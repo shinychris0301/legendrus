@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "id": "FLOW-01",
+      "name": "Boot to Home",
+      "steps": [
+        "Launch",
+        "Splash Continue",
+        "Loading auto transition",
+        "Home visible"
+      ],
+      "expected": "No errors; Home interactive"
+    },
+    {
+      "id": "FLOW-02",
+      "name": "Map back hierarchy",
+      "steps": [
+        "Home -> World Map",
+        "World Map -> Chapter Map",
+        "Back",
+        "Back"
+      ],
+      "expected": "ChapterMap -> WorldMap -> Home"
+    },
+    {
+      "id": "FLOW-03",
+      "name": "Core level loop",
+      "steps": [
+        "Home -> Play",
+        "Select level",
+        "Pre-Level",
+        "Start",
+        "Play to outcome",
+        "Continue/retry"
+      ],
+      "expected": "Progression, energy, save and story remain functional"
+    },
+    {
+      "id": "FLOW-04",
+      "name": "Pause continuity",
+      "steps": [
+        "Gameplay",
+        "Pause",
+        "Settings",
+        "Back",
+        "Resume"
+      ],
+      "expected": "Returns to paused gameplay then resumes without board reset"
+    },
+    {
+      "id": "FLOW-05",
+      "name": "Event demo",
+      "steps": [
+        "Home -> Events",
+        "First event",
+        "Claim",
+        "Claim again",
+        "Back"
+      ],
+      "expected": "First session claim acknowledged; repeat blocked; no currency grant"
+    },
+    {
+      "id": "FLOW-06",
+      "name": "Social demo",
+      "steps": [
+        "Home -> Profile -> Team",
+        "Team Ranking",
+        "Back",
+        "Chat send",
+        "Back",
+        "Friends energy request"
+      ],
+      "expected": "All routes return correctly; no server rewards granted"
+    },
+    {
+      "id": "FLOW-07",
+      "name": "Commercial fail-closed",
+      "steps": [
+        "Home -> Shop",
+        "Pack purchase",
+        "Special Offer purchase"
+      ],
+      "expected": "Unavailable provider fails safely; no direct currency grant"
+    },
+    {
+      "id": "FLOW-08",
+      "name": "Language/account demo",
+      "steps": [
+        "Profile -> Login -> Guest",
+        "Settings -> Language -> EN/RU"
+      ],
+      "expected": "Guest/local language session state works without cloud identity"
+    },
+    {
+      "id": "FLOW-09",
+      "name": "System states",
+      "steps": [
+        "Settings -> Offline",
+        "Retry",
+        "Settings -> Maintenance -> Back",
+        "Settings -> Error -> Retry"
+      ],
+      "expected": "No dead ends; safe return to Home"
+    },
+    {
+      "id": "FLOW-10",
+      "name": "Android Back/Escape",
+      "steps": [
+        "Open ChapterMap/EventDetail/TeamChat/LanguageSelect",
+        "Press system Back on each"
+      ],
+      "expected": "Uses deterministic parent route; no unexpected Home jump except defined parent"
+    }
+  ]
+}

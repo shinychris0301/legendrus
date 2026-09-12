@@ -1,0 +1,700 @@
+--- before/Assets/LegendsOfRus/Editor/AndroidBuild/Core/AndroidBuildReasonCodes.cs
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Core/AndroidBuildReasonCodes.cs
+@@ -45,6 +45,8 @@
+         internal const string ScheduledTargetMismatch =
+             "ANDROID_SCHEDULED_TARGET_MISMATCH";
+         internal const string EditorPlayModeActive = "ANDROID_EDITOR_PLAY_MODE_ACTIVE";
++        internal const string DevelopmentBuildRequired =
++            "ANDROID_DEVELOPMENT_BUILD_REQUIRED";
+         internal const string BuildOptionsUnsafe =
+             "ANDROID_BUILD_OPTIONS_UNSAFE";
+         internal const string AssetBundleManifestBlocked =
+--- before/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs
+@@ -32,8 +32,8 @@
+     [Serializable]
+     internal sealed class AndroidBuildFix03Report
+     {
+-        public int schemaVersion = 1;
+-        public string revision = "R3-BuildPreflightFix03";
++        public int schemaVersion = 2;
++        public string revision = "R3-BuildOptionsFix04";
+         public string unityVersion;
+         public string activeTarget;
+         public string evidenceScope = "Read-only local preflight; NOT an APK or device test";
+@@ -50,6 +50,11 @@
+         public AndroidBuildFix03FileEvidence[] protectedFiles;
+         public AndroidBuildFix03PackageEvidence[] registeredUnityPackages;
+         public string[] observations;
++        // Enum definitions are read from this Editor, not guessed from a formatted error string.
++        public bool lastScheduledOptionsPresent;
++        public string lastScheduledOptions;
++        public AndroidBuildOptionEnumEvidence[] installedBuildOptions;
++        public string permittedDevelopmentOptions;
+     }
+ 
+     /// <summary>Read-only diagnostics; never approves a lock or mutates Unity settings.</summary>
+@@ -67,9 +72,14 @@
+                 case AndroidBuildReasonCodes.EditorPlayModeActive:
+                     return "Stop Play Mode (Pause is not Stop), wait for Edit Mode, then retry. " +
+                         "No content build has been requested by this guard.";
++                case AndroidBuildReasonCodes.DevelopmentBuildRequired:
++                    return "Development=False in the scheduled request. Enable Development Build, " +
++                        "or use Android > Build Fix04 > Build Development APK (No Run). " +
++                        "This guard does not silently convert a release request.";
+                 case AndroidBuildReasonCodes.BuildOptionsUnsafe:
+-                    return "This project's existing contract permits Development only, optionally " +
+-                        "with ShowBuiltPlayer. Use Build, not Build And Run; turn additional flags off.";
++                    return "Development is required. ShowBuiltPlayer, LZ4/LZ4HC compression and " +
++                        "StrictMode are permitted. AutoRunPlayer and unreviewed additional flags " +
++                        "remain outside this build-only workflow. Use Build, not Build And Run.";
+                 case AndroidBuildReasonCodes.PackageLockUnapproved:
+                     return "The inherited v1.17 resolved-package approval is still closed. " +
+                         "A generated packages-lock.json alone does not open it. Run Android > " +
+@@ -93,10 +103,7 @@
+ 
+         internal static string DescribeOptions(BuildOptions options)
+         {
+-            BuildOptions allowed = BuildOptions.Development | BuildOptions.ShowBuiltPlayer;
+-            return "Requested BuildOptions=" + options +
+-                "; Development=" + ((options & BuildOptions.Development) != 0) +
+-                "; DisallowedFlags=" + (options & ~allowed) + ".";
++            return AndroidDevelopmentBuildOptions.Describe(options);
+         }
+ 
+         [MenuItem(MenuRoot + "Export Build Diagnostics")]
+@@ -141,6 +148,11 @@
+                     resolvedPackageLock = Fingerprint(root, "Packages/packages-lock.json", string.Empty),
+                     protectedFiles = AndroidBuildStateReader.ReadProtectedFileEvidence(),
+                     registeredUnityPackages = ReadPackages(),
++                    lastScheduledOptionsPresent = AndroidDevelopmentBuildOptions.HasScheduledSnapshot,
++                    lastScheduledOptions = AndroidDevelopmentBuildOptions.ScheduledSnapshot(),
++                    installedBuildOptions = AndroidDevelopmentBuildOptions.ReadEnumEvidence(),
++                    permittedDevelopmentOptions = AndroidDevelopmentBuildOptions.FormatActive(
++                        AndroidDevelopmentBuildOptions.Allowed),
+                     observations = observations.ToArray()
+                 };
+                 string destination = Path.Combine(root, ReportPath);
+--- before/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildGuard.cs
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildGuard.cs
+@@ -177,6 +177,7 @@
+                 if (options.target != BuildTarget.Android)
+                     return;
+ 
++                AndroidDevelopmentBuildOptions.RememberScheduled(options.options);
+                 AndroidBuildPolicyLoadResult policyLoad =
+                     AndroidBuildPolicyLoader.Load();
+                 if (policyLoad == null || !policyLoad.FilePresent)
+@@ -246,16 +247,9 @@
+                 );
+             }
+ 
+-            BuildOptions uiDevelopment =
+-                BuildOptions.Development | BuildOptions.ShowBuiltPlayer;
+-            if (options.options != BuildOptions.Development &&
+-                options.options != uiDevelopment)
+-            {
+-                // Enum names only: never print output paths, scripting-define values, or signing data.
+-                throw new BuildFailedException(
+-                    AndroidBuildGuard.Denied(AndroidBuildReasonCodes.BuildOptionsUnsafe).Message +
+-                    " " + AndroidBuildFix03Diagnostics.DescribeOptions(options.options));
+-            }
++            // A Development build is an intent, not one exact numerical combination.
++            // LZ4/LZ4HC and StrictMode do not turn it into a release or auto-run build.
++            AndroidDevelopmentBuildOptions.Validate(options.options);
+ 
+             if (options.scenes == null ||
+                 options.scenes.Length != 1 ||
+--- before/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs
+@@ -21,7 +21,8 @@
+             "• IL2CPP with ARM64, category game; the obsolete Is Game " +
+             "compatibility alias mirrors that category; Portrait.\n" +
+             "• Development Build ON; normal Build may add Show Built Player.\n" +
+-            "• Every other Build Options flag OFF; Compression Method Default.\n" +
++            "• Default, LZ4 or LZ4HC compression is permitted; StrictMode is permitted.\n" +
++            "• Build Fix04 provides a dedicated Development build-only command.\n" +
+             "• Script Debugging, profiler/deep profiling, code coverage, " +
+             "test assemblies, patch, and scripts-only options OFF.\n" +
+             "• Use Build, not Build & Run; no AssetBundle manifest.\n" +
+--- /dev/null
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidDevelopmentBuildCommand.cs
+@@ -0,0 +1,207 @@
++#if UNITY_EDITOR && UNITY_6000_0_OR_NEWER
++using System;
++using System.IO;
++using UnityEditor;
++using UnityEditor.Build;
++using UnityEditor.Build.Reporting;
++using UnityEditor.SceneManagement;
++using UnityEngine;
++
++namespace LegendsOfRus.AndroidBuild
++{
++    /// <summary>
++    /// Explicit development-only build entry. Never auto-runs, edits signing/package approvals,
++    /// switches platforms, installs a menu handler, or queues a build after a domain reload.
++    /// </summary>
++    public static class AndroidDevelopmentBuildCommand
++    {
++        private const string MenuRoot = "Legends of Rus/Android/Build Fix04/";
++        private static bool running;
++
++        [MenuItem(MenuRoot + "Prepare Development Options and Export Diagnostics")]
++        public static void PrepareDevelopmentOptions()
++        {
++            if (!CanStart())
++            {
++                Debug.LogWarning("Build Fix04: stop Play Mode and wait for compilation/import/build work to finish.");
++                return;
++            }
++            if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
++            {
++                Debug.LogWarning("Build Fix04: activate the Android platform first. No setting was changed.");
++                return;
++            }
++            if (!AndroidBuildStateReader.CustomBuildProfileAbsent())
++            {
++                Debug.LogWarning(AndroidBuildGuard.Denied(
++                    AndroidBuildReasonCodes.BuildProfileOverrideBlocked).Message);
++                AndroidBuildFix03Diagnostics.Export();
++                return;
++            }
++
++            // These are the only persistent setting changes made by this explicit preparation command.
++            EditorUserBuildSettings.development = true;
++            EditorUserBuildSettings.allowDebugging = false;
++            EditorUserBuildSettings.connectProfiler = false;
++            EditorUserBuildSettings.buildScriptsOnly = false;
++            EditorUserBuildSettings.buildWithDeepProfilingSupport = false;
++            Debug.Log("Build Fix04: Development Build ON; script debugging, autoconnect profiler, " +
++                "scripts-only and deep profiling OFF. Player identity, signing, API levels, " +
++                "package approvals, scenes and compression settings are unchanged. No build was started.");
++            AndroidBuildFix03Diagnostics.Export();
++        }
++
++        [MenuItem(MenuRoot + "Export Build Diagnostics (Read Only)")]
++        public static void ExportDiagnostics() { AndroidBuildFix03Diagnostics.Export(); }
++
++        [MenuItem(MenuRoot + "Build Development APK (No Run)")]
++        public static void BuildDevelopmentApk()
++        {
++            if (!CanStart())
++                throw AndroidBuildGuard.Denied(EditorApplication.isPlaying ||
++                    EditorApplication.isPlayingOrWillChangePlaymode
++                    ? AndroidBuildReasonCodes.EditorPlayModeActive
++                    : AndroidBuildReasonCodes.SettingsReadFailed);
++
++            running = true;
++            try
++            {
++                AndroidBuildPolicyLoadResult load = AndroidBuildPolicyLoader.Load();
++                if (load == null || !load.FilePresent)
++                    throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.PolicyMissing);
++                if (!load.HashMatches)
++                    throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.PolicyHashMismatch);
++                if (!load.IsValid || load.Policy == null)
++                    throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.PolicyInvalid);
++
++                BuildPlayerOptions options = CreateRequest(load.Policy);
++                // Exact intent is used even when the separate Build Profiles UI still shows Release.
++                CheckRequest(options, load.Policy);
++                RequireReadiness(AndroidBuildGuard.EvaluateScheduledPreflight(options));
++
++                if (!Application.isBatchMode)
++                {
++                    if (!EditorUtility.DisplayDialog("Legends of Rus - Development APK",
++                        "Build the existing Bootstrap scene as a local Development APK?\n\n" +
++                        "This uses LZ4 and StrictMode. It does not install or launch an app, " +
++                        "approve package locks, or change signing. The existing policy's output " +
++                        "file will be replaced if a previous build exists.", "Build APK", "Cancel"))
++                        return;
++                    if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
++                }
++
++                // Saving can run editor callbacks; re-check before creating directories or starting a build.
++                AndroidBuildEarlyPreflight.ValidateEditorState(EditorApplication.isPlaying,
++                    EditorApplication.isPlayingOrWillChangePlaymode);
++                if (EditorApplication.isCompiling || EditorApplication.isUpdating || BuildPipeline.isBuildingPlayer)
++                    throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.SettingsReadFailed);
++                load = AndroidBuildPolicyLoader.Load();
++                if (load == null || !load.HashMatches || !load.IsValid || load.Policy == null)
++                    throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.PolicyInvalid);
++                CheckRequest(options, load.Policy);
++                RequireReadiness(AndroidBuildGuard.EvaluateScheduledPreflight(options));
++
++                string root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
++                string output = Path.GetFullPath(Path.Combine(root, options.locationPathName));
++                Directory.CreateDirectory(Path.GetDirectoryName(output));
++
++                // Align UI-facing callbacks only for this build; restore the user's prior toggles afterward.
++                bool oldDevelopment = EditorUserBuildSettings.development;
++                bool oldDebugging = EditorUserBuildSettings.allowDebugging;
++                bool oldProfiler = EditorUserBuildSettings.connectProfiler;
++                bool oldScriptsOnly = EditorUserBuildSettings.buildScriptsOnly;
++                bool oldDeep = EditorUserBuildSettings.buildWithDeepProfilingSupport;
++                BuildReport report;
++                try
++                {
++                    EditorUserBuildSettings.development = true;
++                    EditorUserBuildSettings.allowDebugging = false;
++                    EditorUserBuildSettings.connectProfiler = false;
++                    EditorUserBuildSettings.buildScriptsOnly = false;
++                    EditorUserBuildSettings.buildWithDeepProfilingSupport = false;
++                    Debug.Log("Build Fix04 starting Development APK build. " +
++                        AndroidDevelopmentBuildOptions.Describe(options.options));
++                    // Regular pipeline: Addressables and every existing Player build guard still execute.
++                    report = BuildPipeline.BuildPlayer(options);
++                }
++                finally
++                {
++                    EditorUserBuildSettings.development = oldDevelopment;
++                    EditorUserBuildSettings.allowDebugging = oldDebugging;
++                    EditorUserBuildSettings.connectProfiler = oldProfiler;
++                    EditorUserBuildSettings.buildScriptsOnly = oldScriptsOnly;
++                    EditorUserBuildSettings.buildWithDeepProfilingSupport = oldDeep;
++                }
++
++                if (report == null || report.summary.result != BuildResult.Succeeded)
++                    throw new BuildFailedException("Build Fix04: Unity did not report a successful APK build. " +
++                        "Read the first build error in the Console; no app was installed or launched by this command.");
++                if (!File.Exists(output))
++                    throw new BuildFailedException("Build Fix04: expected APK is absent despite a success report. " +
++                        "No app was installed or launched by this command.");
++                Debug.Log("Build Fix04 APK created at the existing policy output: " +
++                    load.Policy.developmentOutputRelativePath +
++                    ". Not installed, not device-tested, not production-approved.");
++            }
++            catch (BuildFailedException)
++            {
++                // Includes all policy booleans and pins, not just the first rejected option.
++                AndroidBuildFix03Diagnostics.Export();
++                throw;
++            }
++            catch (Exception exception)
++            {
++                AndroidBuildFix03Diagnostics.Export();
++                throw new BuildFailedException("Build Fix04 failed (" + exception.GetType().Name +
++                    "). Consult Unity's build errors. No signing credentials were read by this command.");
++            }
++            finally { running = false; }
++        }
++
++        internal static BuildPlayerOptions CreateRequest(AndroidBuildFoundationPolicy policy)
++        {
++            if (policy == null) throw new ArgumentNullException("policy");
++            return new BuildPlayerOptions
++            {
++                target = BuildTarget.Android,
++                targetGroup = BuildTargetGroup.Android,
++                subtarget = 0,
++                scenes = new[] { policy.requiredScene },
++                locationPathName = policy.developmentOutputRelativePath,
++                options = AndroidDevelopmentBuildOptions.BuildOnlyDefaults,
++                extraScriptingDefines = new string[0],
++                assetBundleManifestPath = string.Empty
++            };
++        }
++
++        private static void CheckRequest(BuildPlayerOptions options, AndroidBuildFoundationPolicy policy)
++        {
++            AndroidBuildEarlyPreflight.ValidateEditorState(EditorApplication.isPlaying,
++                EditorApplication.isPlayingOrWillChangePlaymode);
++            AndroidBuildPlayerOptionsGuard.ValidateOptions(options, policy);
++            if (!AndroidBuildStateReader.CustomBuildProfileAbsent())
++                throw AndroidBuildGuard.Denied(AndroidBuildReasonCodes.BuildProfileOverrideBlocked);
++        }
++
++        private static void RequireReadiness(AndroidBuildPreflightResult result)
++        {
++            if (result == null || result.Decision == null || !result.Decision.Allowed)
++                throw AndroidBuildGuard.Denied(result != null && result.Decision != null
++                    ? result.Decision.ReasonCode : AndroidBuildReasonCodes.UnexpectedFailure);
++        }
++
++        [MenuItem(MenuRoot + "Prepare Development Options and Export Diagnostics", true)]
++        private static bool ValidatePrepareMenu() { return CanStart(); }
++
++        [MenuItem(MenuRoot + "Build Development APK (No Run)", true)]
++        private static bool ValidateBuildMenu() { return CanStart(); }
++
++        private static bool CanStart()
++        {
++            return !running && !EditorApplication.isPlaying &&
++                !EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling &&
++                !EditorApplication.isUpdating && !BuildPipeline.isBuildingPlayer;
++        }
++    }
++}
++#endif
+--- /dev/null
++++ after/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidDevelopmentBuildOptions.cs
+@@ -0,0 +1,180 @@
++#if UNITY_EDITOR && UNITY_6000_0_OR_NEWER
++using System;
++using System.Collections.Generic;
++using System.Globalization;
++using System.Reflection;
++using UnityEditor;
++using UnityEditor.Build;
++
++namespace LegendsOfRus.AndroidBuild
++{
++    [Serializable]
++    internal sealed class AndroidBuildOptionEnumEvidence
++    {
++        public string name;
++        public string rawHex;
++        public bool zeroValue;
++        public bool singleBit;
++        public bool obsolete;
++    }
++
++    internal sealed class AndroidBuildOptionDefinition
++    {
++        internal readonly string Name;
++        internal readonly uint Bits;
++        internal readonly bool Obsolete;
++
++        internal AndroidBuildOptionDefinition(string name, uint bits, bool obsolete)
++        {
++            Name = name;
++            Bits = bits;
++            Obsolete = obsolete;
++        }
++    }
++
++    /// <summary>
++    /// Fix04: keep Development mandatory; accept standard compression/error-checking flags.
++    /// Zero-valued or composite enum aliases are not reported as enabled switches.
++    /// No flags are silently removed from a scheduled request.
++    /// </summary>
++    internal static class AndroidDevelopmentBuildOptions
++    {
++        internal const BuildOptions Allowed = BuildOptions.Development |
++            BuildOptions.ShowBuiltPlayer | BuildOptions.CompressWithLz4 |
++            BuildOptions.CompressWithLz4HC | BuildOptions.StrictMode;
++
++        internal const BuildOptions BuildOnlyDefaults = BuildOptions.Development |
++            BuildOptions.CompressWithLz4 | BuildOptions.StrictMode;
++
++        private const string SnapshotKey = "LegendsOfRus.BuildFix04.ScheduledOptions";
++        private const string SnapshotPresentKey = SnapshotKey + ".Present";
++
++        internal static bool HasDevelopment(BuildOptions value)
++        {
++            return (value & BuildOptions.Development) != 0;
++        }
++
++        internal static BuildOptions Disallowed(BuildOptions value)
++        {
++            return value & ~Allowed;
++        }
++
++        internal static void Validate(BuildOptions value)
++        {
++            if (!HasDevelopment(value))
++                throw Rejected(AndroidBuildReasonCodes.DevelopmentBuildRequired, value);
++            if (Disallowed(value) != 0)
++                throw Rejected(AndroidBuildReasonCodes.BuildOptionsUnsafe, value);
++        }
++
++        private static BuildFailedException Rejected(string reason, BuildOptions value)
++        {
++            return new BuildFailedException(AndroidBuildGuard.Denied(reason).Message +
++                " " + Describe(value));
++        }
++
++        internal static string Describe(BuildOptions value)
++        {
++            return "RequestedBits=0x" + RawBits(value).ToString("X8", CultureInfo.InvariantCulture) +
++                "; ActiveFlags=" + FormatActive(value) +
++                "; Development=" + HasDevelopment(value) +
++                "; AutoRunPlayer=" + ((value & BuildOptions.AutoRunPlayer) != 0) +
++                "; DisallowedBits=0x" + RawBits(Disallowed(value)).ToString("X8", CultureInfo.InvariantCulture) +
++                "; DisallowedFlags=" + FormatActive(Disallowed(value)) + ".";
++        }
++
++        // Unity BuildOptions is an Int32 enum. Unsigned conversion retains the high bit.
++        internal static uint RawBits(BuildOptions value) { return unchecked((uint)value); }
++
++        internal static string FormatActive(BuildOptions value)
++        {
++            return FormatBits(RawBits(value), ReadDefinitions());
++        }
++
++        // A pure formatting seam for testing zero aliases, duplicate aliases and unknown bits.
++        internal static string FormatBits(uint bits, AndroidBuildOptionDefinition[] definitions)
++        {
++            if (bits == 0) return "None";
++            var candidates = new List<AndroidBuildOptionDefinition>(definitions ??
++                new AndroidBuildOptionDefinition[0]);
++            candidates.Sort((left, right) =>
++            {
++                int comparison = left.Bits.CompareTo(right.Bits);
++                if (comparison != 0) return comparison;
++                comparison = left.Obsolete.CompareTo(right.Obsolete);
++                return comparison != 0 ? comparison : string.CompareOrdinal(left.Name, right.Name);
++            });
++            uint described = 0;
++            var names = new List<string>();
++            foreach (var definition in candidates)
++            {
++                uint flag = definition.Bits;
++                if (!IsSingleBit(flag) || string.IsNullOrEmpty(definition.Name)) continue;
++                if ((bits & flag) != flag || (described & flag) != 0) continue;
++                names.Add(definition.Name);
++                described |= flag;
++            }
++            uint unknown = bits & ~described;
++            if (unknown != 0)
++                names.Add("UnknownBits(0x" + unknown.ToString("X8", CultureInfo.InvariantCulture) + ")");
++            return string.Join(", ", names.ToArray());
++        }
++
++        internal static bool IsSingleBit(uint value)
++        {
++            return value != 0 && (value & (value - 1)) == 0;
++        }
++
++        private static AndroidBuildOptionDefinition[] ReadDefinitions()
++        {
++            var definitions = new List<AndroidBuildOptionDefinition>();
++            foreach (FieldInfo field in typeof(BuildOptions).GetFields(BindingFlags.Public | BindingFlags.Static))
++            {
++                if (!field.IsLiteral) continue;
++                var value = (BuildOptions)field.GetValue(null);
++                definitions.Add(new AndroidBuildOptionDefinition(field.Name, RawBits(value),
++                    Attribute.IsDefined(field, typeof(ObsoleteAttribute))));
++            }
++            return definitions.ToArray();
++        }
++
++        internal static AndroidBuildOptionEnumEvidence[] ReadEnumEvidence()
++        {
++            var definitions = ReadDefinitions();
++            Array.Sort(definitions, (left, right) => string.CompareOrdinal(left.Name, right.Name));
++            var result = new AndroidBuildOptionEnumEvidence[definitions.Length];
++            for (int index = 0; index < definitions.Length; index++)
++            {
++                var definition = definitions[index];
++                result[index] = new AndroidBuildOptionEnumEvidence
++                {
++                    name = definition.Name,
++                    rawHex = "0x" + definition.Bits.ToString("X8", CultureInfo.InvariantCulture),
++                    zeroValue = definition.Bits == 0,
++                    singleBit = IsSingleBit(definition.Bits),
++                    obsolete = definition.Obsolete
++                };
++            }
++            return result;
++        }
++
++        internal static void RememberScheduled(BuildOptions value)
++        {
++            SessionState.SetInt(SnapshotKey, unchecked((int)value));
++            SessionState.SetBool(SnapshotPresentKey, true);
++        }
++
++        internal static bool HasScheduledSnapshot
++        {
++            get { return SessionState.GetBool(SnapshotPresentKey, false); }
++        }
++
++        internal static string ScheduledSnapshot()
++        {
++            return HasScheduledSnapshot
++                ? Describe((BuildOptions)SessionState.GetInt(SnapshotKey, 0))
++                : "No Android scheduled-options callback observed in this Editor session since Fix04.";
++        }
++    }
++}
++#endif
+--- before/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs
+@@ -36,7 +36,6 @@
+         [TestCase(BuildOptions.AllowDebugging)]
+         [TestCase(BuildOptions.ConnectWithProfiler)]
+         [TestCase(BuildOptions.IncludeTestAssemblies)]
+-        [TestCase(BuildOptions.CompressWithLz4)]
+         public void ExtraFlagsRemainRejectedAndAreExplained(BuildOptions extra)
+         {
+             var options = new BuildPlayerOptions
+@@ -47,7 +46,7 @@
+             var exception = Assert.Throws<BuildFailedException>(
+                 () => AndroidBuildPlayerOptionsGuard.ValidateOptions(options, AndroidBuildTestFactory.Policy()));
+             StringAssert.Contains("ANDROID_BUILD_OPTIONS_UNSAFE", exception.Message);
+-            StringAssert.Contains(extra.ToString(), exception.Message);
++            StringAssert.Contains(AndroidDevelopmentBuildOptions.FormatActive(extra), exception.Message);
+         }
+ 
+         [Test]
+--- /dev/null
++++ after/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix04EditModeTests.cs
+@@ -0,0 +1,166 @@
++#if UNITY_EDITOR && UNITY_6000_0_OR_NEWER
++using System;
++using System.Linq;
++using LegendsOfRus.AndroidBuild;
++using NUnit.Framework;
++using UnityEditor;
++using UnityEditor.Build;
++
++namespace LegendsOfRus.Tests.AndroidBuild
++{
++    public sealed class AndroidBuildFix04EditModeTests
++    {
++        [TestCase(BuildOptions.None)]
++        [TestCase(BuildOptions.ShowBuiltPlayer)]
++        [TestCase(BuildOptions.CompressWithLz4)]
++        [TestCase(BuildOptions.CompressWithLz4HC)]
++        [TestCase(BuildOptions.StrictMode)]
++        [TestCase(BuildOptions.CompressWithLz4 | BuildOptions.StrictMode)]
++        [TestCase(BuildOptions.ShowBuiltPlayer | BuildOptions.CompressWithLz4HC | BuildOptions.StrictMode)]
++        public void DevelopmentSupportsNormalOptionalFlags(BuildOptions extra)
++        {
++            var options = BuildOptions.Development | extra;
++            Assert.DoesNotThrow(() => AndroidDevelopmentBuildOptions.Validate(options));
++            Assert.AreEqual(BuildOptions.None, AndroidDevelopmentBuildOptions.Disallowed(options));
++        }
++
++        [Test]
++        public void EverySubsetOfAllowedMaskIsAcceptedWhenDevelopmentIsPresent()
++        {
++            var flags = new[] { BuildOptions.ShowBuiltPlayer, BuildOptions.CompressWithLz4,
++                BuildOptions.CompressWithLz4HC, BuildOptions.StrictMode };
++            for (int subset = 0; subset < (1 << flags.Length); subset++)
++            {
++                BuildOptions options = BuildOptions.Development;
++                for (int index = 0; index < flags.Length; index++)
++                    if ((subset & (1 << index)) != 0) options |= flags[index];
++                Assert.DoesNotThrow(() => AndroidDevelopmentBuildOptions.Validate(options));
++            }
++        }
++
++        [TestCase(BuildOptions.None)]
++        [TestCase(BuildOptions.AutoRunPlayer | BuildOptions.CompressWithLz4 | BuildOptions.StrictMode)]
++        [TestCase(BuildOptions.ShowBuiltPlayer | BuildOptions.CompressWithLz4)]
++        public void ReleaseIsRejectedWithSpecificDevelopmentReason(BuildOptions options)
++        {
++            var error = Assert.Throws<BuildFailedException>(() => AndroidDevelopmentBuildOptions.Validate(options));
++            StringAssert.Contains("ANDROID_DEVELOPMENT_BUILD_REQUIRED", error.Message);
++            StringAssert.Contains("Development=False", error.Message);
++        }
++
++        [TestCase(BuildOptions.AutoRunPlayer)]
++        [TestCase(BuildOptions.AllowDebugging)]
++        [TestCase(BuildOptions.ConnectWithProfiler)]
++        [TestCase(BuildOptions.IncludeTestAssemblies)]
++        [TestCase(BuildOptions.BuildScriptsOnly)]
++        [TestCase(BuildOptions.EnableDeepProfilingSupport)]
++        [TestCase(BuildOptions.EnableCodeCoverage)]
++        public void OtherModesAreNotSilentlyAccepted(BuildOptions flag)
++        {
++            var options = AndroidDevelopmentBuildOptions.BuildOnlyDefaults | flag;
++            var error = Assert.Throws<BuildFailedException>(() => AndroidDevelopmentBuildOptions.Validate(options));
++            StringAssert.Contains("ANDROID_BUILD_OPTIONS_UNSAFE", error.Message);
++            Assert.AreEqual(flag, AndroidDevelopmentBuildOptions.Disallowed(options));
++        }
++
++        [Test]
++        public void ActualReproductionStillRejectsReleaseAndAutoRun()
++        {
++            // Reproduces the active public-flag portion of the reported log. No claim about legacy alias values.
++            var request = BuildOptions.AutoRunPlayer | BuildOptions.CompressWithLz4 | BuildOptions.StrictMode;
++            Assert.IsFalse(AndroidDevelopmentBuildOptions.HasDevelopment(request));
++            Assert.AreEqual(BuildOptions.AutoRunPlayer, AndroidDevelopmentBuildOptions.Disallowed(request));
++            Assert.Throws<BuildFailedException>(() => AndroidDevelopmentBuildOptions.Validate(request));
++            Assert.Throws<BuildFailedException>(() => AndroidDevelopmentBuildOptions.Validate(request | BuildOptions.Development));
++            Assert.DoesNotThrow(() => AndroidDevelopmentBuildOptions.Validate(
++                (request & ~BuildOptions.AutoRunPlayer) | BuildOptions.Development));
++        }
++
++        [Test]
++        public void RequestFactoryUsesBootstrapPolicyPathAndNeverRequestsRun()
++        {
++            var policy = AndroidBuildTestFactory.Policy();
++            var request = AndroidDevelopmentBuildCommand.CreateRequest(policy);
++            Assert.AreEqual(BuildTarget.Android, request.target);
++            Assert.AreEqual(BuildTargetGroup.Android, request.targetGroup);
++            Assert.AreEqual(0, request.subtarget);
++            CollectionAssert.AreEqual(new[] { policy.requiredScene }, request.scenes);
++            Assert.AreEqual(policy.developmentOutputRelativePath, request.locationPathName);
++            Assert.AreEqual(AndroidDevelopmentBuildOptions.BuildOnlyDefaults, request.options);
++            Assert.AreEqual(BuildOptions.None, request.options & BuildOptions.AutoRunPlayer);
++            Assert.IsEmpty(request.extraScriptingDefines);
++            Assert.IsEmpty(request.assetBundleManifestPath);
++        }
++
++        [Test]
++        public void RequestFactoryRejectsMissingPolicy()
++        {
++            Assert.Throws<ArgumentNullException>(() => AndroidDevelopmentBuildCommand.CreateRequest(null));
++        }
++
++        [Test]
++        public void ZeroAndCompositeAliasesAreNotShownAsActive()
++        {
++            var definitions = new[] {
++                new AndroidBuildOptionDefinition("SyntheticLegacyAlias", 0, true),
++                new AndroidBuildOptionDefinition("None", 0, false),
++                new AndroidBuildOptionDefinition("One", 1, false),
++                new AndroidBuildOptionDefinition("Two", 2, false),
++                new AndroidBuildOptionDefinition("Composite", 3, false)
++            };
++            Assert.AreEqual("None", AndroidDevelopmentBuildOptions.FormatBits(0, definitions));
++            Assert.AreEqual("One, Two", AndroidDevelopmentBuildOptions.FormatBits(3, definitions));
++        }
++
++        [Test]
++        public void DuplicateSingleBitAliasesPreferNonObsoleteName()
++        {
++            var definitions = new[] {
++                new AndroidBuildOptionDefinition("OldAlias", 1, true),
++                new AndroidBuildOptionDefinition("ModernName", 1, false)
++            };
++            Assert.AreEqual("ModernName", AndroidDevelopmentBuildOptions.FormatBits(1, definitions));
++        }
++
++        [Test]
++        public void UnknownAndHighBitsAreNotLost()
++        {
++            Assert.AreEqual("UnknownBits(0x80000000)",
++                AndroidDevelopmentBuildOptions.FormatBits(0x80000000u, null));
++            Assert.AreEqual(0x80000000u,
++                AndroidDevelopmentBuildOptions.RawBits(unchecked((BuildOptions)(int)0x80000000u)));
++        }
++
++        [Test]
++        public void InstalledZeroValuedNamesNeverAppearInDevelopmentFormatting()
++        {
++            var definitions = AndroidDevelopmentBuildOptions.ReadEnumEvidence();
++            var formatted = AndroidDevelopmentBuildOptions.FormatActive(BuildOptions.Development)
++                .Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
++            foreach (var definition in definitions.Where(value => value.zeroValue))
++                CollectionAssert.DoesNotContain(formatted, definition.name);
++        }
++
++        [Test]
++        public void FixedDiagnosticsPrintNumericMaskAndNoFalseDisallowedNames()
++        {
++            string message = AndroidBuildFix03Diagnostics.DescribeOptions(AndroidDevelopmentBuildOptions.BuildOnlyDefaults);
++            StringAssert.Contains("RequestedBits=0x", message);
++            StringAssert.Contains("Development=True", message);
++            StringAssert.Contains("AutoRunPlayer=False", message);
++            StringAssert.Contains("DisallowedBits=0x00000000", message);
++            StringAssert.Contains("DisallowedFlags=None", message);
++        }
++
++        [Test]
++        public void PackageLockApprovalStillMustBeSatisfied()
++        {
++            var facts = AndroidBuildTestFactory.AllowedFacts();
++            facts.PackageLockApproved = false;
++            var result = AndroidBuildPolicyEvaluator.Evaluate(AndroidBuildTestFactory.Policy(), facts);
++            Assert.IsFalse(result.Allowed);
++            Assert.AreEqual(AndroidBuildReasonCodes.PackageLockUnapproved, result.ReasonCode);
++        }
++    }
++}
++#endif

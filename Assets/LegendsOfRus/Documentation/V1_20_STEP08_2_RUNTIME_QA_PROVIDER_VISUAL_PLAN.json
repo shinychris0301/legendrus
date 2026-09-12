@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step08.2-wave02-unity-prefab-runtime-qa-provider-boundary-visual-acceptance",
+  "baseline": "v1.20 Step 8 (user-confirmed compile-clean)",
+  "pageCount": 9,
+  "runtimeCaptureCount": 36,
+  "aspectTargets": [
+    {
+      "name": "design-9x16",
+      "width": 941,
+      "height": 1672
+    },
+    {
+      "name": "phone-19.5x9",
+      "width": 1080,
+      "height": 2340
+    },
+    {
+      "name": "phone-20x9",
+      "width": 1080,
+      "height": 2400
+    },
+    {
+      "name": "tablet-10x16",
+      "width": 1600,
+      "height": 2560
+    }
+  ],
+  "pages": [
+    "Characters",
+    "DailyReward",
+    "Profile",
+    "Inventory",
+    "Shop",
+    "SpecialOffer",
+    "OutOfEnergy",
+    "BoosterSelect",
+    "RewardClaim"
+  ],
+  "referenceClassification": {
+    "directApproved": [
+      "Shop"
+    ],
+    "demoDesignGuidance": [
+      "Characters",
+      "DailyReward",
+      "Profile",
+      "OutOfEnergy",
+      "BoosterSelect",
+      "RewardClaim"
+    ],
+    "styleSystemDerived": [
+      "Inventory",
+      "SpecialOffer"
+    ]
+  },
+  "providerBoundary": {
+    "candidatePresentationOnly": true,
+    "candidateUnityButtonsExpected": 0,
+    "directCandidateEconomyMutationAllowed": false,
+    "purchaseAuthority": "ScreenRouter -> MonetizationService -> verified/durably committed result only",
+    "rewardedEnergyAuthority": "ScreenRouter -> MonetizationService -> verified/durably committed result only",
+    "friendEnergyDemo": "acknowledgement only; no grant",
+    "rewardClaim": "acknowledgement/close only; reward authority occurs before modal"
+  },
+  "visualAcceptancePolicy": {
+    "shopStrictApprovedReferenceGate": {
+      "correlationMin": 0.8,
+      "maeMax": 0.1
+    },
+    "demoReferencesAreGating": false,
+    "fullWave02CutoverAuthorized": false,
+    "reason": "Only one of nine pages has a direct approved reference; runtime evidence and final reference coverage are incomplete."
+  },
+  "menuOrder": [
+    "Build/Repair v1.20 Step 8 Wave 2 Candidates",
+    "Validate v1.20 Step 8 Wave 2 Candidates",
+    "Run v1.20 Step 8.2 Provider-Boundary Verification",
+    "Run v1.20 Step 8.2 Wave 2 Runtime QA Readiness Self-Test",
+    "Run v1.20 Step 8.2 Wave 2 Unity Runtime Four-Aspect Capture",
+    "Analyze v1.20 Step 8.2 Wave 2 Runtime Visual Acceptance"
+  ]
+}

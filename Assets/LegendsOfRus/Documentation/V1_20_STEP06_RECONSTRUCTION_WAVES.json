@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step06-functional-acceptance-asset-readiness",
+  "pageCount": 36,
+  "sharedFoundation": {
+    "name": "Wave 0 — Shared Production Asset Foundation",
+    "scope": [
+      "canonical buttons and states",
+      "9-slice navy/parchment panels",
+      "gold frames/filigree/corners",
+      "top HUD and currency pills",
+      "back/close/pause controls",
+      "tabs/toggles/badges",
+      "resource/goal/reward icons",
+      "Cyrillic typography styles",
+      "common modal blocker",
+      "safe-area anchors",
+      "common motion/VFX hooks"
+    ],
+    "currentEvidence": {
+      "canonicalUiKitPngCount": 34,
+      "canonicalManifest": "Assets/LegendsOfRus/Art/Production/UI/CanonicalKit/canonical_ui_kit_manifest.json"
+    },
+    "rule": "Normalize/replace shared primitives before page-specific authoring; do not change callbacks or state ownership."
+  },
+  "waves": [
+    {
+      "wave": 1,
+      "name": "Core Loop and Story Spine",
+      "pageCount": 12,
+      "pageKeys": [
+        "SplashTitle",
+        "Loading",
+        "Home",
+        "WorldMap",
+        "LevelSelect",
+        "PreLevel",
+        "Gameplay",
+        "Pause",
+        "Victory",
+        "Fail",
+        "ChapterComplete",
+        "Dialogue"
+      ],
+      "entryGate": "Step 6 executable functional acceptance PASS plus previous wave shared-asset contract stable.",
+      "exitGate": "Each page uses separate runtime assets, preserves functional lock, passes four-aspect visual capture and navigation smoke test."
+    },
+    {
+      "wave": 2,
+      "name": "Meta, Economy, and Collection",
+      "pageCount": 9,
+      "pageKeys": [
+        "CharacterCollection",
+        "DailyReward",
+        "Profile",
+        "Inventory",
+        "Shop",
+        "SpecialOffer",
+        "OutOfEnergy",
+        "BoosterSelect",
+        "RewardClaim"
+      ],
+      "entryGate": "Wave 1 visual/runtime prefab acceptance complete.",
+      "exitGate": "Each page uses separate runtime assets, preserves functional lock, passes four-aspect visual capture and navigation smoke test."
+    },
+    {
+      "wave": 3,
+      "name": "Events, Rankings, and Social",
+      "pageCount": 8,
+      "pageKeys": [
+        "EventsHub",
+        "EventDetail",
+        "IndividualRanking",
+        "TeamHub",
+        "TeamRanking",
+        "TeamChat",
+        "FriendsList",
+        "Mail"
+      ],
+      "entryGate": "Wave 2 visual/runtime prefab acceptance complete.",
+      "exitGate": "Each page uses separate runtime assets, preserves functional lock, passes four-aspect visual capture and navigation smoke test."
+    },
+    {
+      "wave": 4,
+      "name": "Settings, Account, Tutorial, and System States",
+      "pageCount": 7,
+      "pageKeys": [
+        "Settings",
+        "LanguageSelect",
+        "Login",
+        "TutorialOverlay",
+        "OfflineState",
+        "MaintenanceState",
+        "EmptyErrorStates"
+      ],
+      "entryGate": "Wave 3 visual/runtime prefab acceptance complete.",
+      "exitGate": "Each page uses separate runtime assets, preserves functional lock, passes four-aspect visual capture and navigation smoke test."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+gate,scope,authority,packaged_state,pass_condition,cutover_effect
+Step83ShopSourcePreflight,Shop,DIRECT_APPROVED,PASS,correlation>=0.80 and mae<=0.10,none
+Wave02UnityRuntimeCapture,9 pages x 4 aspects,UNITY_RUNTIME,PENDING,36/36 captures plus execution manifest,none
+ApprovedShopRuntimeGate,Shop 941x1672,DIRECT_APPROVED,PENDING,correlation>=0.80 and mae<=0.10,creates pass lock only
+ProviderBoundaryGate,Shop/SpecialOffer/OutOfEnergy/RewardClaim,AUTHORITATIVE_RUNTIME,PENDING,accepted authority hashes and presentation-only candidates,none
+ConditionalShopCutoverReadiness,Shop,DIRECT_APPROVED + PROVIDER + RUNTIME,PENDING,all prior gates pass,readiness decision only
+FullWave02Cutover,9 pages,INSUFFICIENT_REFERENCE_AUTHORITY,NO_GO,direct approved authority required per page,forbidden

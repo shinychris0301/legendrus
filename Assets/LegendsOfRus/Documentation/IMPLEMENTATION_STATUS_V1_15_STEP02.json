@@ -1,0 +1,92 @@
+{
+  "milestone": "v1.15-step02",
+  "name": "Runtime Economy Transactions and Energy Integration",
+  "status": "IMPLEMENTED_IN_SOURCE_PENDING_UNITY_VERIFICATION_AND_RUNTIME_ACTIVATION",
+  "unity_target": "6000.5.9f1",
+  "authority": "FOUNDATION_PRESENT_LIVE_RUNTIME_INACTIVE",
+  "verification_basis": "SOURCE REVIEW; UNITY EXECUTION PENDING",
+  "implemented": {
+    "atomic_multi_resource_transaction_engine": true,
+    "detached_snapshot_copy_on_write": true,
+    "detached_runtime_coordinator": true,
+    "immutable_runtime_policy": true,
+    "immutable_catalog_manifest_binding": true,
+    "fail_closed_activation_gate": true,
+    "legacy_fallback_on_any_failed_gate": true,
+    "reason_coded_activation_failures": true,
+    "supported_resources": [
+      "gold",
+      "gems",
+      "energy",
+      "bogatyr_mace",
+      "firebird",
+      "living_light",
+      "sea_pearl"
+    ],
+    "transaction_rejections": [
+      "invalid_snapshot",
+      "invalid_request",
+      "invalid_or_unstable_key",
+      "duplicate_successful_key",
+      "unknown_resource",
+      "negative_amount",
+      "duplicate_resource_entry",
+      "insufficient_balance",
+      "arithmetic_overflow"
+    ],
+    "energy_grant_capacity_clamp": true,
+    "failed_transaction_non_mutation": true,
+    "failed_key_retryable": true,
+    "successful_key_scope": "PROCESS_LOCAL_NOT_DURABLE",
+    "source_level_editmode_coverage": true,
+    "source_level_playmode_activation_gate_coverage": true
+  },
+  "current_activation_manifest": {
+    "productApproval": true,
+    "compilationVerified": false,
+    "editorSelfTestsPassed": false,
+    "editModeTestsPassed": false,
+    "playModeTestsPassed": false,
+    "runtimeActivationApproved": false
+  },
+  "live_runtime_boundary": {
+    "catalog_proposal_only": true,
+    "catalog_authoritative": false,
+    "game_state_wired": false,
+    "screen_router_wired": false,
+    "match3_board_wired": false,
+    "runtime_bootstrap_wired": false,
+    "existing_runtime_hazards_claimed_fixed": false,
+    "runtime_catalog_authority": false
+  },
+  "save_compatibility": {
+    "save_version": 6,
+    "player_prefs_key": "LegendsOfRus_Save_v1",
+    "schema_change": false,
+    "migration": false,
+    "existing_balance_rebase": false,
+    "automatic_grant": false,
+    "durable_transaction_history_added": false
+  },
+  "excluded": [
+    "live GameState, ScreenRouter, Match3Board, or RuntimeBootstrap economy wiring",
+    "store or IAP SDK",
+    "rewarded-ad SDK",
+    "analytics provider",
+    "backend or cloud service",
+    "remote-config integration",
+    "save migration or balance rebase",
+    "offer UI redesign",
+    "Chapter 2 content"
+  ],
+  "pending": [
+    "Unity 6000.5.9f1 compilation",
+    "Unity Editor self-test execution",
+    "Unity EditMode Test Runner execution",
+    "Unity PlayMode Test Runner execution",
+    "reviewed live economy wiring",
+    "explicit final runtime-activation approval",
+    "post-wiring regression verification"
+  ],
+  "next_checkpoint": "v1.15 Step 2 activation checkpoint; not v1.15 Step 3"
+}

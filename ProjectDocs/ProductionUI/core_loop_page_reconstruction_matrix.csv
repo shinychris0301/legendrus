@@ -1,0 +1,11 @@
+screen,before,after,status,canonicalComponents,runtimeBehavior
+Loading,full-screen screenshot,production prefab,CUTOVER_STEP_3_3,HeaderFrame;ProgressBar;Jewel,Auto-home retained
+Home,screenshot + hotspots + HUD,production prefab + existing action layer,CUTOVER_STEP_3_3,TopBar;HeaderFrame;PrimaryButton;NavTile;ProgressBar,Main navigation hotspots retained
+WorldMap,full-screen screenshot + map hotspot,production prefab + existing map action layer,CUTOVER_STEP_3_3,TopBar;HeaderFrame;NavyPanel;MapNode;NavTile,Dynamic HUD added
+ChapterMap,screenshot + path/play hotspots,production prefab + existing action layer,CUTOVER_STEP_3_3,TopBar;HeaderFrame;MapNode;PrimaryButton,Chapter 1 nodes reconstructed
+PreLevel,screenshot + dynamic goal overlays,production prefab + existing dynamic overlays,CUTOVER_STEP_3_3,TopBar;ParchmentPanel;GoalPanel;BoosterSlot;PrimaryButton,Dynamic goal/move/reward values retained
+Gameplay,screenshot + runtime board/HUD,production frame prefab + runtime board/HUD,CUTOVER_STEP_3_3,GoalPanel;BoardFrame;BoosterSlot;PauseButton,Runtime Match3Board unchanged
+Pause,modal screenshot + hotspots,production modal prefab + existing action layer,CUTOVER_STEP_3_3,ModalFrame;HeaderFrame;Primary/Secondary/Danger buttons,Pause/resume semantics unchanged
+Victory,screenshot + reaction overlay,production result prefab + reaction overlay,CUTOVER_STEP_3_3,HeaderFrame;Star;RewardTile;Primary/Secondary buttons,Rewarded-double behavior unchanged
+Fail,screenshot + reaction overlay,production result prefab + reaction overlay,CUTOVER_STEP_3_3,HeaderFrame;ParchmentPanel;Primary/Secondary buttons,Retry/exit behavior unchanged
+ChapterComplete,screenshot + summary overlay,production result prefab + summary overlay,CUTOVER_STEP_3_3,HeaderFrame;Star;NavyPanel;Primary/Secondary buttons,Completion acknowledgement unchanged

@@ -1,0 +1,24 @@
+{
+  "milestone": "v1.17-step06-unity-compliance-foundation-verification",
+  "status": "PENDING_USER_UNITY_EXECUTION",
+  "unityVersion": "6000.5.9f1",
+  "required": [
+    "0 compile errors",
+    "commercial vertical slice validator passes",
+    "v1.17 Step 6 self-tests pass 20/20",
+    "complete EditMode suite passes",
+    "complete PlayMode suite passes",
+    "Home -> Pre-Level -> Gameplay -> Victory/Fail -> Home remains unchanged",
+    "analytics remains blocked with shipped unapproved legal state",
+    "rewarded ads remain blocked without ads consent",
+    "local support export contains only the reviewed allowlist",
+    "gameplay save v6 remains readable/writable and unchanged by compliance persistence"
+  ],
+  "hardStops": [
+    "do not approve placeholder legal copy",
+    "do not enable account recovery/deletion backends",
+    "do not enable production analytics/ads/IAP",
+    "do not enable remote content delivery",
+    "do not build/sign/upload a production AAB"
+  ]
+}

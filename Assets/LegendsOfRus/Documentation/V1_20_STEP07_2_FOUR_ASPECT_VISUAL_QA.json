@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07.2-candidate-prefab-four-aspect-qa-cutover-decision",
+  "scope": "SOURCE-SIMULATED FOUR-ASPECT + DIRECT-REFERENCE PROXY; UNITY EXECUTABLE CAPTURE STILL REQUIRED",
+  "candidatePrefabCount": 12,
+  "aspectTargets": [
+    {
+      "name": "9x16",
+      "resolution": [
+        1080,
+        1920
+      ]
+    },
+    {
+      "name": "19.5x9",
+      "resolution": [
+        1080,
+        2340
+      ]
+    },
+    {
+      "name": "20x9",
+      "resolution": [
+        1080,
+        2400
+      ]
+    },
+    {
+      "name": "tablet10x16",
+      "resolution": [
+        1600,
+        2560
+      ]
+    }
+  ],
+  "fourAspectContainment": {
+    "checks": 48,
+    "pass": 48,
+    "fail": 0,
+    "status": "PASS_SOURCE_GEOMETRY_48_OF_48"
+  },
+  "directReferenceCoverage": {
+    "available": 9,
+    "missing": [
+      "SplashTitle",
+      "Pause",
+      "ChapterComplete"
+    ]
+  },
+  "referenceProxyMetrics": [
+    {
+      "pageKey": "Loading",
+      "reference": "Loading.png",
+      "ssim": 0.0779,
+      "luminanceCorrelation": 0.2705,
+      "meanAbsoluteRgbError": 0.1687,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "Home",
+      "reference": "Home.png",
+      "ssim": 0.175,
+      "luminanceCorrelation": 0.2198,
+      "meanAbsoluteRgbError": 0.1706,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "WorldMap",
+      "reference": "WorldMap.png",
+      "ssim": 0.564,
+      "luminanceCorrelation": 0.5869,
+      "meanAbsoluteRgbError": 0.081,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "LevelSelect",
+      "reference": "ChapterMap.png",
+      "ssim": 0.5984,
+      "luminanceCorrelation": 0.6161,
+      "meanAbsoluteRgbError": 0.0712,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "PreLevel",
+      "reference": "PreLevel.png",
+      "ssim": 0.0931,
+      "luminanceCorrelation": 0.0395,
+      "meanAbsoluteRgbError": 0.1828,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "Gameplay",
+      "reference": "Gameplay.png",
+      "ssim": 0.0464,
+      "luminanceCorrelation": -0.0249,
+      "meanAbsoluteRgbError": 0.192,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "Victory",
+      "reference": "Victory.png",
+      "ssim": 0.0494,
+      "luminanceCorrelation": 0.0392,
+      "meanAbsoluteRgbError": 0.2043,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "Fail",
+      "reference": "Fail.png",
+      "ssim": 0.1747,
+      "luminanceCorrelation": 0.1088,
+      "meanAbsoluteRgbError": 0.1361,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    },
+    {
+      "pageKey": "Dialogue",
+      "reference": "Dialogue.png",
+      "ssim": 0.6924,
+      "luminanceCorrelation": 0.7924,
+      "meanAbsoluteRgbError": 0.0675,
+      "strictProxyThreshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10",
+      "strictProxyPass": false
+    }
+  ],
+  "strictProxyPassCount": 0,
+  "strictProxyFailCount": 9,
+  "fontStatus": "PENDING_LICENSED_CYRILLIC_FONT_IMPORT",
+  "unityFourAspectCapture": "PENDING_USER_UNITY_EXECUTION",
+  "androidDeviceAcceptance": "PENDING_USER_ANDROID_EXECUTION",
+  "note": "Containment proves the 941x1672 page can fit the four target aspect ratios without crop under the inherited fit-in-safe-area policy. It does not prove pixel fidelity. Direct-reference proxy metrics are intentionally strict and show that Wave 1 artwork is not ready for active cutover."
+}

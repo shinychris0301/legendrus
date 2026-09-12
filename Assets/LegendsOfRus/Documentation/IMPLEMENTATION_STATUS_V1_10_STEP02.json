@@ -1,0 +1,42 @@
+{
+  "version": "v1.10-step02",
+  "milestone": "Deterministic BoardModel Extraction",
+  "status": "IMPLEMENTED_PENDING_UNITY_VALIDATION",
+  "source_version": "v1.10-step01 Input and Gameplay-State Foundation",
+  "unity_target": "6000.5.9f1",
+  "input_system": "1.20.0",
+  "authoritative_model": {
+    "class": "LegendsOfRus.GameplayCore.BoardModel",
+    "engine_dependencies": "none inside BoardModel",
+    "owns": [
+      "tile grid",
+      "special-gem grid",
+      "seeded generation",
+      "swap validation",
+      "match-run detection",
+      "special creation decisions",
+      "special effect expansion",
+      "gravity",
+      "refill",
+      "legal-move detection",
+      "dead-board reshuffling",
+      "snapshots",
+      "state hashes",
+      "replay tokens"
+    ]
+  },
+  "runtime_integration": {
+    "controller": "Match3Board",
+    "model_delegation": true,
+    "approved_visuals_changed": false,
+    "gameplay_art_changed": false,
+    "layout_changed": false
+  },
+  "qa": {
+    "editor_self_test": "Legends of Rus/Tests/Run v1.10 Step 2 BoardModel Self-Tests",
+    "expected_self_test_result": "22/22",
+    "editmode_test_files": 4,
+    "deterministic_debugger": "Legends of Rus/Tests/Open Deterministic Board Debugger"
+  },
+  "next_step": "v1.10 Step 3 — Deterministic Resolution Plans and Special-Combination Commands"
+}

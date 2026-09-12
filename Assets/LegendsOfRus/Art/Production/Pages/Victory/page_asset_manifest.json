@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Victory",
+  "productPage": "Victory",
+  "screenId": "Victory",
+  "wave": 1,
+  "directApprovedReference": "Victory.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Victory.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Victory/environment_victory.png",
+      "role": "victory environment",
+      "sourceType": "derived-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_home_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Victory/hero_firebird_victory.png",
+      "role": "hero/Firebird celebration layer",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/hero_ivan_firebird.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Victory/victory_ribbon.png",
+      "role": "victory ribbon",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/ribbon_red.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Victory/confetti_sparks.png",
+      "role": "confetti/glow VFX",
+      "sourceType": "wave0-shared-copy",
+      "source": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/confetti_sparks.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "victory environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Victory/environment_victory.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "hero/Firebird celebration",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Victory/hero_firebird_victory.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "victory ribbon",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Victory/victory_ribbon.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "star reveal",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/star.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "reward chest/items",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/reward_tile.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "continue button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "reward-double panel",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "confetti/glow VFX",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Victory/confetti_sparks.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 8,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

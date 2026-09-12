@@ -1,0 +1,41 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "approval": "User authorized implementing approved R1 Loading and explicitly requested a bar showing loading work.",
+  "jobs": [
+    {
+      "name": "environment_journey",
+      "prompt": "Use case: precise-object-edit. Image 1 is the user-approved journey illustration for Loading in «Легенды Руси: Три в Ряд». Create the CLEAN ENVIRONMENT PLATE for the real Unity implementation by removing ONLY Ivan and the Firebird. Remove their entire bodies, garments, feathers and local glow from the lower-middle region and fill naturally with the snowy stone path, terrain, trees and existing landscape. Preserve EXACTLY the rest of the composition, same dawn clouds, white fortress, village, stone bridge, pines, snow detail, camera and cool/warm grading. Preserve fine painterly detail. No added characters, animals or figures. Entire plate opaque, 941 x 1672 portrait. NO logo, NO text, NO panel, NO progress bar, NO UI, NO border. Do not blur/stretch screenshot regions or leave ghost silhouettes. This must be a coherent genuinely clean environment plate.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/LoadingStyleAlignment/R1/journey_scene_refined.png"
+      ]
+    },
+    {
+      "name": "ivan_journey",
+      "prompt": "Use case: background-extraction. Extract ONLY the complete Ivan character from Image 1 as an isolated Unity sprite on a genuinely TRANSPARENT background. Image 1 is the approved Loading journey pose; preserve that exact three-quarter-back walking pose, brown wavy hair, small bearded profile, grey-brown fur mantle, navy embroidered robe, red antique-gold-trimmed cape, cream sleeve, leather bracer, belt and walking boots. Image 2 reinforces his established face/costume style, not a replacement pose. Keep the complete cape from leftmost tip through collar and both feet. Do not redraw or restyle his face, clothing, anatomy, palette or lighting. Tightly fit a portrait canvas to the full silhouette with a modest transparent margin. No scenery between limbs, no snow, no ground, no cast ground shadow, no landscape pixels, no other figure, no Firebird, no panel, no words. Solid garment/body interiors must be opaque; only natural fur/hair silhouette edges may be partially transparent. Actual alpha transparency, never a painted checkerboard or colored rectangle. One isolated full-body character sprite only.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/LoadingStyleAlignment/R1/journey_scene_refined.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/slavic_fantasy_prince_warrior_portrait.png"
+      ]
+    },
+    {
+      "name": "firebird_journey",
+      "prompt": "Use case: background-extraction. Extract ONLY the Firebird from Image 1 as one isolated Unity sprite with a genuinely transparent background. Preserve the exact approved Loading bird's flying pose: head faces right, wings spread upwards/outward, long tapering flame feather tail flowing down-left. Preserve its orange/gold luminous feather details, beak, small talons and coherent bird anatomy. Image 2 is the established Firebird rendering reference; do not switch to that different pose. Tightly fit canvas to the complete bird and subtle natural glow with transparent margin, no clipping of wings/tail. Opaque feather/body cores with partially transparent fine flame edges and glow. No snow, scenery, person, ground plane, rectangular haze, checkerboard pixels, text, logo or interface. Preserve original proportions/colors. One genuinely isolated complete bird only.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/LoadingStyleAlignment/R1/journey_scene_refined.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/majestic_fiery_phoenix_in_flight.png"
+      ]
+    }
+  ],
+  "unused_edit": {
+    "prompt": "Use case: background-extraction. Edit this image into a genuinely isolated character sprite. Remove the entire brown/red/black studio background AND all broad colored haze behind the figure. There must be empty transparent pixels immediately outside Ivan's hair, fur, cape, hand and boots, including the space between/around the legs. Keep ONLY the visible person and his complete clothing. Preserve his exact current pose, size, proportions, face/profile, hair, detailed fur and embroidery, colors and all pixels inside the figure as closely as possible. No detached glow or background shadow. The red cape is solid cloth, keep it; the red soft haze outside the cape must disappear. Transparent background, no checkerboard pattern painted in, no solid color rectangle. Opaque body and clothing interior, only narrow fur/hair edge antialiasing. Whole complete character fits canvas; no scenery, floor or text. This is a production cutout, not a portrait with a backdrop.",
+    "output": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-7b131687-175e-4eee-9ecc-4bf910722786.png",
+    "selected": false,
+    "reason": "Original candidate's apparent surround was hidden RGB beneath alpha zero, verified through proper compositing. Cleanup output was RGB with baked checkerboard and was not imported."
+  },
+  "selected_sources": {
+    "environment_journey": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-a1b2000e-b23e-431e-a411-5048650197fe.png",
+    "ivan_journey": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-ca138a2a-4239-476c-b1fe-4e40620bc35f.png",
+    "firebird_journey": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-214e9ba6-0470-4fa8-ade1-0e7fc6af2166.png",
+    "tip_panel": "ProjectDocs/AI/LoadingStyleAlignment/R1/tip_panel_generated.png"
+  }
+}

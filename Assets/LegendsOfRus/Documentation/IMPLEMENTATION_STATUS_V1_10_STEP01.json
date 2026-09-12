@@ -1,0 +1,36 @@
+{
+  "version": "v1.10-step01",
+  "milestone": "Gameplay Core Stabilization and Regression Tests",
+  "substep": "Input and Gameplay-State Foundation",
+  "status": "IMPLEMENTED_PENDING_UNITY_VALIDATION",
+  "unity_target": "6000.5.9f1",
+  "design_style_changed": false,
+  "gem_art_changed": false,
+  "implemented": [
+    "Authoritative BoardDirectionResolver",
+    "Local RectTransform gesture conversion",
+    "Shared drag and fast-flick direction path",
+    "GameplayStateMachine",
+    "Input lock during swap/cascade/fall/special phases",
+    "Stable-phase pause gate",
+    "Full-screen modal raycast blocker",
+    "Pause to Settings without rebuilding board",
+    "EditMode tests",
+    "Editor self-test menu"
+  ],
+  "acceptance": {
+    "self_tests_expected": "14/14",
+    "editmode_test_classes": 2,
+    "manual_device_tests": [
+      "tap adjacent",
+      "swipe left",
+      "swipe right",
+      "swipe up",
+      "swipe down",
+      "invalid swap",
+      "pause resume",
+      "pause settings resume"
+    ]
+  },
+  "next_substep": "v1.10 Step 2 — Deterministic BoardModel extraction"
+}

@@ -1,0 +1,886 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step04-functional-game-flow-demo-logic",
+  "policy": {
+    "priority": "functionality-first",
+    "visuals": "existing demo/captured designs allowed until asset-production phase",
+    "productionBackends": "not simulated; fail closed or local session demo only",
+    "savePayloadVersion": 6,
+    "chapterScope": "Chapter 1 fully playable; 20-chapter pipeline remains separate content phase"
+  },
+  "pages": [
+    {
+      "pageKey": "SplashTitle",
+      "productPage": "Splash / Title",
+      "screenId": "SplashTitle",
+      "surfaceType": "screen",
+      "functionalGoal": "Boot entry; continue into Loading.",
+      "primaryTransitions": "Continue→Loading",
+      "stateOwnership": "none",
+      "backendDependency": "none",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "full-screen title environment",
+        "game logo",
+        "title ornament",
+        "start/continue button",
+        "version/legal microcopy",
+        "ambient particles"
+      ]
+    },
+    {
+      "pageKey": "Loading",
+      "productPage": "Loading",
+      "screenId": "Loading",
+      "surfaceType": "screen",
+      "functionalGoal": "Load local services/content and transition to Home.",
+      "primaryTransitions": "Auto→Home",
+      "stateOwnership": "none",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "loading environment",
+        "logo",
+        "progress frame/fill",
+        "tip parchment",
+        "loading animation"
+      ]
+    },
+    {
+      "pageKey": "Home",
+      "productPage": "Home",
+      "screenId": "Home",
+      "surfaceType": "screen",
+      "functionalGoal": "Main navigation hub; show resources and progression entry.",
+      "primaryTransitions": "Profile, Settings, WorldMap, Shop, Events, Characters, Mail, DailyReward, Play",
+      "stateOwnership": "save-v6 resources/progress",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "home environment",
+        "hero character layers",
+        "Firebird layer",
+        "top HUD",
+        "resource icons",
+        "navigation icons",
+        "play CTA",
+        "quest/progress panel",
+        "notification badges"
+      ]
+    },
+    {
+      "pageKey": "WorldMap",
+      "productPage": "World Map",
+      "screenId": "WorldMap",
+      "surfaceType": "screen",
+      "functionalGoal": "Select chapter/region and return to Home.",
+      "primaryTransitions": "Chapter→ChapterMap; Back→Home",
+      "stateOwnership": "selected chapter",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "world map environment plate",
+        "region art layers",
+        "route/path",
+        "chapter nodes",
+        "lock states",
+        "star counters",
+        "top HUD",
+        "back/home control",
+        "bottom navigation"
+      ]
+    },
+    {
+      "pageKey": "LevelSelect",
+      "productPage": "Level Select / Chapter Map",
+      "screenId": "ChapterMap",
+      "surfaceType": "screen",
+      "functionalGoal": "Select unlocked level in current chapter.",
+      "primaryTransitions": "Level→PreLevel; Back→WorldMap",
+      "stateOwnership": "selected level, unlock state, stars",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "chapter environment",
+        "chapter ribbon/title",
+        "level path",
+        "level nodes",
+        "star states",
+        "lock states",
+        "back button",
+        "play button",
+        "reward chest marker"
+      ]
+    },
+    {
+      "pageKey": "PreLevel",
+      "productPage": "Pre-Level",
+      "screenId": "PreLevel",
+      "surfaceType": "screen",
+      "functionalGoal": "Review goals/moves/rewards and optional boosters before spending energy.",
+      "primaryTransitions": "Boosters modal; Start→Gameplay; Back→LevelSelect",
+      "stateOwnership": "selected level, boosters, energy",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "chapter background",
+        "goals frame",
+        "goal icons",
+        "moves medallion",
+        "booster slots",
+        "reward panel",
+        "back button",
+        "start button"
+      ]
+    },
+    {
+      "pageKey": "Gameplay",
+      "productPage": "Gameplay",
+      "screenId": "Gameplay",
+      "surfaceType": "screen",
+      "functionalGoal": "Run Match-3 board, goals, moves, boosters, pause, win/fail.",
+      "primaryTransitions": "Pause; Victory/Fail; Tutorial/Dialogue",
+      "stateOwnership": "board state, score, goals, moves, boosters, level attempt",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "gameplay environment",
+        "top HUD",
+        "portrait",
+        "goal icons",
+        "moves frame",
+        "board frame/cells",
+        "gems/special gems",
+        "obstacles",
+        "booster bar",
+        "score bar",
+        "VFX",
+        "combo text",
+        "pause button"
+      ]
+    },
+    {
+      "pageKey": "Pause",
+      "productPage": "Pause Menu",
+      "screenId": "Pause",
+      "surfaceType": "modal",
+      "functionalGoal": "Pause safe gameplay state and resume/restart/settings/exit.",
+      "primaryTransitions": "Resume; Restart; Settings; Exit→LevelSelect",
+      "stateOwnership": "live board pause state",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "modal dimmer",
+        "pause frame",
+        "goals snapshot",
+        "booster row",
+        "resume/restart/settings/exit buttons"
+      ]
+    },
+    {
+      "pageKey": "Victory",
+      "productPage": "Victory",
+      "screenId": "Victory",
+      "surfaceType": "screen",
+      "functionalGoal": "Present clear result, stars/rewards, optional verified reward-double.",
+      "primaryTransitions": "Continue→story/chapter flow; Double reward provider",
+      "stateOwnership": "last result/reward",
+      "backendDependency": "rewarded-ad provider optional",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "victory environment",
+        "hero/Firebird celebration",
+        "victory ribbon",
+        "star reveal",
+        "reward chest/items",
+        "continue button",
+        "reward-double panel",
+        "confetti/glow VFX"
+      ]
+    },
+    {
+      "pageKey": "Fail",
+      "productPage": "Fail",
+      "screenId": "Fail",
+      "surfaceType": "screen",
+      "functionalGoal": "Present failed goals and retry/exit options.",
+      "primaryTransitions": "Retry→PreLevel/Gameplay; Exit→LevelSelect",
+      "stateOwnership": "failure/attempt counters",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "failure environment",
+        "hero reaction",
+        "fail ribbon",
+        "failed goal rows",
+        "retry button",
+        "exit button",
+        "continue offer area",
+        "failure VFX"
+      ]
+    },
+    {
+      "pageKey": "ChapterComplete",
+      "productPage": "Chapter Complete",
+      "screenId": "ChapterComplete",
+      "surfaceType": "screen",
+      "functionalGoal": "Present chapter summary/reward and acknowledge completion.",
+      "primaryTransitions": "Continue/Map→WorldMap",
+      "stateOwnership": "chapter completion acknowledgement",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "chapter finale environment",
+        "hero/Firebird",
+        "chapter complete title",
+        "star summary",
+        "reward items",
+        "next chapter card",
+        "continue/map buttons"
+      ]
+    },
+    {
+      "pageKey": "Dialogue",
+      "productPage": "Dialogue / Story",
+      "screenId": "Dialogue",
+      "surfaceType": "screen",
+      "functionalGoal": "Show localized story line and advance deterministic story state.",
+      "primaryTransitions": "Continue→next dialogue/prelevel/chapter map/chapter complete",
+      "stateOwnership": "completed story scenes/storyStage",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "story environment/character scene",
+        "dialogue panel",
+        "speaker plate/avatar",
+        "continue button",
+        "skip/history optional icons"
+      ]
+    },
+    {
+      "pageKey": "CharacterCollection",
+      "productPage": "Character Collection",
+      "screenId": "Characters",
+      "surfaceType": "screen",
+      "functionalGoal": "Browse/unlock/select characters; current demo selects Ivan.",
+      "primaryTransitions": "Select/Use; Back→Home",
+      "stateOwnership": "selected/owned character future state",
+      "backendDependency": "account/content backend optional",
+      "logicStatus": "partial",
+      "assetRequirements": [
+        "collection background",
+        "character cards",
+        "portrait/full-body layers",
+        "rarity frames",
+        "progress shards",
+        "use/select button",
+        "filters/tabs",
+        "lock states"
+      ]
+    },
+    {
+      "pageKey": "DailyReward",
+      "productPage": "Daily Reward",
+      "screenId": "DailyReward",
+      "surfaceType": "screen",
+      "functionalGoal": "Claim once-per-day local reward and show claim modal.",
+      "primaryTransitions": "Claim→RewardClaim; Back→Home",
+      "stateOwnership": "lastDailyRewardUtc/resources",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "daily calendar frame",
+        "7-day reward cells",
+        "claimed/current/locked states",
+        "reward icons",
+        "claim button",
+        "timer"
+      ]
+    },
+    {
+      "pageKey": "EventsHub",
+      "productPage": "Events Hub",
+      "screenId": "Events",
+      "surfaceType": "screen",
+      "functionalGoal": "Browse active events and open details.",
+      "primaryTransitions": "Event card→EventDetail; Back→Home",
+      "stateOwnership": "event availability future",
+      "backendDependency": "LiveOps backend required for production",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "events environment",
+        "event cards/banners",
+        "countdown badges",
+        "progress bars",
+        "reward previews",
+        "event currency",
+        "tabs"
+      ]
+    },
+    {
+      "pageKey": "EventDetail",
+      "productPage": "Event Detail",
+      "screenId": "EventDetail",
+      "surfaceType": "screen",
+      "functionalGoal": "Review event objective/progress/rewards; demo claim records session only.",
+      "primaryTransitions": "Claim demo; Back→Events",
+      "stateOwnership": "demo event claim session state",
+      "backendDependency": "LiveOps/reward authority required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "event hero art",
+        "event title frame",
+        "objective rows",
+        "progress bar",
+        "milestone rewards",
+        "event shop/pass CTA",
+        "claim button",
+        "timer"
+      ]
+    },
+    {
+      "pageKey": "IndividualRanking",
+      "productPage": "Individual Ranking",
+      "screenId": "IndividualRanking",
+      "surfaceType": "screen",
+      "functionalGoal": "Display player leaderboard and player rank.",
+      "primaryTransitions": "Back→Home",
+      "stateOwnership": "ranking snapshot future",
+      "backendDependency": "leaderboard backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "ranking background",
+        "season header",
+        "rank tabs",
+        "ranking rows",
+        "avatar frames",
+        "rank badges",
+        "score icons",
+        "player sticky row"
+      ]
+    },
+    {
+      "pageKey": "TeamHub",
+      "productPage": "Team Hub",
+      "screenId": "TeamHub",
+      "surfaceType": "screen",
+      "functionalGoal": "Social hub for team ranking/chat/friends.",
+      "primaryTransitions": "Ranking, Chat, Friends; Back→Home",
+      "stateOwnership": "team membership future",
+      "backendDependency": "social backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "team banner/emblem",
+        "team header",
+        "member summary",
+        "team chest/progress",
+        "ranking/chat/friends buttons",
+        "member avatars"
+      ]
+    },
+    {
+      "pageKey": "TeamRanking",
+      "productPage": "Team Ranking",
+      "screenId": "TeamRanking",
+      "surfaceType": "screen",
+      "functionalGoal": "Display ranked teams.",
+      "primaryTransitions": "Back→TeamHub",
+      "stateOwnership": "ranking snapshot future",
+      "backendDependency": "leaderboard backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "team ranking header",
+        "team rows",
+        "emblems",
+        "rank badges",
+        "score/trophy icons",
+        "player team highlight"
+      ]
+    },
+    {
+      "pageKey": "TeamChat",
+      "productPage": "Team Chat",
+      "screenId": "TeamChat",
+      "surfaceType": "screen",
+      "functionalGoal": "Send/view team messages; demo send is session-only.",
+      "primaryTransitions": "Send demo; Back→TeamHub",
+      "stateOwnership": "demo message count",
+      "backendDependency": "chat/moderation backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "chat background",
+        "message bubbles",
+        "avatars",
+        "timestamp/status icons",
+        "composer field",
+        "send button",
+        "moderation/report icons"
+      ]
+    },
+    {
+      "pageKey": "FriendsList",
+      "productPage": "Friends List",
+      "screenId": "FriendsList",
+      "surfaceType": "screen",
+      "functionalGoal": "Browse friends and request energy; demo request is session-only.",
+      "primaryTransitions": "Request energy; Back→TeamHub/Home",
+      "stateOwnership": "demo request state",
+      "backendDependency": "friends backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "friends rows",
+        "avatars",
+        "online status",
+        "gift/energy icons",
+        "invite/add button",
+        "search field",
+        "request button"
+      ]
+    },
+    {
+      "pageKey": "Mail",
+      "productPage": "Mail / Inbox",
+      "screenId": "Mail",
+      "surfaceType": "screen",
+      "functionalGoal": "List messages/rewards; current reward claim is intentionally unavailable.",
+      "primaryTransitions": "ClaimAll safe stub; Back→Home",
+      "stateOwnership": "mail future",
+      "backendDependency": "mail/backend required",
+      "logicStatus": "partial",
+      "assetRequirements": [
+        "mail background",
+        "message rows",
+        "sender icons",
+        "unread badges",
+        "attachments/reward icons",
+        "claim buttons",
+        "empty state"
+      ]
+    },
+    {
+      "pageKey": "Profile",
+      "productPage": "Profile",
+      "screenId": "Profile",
+      "surfaceType": "screen",
+      "functionalGoal": "Show player identity/progress and demo access to ranking/team/inventory/login.",
+      "primaryTransitions": "Ranking, Team, Inventory, Login; Back→Home",
+      "stateOwnership": "save-v6 progress; account future",
+      "backendDependency": "account backend optional",
+      "logicStatus": "partial",
+      "assetRequirements": [
+        "profile background",
+        "avatar frame",
+        "name plate",
+        "level/progress",
+        "stats panels",
+        "achievements",
+        "edit-name button",
+        "account link badge"
+      ]
+    },
+    {
+      "pageKey": "Inventory",
+      "productPage": "Inventory",
+      "screenId": "Inventory",
+      "surfaceType": "screen",
+      "functionalGoal": "Show owned boosters/items from save/game state.",
+      "primaryTransitions": "Back→Home",
+      "stateOwnership": "booster counts/resources",
+      "backendDependency": "none",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "inventory background",
+        "tabs",
+        "item slots",
+        "item icons",
+        "quantity badges",
+        "rarity frames",
+        "empty slot/state",
+        "item detail popup"
+      ]
+    },
+    {
+      "pageKey": "Shop",
+      "productPage": "Shop",
+      "screenId": "Shop",
+      "surfaceType": "screen",
+      "functionalGoal": "Display offers and route purchases through verified monetization facade.",
+      "primaryTransitions": "Packs; SpecialOffer; Back→Home",
+      "stateOwnership": "catalog/provider receipts",
+      "backendDependency": "IAP backend/provider required",
+      "logicStatus": "implemented-fail-closed",
+      "assetRequirements": [
+        "shop background",
+        "category tabs",
+        "pack cards",
+        "currency icons",
+        "price buttons",
+        "best-value badges",
+        "restore/info controls",
+        "special offer banner"
+      ]
+    },
+    {
+      "pageKey": "SpecialOffer",
+      "productPage": "Special Offer Popup",
+      "screenId": "SpecialOffer",
+      "surfaceType": "screen",
+      "functionalGoal": "Present targeted offer; purchase remains fail-closed without verified provider.",
+      "primaryTransitions": "Buy; Back→Shop",
+      "stateOwnership": "provider receipt only",
+      "backendDependency": "IAP backend/provider required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "offer hero art",
+        "modal frame",
+        "bundle item icons",
+        "original/sale price",
+        "discount badge",
+        "countdown",
+        "buy/close buttons"
+      ]
+    },
+    {
+      "pageKey": "OutOfEnergy",
+      "productPage": "Out of Energy",
+      "screenId": "OutOfEnergy",
+      "surfaceType": "modal",
+      "functionalGoal": "Block level start when energy insufficient; buy/ad/friend options fail safely.",
+      "primaryTransitions": "Buy; WatchAd; AskFriends demo; Close",
+      "stateOwnership": "energy/time",
+      "backendDependency": "IAP/rewarded/social providers optional",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "energy modal",
+        "heart/energy icon",
+        "refill timer",
+        "purchase row",
+        "friend request row",
+        "rewarded-ad row",
+        "close button"
+      ]
+    },
+    {
+      "pageKey": "BoosterSelect",
+      "productPage": "Booster Select Popup",
+      "screenId": "BoosterSelect",
+      "surfaceType": "modal",
+      "functionalGoal": "Choose pre-level boosters and start.",
+      "primaryTransitions": "Play/close",
+      "stateOwnership": "booster inventory/selection",
+      "backendDependency": "none",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "booster modal",
+        "booster grid",
+        "booster icons",
+        "count badges",
+        "selected states",
+        "info tooltips",
+        "play/close buttons"
+      ]
+    },
+    {
+      "pageKey": "RewardClaim",
+      "productPage": "Reward Claim Popup",
+      "screenId": "RewardClaim",
+      "surfaceType": "modal",
+      "functionalGoal": "Acknowledge a verified/local reward result.",
+      "primaryTransitions": "Claim/close",
+      "stateOwnership": "reward result",
+      "backendDependency": "provider-specific when applicable",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "reward modal",
+        "chest/reward burst",
+        "reward item icons",
+        "quantity labels",
+        "claim button",
+        "shine/particle VFX"
+      ]
+    },
+    {
+      "pageKey": "Settings",
+      "productPage": "Settings",
+      "screenId": "Settings",
+      "surfaceType": "screen/modal",
+      "functionalGoal": "Toggle music/SFX/vibration/notifications; access language/help/system demos.",
+      "primaryTransitions": "Toggles; Language; Tutorial; Back",
+      "stateOwnership": "save-v6 settings",
+      "backendDependency": "OS/provider optional for notifications",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "settings panel",
+        "toggle controls",
+        "audio/haptic icons",
+        "notification icon",
+        "language row",
+        "support/privacy rows",
+        "back/close button"
+      ]
+    },
+    {
+      "pageKey": "LanguageSelect",
+      "productPage": "Language Select",
+      "screenId": "LanguageSelect",
+      "surfaceType": "screen",
+      "functionalGoal": "Choose locale; demo stores session language only.",
+      "primaryTransitions": "RU/EN demo; Back→Settings",
+      "stateOwnership": "session language; future persisted locale",
+      "backendDependency": "localization content required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "language background",
+        "language rows",
+        "flags/locale icons",
+        "selected checkmark",
+        "download indicator optional",
+        "back button"
+      ]
+    },
+    {
+      "pageKey": "Login",
+      "productPage": "Login",
+      "screenId": "Login",
+      "surfaceType": "screen",
+      "functionalGoal": "Guest entry now; production account providers later.",
+      "primaryTransitions": "Guest→Home; Back→Profile",
+      "stateOwnership": "demo guest state",
+      "backendDependency": "identity/cloud backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "login environment",
+        "logo",
+        "guest button",
+        "provider buttons",
+        "privacy/legal links",
+        "account recovery link",
+        "loading/error states"
+      ]
+    },
+    {
+      "pageKey": "TutorialOverlay",
+      "productPage": "Tutorial Overlay",
+      "screenId": "TutorialOverlay",
+      "surfaceType": "overlay/screen",
+      "functionalGoal": "Explain controls; gameplay tutorial remains data-driven.",
+      "primaryTransitions": "Back/help close; gameplay triggers existing presenter",
+      "stateOwnership": "completedTutorialSteps",
+      "backendDependency": "none",
+      "logicStatus": "partial",
+      "assetRequirements": [
+        "spotlight mask",
+        "hand/pointer",
+        "callout panel",
+        "arrow",
+        "step dots",
+        "skip/next controls",
+        "highlight frames"
+      ]
+    },
+    {
+      "pageKey": "OfflineState",
+      "productPage": "Offline State",
+      "screenId": "OfflineState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Explain offline limitations and allow safe retry/local play.",
+      "primaryTransitions": "Retry/Home",
+      "stateOwnership": "network status future",
+      "backendDependency": "network provider",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "offline illustration",
+        "status icon",
+        "retry button",
+        "continue-offline button",
+        "support text"
+      ]
+    },
+    {
+      "pageKey": "MaintenanceState",
+      "productPage": "Maintenance State",
+      "screenId": "MaintenanceState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Block online-only operations during maintenance.",
+      "primaryTransitions": "Back/Home",
+      "stateOwnership": "maintenance flag future",
+      "backendDependency": "remote config/backend",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "maintenance illustration",
+        "status panel",
+        "estimated-time text",
+        "retry/home controls"
+      ]
+    },
+    {
+      "pageKey": "EmptyErrorStates",
+      "productPage": "Empty / Error Variants",
+      "screenId": "EmptyErrorState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Reusable empty/error/retry state.",
+      "primaryTransitions": "Retry/Home",
+      "stateOwnership": "error context",
+      "backendDependency": "varies",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "empty-state illustrations",
+        "error icons",
+        "message panel",
+        "retry/back buttons",
+        "variant badges"
+      ]
+    }
+  ],
+  "routeGraph": {
+    "SplashTitle": [
+      "Loading"
+    ],
+    "Loading": [
+      "Home"
+    ],
+    "Home": [
+      "Profile",
+      "Settings",
+      "WorldMap",
+      "ChapterMap",
+      "Shop",
+      "Events",
+      "Characters",
+      "Mail",
+      "DailyReward"
+    ],
+    "WorldMap": [
+      "Home",
+      "ChapterMap"
+    ],
+    "ChapterMap": [
+      "WorldMap",
+      "PreLevel"
+    ],
+    "PreLevel": [
+      "ChapterMap",
+      "BoosterSelect",
+      "Gameplay",
+      "OutOfEnergy"
+    ],
+    "Gameplay": [
+      "Pause",
+      "TutorialOverlay",
+      "Victory",
+      "Fail",
+      "Dialogue"
+    ],
+    "Pause": [
+      "Gameplay",
+      "Settings",
+      "PreLevel",
+      "ChapterMap"
+    ],
+    "Victory": [
+      "Dialogue",
+      "ChapterComplete",
+      "ChapterMap"
+    ],
+    "Fail": [
+      "Gameplay",
+      "ChapterMap"
+    ],
+    "ChapterComplete": [
+      "WorldMap"
+    ],
+    "Dialogue": [
+      "Dialogue",
+      "PreLevel",
+      "ChapterMap",
+      "ChapterComplete"
+    ],
+    "Events": [
+      "Home",
+      "EventDetail"
+    ],
+    "EventDetail": [
+      "Events"
+    ],
+    "Profile": [
+      "Home",
+      "IndividualRanking",
+      "TeamHub",
+      "Inventory",
+      "Login"
+    ],
+    "TeamHub": [
+      "Home",
+      "TeamRanking",
+      "TeamChat",
+      "FriendsList"
+    ],
+    "TeamRanking": [
+      "TeamHub"
+    ],
+    "TeamChat": [
+      "TeamHub"
+    ],
+    "FriendsList": [
+      "TeamHub"
+    ],
+    "Inventory": [
+      "Home"
+    ],
+    "Shop": [
+      "Home",
+      "SpecialOffer"
+    ],
+    "SpecialOffer": [
+      "Shop"
+    ],
+    "Settings": [
+      "Home",
+      "LanguageSelect",
+      "TutorialOverlay",
+      "OfflineState",
+      "MaintenanceState",
+      "EmptyErrorState"
+    ],
+    "LanguageSelect": [
+      "Settings"
+    ],
+    "Login": [
+      "Profile",
+      "Home"
+    ],
+    "Characters": [
+      "Home"
+    ],
+    "Mail": [
+      "Home"
+    ],
+    "DailyReward": [
+      "Home",
+      "RewardClaim"
+    ],
+    "OutOfEnergy": [
+      "PreLevel",
+      "Gameplay"
+    ],
+    "BoosterSelect": [
+      "PreLevel",
+      "Gameplay"
+    ],
+    "RewardClaim": [
+      "DailyReward"
+    ],
+    "OfflineState": [
+      "Home"
+    ],
+    "MaintenanceState": [
+      "Home"
+    ],
+    "EmptyErrorState": [
+      "Home"
+    ],
+    "TutorialOverlay": [
+      "Home"
+    ]
+  }
+}

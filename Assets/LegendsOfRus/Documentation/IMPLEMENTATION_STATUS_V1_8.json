@@ -1,0 +1,33 @@
+{
+  "version": "1.8-gameplay-polish",
+  "input_fixes": [
+    "drag triggers during OnDrag instead of waiting for pointer-up",
+    "swipe direction normalized by actual cell width/height",
+    "pointer-up fallback handles fast flicks",
+    "tap-to-select remains available"
+  ],
+  "animation": [
+    "gem swap slide animation",
+    "invalid swap return animation",
+    "match shrink/pop animation",
+    "cascade drop animation",
+    "special-gem creation pulse",
+    "row/column line sweep",
+    "burst pulse",
+    "Living Light board flash",
+    "Sea Pearl blue flash"
+  ],
+  "special_matches": {
+    "4_horizontal": "row special",
+    "4_vertical": "column special",
+    "5_or_more": "color special",
+    "T_or_L_intersection": "burst special"
+  },
+  "boosters": {
+    "BogatyrMace": "arm -> tap clears row; vertical swipe on target clears column",
+    "Firebird": "arm -> tap target clears 3x3 with fire pulse",
+    "LivingLight": "arm -> tap target clears all gems of that color",
+    "SeaPearl": "immediate +5 moves with water-blue flash"
+  },
+  "art": "runtime gem sprites reconstructed from the approved Gameplay design page"
+}

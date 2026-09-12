@@ -1,0 +1,196 @@
+{
+  "revision": "R3-BuildPreflightFix03",
+  "archiveFindings": {
+    "archive": "LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL.zip",
+    "unityVersion": "m_EditorVersion: 6000.5.9f1",
+    "packageManifestPresent": true,
+    "packageLockPresent": false,
+    "playerSettingsAssetPresent": false,
+    "policySha256": "95eec67ffb9ef8e45ad657524cbfcaa3c852258f4de2c7a54dc53ad18f96751c",
+    "manifestCurrentSha256": "03924bef7f475ba9f8ae358f7504960715b12362be2668361aa9411ea95e4dfc",
+    "manifestPinnedSha256": "f534b3f48018d7c02ddfb1b59588813562837db8167dda7395956065bf4f6713",
+    "originalMetadataCount": 708,
+    "localUnityState": "Not accessed; archive findings do not establish local Player Settings or resolved package versions."
+  },
+  "checks": [
+    {
+      "check": "Original final guards retain both maximum callback orders",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Early Player processor uses minimum callback order",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Early state check occurs before reuse of original options guard",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Early options validation occurs before scheduled policy evaluation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Play and pending-Play states checked",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "No permission to auto-start or auto-stop play",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Scheduled Development comes from scheduled options",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Build option allowlist unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "AutoRunPlayer is not added to allowed mask",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Production switch still private const false",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Package approval still private const false",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "All six existing protected SHA256 pins unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Protected policy file unchanged and not in patch",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Original policy evaluator unchanged and not in patch",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Original policy loader unchanged and not in patch",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "No Player or Addressables build invocation introduced",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "No scene opening or prefab repair introduced",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "No PackageCache or Unity package files changed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "No scene prefab art font or runtime UI files in patch",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Existing metadata identical wherever present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "New scripts have unique metadata GUIDs",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Diagnostics use fully qualified PackageInfo",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Diagnostics record lock as observed not approved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Diagnostics have bounded file fingerprinting",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Diagnostics do not read credential-bearing properties",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C# lexical delimiter sanity only",
+      "passed": true,
+      "detail": "No C# compiler or Unity Editor was used; this is not a syntax/type check."
+    },
+    {
+      "check": "Archive manifest pin mismatch independently verified",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "New tests are in existing configured Editor test assembly",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "staticChecksPassed": 28,
+  "staticChecksTotal": 28,
+  "unityCompilationPerformed": false,
+  "unityTestRunnerPerformed": false,
+  "androidBuildPerformed": false,
+  "addressablesBuildPerformed": false,
+  "deviceTestPerformed": false,
+  "sourceChanges": [
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildGuard.cs",
+      "action": "modified",
+      "sha256": "b02d7a17e92ed911c1c7898caa9aa12eb071812c1ea95adc88e473908871ee6b"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs",
+      "action": "modified",
+      "sha256": "993d6e5fbda9912a088fedfca7426e84084b3aa2df0e8243a9e00ac40dd0812c"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Core/AndroidBuildReasonCodes.cs",
+      "action": "modified",
+      "sha256": "a4d9b4fadae7c0fa311f15acfaa68284cddd520382ab5f9645770ee64e94a055"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildEarlyPreflight.cs",
+      "action": "added",
+      "sha256": "4ef4bc815869b5ec8a4d5f4178ba007e842e7bc2c7e80d512a0e2286c8d25473"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs",
+      "action": "added",
+      "sha256": "e51d03cd60257fc8ef6b6c8848b4a53e169b0d4b9ad2bd2a72f67e7efd49d5e1"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs",
+      "action": "added",
+      "sha256": "43d138c67e695fd15924da5d525be535d3eeec7fc5a6cc265fe31f2c5f45a615"
+    }
+  ]
+}

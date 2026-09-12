@@ -1,0 +1,27 @@
+{
+  "milestone": "v1.17-step03",
+  "name": "Crash and Error Reporting Foundation",
+  "status": "PLANNED_AFTER_V1_17_STEP02_UNITY_VERIFICATION",
+  "productionBuildAuthorized": false,
+  "scope": [
+    "Define provider-neutral structured crash and nonfatal error records with data minimization",
+    "Add bounded local buffering, deduplication, retry policy, and safe offline behavior",
+    "Separate development diagnostics from any future consent-aware production transport",
+    "Add deterministic serialization, failure isolation, and retention-policy tests"
+  ],
+  "outOfScope": [
+    "Installing or activating a production crash-reporting SDK",
+    "Collecting identifiers, save payloads, credentials, purchases, or unrestricted logs",
+    "Network upload without legal, consent, regional, provider, and security approval",
+    "Production Android signing, AAB generation, Play publishing, or package-lock activation",
+    "Runtime economy or commercial-provider activation",
+    "Claiming closed/player-facing transactional save durability before copy-on-write gameplay mutation transactions are implemented"
+  ],
+  "entryCriteria": [
+    "v1.17 Step 2 compiles in Unity 6000.5.9f1 with retained zero-error evidence",
+    "The Step 2 project validator and Editor self-test pass with retained output",
+    "Complete Step 2 EditMode and PlayMode XML is retained with zero failures, skips, or inconclusive tests",
+    "Disposable-profile migration, corruption, backup, future-version, reset, offline, suspend/resume, and forced-termination checks pass",
+    "Save failure diagnostics are stable and contain no raw payload or sensitive value"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "milestone": "v1.17-step02",
+  "name": "Save Migration and Recovery Foundation",
+  "status": "PLANNED_AFTER_V1_17_STEP01_UNITY_VERIFICATION",
+  "productionBuildAuthorized": false,
+  "scope": [
+    "Define a versioned save-envelope and migration registry without activating new economy values",
+    "Add atomic write, backup, corruption detection, and last-known-good recovery",
+    "Preserve save version 6 compatibility and existing player progress",
+    "Add pure migration, interruption, rollback, and recovery tests"
+  ],
+  "outOfScope": [
+    "Production Android signing or publishing",
+    "Provider SDK activation",
+    "Runtime economy activation or balance rebase",
+    "Durable commercial entitlement fulfillment",
+    "Cloud save or account recovery"
+  ],
+  "entryCriteria": [
+    "The Unity-resolved Packages/packages-lock.json is reviewed, returned, included, and SHA-256-pinned by a follow-up source revision",
+    "v1.17 Step 1 compiles in Unity 6000.5.9f1 with retained evidence",
+    "v1.17 Step 1 Editor self-test, EditMode, and PlayMode suites pass with retained evidence",
+    "The exact Development APK preflight passes and the permitted local APK is verified on representative Android hardware"
+  ]
+}

@@ -1,0 +1,1387 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step06-functional-acceptance-asset-readiness",
+  "sourcePlan": "V1_20_STEP04_PAGE_FUNCTION_ASSET_PLAN.json",
+  "sourceFunctionalAcceptance": "V1_20_STEP05_ROUTE_ACCEPTANCE.json",
+  "pageCount": 36,
+  "policy": {
+    "functionalityFirst": true,
+    "fullScreenApprovedImagesAreReferenceOnly": true,
+    "runtimeUsesSeparateAssetsAndPrefabs": true,
+    "noRuntimeCompositeScreenshotFallback": true,
+    "noFunctionalBehaviorChangeDuringAssetReconstruction": true,
+    "lockedStyle": "historical Russian fairy-tale; deep navy/black lacquer, antique-gold filigree, sapphire accents, warm parchment, carved dark wood, painterly environments, gold Cyrillic serif headings, emerald primary CTAs"
+  },
+  "pages": [
+    {
+      "index": 0,
+      "pageKey": "SplashTitle",
+      "productPage": "Splash / Title",
+      "screenId": "SplashTitle",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Boot entry; continue into Loading.",
+        "primaryTransitions": "Continue→Loading",
+        "stateOwnership": "none",
+        "backendDependency": "none",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "full-screen title environment",
+          "game logo",
+          "title ornament",
+          "start/continue button",
+          "version/legal microcopy",
+          "ambient particles"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/SplashTitle.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 1,
+      "pageKey": "Loading",
+      "productPage": "Loading",
+      "screenId": "Loading",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Load local services/content and transition to Home.",
+        "primaryTransitions": "Auto→Home",
+        "stateOwnership": "none",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "loading environment",
+          "logo",
+          "progress frame/fill",
+          "tip parchment",
+          "loading animation"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Loading/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Loading.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Loading.png",
+        "existingRuntimePrefab": "Loading.prefab",
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_AND_PREFAB_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 2,
+      "pageKey": "Home",
+      "productPage": "Home",
+      "screenId": "Home",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Main navigation hub; show resources and progression entry.",
+        "primaryTransitions": "Profile, Settings, WorldMap, Shop, Events, Characters, Mail, DailyReward, Play",
+        "stateOwnership": "save-v6 resources/progress",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "home environment",
+          "hero character layers",
+          "Firebird layer",
+          "top HUD",
+          "resource icons",
+          "navigation icons",
+          "play CTA",
+          "quest/progress panel",
+          "notification badges"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Home/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Home.png",
+        "existingRuntimePrefab": "Home.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 3,
+      "pageKey": "WorldMap",
+      "productPage": "World Map",
+      "screenId": "WorldMap",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Select chapter/region and return to Home.",
+        "primaryTransitions": "Chapter→ChapterMap; Back→Home",
+        "stateOwnership": "selected chapter",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "world map environment plate",
+          "region art layers",
+          "route/path",
+          "chapter nodes",
+          "lock states",
+          "star counters",
+          "top HUD",
+          "back/home control",
+          "bottom navigation"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/WorldMap.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "WorldMap.png",
+        "existingRuntimePrefab": "WorldMap.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 4,
+      "pageKey": "LevelSelect",
+      "productPage": "Level Select / Chapter Map",
+      "screenId": "ChapterMap",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Select unlocked level in current chapter.",
+        "primaryTransitions": "Level→PreLevel; Back→WorldMap",
+        "stateOwnership": "selected level, unlock state, stars",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "chapter environment",
+          "chapter ribbon/title",
+          "level path",
+          "level nodes",
+          "star states",
+          "lock states",
+          "back button",
+          "play button",
+          "reward chest marker"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterMap.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "ChapterMap.png",
+        "existingRuntimePrefab": "ChapterMap.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 5,
+      "pageKey": "PreLevel",
+      "productPage": "Pre-Level",
+      "screenId": "PreLevel",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Review goals/moves/rewards and optional boosters before spending energy.",
+        "primaryTransitions": "Boosters modal; Start→Gameplay; Back→LevelSelect",
+        "stateOwnership": "selected level, boosters, energy",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "chapter background",
+          "goals frame",
+          "goal icons",
+          "moves medallion",
+          "booster slots",
+          "reward panel",
+          "back button",
+          "start button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/PreLevel/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "PreLevel.png",
+        "existingRuntimePrefab": "PreLevel.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 6,
+      "pageKey": "Gameplay",
+      "productPage": "Gameplay",
+      "screenId": "Gameplay",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Run Match-3 board, goals, moves, boosters, pause, win/fail.",
+        "primaryTransitions": "Pause; Victory/Fail; Tutorial/Dialogue",
+        "stateOwnership": "board state, score, goals, moves, boosters, level attempt",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "gameplay environment",
+          "top HUD",
+          "portrait",
+          "goal icons",
+          "moves frame",
+          "board frame/cells",
+          "gems/special gems",
+          "obstacles",
+          "booster bar",
+          "score bar",
+          "VFX",
+          "combo text",
+          "pause button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Gameplay/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Gameplay.png",
+        "existingRuntimePrefab": "Gameplay.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 7,
+      "pageKey": "Pause",
+      "productPage": "Pause Menu",
+      "screenId": "Pause",
+      "surfaceType": "modal",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Pause safe gameplay state and resume/restart/settings/exit.",
+        "primaryTransitions": "Resume; Restart; Settings; Exit→LevelSelect",
+        "stateOwnership": "live board pause state",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "modal dimmer",
+          "pause frame",
+          "goals snapshot",
+          "booster row",
+          "resume/restart/settings/exit buttons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Pause/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Pause.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": "Pause.prefab",
+        "existingReconstructedComponentCoverage": true,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "RUNTIME_SHELL_AVAILABLE_DIRECT_REFERENCE_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 8,
+      "pageKey": "Victory",
+      "productPage": "Victory",
+      "screenId": "Victory",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Present clear result, stars/rewards, optional verified reward-double.",
+        "primaryTransitions": "Continue→story/chapter flow; Double reward provider",
+        "stateOwnership": "last result/reward",
+        "backendDependency": "rewarded-ad provider optional",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "victory environment",
+          "hero/Firebird celebration",
+          "victory ribbon",
+          "star reveal",
+          "reward chest/items",
+          "continue button",
+          "reward-double panel",
+          "confetti/glow VFX"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Victory/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Victory.png",
+        "existingRuntimePrefab": "Victory.prefab",
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_AND_PREFAB_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 9,
+      "pageKey": "Fail",
+      "productPage": "Fail",
+      "screenId": "Fail",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Present failed goals and retry/exit options.",
+        "primaryTransitions": "Retry→PreLevel/Gameplay; Exit→LevelSelect",
+        "stateOwnership": "failure/attempt counters",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "failure environment",
+          "hero reaction",
+          "fail ribbon",
+          "failed goal rows",
+          "retry button",
+          "exit button",
+          "continue offer area",
+          "failure VFX"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Fail/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Fail.png",
+        "existingRuntimePrefab": "Fail.prefab",
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "REFERENCE_AND_PREFAB_AVAILABLE_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 10,
+      "pageKey": "ChapterComplete",
+      "productPage": "Chapter Complete",
+      "screenId": "ChapterComplete",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Present chapter summary/reward and acknowledge completion.",
+        "primaryTransitions": "Continue/Map→WorldMap",
+        "stateOwnership": "chapter completion acknowledgement",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "chapter finale environment",
+          "hero/Firebird",
+          "chapter complete title",
+          "star summary",
+          "reward items",
+          "next chapter card",
+          "continue/map buttons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": "ChapterComplete.prefab",
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "RUNTIME_SHELL_AVAILABLE_DIRECT_REFERENCE_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 11,
+      "pageKey": "Dialogue",
+      "productPage": "Dialogue / Story",
+      "screenId": "Dialogue",
+      "surfaceType": "screen",
+      "wave": 1,
+      "functionalLock": {
+        "functionalGoal": "Show localized story line and advance deterministic story state.",
+        "primaryTransitions": "Continue→next dialogue/prelevel/chapter map/chapter complete",
+        "stateOwnership": "completed story scenes/storyStage",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "story environment/character scene",
+          "dialogue panel",
+          "speaker plate/avatar",
+          "continue button",
+          "skip/history optional icons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Dialogue.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Dialogue.png",
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AVAILABLE_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 12,
+      "pageKey": "CharacterCollection",
+      "productPage": "Character Collection",
+      "screenId": "Characters",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Browse/unlock/select characters; current demo selects Ivan.",
+        "primaryTransitions": "Select/Use; Back→Home",
+        "stateOwnership": "selected/owned character future state",
+        "backendDependency": "account/content backend optional",
+        "logicStatus": "partial"
+      },
+      "assetContract": {
+        "requirements": [
+          "collection background",
+          "character cards",
+          "portrait/full-body layers",
+          "rarity frames",
+          "progress shards",
+          "use/select button",
+          "filters/tabs",
+          "lock states"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/CharacterCollection/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Characters.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 13,
+      "pageKey": "DailyReward",
+      "productPage": "Daily Reward",
+      "screenId": "DailyReward",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Claim once-per-day local reward and show claim modal.",
+        "primaryTransitions": "Claim→RewardClaim; Back→Home",
+        "stateOwnership": "lastDailyRewardUtc/resources",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "daily calendar frame",
+          "7-day reward cells",
+          "claimed/current/locked states",
+          "reward icons",
+          "claim button",
+          "timer"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/DailyReward/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/DailyReward.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 14,
+      "pageKey": "EventsHub",
+      "productPage": "Events Hub",
+      "screenId": "Events",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Browse active events and open details.",
+        "primaryTransitions": "Event card→EventDetail; Back→Home",
+        "stateOwnership": "event availability future",
+        "backendDependency": "LiveOps backend required for production",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "events environment",
+          "event cards/banners",
+          "countdown badges",
+          "progress bars",
+          "reward previews",
+          "event currency",
+          "tabs"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/EventsHub/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Events.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 15,
+      "pageKey": "EventDetail",
+      "productPage": "Event Detail",
+      "screenId": "EventDetail",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Review event objective/progress/rewards; demo claim records session only.",
+        "primaryTransitions": "Claim demo; Back→Events",
+        "stateOwnership": "demo event claim session state",
+        "backendDependency": "LiveOps/reward authority required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "event hero art",
+          "event title frame",
+          "objective rows",
+          "progress bar",
+          "milestone rewards",
+          "event shop/pass CTA",
+          "claim button",
+          "timer"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/EventDetail/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/EventDetail.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 16,
+      "pageKey": "IndividualRanking",
+      "productPage": "Individual Ranking",
+      "screenId": "IndividualRanking",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Display player leaderboard and player rank.",
+        "primaryTransitions": "Back→Home",
+        "stateOwnership": "ranking snapshot future",
+        "backendDependency": "leaderboard backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "ranking background",
+          "season header",
+          "rank tabs",
+          "ranking rows",
+          "avatar frames",
+          "rank badges",
+          "score icons",
+          "player sticky row"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/IndividualRanking/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/IndividualRanking.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 17,
+      "pageKey": "TeamHub",
+      "productPage": "Team Hub",
+      "screenId": "TeamHub",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Social hub for team ranking/chat/friends.",
+        "primaryTransitions": "Ranking, Chat, Friends; Back→Home",
+        "stateOwnership": "team membership future",
+        "backendDependency": "social backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "team banner/emblem",
+          "team header",
+          "member summary",
+          "team chest/progress",
+          "ranking/chat/friends buttons",
+          "member avatars"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/TeamHub/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/TeamHub.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 18,
+      "pageKey": "TeamRanking",
+      "productPage": "Team Ranking",
+      "screenId": "TeamRanking",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Display ranked teams.",
+        "primaryTransitions": "Back→TeamHub",
+        "stateOwnership": "ranking snapshot future",
+        "backendDependency": "leaderboard backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "team ranking header",
+          "team rows",
+          "emblems",
+          "rank badges",
+          "score/trophy icons",
+          "player team highlight"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/TeamRanking/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/TeamRanking.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 19,
+      "pageKey": "TeamChat",
+      "productPage": "Team Chat",
+      "screenId": "TeamChat",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Send/view team messages; demo send is session-only.",
+        "primaryTransitions": "Send demo; Back→TeamHub",
+        "stateOwnership": "demo message count",
+        "backendDependency": "chat/moderation backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "chat background",
+          "message bubbles",
+          "avatars",
+          "timestamp/status icons",
+          "composer field",
+          "send button",
+          "moderation/report icons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/TeamChat/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/TeamChat.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 20,
+      "pageKey": "FriendsList",
+      "productPage": "Friends List",
+      "screenId": "FriendsList",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "Browse friends and request energy; demo request is session-only.",
+        "primaryTransitions": "Request energy; Back→TeamHub/Home",
+        "stateOwnership": "demo request state",
+        "backendDependency": "friends backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "friends rows",
+          "avatars",
+          "online status",
+          "gift/energy icons",
+          "invite/add button",
+          "search field",
+          "request button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/FriendsList/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/FriendsList.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 21,
+      "pageKey": "Mail",
+      "productPage": "Mail / Inbox",
+      "screenId": "Mail",
+      "surfaceType": "screen",
+      "wave": 3,
+      "functionalLock": {
+        "functionalGoal": "List messages/rewards; current reward claim is intentionally unavailable.",
+        "primaryTransitions": "ClaimAll safe stub; Back→Home",
+        "stateOwnership": "mail future",
+        "backendDependency": "mail/backend required",
+        "logicStatus": "partial"
+      },
+      "assetContract": {
+        "requirements": [
+          "mail background",
+          "message rows",
+          "sender icons",
+          "unread badges",
+          "attachments/reward icons",
+          "claim buttons",
+          "empty state"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Mail/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Mail.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 22,
+      "pageKey": "Profile",
+      "productPage": "Profile",
+      "screenId": "Profile",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Show player identity/progress and demo access to ranking/team/inventory/login.",
+        "primaryTransitions": "Ranking, Team, Inventory, Login; Back→Home",
+        "stateOwnership": "save-v6 progress; account future",
+        "backendDependency": "account backend optional",
+        "logicStatus": "partial"
+      },
+      "assetContract": {
+        "requirements": [
+          "profile background",
+          "avatar frame",
+          "name plate",
+          "level/progress",
+          "stats panels",
+          "achievements",
+          "edit-name button",
+          "account link badge"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Profile/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Profile.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 23,
+      "pageKey": "Inventory",
+      "productPage": "Inventory",
+      "screenId": "Inventory",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Show owned boosters/items from save/game state.",
+        "primaryTransitions": "Back→Home",
+        "stateOwnership": "booster counts/resources",
+        "backendDependency": "none",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "inventory background",
+          "tabs",
+          "item slots",
+          "item icons",
+          "quantity badges",
+          "rarity frames",
+          "empty slot/state",
+          "item detail popup"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Inventory/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Inventory.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 24,
+      "pageKey": "Shop",
+      "productPage": "Shop",
+      "screenId": "Shop",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Display offers and route purchases through verified monetization facade.",
+        "primaryTransitions": "Packs; SpecialOffer; Back→Home",
+        "stateOwnership": "catalog/provider receipts",
+        "backendDependency": "IAP backend/provider required",
+        "logicStatus": "implemented-fail-closed"
+      },
+      "assetContract": {
+        "requirements": [
+          "shop background",
+          "category tabs",
+          "pack cards",
+          "currency icons",
+          "price buttons",
+          "best-value badges",
+          "restore/info controls",
+          "special offer banner"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Shop/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Shop.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": "Shop.png",
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AVAILABLE_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 25,
+      "pageKey": "SpecialOffer",
+      "productPage": "Special Offer Popup",
+      "screenId": "SpecialOffer",
+      "surfaceType": "screen",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Present targeted offer; purchase remains fail-closed without verified provider.",
+        "primaryTransitions": "Buy; Back→Shop",
+        "stateOwnership": "provider receipt only",
+        "backendDependency": "IAP backend/provider required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "offer hero art",
+          "modal frame",
+          "bundle item icons",
+          "original/sale price",
+          "discount badge",
+          "countdown",
+          "buy/close buttons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/SpecialOffer/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/SpecialOffer.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 26,
+      "pageKey": "OutOfEnergy",
+      "productPage": "Out of Energy",
+      "screenId": "OutOfEnergy",
+      "surfaceType": "modal",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Block level start when energy insufficient; buy/ad/friend options fail safely.",
+        "primaryTransitions": "Buy; WatchAd; AskFriends demo; Close",
+        "stateOwnership": "energy/time",
+        "backendDependency": "IAP/rewarded/social providers optional",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "energy modal",
+          "heart/energy icon",
+          "refill timer",
+          "purchase row",
+          "friend request row",
+          "rewarded-ad row",
+          "close button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/OutOfEnergy/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/OutOfEnergy.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 27,
+      "pageKey": "BoosterSelect",
+      "productPage": "Booster Select Popup",
+      "screenId": "BoosterSelect",
+      "surfaceType": "modal",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Choose pre-level boosters and start.",
+        "primaryTransitions": "Play/close",
+        "stateOwnership": "booster inventory/selection",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "booster modal",
+          "booster grid",
+          "booster icons",
+          "count badges",
+          "selected states",
+          "info tooltips",
+          "play/close buttons"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/BoosterSelect/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/BoosterSelect.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 28,
+      "pageKey": "RewardClaim",
+      "productPage": "Reward Claim Popup",
+      "screenId": "RewardClaim",
+      "surfaceType": "modal",
+      "wave": 2,
+      "functionalLock": {
+        "functionalGoal": "Acknowledge a verified/local reward result.",
+        "primaryTransitions": "Claim/close",
+        "stateOwnership": "reward result",
+        "backendDependency": "provider-specific when applicable",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "reward modal",
+          "chest/reward burst",
+          "reward item icons",
+          "quantity labels",
+          "claim button",
+          "shine/particle VFX"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/RewardClaim/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/RewardClaim.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 29,
+      "pageKey": "Settings",
+      "productPage": "Settings",
+      "screenId": "Settings",
+      "surfaceType": "screen/modal",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Toggle music/SFX/vibration/notifications; access language/help/system demos.",
+        "primaryTransitions": "Toggles; Language; Tutorial; Back",
+        "stateOwnership": "save-v6 settings",
+        "backendDependency": "OS/provider optional for notifications",
+        "logicStatus": "implemented"
+      },
+      "assetContract": {
+        "requirements": [
+          "settings panel",
+          "toggle controls",
+          "audio/haptic icons",
+          "notification icon",
+          "language row",
+          "support/privacy rows",
+          "back/close button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Settings/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Settings.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 30,
+      "pageKey": "LanguageSelect",
+      "productPage": "Language Select",
+      "screenId": "LanguageSelect",
+      "surfaceType": "screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Choose locale; demo stores session language only.",
+        "primaryTransitions": "RU/EN demo; Back→Settings",
+        "stateOwnership": "session language; future persisted locale",
+        "backendDependency": "localization content required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "language background",
+          "language rows",
+          "flags/locale icons",
+          "selected checkmark",
+          "download indicator optional",
+          "back button"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/LanguageSelect/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/LanguageSelect.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 31,
+      "pageKey": "Login",
+      "productPage": "Login",
+      "screenId": "Login",
+      "surfaceType": "screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Guest entry now; production account providers later.",
+        "primaryTransitions": "Guest→Home; Back→Profile",
+        "stateOwnership": "demo guest state",
+        "backendDependency": "identity/cloud backend required",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "login environment",
+          "logo",
+          "guest button",
+          "provider buttons",
+          "privacy/legal links",
+          "account recovery link",
+          "loading/error states"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/Login/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Login.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 32,
+      "pageKey": "TutorialOverlay",
+      "productPage": "Tutorial Overlay",
+      "screenId": "TutorialOverlay",
+      "surfaceType": "overlay/screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Explain controls; gameplay tutorial remains data-driven.",
+        "primaryTransitions": "Back/help close; gameplay triggers existing presenter",
+        "stateOwnership": "completedTutorialSteps",
+        "backendDependency": "none",
+        "logicStatus": "partial"
+      },
+      "assetContract": {
+        "requirements": [
+          "spotlight mask",
+          "hand/pointer",
+          "callout panel",
+          "arrow",
+          "step dots",
+          "skip/next controls",
+          "highlight frames"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/TutorialOverlay/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/TutorialOverlay.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 33,
+      "pageKey": "OfflineState",
+      "productPage": "Offline State",
+      "screenId": "OfflineState",
+      "surfaceType": "system screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Explain offline limitations and allow safe retry/local play.",
+        "primaryTransitions": "Retry/Home",
+        "stateOwnership": "network status future",
+        "backendDependency": "network provider",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "offline illustration",
+          "status icon",
+          "retry button",
+          "continue-offline button",
+          "support text"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/OfflineState/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/OfflineState.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 34,
+      "pageKey": "MaintenanceState",
+      "productPage": "Maintenance State",
+      "screenId": "MaintenanceState",
+      "surfaceType": "system screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Block online-only operations during maintenance.",
+        "primaryTransitions": "Back/Home",
+        "stateOwnership": "maintenance flag future",
+        "backendDependency": "remote config/backend",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "maintenance illustration",
+          "status panel",
+          "estimated-time text",
+          "retry/home controls"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/MaintenanceState/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/MaintenanceState.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    },
+    {
+      "index": 35,
+      "pageKey": "EmptyErrorStates",
+      "productPage": "Empty / Error Variants",
+      "screenId": "EmptyErrorState",
+      "surfaceType": "system screen",
+      "wave": 4,
+      "functionalLock": {
+        "functionalGoal": "Reusable empty/error/retry state.",
+        "primaryTransitions": "Retry/Home",
+        "stateOwnership": "error context",
+        "backendDependency": "varies",
+        "logicStatus": "demo-local"
+      },
+      "assetContract": {
+        "requirements": [
+          "empty-state illustrations",
+          "error icons",
+          "message panel",
+          "retry/back buttons",
+          "variant badges"
+        ],
+        "productionFolder": "Assets/LegendsOfRus/Art/Production/Pages/EmptyErrorStates/",
+        "runtimePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/EmptyErrorState.prefab",
+        "referenceOnlyFolder": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/",
+        "directApprovedReference": null,
+        "existingRuntimePrefab": null,
+        "existingReconstructedComponentCoverage": false,
+        "runtimeCompositeScreenshotAllowed": false,
+        "liveTextRequired": true,
+        "preserveExistingInteractionRolesAndCallbacks": true,
+        "preserveSafeAreaAndAspectHandling": true
+      },
+      "readiness": "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED",
+      "activationPolicy": "AUTHORING_PREP_ALLOWED_RUNTIME_CUTOVER_BLOCKED_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE"
+    }
+  ]
+}

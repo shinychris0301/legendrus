@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step09-production-asset-reconstruction-wave03-events-rankings-social",
+  "wave": 3,
+  "pageCount": 8,
+  "pages": [
+    {
+      "pageKey": "EventsHub",
+      "screenId": "Events",
+      "productPage": "Events Hub",
+      "referenceAuthority": "DEMO_DESIGN_GUIDANCE",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "events environment",
+          "assets": "background_plate.png",
+          "covered": true
+        },
+        {
+          "requirement": "event cards/banners",
+          "assets": "event_card_frame.png + event_hero_*.png",
+          "covered": true
+        },
+        {
+          "requirement": "countdown badges",
+          "assets": "countdown_badge.png",
+          "covered": true
+        },
+        {
+          "requirement": "progress bars",
+          "assets": "Wave0Foundation/Ornaments/progress_track.png + progress_fill.png",
+          "covered": true
+        },
+        {
+          "requirement": "reward previews",
+          "assets": "reward_preview_strip.png",
+          "covered": true
+        },
+        {
+          "requirement": "event currency",
+          "assets": "event_currency_badge.png",
+          "covered": true
+        },
+        {
+          "requirement": "tabs",
+          "assets": "Wave0Foundation/Controls/tab_idle.png + tab_selected.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Browse active events and open details.",
+        "primaryTransitions": "Event card→EventDetail; Back→Home",
+        "stateOwnership": "event availability future",
+        "backendDependency": "LiveOps backend required for production",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/EventsHub/"
+    },
+    {
+      "pageKey": "EventDetail",
+      "screenId": "EventDetail",
+      "productPage": "Event Detail",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "event hero art",
+          "assets": "event_hero_firebird.png",
+          "covered": true
+        },
+        {
+          "requirement": "event title frame",
+          "assets": "event_title_frame.png",
+          "covered": true
+        },
+        {
+          "requirement": "objective rows",
+          "assets": "objective_row.png",
+          "covered": true
+        },
+        {
+          "requirement": "progress bar",
+          "assets": "progress_bar_frame.png + Wave0 progress_fill.png",
+          "covered": true
+        },
+        {
+          "requirement": "milestone rewards",
+          "assets": "milestone_rewards.png",
+          "covered": true
+        },
+        {
+          "requirement": "event shop/pass CTA",
+          "assets": "event_pass_banner.png",
+          "covered": true
+        },
+        {
+          "requirement": "claim button",
+          "assets": "claim_button.png",
+          "covered": true
+        },
+        {
+          "requirement": "timer",
+          "assets": "timer_badge.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Review event objective/progress/rewards; demo claim records session only.",
+        "primaryTransitions": "Claim demo; Back→Events",
+        "stateOwnership": "demo event claim session state",
+        "backendDependency": "LiveOps/reward authority required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/EventDetail/"
+    },
+    {
+      "pageKey": "IndividualRanking",
+      "screenId": "IndividualRanking",
+      "productPage": "Individual Ranking",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "ranking background",
+          "assets": "background_plate.png",
+          "covered": true
+        },
+        {
+          "requirement": "season header",
+          "assets": "season_header.png",
+          "covered": true
+        },
+        {
+          "requirement": "rank tabs",
+          "assets": "rank_tab.png",
+          "covered": true
+        },
+        {
+          "requirement": "ranking rows",
+          "assets": "ranking_row.png",
+          "covered": true
+        },
+        {
+          "requirement": "avatar frames",
+          "assets": "avatar_frame.png",
+          "covered": true
+        },
+        {
+          "requirement": "rank badges",
+          "assets": "rank_badges.png",
+          "covered": true
+        },
+        {
+          "requirement": "score icons",
+          "assets": "trophy_icon.png",
+          "covered": true
+        },
+        {
+          "requirement": "player sticky row",
+          "assets": "player_sticky_row.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Display player leaderboard and player rank.",
+        "primaryTransitions": "Back→Home",
+        "stateOwnership": "ranking snapshot future",
+        "backendDependency": "leaderboard backend required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/IndividualRanking/"
+    },
+    {
+      "pageKey": "TeamHub",
+      "screenId": "TeamHub",
+      "productPage": "Team Hub",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "team banner/emblem",
+          "assets": "team_banner.png + team_emblem.png",
+          "covered": true
+        },
+        {
+          "requirement": "team header",
+          "assets": "team_header.png",
+          "covered": true
+        },
+        {
+          "requirement": "member summary",
+          "assets": "member_summary.png",
+          "covered": true
+        },
+        {
+          "requirement": "team chest/progress",
+          "assets": "team_chest_progress.png + Wave0 progress assets",
+          "covered": true
+        },
+        {
+          "requirement": "ranking/chat/friends buttons",
+          "assets": "social_nav_tile.png + Wave0 icons",
+          "covered": true
+        },
+        {
+          "requirement": "member avatars",
+          "assets": "member_avatar_frame.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Social hub for team ranking/chat/friends.",
+        "primaryTransitions": "Ranking, Chat, Friends; Back→Home",
+        "stateOwnership": "team membership future",
+        "backendDependency": "social backend required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/TeamHub/"
+    },
+    {
+      "pageKey": "TeamRanking",
+      "screenId": "TeamRanking",
+      "productPage": "Team Ranking",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "team ranking header",
+          "assets": "team_ranking_header.png",
+          "covered": true
+        },
+        {
+          "requirement": "team rows",
+          "assets": "team_row.png",
+          "covered": true
+        },
+        {
+          "requirement": "emblems",
+          "assets": "team_emblem.png",
+          "covered": true
+        },
+        {
+          "requirement": "rank badges",
+          "assets": "rank_badges.png",
+          "covered": true
+        },
+        {
+          "requirement": "score/trophy icons",
+          "assets": "trophy_icon.png",
+          "covered": true
+        },
+        {
+          "requirement": "player team highlight",
+          "assets": "player_team_highlight.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Display ranked teams.",
+        "primaryTransitions": "Back→TeamHub",
+        "stateOwnership": "ranking snapshot future",
+        "backendDependency": "leaderboard backend required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/TeamRanking/"
+    },
+    {
+      "pageKey": "TeamChat",
+      "screenId": "TeamChat",
+      "productPage": "Team Chat",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "chat background",
+          "assets": "background_plate.png",
+          "covered": true
+        },
+        {
+          "requirement": "message bubbles",
+          "assets": "message_bubble_in.png + message_bubble_out.png",
+          "covered": true
+        },
+        {
+          "requirement": "avatars",
+          "assets": "avatar_frame.png",
+          "covered": true
+        },
+        {
+          "requirement": "timestamp/status icons",
+          "assets": "status_icons.png",
+          "covered": true
+        },
+        {
+          "requirement": "composer field",
+          "assets": "composer_field.png",
+          "covered": true
+        },
+        {
+          "requirement": "send button",
+          "assets": "send_icon.png",
+          "covered": true
+        },
+        {
+          "requirement": "moderation/report icons",
+          "assets": "report_icon.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Send/view team messages; demo send is session-only.",
+        "primaryTransitions": "Send demo; Back→TeamHub",
+        "stateOwnership": "demo message count",
+        "backendDependency": "chat/moderation backend required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/TeamChat/"
+    },
+    {
+      "pageKey": "FriendsList",
+      "screenId": "FriendsList",
+      "productPage": "Friends List",
+      "referenceAuthority": "LOCKED_STYLE_SYSTEM_DERIVED",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "friends rows",
+          "assets": "friend_row.png",
+          "covered": true
+        },
+        {
+          "requirement": "avatars",
+          "assets": "avatar_frame.png",
+          "covered": true
+        },
+        {
+          "requirement": "online status",
+          "assets": "online_status.png",
+          "covered": true
+        },
+        {
+          "requirement": "gift/energy icons",
+          "assets": "gift_energy_icon.png + Wave0 energy icon",
+          "covered": true
+        },
+        {
+          "requirement": "invite/add button",
+          "assets": "invite_add_button.png",
+          "covered": true
+        },
+        {
+          "requirement": "search field",
+          "assets": "search_field.png",
+          "covered": true
+        },
+        {
+          "requirement": "request button",
+          "assets": "request_button.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "Browse friends and request energy; demo request is session-only.",
+        "primaryTransitions": "Request energy; Back→TeamHub/Home",
+        "stateOwnership": "demo request state",
+        "backendDependency": "friends backend required",
+        "logicStatus": "demo-local"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/FriendsList/"
+    },
+    {
+      "pageKey": "Mail",
+      "screenId": "Mail",
+      "productPage": "Mail / Inbox",
+      "referenceAuthority": "DEMO_DESIGN_GUIDANCE",
+      "directApprovedReference": null,
+      "requirements": [
+        {
+          "requirement": "mail background",
+          "assets": "background_plate.png",
+          "covered": true
+        },
+        {
+          "requirement": "message rows",
+          "assets": "message_row.png",
+          "covered": true
+        },
+        {
+          "requirement": "sender icons",
+          "assets": "sender_avatar_frame.png + sender_*.png",
+          "covered": true
+        },
+        {
+          "requirement": "unread badges",
+          "assets": "unread_badge.png",
+          "covered": true
+        },
+        {
+          "requirement": "attachments/reward icons",
+          "assets": "attachment_frame.png + Wave0 reward icons",
+          "covered": true
+        },
+        {
+          "requirement": "claim buttons",
+          "assets": "claim_button.png",
+          "covered": true
+        },
+        {
+          "requirement": "empty state",
+          "assets": "empty_state.png",
+          "covered": true
+        }
+      ],
+      "functionalLock": {
+        "functionalGoal": "List messages/rewards; current reward claim is intentionally unavailable.",
+        "primaryTransitions": "ClaimAll safe stub; Back→Home",
+        "stateOwnership": "mail future",
+        "backendDependency": "mail/backend required",
+        "logicStatus": "partial"
+      },
+      "productionFolder": "Assets/LegendsOfRus/Art/Production/Wave03/Mail/"
+    }
+  ],
+  "policy": {
+    "runtimeCompositeScreenshotAllowed": false,
+    "referenceOnlyRuntimeDependenciesForbidden": true,
+    "designScreenRuntimeDependenciesForbidden": true,
+    "liveTextRequired": true,
+    "productionBackendsNotSimulated": true,
+    "allWave03Cutover": "BLOCKED_NO_DIRECT_APPROVED_REFERENCES"
+  },
+  "assetCount": 71,
+  "allRequirementsCovered": true,
+  "requirementCount": 56,
+  "referenceAuthorityCounts": {
+    "directApproved": 0,
+    "demoDesignGuidance": 2,
+    "styleSystemDerived": 6
+  }
+}

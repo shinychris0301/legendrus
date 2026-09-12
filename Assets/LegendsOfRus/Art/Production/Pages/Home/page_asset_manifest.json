@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Home",
+  "productPage": "Home",
+  "screenId": "Home",
+  "wave": 1,
+  "directApprovedReference": "Home.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Home.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Home/environment_home.png",
+      "role": "home environment",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_home_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Home/hero_ivan_firebird.png",
+      "role": "hero and Firebird foreground",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/hero_ivan_firebird.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Home/logo_plaque.png",
+      "role": "logo plaque",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/title_plaque_navy.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "home environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Home/environment_home.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "hero character layers",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Home/hero_ivan_firebird.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "Firebird layer",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Home/hero_ivan_firebird.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "top HUD",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/top_bar.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "resource icons",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_energy.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "navigation icons",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_map.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_shop.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_events.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_character.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "play CTA",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "quest/progress panel",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_track.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_fill.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "notification badges",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/notification_badge.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 9,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

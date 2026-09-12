@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 3,
+  "chapterId": 1,
+  "introSceneId": "chapter01.intro",
+  "scenes": [
+    {
+      "id": "chapter01.intro",
+      "trigger": "chapter01.first_launch",
+      "returnRoute": "PreLevel",
+      "lines": [
+        { "speakerKey": "speaker.dobrynya", "textKey": "story.chapter01.intro.01" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.intro.02" },
+        { "speakerKey": "speaker.dobrynya", "textKey": "story.chapter01.intro.03" }
+      ]
+    },
+    {
+      "id": "chapter01.firebird_found",
+      "trigger": "dialogue.firebird_found",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.firebird_found.01" },
+        { "speakerKey": "speaker.firebird", "textKey": "story.chapter01.firebird_found.02" }
+      ]
+    },
+    {
+      "id": "chapter01.raven_watch",
+      "trigger": "dialogue.raven_watch",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.narrator", "textKey": "story.chapter01.raven_watch.01" },
+        { "speakerKey": "speaker.raven", "textKey": "story.chapter01.raven_watch.02" }
+      ]
+    },
+    {
+      "id": "chapter01.elder_request",
+      "trigger": "dialogue.elder_request",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.elder", "textKey": "story.chapter01.elder_request.01" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.elder_request.02" }
+      ]
+    },
+    {
+      "id": "chapter01.embers_fade",
+      "trigger": "dialogue.embers_fade",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.firebird", "textKey": "story.chapter01.embers_fade.01" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.embers_fade.02" }
+      ]
+    },
+    {
+      "id": "chapter01.river_shadow",
+      "trigger": "dialogue.river_shadow",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.narrator", "textKey": "story.chapter01.river_shadow.01" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.river_shadow.02" }
+      ]
+    },
+    {
+      "id": "chapter01.living_flame",
+      "trigger": "dialogue.living_flame",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        { "speakerKey": "speaker.firebird", "textKey": "story.chapter01.living_flame.01" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.living_flame.02" }
+      ]
+    },
+    {
+      "id": "chapter01.finale",
+      "trigger": "dialogue.chapter_finale",
+      "returnRoute": "ChapterComplete",
+      "lines": [
+        { "speakerKey": "speaker.narrator", "textKey": "story.chapter01.finale.01" },
+        { "speakerKey": "speaker.raven", "textKey": "story.chapter01.finale.02" },
+        { "speakerKey": "speaker.firebird", "textKey": "story.chapter01.finale.03" },
+        { "speakerKey": "speaker.dobrynya", "textKey": "story.chapter01.finale.04" },
+        { "speakerKey": "speaker.ivan", "textKey": "story.chapter01.finale.05" }
+      ]
+    }
+  ],
+  "milestones": [
+    { "id": "milestone.firebird_found", "afterLevelId": 1, "sceneId": "chapter01.firebird_found", "major": true },
+    { "id": "milestone.raven_watch", "afterLevelId": 3, "sceneId": "chapter01.raven_watch", "major": true },
+    { "id": "milestone.elder_request", "afterLevelId": 4, "sceneId": "chapter01.elder_request", "major": false },
+    { "id": "milestone.embers_fade", "afterLevelId": 6, "sceneId": "chapter01.embers_fade", "major": true },
+    { "id": "milestone.river_shadow", "afterLevelId": 8, "sceneId": "chapter01.river_shadow", "major": false },
+    { "id": "milestone.living_flame", "afterLevelId": 9, "sceneId": "chapter01.living_flame", "major": false },
+    { "id": "milestone.chapter_finale", "afterLevelId": 10, "sceneId": "chapter01.finale", "major": true }
+  ],
+  "reactions": [
+    { "id": "reaction.level01.victory", "levelId": 1, "outcome": "victory", "speakerKey": "speaker.narrator", "textKey": "reaction.chapter01.level01.victory" },
+    { "id": "reaction.level01.failure", "levelId": 1, "outcome": "failure", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level01.failure" },
+    { "id": "reaction.level02.victory", "levelId": 2, "outcome": "victory", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level02.victory" },
+    { "id": "reaction.level02.failure", "levelId": 2, "outcome": "failure", "speakerKey": "speaker.dobrynya", "textKey": "reaction.chapter01.level02.failure" },
+    { "id": "reaction.level03.victory", "levelId": 3, "outcome": "victory", "speakerKey": "speaker.dobrynya", "textKey": "reaction.chapter01.level03.victory" },
+    { "id": "reaction.level03.failure", "levelId": 3, "outcome": "failure", "speakerKey": "speaker.firebird", "textKey": "reaction.chapter01.level03.failure" },
+    { "id": "reaction.level04.victory", "levelId": 4, "outcome": "victory", "speakerKey": "speaker.elder", "textKey": "reaction.chapter01.level04.victory" },
+    { "id": "reaction.level04.failure", "levelId": 4, "outcome": "failure", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level04.failure" },
+    { "id": "reaction.level05.victory", "levelId": 5, "outcome": "victory", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level05.victory" },
+    { "id": "reaction.level05.failure", "levelId": 5, "outcome": "failure", "speakerKey": "speaker.dobrynya", "textKey": "reaction.chapter01.level05.failure" },
+    { "id": "reaction.level06.victory", "levelId": 6, "outcome": "victory", "speakerKey": "speaker.elder", "textKey": "reaction.chapter01.level06.victory" },
+    { "id": "reaction.level06.failure", "levelId": 6, "outcome": "failure", "speakerKey": "speaker.firebird", "textKey": "reaction.chapter01.level06.failure" },
+    { "id": "reaction.level07.victory", "levelId": 7, "outcome": "victory", "speakerKey": "speaker.firebird", "textKey": "reaction.chapter01.level07.victory" },
+    { "id": "reaction.level07.failure", "levelId": 7, "outcome": "failure", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level07.failure" },
+    { "id": "reaction.level08.victory", "levelId": 8, "outcome": "victory", "speakerKey": "speaker.firebird", "textKey": "reaction.chapter01.level08.victory" },
+    { "id": "reaction.level08.failure", "levelId": 8, "outcome": "failure", "speakerKey": "speaker.dobrynya", "textKey": "reaction.chapter01.level08.failure" },
+    { "id": "reaction.level09.victory", "levelId": 9, "outcome": "victory", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level09.victory" },
+    { "id": "reaction.level09.failure", "levelId": 9, "outcome": "failure", "speakerKey": "speaker.firebird", "textKey": "reaction.chapter01.level09.failure" },
+    { "id": "reaction.level10.victory", "levelId": 10, "outcome": "victory", "speakerKey": "speaker.dobrynya", "textKey": "reaction.chapter01.level10.victory" },
+    { "id": "reaction.level10.failure", "levelId": 10, "outcome": "failure", "speakerKey": "speaker.ivan", "textKey": "reaction.chapter01.level10.failure" }
+  ],
+  "completion": {
+    "finalLevelId": 10,
+    "finaleSceneId": "chapter01.finale",
+    "completionTrigger": "chapter.complete",
+    "summaryTitleKey": "completion.chapter01.summary_title",
+    "summaryFormatKey": "completion.chapter01.summary_format",
+    "rewardNoteKey": "completion.chapter01.reward_note"
+  }
+}

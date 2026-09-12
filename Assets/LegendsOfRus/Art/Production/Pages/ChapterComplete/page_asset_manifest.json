@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "ChapterComplete",
+  "productPage": "Chapter Complete",
+  "screenId": "ChapterComplete",
+  "wave": 1,
+  "directApprovedReference": null,
+  "referenceStatus": "LOCKED_STYLE_SYSTEM_DERIVED_DIRECT_PAGE_REFERENCE_STILL_REQUIRED_FOR_PIXEL_SIGNOFF",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/ChapterComplete.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/environment_chapter_complete.png",
+      "role": "chapter finale environment",
+      "sourceType": "derived-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_chaptermap_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/hero_firebird_complete.png",
+      "role": "hero/Firebird layer",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/hero_ivan_firebird.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/complete_ribbon.png",
+      "role": "chapter-complete ribbon",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/ribbon_red.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "chapter finale environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/environment_chapter_complete.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "hero/Firebird",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/hero_firebird_complete.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "chapter complete title",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/ChapterComplete/complete_ribbon.png",
+        "LIVE_TEXT"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "star summary",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/star.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "reward items",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/reward_tile.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "next chapter card",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "continue/map buttons",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 7,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

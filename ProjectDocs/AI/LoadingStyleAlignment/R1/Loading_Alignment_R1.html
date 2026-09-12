@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Легенды Руси — Loading alignment R1 · Offline preview</title>
+  <style>
+    :root {
+      font-family: "Times New Roman", "Liberation Serif", "Noto Serif", "Droid Serif", serif;
+      color: #ebdec4;
+      background: #10151d;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { padding: 24px; }
+
+    .review-note {
+      max-width: 941px;
+      margin: 0 auto 20px;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #d0d4dc;
+    }
+    .review-note strong { color: #f1e7d4; }
+    .review-note p { margin: 0 0 6px; }
+
+    .preview-viewport { margin: 0 auto; position: relative; }
+    .loading-page {
+      position: relative;
+      width: 941px;
+      height: 1672px;
+      overflow: hidden;
+      isolation: isolate;
+      transform-origin: top left;
+      background: #121c28;
+    }
+    .journey-scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .lower-shade {
+      position: absolute;
+      inset: 1110px 0 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(4, 12, 23, .13) 20%, rgba(3, 10, 20, .76) 76%, rgba(3, 9, 17, .87) 100%);
+      pointer-events: none;
+    }
+    .approved-logo {
+      position: absolute;
+      top: 35px;
+      left: 195.5px;
+      width: 550px;
+      height: auto;
+      display: block;
+    }
+
+    .tip-panel {
+      position: absolute;
+      left: 125px;
+      top: 1210px;
+      width: 691px;
+      height: 260px;
+      color: #342817;
+      text-align: center;
+    }
+    .tip-panel__art {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+    .tip-panel__paper-backing {
+      position: absolute;
+      inset: 50px 31px 44px;
+      border-radius: 5px;
+      background: #e5ca94;
+    }
+    .tip-panel h1 {
+      position: absolute;
+      top: 54px;
+      left: 60px;
+      width: 571px;
+      margin: 0;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 38px;
+      letter-spacing: 3px;
+      color: #58401d;
+      text-shadow: 0 1px 0 rgba(255, 243, 204, .65);
+    }
+    .tip-panel p {
+      position: absolute;
+      top: 105px;
+      left: 62px;
+      width: 567px;
+      margin: 0;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 37px;
+      text-wrap: balance;
+    }
+    .loading-label {
+      position: absolute;
+      top: 1490px;
+      left: 170px;
+      width: 601px;
+      margin: 0;
+      color: #e3c484;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 46px;
+      text-align: center;
+      letter-spacing: .6px;
+      text-shadow: 0 2px 3px #050a10;
+    }
+    .progress-track {
+      position: absolute;
+      left: 170px;
+      top: 1554px;
+      width: 601px;
+      height: 29px;
+      padding: 5px;
+      overflow: hidden;
+      border: 2px solid #9b733a;
+      border-radius: 15px;
+      background: linear-gradient(180deg, #080f1a, #17293d);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .65), inset 0 0 0 1px #2c2115;
+    }
+    .progress-segment {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: 168px;
+      width: 245px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(18, 66, 107, .1), #245c8c 22%, #4889b5 52%, #245c8c 80%, rgba(18, 66, 107, .1));
+      box-shadow: 0 0 6px rgba(69, 132, 174, .2);
+    }
+
+    html.capture, html.capture body {
+      width: 941px;
+      height: 1672px;
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .capture .review-note { display: none; }
+    .capture .preview-viewport { margin: 0; width: 941px !important; height: 1672px !important; }
+    .capture .loading-page { transform: none !important; }
+  </style>
+</head>
+<body>
+  <aside class="review-note" aria-label="Preview status">
+    <p><strong>Offline design preview R1 — not a Unity capture; not approved.</strong> Portrait reference size: 941 × 1672.</p>
+    <p>Journey and panel art are generated. The logo uses the unchanged canonical Splash PNG. Live text uses the existing development fallback font stack; exact source font identity remains unverified. The stationary sapphire segment illustrates an indeterminate Loading state and reports no measured progress.</p>
+  </aside>
+
+  <div class="preview-viewport">
+    <main class="loading-page" aria-label="Легенды Руси: экран загрузки, предварительный дизайн">
+      <img class="journey-scene" src="journey_scene_refined.png" alt="Иван и Жар-птица на пути к сказочному городу">
+      <div class="lower-shade" aria-hidden="true"></div>
+      <img class="approved-logo" src="../../../../Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png" alt="Легенды Руси: Три в Ряд">
+
+      <section class="tip-panel" aria-labelledby="tip-title">
+        <div class="tip-panel__paper-backing" aria-hidden="true"></div>
+        <img class="tip-panel__art" src="tip_panel_generated.png" alt="">
+        <h1 id="tip-title">СОВЕТ</h1>
+        <p>Совет: объединяйте особые самоцветы, чтобы очищать тьму быстрее.</p>
+      </section>
+
+      <p class="loading-label" id="loading-label">Загрузка...</p>
+      <div class="progress-track" role="progressbar" aria-labelledby="loading-label" aria-valuetext="Неопределённый прогресс; статичный предварительный дизайн">
+        <div class="progress-segment" aria-hidden="true"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const capture = new URLSearchParams(window.location.search).get('capture') === '1';
+      document.documentElement.classList.toggle('capture', capture);
+      const stage = document.querySelector('.loading-page');
+      const viewport = document.querySelector('.preview-viewport');
+      const note = document.querySelector('.review-note');
+
+      function fitPreview() {
+        if (capture) return;
+        const availableWidth = Math.max(1, window.innerWidth - 48);
+        const availableHeight = Math.max(320, window.innerHeight - note.offsetHeight - 68);
+        const scale = Math.min(1, availableWidth / 941, availableHeight / 1672);
+        stage.style.transform = `scale(${scale})`;
+        viewport.style.width = `${941 * scale}px`;
+        viewport.style.height = `${1672 * scale}px`;
+      }
+
+      fitPreview();
+      window.addEventListener('resize', fitPreview);
+      window.addEventListener('load', fitPreview);
+    })();
+  </script>
+</body>
+</html>

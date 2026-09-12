@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step06-functional-acceptance-asset-readiness",
+  "baselineMilestone": "v1.20-step05-functional-qa-full-demo-verification",
+  "policy": "Step 6 is additive readiness tooling. Runtime scripts, inherited tests, Packages, ProjectSettings, approved references, canonical kit, and existing production page prefabs are frozen to Step 5 bytes.",
+  "trees": {
+    "runtimeScripts": {
+      "path": "Assets/LegendsOfRus/Scripts/Runtime",
+      "fileCount": 80,
+      "treeSha256": "6f2930e8347dd64204c5e5429c95f4a94b0a401695bd9c47c69bd49d7fcfd5e3"
+    },
+    "tests": {
+      "path": "Assets/LegendsOfRus/Tests",
+      "fileCount": 138,
+      "treeSha256": "88ba5e854efe239751521ccb55e6f942f3d63f2067070b10be5c40d9e16529c3"
+    },
+    "packages": {
+      "path": "Packages",
+      "fileCount": 1,
+      "treeSha256": "fdec3f1e16d03f4ec2471c1b49ed0a0dd6b3dcfa1881c951811a3e5c7aa3f2f0"
+    },
+    "projectSettings": {
+      "path": "ProjectSettings",
+      "fileCount": 2,
+      "treeSha256": "9d1402e81b07019f5f41afb56d4765e6851ccfda08221943d16d78edd61e5a4f"
+    },
+    "approvedReferences": {
+      "path": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens",
+      "fileCount": 11,
+      "treeSha256": "b5c33bb16a6d92256f92084c63ed51d3c44d34be97a33b7883d6688c226fc45e"
+    },
+    "canonicalUiKit": {
+      "path": "Assets/LegendsOfRus/Art/Production/UI/CanonicalKit",
+      "fileCount": 35,
+      "treeSha256": "bcc752d592689f3626a1d1c489b6c1b580bba1226e46e3a2f88ab6aee5cfe1f5"
+    },
+    "productionPagePrefabs": {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages",
+      "fileCount": 20,
+      "treeSha256": "c39e8b711a4169b6776d5b4a370f8f286ca895008df93dd1d34102d8ea48b32d"
+    },
+    "allProjectPngs": {
+      "path": "**/*.png",
+      "fileCount": 196,
+      "treeSha256": "8b0d86379249ce662b6033ead2250c5d1d849072e193a78263d8846cd49e4d26"
+    }
+  },
+  "criticalFiles": {
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs": "6b66f9d6ad08c15b087489685cd2056b9b479e3389c19ce2773094b958861a02",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenNavigationPolicy.cs": "faf54ad5bc62c45f76302c59a0570e276e99f417c17b4f16b25f108a4528ecfa",
+    "Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs": "d8853d33a49a6d21d414fab1830b957d032d047ed242b259af47d749414b6163",
+    "Assets/LegendsOfRus/Scripts/Runtime/Core/RuntimeBootstrap.cs": "ecb26b04310415bf8c077e213b32dd625b43c0f119ffb19efba741695caaa60d",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/DemoFeatureState.cs": "655879000c576ec5bf317a85ce8743b1b06afa0aeba374c8c278fc5fa5bcf4e3",
+    "Assets/LegendsOfRus/Resources/Config/functionality_first_demo_v120_step04.json": "8ac3fbc091131b7178b81590e05a8d1dc03a1991e82e95ccaf02b6b589138c55",
+    "Assets/LegendsOfRus/Documentation/V1_20_STEP05_ROUTE_ACCEPTANCE.json": "40df550a6e0542d9ee1246340b5647cacef413f52e3947e4d567b3d06ff50f6c",
+    "Assets/LegendsOfRus/Documentation/V1_20_STEP04_PAGE_FUNCTION_ASSET_PLAN.json": "b6c1aea4f1ae56e791865fccde90af08a062a86fcbfa0efcb0904f10afa4359c"
+  }
+}

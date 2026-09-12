@@ -1,0 +1,268 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -159,6 +159,14 @@
+             if (current != expectedSource)
+                 return;
+ 
++            // Respect a Splash-launched auxiliary flow even when a visible Back
++            // control uses this source-bound helper rather than NavigateBack directly.
++            if (splashAuxiliaryRoot.HasValue && expectedSource == splashAuxiliaryRoot.Value)
++            {
++                NavigateBack();
++                return;
++            }
++
+             ScreenId destination;
+             if (ScreenNavigationPolicy.TryGetBackDestination(expectedSource, out destination))
+                 Show(destination);
+@@ -205,8 +213,30 @@
+ 
+         void OpenSplashAuxiliary(ScreenId destination)
+         {
++            if (current != ScreenId.SplashTitle)
++                return;
++
+             splashAuxiliaryRoot = destination;
+             Show(destination);
++        }
++
++        Action GuardSplashAction(Action action)
++        {
++            // Press feedback is asynchronous. A callback belongs to the specific
++            // Splash instance that created it, not to a later visit to the same page.
++            // Show increments routeGeneration, so the first accepted navigation
++            // also invalidates any other pending Splash navigation callback.
++            int expectedGeneration = routeGeneration;
++            return () =>
++            {
++                if (this == null || current != ScreenId.SplashTitle ||
++                    routeGeneration != expectedGeneration ||
++                    contentRoot == null || !contentRoot.activeInHierarchy ||
++                    modalRoot != null)
++                    return;
++
++                action?.Invoke();
++            };
+         }
+ 
+         void EnsureEventSystem()
+@@ -280,9 +310,10 @@
+ 
+         public void Show(ScreenId id)
+         {
+-            // A forward exit from a Splash-launched auxiliary flow must not leave a stale
+-            // Back override behind for later Home navigation.
+-            if (id == ScreenId.Home && current != ScreenId.SplashTitle)
++            // The transient Back target belongs only to the directly opened auxiliary
++            // page. Preserve it on a refresh of that page; clear it on every departure,
++            // including forward exits that do not happen to pass through Home.
++            if (splashAuxiliaryRoot.HasValue && id != splashAuxiliaryRoot.Value)
+                 splashAuxiliaryRoot = null;
+ 
+             RuntimeOptimizationService optimization =
+@@ -391,6 +422,13 @@
+             // emergency surface instead of silently regressing to the mockup.
+             if (ProductionCoreLoopPageRegistry.IsCutover(id))
+                 return ProductionCoreLoopPageRuntime.TryBuild(id, parent);
++
++            // Dispatch explicitly enabled meta pages before legacy/demo presentation.
++            // In the supplied 01-R archive this was reached indirectly through
++            // DesignScreenRegistry -> DemoFunctionalPageRuntime. This makes the
++            // authority explicit; it does not promote the old R art to R2 approval.
++            if (ProductionMetaPageCutoverRegistry.IsCutover(id))
++                return ProductionMetaPageRuntime.TryBuild(id, parent);
+ 
+             string key = DesignScreenRegistry.ResourceKey(id);
+             if (string.IsNullOrEmpty(key))
+@@ -585,12 +623,14 @@
+                     break;
+ 
+                 case ScreenId.SplashTitle:
+-                    // v1.20 Visual Page 01: interaction geometry follows the approved layered title composition.
+-                    Hotspot(parent, "Continue", 180, 1125, 590, 190, () => Show(ScreenId.Loading));
+-                    Hotspot(parent, "Language", 680, 0, 261, 130, () => OpenSplashAuxiliary(ScreenId.LanguageSelect));
+-                    Hotspot(parent, "Settings", 45, 1295, 215, 205, () => OpenSplashAuxiliary(ScreenId.Settings));
+-                    Hotspot(parent, "Account", 365, 1295, 215, 205, () => OpenSplashAuxiliary(ScreenId.Login));
+-                    Hotspot(parent, "Help", 685, 1295, 215, 205, () => OpenSplashAuxiliary(ScreenId.TutorialOverlay));
++                    // Preserve the supplied 01-R interaction geometry until the real
++                    // R2 controls are available. This is a navigation repair, not
++                    // approval of the existing cutouts or a completed prefab rebuild.
++                    Hotspot(parent, "Continue", 180, 1125, 590, 190, GuardSplashAction(() => Show(ScreenId.Loading)));
++                    Hotspot(parent, "Language", 680, 0, 261, 130, GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.LanguageSelect)));
++                    Hotspot(parent, "Settings", 45, 1295, 215, 205, GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.Settings)));
++                    Hotspot(parent, "Account", 365, 1295, 215, 205, GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.Login)));
++                    Hotspot(parent, "Help", 685, 1295, 215, 205, GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.TutorialOverlay)));
+                     break;
+ 
+                 case ScreenId.EventDetail:
+--- a/Assets/LegendsOfRus/Scripts/Editor/Step20SplashTitleProductionSelfTest.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/Step20SplashTitleProductionSelfTest.cs
+@@ -7,54 +7,132 @@
+ 
+ namespace LegendsOfRus.Editor
+ {
++    /// <summary>
++    /// Source integration and visual-readiness checks are deliberately separate.
++    /// Alpha channels, file existence, and offline reconstruction scores are not
++    /// evidence of isolated artwork, a working prefab, or a Unity runtime match.
++    /// This validator never regenerates artwork or rewrites production prefabs.
++    /// </summary>
+     public static class Step20SplashTitleProductionSelfTest
+     {
++        const string RouterPath = "Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs";
++        const string RuntimePath = "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSplashTitleRuntime.cs";
++        const string MetaRuntimePath = "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionMetaPageRuntime.cs";
++        const string PrefabPath = "Assets/LegendsOfRus/Resources/ProductionUI/Pages/SplashTitle.prefab";
++        const string ReferencePath = "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/SplashTitle.png";
++        const string FontRoot = "Assets/LegendsOfRus/Art/Fonts/Production";
++
++        // Keep the established menu path, but remove its former false visual PASS.
+         [MenuItem("Legends of Rus/Tests/Run v1.20 Visual Page 01-R Splash-Title Reference-Accurate Self-Test")]
+         public static void Run()
+         {
++            List<string> blockers = ValidateSourceIntegration();
++            AddVisualReadinessBlockers(blockers);
++            if (blockers.Count > 0)
++                throw new InvalidOperationException(
++                    "Splash/Title production acceptance is BLOCKED:\n- " +
++                    string.Join("\n- ", blockers.ToArray()) +
++                    "\nNo asset was changed. These diagnostics are not a compile error or a runtime screenshot test.");
++
++            Debug.Log("Splash/Title source/readiness checks found no automatic blockers. " +
++                "Visual acceptance is still UNVERIFIED: inspect alpha edges, run the real Bootstrap flow, " +
++                "test navigation and safe areas, and compare actual Unity captures against the approved reference.");
++        }
++
++        [MenuItem("Legends of Rus/Tests/Run Splash-Title Source Integration Checks (Not Visual Acceptance)")]
++        public static void RunSourceIntegrationChecks()
++        {
++            List<string> failures = ValidateSourceIntegration();
++            if (failures.Count > 0)
++                throw new InvalidOperationException(string.Join(Environment.NewLine, failures.ToArray()));
++            Debug.Log("Splash/Title SOURCE integration checks passed. " +
++                "This does not establish runtime behavior, transparent-art quality, live text, or reference fidelity.");
++        }
++
++        public static List<string> ValidateSourceIntegration()
++        {
+             var failures = new List<string>();
+-            string root = "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleFinal";
+-            string[] assets = {
+-                "background_clean.png", "characters_upper.png", "character_male_micro.png", "character_female_micro.png", "character_rim_glow.png",
+-                "firebird.png", "firebird_aura.png", "firebird_shimmer.png", "title_logo.png", "version_v1_20_0.png", "language_frame.png",
+-                "start_button_frame.png", "start_glow.png", "icon_settings.png", "icon_account.png", "icon_help.png", "tagline_ornament.png", "legal_ru.png", "manifest.json"
++            string router = ReadSource(RouterPath, failures);
++            int start = router.IndexOf("bool BuildDesignLayer(", StringComparison.Ordinal);
++            int end = start < 0 ? -1 : router.IndexOf("void BuildInteractionLayer(", start, StringComparison.Ordinal);
++            string dispatch = start >= 0 && end > start ? router.Substring(start, end - start) : string.Empty;
++            int core = dispatch.IndexOf("ProductionCoreLoopPageRuntime.TryBuild", StringComparison.Ordinal);
++            int meta = dispatch.IndexOf("ProductionMetaPageRuntime.TryBuild", StringComparison.Ordinal);
++            int legacy = dispatch.IndexOf("DesignScreenRegistry.ResourceKey", StringComparison.Ordinal);
++            if (core < 0 || meta <= core || legacy <= meta)
++                failures.Add("ScreenRouter must explicitly dispatch core -> enabled meta -> legacy/demo presentation.");
++
++            string[] calls = {
++                "GuardSplashAction(() => Show(ScreenId.Loading))",
++                "GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.LanguageSelect))",
++                "GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.Settings))",
++                "GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.Login))",
++                "GuardSplashAction(() => OpenSplashAuxiliary(ScreenId.TutorialOverlay))"
+             };
+-            foreach (string a in assets)
+-                if (!File.Exists(root + "/" + a)) failures.Add("Missing reference-accurate runtime asset: " + a);
++            foreach (string call in calls)
++                if (router.IndexOf(call, StringComparison.Ordinal) < 0)
++                    failures.Add("Missing generation-guarded Splash action: " + call);
++            if (router.IndexOf("routeGeneration != expectedGeneration", StringComparison.Ordinal) < 0)
++                failures.Add("Splash callbacks do not reject a stale route generation.");
++            if (router.IndexOf("splashAuxiliaryRoot.HasValue && id != splashAuxiliaryRoot.Value", StringComparison.Ordinal) < 0)
++                failures.Add("Splash auxiliary Back override is not cleared on departure.");
++            if (router.IndexOf("generation == routeGeneration && current == ScreenId.Loading", StringComparison.Ordinal) < 0)
++                failures.Add("Existing Loading -> Home generation guard must be preserved.");
++            return failures;
++        }
+ 
+-            string reference = "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/SplashTitle.png";
+-            if (!File.Exists(reference)) failures.Add("Missing direct approved SplashTitle reference.");
++        static void AddVisualReadinessBlockers(List<string> blockers)
++        {
++            Texture2D reference = AssetDatabase.LoadAssetAtPath<Texture2D>(ReferencePath);
++            if (reference == null)
++                blockers.Add("Approved Splash reference could not be loaded: " + ReferencePath);
++            else if (reference.width != 941 || reference.height != 1672)
++                blockers.Add("Reference dimensions changed; remeasure the layout rather than assuming 941 x 1672.");
++
++            if (!ProductionMetaPageCutoverRegistry.IsCutover(ScreenId.SplashTitle))
++                blockers.Add("Splash production cutover is disabled; the canonical runtime flow must be verified after activation.");
++
++            string runtime = ReadSource(RuntimePath, blockers);
++            string metaRuntime = ReadSource(MetaRuntimePath, blockers);
++            if (metaRuntime.IndexOf("return ProductionSplashTitleRuntime.TryBuild(parent)", StringComparison.Ordinal) >= 0 &&
++                runtime.IndexOf("Object.Instantiate", StringComparison.Ordinal) < 0)
++                blockers.Add("Active Splash path is the procedural 01-R builder, not the saved canonical prefab: " + PrefabPath);
++
++            string[] rasterTextLayers = {
++                "version_v1_20_0", "language_frame", "start_button_frame",
++                "icon_settings", "icon_account", "icon_help", "tagline_ornament", "legal_ru"
++            };
++            foreach (string layer in rasterTextLayers)
++                if (runtime.IndexOf("Load(\"" + layer + "\")", StringComparison.Ordinal) >= 0)
++                    blockers.Add("Active 01-R raster label/control requires the actual R2 replacement plus live text: " + layer + ".png");
++
++            if (runtime.IndexOf("Load(\"characters_upper\")", StringComparison.Ordinal) >= 0)
++                blockers.Add("The active 01-R hero base combines Ivan and Masha; the reviewed source also contains background/cutout defects. Separate R2 character resources are required.");
++
++            if (!AssetDatabase.IsValidFolder(FontRoot) || AssetDatabase.FindAssets("t:Font", new[] { FontRoot }).Length == 0)
++                blockers.Add("No approved production Font asset is imported in " + FontRoot + ". Built-in fallback typography is not visual signoff.");
++
++            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
++            if (prefab == null)
++                blockers.Add("Canonical Splash prefab could not be loaded: " + PrefabPath);
+             else
+             {
+-                Texture2D t = AssetDatabase.LoadAssetAtPath<Texture2D>(reference);
+-                if (t == null || t.width != 941 || t.height != 1672)
+-                    failures.Add("SplashTitle approved reference must be exactly 941x1672.");
++                if (prefab.name == "Wave01_SplashTitle")
++                    blockers.Add("The saved Splash prefab is still the old Wave01 candidate. Do not activate it as an R2 implementation.");
++                foreach (string dependency in AssetDatabase.GetDependencies(PrefabPath, true))
++                {
++                    string path = dependency.Replace('\\', '/');
++                    if (path.Contains("/Art/ReferenceOnly/") || path.Contains("/Resources/DesignScreens/") || path.Contains("/ProjectDocs/"))
++                        blockers.Add("Forbidden reference/QA runtime dependency: " + dependency);
++                }
+             }
++        }
+ 
+-            if (!ProductionMetaPageCutoverRegistry.IsCutover(ScreenId.SplashTitle))
+-                failures.Add("SplashTitle production cutover state is not enabled.");
+-
+-            string runtimePath = "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSplashTitleRuntime.cs";
+-            string runtime = File.ReadAllText(runtimePath);
+-            if (runtime.Contains("ApprovedScreens") || runtime.Contains("DesignScreens"))
+-                failures.Add("Splash runtime must not load full-screen approved/design screens.");
+-            if (runtime.Contains("AddText("))
+-                failures.Add("Russian reference composition must use exact separated reference sprites instead of approximate live-font recreation.");
+-            if (!runtime.Contains("version_v1_20_0") || !runtime.Contains("legal_ru"))
+-                failures.Add("Version/legal reference layers are not independently wired.");
+-            if (!runtime.Contains("character_male_micro") || !runtime.Contains("character_female_micro") || !runtime.Contains("firebird_shimmer"))
+-                failures.Add("Living character/Firebird overlays are not wired.");
+-
+-            string manifest = File.ReadAllText(root + "/manifest.json");
+-            if (!manifest.Contains("0.998346"))
+-                failures.Add("Reference-geometry reconstruction metric is missing from manifest.");
+-            if (!manifest.Contains("no rectangular production crops") && !manifest.Contains("No rectangular production crops"))
+-                failures.Add("Manifest must explicitly prohibit rectangular production crops.");
+-
+-            if (failures.Count > 0)
+-                throw new InvalidOperationException(string.Join(Environment.NewLine, failures.ToArray()));
+-
+-            Debug.Log("v1.20 Visual Page 01-R Splash/Title self-test PASS: exact reference geometry, non-rectangular separated assets, reference-only full screen, restrained living overlays, and preserved navigation cutover.");
++        static string ReadSource(string path, List<string> failures)
++        {
++            if (File.Exists(path)) return File.ReadAllText(path);
++            failures.Add("Source file unavailable: " + path);
++            return string.Empty;
+         }
+     }
+ }

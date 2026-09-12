@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step06-functional-acceptance-asset-readiness",
+  "baselineMilestone": "v1.20-step05-functional-qa-full-demo-verification",
+  "unityTarget": "6000.5.9f1",
+  "intent": "Freeze accepted functionality before production asset reconstruction. Step 6 does not change runtime/gameplay/economy/save/backend behavior.",
+  "sourceGate": {
+    "step5StaticSourceVerification": "PASS",
+    "routeAcceptance36Of36": "PASS",
+    "pageFunctionAssetPlan36Of36": "PASS",
+    "functionalFreezeManifest": "PASS_GENERATED_FROM_STEP5_BASELINE",
+    "runtimeScriptsChangedInStep6": false,
+    "testsChangedInStep6": false,
+    "packagesChangedInStep6": false,
+    "projectSettingsChangedInStep6": false,
+    "pngAssetsChangedInStep6": false,
+    "savePayloadVersion": 6,
+    "productionBackendsRemainFailClosed": true
+  },
+  "executableGate": {
+    "unityCompilation": "PENDING_USER_UNITY_EXECUTION",
+    "step5FunctionalQaSelfTest": "PENDING_USER_UNITY_EXECUTION",
+    "step6AcceptanceReadinessSelfTest": "PENDING_USER_UNITY_EXECUTION",
+    "completeEditModeSuite": "PENDING_USER_UNITY_EXECUTION",
+    "completePlayModeSuite": "PENDING_USER_UNITY_EXECUTION",
+    "fullDemoFlowChecklist": "PENDING_USER_UNITY_EXECUTION",
+    "androidVisibleMapBack": "PENDING_USER_ANDROID_EXECUTION",
+    "androidSystemBack": "PENDING_USER_ANDROID_EXECUTION"
+  },
+  "decision": {
+    "sourceFunctionalAcceptance": "PASS",
+    "executableFunctionalAcceptance": "PENDING",
+    "assetAuthoringPreparation": "GO",
+    "productionAssetReconstructionRuntimeCutover": "BLOCKED",
+    "reason": "No Unity Editor or Android device is available in this build environment; static verification cannot substitute for executable acceptance."
+  },
+  "passCondition": "All executableGate items must be PASS on the exact Step 6 bytes before Wave 1 production asset runtime cutover begins.",
+  "failurePolicy": "Any functional regression sends the project back to the functionality lane. Do not compensate for a logic defect inside an art prefab."
+}

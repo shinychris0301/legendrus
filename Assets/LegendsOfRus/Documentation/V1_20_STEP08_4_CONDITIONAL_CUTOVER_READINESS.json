@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step08.4-conditional-shop-cutover-readiness",
+  "decision": "PENDING_UNITY_RUNTIME_CAPTURE_AND_SHOP_GATE",
+  "activeCutoverPerformed": false,
+  "shopOnlyEligibility": true,
+  "fullWave02CutoverAuthorized": false,
+  "directApprovedReferencePages": 1,
+  "otherWave02PagesEligibleForProductionCutover": 0,
+  "runtimeEvidenceGeneratedByThisSourcePackage": false,
+  "blockers": [
+    "RUNTIME_CAPTURE: execute 36 actual Unity Play-Mode captures.",
+    "SHOP_APPROVED_GATE: analyze the 941x1672 Unity Shop render against the direct approved reference.",
+    "PROVIDER_BOUNDARY: re-run the Step 8.4 provider/economy authority gate.",
+    "REFERENCE_COVERAGE: full Wave 2 cutover remains blocked because approved direct reference authority is 1/9."
+  ]
+}

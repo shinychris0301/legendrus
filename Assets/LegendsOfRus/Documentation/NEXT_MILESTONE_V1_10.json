@@ -1,0 +1,31 @@
+{
+  "milestone": "v1.10",
+  "name": "Gameplay Core Stabilization and Regression Tests",
+  "priority": "BLOCKING",
+  "reason": "Recent runtime tests found direction, interaction, special-match, and booster regressions. The puzzle engine must be reliable before level production, monetization integration, or content expansion.",
+  "deliverables": [
+    "Pure C# BoardModel separated from visual cells",
+    "Gameplay state machine: Idle, Selecting, Swapping, Resolving, Falling, BoosterTargeting, Paused",
+    "Single authoritative tap/swipe direction converter",
+    "Deterministic match grouping and cascade resolver",
+    "4-match, 5-match, T/L special creation and special-chain resolution",
+    "Booster preview, cancel, execute, inventory-consumption rules",
+    "Seeded board/replay debugging",
+    "EditMode regression tests",
+    "PlayMode interaction tests",
+    "QA debug overlay and test-board presets"
+  ],
+  "acceptance_tests": [
+    "Up, down, left, and right swaps map correctly",
+    "Single-tap adjacent movement and swipe movement agree",
+    "Invalid swap does not consume a move",
+    "Input is ignored while animation/resolution is active",
+    "No unresolved dead board",
+    "All special shapes create the expected special",
+    "Special combinations chain without corrupting the board",
+    "Boosters only consume inventory after valid execution",
+    "Pause/resume preserves the exact board state",
+    "Approved gameplay layout and gem art remain unchanged"
+  ],
+  "next_after_completion": "v1.11 — Data-Driven Chapter 1 Level System"
+}

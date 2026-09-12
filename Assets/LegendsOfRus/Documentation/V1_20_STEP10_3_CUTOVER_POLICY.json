@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step10.3-rollback-controlled-cutover-policy",
+  "coreRegistryPolicy": "ProductionCoreLoopPageRegistry remains exactly 10 routes",
+  "metaRegistryPolicy": "Non-core functional pages use explicit page-scoped Resources state artifacts only",
+  "eligibility": [
+    "candidate prefab exists",
+    "actual four-aspect Unity runtime evidence exists",
+    "direct approved reference exists",
+    "941x1672 runtime fidelity passes correlation >= 0.80 and MAE <= 0.10",
+    "global authority boundary checks pass",
+    "page is not already active"
+  ],
+  "transaction": [
+    "immutable per-page baseline snapshot",
+    "candidate copied/validated",
+    "activation state written last",
+    "functional and Android acceptance locks cleared",
+    "any apply failure rolls back pages applied in the transaction"
+  ],
+  "rollback": "restores original active prefab/meta and original cutover state/meta from immutable snapshot",
+  "androidAcceptance": "functional and physical Android PASS locks are bound to integration fingerprint and invalid after cutover/rollback"
+}

@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step05-functional-qa-full-demo-verification",
+  "sourceAssetPlan": "V1_20_STEP04_PAGE_FUNCTION_ASSET_PLAN.json",
+  "note": "Step 4 asset plan remains unchanged. Step 5 adds the omitted IndividualRanking source route for functional acceptance.",
+  "screenCount": 36,
+  "reachableFromSplashCount": 36,
+  "allScreensReachableFromSplash": true,
+  "routes": {
+    "SplashTitle": [
+      "Loading"
+    ],
+    "Loading": [
+      "Home"
+    ],
+    "Home": [
+      "Profile",
+      "Settings",
+      "WorldMap",
+      "ChapterMap",
+      "Shop",
+      "Events",
+      "Characters",
+      "Mail",
+      "DailyReward"
+    ],
+    "WorldMap": [
+      "Home",
+      "ChapterMap"
+    ],
+    "ChapterMap": [
+      "WorldMap",
+      "PreLevel"
+    ],
+    "PreLevel": [
+      "ChapterMap",
+      "BoosterSelect",
+      "Gameplay",
+      "OutOfEnergy"
+    ],
+    "Gameplay": [
+      "Pause",
+      "TutorialOverlay",
+      "Victory",
+      "Fail",
+      "Dialogue"
+    ],
+    "Pause": [
+      "Gameplay",
+      "Settings",
+      "PreLevel",
+      "ChapterMap"
+    ],
+    "Victory": [
+      "Dialogue",
+      "ChapterComplete",
+      "ChapterMap"
+    ],
+    "Fail": [
+      "Gameplay",
+      "ChapterMap"
+    ],
+    "ChapterComplete": [
+      "WorldMap"
+    ],
+    "Dialogue": [
+      "Dialogue",
+      "PreLevel",
+      "ChapterMap",
+      "ChapterComplete"
+    ],
+    "Characters": [
+      "Home"
+    ],
+    "DailyReward": [
+      "Home",
+      "RewardClaim"
+    ],
+    "Events": [
+      "Home",
+      "EventDetail"
+    ],
+    "EventDetail": [
+      "Events"
+    ],
+    "IndividualRanking": [
+      "Home"
+    ],
+    "TeamHub": [
+      "Home",
+      "TeamRanking",
+      "TeamChat",
+      "FriendsList"
+    ],
+    "TeamRanking": [
+      "TeamHub"
+    ],
+    "TeamChat": [
+      "TeamHub"
+    ],
+    "FriendsList": [
+      "TeamHub"
+    ],
+    "Mail": [
+      "Home"
+    ],
+    "Profile": [
+      "Home",
+      "IndividualRanking",
+      "TeamHub",
+      "Inventory",
+      "Login"
+    ],
+    "Inventory": [
+      "Home"
+    ],
+    "Shop": [
+      "Home",
+      "SpecialOffer"
+    ],
+    "SpecialOffer": [
+      "Shop"
+    ],
+    "OutOfEnergy": [
+      "PreLevel",
+      "Gameplay"
+    ],
+    "BoosterSelect": [
+      "PreLevel",
+      "Gameplay"
+    ],
+    "RewardClaim": [
+      "DailyReward"
+    ],
+    "Settings": [
+      "Home",
+      "LanguageSelect",
+      "TutorialOverlay",
+      "OfflineState",
+      "MaintenanceState",
+      "EmptyErrorState"
+    ],
+    "LanguageSelect": [
+      "Settings"
+    ],
+    "Login": [
+      "Profile",
+      "Home"
+    ],
+    "TutorialOverlay": [
+      "Home"
+    ],
+    "OfflineState": [
+      "Home"
+    ],
+    "MaintenanceState": [
+      "Home"
+    ],
+    "EmptyErrorState": [
+      "Home"
+    ]
+  }
+}

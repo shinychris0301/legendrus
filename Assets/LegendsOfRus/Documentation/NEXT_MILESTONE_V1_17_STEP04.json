@@ -1,0 +1,26 @@
+{
+  "milestone": "v1.17-step04",
+  "name": "Memory, Texture, and Loading Optimization Foundation",
+  "status": "PLANNED_AFTER_V1_17_STEP03_PREREQUISITE_AND_UNITY_VERIFICATION",
+  "productionBuildAuthorized": false,
+  "scope": [
+    "Inventory texture import settings, runtime allocations, scene loading, and retained object lifetimes",
+    "Define measurable memory and loading budgets for the supported portrait device matrix",
+    "Add deterministic development probes and bounded evidence reports without player tracking",
+    "Implement low-risk loading and lifetime fixes that preserve approved artwork and gameplay behavior"
+  ],
+  "outOfScope": [
+    "Changing or regenerating the locked approved visual assets",
+    "Addressables or remote content delivery activation",
+    "Production crash transport, analytics upload, provider SDKs, or background network work",
+    "Production Android signing, AAB generation, Play publishing, package-lock activation, economy activation, or commercial activation"
+  ],
+  "entryCriteria": [
+    "Every v1.17 Step 2 prerequisite artifact is retained and accepted",
+    "The exact Step 3 candidate compiles in Unity 6000.5.9f1 with retained zero-error evidence",
+    "The exact Step 3 baseline verifier passes against the frozen Step 2 tree and its complete JSON report is retained",
+    "The Step 3 project validator, Editor self-test, EditMode tests, and PlayMode tests pass with retained output",
+    "The diagnostics foundation remains detached, minimized, bounded, provider-neutral, and network-disabled",
+    "A representative-device baseline is retained before optimization changes"
+  ]
+}

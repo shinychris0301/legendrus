@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "WorldMap",
+  "productPage": "World Map",
+  "screenId": "WorldMap",
+  "wave": 1,
+  "directApprovedReference": "WorldMap.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/WorldMap.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/environment_world_map.png",
+      "role": "world map environment plate",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_worldmap_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/route_glow.png",
+      "role": "route/path glow overlay",
+      "sourceType": "procedural-style-matched",
+      "source": "procedural"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "world map environment plate",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/environment_world_map.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "region art layers",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/environment_world_map.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "route/path",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/WorldMap/route_glow.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "chapter nodes",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/map_node.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "lock states",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_lock.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "star counters",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/star.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "top HUD",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/top_bar.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "back/home control",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/back_button.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "bottom navigation",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/nav_tile.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 9,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

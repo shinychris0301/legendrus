@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07.4-runtime-capture-dynamic-map-conditional-cutover",
+  "decision": "NO_GO",
+  "automaticCutover": false,
+  "developmentCutoverApplied": false,
+  "postCutoverAndroidAccepted": false,
+  "eligiblePages": [
+    "Loading",
+    "Home",
+    "WorldMap",
+    "ChapterMap",
+    "PreLevel",
+    "Gameplay",
+    "Victory",
+    "Fail"
+  ],
+  "deferredPages": {
+    "missingDirectReference": ["SplashTitle", "Pause", "ChapterComplete"],
+    "candidateOnlyRegistryScope": ["SplashTitle", "Dialogue"]
+  },
+  "sourceState": {
+    "step73ReferenceProxy": "8/9 full-page + Gameplay shell pass retained",
+    "dynamicMapDecomposition": "IMPLEMENTED_SOURCE_PENDING_UNITY_QA",
+    "unityRuntimeCapture": "PENDING_USER_UNITY_EXECUTION",
+    "unityRuntimeFidelity": "PENDING_RUNTIME_CAPTURE",
+    "activeRegistryChanged": false,
+    "activePrefabCutoverPerformed": false
+  },
+  "blockers": [
+    "CANDIDATE-BUILD: Step 7.4 candidates must rebuild in Unity so WorldMap/ChapterMap receive live state controllers.",
+    "UNITY-RUNTIME-CAPTURE: execute 48 Play-Mode candidate renders at 9:16, 19.5:9, 20:9 and 10:16.",
+    "UNITY-RUNTIME-FIDELITY: analyze the 9 directly referenced pages from the Unity runtime captures.",
+    "MAP-DYNAMIC-STATE: run the WorldMap 15/20 and ChapterMap 7/10 window-state QA.",
+    "FULL-WAVE1: SplashTitle, Pause and ChapterComplete still lack direct approved references. Dialogue remains candidate-only at this registry checkpoint."
+  ],
+  "postCutoverAcceptance": [
+    "Run the accepted Step 5 functional QA suite again after cutover.",
+    "Test active cutover on physical Android: safe area, touch, visible Back, system Back, dynamic map state and Cyrillic rendering.",
+    "Record Android PASS only after physical-device testing; otherwise use the Step 7.4 rollback command."
+  ],
+  "releaseOnlyBlocker": "A properly licensed final Cyrillic font face remains required for release signoff; no font binary is bundled."
+}

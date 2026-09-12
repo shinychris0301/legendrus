@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step08.5-rollback-safe-shop-development-cutover-android-regression-acceptance",
+  "baseline": "v1.20 Step 8.4",
+  "sourceVerification": "PASS",
+  "packagedCutoverState": "INACTIVE",
+  "automaticCutover": false,
+  "shopOnlyCutoverInfrastructure": true,
+  "fullWave02CutoverAuthorized": false,
+  "directApprovedWave02ReferencePages": 1,
+  "coreRegistryRoutesExpected": 10,
+  "criticalAuthorityFilesFrozen": {
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs": {
+      "sha256": "6b66f9d6ad08c15b087489685cd2056b9b479e3389c19ce2773094b958861a02",
+      "identicalToStep84": true
+    },
+    "Assets/LegendsOfRus/Scripts/Runtime/Services/MonetizationService.cs": {
+      "sha256": "e2ef36f2bbab50ae45f1852e729b8692830539fc1345b835564e9e2f7b2d4e79",
+      "identicalToStep84": true
+    },
+    "Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs": {
+      "sha256": "d8853d33a49a6d21d414fab1830b957d032d047ed242b259af47d749414b6163",
+      "identicalToStep84": true
+    },
+    "Assets/LegendsOfRus/Scripts/CommercialCore/Monetization/VerifiedEntitlementGate.cs": {
+      "sha256": "acc60d5ef7f4c9b925f3282f3fe5a6d05619398410bb6e286c4736156cabeb29",
+      "identicalToStep84": true
+    },
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionCoreLoopPageRegistry.cs": {
+      "sha256": "aee233191e2696acdf944fbb207cbfb6580ccc80a80941e960b13f09058a8938",
+      "identicalToStep84": true
+    }
+  },
+  "runtimeIntegrationChanges": [
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/DesignScreenRegistry.cs",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/DemoFunctionalPageRuntime.cs",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionMetaPageCutoverRegistry.cs",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionMetaPageRuntime.cs"
+  ],
+  "activeProductionPrefabsChanged": false,
+  "packagesChanged": false,
+  "projectSettingsChanged": false,
+  "step84RuntimeEvidenceFabricated": false,
+  "functionalPassFabricated": false,
+  "androidPassFabricated": false,
+  "rollbackSnapshotPackaged": false,
+  "rollbackSnapshotCreatedOnFirstExplicitApply": true
+}

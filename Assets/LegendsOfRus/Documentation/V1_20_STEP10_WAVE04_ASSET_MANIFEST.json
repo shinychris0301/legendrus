@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step10-wave04-account-language-system-ui",
+  "policy": {
+    "activeRuntimeCutover": false,
+    "runtimeFullScreenScreenshotFallback": false,
+    "liveLocalizedText": true,
+    "backendActivation": false,
+    "finalFontBinaryBundled": false
+  },
+  "pages": [
+    {
+      "pageKey": "Settings",
+      "productPage": "Settings",
+      "screenId": "Settings",
+      "surfaceType": "screen/modal",
+      "functionalGoal": "Toggle music/SFX/vibration/notifications; access language/help/system demos.",
+      "primaryTransitions": "Toggles; Language; Tutorial; Back",
+      "stateOwnership": "save-v6 settings",
+      "backendDependency": "OS/provider optional for notifications",
+      "logicStatus": "implemented",
+      "assetRequirements": [
+        "settings panel",
+        "toggle controls",
+        "audio/haptic icons",
+        "notification icon",
+        "language row",
+        "support/privacy rows",
+        "back/close button"
+      ],
+      "wave": 4,
+      "referenceAuthority": "demo-guidance",
+      "candidateFolder": "Settings"
+    },
+    {
+      "pageKey": "LanguageSelect",
+      "productPage": "Language Select",
+      "screenId": "LanguageSelect",
+      "surfaceType": "screen",
+      "functionalGoal": "Choose locale; demo stores session language only.",
+      "primaryTransitions": "RU/EN demo; Back→Settings",
+      "stateOwnership": "session language; future persisted locale",
+      "backendDependency": "localization content required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "language background",
+        "language rows",
+        "flags/locale icons",
+        "selected checkmark",
+        "download indicator optional",
+        "back button"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "LanguageSelect"
+    },
+    {
+      "pageKey": "Login",
+      "productPage": "Login",
+      "screenId": "Login",
+      "surfaceType": "screen",
+      "functionalGoal": "Guest entry now; production account providers later.",
+      "primaryTransitions": "Guest→Home; Back→Profile",
+      "stateOwnership": "demo guest state",
+      "backendDependency": "identity/cloud backend required",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "login environment",
+        "logo",
+        "guest button",
+        "provider buttons",
+        "privacy/legal links",
+        "account recovery link",
+        "loading/error states"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "Login"
+    },
+    {
+      "pageKey": "TutorialOverlay",
+      "productPage": "Tutorial Overlay",
+      "screenId": "TutorialOverlay",
+      "surfaceType": "overlay/screen",
+      "functionalGoal": "Explain controls; gameplay tutorial remains data-driven.",
+      "primaryTransitions": "Back/help close; gameplay triggers existing presenter",
+      "stateOwnership": "completedTutorialSteps",
+      "backendDependency": "none",
+      "logicStatus": "partial",
+      "assetRequirements": [
+        "spotlight mask",
+        "hand/pointer",
+        "callout panel",
+        "arrow",
+        "step dots",
+        "skip/next controls",
+        "highlight frames"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "TutorialOverlay"
+    },
+    {
+      "pageKey": "OfflineState",
+      "productPage": "Offline State",
+      "screenId": "OfflineState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Explain offline limitations and allow safe retry/local play.",
+      "primaryTransitions": "Retry/Home",
+      "stateOwnership": "network status future",
+      "backendDependency": "network provider",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "offline illustration",
+        "status icon",
+        "retry button",
+        "continue-offline button",
+        "support text"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "OfflineState"
+    },
+    {
+      "pageKey": "MaintenanceState",
+      "productPage": "Maintenance State",
+      "screenId": "MaintenanceState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Block online-only operations during maintenance.",
+      "primaryTransitions": "Back/Home",
+      "stateOwnership": "maintenance flag future",
+      "backendDependency": "remote config/backend",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "maintenance illustration",
+        "status panel",
+        "estimated-time text",
+        "retry/home controls"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "MaintenanceState"
+    },
+    {
+      "pageKey": "EmptyErrorStates",
+      "productPage": "Empty / Error Variants",
+      "screenId": "EmptyErrorState",
+      "surfaceType": "system screen",
+      "functionalGoal": "Reusable empty/error/retry state.",
+      "primaryTransitions": "Retry/Home",
+      "stateOwnership": "error context",
+      "backendDependency": "varies",
+      "logicStatus": "demo-local",
+      "assetRequirements": [
+        "empty-state illustrations",
+        "error icons",
+        "message panel",
+        "retry/back buttons",
+        "variant badges"
+      ],
+      "wave": 4,
+      "referenceAuthority": "style-system-derived",
+      "candidateFolder": "EmptyErrorState"
+    }
+  ],
+  "pageCount": 7,
+  "requirementCount": 41,
+  "newWave04PngCount": 67,
+  "fullReconstructionProgramCandidateCoverage": "36/36 page contracts now have a Wave 1-4 reconstruction lane; runtime cutover remains evidence-gated"
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Pause",
+  "productPage": "Pause Menu",
+  "screenId": "Pause",
+  "wave": 1,
+  "directApprovedReference": null,
+  "referenceStatus": "LOCKED_STYLE_SYSTEM_DERIVED_DIRECT_PAGE_REFERENCE_STILL_REQUIRED_FOR_PIXEL_SIGNOFF",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Pause.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Pause/pause_backdrop_vignette.png",
+      "role": "pause modal dim/vignette",
+      "sourceType": "procedural",
+      "source": "procedural"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "modal dimmer",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Pause/pause_backdrop_vignette.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "pause frame",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "goals snapshot",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/goal_panel.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "booster row",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/booster_slot.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "resume/restart/settings/exit buttons",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_danger_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 5,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

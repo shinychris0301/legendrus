@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step10.3-full-android-regression",
+  "manualPassRequired": true,
+  "sections": [
+    {
+      "section": "Boot and navigation",
+      "checks": [
+        "Cold boot reaches Splash/Loading/Home without errors",
+        "Home navigation hotspots route correctly",
+        "WorldMap -> ChapterMap -> Home Back hierarchy works",
+        "Android system Back matches visible Back policy",
+        "Background/resume does not corrupt current route"
+      ]
+    },
+    {
+      "section": "Core gameplay",
+      "checks": [
+        "Pre-Level starts selected level and spends energy correctly",
+        "Single-drag swipe works in all four directions",
+        "Match/cascade/goals/moves/score remain correct",
+        "Boosters and obstacles retain accepted authority",
+        "Pause/resume/restart/exit preserve board semantics",
+        "Victory/Fail/ChapterComplete progression/save remains correct"
+      ]
+    },
+    {
+      "section": "Meta and economy",
+      "checks": [
+        "Shop/Special Offer visual cutover does not bypass provider authority",
+        "Unavailable purchases fail closed with no grant",
+        "Reward Claim cannot double-grant",
+        "Daily Reward retains once-per-day authority",
+        "Out of Energy rewarded-ad path requires verified fulfillment"
+      ]
+    },
+    {
+      "section": "Events and social",
+      "checks": [
+        "Event claims remain authorized/demo-safe",
+        "Rankings do not invent server authority",
+        "Team/chat/friends remain within accepted local/server boundaries",
+        "Friend energy request does not directly grant energy",
+        "Mail cannot grant unavailable backend rewards"
+      ]
+    },
+    {
+      "section": "Account and system",
+      "checks": [
+        "Settings persist via save-v6",
+        "Language remains expected local/session behavior",
+        "Guest login does not activate identity provider",
+        "Tutorial completion persists through existing path",
+        "Offline/Maintenance/Error states have safe retry/back/home behavior"
+      ]
+    },
+    {
+      "section": "Device presentation",
+      "checks": [
+        "Safe area/cutout correct on tested Android device",
+        "Live Cyrillic text renders without missing glyphs",
+        "Touch targets are usable and decorative layers do not intercept input",
+        "No screen is zoomed/cropped outside intended responsive canvas",
+        "No new Console/runtime exceptions during full flow"
+      ]
+    }
+  ]
+}

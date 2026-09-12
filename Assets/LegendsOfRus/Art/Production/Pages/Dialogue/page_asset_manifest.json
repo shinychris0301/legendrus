@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Dialogue",
+  "productPage": "Dialogue / Story",
+  "screenId": "Dialogue",
+  "wave": 1,
+  "directApprovedReference": "Dialogue.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Dialogue.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/story_scene_dobrynya.png",
+      "role": "story environment + character scene",
+      "sourceType": "approved-reference-scene-only-crop-no-dialogue-ui",
+      "source": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Dialogue.png",
+      "crop": [
+        0,
+        0,
+        941,
+        1115
+      ]
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/speaker_avatar_ivan.png",
+      "role": "Ivan speaker avatar",
+      "sourceType": "approved-reference-character-crop",
+      "source": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Dialogue.png",
+      "crop": [
+        180,
+        110,
+        475,
+        405
+      ]
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/speaker_avatar_dobrynya.png",
+      "role": "Dobrynya speaker avatar",
+      "sourceType": "approved-reference-character-crop",
+      "source": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Dialogue.png",
+      "crop": [
+        545,
+        95,
+        870,
+        420
+      ]
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "story environment/character scene",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/story_scene_dobrynya.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "dialogue panel",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "speaker plate/avatar",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/header_frame.png",
+        "Assets/LegendsOfRus/Art/Production/Pages/Dialogue/speaker_avatar_dobrynya.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "continue button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "skip/history optional icons",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/icon_button.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 5,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

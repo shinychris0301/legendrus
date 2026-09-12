@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step11.2-production-route-expansion",
+  "coreRegistryFrozenRoutes": 10,
+  "nonCoreSupportedRoutes": 26,
+  "automaticCutover": false,
+  "rollbackModel": "immutable per-page baseline snapshot + state-last activation",
+  "regressionBetweenBatchesRequired": true,
+  "batchA": {
+    "name": "Wave 1 authority closure",
+    "activeReferencePrerequisites": ["Pause", "ChapterComplete"],
+    "routeExpansionPages": ["SplashTitle", "Dialogue"]
+  },
+  "batchB": {
+    "name": "Wave 2 meta/economy",
+    "routeExpansionPages": ["Characters", "DailyReward", "Profile", "Inventory", "Shop", "SpecialOffer", "OutOfEnergy", "BoosterSelect", "RewardClaim"]
+  },
+  "batchC": {
+    "name": "Wave 3 Events/Rankings/Social",
+    "routeExpansionPages": ["Events", "EventDetail", "IndividualRanking", "TeamHub", "TeamRanking", "TeamChat", "FriendsList", "Mail"]
+  },
+  "batchD": {
+    "name": "Wave 4 Account/Language/System",
+    "routeExpansionPages": ["Settings", "LanguageSelect", "Login", "TutorialOverlay", "OfflineState", "MaintenanceState", "EmptyErrorState"]
+  },
+  "pageEligibility": [
+    "source candidate present",
+    "actual four-aspect Unity runtime evidence present",
+    "direct approved reference present",
+    "941x1672 runtime fidelity correlation >= 0.80 and MAE <= 0.10",
+    "global authority boundaries pass",
+    "page is not already active"
+  ],
+  "batchTransitionGate": "A valid Step 11 Development RC freeze for the current integration is required before applying each new batch. Applying a batch invalidates regression/Android/RC locks and requires them to be regenerated before the next batch."
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "LevelSelect",
+  "productPage": "Level Select / Chapter Map",
+  "screenId": "ChapterMap",
+  "wave": 1,
+  "directApprovedReference": "ChapterMap.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/ChapterMap.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/environment_chapter_map.png",
+      "role": "chapter environment",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_chaptermap_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/chapter_ribbon.png",
+      "role": "chapter ribbon/title base",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/ribbon_red.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/route_glow.png",
+      "role": "level route/path glow overlay",
+      "sourceType": "procedural-style-matched",
+      "source": "procedural"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "chapter environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/environment_chapter_map.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "chapter ribbon/title",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/chapter_ribbon.png",
+        "LIVE_TEXT"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "level path",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/LevelSelect/route_glow.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "level nodes",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/map_node.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "star states",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/star.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "lock states",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_lock.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "back button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/back_button.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "play button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "reward chest marker",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 9,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

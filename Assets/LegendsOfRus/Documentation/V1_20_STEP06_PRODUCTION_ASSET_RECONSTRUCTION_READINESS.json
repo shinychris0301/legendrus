@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step06-functional-acceptance-asset-readiness",
+  "unityTarget": "6000.5.9f1",
+  "pageCount": 36,
+  "currentAssetInventory": {
+    "approvedReferenceScreenPngs": 11,
+    "direct36PageApprovedReferences": 10,
+    "styleOnlyChapterReferencePngs": 1,
+    "canonicalUiKitPngs": 34,
+    "existingProductionPagePrefabs": 10,
+    "coreLoopReconstructedComponentPngs": 38,
+    "pagesWithReconstructedComponentCoverage": 6,
+    "approvedGameplayPngs": 11
+  },
+  "gaps": {
+    "pagesWithoutDirectApprovedReference": 26,
+    "pagesWithoutExistingProductionPrefab": 26,
+    "pagesWithoutReconstructedComponentCoverage": 30,
+    "finalArtistGradeEnvironmentCharacterCleanup": "REQUIRED",
+    "finalUnityDeviceVisualSignoff": "REQUIRED"
+  },
+  "readinessStatusCounts": {
+    "DIRECT_REFERENCE_AND_RUNTIME_RECONSTRUCTION_REQUIRED": 24,
+    "REFERENCE_AND_PREFAB_AVAILABLE_RECONSTRUCTION_REQUIRED": 3,
+    "REFERENCE_PREFAB_COMPONENTS_AVAILABLE_RECONSTRUCTION_REQUIRED": 5,
+    "RUNTIME_SHELL_AVAILABLE_DIRECT_REFERENCE_REQUIRED": 2,
+    "DIRECT_REFERENCE_AVAILABLE_RUNTIME_RECONSTRUCTION_REQUIRED": 2
+  },
+  "readinessDecision": {
+    "assetInventoryAndContracts": "READY",
+    "authoringPreparation": "GO",
+    "productionAssetReconstruction": "CONDITIONAL_GO_AFTER_EXECUTABLE_FUNCTIONAL_ACCEPTANCE",
+    "runtimeVisualCutover": "NO_GO_UNTIL_EXECUTABLE_FUNCTIONAL_ACCEPTANCE_AND_PER_WAVE_VISUAL_ACCEPTANCE",
+    "automaticArtGenerationOrLockedReferenceOverwrite": "NOT_AUTHORIZED"
+  },
+  "authoritativeFiles": {
+    "pageContracts": "Assets/LegendsOfRus/Documentation/V1_20_STEP06_PAGE_ASSET_CONTRACTS.json",
+    "waves": "Assets/LegendsOfRus/Documentation/V1_20_STEP06_RECONSTRUCTION_WAVES.json",
+    "functionalGate": "Assets/LegendsOfRus/Documentation/V1_20_STEP06_FUNCTIONAL_ACCEPTANCE_GATE.json",
+    "functionalFreeze": "Assets/LegendsOfRus/Documentation/V1_20_STEP06_FUNCTIONAL_FREEZE_MANIFEST.json"
+  }
+}

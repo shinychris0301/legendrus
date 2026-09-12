@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step11.2a-runtime-closeout-source-risk-preflight",
+  "note": "Informational source-preview proxy only. Actual Unity runtime capture is authoritative.",
+  "thresholds": {
+    "correlationMin": 0.8,
+    "maeMax": 0.1
+  },
+  "pages": [
+    {
+      "page": "Pause",
+      "sourcePreviewCorrelation": 0.4869,
+      "sourcePreviewMae": 0.0749,
+      "strictProxyPass": false
+    },
+    {
+      "page": "ChapterComplete",
+      "sourcePreviewCorrelation": 0.0422,
+      "sourcePreviewMae": 0.2138,
+      "strictProxyPass": false
+    }
+  ]
+}

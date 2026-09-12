@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step05-functional-qa-full-demo-verification",
+  "baseline": "v1.20 Step 4 — Complete Demo Game Flow and Functional Logic Foundation",
+  "unityTarget": "6000.5.9f1",
+  "priority": "functionality-first; demo design retained",
+  "staticSourceStatus": "PASS_AFTER_TOOLS_VERIFY",
+  "unityExecution": "PENDING_USER_UNITY_EXECUTION",
+  "deviceExecution": "PENDING_USER_ANDROID_EXECUTION",
+  "fixedInStep05": [
+    {
+      "id": "NAV-MAP-BACK",
+      "issue": "Visible World Map Back reported non-functional",
+      "change": "Expanded Back touch target and bound it to the source screen before central parent-policy dispatch.",
+      "expected": "WorldMap -> Home; ChapterMap -> WorldMap",
+      "playModeCoverage": "MapBackHotspots_FollowChapterMapWorldMapHomeHierarchy"
+    },
+    {
+      "id": "NAV-FRIENDS-PARENT",
+      "issue": "FriendsList parent disagreed with Step 4 route graph",
+      "change": "FriendsList Back destination changed from Home to TeamHub.",
+      "expected": "FriendsList -> TeamHub",
+      "playModeCoverage": "NavigateBack_FriendsListReturnsToTeamHub"
+    },
+    {
+      "id": "ROUTE-INDIVIDUAL-RANKING",
+      "issue": "Step 4 route graph omitted IndividualRanking as a source node although runtime Back existed.",
+      "change": "Added Step 5 route-acceptance graph with IndividualRanking -> Home while retaining the Step 4 asset plan unchanged.",
+      "expected": "36/36 screen IDs present and reachable from SplashTitle in the acceptance graph.",
+      "playModeCoverage": "ExtendedDemoRoutes_RenderWithAtLeastOneInteraction"
+    },
+    {
+      "id": "NAV-PRELEVEL-BACK",
+      "issue": "Pre-Level rendered a visible Back icon but had no clickable Back hotspot in Step 4.",
+      "change": "Added a source-bound Back hotspot over the visible Pre-Level Back control.",
+      "expected": "PreLevel -> ChapterMap",
+      "playModeCoverage": "PreLevelVisibleBackHotspot_ReturnsToChapterMap"
+    }
+  ],
+  "checks": [
+    {
+      "id": "FLOW-01",
+      "area": "Boot",
+      "expected": "SplashTitle -> Loading -> Home",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-02",
+      "area": "Map Back visible control",
+      "expected": "ChapterMap -> WorldMap -> Home using actual hotspots",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-03",
+      "area": "Map Back system control",
+      "expected": "Escape/Android Back uses same parent policy",
+      "static": "PASS",
+      "unity": "PENDING_DEVICE"
+    },
+    {
+      "id": "FLOW-04",
+      "area": "Core level loop",
+      "expected": "select -> prelevel -> gameplay -> victory/fail -> continue/retry",
+      "static": "PASS_INHERITED_CONTRACT",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-05",
+      "area": "Pause continuity",
+      "expected": "Gameplay -> Pause -> Settings -> Pause -> Gameplay without board reset",
+      "static": "PASS_INHERITED_COVERAGE",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-06",
+      "area": "Event one-shot demo",
+      "expected": "first session claim acknowledged; repeat blocked; no economy grant",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-07",
+      "area": "Team social navigation",
+      "expected": "ranking/chat/friends return to TeamHub; demo actions session-only",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-08",
+      "area": "Commercial fail-closed",
+      "expected": "IAP/ad unavailable never grants unverified rewards",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-09",
+      "area": "Language/account demo",
+      "expected": "RU/EN and guest session state only",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-10",
+      "area": "System states",
+      "expected": "offline/maintenance/error all provide deterministic exit",
+      "static": "PASS",
+      "unity": "PENDING"
+    },
+    {
+      "id": "FLOW-11",
+      "area": "Extended demo renderability",
+      "expected": "15 extended routes render and expose at least one interaction",
+      "static": "PASS_SOURCE",
+      "unity": "PENDING_PLAYMODE"
+    },
+    {
+      "id": "FLOW-12",
+      "area": "Save integrity boundary",
+      "expected": "save payload remains v6; Step 5 adds no save mutation",
+      "static": "PASS",
+      "unity": "PENDING_FULL_SUITE"
+    },
+    {
+      "id": "FLOW-13",
+      "area": "Package safety",
+      "expected": "Packages/ProjectSettings/PNG inherited bytes unchanged; no AAB bundled",
+      "static": "PASS_AFTER_TOOLS_VERIFY",
+      "unity": "N/A"
+    },
+    {
+      "id": "FLOW-14",
+      "area": "Asset plan completeness",
+      "expected": "all 36 product surfaces have functional goal and non-empty asset requirements",
+      "static": "PASS",
+      "unity": "N/A"
+    },
+    {
+      "id": "FLOW-15",
+      "area": "Full regression",
+      "expected": "Step 5 self-test + all EditMode + all PlayMode pass with no console errors",
+      "static": "NOT_A_SUBSTITUTE",
+      "unity": "PENDING"
+    }
+  ],
+  "assetPlanAudit": {
+    "authoritativeFile": "Assets/LegendsOfRus/Documentation/V1_20_STEP04_PAGE_FUNCTION_ASSET_PLAN.json",
+    "pageCount": 36,
+    "pagesWithAssetRequirements": 36,
+    "totalRequirementEntries": 254,
+    "logicStatusCounts": {
+      "demo-local": 15,
+      "implemented": 16,
+      "partial": 4,
+      "implemented-fail-closed": 1
+    },
+    "result": "PASS_36_OF_36"
+  },
+  "productionSafety": {
+    "productionBackendsRemainDisabled": true,
+    "automaticDemoEconomyGrant": false,
+    "automaticProductionPublish": false,
+    "finalProductionArtImplementation": "DEFERRED_UNTIL_FUNCTIONAL_ACCEPTANCE"
+  },
+  "routeAcceptance": {
+    "file": "Assets/LegendsOfRus/Documentation/V1_20_STEP05_ROUTE_ACCEPTANCE.json",
+    "screenCount": 36,
+    "reachableFromSplashCount": 36,
+    "allScreensReachableFromSplash": true
+  }
+}

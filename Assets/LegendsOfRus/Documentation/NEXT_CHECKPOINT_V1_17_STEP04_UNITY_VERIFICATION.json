@@ -1,0 +1,38 @@
+{
+  "checkpoint": "v1.17-step04-prerequisite-unity-device-verification",
+  "name": "Step 4 Memory, Texture, and Loading Verification",
+  "status": "PENDING_RETAINED_STEP02_STEP03_PREREQUISITES_AND_STEP04_UNITY_DEVICE_EVIDENCE",
+  "implementationStatus": "IMPLEMENTED_IN_SOURCE_PENDING_V1_17_STEP02_STEP03_PREREQUISITES_AND_STEP04_UNITY_DEVICE_VERIFICATION",
+  "candidateStatus": "MEMORY_TEXTURE_LOADING_OPTIMIZATION_FOUNDATION_SOURCE_CANDIDATE_PRODUCTION_GATES_BLOCKED",
+  "unityVersion": "6000.5.9f1",
+  "step2EntryEvidenceRetained": false,
+  "step3UnityEvidenceRetained": false,
+  "step4UnityEvidenceRetained": false,
+  "representativeDeviceBaselineRetained": false,
+  "productionBuildAuthorized": false,
+  "addressablesActivationAuthorized": false,
+  "requiredSequence": [
+    "Retain and accept all exact v1.17 Step 2 prerequisite evidence",
+    "Retain and accept the exact Step 3 Unity 6000.5.9f1 compilation, validator, self-test, EditMode, PlayMode, and representative-device evidence",
+    "Run node Tools/verify_v1_17_step04.mjs --baseline <exact-v1.17-step03-project> and retain the complete report",
+    "Compile the exact Step 4 candidate in Unity 6000.5.9f1 with zero errors",
+    "Run Legends of Rus/Validate Commercial Vertical Slice",
+    "Run Legends of Rus/Tests/Run v1.17 Step 4 Texture Audit",
+    "Run Legends of Rus/Tests/Run v1.17 Step 4 Self-Tests",
+    "Run complete EditMode and PlayMode suites and retain NUnit XML with zero failures, skips, or inconclusive tests",
+    "On representative Android hardware retain settled initial/final memory around repeated core-loop routes and investigate growth above the 32 MiB development guardrail",
+    "Verify low-memory cleanup preserves save and gameplay continuity and does not duplicate the persistent optimization service",
+    "Retain bootstrap, screen-route, and cleanup timing evidence from comparable device states"
+  ],
+  "exitCriteria": [
+    "All approved PNG bytes remain identical to the Step 3 baseline",
+    "Runtime textures pass the locked Sprite/readability/mipmap/2048/ASTC audit",
+    "Optimization evidence remains fixed-capacity, process-memory-only, identifier-free, and network-free",
+    "Cleanup is coalesced and routine cleanup does not trigger on Gameplay or Dialogue entry",
+    "Repeated comparable routes do not show unexplained growth beyond the pinned development guardrail",
+    "Low-memory cleanup does not corrupt or replace player save state",
+    "Package-lock, Addressables/content-delivery, economy, commercial, crash-provider, cloud, Android-production, and publishing gates remain blocked"
+  ],
+  "hardStop": "Source implementation and static verification do not authorize production memory claims, Android release builds, Addressables activation, provider transport, economy/commercial activation, or publishing.",
+  "nextDevelopmentMilestone": "v1.17 Step 5 \u2014 Addressables and Content Delivery Foundation"
+}

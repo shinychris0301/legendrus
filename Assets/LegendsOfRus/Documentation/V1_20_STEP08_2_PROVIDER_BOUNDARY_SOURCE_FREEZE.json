@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step08.2-provider-boundary-source-freeze",
+  "status": "PASS_STATIC_SOURCE_FREEZE",
+  "baseline": "v1.20 Step 8 user-confirmed compile-clean",
+  "criticalFiles": {
+    "ScreenRouter.cs": "6b66f9d6ad08c15b087489685cd2056b9b479e3389c19ce2773094b958861a02",
+    "MonetizationService.cs": "e2ef36f2bbab50ae45f1852e729b8692830539fc1345b835564e9e2f7b2d4e79",
+    "GameState.cs": "d8853d33a49a6d21d414fab1830b957d032d047ed242b259af47d749414b6163",
+    "VerifiedEntitlementGate.cs": "acc60d5ef7f4c9b925f3282f3fe5a6d05619398410bb6e286c4736156cabeb29",
+    "ProductionCoreLoopPageRegistry.cs": "aee233191e2696acdf944fbb207cbfb6580ccc80a80941e960b13f09058a8938"
+  },
+  "activeRegistryExpectedRoutes": 10,
+  "wave02CandidateDirectActionsAllowed": false,
+  "shopAndSpecialOffer": "must route through existing MonetizationService verified-and-durably-committed boundary",
+  "outOfEnergyRewardedAd": "must route through existing consent + verified-and-durably-committed boundary",
+  "friendEnergy": "demo acknowledgement only; no energy grant",
+  "rewardClaim": "close/acknowledge only",
+  "unityRuntimeVerification": "PENDING_USER_EXECUTION_OF_STEP08_2_PROVIDER_BOUNDARY_MENU_TEST"
+}

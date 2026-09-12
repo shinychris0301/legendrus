@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step10.3-final-runtime-integration-36-page-cutover-readiness-android-regression",
+  "functionalPageContracts": 36,
+  "assetRequirements": 254,
+  "runtimeCaptureTarget": 144,
+  "runtimeCaptureByWave": {
+    "wave1": 48,
+    "wave2": 36,
+    "wave3": 32,
+    "wave4": 28
+  },
+  "policy": {
+    "sourceReconstructionIsNotRuntimeAcceptance": true,
+    "runtimeAcceptanceIsNotReferenceApproval": true,
+    "referenceApprovalIsNotAutomaticCutover": true,
+    "newNonCoreCutoversRequireRollbackSnapshot": true,
+    "coreRegistryFrozenAt": 10,
+    "cutoverIsExplicitOnly": true,
+    "androidRegressionInvalidatedByIntegrationChange": true
+  },
+  "readinessCategories": [
+    "ACTIVE_ACCEPTED_OR_DEVELOPMENT_ROUTE",
+    "READY_FOR_ROLLBACK_CONTROLLED_DEVELOPMENT_CUTOVER",
+    "RUNTIME_VALID_AWAITING_APPROVED_REFERENCE",
+    "APPROVED_REFERENCE_AWAITING_RUNTIME_EVIDENCE",
+    "CANDIDATE_AWAITING_RUNTIME_AND_REFERENCE_EVIDENCE",
+    "BLOCKED_RUNTIME_FIDELITY_FIX_REQUIRED",
+    "BLOCKED_FIX_REQUIRED"
+  ]
+}

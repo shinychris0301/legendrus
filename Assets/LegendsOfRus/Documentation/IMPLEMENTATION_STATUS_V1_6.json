@@ -1,0 +1,55 @@
+{
+  "version": "1.6-runtime-flow",
+  "unity_target": "6000.5.9f1",
+  "input_system": "1.20.0",
+  "core_loop": [
+    "Loading",
+    "Home",
+    "WorldMap",
+    "ChapterMap",
+    "PreLevel",
+    "Gameplay",
+    "Pause",
+    "Victory",
+    "Fail",
+    "Dialogue",
+    "ChapterComplete"
+  ],
+  "meta_screens_wired": [
+    "Shop",
+    "DailyReward",
+    "RewardClaim",
+    "Events",
+    "Profile",
+    "Settings",
+    "Characters",
+    "Mail",
+    "OutOfEnergy",
+    "BoosterSelect"
+  ],
+  "gameplay": {
+    "board": "8x8",
+    "input": [
+      "tap",
+      "swipe"
+    ],
+    "goals_live": true,
+    "moves_live": true,
+    "score_live": true,
+    "reshuffle_if_no_move": true,
+    "boosters": [
+      "BogatyrMace",
+      "Firebird",
+      "LivingLight",
+      "SeaPearl"
+    ]
+  },
+  "economy": {
+    "energy_max": 5,
+    "energy_refill_minutes": 30,
+    "daily_reward_persisted": true,
+    "shop": "development mock only",
+    "rewarded_ads": "development mock only"
+  },
+  "design_rule": "Approved full-screen pages remain the immutable visual layer; dynamic and interactive systems are aligned above them in the 941x1672 design coordinate space."
+}

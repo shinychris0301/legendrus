@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "reportId": "v1.15-step01-economy-simulation",
+  "nonAuthoritative": true,
+  "authority": "proposal-comparison-only",
+  "fixedInputs": {
+    "startTick": 0,
+    "ticksPerMinute": 1,
+    "allowStore": false,
+    "allowAds": false,
+    "allowPurchases": false,
+    "optionalPaidContinuesPerLevel": 0
+  },
+  "load": {
+    "succeeded": true,
+    "errorCode": "",
+    "error": ""
+  },
+  "simulation": {
+    "catalogId": "v1.15-step01-proposal",
+    "scenarioId": "chapter01-purchase-free-baseline",
+    "verdict": "Incomplete",
+    "validation": {
+      "verdict": "Pass",
+      "violations": []
+    },
+    "checks": [
+      {
+        "id": "booster-inventory-affordability",
+        "verdict": "Pass",
+        "code": "",
+        "message": "All mandatory booster quantities, if any, were funded by detached inventory."
+      },
+      {
+        "id": "booster-price-affordability",
+        "verdict": "Incomplete",
+        "code": "ECON_PRICE_UNDEFINED",
+        "message": "Booster purchasing is disabled or prices are undefined; affordability is intentionally not inferred."
+      },
+      {
+        "id": "catalog-validation",
+        "verdict": "Pass",
+        "code": "",
+        "message": "Proposal catalog is valid."
+      },
+      {
+        "id": "continue-affordability",
+        "verdict": "Incomplete",
+        "code": "ECON_PRICE_UNDEFINED",
+        "message": "Paid continue behavior is inactive; purchase-free retry remains available."
+      },
+      {
+        "id": "daily-reward-cadence",
+        "verdict": "Pass",
+        "code": "",
+        "message": "The first UTC-day claim succeeds and a same-day repeat is rejected."
+      },
+      {
+        "id": "energy-refill-cadence",
+        "verdict": "Pass",
+        "code": "",
+        "message": "No energy is granted before the exact interval; one unit is granted at the boundary."
+      },
+      {
+        "id": "first-clear-reward-cadence",
+        "verdict": "Pass",
+        "code": "",
+        "message": "A repeated first-clear key was rejected without changing the wallet."
+      },
+      {
+        "id": "purchase-free-progression",
+        "verdict": "Pass",
+        "code": "",
+        "message": "All configured levels are reachable with store, ads, and purchases disabled."
+      },
+      {
+        "id": "retry-energy-cost",
+        "verdict": "Pass",
+        "code": "",
+        "message": "The detached retry path consumes zero additional energy, matching the current prototype."
+      },
+      {
+        "id": "reward-doubling-cadence",
+        "verdict": "Pass",
+        "code": "",
+        "message": "One deterministic reward-double key applies once and rejects a repeated claim."
+      }
+    ],
+    "metrics": [
+      {
+        "id": "ad-dependencies-used",
+        "value": 0,
+        "unit": "dependencies"
+      },
+      {
+        "id": "elapsed-wait",
+        "value": 150,
+        "unit": "minutes"
+      },
+      {
+        "id": "ending-energy",
+        "value": 0,
+        "unit": "energy"
+      },
+      {
+        "id": "levels-completed",
+        "value": 10,
+        "unit": "levels"
+      },
+      {
+        "id": "levels-configured",
+        "value": 10,
+        "unit": "levels"
+      },
+      {
+        "id": "paid-continues-applied",
+        "value": 0,
+        "unit": "continues"
+      },
+      {
+        "id": "purchases-used",
+        "value": 0,
+        "unit": "purchases"
+      },
+      {
+        "id": "store-dependencies-used",
+        "value": 0,
+        "unit": "dependencies"
+      }
+    ],
+    "endingWallet": {
+      "balances": [
+        {
+          "id": "gems",
+          "amount": 390
+        },
+        {
+          "id": "gold",
+          "amount": 14390
+        }
+      ],
+      "appliedKeys": [
+        "first-clear:chapter01.level01",
+        "first-clear:chapter01.level02",
+        "first-clear:chapter01.level03",
+        "first-clear:chapter01.level04",
+        "first-clear:chapter01.level05",
+        "first-clear:chapter01.level06",
+        "first-clear:chapter01.level07",
+        "first-clear:chapter01.level08",
+        "first-clear:chapter01.level09",
+        "first-clear:chapter01.level10"
+      ]
+    },
+    "endingBoosters": [
+      {
+        "id": "bogatyr_mace",
+        "amount": 9
+      },
+      {
+        "id": "firebird",
+        "amount": 7
+      },
+      {
+        "id": "living_light",
+        "amount": 10
+      },
+      {
+        "id": "sea_pearl",
+        "amount": 12
+      }
+    ],
+    "endingEnergy": 0,
+    "elapsedMinutes": 150,
+    "trace": [
+      "simulation:start:chapter01-purchase-free-baseline",
+      "level:1:begin",
+      "level:1:complete",
+      "level:2:begin",
+      "level:2:complete",
+      "level:3:begin",
+      "level:3:complete",
+      "level:4:begin",
+      "level:4:complete",
+      "level:5:begin",
+      "level:5:complete",
+      "level:6:begin",
+      "level:6:wait-minutes:30",
+      "level:6:complete",
+      "level:7:begin",
+      "level:7:wait-minutes:30",
+      "level:7:complete",
+      "level:8:begin",
+      "level:8:wait-minutes:30",
+      "level:8:complete",
+      "level:9:begin",
+      "level:9:wait-minutes:30",
+      "level:9:complete",
+      "level:10:begin",
+      "level:10:wait-minutes:30",
+      "level:10:complete",
+      "simulation:end:10/10"
+    ]
+  },
+  "prototypeComparison": {
+    "catalogId": "v1.15-step01-proposal",
+    "verdict": "Incomplete",
+    "entries": [
+      {
+        "path": "boosters.bogatyr_mace.startingQuantity",
+        "status": "Match",
+        "runtimeValue": "7",
+        "proposalValue": "7",
+        "source": "PlayerSaveData.boosterMace"
+      },
+      {
+        "path": "boosters.firebird.startingQuantity",
+        "status": "Match",
+        "runtimeValue": "5",
+        "proposalValue": "5",
+        "source": "PlayerSaveData.boosterFirebird"
+      },
+      {
+        "path": "boosters.living_light.startingQuantity",
+        "status": "Match",
+        "runtimeValue": "8",
+        "proposalValue": "8",
+        "source": "PlayerSaveData.boosterLivingLight"
+      },
+      {
+        "path": "boosters.purchasePrices",
+        "status": "Missing",
+        "runtimeValue": "no runtime booster prices",
+        "proposalValue": "disabled and undefined",
+        "source": "GameState.TryUseBooster"
+      },
+      {
+        "path": "boosters.sea_pearl.startingQuantity",
+        "status": "Match",
+        "runtimeValue": "10",
+        "proposalValue": "10",
+        "source": "PlayerSaveData.boosterSeaPearl"
+      },
+      {
+        "path": "catalog.authority",
+        "status": "Match",
+        "runtimeValue": "prototype literals remain authoritative",
+        "proposalValue": "proposal-only; non-authoritative",
+        "source": "EconomyCatalogData authority flags"
+      },
+      {
+        "path": "continue.enabled",
+        "status": "Match",
+        "runtimeValue": "false",
+        "proposalValue": "false",
+        "source": "ScreenRouter.Fail"
+      },
+      {
+        "path": "continue.grantedMoves",
+        "status": "Dormant",
+        "runtimeValue": "not granted by runtime",
+        "proposalValue": "5",
+        "source": "MonetizationService.MockRewardedContinue"
+      },
+      {
+        "path": "continue.price",
+        "status": "Dormant",
+        "runtimeValue": "not consumed by runtime",
+        "proposalValue": "20 gems",
+        "source": "legacy economy value retained for comparison"
+      },
+      {
+        "path": "dailyReward.energy",
+        "status": "Match",
+        "runtimeValue": "1",
+        "proposalValue": "1",
+        "source": "GameState.ClaimDailyReward"
+      },
+      {
+        "path": "dailyReward.gems",
+        "status": "Match",
+        "runtimeValue": "20",
+        "proposalValue": "20",
+        "source": "GameState.ClaimDailyReward"
+      },
+      {
+        "path": "dailyReward.gold",
+        "status": "Match",
+        "runtimeValue": "500",
+        "proposalValue": "500",
+        "source": "GameState.ClaimDailyReward"
+      },
+      {
+        "path": "energy.capacity",
+        "status": "Match",
+        "runtimeValue": "5",
+        "proposalValue": "5",
+        "source": "PlayerSaveData.energyMax"
+      },
+      {
+        "path": "energy.levelEntryCost",
+        "status": "Match",
+        "runtimeValue": "1",
+        "proposalValue": "1",
+        "source": "ScreenRouter.StartLevel/SpendEnergy"
+      },
+      {
+        "path": "energy.refillIntervalMinutes",
+        "status": "Match",
+        "runtimeValue": "30",
+        "proposalValue": "30",
+        "source": "GameState.EnergyRefillMinutes"
+      },
+      {
+        "path": "energy.retryCost",
+        "status": "Match",
+        "runtimeValue": "0",
+        "proposalValue": "0",
+        "source": "ScreenRouter.RestartCurrentLevel"
+      },
+      {
+        "path": "energy.startingAmount",
+        "status": "Match",
+        "runtimeValue": "5",
+        "proposalValue": "5",
+        "source": "PlayerSaveData.energy"
+      },
+      {
+        "path": "progression.chapter01.firstClearGems",
+        "status": "Match",
+        "runtimeValue": "40",
+        "proposalValue": "40",
+        "source": "chapter01_levels.json"
+      },
+      {
+        "path": "progression.chapter01.firstClearGold",
+        "status": "Match",
+        "runtimeValue": "1850",
+        "proposalValue": "1850",
+        "source": "chapter01_levels.json"
+      },
+      {
+        "path": "progression.chapter01.levelCount",
+        "status": "Match",
+        "runtimeValue": "10",
+        "proposalValue": "10",
+        "source": "chapter01_levels.json"
+      },
+      {
+        "path": "prototype.mailClaim",
+        "status": "Dormant",
+        "runtimeValue": "repeatable +250 gold prototype hotspot",
+        "proposalValue": "excluded from guaranteed income",
+        "source": "ScreenRouter.Mail"
+      },
+      {
+        "path": "prototype.mockOffers",
+        "status": "Missing",
+        "runtimeValue": "development-only grants",
+        "proposalValue": "not modeled by Step 1 proposal",
+        "source": "MonetizationService.MockPurchase"
+      },
+      {
+        "path": "rewardDoubling.multiplier",
+        "status": "Match",
+        "runtimeValue": "2",
+        "proposalValue": "2",
+        "source": "GameState.TryDoubleLastLevelGoldReward"
+      },
+      {
+        "path": "wallet.gems.starting",
+        "status": "Match",
+        "runtimeValue": "350",
+        "proposalValue": "350",
+        "source": "PlayerSaveData.gems"
+      },
+      {
+        "path": "wallet.gold.starting",
+        "status": "Match",
+        "runtimeValue": "12540",
+        "proposalValue": "12540",
+        "source": "PlayerSaveData.gold"
+      }
+    ]
+  }
+}

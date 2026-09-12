@@ -1,0 +1,868 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step08-wave02-meta-progression-economy",
+  "baseline": "v1.20 Step 7.4 Compile Fix 01",
+  "wave": 2,
+  "pageCount": 9,
+  "assetRequirementCount": 65,
+  "pageSpecificPngCount": 36,
+  "directApprovedReferenceCount": 1,
+  "demoDesignReferenceCount": 6,
+  "styleSystemDerivedCount": 2,
+  "activeRuntimeCutoverPerformed": false,
+  "providerPolicy": "IAP/rewarded/social fulfillment remains fail-closed and authoritative; candidate UI does not grant currency, energy or rewards.",
+  "referencePolicy": "ReferenceOnly and DesignScreens are measurement/QA sources only; Wave02 candidate prefabs may depend only on separate production assets and shared Wave0 primitives.",
+  "pages": [
+    {
+      "pageKey": "CharacterCollection",
+      "screenId": "Characters",
+      "productPage": "Character Collection",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Browse/unlock/select characters; current demo selects Ivan.",
+        "primaryTransitions": "Select/Use; Back→Home",
+        "stateOwnership": "selected/owned character future state",
+        "backendDependency": "account/content backend optional",
+        "logicStatus": "partial"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/Characters.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/character_stats_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/hero_character_scene.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/portrait_gallery_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "collection background",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/background_plate.png"
+          ]
+        },
+        {
+          "requirement": "character cards",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/character_stats_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/portrait_gallery_art.png"
+          ]
+        },
+        {
+          "requirement": "portrait/full-body layers",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/character_stats_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/hero_character_scene.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/portrait_gallery_art.png"
+          ]
+        },
+        {
+          "requirement": "rarity frames",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/character_stats_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/CharacterCollection/portrait_gallery_art.png"
+          ]
+        },
+        {
+          "requirement": "progress shards",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_track.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_fill.png"
+          ]
+        },
+        {
+          "requirement": "use/select button",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "filters/tabs",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_selected.png"
+          ]
+        },
+        {
+          "requirement": "lock states",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_lock.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "DailyReward",
+      "screenId": "DailyReward",
+      "productPage": "Daily Reward",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Claim once-per-day local reward and show claim modal.",
+        "primaryTransitions": "Claim→RewardClaim; Back→Home",
+        "stateOwnership": "lastDailyRewardUtc/resources",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/DailyReward.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day7_chest_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day_reward_medallions.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/monthly_progress_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "daily calendar frame",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day7_chest_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day_reward_medallions.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/monthly_progress_art.png"
+          ]
+        },
+        {
+          "requirement": "7-day reward cells",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day7_chest_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day_reward_medallions.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/monthly_progress_art.png"
+          ]
+        },
+        {
+          "requirement": "claimed/current/locked states",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_lock.png"
+          ]
+        },
+        {
+          "requirement": "reward icons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/day7_chest_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/DailyReward/monthly_progress_art.png"
+          ]
+        },
+        {
+          "requirement": "claim button",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "timer",
+          "coverageKind": "live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "Profile",
+      "screenId": "Profile",
+      "productPage": "Profile",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Show player identity/progress and demo access to ranking/team/inventory/login.",
+        "primaryTransitions": "Ranking, Team, Inventory, Login; Back→Home",
+        "stateOwnership": "save-v6 progress; account future",
+        "backendDependency": "account backend optional",
+        "logicStatus": "partial"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/Profile.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/Profile/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Profile/season_emblem.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "profile background",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/background_plate.png"
+          ]
+        },
+        {
+          "requirement": "avatar frame",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+          ]
+        },
+        {
+          "requirement": "name plate",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/season_emblem.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+          ]
+        },
+        {
+          "requirement": "level/progress",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_track.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_fill.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png"
+          ]
+        },
+        {
+          "requirement": "stats panels",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+          ]
+        },
+        {
+          "requirement": "achievements",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/season_emblem.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+          ]
+        },
+        {
+          "requirement": "edit-name button",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "account link badge",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/collection_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/progress_chart_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Profile/trophy_art.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "Inventory",
+      "screenId": "Inventory",
+      "productPage": "Inventory",
+      "referenceClass": "STYLE_SYSTEM_DERIVED",
+      "functionalLock": {
+        "functionalGoal": "Show owned boosters/items from save/game state.",
+        "primaryTransitions": "Back→Home",
+        "stateOwnership": "booster counts/resources",
+        "backendDependency": "none",
+        "logicStatus": "demo-local"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/Inventory.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "inventory background",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/background_plate.png"
+          ]
+        },
+        {
+          "requirement": "tabs",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_selected.png"
+          ]
+        },
+        {
+          "requirement": "item slots",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        },
+        {
+          "requirement": "item icons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        },
+        {
+          "requirement": "quantity badges",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        },
+        {
+          "requirement": "rarity frames",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        },
+        {
+          "requirement": "empty slot/state",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        },
+        {
+          "requirement": "item detail popup",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_header_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Inventory/inventory_items_grid.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "Shop",
+      "screenId": "Shop",
+      "productPage": "Shop",
+      "referenceClass": "DIRECT_APPROVED_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Display offers and route purchases through verified monetization facade.",
+        "primaryTransitions": "Packs; SpecialOffer; Back→Home",
+        "stateOwnership": "catalog/provider receipts",
+        "backendDependency": "IAP backend/provider required",
+        "logicStatus": "implemented-fail-closed"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/Shop.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/Shop/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Shop/cart_pack_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Shop/chest_pack_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Shop/coin_bag_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/Shop/magic_pack_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "shop background",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/background_plate.png"
+          ]
+        },
+        {
+          "requirement": "category tabs",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_selected.png"
+          ]
+        },
+        {
+          "requirement": "pack cards",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/cart_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/chest_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/coin_bag_art.png"
+          ]
+        },
+        {
+          "requirement": "currency icons",
+          "coverageKind": "asset+live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png"
+          ]
+        },
+        {
+          "requirement": "price buttons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "best-value badges",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/cart_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/chest_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/coin_bag_art.png"
+          ]
+        },
+        {
+          "requirement": "restore/info controls",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "special offer banner",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/cart_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/chest_pack_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/coin_bag_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/Shop/magic_pack_art.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "SpecialOffer",
+      "screenId": "SpecialOffer",
+      "productPage": "Special Offer Popup",
+      "referenceClass": "STYLE_SYSTEM_DERIVED",
+      "functionalLock": {
+        "functionalGoal": "Present targeted offer; purchase remains fail-closed without verified provider.",
+        "primaryTransitions": "Buy; Back→Shop",
+        "stateOwnership": "provider receipt only",
+        "backendDependency": "IAP backend/provider required",
+        "logicStatus": "demo-local"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/SpecialOffer.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/discount_badge.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/offer_hero_bundle.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "offer hero art",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/discount_badge.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/offer_hero_bundle.png"
+          ]
+        },
+        {
+          "requirement": "modal frame",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/discount_badge.png"
+          ]
+        },
+        {
+          "requirement": "bundle item icons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png"
+          ]
+        },
+        {
+          "requirement": "original/sale price",
+          "coverageKind": "asset+live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png"
+          ]
+        },
+        {
+          "requirement": "discount badge",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/SpecialOffer/discount_badge.png"
+          ]
+        },
+        {
+          "requirement": "countdown",
+          "coverageKind": "live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+          ]
+        },
+        {
+          "requirement": "buy/close buttons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "OutOfEnergy",
+      "screenId": "OutOfEnergy",
+      "productPage": "Out of Energy",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Block level start when energy insufficient; buy/ad/friend options fail safely.",
+        "primaryTransitions": "Buy; WatchAd; AskFriends demo; Close",
+        "stateOwnership": "energy/time",
+        "backendDependency": "IAP/rewarded/social providers optional",
+        "logicStatus": "implemented"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/OutOfEnergy.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/refill_options_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "energy modal",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_energy.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png"
+          ]
+        },
+        {
+          "requirement": "heart/energy icon",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_energy.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png"
+          ]
+        },
+        {
+          "requirement": "refill timer",
+          "coverageKind": "live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+          ]
+        },
+        {
+          "requirement": "purchase row",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/refill_options_art.png"
+          ]
+        },
+        {
+          "requirement": "friend request row",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/refill_options_art.png"
+          ]
+        },
+        {
+          "requirement": "rewarded-ad row",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/energy_medallion.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/OutOfEnergy/refill_options_art.png"
+          ]
+        },
+        {
+          "requirement": "close button",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "BoosterSelect",
+      "screenId": "BoosterSelect",
+      "productPage": "Booster Select Popup",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Choose pre-level boosters and start.",
+        "primaryTransitions": "Play/close",
+        "stateOwnership": "booster inventory/selection",
+        "backendDependency": "none",
+        "logicStatus": "implemented"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/BoosterSelect.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/potion_art.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/shield_art.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "booster modal",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png"
+          ]
+        },
+        {
+          "requirement": "booster grid",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/potion_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/shield_art.png"
+          ]
+        },
+        {
+          "requirement": "booster icons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png"
+          ]
+        },
+        {
+          "requirement": "count badges",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png"
+          ]
+        },
+        {
+          "requirement": "selected states",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png"
+          ]
+        },
+        {
+          "requirement": "info tooltips",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/booster_grid_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/firebird_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/hammer_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/potion_art.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/BoosterSelect/shield_art.png"
+          ]
+        },
+        {
+          "requirement": "play/close buttons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    },
+    {
+      "pageKey": "RewardClaim",
+      "screenId": "RewardClaim",
+      "productPage": "Reward Claim Popup",
+      "referenceClass": "DEMO_DESIGN_REFERENCE",
+      "functionalLock": {
+        "functionalGoal": "Acknowledge a verified/local reward result.",
+        "primaryTransitions": "Claim/close",
+        "stateOwnership": "reward result",
+        "backendDependency": "provider-specific when applicable",
+        "logicStatus": "implemented"
+      },
+      "candidatePrefab": "Assets/LegendsOfRus/Resources/ProductionUI/Wave02Pages/RewardClaim.prefab",
+      "productionAssets": [
+        "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/background_plate.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/reward_chest_burst.png",
+        "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/reward_items_strip.png"
+      ],
+      "requirementCoverage": [
+        {
+          "requirement": "reward modal",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/reward_items_strip.png"
+          ]
+        },
+        {
+          "requirement": "chest/reward burst",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/reward_chest_burst.png"
+          ]
+        },
+        {
+          "requirement": "reward item icons",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+            "Assets/LegendsOfRus/Art/Production/Wave02/RewardClaim/reward_items_strip.png"
+          ]
+        },
+        {
+          "requirement": "quantity labels",
+          "coverageKind": "live_text",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+          ]
+        },
+        {
+          "requirement": "claim button",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+          ]
+        },
+        {
+          "requirement": "shine/particle VFX",
+          "coverageKind": "asset",
+          "sources": [
+            "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/ambient_sparks.png"
+          ]
+        }
+      ],
+      "runtimeCompositeScreenshotAllowed": false,
+      "liveTextRequired": true,
+      "activation": "PARALLEL_CANDIDATE_ONLY"
+    }
+  ],
+  "sharedAssets": {
+    "button_primary": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png",
+    "button_secondary": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png",
+    "panel_navy": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png",
+    "panel_parchment": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png",
+    "modal": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/modal_frame.png",
+    "reward_tile": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/reward_tile.png",
+    "booster_slot": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/booster_slot.png",
+    "tab_idle": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_idle.png",
+    "tab_selected": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Controls/tab_selected.png",
+    "lock": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_lock.png",
+    "coin": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_coin.png",
+    "gem": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_gem.png",
+    "energy": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_energy.png",
+    "chest": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_chest.png",
+    "star": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Icons/icon_star.png",
+    "progress_track": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_track.png",
+    "progress_fill": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_fill.png",
+    "spark": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/ambient_sparks.png"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "version": "v1.18-step04",
+  "milestone": "controlled-test-build-release-candidate-foundation",
+  "status": "IMPLEMENTED_IN_SOURCE_PENDING_UNITY_AND_EXTERNAL_RELEASE_EVIDENCE",
+  "unityVersion": "6000.5.9f1",
+  "requirementsSnapshotDate": "2026-09-09",
+  "requiredTargetApiLevel": 36,
+  "implemented": [
+    "engine-free controlled-test build evaluator",
+    "three-stage plan/build/upload gates",
+    "signed AAB evidence validator",
+    "sanitized local Editor preflight snapshot",
+    "16 EditMode test declarations",
+    "31-check Editor self-test"
+  ],
+  "retained": [
+    "Addressables 2.8.1",
+    "Step4 NUnit Type compatibility hotfix",
+    "Step5 ContentDeliveryCore PlayMode asmdef hotfix",
+    "Step3 BalanceReview UnityTest TestAssemblies hotfix",
+    "65 approved PNGs",
+    "save payload v6",
+    "development-only Android build guard"
+  ],
+  "blocked": [
+    "automatic PlayerSettings mutation",
+    "BuildPipeline.BuildPlayer",
+    "keystore/password discovery",
+    "production application identifier approval",
+    "versioning approval",
+    "Play App Signing approval",
+    "upload-key workflow approval",
+    "production signing",
+    "signed AAB creation",
+    "closed-test upload",
+    "Play publishing"
+  ]
+}

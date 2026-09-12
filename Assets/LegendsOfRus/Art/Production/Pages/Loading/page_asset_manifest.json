@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Loading",
+  "productPage": "Loading",
+  "screenId": "Loading",
+  "wave": 1,
+  "directApprovedReference": "Loading.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Loading.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Loading/environment_loading.png",
+      "role": "loading environment",
+      "sourceType": "derived-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_home_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Loading/logo_plaque.png",
+      "role": "logo plaque",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/title_plaque_navy.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "loading environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Loading/environment_loading.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "logo",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Loading/logo_plaque.png",
+        "LIVE_TEXT"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "progress frame/fill",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_track.png",
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/progress_fill.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "tip parchment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_parchment.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "loading animation",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/ambient_sparks.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 5,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

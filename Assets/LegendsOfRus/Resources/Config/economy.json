@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "v1.15-step01-proposal",
+  "proposalOnly": true,
+  "authoritative": false,
+  "currencies": [{ "id": "gold" }, { "id": "gems" }],
+  "startingBalances": [
+    { "id": "gold", "amount": 12540 },
+    { "id": "gems", "amount": 350 }
+  ],
+  "energy": {
+    "capacity": 5,
+    "startingAmount": 5,
+    "levelEntryCost": 1,
+    "retryCost": 0,
+    "refillIntervalMinutes": 30
+  },
+  "boosters": [
+    { "id": "bogatyr_mace", "startingQuantity": 7, "purchaseEnabled": false, "priceDefined": false, "price": { "id": "", "amount": 0 } },
+    { "id": "firebird", "startingQuantity": 5, "purchaseEnabled": false, "priceDefined": false, "price": { "id": "", "amount": 0 } },
+    { "id": "living_light", "startingQuantity": 8, "purchaseEnabled": false, "priceDefined": false, "price": { "id": "", "amount": 0 } },
+    { "id": "sea_pearl", "startingQuantity": 10, "purchaseEnabled": false, "priceDefined": false, "price": { "id": "", "amount": 0 } }
+  ],
+  "continueRule": {
+    "enabled": false,
+    "priceDefined": true,
+    "price": { "id": "gems", "amount": 20 },
+    "grantedMoves": 5,
+    "maxPerAttempt": 1,
+    "freeExitAndRetry": true
+  },
+  "dailyReward": {
+    "enabled": true,
+    "cadenceUtcDays": 1,
+    "grants": [
+      { "id": "gold", "amount": 500 },
+      { "id": "gems", "amount": 20 }
+    ],
+    "energyGrant": 1
+  },
+  "rewardDoubling": {
+    "enabled": true,
+    "eligibleCurrencyId": "gold",
+    "multiplier": 2,
+    "maxClaimsPerReward": 1,
+    "optional": true
+  },
+  "progression": {
+    "chapterId": 1,
+    "normalProgressRequiresPurchase": false,
+    "levels": [
+      {
+        "id": "chapter01.level01", "levelNumber": 1,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 120 }, { "id": "gems", "amount": 0 }],
+        "firstClearBoosterGrants": []
+      },
+      {
+        "id": "chapter01.level02", "levelNumber": 2,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 130 }, { "id": "gems", "amount": 0 }],
+        "firstClearBoosterGrants": [{ "id": "bogatyr_mace", "amount": 1 }]
+      },
+      {
+        "id": "chapter01.level03", "levelNumber": 3,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 140 }, { "id": "gems", "amount": 5 }],
+        "firstClearBoosterGrants": []
+      },
+      {
+        "id": "chapter01.level04", "levelNumber": 4,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 150 }, { "id": "gems", "amount": 0 }],
+        "firstClearBoosterGrants": [{ "id": "firebird", "amount": 1 }]
+      },
+      {
+        "id": "chapter01.level05", "levelNumber": 5,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 160 }, { "id": "gems", "amount": 0 }],
+        "firstClearBoosterGrants": [{ "id": "living_light", "amount": 1 }]
+      },
+      {
+        "id": "chapter01.level06", "levelNumber": 6,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 190 }, { "id": "gems", "amount": 5 }],
+        "firstClearBoosterGrants": []
+      },
+      {
+        "id": "chapter01.level07", "levelNumber": 7,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 170 }, { "id": "gems", "amount": 0 }],
+        "firstClearBoosterGrants": [{ "id": "sea_pearl", "amount": 1 }]
+      },
+      {
+        "id": "chapter01.level08", "levelNumber": 8,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 210 }, { "id": "gems", "amount": 5 }],
+        "firstClearBoosterGrants": []
+      },
+      {
+        "id": "chapter01.level09", "levelNumber": 9,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 230 }, { "id": "gems", "amount": 5 }],
+        "firstClearBoosterGrants": [{ "id": "bogatyr_mace", "amount": 1 }]
+      },
+      {
+        "id": "chapter01.level10", "levelNumber": 10,
+        "requiresStore": false, "requiresAd": false, "requiresPurchase": false,
+        "requiredBoosterId": "", "requiredBoosterQuantity": 0,
+        "firstClearGrants": [{ "id": "gold", "amount": 350 }, { "id": "gems", "amount": 20 }],
+        "firstClearBoosterGrants": [
+          { "id": "firebird", "amount": 1 },
+          { "id": "living_light", "amount": 1 },
+          { "id": "sea_pearl", "amount": 1 }
+        ]
+      }
+    ]
+  }
+}

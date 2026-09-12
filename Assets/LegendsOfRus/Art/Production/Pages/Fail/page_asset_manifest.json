@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "Fail",
+  "productPage": "Fail",
+  "screenId": "Fail",
+  "wave": 1,
+  "directApprovedReference": "Fail.png",
+  "referenceStatus": "DIRECT_APPROVED_REFERENCE_AVAILABLE",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/Fail.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Fail/environment_fail.png",
+      "role": "failure environment",
+      "sourceType": "derived-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_home_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Fail/portrait_ivan_fail.png",
+      "role": "hero reaction portrait",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/portrait_ivan.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Fail/fail_ribbon.png",
+      "role": "fail ribbon",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/ribbon_red.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/Fail/failure_vignette.png",
+      "role": "failure VFX",
+      "sourceType": "wave0-shared-copy",
+      "source": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/failure_vignette.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "failure environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Fail/environment_fail.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "hero reaction",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Fail/portrait_ivan_fail.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "fail ribbon",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Fail/fail_ribbon.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "failed goal rows",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/goal_panel.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "retry button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "exit button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_secondary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "continue offer area",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Panels/panel_navy.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "failure VFX",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/Fail/failure_vignette.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 8,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

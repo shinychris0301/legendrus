@@ -1,0 +1,23 @@
+{
+  "milestone": "v1.17-step05",
+  "name": "Addressables and Content Delivery Foundation",
+  "status": "PLANNED_AFTER_ACCEPTED_V1_17_STEP04_VERIFICATION",
+  "productionBuildAuthorized": false,
+  "scope": [
+    "Define addressable content groups and stable labels without changing approved artwork",
+    "Separate tiny boot-local content from deferred chapter and large-screen content",
+    "Add deterministic catalog/content validation and safe unavailable-content fallbacks",
+    "Measure local content load/release behavior before any remote delivery activation"
+  ],
+  "outOfScope": [
+    "Remote CDN or production content delivery activation before review",
+    "Regenerating or visually modifying locked approved art",
+    "Production provider SDK activation, economy/commercial activation, Android production signing, AAB generation, Play publishing"
+  ],
+  "entryCriteria": [
+    "Step 2 and Step 3 prerequisite evidence is retained and accepted",
+    "The exact Step 4 candidate compiles and its validator, texture audit, self-tests, EditMode and PlayMode suites pass with retained output",
+    "Representative Android memory/loading evidence establishes a usable Step 4 baseline",
+    "Approved PNG hashes remain unchanged and all production activation gates remain false"
+  ]
+}

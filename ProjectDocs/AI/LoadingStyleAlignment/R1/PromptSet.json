@@ -1,0 +1,50 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "scope": "Offline Loading visual review only; no Unity runtime dependency",
+  "inputs": [
+    {
+      "path": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/slavic_fantasy_prince_warrior_portrait.png",
+      "role": "Ivan identity and costume"
+    },
+    {
+      "path": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/majestic_fiery_phoenix_in_flight.png",
+      "role": "Firebird rendering"
+    },
+    {
+      "path": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/golden_fortress_at_winter_sunrise.png",
+      "role": "Splash environment palette and lighting"
+    },
+    {
+      "path": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png",
+      "role": "Actual logo material reference; canonical source used separately in HTML"
+    }
+  ],
+  "calls": [
+    {
+      "name": "journey_initial",
+      "prompt": "Use case: illustration-story. Asset type: new painted journey illustration for an OFFLINE portrait Loading UI design for the existing Russian fairy tale game «Легенды Руси: Три в Ряд». Generate one image, portrait 9:16, ideally 1080x1920. This is only the illustration layer, without interface.\nInput images: Image 1 is the actual accepted Ivan character, identity and costume reference. Image 2 is the accepted Firebird, rendering and feather reference. Image 3 is the approved Splash winter environment, lighting and painterly style reference. Image 4 is the actual approved logo, MATERIAL AND COLOR REFERENCE ONLY; do not draw it or any lettering.\nScene: a quiet snowy path and old stone bridge lead through carved timber houses toward a distant white Russian fairy-tale fortress with gold domes, dawn rising beyond. Cool blue snow and desaturated navy shadow, restrained warm pale gold sunrise. Open landscape to all four edges, detailed painterly finish matching Image 3. Dark pines at edges, no enclosing ornamental border.\nSubject: the same adult Ivan travels toward the village, on the left in the middle band, seen from behind at a three-quarter angle with a small readable profile. Match his brown wavy hair, slight beard/profile, heavy grey-brown fur collar, dark navy embroidered robe, cream sleeves, red and antique-gold trimmed mantle, brown leather belt and bracers from Image 1. Preserve the grounded fabric and face treatment. Full body walking naturally, correct anatomy, no additional companions. The same fiery bird from Image 2 glides low on the right beside him: coherent avian body, tapered long flowing flame-feathers, warm amber/gold-orange glow contained to the bird and nearby snow. Do not turn the bird into a peacock, neon flame, or different mascot.\nComposition: top 27% is mostly calm open pale-blue/golden sky for a separate exact logo overlay. Distant fortress and horizon at 30%-40% height. Ivan and bird occupy roughly 38%-69% height, with their complete silhouettes above the lower UI area; retain a clear journey view between them. Bottom 28% is quiet shadowed snow/path reserved for later separately composed parchment and loading controls. Maintain legibility and a restrained warm/cool balance.\nConstraints: NO logo, NO words, NO letters, NO UI, NO panels, NO progress bar, NO border, NO corner jewels, NO watermark, no collage. Do not copy screenshot fragments; create a coherent new illustration. No changes to the source reference images.",
+      "output": "journey_scene_generated.png",
+      "selected": false
+    },
+    {
+      "name": "parchment_panel",
+      "prompt": "Use case: ui-mockup. Asset type: one isolated blank parchment tip panel for a Russian-fairy-tale portrait game page, separate reusable art element. Image 1 is the accepted Splash logo, MATERIAL STYLE REFERENCE ONLY. Match its subdued antique gold, dark navy lacquer and restrained sapphire accents without recreating any lettering or logo.\nGenerate exactly one horizontal rectangular parchment panel, approximately 2.65:1 width-to-height, centered with comfortable transparent padding. Genuinely transparent background outside the panel. Entire parchment surface inside the frame must remain intentionally opaque. Aged warm ivory paper, fine natural grain, subtly darker edges, generous empty flat central writing area. Thin carved dark navy outer structure with delicate antique gold filigree along the edges, restrained ornamental curls focused at four corners and a small single sapphire at top center. Refined Russian fairy-tale ornament, not a rounded generic app card. Thin frame occupies less than 10% of height. Minimal symmetrical flourishes; elegant weight matching the actual logo. Soft natural material highlights, no bright neon glow, no oversaturated orange gold.\nConstraints: blank interior; NO text, NO letters, NO logo, NO characters, NO scenery, NO ground plane, NO background color, NO inset transparent hole, NO checkerboard pixels. One complete panel, no collage, no sheet, no alternatives. Edges and all ornament completely in frame.",
+      "output": "tip_panel_generated.png",
+      "selected_for_preview": true,
+      "production_alpha_acceptance": false
+    },
+    {
+      "name": "journey_composition_refinement",
+      "prompt": "Use case: precise-object-edit. Edit Image 1, the generated portrait journey illustration. Make only one composition correction: reduce Ivan and the Firebird together to approximately 75% of their current size and move their feet/tail upward so BOTH full silhouettes fit between y=560 and y=1190 in this 941x1672 portrait. Ivan still walks left of center, looking toward the distant village; bird glides beside him on the right. Leave the bottom 28% (y=1200..1672) as quiet uninterrupted snow/path for a separately composed UI panel. Restore coherent scenic pixels behind their old larger silhouettes. Preserve the original horizon, fortress, bridge, dawn, trees, painted detail, and all colors. Preserve Ivan's identity/costume and Firebird feather rendering from Image 1; Images 2 and 3 reinforce their original approved appearance only. No other characters or props. No UI, no logo, no words, no border. Keep the exact 941x1672 portrait composition.",
+      "output": "journey_scene_refined.png",
+      "selected": true
+    },
+    {
+      "name": "panel_opacity_correction_rejected",
+      "prompt": "Use case: precise-object-edit. Image 1 is the generated isolated tip panel and the only edit target. Correct ONLY its transparency: the parchment writing surface must be fully opaque (alpha 255 throughout its interior), and the solid navy/gold frame must be opaque. Keep real alpha 0 outside the ornamental silhouette, retaining edge antialiasing only at the silhouette. The current image mistakenly gives almost every interior pixel partial opacity. Preserve the visual design, dimensions, paper texture, subdued gold, dark navy, sapphire, proportions, and all ornament as closely as possible. No new lettering, no characters, no scenery, no background plate. The empty parchment is an opaque material, NOT translucent glass. One blank complete horizontal panel on a genuinely transparent surrounding background.",
+      "output_saved_in_workspace": false,
+      "output_source": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-a51ad8bb-f91f-46a7-9a73-636b444d94bc.png",
+      "reason": "RGB output with baked checkerboard outside frame; not used"
+    }
+  ]
+}

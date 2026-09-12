@@ -1,0 +1,47 @@
+{
+  "checkpoint": "v1.15-step02-activation",
+  "name": "Runtime Economy Activation Checkpoint",
+  "status": "PENDING_UNITY_VERIFICATION_LIVE_WIRING_AND_FINAL_APPROVAL",
+  "is_new_development_step": false,
+  "product_approval_recorded": true,
+  "current_manifest": {
+    "compilationVerified": false,
+    "editorSelfTestsPassed": false,
+    "editModeTestsPassed": false,
+    "playModeTestsPassed": false,
+    "runtimeActivationApproved": false
+  },
+  "current_runtime": {
+    "catalog_proposal_only": true,
+    "catalog_authoritative": false,
+    "uses_step02_transaction_coordinator": false,
+    "uses_catalog_policy": false,
+    "uses_legacy_prototype_paths": true
+  },
+  "required_sequence": [
+    "Compile with zero errors in exactly Unity 6000.5.9f1",
+    "Run Validate Commercial Vertical Slice",
+    "Run v1.15 Step 2 Editor self-tests",
+    "Run all EditMode tests",
+    "Run all PlayMode tests",
+    "Retain passing evidence and set only the four supported verification flags",
+    "Review a narrow live-wiring change for GameState, ScreenRouter, Match3Board, and RuntimeBootstrap",
+    "Keep runtimeActivationApproved false while wiring and re-verification are incomplete",
+    "Re-run compilation, Editor self-tests, EditMode tests, and PlayMode tests after wiring",
+    "Obtain explicit final runtime-activation approval",
+    "Set runtimeActivationApproved true only in the reviewed release candidate",
+    "Re-run the complete verification set after the manifest change"
+  ],
+  "activation_acceptance": [
+    "One atomic candidate commit for each live economy operation",
+    "Stable domain keys and explicit restart behavior",
+    "Entry cost and level-attempt behavior cannot split",
+    "Booster debit and recovery cannot duplicate or lose inventory",
+    "Unknown, insufficient, negative, duplicate, and overflowing operations fail without mutation",
+    "Daily, first-clear, double, mail, and development-mock grants cannot bypass their reviewed entitlement rules",
+    "Existing version-6 saves retain balances, inventory, progression, and claim markers",
+    "No starting-balance rebase, schema migration, or automatic grant",
+    "No store, ad, analytics, backend, cloud, or remote-config SDK"
+  ],
+  "release_blocker": "Any false verification flag, absent final approval, unreviewed live wiring, catalog binding mismatch, or Unity version mismatch keeps the frozen legacy policy and blocks runtime activation."
+}

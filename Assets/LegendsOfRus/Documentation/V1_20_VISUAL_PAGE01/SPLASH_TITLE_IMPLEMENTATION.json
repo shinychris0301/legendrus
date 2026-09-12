@@ -1,0 +1,15 @@
+{
+  "milestone": "v1.20-visual-page01-splashtitle-production-implementation",
+  "screenId": "SplashTitle",
+  "approvedReference": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/SplashTitle.png",
+  "referenceResolution": [941, 1672],
+  "runtime": {
+    "layered": true,
+    "fullScreenReferenceDependency": false,
+    "liveElements": ["version", "language", "start", "settings", "account", "help", "tagline", "legal"],
+    "motion": ["background parallax", "Ivan micro-breath", "Masha micro-breath", "Firebird shimmer", "logo float", "Start glow"],
+    "routes": {"start":"Loading","language":"LanguageSelect","settings":"Settings","account":"Login","help":"TutorialOverlay"}
+  },
+  "rollback": "remove Resources/ProductionUI/CutoverState/SplashTitleCutoverState.txt",
+  "acceptance": {"fourAspectRuntimeCapture":"pending user Unity execution","android":"pending"}
+}

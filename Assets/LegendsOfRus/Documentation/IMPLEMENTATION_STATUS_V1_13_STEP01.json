@@ -1,0 +1,29 @@
+{
+  "version": "v1.13-step01",
+  "name": "Story Data and Chapter Intro",
+  "package_revision": 1,
+  "unity_target": "6000.5.9f1",
+  "implemented": [
+    "Separate Chapter 1 story structure and Russian localization resources",
+    "Validated mapping for every released dialogue trigger",
+    "First-launch Chapter 1 intro before the pre-level screen",
+    "Localized multi-line Dialogue runtime overlay",
+    "Save-version 5 completed-story-scene persistence",
+    "Replay-safe story scene suppression",
+    "Chapter map, pre-level, and chapter-complete story return routes",
+    "Editor validation, self-tests, and PlayMode regression coverage"
+  ],
+  "chapter_1_story_scenes": 8,
+  "chapter_1_intro_lines": 3,
+  "chapter_1_dialogue_triggers_covered": 7,
+  "v1_13_step01_exit_criteria_met_in_source": true,
+  "visual_contract_changed": false,
+  "approved_art_changed": false,
+  "gameplay_mechanics_changed": false,
+  "unity_compile_corrections": [
+    "Restored the original side-effect-free StoryService.ShouldShowDialogueAfterVictory trigger predicate",
+    "Updated retained tutorial persistence test from save version 4 to save version 5"
+  ],
+  "unity_verification": "pending",
+  "next_step": "v1.13 Step 2 — Story Milestones and Character Reactions"
+}

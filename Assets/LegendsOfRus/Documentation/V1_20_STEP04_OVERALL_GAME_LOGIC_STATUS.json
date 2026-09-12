@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step04-functional-game-flow-demo-logic",
+  "features": [
+    {
+      "feature": "Boot/Splash/Loading",
+      "status": "implemented-demo",
+      "notes": "SplashTitle -> Loading -> Home"
+    },
+    {
+      "feature": "Back navigation",
+      "status": "implemented",
+      "notes": "Shared parent policy; ChapterMap -> WorldMap -> Home"
+    },
+    {
+      "feature": "Safe area/aspect ratio",
+      "status": "implemented",
+      "notes": "Existing adaptive canvas/safe-area system retained"
+    },
+    {
+      "feature": "Save/load/recovery",
+      "status": "implemented",
+      "notes": "save-v6 + envelope/journal/recovery retained"
+    },
+    {
+      "feature": "Energy/refill",
+      "status": "implemented",
+      "notes": "Clock refill, spend/refill/add boundaries retained"
+    },
+    {
+      "feature": "Chapter 1 level selection",
+      "status": "implemented",
+      "notes": "Unlock/select/progress retained"
+    },
+    {
+      "feature": "Match-3 board",
+      "status": "implemented",
+      "notes": "Swap/match/cascade/goals/moves/score retained"
+    },
+    {
+      "feature": "Swipe input",
+      "status": "implemented",
+      "notes": "Existing stable-axis input retained"
+    },
+    {
+      "feature": "Obstacles/special gems",
+      "status": "implemented",
+      "notes": "Existing Chapter 1 mechanics retained"
+    },
+    {
+      "feature": "Boosters",
+      "status": "implemented",
+      "notes": "Inventory/use flow retained"
+    },
+    {
+      "feature": "Tutorial triggers",
+      "status": "implemented",
+      "notes": "Data-driven presenter + saved completion retained"
+    },
+    {
+      "feature": "Story/dialogue",
+      "status": "implemented",
+      "notes": "Localized deterministic milestone flow retained"
+    },
+    {
+      "feature": "Pause/restart/exit",
+      "status": "implemented",
+      "notes": "Live board pause semantics retained"
+    },
+    {
+      "feature": "Victory/fail",
+      "status": "implemented",
+      "notes": "Outcome/retry/continue flow retained"
+    },
+    {
+      "feature": "Chapter complete",
+      "status": "implemented",
+      "notes": "Acknowledgement/relaunch-safe flow retained"
+    },
+    {
+      "feature": "Daily reward",
+      "status": "implemented",
+      "notes": "Once-per-day local reward retained"
+    },
+    {
+      "feature": "Reward claim",
+      "status": "implemented",
+      "notes": "Modal acknowledgement retained"
+    },
+    {
+      "feature": "Settings",
+      "status": "implemented",
+      "notes": "Music/SFX/vibration/notifications retained"
+    },
+    {
+      "feature": "Shop/IAP",
+      "status": "fail-closed-provider-boundary",
+      "notes": "No unverified grants; production provider required"
+    },
+    {
+      "feature": "Rewarded ads",
+      "status": "fail-closed-provider-boundary",
+      "notes": "Existing verified fulfillment boundary retained"
+    },
+    {
+      "feature": "Events hub/detail",
+      "status": "demo-local",
+      "notes": "Navigation and once-per-session claim acknowledgement; no economy grant"
+    },
+    {
+      "feature": "Individual ranking",
+      "status": "demo-local",
+      "notes": "Static local demo data; production leaderboard backend required"
+    },
+    {
+      "feature": "Team hub/ranking",
+      "status": "demo-local",
+      "notes": "Route logic implemented; server membership/ranking required"
+    },
+    {
+      "feature": "Team chat",
+      "status": "demo-local",
+      "notes": "Local message counter only; server/moderation required"
+    },
+    {
+      "feature": "Friends/energy request",
+      "status": "demo-local",
+      "notes": "Once-per-session request acknowledgement; no energy grant"
+    },
+    {
+      "feature": "Mail",
+      "status": "partial-safe-stub",
+      "notes": "Screen exists; reward claim remains unavailable without backend"
+    },
+    {
+      "feature": "Inventory",
+      "status": "demo-local",
+      "notes": "Route/view boundary; booster counts remain authoritative in GameState"
+    },
+    {
+      "feature": "Language",
+      "status": "demo-local",
+      "notes": "Session RU/EN state; authored complete localization pending"
+    },
+    {
+      "feature": "Login/account",
+      "status": "demo-local",
+      "notes": "Guest path only; identity/cloud backend pending"
+    },
+    {
+      "feature": "Offline/maintenance/error states",
+      "status": "demo-local",
+      "notes": "Reusable safe routes and retry/home behavior"
+    },
+    {
+      "feature": "Chapters 2-20",
+      "status": "content-pipeline-pending",
+      "notes": "Overall logic contract exists; authored content expansion remains future phase"
+    },
+    {
+      "feature": "Final production UI/assets",
+      "status": "deferred-by-priority",
+      "notes": "Demo design allowed until functional QA is accepted"
+    }
+  ]
+}

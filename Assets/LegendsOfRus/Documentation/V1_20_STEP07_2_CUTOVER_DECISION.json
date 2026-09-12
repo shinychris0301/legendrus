@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07.2-candidate-prefab-four-aspect-qa-cutover-decision",
+  "decision": "NO_GO",
+  "decisionScope": "WAVE1_ACTIVE_RUNTIME_VISUAL_CUTOVER",
+  "candidatePrefabs": "READY_FOR_UNITY_QA_NOT_ACTIVE",
+  "activeRuntimeCutoverPerformed": false,
+  "activeRegistryCutoverPageCount": 10,
+  "blockers": [
+    {
+      "id": "REF-COVERAGE",
+      "severity": "BLOCKER",
+      "detail": "Direct approved references are missing for SplashTitle, Pause, and ChapterComplete."
+    },
+    {
+      "id": "PIXEL-FIDELITY",
+      "severity": "BLOCKER",
+      "detail": "Strict source proxy visual fidelity passes 0/9 direct-reference pages; approved locked-style cutover requires all direct-reference pages to pass human/Unity review."
+    },
+    {
+      "id": "TYPOGRAPHY",
+      "severity": "BLOCKER",
+      "detail": "Licensed production Cyrillic font asset has not been imported; candidate prefabs currently use Unity built-in legacy font fallback for live text."
+    },
+    {
+      "id": "UNITY-EXEC",
+      "severity": "BLOCKER",
+      "detail": "Serialized candidate prefab import and actual Unity four-aspect capture have not been executed in Unity 6000.5.9f1 in this environment."
+    },
+    {
+      "id": "ANDROID",
+      "severity": "BLOCKER",
+      "detail": "Android visual, safe-area, touch/back, and device signoff is still pending."
+    }
+  ],
+  "passes": [
+    "12/12 serialized candidate prefab files physically shipped",
+    "48/48 source geometry aspect containment checks",
+    "0 candidate visual graphics are raycast targets",
+    "0 ReferenceOnly/DesignScreens dependencies in serialized candidates",
+    "Step 7 functional runtime baseline remains frozen"
+  ],
+  "requiredBeforeReconsideration": [
+    "Reconstruct direct-reference pages until approved-screen comparison is acceptable",
+    "Provide/approve direct references for SplashTitle, Pause, ChapterComplete",
+    "Import licensed Cyrillic production font and bind live text",
+    "Run Step 7.2 Unity four-aspect capture tool and review 48 actual Unity captures",
+    "Run Step 6/Step 7 functional tests after candidate import",
+    "Run Android safe-area + visible/system Back + touch verification"
+  ],
+  "nextRecommendedMilestone": "v1.20 Step 7.3 — Reference-Accurate Wave 1 Reconstruction Refinement and Typography Finalization"
+}

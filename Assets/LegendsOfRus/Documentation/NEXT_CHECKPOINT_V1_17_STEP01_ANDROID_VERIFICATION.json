@@ -1,0 +1,35 @@
+{
+  "checkpoint": "v1.17-step01-android-verification",
+  "name": "Unity Android Development APK Verification",
+  "status": "BLOCKED_PENDING_PACKAGE_LOCK_PIN_AND_RETAINED_UNITY_DEVICE_EVIDENCE",
+  "implementationStatus": "IMPLEMENTED_IN_SOURCE_PENDING_UNITY_ANDROID_CONFIGURATION_AND_VERIFICATION",
+  "androidCandidateStatus": "DEVELOPMENT_APK_GUARD_READY_PACKAGE_LOCK_APPROVAL_PENDING_PRODUCTION_BLOCKED",
+  "productionBuildAuthorized": false,
+  "candidateMilestoneId": "v1.17-step01-android-build-configuration-signing-foundation",
+  "requiredSequence": [
+    "Run static and baseline verification on a separate clean extraction before Unity import; do not run the sealed-source verifier in the imported working copy",
+    "Open a different working copy of the exact candidate in Unity 6000.5.9f1, save the Unity-generated ProjectSettings.asset, and let Package Manager resolve Packages/packages-lock.json",
+    "Treat import-generated .meta files, Library, Logs, UserSettings, and other Unity working-copy state as outside the sealed 457-file source fingerprint",
+    "Return only the unedited ProjectSettings.asset and packages-lock.json; retain and review the lock for no embedded, local, or Git dependency, then source-pin its SHA-256 before attempting preflight or an APK build",
+    "Continue only on the resulting lock-pinned frozen candidate; the current unpinned source is intentionally build-blocked",
+    "Configure the exact nonproduction Development APK values from the manual checklist without adding signing credentials",
+    "Compile with zero errors and retain the Unity Console evidence",
+    "Run the project validator and v1.17 Step 1 Editor self-test and retain both results",
+    "Run every EditMode and PlayMode test and retain both NUnit XML files with zero failed, skipped, or inconclusive tests",
+    "Pass the sanitized Development APK preflight on the same frozen bytes",
+    "In a throwaway copy, retain fail-closed denial evidence for Android requests with extraScriptingDefines, an empty or alternate scene list, an extra Build Options flag, an AssetBundle manifest, and an inactive custom Build Profile",
+    "Build only the exact permitted debug-signed Development APK and retain its BuildReport and SHA-256",
+    "Review the merged manifest, ARM64 native inventory, 16 KB compatibility, and representative-device behavior"
+  ],
+  "exitCriteria": [
+    "Every later Unity evidence item is tied to the reviewed source-archive SHA-256, policy hash, and the explicitly retained ProjectSettings.asset and packages-lock.json, not literal post-import 457-file equality",
+    "The resolved Packages/packages-lock.json is reviewed, included in the candidate, and SHA-256 pinned by both the live guard and static verifier",
+    "Scheduled per-build defines and active or inactive custom Build Profiles are rejected before Android compilation",
+    "The scheduled Android target, subtarget, scenes, output, Build Options, and AssetBundle manifest match the exact development-only contract",
+    "No release APK, AAB, Gradle export, custom signing, production identity, provider, economy activation, or commercial activation is enabled",
+    "The exact Development APK runs on representative Android hardware without blocking the offline core loop",
+    "The generated ProjectSettings.asset contains no serialized credential or unapproved production value"
+  ],
+  "hardStop": "The current source cannot build an APK until the resolved package lock is reviewed and source-pinned. Passing the later checkpoint authorizes only a local debug-signed Development APK; it never enables production signing, AAB, Play publishing, economy authority, or commercial providers.",
+  "nextDevelopmentMilestone": "v1.17 Step 2 — Save Migration and Recovery Foundation"
+}

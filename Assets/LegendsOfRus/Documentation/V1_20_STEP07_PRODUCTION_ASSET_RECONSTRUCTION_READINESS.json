@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "functionalBaseline": "v1.20 Step 6 byte-frozen for runtime scripts, active production page prefabs, Packages, ProjectSettings, and approved references",
+  "wave0": {
+    "status": "AUTHORED_CANDIDATE",
+    "sharedPngCount": 61,
+    "manifest": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/wave0_foundation_manifest.json",
+    "fontFinalization": "PENDING_LICENSED_CYRILLIC_FONT_IMPORT"
+  },
+  "wave1": {
+    "status": "ASSET_SETS_AND_LAYOUTS_AUTHORED_CANDIDATE",
+    "pageCount": 12,
+    "directApprovedReferencePages": 9,
+    "missingDirectReferencePages": [
+      "SplashTitle",
+      "Pause",
+      "ChapterComplete"
+    ],
+    "pageSpecificPngCount": 46,
+    "requirementsMapped": 92,
+    "requirementsUncovered": 0,
+    "qaPreviewCount": 12,
+    "candidatePrefabBuilder": "READY",
+    "serializedCandidatePrefabs": "PENDING_UNITY_AUTOBUILD",
+    "fourAspectUnityCapture": "PENDING",
+    "androidVisualSignoff": "PENDING"
+  },
+  "runtimeCutover": {
+    "status": "BLOCKED",
+    "reason": "Step 6 executable functional acceptance and per-wave visual/device acceptance have not been evidenced in this environment",
+    "activeRegistryChanged": false,
+    "activeProductionPagePrefabsChanged": false
+  },
+  "nextGate": [
+    "Open exact Step 7 candidate in Unity 6000.5.9f1",
+    "Allow candidate builder to generate 12 Wave01Pages prefabs",
+    "Run Step 6 functional acceptance gate",
+    "Run Step 7 Wave 0/1 self-test",
+    "Run complete EditMode + PlayMode suites",
+    "Capture 9:16, 19.5:9, 20:9 and tablet aspect previews",
+    "Verify visible/system Back on Android",
+    "Approve direct references for SplashTitle, Pause and ChapterComplete or accept style-system composition for those pages",
+    "Only then authorize active runtime visual cutover"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "milestone": "v1.15-step01",
+  "name": "Economy Configuration and Simulation Foundation",
+  "status": "IMPLEMENTED_PENDING_UNITY_VERIFICATION",
+  "unity_target": "6000.5.9f1",
+  "authority": "PROPOSAL_ONLY_NON_AUTHORITATIVE",
+  "verification_basis": "STATIC_SOURCE_VERIFICATION; UNITY EXECUTION PENDING",
+  "implemented": {
+    "versioned_economy_catalog": true,
+    "catalog_scope": [
+      "currencies",
+      "energy",
+      "booster activation inventory costs and purchase-price availability",
+      "continues",
+      "reward sources",
+      "Chapter 1 progression inputs for offline simulation"
+    ],
+    "prototype_provenance": [
+      "declared_unwired_config",
+      "runtime_hardcode",
+      "authored_level_data"
+    ],
+    "deterministic_offline_ledger": true,
+    "atomic_failed_transactions": true,
+    "idempotent_grant_protection": true,
+    "deterministic_energy_and_reward_cadence": true,
+    "chapter_1_affordability_simulation": true,
+    "no_store_no_ad_progression_scenario": true,
+    "proposal_vs_prototype_report": true,
+    "booster_purchase_price_availability": "UNDEFINED",
+    "booster_purchase_affordability": "INCOMPLETE_PRICE_UNDEFINED",
+    "guardrails": [
+      "negative_balance",
+      "duplicate_grant",
+      "unreachable_progress",
+      "forced_purchase",
+      "invalid_reference",
+      "duplicate_id",
+      "invalid_amount",
+      "arithmetic_overflow"
+    ]
+  },
+  "non_authoritative_guarantees": {
+    "player_save_mutation": false,
+    "existing_balance_mutation": false,
+    "save_schema_migration": false,
+    "runtime_ui_mutation": false,
+    "chapter_1_reward_rebalance": false,
+    "runtime_catalog_activation": false
+  },
+  "excluded": [
+    "store or IAP SDK",
+    "rewarded-ad SDK",
+    "analytics provider",
+    "backend or cloud service",
+    "remote-config integration",
+    "offer UI redesign",
+    "Chapter 2 content",
+    "silent migration of existing player balances"
+  ],
+  "pending": [
+    "Unity Editor compilation",
+    "Unity Editor self-test execution",
+    "Unity EditMode and PlayMode Test Runner execution",
+    "review and approval before runtime authority"
+  ],
+  "next_step": "v1.15 Step 2 proposal pending approval"
+}

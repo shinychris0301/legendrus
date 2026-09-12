@@ -1,0 +1,82 @@
+[
+  {
+    "screen": "Loading",
+    "before": "full-screen screenshot",
+    "after": "production prefab",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "HeaderFrame;ProgressBar;Jewel",
+    "runtimeBehavior": "Auto-home retained"
+  },
+  {
+    "screen": "Home",
+    "before": "screenshot + hotspots + HUD",
+    "after": "production prefab + existing action layer",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "TopBar;HeaderFrame;PrimaryButton;NavTile;ProgressBar",
+    "runtimeBehavior": "Main navigation hotspots retained"
+  },
+  {
+    "screen": "WorldMap",
+    "before": "full-screen screenshot + map hotspot",
+    "after": "production prefab + existing map action layer",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "TopBar;HeaderFrame;NavyPanel;MapNode;NavTile",
+    "runtimeBehavior": "Dynamic HUD added"
+  },
+  {
+    "screen": "ChapterMap",
+    "before": "screenshot + path/play hotspots",
+    "after": "production prefab + existing action layer",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "TopBar;HeaderFrame;MapNode;PrimaryButton",
+    "runtimeBehavior": "Chapter 1 nodes reconstructed"
+  },
+  {
+    "screen": "PreLevel",
+    "before": "screenshot + dynamic goal overlays",
+    "after": "production prefab + existing dynamic overlays",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "TopBar;ParchmentPanel;GoalPanel;BoosterSlot;PrimaryButton",
+    "runtimeBehavior": "Dynamic goal/move/reward values retained"
+  },
+  {
+    "screen": "Gameplay",
+    "before": "screenshot + runtime board/HUD",
+    "after": "production frame prefab + runtime board/HUD",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "GoalPanel;BoardFrame;BoosterSlot;PauseButton",
+    "runtimeBehavior": "Runtime Match3Board unchanged"
+  },
+  {
+    "screen": "Pause",
+    "before": "modal screenshot + hotspots",
+    "after": "production modal prefab + existing action layer",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "ModalFrame;HeaderFrame;Primary/Secondary/Danger buttons",
+    "runtimeBehavior": "Pause/resume semantics unchanged"
+  },
+  {
+    "screen": "Victory",
+    "before": "screenshot + reaction overlay",
+    "after": "production result prefab + reaction overlay",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "HeaderFrame;Star;RewardTile;Primary/Secondary buttons",
+    "runtimeBehavior": "Rewarded-double behavior unchanged"
+  },
+  {
+    "screen": "Fail",
+    "before": "screenshot + reaction overlay",
+    "after": "production result prefab + reaction overlay",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "HeaderFrame;ParchmentPanel;Primary/Secondary buttons",
+    "runtimeBehavior": "Retry/exit behavior unchanged"
+  },
+  {
+    "screen": "ChapterComplete",
+    "before": "screenshot + summary overlay",
+    "after": "production result prefab + summary overlay",
+    "status": "CUTOVER_STEP_3_3",
+    "canonicalComponents": "HeaderFrame;Star;NavyPanel;Primary/Secondary buttons",
+    "runtimeBehavior": "Completion acknowledgement unchanged"
+  }
+]

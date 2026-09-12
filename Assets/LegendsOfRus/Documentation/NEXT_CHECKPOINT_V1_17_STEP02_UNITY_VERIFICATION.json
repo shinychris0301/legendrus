@@ -1,0 +1,40 @@
+{
+  "checkpoint": "v1.17-step02-unity-save-recovery-verification",
+  "name": "Unity Save Migration and Recovery Verification",
+  "status": "PENDING_RETAINED_UNITY_EVIDENCE",
+  "implementationStatus": "IMPLEMENTED_IN_SOURCE_PENDING_UNITY_SAVE_RECOVERY_VERIFICATION",
+  "candidateStatus": "SAVE_V6_ENVELOPE_V1_RECOVERY_FOUNDATION_PRODUCTION_ACTIVATION_BLOCKED",
+  "unityVersion": "6000.5.9f1",
+  "step1UserReportedZeroErrors": true,
+  "step1RetainedEvidencePresent": false,
+  "packageLockApproved": false,
+  "productionBuildAuthorized": false,
+  "requiredSequence": [
+    "On a clean extraction, run node Tools/verify_v1_17_step02.mjs --baseline <exact-v1.17-step01-project> and retain the JSON report",
+    "Open a separate working copy of the exact Step 2 candidate in Unity 6000.5.9f1 and retain compilation output with zero errors",
+    "Run Legends of Rus/Validate Commercial Vertical Slice and retain the result",
+    "Run Legends of Rus/Tests/Run v1.17 Step 2 Self-Tests and retain the result",
+    "Run every EditMode and PlayMode test and retain both NUnit XML files with zero failed, skipped, or inconclusive tests",
+    "On disposable profiles, verify first launch, unversioned and legacy v1-v5 import, strict complete raw-v6 import, envelope-v1 payload-v6 preservation, normal relaunch, backup recovery, unrecoverable corruption, canonical future raw/envelope barriers, and explicit reset",
+    "Verify PrimaryDurablyCommitted reset adoption after primary flush with injected backup and staging-cleanup failures, retaining CanPersist=false and LastWriteResult",
+    "Confirm all 12 inherited isolation fixtures preserve primary, backup, and staging and that every other inherited test remains byte-identical to Step 1",
+    "Retain raw primary, backup, and staging values before destructive cases and prove blocked cases do not automatically persist a fallback default",
+    "Verify offline, suspend/resume, and forced termination around each staged write phase on representative Android hardware without invoking the blocked Android build workflow"
+  ],
+  "exitCriteria": [
+    "PlayerSaveData remains payload version 6 and all 32 existing fields survive a current-v6 round trip",
+    "Envelope version 1 detects payload, length, encoding, structure, and envelope corruption deterministically",
+    "Literal legacy v1 through v5 payloads migrate to version 6 without mutating the source before a successful commit",
+    "Unversioned raw payloads retain the v1 migration path, while raw current-v6 imports require all 32 typed fields with no duplicate known field",
+    "Canonical differently shaped or oversized future envelopes and canonical future raw payloads block downgrade",
+    "A durably flushed reset primary may be adopted after a later redundancy or cleanup failure without reporting full journal success",
+    "A valid primary wins, a missing primary never resurrects backup-only history, staging is never promoted, and eligible invalid-primary backup recovery preserves player progress",
+    "Unsupported future data and unrecoverable corruption retain raw evidence and block normal persistence",
+    "Explicit reset cannot recover pre-reset progress after later primary corruption",
+    "All 12 relevant inherited fixtures isolate the complete three-key namespace without PlayerPrefs.DeleteAll and every other inherited test remains identical",
+    "Legacy GameState mutator booleans are not durable proof; copy-on-write mutation transactions remain required before closed/player-facing testing or a transactional-durability claim",
+    "No cloud/account recovery, provider activation, runtime economy authority, commercial activation, or production Android authority is introduced"
+  ],
+  "hardStop": "This checkpoint validates only the local save/recovery foundation. ResolvedPackageLockApproved remains false, so Android preflight and APK build remain blocked. Passing Step 2 does not authorize production providers, economy/commercial activation, cloud recovery, signing, or publishing.",
+  "nextDevelopmentMilestone": "v1.17 Step 3 — Crash and Error Reporting Foundation"
+}

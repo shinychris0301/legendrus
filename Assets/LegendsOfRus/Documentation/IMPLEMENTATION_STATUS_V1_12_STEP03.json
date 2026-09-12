@@ -1,0 +1,39 @@
+{
+  "version": "v1.12-step03",
+  "name": "Chapter 1 Mechanic Tutorials and Difficulty Curve",
+  "unity_target": "6000.5.9f1",
+  "implemented": [
+    "Schema-v3 tutorial steps and numeric difficulty ratings",
+    "One-at-a-time Chapter 1 mechanic rollout",
+    "Score, ice, chain, crate, bring-down, and survival level activation",
+    "Deterministic start and gameplay-event tutorial triggers",
+    "Gameplay pause/resume tutorial presentation",
+    "Save-version 4 completed-tutorial persistence",
+    "Difficulty peaks on levels 3 and 6",
+    "Recovery levels on levels 4 and 7",
+    "Chapter 1 rollout and difficulty-curve validation",
+    "Unity authoring support and regression coverage"
+  ],
+  "chapter_1_level_count": 10,
+  "chapter_1_tutorial_step_count": 14,
+  "chapter_1_recovery_levels": [4, 7],
+  "chapter_1_mechanics": [
+    "match",
+    "score",
+    "ice",
+    "chain",
+    "crate",
+    "bring_down",
+    "survival"
+  ],
+  "v1_12_exit_criteria_met_in_source": true,
+  "runtime_corrections": [
+    "Blocked swap preflight returns directly from Swapping to Idle",
+    "Expected blocker rejection no longer logs warning or recovery error",
+    "Rejected swaps preserve moves, board hash, and input availability"
+  ],
+  "visual_contract_changed": false,
+  "approved_art_changed": false,
+  "unity_verification": "pending",
+  "next_step": "v1.13 Step 1 — Story Data and Chapter Intro"
+}

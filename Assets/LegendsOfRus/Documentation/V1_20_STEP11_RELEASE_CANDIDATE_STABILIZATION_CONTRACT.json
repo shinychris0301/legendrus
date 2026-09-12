@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step11-controlled-production-ui-cutover-functional-regression-rc-stabilization",
+  "principles": [
+    "Never activate a page only because source art exists",
+    "Reuse Step 10.3 candidate+runtime+approved-reference+fidelity+authority eligibility",
+    "Keep ProductionCoreLoopPageRegistry frozen at exactly 10 routes",
+    "All non-core activation remains page-scoped and rollback-controlled",
+    "Functional and physical Android evidence must match the current integration fingerprint",
+    "Development RC freeze never implies store-release visual completeness"
+  ],
+  "developmentRcGate": [
+    "36/36 source candidates",
+    "global authority boundaries pass",
+    "active cutover batch validates",
+    "full functional regression PASS matches current integration fingerprint",
+    "physical Android regression PASS matches current integration fingerprint",
+    "Step 10.3 final Android acceptance matches current integration fingerprint"
+  ],
+  "storeReleaseRcGate": [
+    "development RC gate passes",
+    "36/36 functional pages are active production routes",
+    "36/36 active pages have direct approved visual authority",
+    "36/36 active pages have four-aspect runtime evidence",
+    "36/36 active approved pages pass runtime fidelity correlation >= 0.80 and MAE <= 0.10"
+  ],
+  "automaticCutover": false,
+  "automaticRcFreeze": false
+}

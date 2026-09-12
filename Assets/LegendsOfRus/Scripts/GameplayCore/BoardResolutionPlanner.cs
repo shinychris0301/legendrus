@@ -1,0 +1,1146 @@
+using System;
+using System.Collections.Generic;
+
+namespace LegendsOfRus.GameplayCore
+{
+    /// <summary>
+    /// Produces a deterministic, immutable resolution plan without changing
+    /// the authoritative source BoardModel.
+    ///
+    /// The runtime view consumes the plan step-by-step. Puzzle rules no longer
+    /// depend on animation timing or MonoBehaviour coroutine order.
+    /// </summary>
+    public sealed class BoardResolutionPlanner
+    {
+        readonly BoardModel source;
+        readonly BoardBalanceProfile balance;
+
+        public BoardResolutionPlanner(BoardModel source)
+            : this(source, BoardBalanceProfile.CommercialDefault)
+        {
+        }
+
+        public BoardResolutionPlanner(
+            BoardModel source,
+            BoardBalanceProfile balance
+        )
+        {
+            this.source = source ?? throw new ArgumentNullException(nameof(source));
+            this.balance = balance ?? BoardBalanceProfile.CommercialDefault;
+        }
+
+        public BoardResolutionPlan PlanSwap(BoardPosition a, BoardPosition b)
+        {
+            BoardSnapshot before = source.CreateSnapshot();
+            int resolutionSeed = CreateResolutionSeed(
+                before,
+                $"swap:{a.X},{a.Y}:{b.X},{b.Y}"
+            );
+
+            if (!source.AreAdjacent(a, b))
+            {
+                return CreateRejectedSwap(
+                    before,
+                    a,
+                    b,
+                    resolutionSeed,
+                    "Cells are outside the board or are not adjacent."
+                );
+            }
+
+            if (!source.CanSwap(a, b))
+            {
+                return CreateRejectedSwap(
+                    before,
+                    a,
+                    b,
+                    resolutionSeed,
+                    "A chain, crate, objective item, or empty cell blocks this swap."
+                );
+            }
+
+            BoardModel working = CreateWorkingModel(before, resolutionSeed);
+            BoardCellData originalA = working.GetCell(a);
+            BoardCellData originalB = working.GetCell(b);
+
+            working.Swap(a, b);
+            BoardSnapshot afterSwap = working.CreateSnapshot();
+
+            SpecialCombinationKind combination = DetermineCombination(
+                originalA.Special,
+                originalB.Special
+            );
+
+            List<BoardMatchRun> runs = working.FindRuns();
+            bool specialSwap = IsSpecialCombinationSwap(
+                originalA,
+                originalB,
+                combination
+            );
+
+            if (runs.Count == 0 && !specialSwap)
+            {
+                return new BoardResolutionPlan(
+                    BoardResolutionActionKind.Swap,
+                    BoardResolutionStatus.InvalidSwap,
+                    "Swap does not create a match or valid special combination.",
+                    a,
+                    b,
+                    BoardBoosterCommandKind.None,
+                    false,
+                    resolutionSeed,
+                    before,
+                    afterSwap,
+                    Array.Empty<BoardResolutionWave>(),
+                    new BoardReshuffleResult(0, false),
+                    null,
+                    before
+                );
+            }
+
+            var waves = new List<BoardResolutionWave>();
+            int comboIndex = 1;
+
+            if (specialSwap)
+            {
+                BoardResolutionWave first = ResolveSpecialCombinationWave(
+                    working,
+                    a,
+                    b,
+                    originalA,
+                    originalB,
+                    combination,
+                    comboIndex++
+                );
+                waves.Add(first);
+                runs = working.FindRuns();
+            }
+
+            BoardPosition? preferred = specialSwap
+                ? (BoardPosition?)null
+                : b;
+
+            while (runs.Count > 0)
+            {
+                BoardResolutionWave wave = ResolveMatchWave(
+                    working,
+                    runs,
+                    preferred,
+                    comboIndex++
+                );
+                waves.Add(wave);
+                preferred = null;
+                runs = working.FindRuns();
+            }
+
+            BoardReshuffleResult reshuffle = working.EnsurePlayableBoard();
+            BoardSnapshot afterReshuffle = reshuffle.Attempts > 0
+                ? working.CreateSnapshot()
+                : null;
+            BoardSnapshot final = working.CreateSnapshot();
+
+            return new BoardResolutionPlan(
+                BoardResolutionActionKind.Swap,
+                BoardResolutionStatus.Resolved,
+                string.Empty,
+                a,
+                b,
+                BoardBoosterCommandKind.None,
+                true,
+                resolutionSeed,
+                before,
+                afterSwap,
+                waves,
+                reshuffle,
+                afterReshuffle,
+                final
+            );
+        }
+
+        public BoardResolutionPlan PlanBooster(BoardBoosterRequest request)
+        {
+            BoardSnapshot before = source.CreateSnapshot();
+            int resolutionSeed = CreateResolutionSeed(
+                before,
+                $"booster:{(int)request.Kind}:{request.Target.X},{request.Target.Y}"
+            );
+
+            BoardBoosterValidationResult validation =
+                BoardBoosterCommandValidator.Validate(source, request, balance);
+
+            if (!validation.IsValid)
+            {
+                return new BoardResolutionPlan(
+                    BoardResolutionActionKind.Booster,
+                    BoardResolutionStatus.Rejected,
+                    validation.Reason,
+                    request.Target,
+                    request.Target,
+                    request.Kind,
+                    false,
+                    resolutionSeed,
+                    before,
+                    before,
+                    Array.Empty<BoardResolutionWave>(),
+                    new BoardReshuffleResult(0, false),
+                    null,
+                    before
+                );
+            }
+
+            BoardModel working = CreateWorkingModel(before, resolutionSeed);
+            BoardResolutionWave first = ResolveBoosterWave(
+                working,
+                request,
+                1
+            );
+
+            var waves = new List<BoardResolutionWave> { first };
+            int comboIndex = 2;
+            List<BoardMatchRun> runs = working.FindRuns();
+
+            while (runs.Count > 0)
+            {
+                waves.Add(
+                    ResolveMatchWave(
+                        working,
+                        runs,
+                        null,
+                        comboIndex++
+                    )
+                );
+                runs = working.FindRuns();
+            }
+
+            BoardReshuffleResult reshuffle = working.EnsurePlayableBoard();
+            BoardSnapshot afterReshuffle = reshuffle.Attempts > 0
+                ? working.CreateSnapshot()
+                : null;
+            BoardSnapshot final = working.CreateSnapshot();
+
+            return new BoardResolutionPlan(
+                BoardResolutionActionKind.Booster,
+                BoardResolutionStatus.Resolved,
+                string.Empty,
+                request.Target,
+                request.Target,
+                request.Kind,
+                false,
+                resolutionSeed,
+                before,
+                before,
+                waves,
+                reshuffle,
+                afterReshuffle,
+                final
+            );
+        }
+
+        BoardResolutionPlan CreateRejectedSwap(
+            BoardSnapshot before,
+            BoardPosition a,
+            BoardPosition b,
+            int resolutionSeed,
+            string reason
+        )
+        {
+            return new BoardResolutionPlan(
+                BoardResolutionActionKind.Swap,
+                BoardResolutionStatus.Rejected,
+                reason,
+                a,
+                b,
+                BoardBoosterCommandKind.None,
+                false,
+                resolutionSeed,
+                before,
+                before,
+                Array.Empty<BoardResolutionWave>(),
+                new BoardReshuffleResult(0, false),
+                null,
+                before
+            );
+        }
+
+        BoardModel CreateWorkingModel(
+            BoardSnapshot snapshot,
+            int resolutionSeed
+        )
+        {
+            var model = new BoardModel(
+                snapshot.Width,
+                snapshot.Height,
+                snapshot.TileTypeCount,
+                new SeededBoardRandom(resolutionSeed)
+            );
+            model.RestoreSnapshot(snapshot);
+            return model;
+        }
+
+        BoardResolutionWave ResolveMatchWave(
+            BoardModel working,
+            IReadOnlyList<BoardMatchRun> runs,
+            BoardPosition? preferred,
+            int comboIndex
+        )
+        {
+            List<BoardMatchRun> copiedRuns = CopyRuns(runs);
+            HashSet<BoardPosition> matched = working.CollectMatchedCells(runs);
+            Dictionary<BoardPosition, SpecialGemKind> creationMap =
+                working.DetermineSpecialCreations(runs, preferred);
+
+            var triggeredPositions = new List<BoardPosition>();
+            HashSet<BoardPosition> clear = working.ExpandSpecialEffects(
+                matched,
+                triggeredPositions
+            );
+
+            foreach (BoardPosition creationPosition in creationMap.Keys)
+                clear.Remove(creationPosition);
+
+            List<BoardSpecialActivationInstruction> activations =
+                BuildActualActivations(working, triggeredPositions);
+            List<BoardSpecialCreationInstruction> creations =
+                BuildCreations(working, creationMap);
+
+            return ResolveWaveMutation(
+                working,
+                comboIndex,
+                SpecialCombinationKind.None,
+                BoardBoosterCommandKind.None,
+                copiedRuns,
+                ToSortedList(matched),
+                creations,
+                activations,
+                clear,
+                balance.ScoreForMatchCell(comboIndex)
+            );
+        }
+
+        BoardResolutionWave ResolveSpecialCombinationWave(
+            BoardModel working,
+            BoardPosition a,
+            BoardPosition b,
+            BoardCellData originalA,
+            BoardCellData originalB,
+            SpecialCombinationKind combination,
+            int comboIndex
+        )
+        {
+            var clear = new HashSet<BoardPosition>();
+            var activationQueue = new Queue<BoardSpecialActivationInstruction>();
+            var activations = new List<BoardSpecialActivationInstruction>();
+            var processed = new HashSet<string>();
+
+            BoardCellData afterA = working.GetCell(a);
+            BoardCellData afterB = working.GetCell(b);
+
+            clear.Add(a);
+            clear.Add(b);
+
+            switch (combination)
+            {
+                case SpecialCombinationKind.ColorWithNormal:
+                    QueueActivation(
+                        activationQueue,
+                        FindColorPosition(a, b, afterA, afterB),
+                        SpecialGemKind.Color,
+                        FindPartnerTileType(afterA, afterB),
+                        true
+                    );
+                    break;
+
+                case SpecialCombinationKind.ColorWithColor:
+                    QueueActivation(
+                        activationQueue,
+                        a,
+                        SpecialGemKind.Color,
+                        working.GetTile(a),
+                        true
+                    );
+                    QueueActivation(
+                        activationQueue,
+                        b,
+                        SpecialGemKind.Color,
+                        working.GetTile(b),
+                        true
+                    );
+                    AddAllNonEmpty(working, clear);
+                    break;
+
+                case SpecialCombinationKind.ColorWithRow:
+                case SpecialCombinationKind.ColorWithColumn:
+                case SpecialCombinationKind.ColorWithBurst:
+                    ResolveColorSpecialCombination(
+                        working,
+                        a,
+                        b,
+                        afterA,
+                        afterB,
+                        combination,
+                        activationQueue,
+                        clear
+                    );
+                    break;
+
+                case SpecialCombinationKind.RowWithRow:
+                    QueueActivation(activationQueue, a, SpecialGemKind.Row, afterA.TileType, true);
+                    QueueActivation(activationQueue, b, SpecialGemKind.Row, afterB.TileType, true);
+                    break;
+
+                case SpecialCombinationKind.ColumnWithColumn:
+                    QueueActivation(activationQueue, a, SpecialGemKind.Column, afterA.TileType, true);
+                    QueueActivation(activationQueue, b, SpecialGemKind.Column, afterB.TileType, true);
+                    break;
+
+                case SpecialCombinationKind.RowWithColumn:
+                    QueueActivation(activationQueue, a, afterA.Special, afterA.TileType, true);
+                    QueueActivation(activationQueue, b, afterB.Special, afterB.TileType, true);
+                    break;
+
+                case SpecialCombinationKind.RowWithBurst:
+                {
+                    BoardPosition burst = FindPositionWithSpecial(
+                        a, b, afterA, afterB, SpecialGemKind.Burst
+                    );
+                    QueueActivation(
+                        activationQueue, burst, SpecialGemKind.Burst,
+                        working.GetTile(burst), true
+                    );
+                    QueueThreeRows(working, burst, activationQueue);
+                    break;
+                }
+
+                case SpecialCombinationKind.ColumnWithBurst:
+                {
+                    BoardPosition burst = FindPositionWithSpecial(
+                        a, b, afterA, afterB, SpecialGemKind.Burst
+                    );
+                    QueueActivation(
+                        activationQueue, burst, SpecialGemKind.Burst,
+                        working.GetTile(burst), true
+                    );
+                    QueueThreeColumns(working, burst, activationQueue);
+                    break;
+                }
+
+                case SpecialCombinationKind.BurstWithBurst:
+                    // Commercial balance: one deterministic 5x5 footprint centered
+                    // on the destination cell, rather than two overlapping 5x5
+                    // footprints that can erase most of the board.
+                    AddRadius(
+                        working,
+                        b,
+                        balance.BurstBurstRadius,
+                        clear
+                    );
+                    QueueActivation(activationQueue, a, SpecialGemKind.Burst, afterA.TileType, true);
+                    QueueActivation(activationQueue, b, SpecialGemKind.Burst, afterB.TileType, true);
+                    break;
+            }
+
+            ExpandActivationQueue(
+                working,
+                activationQueue,
+                activations,
+                processed,
+                clear
+            );
+
+            return ResolveWaveMutation(
+                working,
+                comboIndex,
+                combination,
+                BoardBoosterCommandKind.None,
+                Array.Empty<BoardMatchRun>(),
+                Array.Empty<BoardPosition>(),
+                Array.Empty<BoardSpecialCreationInstruction>(),
+                activations,
+                clear,
+                balance.ScoreForCombinationCell(combination)
+            );
+        }
+
+        BoardResolutionWave ResolveBoosterWave(
+            BoardModel working,
+            BoardBoosterRequest request,
+            int comboIndex
+        )
+        {
+            var clear = new HashSet<BoardPosition>();
+            var queue = new Queue<BoardSpecialActivationInstruction>();
+            var activations = new List<BoardSpecialActivationInstruction>();
+            var processed = new HashSet<string>();
+            BoardCellData target = working.GetCell(request.Target);
+
+            switch (request.Kind)
+            {
+                case BoardBoosterCommandKind.MaceRow:
+                    QueueActivation(
+                        queue,
+                        request.Target,
+                        SpecialGemKind.Row,
+                        target.TileType,
+                        true
+                    );
+                    break;
+
+                case BoardBoosterCommandKind.MaceColumn:
+                    QueueActivation(
+                        queue,
+                        request.Target,
+                        SpecialGemKind.Column,
+                        target.TileType,
+                        true
+                    );
+                    break;
+
+                case BoardBoosterCommandKind.FirebirdArea:
+                    QueueActivation(
+                        queue,
+                        request.Target,
+                        SpecialGemKind.Burst,
+                        target.TileType,
+                        true
+                    );
+                    break;
+
+                case BoardBoosterCommandKind.LivingLightColor:
+                    QueueActivation(
+                        queue,
+                        request.Target,
+                        SpecialGemKind.Color,
+                        target.TileType,
+                        true
+                    );
+                    break;
+            }
+
+            clear.Add(request.Target);
+            ExpandActivationQueue(
+                working,
+                queue,
+                activations,
+                processed,
+                clear
+            );
+
+            return ResolveWaveMutation(
+                working,
+                comboIndex,
+                SpecialCombinationKind.None,
+                request.Kind,
+                Array.Empty<BoardMatchRun>(),
+                Array.Empty<BoardPosition>(),
+                Array.Empty<BoardSpecialCreationInstruction>(),
+                activations,
+                clear,
+                balance.ScoreForBoosterCell(request.Kind)
+            );
+        }
+
+        BoardResolutionWave ResolveWaveMutation(
+            BoardModel working,
+            int comboIndex,
+            SpecialCombinationKind combination,
+            BoardBoosterCommandKind booster,
+            IReadOnlyList<BoardMatchRun> runs,
+            IReadOnlyList<BoardPosition> matchedCells,
+            IReadOnlyList<BoardSpecialCreationInstruction> creations,
+            IReadOnlyList<BoardSpecialActivationInstruction> activations,
+            HashSet<BoardPosition> clear,
+            int scorePerCell
+        )
+        {
+            List<BoardPosition> clearSorted = ToSortedList(clear);
+            var clearedCells = new List<BoardClearedCellInstruction>(clearSorted.Count);
+            var clearedByType = new int[working.TileTypeCount];
+            List<BoardObstacleInteractionInstruction> obstacleInteractions =
+                ApplyObstacleInteractions(
+                    working,
+                    clearSorted,
+                    matchedCells
+                );
+
+            for (int i = 0; i < clearSorted.Count; i++)
+            {
+                BoardPosition position = clearSorted[i];
+                BoardCellData cell = working.GetCell(position);
+                if (cell.IsEmpty || cell.HasObjectiveItem) continue;
+
+                clearedCells.Add(
+                    new BoardClearedCellInstruction(position, cell)
+                );
+
+                if (cell.TileType >= 0 && cell.TileType < clearedByType.Length)
+                    clearedByType[cell.TileType]++;
+            }
+
+            for (int i = 0; i < clearedCells.Count; i++)
+                working.ClearCell(clearedCells[i].Position);
+
+            for (int i = 0; i < creations.Count; i++)
+            {
+                BoardSpecialCreationInstruction creation = creations[i];
+                working.SetCell(
+                    creation.Position,
+                    new BoardCellData(
+                        creation.CellBefore.TileType,
+                        creation.Kind
+                    )
+                );
+            }
+
+            BoardSnapshot afterClear = working.CreateSnapshot();
+            BoardCollapseResult collapse = working.CollapseAndRefill();
+            BoardSnapshot afterCollapse = working.CreateSnapshot();
+
+            return new BoardResolutionWave(
+                comboIndex,
+                combination,
+                booster,
+                runs,
+                matchedCells,
+                creations,
+                activations,
+                clearedCells,
+                obstacleInteractions,
+                clearedByType,
+                clearedCells.Count * scorePerCell,
+                afterClear,
+                collapse,
+                afterCollapse
+            );
+        }
+
+        List<BoardObstacleInteractionInstruction> ApplyObstacleInteractions(
+            BoardModel working,
+            IReadOnlyList<BoardPosition> directClearCells,
+            IReadOnlyList<BoardPosition> matchedCells
+        )
+        {
+            var causes = new Dictionary<BoardPosition, BoardObstacleHitCause>();
+
+            AddDirectObstacleCandidates(working, directClearCells, causes);
+            AddDirectObstacleCandidates(working, matchedCells, causes);
+
+            for (int i = 0; i < matchedCells.Count; i++)
+            {
+                BoardPosition matched = matchedCells[i];
+                AddAdjacentCrateCandidate(
+                    working,
+                    new BoardPosition(matched.X - 1, matched.Y),
+                    causes
+                );
+                AddAdjacentCrateCandidate(
+                    working,
+                    new BoardPosition(matched.X + 1, matched.Y),
+                    causes
+                );
+                AddAdjacentCrateCandidate(
+                    working,
+                    new BoardPosition(matched.X, matched.Y - 1),
+                    causes
+                );
+                AddAdjacentCrateCandidate(
+                    working,
+                    new BoardPosition(matched.X, matched.Y + 1),
+                    causes
+                );
+            }
+
+            var positions = new List<BoardPosition>(causes.Keys);
+            positions.Sort();
+            var interactions =
+                new List<BoardObstacleInteractionInstruction>(positions.Count);
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                BoardPosition position = positions[i];
+                if (
+                    !working.DamageObstacle(
+                        position,
+                        out BoardObstacleData before,
+                        out BoardObstacleData after
+                    )
+                )
+                {
+                    continue;
+                }
+
+                interactions.Add(
+                    new BoardObstacleInteractionInstruction(
+                        position,
+                        before.Kind,
+                        before.Layers,
+                        after.Layers,
+                        causes[position]
+                    )
+                );
+            }
+
+            return interactions;
+        }
+
+        void AddDirectObstacleCandidates(
+            BoardModel working,
+            IReadOnlyList<BoardPosition> positions,
+            Dictionary<BoardPosition, BoardObstacleHitCause> causes
+        )
+        {
+            for (int i = 0; i < positions.Count; i++)
+            {
+                BoardPosition position = positions[i];
+                if (!working.IsInside(position)) continue;
+                if (working.GetObstacle(position).IsEmpty) continue;
+                causes[position] = BoardObstacleHitCause.DirectClear;
+            }
+        }
+
+        void AddAdjacentCrateCandidate(
+            BoardModel working,
+            BoardPosition position,
+            Dictionary<BoardPosition, BoardObstacleHitCause> causes
+        )
+        {
+            if (!working.IsInside(position) || causes.ContainsKey(position))
+                return;
+
+            if (working.GetObstacle(position).Kind != BoardObstacleKind.Crate)
+                return;
+
+            causes[position] = BoardObstacleHitCause.AdjacentMatch;
+        }
+
+        List<BoardSpecialCreationInstruction> BuildCreations(
+            BoardModel working,
+            Dictionary<BoardPosition, SpecialGemKind> creationMap
+        )
+        {
+            var positions = new List<BoardPosition>(creationMap.Keys);
+            positions.Sort();
+            var result = new List<BoardSpecialCreationInstruction>(positions.Count);
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                BoardPosition position = positions[i];
+                result.Add(
+                    new BoardSpecialCreationInstruction(
+                        position,
+                        creationMap[position],
+                        working.GetCell(position)
+                    )
+                );
+            }
+
+            return result;
+        }
+
+        List<BoardSpecialActivationInstruction> BuildActualActivations(
+            BoardModel working,
+            IReadOnlyList<BoardPosition> positions
+        )
+        {
+            var sorted = new List<BoardPosition>(positions);
+            sorted.Sort();
+            var result = new List<BoardSpecialActivationInstruction>(sorted.Count);
+
+            for (int i = 0; i < sorted.Count; i++)
+            {
+                BoardPosition position = sorted[i];
+                BoardCellData cell = working.GetCell(position);
+                if (cell.Special == SpecialGemKind.None) continue;
+
+                result.Add(
+                    new BoardSpecialActivationInstruction(
+                        position,
+                        cell.Special,
+                        cell.TileType,
+                        false
+                    )
+                );
+            }
+
+            return result;
+        }
+
+        void ResolveColorSpecialCombination(
+            BoardModel working,
+            BoardPosition a,
+            BoardPosition b,
+            BoardCellData afterA,
+            BoardCellData afterB,
+            SpecialCombinationKind combination,
+            Queue<BoardSpecialActivationInstruction> queue,
+            HashSet<BoardPosition> clear
+        )
+        {
+            BoardPosition colorPosition = FindColorPosition(a, b, afterA, afterB);
+            BoardPosition partnerPosition = colorPosition == a ? b : a;
+            BoardCellData partner = working.GetCell(partnerPosition);
+            SpecialGemKind forcedKind = combination == SpecialCombinationKind.ColorWithRow
+                ? SpecialGemKind.Row
+                : combination == SpecialCombinationKind.ColorWithColumn
+                    ? SpecialGemKind.Column
+                    : SpecialGemKind.Burst;
+
+            QueueActivation(
+                queue,
+                colorPosition,
+                SpecialGemKind.Color,
+                partner.TileType,
+                true
+            );
+
+            for (int y = 0; y < working.Height; y++)
+            for (int x = 0; x < working.Width; x++)
+            {
+                var position = new BoardPosition(x, y);
+                BoardCellData cell = working.GetCell(position);
+                if (cell.IsEmpty || cell.TileType != partner.TileType) continue;
+
+                clear.Add(position);
+                QueueActivation(
+                    queue,
+                    position,
+                    forcedKind,
+                    cell.TileType,
+                    true
+                );
+            }
+        }
+
+        void ExpandActivationQueue(
+            BoardModel working,
+            Queue<BoardSpecialActivationInstruction> queue,
+            List<BoardSpecialActivationInstruction> activations,
+            HashSet<string> processed,
+            HashSet<BoardPosition> clear
+        )
+        {
+            while (queue.Count > 0)
+            {
+                BoardSpecialActivationInstruction activation = queue.Dequeue();
+                string key = $"{activation.Position.X}:{activation.Position.Y}:{(int)activation.Kind}";
+                if (!processed.Add(key)) continue;
+                if (!working.IsInside(activation.Position)) continue;
+
+                activations.Add(activation);
+                ApplyActivationEffect(working, activation, clear);
+
+                var newlyFound = new List<BoardPosition>(clear);
+                newlyFound.Sort();
+                for (int i = 0; i < newlyFound.Count; i++)
+                {
+                    BoardPosition position = newlyFound[i];
+                    BoardCellData cell = working.GetCell(position);
+                    if (cell.IsEmpty || cell.Special == SpecialGemKind.None) continue;
+
+                    string actualKey = $"{position.X}:{position.Y}:{(int)cell.Special}";
+                    if (processed.Contains(actualKey)) continue;
+
+                    QueueActivation(
+                        queue,
+                        position,
+                        cell.Special,
+                        cell.TileType,
+                        false
+                    );
+                }
+            }
+
+            activations.Sort(
+                (left, right) =>
+                {
+                    int byPosition = left.Position.CompareTo(right.Position);
+                    if (byPosition != 0) return byPosition;
+                    return left.Kind.CompareTo(right.Kind);
+                }
+            );
+        }
+
+        void ApplyActivationEffect(
+            BoardModel working,
+            BoardSpecialActivationInstruction activation,
+            HashSet<BoardPosition> clear
+        )
+        {
+            switch (activation.Kind)
+            {
+                case SpecialGemKind.Row:
+                    for (int x = 0; x < working.Width; x++)
+                        clear.Add(new BoardPosition(x, activation.Position.Y));
+                    break;
+
+                case SpecialGemKind.Column:
+                    for (int y = 0; y < working.Height; y++)
+                        clear.Add(new BoardPosition(activation.Position.X, y));
+                    break;
+
+                case SpecialGemKind.Burst:
+                    AddRadius(working, activation.Position, balance.BurstRadius, clear);
+                    break;
+
+                case SpecialGemKind.Color:
+                    for (int y = 0; y < working.Height; y++)
+                    for (int x = 0; x < working.Width; x++)
+                    {
+                        var candidate = new BoardPosition(x, y);
+                        BoardCellData cell = working.GetCell(candidate);
+                        if (!cell.IsEmpty && cell.TileType == activation.TileType)
+                            clear.Add(candidate);
+                    }
+                    break;
+            }
+        }
+
+        void QueueThreeRows(
+            BoardModel working,
+            BoardPosition center,
+            Queue<BoardSpecialActivationInstruction> queue
+        )
+        {
+            for (int dy = -balance.LineBurstBandRadius; dy <= balance.LineBurstBandRadius; dy++)
+            {
+                var position = new BoardPosition(
+                    center.X,
+                    Math.Max(0, Math.Min(working.Height - 1, center.Y + dy))
+                );
+                QueueActivation(
+                    queue,
+                    position,
+                    SpecialGemKind.Row,
+                    working.GetTile(position),
+                    true
+                );
+            }
+        }
+
+        void QueueThreeColumns(
+            BoardModel working,
+            BoardPosition center,
+            Queue<BoardSpecialActivationInstruction> queue
+        )
+        {
+            for (int dx = -balance.LineBurstBandRadius; dx <= balance.LineBurstBandRadius; dx++)
+            {
+                var position = new BoardPosition(
+                    Math.Max(0, Math.Min(working.Width - 1, center.X + dx)),
+                    center.Y
+                );
+                QueueActivation(
+                    queue,
+                    position,
+                    SpecialGemKind.Column,
+                    working.GetTile(position),
+                    true
+                );
+            }
+        }
+
+        void QueueActivation(
+            Queue<BoardSpecialActivationInstruction> queue,
+            BoardPosition position,
+            SpecialGemKind kind,
+            int tileType,
+            bool forced
+        )
+        {
+            if (kind == SpecialGemKind.None) return;
+            queue.Enqueue(
+                new BoardSpecialActivationInstruction(
+                    position,
+                    kind,
+                    tileType,
+                    forced
+                )
+            );
+        }
+
+        void AddRadius(
+            BoardModel working,
+            BoardPosition center,
+            int radius,
+            HashSet<BoardPosition> clear
+        )
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            for (int dx = -radius; dx <= radius; dx++)
+            {
+                var position = new BoardPosition(center.X + dx, center.Y + dy);
+                if (working.IsInside(position)) clear.Add(position);
+            }
+        }
+
+        void AddAllNonEmpty(
+            BoardModel working,
+            HashSet<BoardPosition> clear
+        )
+        {
+            for (int y = 0; y < working.Height; y++)
+            for (int x = 0; x < working.Width; x++)
+            {
+                var position = new BoardPosition(x, y);
+                if (
+                    !working.GetCell(position).IsEmpty ||
+                    !working.GetObstacle(position).IsEmpty
+                )
+                    clear.Add(position);
+            }
+        }
+
+        BoardPosition FindColorPosition(
+            BoardPosition a,
+            BoardPosition b,
+            BoardCellData afterA,
+            BoardCellData afterB
+        )
+        {
+            return afterA.Special == SpecialGemKind.Color ? a : b;
+        }
+
+        int FindPartnerTileType(
+            BoardCellData afterA,
+            BoardCellData afterB
+        )
+        {
+            return afterA.Special == SpecialGemKind.Color
+                ? afterB.TileType
+                : afterA.TileType;
+        }
+
+        BoardPosition FindPositionWithSpecial(
+            BoardPosition a,
+            BoardPosition b,
+            BoardCellData afterA,
+            BoardCellData afterB,
+            SpecialGemKind kind
+        )
+        {
+            return afterA.Special == kind ? a : b;
+        }
+
+        bool IsSpecialCombinationSwap(
+            BoardCellData originalA,
+            BoardCellData originalB,
+            SpecialCombinationKind combination
+        )
+        {
+            if (combination == SpecialCombinationKind.None) return false;
+
+            bool bothSpecial =
+                originalA.Special != SpecialGemKind.None &&
+                originalB.Special != SpecialGemKind.None;
+            bool hasColor =
+                originalA.Special == SpecialGemKind.Color ||
+                originalB.Special == SpecialGemKind.Color;
+
+            return bothSpecial || hasColor;
+        }
+
+        SpecialCombinationKind DetermineCombination(
+            SpecialGemKind a,
+            SpecialGemKind b
+        )
+        {
+            if (a == SpecialGemKind.Color && b == SpecialGemKind.Color)
+                return SpecialCombinationKind.ColorWithColor;
+
+            if (a == SpecialGemKind.Color || b == SpecialGemKind.Color)
+            {
+                SpecialGemKind partner = a == SpecialGemKind.Color ? b : a;
+                switch (partner)
+                {
+                    case SpecialGemKind.Row:
+                        return SpecialCombinationKind.ColorWithRow;
+                    case SpecialGemKind.Column:
+                        return SpecialCombinationKind.ColorWithColumn;
+                    case SpecialGemKind.Burst:
+                        return SpecialCombinationKind.ColorWithBurst;
+                    default:
+                        return SpecialCombinationKind.ColorWithNormal;
+                }
+            }
+
+            if (a == SpecialGemKind.None || b == SpecialGemKind.None)
+                return SpecialCombinationKind.None;
+
+            if (a == SpecialGemKind.Row && b == SpecialGemKind.Row)
+                return SpecialCombinationKind.RowWithRow;
+            if (a == SpecialGemKind.Column && b == SpecialGemKind.Column)
+                return SpecialCombinationKind.ColumnWithColumn;
+            if (
+                (a == SpecialGemKind.Row && b == SpecialGemKind.Column) ||
+                (a == SpecialGemKind.Column && b == SpecialGemKind.Row)
+            )
+            {
+                return SpecialCombinationKind.RowWithColumn;
+            }
+            if (
+                (a == SpecialGemKind.Row && b == SpecialGemKind.Burst) ||
+                (a == SpecialGemKind.Burst && b == SpecialGemKind.Row)
+            )
+            {
+                return SpecialCombinationKind.RowWithBurst;
+            }
+            if (
+                (a == SpecialGemKind.Column && b == SpecialGemKind.Burst) ||
+                (a == SpecialGemKind.Burst && b == SpecialGemKind.Column)
+            )
+            {
+                return SpecialCombinationKind.ColumnWithBurst;
+            }
+            if (a == SpecialGemKind.Burst && b == SpecialGemKind.Burst)
+                return SpecialCombinationKind.BurstWithBurst;
+
+            return SpecialCombinationKind.None;
+        }
+
+        List<BoardMatchRun> CopyRuns(IReadOnlyList<BoardMatchRun> sourceRuns)
+        {
+            var result = new List<BoardMatchRun>(sourceRuns.Count);
+            for (int i = 0; i < sourceRuns.Count; i++)
+            {
+                BoardMatchRun sourceRun = sourceRuns[i];
+                var copy = new BoardMatchRun
+                {
+                    Horizontal = sourceRun.Horizontal,
+                    Type = sourceRun.Type
+                };
+                copy.Cells.AddRange(sourceRun.Cells);
+                result.Add(copy);
+            }
+            return result;
+        }
+
+        List<BoardPosition> ToSortedList(IEnumerable<BoardPosition> positions)
+        {
+            var result = new List<BoardPosition>(positions);
+            result.Sort();
+            return result;
+        }
+
+        int CreateResolutionSeed(BoardSnapshot snapshot, string signature)
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + snapshot.Width;
+                hash = hash * 31 + snapshot.Height;
+                hash = hash * 31 + snapshot.TileTypeCount;
+
+                string state = snapshot.StateHash ?? string.Empty;
+                for (int i = 0; i < state.Length; i++)
+                    hash = hash * 31 + state[i];
+
+                if (!string.IsNullOrEmpty(signature))
+                {
+                    for (int i = 0; i < signature.Length; i++)
+                        hash = hash * 31 + signature[i];
+                }
+
+                return hash;
+            }
+        }
+    }
+}

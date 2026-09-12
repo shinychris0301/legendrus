@@ -1,0 +1,36 @@
+{
+  "version": "v1.10-step03",
+  "milestone": "Deterministic Resolution Plans and Special-Combination Commands",
+  "status": "IMPLEMENTED_PENDING_UNITY_TESTS",
+  "unity_target": "6000.5.9f1",
+  "input_system": "1.20.0",
+  "test_framework": "1.6.0",
+  "new_core_files": [
+    "BoardResolutionPrimitives.cs",
+    "BoardResolutionPlanner.cs"
+  ],
+  "runtime_integration": [
+    "Swap commands are planned before animation",
+    "Invalid swaps restore the before snapshot",
+    "Goal and score deltas are supplied by the plan",
+    "Special creation and activation are supplied by the plan",
+    "Collapse animation consumes exact move and spawn instructions",
+    "Targeted boosters use BoardResolutionPlan",
+    "F12 QA output includes the last plan hash"
+  ],
+  "special_combinations": [
+    "ColorWithNormal",
+    "ColorWithRow",
+    "ColorWithColumn",
+    "ColorWithBurst",
+    "ColorWithColor",
+    "RowWithRow",
+    "ColumnWithColumn",
+    "RowWithColumn",
+    "RowWithBurst",
+    "ColumnWithBurst",
+    "BurstWithBurst"
+  ],
+  "self_test_expected": "19/19",
+  "next_step": "v1.10 Step 4 — Booster Command Validation, Combined-Special Balance, and PlayMode Regression Tests"
+}

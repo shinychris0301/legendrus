@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step03.3R-FIX01-real-asset-runtime-prefab-delivery",
+  "deliveryModel": "serialized bootstrap prefab + direct runtime asset-composition fallback",
+  "serializedPrefabs": [
+    {
+      "screenId": "Loading",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Loading.prefab",
+      "sha256": "cf97d296ef24eeca22800e84a5065d709fa623fff767c236fecc9ecea0b77f10",
+      "bytes": 1868
+    },
+    {
+      "screenId": "Home",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab",
+      "sha256": "40bad1faea772c67dae8f20d98caf211c2f301d4b67b8eecbddf252f2ca00ef5",
+      "bytes": 2491
+    },
+    {
+      "screenId": "WorldMap",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/WorldMap.prefab",
+      "sha256": "d3cdeea79e2b24faf5f40dea4ee91749ed4682ce04d4e2e2f222ac10bfda103d",
+      "bytes": 2495
+    },
+    {
+      "screenId": "ChapterMap",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterMap.prefab",
+      "sha256": "d87785af6695d5dbe0a9471a872165e765720d246e4fad0a0e224ed83b69b156",
+      "bytes": 2497
+    },
+    {
+      "screenId": "PreLevel",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab",
+      "sha256": "608e73beb3a39265c7908d9b24914c52468cc31dfcf6b70b486f61c45a0fb899",
+      "bytes": 2579
+    },
+    {
+      "screenId": "Gameplay",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab",
+      "sha256": "d4ab55495eda23259921e6bddd8c15d2fe8d594ae8311c7d741653e737cb1ea1",
+      "bytes": 2590
+    },
+    {
+      "screenId": "Pause",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Pause.prefab",
+      "sha256": "427f07ec5ddb58951f8439c042b6c652024f22f0e09b06821567cff03a23d18c",
+      "bytes": 2571
+    },
+    {
+      "screenId": "Victory",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab",
+      "sha256": "bb525b077c1ae4592a43d3c9a0d39f3cc4d0907d7525f9dc59a66b584894c93c",
+      "bytes": 1868
+    },
+    {
+      "screenId": "Fail",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab",
+      "sha256": "fb859cf0fa41a6851b473077c915dad2052d9f79f91e31c922ff3fe382650c68",
+      "bytes": 1865
+    },
+    {
+      "screenId": "ChapterComplete",
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab",
+      "sha256": "bbfae0a75bd427223227de26ec3537245670116ee88dfd3e71ef21cbf09e7b86",
+      "bytes": 1878
+    }
+  ],
+  "runtimeBehavior": {
+    "prefabLoad": "Resources.Load<GameObject>(ProductionUI/Pages/<ScreenId>)",
+    "prefabAwake": "ProductionUiFix01PageBootstrap builds visual hierarchy from standalone Resources assets",
+    "missingPrefabFallback": "ProductionUiFix01Runtime.TryBuild builds the same page directly; emergency surface is last resort only",
+    "editorBuilderRequiredBeforePlay": false,
+    "legacyScreenshotFallbackForCutoverRoutes": false
+  },
+  "visualSignoff": {
+    "unityCompileAndImport": "PENDING_USER_UNITY_EXECUTION",
+    "unityRuntimeRender": "PENDING_USER_UNITY_EXECUTION",
+    "deviceReferenceMatch": "PENDING_USER_DEVICE_CAPTURE_REVIEW",
+    "finalVisualSignoffGranted": false
+  }
+}

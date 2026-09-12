@@ -1,0 +1,667 @@
+{
+  "milestone": "v1.20-step03.3R1-core-loop-reference-audit-fidelity-gap-matrix",
+  "baselineMilestone": "v1.20-step03.3-core-loop-page-reconstruction",
+  "referenceResolution": [
+    941,
+    1672
+  ],
+  "auditedP0SurfaceCount": 14,
+  "approvedReferenceCount": 8,
+  "provisionalReferenceCount": 4,
+  "missingReferenceCount": 2,
+  "currentlyCutoverStep33Routes": 10,
+  "referenceMatchSignoffGranted": false,
+  "screenshotDeletionAuthorized": false,
+  "lockedArtOverwriteAuthorized": false,
+  "automaticArtGenerationAuthorized": false,
+  "genericStyleSubstitutionAllowed": false,
+  "manualReferenceMatchApprovalRequired": true,
+  "nextBatch": "v1.20 Step 3.3R.2 — Home / World Map / Chapter Map Visual Rebuild",
+  "pages": [
+    {
+      "pageKey": "SplashTitle",
+      "productPage": "Splash / Title",
+      "screenId": null,
+      "referenceStatus": "missing",
+      "referencePath": "",
+      "referenceSha256": "",
+      "currentStep33Implementation": "Not implemented by Step 3.3; Step 3.1 lists a target prefab only.",
+      "gapSeverity": "BLOCKED_REFERENCE_MISSING",
+      "reconstructionBatch": "3.3R.5",
+      "requiredAssetLayers": [
+        "approved splash environment/brand plate",
+        "ornate logo/title lockup",
+        "entry CTA treatment",
+        "language entry control",
+        "corner/edge filigree"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Define whether Splash and Title are one timed state or separate pages.",
+        "Freeze exact title/logo scale and vertical placement after an approved reference exists."
+      ],
+      "dynamicBindingsToPreserve": [
+        "language selection entry",
+        "boot/loading transition"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "An approved Splash/Title reference must be designated before fidelity sign-off."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": "Do not invent a new final composition from the Loading page; that would repeat the style-inspired mismatch."
+    },
+    {
+      "pageKey": "Loading",
+      "productPage": "Loading",
+      "screenId": "Loading",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Loading.png",
+      "referenceSha256": "e25641a1dbddbd45826372ea3ad8dbd30e7de57784fa8adbc411bfe1e5d1f435",
+      "currentStep33Implementation": "Gradient background + generic header frame, title text, sapphire jewel, simple progress bar.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.5",
+      "requiredAssetLayers": [
+        "painterly sunset village environment plate",
+        "Ivan rear 3/4 character layer",
+        "Firebird full-body layer",
+        "ornate brand/logo frame",
+        "outer gold/sapphire border/corner filigree",
+        "parchment tip panel",
+        "ornate loading progress frame/fill jewels"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Restore logo to upper quarter and hero/environment composition across center.",
+        "Place tip parchment above loading label and ornate progress near footer.",
+        "Remove generic center header/jewel layout."
+      ],
+      "dynamicBindingsToPreserve": [
+        "loading progress percent",
+        "tip/localized copy",
+        "automatic Home transition"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "Home",
+      "productPage": "Home",
+      "screenId": "Home",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Home.png",
+      "referenceSha256": "7509bdd1fee910207eb5287a1eb69700c6ac44f816fd4f209e524d56be2b64e8",
+      "currentStep33Implementation": "Gradient backdrop + generic title/header + navy hero panel + four generic nav tiles + quest panel.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.2",
+      "requiredAssetLayers": [
+        "twilight Russian town environment plate",
+        "Ivan hero character layer",
+        "Firebird hero layer",
+        "exact ornate Legends of Rus logo lockup",
+        "portrait medallion + heraldic badge",
+        "full lacquer/gold top HUD frame",
+        "coin/gem/energy cells + green add buttons",
+        "settings medallion",
+        "four illustrated nav tile artworks",
+        "large emerald Play frame",
+        "mail medallion",
+        "reward chest medallion",
+        "bottom carved quest panel",
+        "blue gem reward icon"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Hero art must dominate middle 55-60% of page instead of a generic navy panel.",
+        "Logo overlays the upper environment below top HUD.",
+        "Play button spans the hero-to-navigation transition.",
+        "Four illustrated nav tiles sit in a single framed row.",
+        "Bottom quest/mail/chest band matches reference proportions."
+      ],
+      "dynamicBindingsToPreserve": [
+        "player name/level/progress",
+        "coin/gem/energy values",
+        "mail/reward badges",
+        "quest text/progress/reward",
+        "Home navigation hotspots"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "WorldMap",
+      "productPage": "World Map",
+      "screenId": "WorldMap",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/WorldMap.png",
+      "referenceSha256": "b13e01a68e3ef8641e6094abefabe34faa3c1a0d2e2cec9f7fb2a5afc7993e19",
+      "currentStep33Implementation": "Gradient + translucent navy map panel + generic map nodes + generic nav tiles.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.2",
+      "requiredAssetLayers": [
+        "full painterly world-map valley/river/castle environment plate",
+        "painted route/path light dots",
+        "15 ornate numbered node medallions",
+        "per-node star rows",
+        "top HUD/profile frame",
+        "ornate world-map title plaque",
+        "bottom three circular navigation medallions",
+        "map/tasks/guild icon artworks",
+        "bottom filigree foundation"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Remove opaque MapField panel; nodes must sit directly on painted terrain.",
+        "Route must visually follow the river/road through the valley.",
+        "Match 1→15 node positions and scale from reference.",
+        "Bottom nav uses large circular medallions, not small generic tiles."
+      ],
+      "dynamicBindingsToPreserve": [
+        "player resources",
+        "node unlocked/completed state",
+        "node star counts",
+        "chapter selection/navigation"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "LevelSelect",
+      "productPage": "Level Select / Chapter Map",
+      "screenId": "ChapterMap",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/ChapterMap.png",
+      "referenceSha256": "e69143c5ec1d2122fed9e177c8b0cc48bee0cdc657d50080a2cf7113023122bf",
+      "currentStep33Implementation": "Gradient + red generic button used as chapter header + translucent navy path panel + ten generic nodes.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.2",
+      "requiredAssetLayers": [
+        "Chapter 1 rural village environment plate",
+        "large red fabric chapter ribbon with gold filigree and sapphire centerpieces",
+        "chapter title typography treatment",
+        "stone/road path integrated into environment",
+        "ornate level node medallions + stars",
+        "top HUD/profile frame",
+        "large bottom emerald Play frame",
+        "round blue Back medallion",
+        "bottom carved filigree"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Remove translucent PathPanel; level path must be embedded in scenery.",
+        "Match visible reference node sequence/positions (10–16 in the captured composition).",
+        "Chapter ribbon occupies upper scenic area below top HUD.",
+        "Play and Back controls align to reference footer."
+      ],
+      "dynamicBindingsToPreserve": [
+        "selected/current level",
+        "star counts",
+        "locked/unlocked states",
+        "player resources",
+        "Pre-Level navigation"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "PreLevel",
+      "productPage": "Pre-Level",
+      "screenId": "PreLevel",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/PreLevel.png",
+      "referenceSha256": "32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195",
+      "currentStep33Implementation": "Generic header + parchment goals + small moves jewel + generic booster panel/reward strip.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.3",
+      "requiredAssetLayers": [
+        "Chapter 1 village environment plate",
+        "red chapter ribbon",
+        "ornate navy Goals frame",
+        "large red/blue gem goal icons",
+        "large central moves medallion",
+        "ornate booster section frame",
+        "four illustrated booster medallions + quantity badges",
+        "reward frame",
+        "ornate reward chest illustration",
+        "coin/gem reward icons",
+        "large emerald Play button",
+        "round Back medallion",
+        "top HUD/profile frame"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Use dark navy/gold goal and booster frames rather than parchment blocks.",
+        "Moves medallion bridges goals and booster sections.",
+        "Four boosters are large illustrated circles in one row.",
+        "Reward box occupies lower third above Play."
+      ],
+      "dynamicBindingsToPreserve": [
+        "level goals/counts",
+        "moves",
+        "booster inventory/selection",
+        "reward values",
+        "resource HUD",
+        "start/back actions"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "Gameplay",
+      "productPage": "Gameplay",
+      "screenId": "Gameplay",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Gameplay.png",
+      "referenceSha256": "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800",
+      "currentStep33Implementation": "Gradient shell + generic goal frame, board frame, booster slots and score panel; functional Match3Board overlays it.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.3",
+      "requiredAssetLayers": [
+        "twilight village gameplay environment plate",
+        "profile medallion/header frame",
+        "star/progress meter",
+        "large moves medallion",
+        "goals frame with exact gem icons/counts",
+        "ornate board outer frame + cell lattice",
+        "approved gameplay gem/special-gem visual set",
+        "booster medallions + quantity badges",
+        "pause/settings medallion",
+        "ornate score footer",
+        "match/special-gem glow/VFX overlays"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Board must occupy the same central footprint as reference with environment visible around it.",
+        "Top HUD hierarchy: profile left, star meter center, goals right, moves medallion centered beneath/within header.",
+        "Booster bar uses large illustrated circles under board.",
+        "Score footer is integrated into bottom ornamental frame."
+      ],
+      "dynamicBindingsToPreserve": [
+        "live Match3Board cells",
+        "moves/score/goals",
+        "booster availability/actions",
+        "tutorial presenter",
+        "pause action",
+        "existing swipe/match/cascade/VFX callbacks"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "Functional board art changes must preserve the approved movement/matching logic and the user-approved gem identity mapping."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "TutorialOverlay",
+      "productPage": "Tutorial Overlay",
+      "screenId": null,
+      "referenceStatus": "missing",
+      "referencePath": "",
+      "referenceSha256": "",
+      "currentStep33Implementation": "Runtime-generated flat dark-blue rectangle with Unity Outline and a plain red button.",
+      "gapSeverity": "CRITICAL_REFERENCE_MISSING",
+      "reconstructionBatch": "3.3R.5",
+      "requiredAssetLayers": [
+        "ornate tutorial panel frame",
+        "sapphire/filigree title ornament",
+        "pointer/hand indicator",
+        "spotlight/highlight mask treatment",
+        "primary/secondary tutorial button state",
+        "mechanic icon slot"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Overlay must spotlight the relevant gameplay area instead of only dimming the entire screen.",
+        "Panel placement must adapt so it never covers the target interaction."
+      ],
+      "dynamicBindingsToPreserve": [
+        "authored tutorial title/body/mechanic",
+        "advance/complete action",
+        "persisted tutorial completion",
+        "analytics/review hooks"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "An approved Tutorial Overlay reference or explicit layout approval is required before final fidelity sign-off."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "Pause",
+      "productPage": "Pause",
+      "screenId": "Pause",
+      "referenceStatus": "provisional_capture",
+      "referencePath": "Assets/LegendsOfRus/Resources/DesignScreens/Pause.png",
+      "referenceSha256": "31ae057a57b556ba296d4415678cb6aaa1faf72e8bbe4eb6325e42bd64c55716",
+      "currentStep33Implementation": "Generic modal on a gradient page rather than an ornate overlay over the live gameplay page.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.3",
+      "requiredAssetLayers": [
+        "live Gameplay underlay + dim blocker",
+        "large navy/gold pause modal frame",
+        "ornate PAUSE header plaque",
+        "goal summary frame with gem icons/counts",
+        "booster row with four illustrated icons + quantities",
+        "emerald Continue button",
+        "blue Restart button",
+        "blue Settings button",
+        "red Exit button"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Pause must overlay the live board/HUD, preserving the frozen gameplay composition beneath.",
+        "Modal scale/vertical placement must match captured reference.",
+        "Goal and booster sections are part of modal, not omitted."
+      ],
+      "dynamicBindingsToPreserve": [
+        "current level goals/progress",
+        "booster inventory",
+        "resume/restart/settings/exit actions",
+        "pause state continuity"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "Current capture is provisional; move/copy to ReferenceOnly only after explicit approval, without altering its bytes."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "Victory",
+      "productPage": "Victory",
+      "screenId": "Victory",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Victory.png",
+      "referenceSha256": "f97f7a020c128168332f15aa7c3d81dcc9533b1ed68d6d04bf245808e8c34509",
+      "currentStep33Implementation": "Gradient + generic header, three stars, parchment rewards, two buttons.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.4",
+      "requiredAssetLayers": [
+        "celebration village environment plate",
+        "flying Firebird hero layer",
+        "confetti/particle layer",
+        "top currency/energy bar",
+        "large red fabric Victory ribbon",
+        "three luminous star assets + burst glow",
+        "wood/dark reward panel",
+        "coin stack reward art",
+        "blue gem reward art",
+        "ornate egg/relic reward art",
+        "emerald Continue button",
+        "gold rewarded x2 button",
+        "bottom heraldic crest/filigree"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Hero Firebird occupies upper half; result ribbon overlaps center.",
+        "Stars sit immediately under ribbon with luminous burst.",
+        "Reward row contains three distinct illustrated tiles.",
+        "Continue and rewarded x2 controls match reference hierarchy."
+      ],
+      "dynamicBindingsToPreserve": [
+        "reward amounts",
+        "star count",
+        "currency/energy HUD",
+        "continue action",
+        "rewarded x2 availability/result"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "Fail",
+      "productPage": "Fail",
+      "screenId": "Fail",
+      "referenceStatus": "approved",
+      "referencePath": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Fail.png",
+      "referenceSha256": "97c89cb094ddf6fe5e6a9baeab9630828b6fbaab46e4d11411a0a3119aba3ce3",
+      "currentStep33Implementation": "Red/navy gradient + generic header + parchment advice + retry/map buttons.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.4",
+      "requiredAssetLayers": [
+        "burning village environment plate",
+        "Ivan failure hero layer",
+        "top HUD/profile frame",
+        "ornate navy defeat title plaque + sapphire crown ornament",
+        "incomplete-goals panel with three goal icons/counts",
+        "emerald Retry button",
+        "+5 moves purchase panel",
+        "ad-continue panel",
+        "recommended boosters section",
+        "four booster medallions + labels/quantities",
+        "bottom frame/filigree"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Failure hero composition fills upper-middle page.",
+        "Replace generic AdvicePanel with actual incomplete-goals summary.",
+        "Include both +5-moves currency offer and ad-continue alternative.",
+        "Include recommended booster row."
+      ],
+      "dynamicBindingsToPreserve": [
+        "failed goal progress",
+        "resource HUD",
+        "retry",
+        "exit/map",
+        "extra-moves cost/availability",
+        "rewarded continue availability",
+        "recommended boosters"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "ChapterComplete",
+      "productPage": "Chapter Complete",
+      "screenId": "ChapterComplete",
+      "referenceStatus": "provisional_capture",
+      "referencePath": "Assets/LegendsOfRus/Resources/DesignScreens/ChapterComplete.png",
+      "referenceSha256": "d537fc07cc5453512dedc994d850f833eb03a012a53aa8702162d9e99f67c3f8",
+      "currentStep33Implementation": "Gradient + generic chapter header, jewel, stars, navy summary and two buttons.",
+      "gapSeverity": "CRITICAL",
+      "reconstructionBatch": "3.3R.4",
+      "requiredAssetLayers": [
+        "sunset village environment plate",
+        "Ivan hero layer",
+        "Firebird hero layer",
+        "ornate Chapter Complete title plaque",
+        "red chapter ribbon",
+        "three-star + heraldic crest victory composition",
+        "reward row with coin/gem/energy/chest",
+        "emerald Next button",
+        "blue Map button",
+        "Next Chapter parchment card",
+        "Chapter 2 forest thumbnail/plate",
+        "outer wood/gold/sapphire frame"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Hero scene occupies center; stars/crest overlap lower hero area.",
+        "Rewards and dual buttons use carved dark-wood section.",
+        "Next Chapter parchment card occupies footer with image at right."
+      ],
+      "dynamicBindingsToPreserve": [
+        "chapter completion state",
+        "reward values",
+        "next chapter metadata/title/copy",
+        "next/map actions"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "Current capture is provisional; final fidelity sign-off requires explicit approval of this reference."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "OutOfEnergy",
+      "productPage": "Out of Energy",
+      "screenId": "OutOfEnergy",
+      "referenceStatus": "provisional_capture",
+      "referencePath": "Assets/LegendsOfRus/Resources/DesignScreens/OutOfEnergy.png",
+      "referenceSha256": "5e24f54899336a75304e90d4aa0f44d1ea1260d1543d26b635de955ef8ffed4e",
+      "currentStep33Implementation": "Still screenshot-backed modal; not reconstructed in Step 3.3.",
+      "gapSeverity": "UNRECONSTRUCTED_P0",
+      "reconstructionBatch": "3.3R.5",
+      "requiredAssetLayers": [
+        "live underlying page + dim blocker",
+        "large navy/gold modal",
+        "energy medallion with zero badge",
+        "countdown panel",
+        "buy-energy row + green price button",
+        "ask-friends row + blue action",
+        "watch-ad row + blue action",
+        "close medallion"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Must be a true modal over the originating page, not a full-screen capture.",
+        "Preserve the dimmed chapter/home composition underneath."
+      ],
+      "dynamicBindingsToPreserve": [
+        "energy balance",
+        "refill countdown",
+        "purchase availability",
+        "friends action availability",
+        "rewarded-ad availability",
+        "close/resume flow"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "Current capture is provisional; production IAP/ad/friends actions remain fail-closed until providers are authorized."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    },
+    {
+      "pageKey": "BoosterSelect",
+      "productPage": "Booster Select Popup",
+      "screenId": "BoosterSelect",
+      "referenceStatus": "provisional_capture",
+      "referencePath": "Assets/LegendsOfRus/Resources/DesignScreens/BoosterSelect.png",
+      "referenceSha256": "4d403a0c4ce8a709e40744fa3331997cb8b788ce04fcdff2bbbbdf79dd32a72e",
+      "currentStep33Implementation": "Still screenshot-backed modal; not reconstructed in Step 3.3.",
+      "gapSeverity": "UNRECONSTRUCTED_P0",
+      "reconstructionBatch": "3.3R.5",
+      "requiredAssetLayers": [
+        "live gameplay/pre-level underlay + dim blocker",
+        "large ornate navy modal frame",
+        "title ornament + close medallion",
+        "8 booster medallions/icons",
+        "quantity badges",
+        "selection toggles",
+        "booster names/descriptions",
+        "large emerald Play/Confirm button"
+      ],
+      "layoutAndCompositionCorrections": [
+        "Use 4x2 booster grid matching capture.",
+        "Modal must preserve live screen behind it and use scrolling only if localization requires."
+      ],
+      "dynamicBindingsToPreserve": [
+        "booster catalog/inventory",
+        "selection toggles",
+        "descriptions/localization",
+        "confirm/close action"
+      ],
+      "acceptanceRequirements": [
+        "No Resources/DesignScreens dependency in the production visual tree.",
+        "All named reference elements are present; no generic substitute panel or gradient may stand in for painterly or ornamental reference art.",
+        "Reference-resolution QA capture at 941x1672 is reviewed with overlay comparison before sign-off.",
+        "Key landmark bounds are aligned within 1.5% of reference width/height unless intentionally responsive.",
+        "Cyrillic labels remain runtime text/TMP where practical; no new full-screen flattened UI is introduced.",
+        "16:9, 18:9, 19.5:9, and 20:9 portrait layouts preserve hierarchy and safe-area access.",
+        "Existing navigation/gameplay/save/economy behavior remains unchanged unless separately authorized.",
+        "Current capture is provisional; no booster economy mutation is authorized by this visual reconstruction."
+      ],
+      "runtimeScreenshotAllowedAfterSignoff": false,
+      "notes": ""
+    }
+  ]
+}

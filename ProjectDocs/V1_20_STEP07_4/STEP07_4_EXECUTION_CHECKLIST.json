@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07.4-runtime-capture-dynamic-map-conditional-cutover",
+  "packagedDecision": "NO_GO_PENDING_UNITY_AND_DEVICE_EVIDENCE",
+  "executionOrder": [
+    {
+      "id": "S74-01",
+      "action": "Let Unity 6000.5.9f1 finish import and candidate auto-rebuild",
+      "expected": "12/12 Step 7.4 candidate prefabs validate; active ProductionUI/Pages untouched"
+    },
+    {
+      "id": "S74-02",
+      "menu": "Legends of Rus > Tests > Run v1.20 Step 7.4 Source Readiness Self-Test",
+      "expected": "PASS; packaged cutover still NO_GO and no pre-applied Android signoff"
+    },
+    {
+      "id": "S74-03",
+      "menu": "Legends of Rus > Tests > Run v1.20 Step 7.4 Unity Runtime Four-Aspect Capture",
+      "expected": "48/48 Play-Mode runtime renders: 12 pages x 4 target aspects"
+    },
+    {
+      "id": "S74-04",
+      "menu": "Legends of Rus > Tests > Analyze v1.20 Step 7.4 Unity Runtime Capture Fidelity",
+      "expected": "9/9 directly referenced pages pass correlation/MAE gate; Gameplay board excluded from static shell comparison"
+    },
+    {
+      "id": "S74-05",
+      "menu": "Legends of Rus > Tests > Run v1.20 Step 7.4 Dynamic Map-State QA",
+      "expected": "WorldMap windows 1-15 and 6-20; ChapterMap windows 1-7 and 4-10; reference QA labels 10-16 without save mutation"
+    },
+    {
+      "id": "S74-06",
+      "menu": "Legends of Rus > Production UI > v1.20 Step 7.4 > Evaluate Conditional Wave 1 Cutover",
+      "expected": "ELIGIBLE_8_PAGE_DEVELOPMENT_CUTOVER only if all pre-cutover evidence exists"
+    },
+    {
+      "id": "S74-07",
+      "menu": "Legends of Rus > Production UI > v1.20 Step 7.4 > Apply Eligible 8-Page Development Cutover",
+      "expected": "Explicit interactive confirmation; backup active YAML; replace visual prefabs only for Loading/Home/WorldMap/ChapterMap/PreLevel/Gameplay/Victory/Fail"
+    },
+    {
+      "id": "S74-08",
+      "action": "Run complete Step 5 functional QA plus EditMode/PlayMode suites",
+      "expected": "No gameplay, save, economy, input or navigation regression"
+    },
+    {
+      "id": "S74-09",
+      "action": "Build and test the ACTIVE cutover on a physical Android device",
+      "expected": "Safe-area, touch, visible Back, system Back, Cyrillic, map state, gameplay and navigation pass"
+    },
+    {
+      "id": "S74-10",
+      "menu": "Legends of Rus > Production UI > v1.20 Step 7.4 > Record Post-Cutover Physical Android QA PASS",
+      "expected": "Record only after physical-device testing; otherwise use rollback"
+    }
+  ],
+  "fourAspectTargets": ["941x1672", "1080x2340", "1080x2400", "1600x2560"],
+  "eligibleDevelopmentCutoverPages": ["Loading", "Home", "WorldMap", "ChapterMap", "PreLevel", "Gameplay", "Victory", "Fail"],
+  "deferred": {
+    "missingDirectReference": ["SplashTitle", "Pause", "ChapterComplete"],
+    "candidateOnlyRegistryScope": ["SplashTitle", "Dialogue"],
+    "releaseFontFaceSignoff": true
+  },
+  "rollback": "Use Roll Back Eligible 8-Page Cutover if post-cutover tests fail. Re-apply is blocked while an applied marker exists so the original backup cannot be silently overwritten."
+}

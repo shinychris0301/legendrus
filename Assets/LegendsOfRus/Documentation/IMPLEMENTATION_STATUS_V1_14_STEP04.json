@@ -1,0 +1,71 @@
+{
+  "milestone": "v1.14-step04",
+  "name": "Audio, Haptics, and Fidelity Verification",
+  "status": "IMPLEMENTED_PENDING_UNITY_AND_DEVICE_VERIFICATION",
+  "unity_target": "6000.5.9f1",
+  "implemented": {
+    "persistent_production_feedback_adapter": true,
+    "prewarmed_sfx_voice_capacity": 4,
+    "canonical_audio_resource_contract": true,
+    "required_unity_modules": [
+      "com.unity.modules.audio@1.0.0",
+      "com.unity.modules.androidjni@1.0.0"
+    ],
+    "approved_or_licensed_audio_clips_bundled": false,
+    "missing_audio_is_safe_noop_with_diagnostics": true,
+    "music_sfx_and_vibration_setting_gates": true,
+    "pause_focus_and_teardown_cleanup": true,
+    "core_and_meta_null_provider_fallbacks": true,
+    "android_view_haptic_bridge": true,
+    "haptic_minimum_interval_seconds": 0.06,
+    "haptic_priority_coalescing": true,
+    "haptic_suspend_requires_explicit_resume": true,
+    "accepted_haptic_count_semantics": "bridge accepted or queued request; not confirmed physical pulse",
+    "unsupported_platform_haptics_noop": true,
+    "fidelity_portrait_target_count": 4,
+    "fidelity_target_resolutions": [
+      "1080x1920",
+      "1080x2160",
+      "1080x2340",
+      "1080x2400"
+    ],
+    "capture_png_and_metadata_sidecar": true,
+    "capture_layout_matrix_scope": "dimensions, route generation, transitions, and layout only; not pixel fidelity",
+    "viewport_aware_design_comparator": true,
+    "pixel_comparator_requires_step04_sidecar": true,
+    "pixel_comparator_aspect_fits_approved_art": true,
+    "dynamic_gameplay_pixel_certification": "pending canonical visual fixture or dynamic-region mask",
+    "fixed_capacity_performance_accumulator": 3600,
+    "performance_report_is_deterministic_json": true,
+    "performance_shortcuts": "F6 Gameplay Idle, F7 Gameplay Active, F8 Meta Idle, F9 Meta Transition, F10 cancel",
+    "performance_report_directory": "Application.persistentDataPath/PerformanceQARuns/v1_14_step04",
+    "configured_target_frame_rate_is_not_measured_fps": true,
+    "performance_gate_semantics": "60 fps tolerance gate; not an every-frame 16.667 ms guarantee",
+    "cpu_and_gpu_percentile_gates": true,
+    "allocation_evidence": "aggregate sample-window counter; active scenarios diagnostic",
+    "performance_sampling_is_opt_in_development_only": true,
+    "release_probe_surface_is_unsupported_noop": true
+  },
+  "unchanged": {
+    "approved_png_art": true,
+    "gameplay_rules_and_balance": true,
+    "chapter_1_data": true,
+    "navigation_destinations": true,
+    "economy_and_rewards": true,
+    "story_routes_and_copy": true,
+    "save_schema": true,
+    "scenes_and_project_settings": true
+  },
+  "pending": [
+    "Unity Editor compilation",
+    "Unity EditMode and PlayMode Test Runner execution",
+    "approved or licensed SFX and music content",
+    "audible output and settings verification",
+    "16:9, 18:9, 19.5:9, and 20:9 capture/layout matrix execution",
+    "eligible static-route approved-art pixel comparison",
+    "canonical Gameplay visual fixture or reviewed dynamic-region mask for pixel comparison",
+    "Android haptic behavior verification",
+    "representative Android allocation and frame-pacing profiling"
+  ],
+  "next_step": "v1.15 Step 1 — Economy Configuration and Simulation Foundation"
+}

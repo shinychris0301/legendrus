@@ -1,0 +1,17 @@
+{
+  "version": "v1.18-step04",
+  "checkpoint": "unity-controlled-test-build-preflight-verification",
+  "required": [
+    "Unity 6000.5.9f1 compiles with zero errors",
+    "v1.18 Step 4 self-tests pass",
+    "complete EditMode and PlayMode suites pass",
+    "print/write sanitized controlled-test preflight snapshot",
+    "retain device-matrix evidence before enabling candidate build gate"
+  ],
+  "mustRemainBlocked": [
+    "production signing",
+    "signed AAB creation",
+    "closed-test upload",
+    "Play publishing"
+  ]
+}

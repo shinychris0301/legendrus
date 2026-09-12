@@ -1,0 +1,921 @@
+{
+  "version": "v1.20-step03.1",
+  "milestone": "placeholder-audit-replacement-matrix",
+  "auditScope": "runtime UI screenshot placeholders and production page surface inventory",
+  "summary": {
+    "productSurfaceCount": 36,
+    "legacySpecialCaseCount": 1,
+    "runtimeDesignScreenPngCount": 22,
+    "runtimeScreenshotBackedScreenCount": 22,
+    "missingProductSurfaces": 14,
+    "existingUnityPrefabCount": 0,
+    "approvedReferenceCopyCount": 11,
+    "estimatedRuntimePlaceholderRgbaBytes": 138453024,
+    "estimatedRuntimePlaceholderRgbaMiB": 132.04,
+    "allRegisteredRuntimeScreensScreenshotBacked": true,
+    "screenRouterUsesResourcesDesignScreenLayer": true,
+    "runtimeCutoverAuthorized": false,
+    "screenshotDeletionAuthorized": false
+  },
+  "findings": [
+    "ScreenRouter.BuildDesignLayer resolves every registered ScreenId through DesignScreenRegistry and Resources.Load<Sprite>.",
+    "Assets/LegendsOfRus/Resources/DesignScreens contains 22 full-screen placeholder PNGs.",
+    "No .prefab files currently exist anywhere under Assets.",
+    "Gameplay is hybrid: full-screen screenshot skin plus a real runtime Match3 board and tutorial overlay.",
+    "Several meta screens are hybrid: screenshot skin plus dynamic HUD/data overlays and invisible hotspots.",
+    "Chapter15 uses 1024x1536 while the main design viewport is 941x1672; it must not be treated as a canonical runtime page.",
+    "Tutorial UI is runtime-generated but not reconstructed into the locked visual kit yet.",
+    "Step 3.1 does not remove or mutate any screenshot; it only inventories and freezes the replacement plan."
+  ],
+  "pages": [
+    {
+      "pageKey": "SplashTitle",
+      "productPage": "Splash / Title",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/SplashScreen.prefab",
+      "sharedKitDependencies": [
+        "BrandTitle",
+        "BackgroundPlate",
+        "PrimaryButton",
+        "LanguageEntry"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Loading",
+      "productPage": "Loading",
+      "legacyScreenId": "Loading",
+      "auditStatus": "screenshot_only",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Loading.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "AutoHome timer"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/LoadingScreen.prefab",
+      "sharedKitDependencies": [
+        "BackgroundPlate",
+        "Logo",
+        "ProgressBar",
+        "LoadingMessage"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Home",
+      "productPage": "Home",
+      "legacyScreenId": "Home",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Home.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/HomeScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "CurrencyBar",
+        "HeroPanel",
+        "PrimaryButton",
+        "BottomNavigation",
+        "NotificationBadge"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "WorldMap",
+      "productPage": "World Map",
+      "legacyScreenId": "WorldMap",
+      "auditStatus": "screenshot_plus_hotspots",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/WorldMap.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/WorldMapScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "MapNode",
+        "ChapterMedallion",
+        "MapPath",
+        "BottomNavigation"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "LevelSelect",
+      "productPage": "Level Select",
+      "legacyScreenId": "ChapterMap",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/ChapterMap.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/LevelSelectScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "LevelNode",
+        "ChapterHeader",
+        "MapPath",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "PreLevel",
+      "productPage": "Pre-Level",
+      "legacyScreenId": "PreLevel",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/PreLevel.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Pre-level data overlay",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/PreLevelScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "ParchmentPanel",
+        "GoalRow",
+        "BoosterSlot",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Gameplay",
+      "productPage": "Gameplay",
+      "legacyScreenId": "Gameplay",
+      "auditStatus": "hybrid_screenshot_runtime_board",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Gameplay.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Runtime Match3Board",
+        "LevelTutorialPresenter"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/GameplayScreen.prefab",
+      "sharedKitDependencies": [
+        "GameplayHud",
+        "GoalPanel",
+        "MovesCounter",
+        "BoardFrame",
+        "BoosterBar",
+        "PauseButton",
+        "ToastLayer"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Pause",
+      "productPage": "Pause Menu",
+      "legacyScreenId": "Pause",
+      "auditStatus": "modal_screenshot_plus_hotspots",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Pause.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Modal hotspots"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/PauseModal.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "NavyPanel",
+        "PrimaryButton",
+        "SecondaryButton",
+        "IconButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Victory",
+      "productPage": "Victory",
+      "legacyScreenId": "Victory",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Victory.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Outcome reaction overlay"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/VictoryScreen.prefab",
+      "sharedKitDependencies": [
+        "ResultFrame",
+        "Stars",
+        "RewardRow",
+        "PrimaryButton",
+        "RewardedButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Fail",
+      "productPage": "Fail",
+      "legacyScreenId": "Fail",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Fail.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Outcome reaction overlay"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/FailScreen.prefab",
+      "sharedKitDependencies": [
+        "ResultFrame",
+        "GoalSummary",
+        "PrimaryButton",
+        "SecondaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "ChapterComplete",
+      "productPage": "Chapter Complete",
+      "legacyScreenId": "ChapterComplete",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/ChapterComplete.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Chapter-complete overlay"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/ChapterCompleteScreen.prefab",
+      "sharedKitDependencies": [
+        "ChapterFrame",
+        "RewardRow",
+        "PrimaryButton",
+        "SecondaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Dialogue",
+      "productPage": "Dialogue / Story",
+      "legacyScreenId": "Dialogue",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Dialogue.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Story dialogue overlay"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/DialogueScreen.prefab",
+      "sharedKitDependencies": [
+        "StoryFrame",
+        "CharacterPortrait",
+        "DialoguePanel",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "CharacterCollection",
+      "productPage": "Character Collection",
+      "legacyScreenId": "Characters",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Characters.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/CharacterCollectionScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "CharacterCard",
+        "TabBar",
+        "PrimaryButton",
+        "BottomNavigation"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "DailyReward",
+      "productPage": "Daily Reward",
+      "legacyScreenId": "DailyReward",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/DailyReward.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/DailyRewardScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "RewardTile",
+        "CalendarFrame",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "EventsHub",
+      "productPage": "Events Hub",
+      "legacyScreenId": "Events",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Events.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/EventsHubScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "EventCard",
+        "TimerBadge",
+        "ProgressBar",
+        "BottomNavigation"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "EventDetail",
+      "productPage": "Event Detail",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/EventDetailScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "EventHero",
+        "ProgressBar",
+        "RewardTrack",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "IndividualRanking",
+      "productPage": "Individual Ranking",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/IndividualRankingScreen.prefab",
+      "sharedKitDependencies": [
+        "RankingHeader",
+        "RankingRow",
+        "AvatarFrame",
+        "TabBar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "TeamHub",
+      "productPage": "Team Hub",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/TeamHubScreen.prefab",
+      "sharedKitDependencies": [
+        "TeamHeader",
+        "MemberRow",
+        "PrimaryButton",
+        "TabBar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "TeamRanking",
+      "productPage": "Team Ranking",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/TeamRankingScreen.prefab",
+      "sharedKitDependencies": [
+        "RankingHeader",
+        "TeamRankingRow",
+        "TabBar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "TeamChat",
+      "productPage": "Team Chat",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/TeamChatScreen.prefab",
+      "sharedKitDependencies": [
+        "ChatHeader",
+        "ChatBubble",
+        "InputBar",
+        "MemberAvatar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "FriendsList",
+      "productPage": "Friends List",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/FriendsScreen.prefab",
+      "sharedKitDependencies": [
+        "FriendRow",
+        "SearchBar",
+        "PrimaryButton",
+        "TabBar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Mail",
+      "productPage": "Mail / Inbox",
+      "legacyScreenId": "Mail",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Mail.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/MailScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "MailRow",
+        "RewardAttachment",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Profile",
+      "productPage": "Profile",
+      "legacyScreenId": "Profile",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Profile.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/ProfileScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "AvatarFrame",
+        "StatRow",
+        "AchievementSlot"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Inventory",
+      "productPage": "Inventory",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/InventoryScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "InventorySlot",
+        "TabBar",
+        "ItemDetailPanel"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Shop",
+      "productPage": "Shop",
+      "legacyScreenId": "Shop",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Shop.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/ShopScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "OfferCard",
+        "PriceButton",
+        "CurrencyBar",
+        "TabBar"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "SpecialOffer",
+      "productPage": "Special Offer Popup",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/SpecialOfferModal.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "OfferFrame",
+        "Countdown",
+        "PriceButton",
+        "CloseButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "OutOfEnergy",
+      "productPage": "Out of Energy",
+      "legacyScreenId": "OutOfEnergy",
+      "auditStatus": "modal_screenshot_plus_hotspots",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/OutOfEnergy.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Modal hotspots"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/OutOfEnergyModal.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "EnergyIcon",
+        "OfferPanel",
+        "PrimaryButton",
+        "SecondaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "BoosterSelect",
+      "productPage": "Booster Select Popup",
+      "legacyScreenId": "BoosterSelect",
+      "auditStatus": "modal_screenshot_plus_hotspots",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/BoosterSelect.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Modal hotspots"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/BoosterSelectModal.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "BoosterSlot",
+        "QuantityBadge",
+        "PrimaryButton",
+        "CloseButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "RewardClaim",
+      "productPage": "Reward Claim Popup",
+      "legacyScreenId": "RewardClaim",
+      "auditStatus": "modal_screenshot_plus_hotspots",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/RewardClaim.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Modal hotspots"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/RewardClaimModal.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "RewardFrame",
+        "RewardTile",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Settings",
+      "productPage": "Settings",
+      "legacyScreenId": "Settings",
+      "auditStatus": "hybrid_screenshot_runtime_overlay",
+      "priority": "P1",
+      "reconstructionWave": "3.4",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Settings.png",
+      "placeholderDimensions": "941x1672",
+      "estimatedRgbaBytes": 6293408,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Hotspots",
+        "Dynamic resource HUD"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/SettingsScreen.prefab",
+      "sharedKitDependencies": [
+        "TopBar",
+        "SettingsRow",
+        "Toggle",
+        "SecondaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "LanguageSelect",
+      "productPage": "Language Select",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/LanguageSelectScreen.prefab",
+      "sharedKitDependencies": [
+        "LanguageRow",
+        "RadioSelector",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "Login",
+      "productPage": "Login",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/LoginScreen.prefab",
+      "sharedKitDependencies": [
+        "BrandTitle",
+        "LoginPanel",
+        "PrimaryButton",
+        "SecondaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "TutorialOverlay",
+      "productPage": "Tutorial Overlay",
+      "legacyScreenId": null,
+      "auditStatus": "runtime_generated_unstyled",
+      "priority": "P0",
+      "reconstructionWave": "3.3",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [
+        "Runtime-authored tutorial overlay"
+      ],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/TutorialOverlay.prefab",
+      "sharedKitDependencies": [
+        "ModalBlocker",
+        "TutorialPanel",
+        "Pointer",
+        "HighlightMask",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "OfflineState",
+      "productPage": "Offline State",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/OfflineStateModal.prefab",
+      "sharedKitDependencies": [
+        "SystemStatePanel",
+        "RetryButton",
+        "OfflineIcon"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "MaintenanceState",
+      "productPage": "Maintenance State",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/MaintenanceScreen.prefab",
+      "sharedKitDependencies": [
+        "SystemStatePanel",
+        "MaintenanceIcon",
+        "StatusText"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "EmptyErrorStates",
+      "productPage": "Empty / Error Variants",
+      "legacyScreenId": null,
+      "auditStatus": "missing",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "",
+      "placeholderDimensions": "",
+      "estimatedRgbaBytes": 0,
+      "approvedReferenceCopyPresent": false,
+      "runtimeLayers": [],
+      "targetPrefab": "Assets/LegendsOfRus/Prefabs/UI/SystemStateVariants.prefab",
+      "sharedKitDependencies": [
+        "SystemStatePanel",
+        "EmptyIcon",
+        "ErrorIcon",
+        "RetryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    },
+    {
+      "pageKey": "LegacyChapter15",
+      "productPage": "Legacy Chapter 15 special-case page",
+      "legacyScreenId": "Chapter15",
+      "auditStatus": "legacy_screenshot_special_case",
+      "priority": "P2",
+      "reconstructionWave": "3.5",
+      "placeholderPath": "Assets/LegendsOfRus/Resources/DesignScreens/Chapter15.png",
+      "placeholderDimensions": "1024x1536",
+      "estimatedRgbaBytes": 6291456,
+      "approvedReferenceCopyPresent": true,
+      "runtimeLayers": [
+        "Hotspot only"
+      ],
+      "targetPrefab": "RETIRE_AS_DATA_DRIVEN_CHAPTER_DETAIL",
+      "sharedKitDependencies": [
+        "ChapterHeader",
+        "ChapterArtwork",
+        "PrimaryButton"
+      ],
+      "runtimeCutoverAuthorized": false,
+      "screenshotRemovalAuthorized": false
+    }
+  ]
+}

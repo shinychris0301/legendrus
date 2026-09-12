@@ -1,0 +1,13 @@
+{
+  "milestone": "v1.15-step01",
+  "name": "Economy Configuration and Simulation Foundation",
+  "product_reason": "A tunable, validated economy source of truth is required before energy, boosters, continues, daily rewards, reward doubling, or starter offers can be balanced safely for retention and commercialization.",
+  "objectives": [
+    "Define a versioned economy catalog for currencies, energy, booster costs, continue costs, and reward sources",
+    "Add pure deterministic simulations for earn-spend loops, refill cadence, reward cadence, and progression affordability",
+    "Reject negative balances, duplicate grants, unreachable progress, and configurations that force a purchase to continue",
+    "Compare proposed values with the current prototype through reports before making the new catalog authoritative",
+    "Preserve existing player saves and keep all values locally testable without a store, ad, analytics, backend, or remote-config SDK"
+  ],
+  "boundary": "Configuration, validation, and offline simulation only. No IAP or ad SDK, offer UI redesign, analytics integration, live-ops backend, Chapter 2 content, or silent mutation of existing player balances."
+}

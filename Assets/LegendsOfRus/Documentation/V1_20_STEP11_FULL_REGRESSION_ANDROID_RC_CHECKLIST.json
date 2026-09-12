@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step11-full-regression-android-rc-checklist",
+  "requiredBeforeDevelopmentRcFreeze": [
+    "Run Step 10.3 final 36-page cutover readiness and review matrix",
+    "Apply only evidence-eligible rollback-controlled non-core cutovers (optional)",
+    "Run complete EditMode suite",
+    "Run complete PlayMode suite",
+    "Run Step 5 full demo flow regression",
+    "Verify map visible Back + Android system Back",
+    "Verify four-direction single-drag Match-3 input, boosters, obstacles, pause/resume/restart",
+    "Verify Victory/Fail/ChapterComplete and save/load/energy/progression",
+    "Verify Shop/Special Offer fail-closed commercial authority",
+    "Verify Events/ranking/team/chat/friends/mail boundaries",
+    "Verify Settings/language/guest login/tutorial/system states",
+    "Physical Android safe-area/cutout, background/resume, Cyrillic/live text",
+    "Confirm no unauthorized currency, reward, entitlement, or energy mutation",
+    "Record Step 10.3 functional regression PASS and physical Android PASS for current fingerprint",
+    "Evaluate Step 10.3 final Android acceptance"
+  ],
+  "rollbackRule": "Any regression after cutover invalidates current acceptance; rollback and rerun the complete gate."
+}

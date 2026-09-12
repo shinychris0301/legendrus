@@ -1,0 +1,145 @@
+{
+  "sharedAssetsToReconstruct": [
+    {
+      "id": "top_hud_profile_resources",
+      "usedBy": [
+        "Home",
+        "WorldMap",
+        "LevelSelect",
+        "PreLevel",
+        "Fail"
+      ],
+      "parts": [
+        "portrait medallion",
+        "heraldic badge",
+        "player name/level",
+        "XP bar",
+        "coin cell",
+        "gem cell",
+        "energy cell",
+        "green add buttons",
+        "settings medallion"
+      ]
+    },
+    {
+      "id": "chapter_red_ribbon",
+      "usedBy": [
+        "LevelSelect",
+        "PreLevel",
+        "ChapterComplete"
+      ],
+      "parts": [
+        "red fabric ribbon",
+        "gold edge filigree",
+        "sapphire crown ornament",
+        "chapter label/title treatment"
+      ]
+    },
+    {
+      "id": "primary_emerald_cta",
+      "usedBy": [
+        "Home",
+        "LevelSelect",
+        "PreLevel",
+        "Pause",
+        "Victory",
+        "Fail",
+        "OutOfEnergy",
+        "BoosterSelect"
+      ],
+      "parts": [
+        "emerald face",
+        "multi-line antique-gold frame",
+        "sapphire center jewels",
+        "pressed/disabled states"
+      ]
+    },
+    {
+      "id": "navy_gold_modal_family",
+      "usedBy": [
+        "Pause",
+        "Fail",
+        "OutOfEnergy",
+        "BoosterSelect"
+      ],
+      "parts": [
+        "navy lacquer surface",
+        "antique-gold border",
+        "sapphire ornaments",
+        "close/back medallions"
+      ]
+    },
+    {
+      "id": "booster_medallion_family",
+      "usedBy": [
+        "PreLevel",
+        "Gameplay",
+        "Pause",
+        "Fail",
+        "BoosterSelect"
+      ],
+      "parts": [
+        "8 booster icon artworks",
+        "round ornate frames",
+        "quantity badges",
+        "selected/unselected states"
+      ]
+    },
+    {
+      "id": "reference_match_typography",
+      "usedBy": [
+        "all"
+      ],
+      "parts": [
+        "Cyrillic serif heading treatment",
+        "gold bevel/outline",
+        "shadow",
+        "body copy hierarchy",
+        "numeric counters"
+      ]
+    }
+  ],
+  "pageSpecificEnvironmentAndHeroPlates": {
+    "Loading": [
+      "sunset village environment",
+      "Ivan rear pose",
+      "Firebird standing pose"
+    ],
+    "Home": [
+      "twilight village/city environment",
+      "Ivan hero",
+      "Firebird hero"
+    ],
+    "WorldMap": [
+      "river-valley/castle world map plate"
+    ],
+    "LevelSelect": [
+      "Chapter 1 village level-path plate"
+    ],
+    "PreLevel": [
+      "Chapter 1 village pre-level plate"
+    ],
+    "Gameplay": [
+      "twilight gameplay village plate"
+    ],
+    "Victory": [
+      "celebration village plate",
+      "flying Firebird"
+    ],
+    "Fail": [
+      "burning village plate",
+      "Ivan failure hero"
+    ],
+    "ChapterComplete": [
+      "sunset village plate",
+      "Ivan + Firebird hero",
+      "Chapter 2 forest thumbnail"
+    ]
+  },
+  "rules": [
+    "Environment/hero art must be reconstructed as clean layers; do not crop a flattened full-screen screenshot into a fake page asset.",
+    "Reference PNGs are immutable QA targets and remain outside production runtime dependency graphs.",
+    "No page is considered visually complete because its prefab merely exists.",
+    "A screenshot-free emergency fallback is not a visual-completion substitute."
+  ]
+}

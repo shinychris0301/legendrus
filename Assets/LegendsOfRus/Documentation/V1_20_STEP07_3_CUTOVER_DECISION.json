@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07.3-reference-accurate-wave1-refinement-typography",
+  "decision": "NO_GO",
+  "decisionScope": "WAVE1_ACTIVE_RUNTIME_VISUAL_CUTOVER",
+  "sourceRefinementStatus": "PASS_REFERENCE_LOCKED_SOURCE_RECONSTRUCTION",
+  "candidatePrefabs": "AUTO_REBUILD_ON_UNITY_IMPORT_REQUIRED",
+  "activeRuntimeCutoverPerformed": false,
+  "activeRegistryCutoverPageCount": 10,
+  "referenceCoverage": {
+    "directApproved": 9,
+    "styleDerivedPendingDirectReference": ["SplashTitle", "Pause", "ChapterComplete"]
+  },
+  "sourceFidelity": {
+    "fullPageStrictPass": "8/9 direct-reference pages",
+    "gameplay": "dynamic-board exception: non-board shell passes with correlation 0.9458 and MAE 0.0066; full-page screenshot comparison is intentionally not used as a cutover cheat",
+    "threshold": "SSIM>=0.78 AND correlation>=0.80 AND MAE<=0.10; Gameplay shell uses correlation>=0.80 and MAE<=0.10"
+  },
+  "typography": {
+    "pipeline": "FINALIZED",
+    "localizedText": "LIVE",
+    "goldOutlineShadowHierarchy": "IMPLEMENTED_IN_STEP73_BUILDER",
+    "fontBinaryBundled": false,
+    "releaseFontFace": "EXTERNAL_LICENSED_IMPORT_REQUIRED_FOR_FINAL_SIGNOFF"
+  },
+  "blockers": [
+    {
+      "id": "REF-COVERAGE",
+      "severity": "BLOCKER",
+      "detail": "Direct approved references are still missing for SplashTitle, Pause, and ChapterComplete. Those pages remain style-system-derived candidates."
+    },
+    {
+      "id": "UNITY-EXEC",
+      "severity": "BLOCKER",
+      "detail": "Step 7.3 candidate prefabs must auto-rebuild/import and be captured at four target aspects in Unity 6000.5.9f1."
+    },
+    {
+      "id": "ANDROID",
+      "severity": "BLOCKER",
+      "detail": "Android safe-area, touch, visible Back/system Back, text rasterization, and performance signoff are pending."
+    },
+    {
+      "id": "FONT-FACE-SIGNOFF",
+      "severity": "BLOCKER",
+      "detail": "Typography behavior is finalized, but final release signoff still requires a properly licensed Cyrillic font imported by the project owner and reviewed in Unity."
+    },
+    {
+      "id": "MAP-DYNAMIC-DECOMPOSITION",
+      "severity": "BLOCKER",
+      "detail": "WorldMap/ChapterMap reference-locked sectional candidates still contain authored node/star state pixels. Before active cutover, dynamic map nodes/stars must be bound to gameplay/progression state instead of relying on sectional source state."
+    }
+  ],
+  "passes": [
+    "Reference-only full-screen images remain forbidden prefab dependencies",
+    "Eight of nine direct-reference pages pass the strict full-page source proxy after refinement",
+    "Gameplay non-board shell passes the strict dynamic-content-safe proxy",
+    "Live Cyrillic text hierarchy, outline and shadow behavior are finalized in the builder",
+    "No font binaries are bundled",
+    "Active production registry remains unchanged"
+  ],
+  "nextRecommendedMilestone": "v1.20 Step 7.4 — Unity Runtime Capture, Dynamic Map-State Decomposition, and Conditional Wave 1 Cutover"
+}

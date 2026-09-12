@@ -1,0 +1,39 @@
+{
+  "checkpoint": "v1.17-step03-prerequisite-and-unity-verification",
+  "name": "Step 2 Prerequisite and Step 3 Diagnostics Verification",
+  "status": "PENDING_RETAINED_PREREQUISITE_AND_UNITY_EVIDENCE",
+  "implementationStatus": "IMPLEMENTED_IN_SOURCE_PENDING_V1_17_STEP02_PREREQUISITE_AND_STEP03_UNITY_VERIFICATION",
+  "candidateStatus": "CRASH_ERROR_REPORTING_FOUNDATION_DETACHED_PRODUCTION_TRANSPORT_BLOCKED",
+  "unityVersion": "6000.5.9f1",
+  "step2EntryEvidenceRetained": false,
+  "packageLockApproved": false,
+  "productionCrashTransportAuthorized": false,
+  "productionBuildAuthorized": false,
+  "requiredSequence": [
+    "Complete and retain every v1.17 Step 2 Unity save/recovery entry-criteria artifact against the exact frozen Step 2 baseline",
+    "On a clean extraction, run node Tools/verify_v1_17_step03.mjs --baseline <exact-v1.17-step02-project> and retain the JSON report",
+    "Open a separate working copy of the exact Step 3 candidate in Unity 6000.5.9f1 and retain compilation output with zero errors",
+    "Run Legends of Rus/Validate Commercial Vertical Slice and retain the result",
+    "Run Legends of Rus/Tests/Run v1.17 Step 3 Self-Tests and retain the result",
+    "Run every EditMode and PlayMode test and retain complete NUnit XML with zero failures, skips, or inconclusive tests",
+    "Verify the public draft accepts only the reviewed enum catalog and exposes no string or metadata channel for messages, stacks, paths, URLs, identifiers, save payloads, purchase data, credentials, or unrestricted context",
+    "Verify bounded capacity, inclusive deduplication window, hard retention, detached snapshots, and canonical JSON using injected fixed clocks",
+    "Verify offline, disabled, network-capable, throwing, null-result, retryable, permanent, retry-exhausted, and eventual-success transport cases",
+    "Confirm no Unity log subscription, runtime bootstrap wiring, file persistence, background worker, SDK, endpoint, credential, or network implementation exists",
+    "Confirm the pure diagnostics PlayMode tests create no GameObject and preserve the primary, backup, and staging save keys byte-for-byte"
+  ],
+  "exitCriteria": [
+    "The exact Step 2 prerequisite evidence is retained and accepted before Step 3 is represented as formally entered",
+    "DiagnosticsCore remains engine-free and independent of Unity, runtime gameplay, SaveCore, CommercialCore, and providers",
+    "Only typed stable codes and bounded delivery state enter a report record",
+    "Fingerprinting and canonical serialization are deterministic and contain none of the forbidden raw inputs",
+    "The process-memory buffer never exceeds its configured capacity and repeated incidents cannot bypass hard retention",
+    "Offline and disabled delivery preserve buffered evidence without incrementing attempts",
+    "Retryable failures use deterministic capped backoff and stop after the configured maximum",
+    "Throwing or malformed adapters cannot escape into gameplay",
+    "The only shipped transport remains disabled and network transport remains compiled out",
+    "All inherited save, economy, commercial, Android, package-lock, cloud, and publishing gates remain unchanged and false"
+  ],
+  "hardStop": "Step 3 is a detached pre-entry foundation only. It cannot capture Unity logs, persist or upload reports, install a provider, authorize production transport, build Android artifacts, activate economy or commercial systems, or authorize publishing.",
+  "nextDevelopmentMilestone": "v1.17 Step 4 — Memory, Texture, and Loading Optimization Foundation"
+}

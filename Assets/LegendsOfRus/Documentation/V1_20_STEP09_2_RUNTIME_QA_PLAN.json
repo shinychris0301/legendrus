@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step09.2-wave03-runtime-qa-social-liveops-visual-acceptance",
+  "wave": 3,
+  "candidatePages": 8,
+  "aspectTargets": [
+    {"name":"design-9x16","width":941,"height":1672},
+    {"name":"phone-19.5x9","width":1080,"height":2340},
+    {"name":"phone-20x9","width":1080,"height":2400},
+    {"name":"tablet-10x16","width":1600,"height":2560}
+  ],
+  "expectedRuntimeCaptures": 32,
+  "captureMethod": "Unity Camera + RenderTexture; ScreenCapture API forbidden",
+  "captureInvokesActions": false,
+  "activeCutoverAuthorized": false,
+  "acceptanceOrder": [
+    "build-and-validate-wave03-candidates",
+    "run-step09.2-readiness-self-test",
+    "run-social-liveops-boundary-verification",
+    "run-32-unity-runtime-captures",
+    "analyze-runtime-visual-acceptance"
+  ]
+}

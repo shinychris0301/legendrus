@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "milestone": "v1.20-step07-production-asset-reconstruction-wave00-wave01",
+  "pageKey": "SplashTitle",
+  "productPage": "Splash / Title",
+  "screenId": "SplashTitle",
+  "wave": 1,
+  "directApprovedReference": null,
+  "referenceStatus": "LOCKED_STYLE_SYSTEM_DERIVED_DIRECT_PAGE_REFERENCE_STILL_REQUIRED_FOR_PIXEL_SIGNOFF",
+  "runtimePolicy": {
+    "activeRuntimePrefabUnchanged": true,
+    "candidatePrefabTarget": "Assets/LegendsOfRus/Resources/ProductionUI/Wave01Pages/SplashTitle.prefab",
+    "runtimeCutover": false,
+    "fullScreenScreenshotRuntimeUse": false,
+    "liveText": true
+  },
+  "pageSpecificAssets": [
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/environment_title.png",
+      "role": "title environment",
+      "sourceType": "derived-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/bg_home_clean.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/hero_firebird_title.png",
+      "role": "hero/firebird foreground",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/hero_ivan_firebird.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/logo_plaque.png",
+      "role": "title/logo plaque",
+      "sourceType": "existing-screenshot-free-production",
+      "source": "Assets/LegendsOfRus/Resources/ProductionUI/Assets/Fix01/title_plaque_navy.png"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/ambient_sparks.png",
+      "role": "ambient particles",
+      "sourceType": "wave0-shared-copy",
+      "source": "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/VFX/ambient_sparks.png"
+    }
+  ],
+  "requirementCoverage": [
+    {
+      "requirement": "full-screen title environment",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/environment_title.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "game logo",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/logo_plaque.png",
+        "LIVE_TEXT:ЛЕГЕНДЫ РУСИ / ТРИ В РЯД"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "title ornament",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Ornaments/corner_flourish.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "start/continue button",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/UI/Wave0Foundation/Buttons/btn_primary_idle.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "version/legal microcopy",
+      "satisfiedBy": [
+        "LIVE_TEXT"
+      ],
+      "status": "CANDIDATE_COVERED"
+    },
+    {
+      "requirement": "ambient particles",
+      "satisfiedBy": [
+        "Assets/LegendsOfRus/Art/Production/Pages/SplashTitle/ambient_sparks.png"
+      ],
+      "status": "CANDIDATE_COVERED"
+    }
+  ],
+  "requirementCoverageCount": 6,
+  "uncoveredRequirementCount": 0,
+  "visualAcceptance": "PENDING_UNITY_FOUR_ASPECT_AND_DEVICE_SIGNOFF"
+}

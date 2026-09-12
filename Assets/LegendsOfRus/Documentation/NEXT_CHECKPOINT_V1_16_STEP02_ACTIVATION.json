@@ -1,0 +1,27 @@
+{
+  "checkpoint": "v1.16-step02-activation-review",
+  "name": "Provider, Unity Evidence, Durable Fulfillment, and Activation Review",
+  "status": "BLOCKED_PENDING_RETAINED_EVIDENCE_AND_APPROVALS",
+  "implementationStatus": "IMPLEMENTED_IN_SOURCE_PENDING_PROVIDER_LEGAL_AND_ACTIVATION",
+  "runtimeCandidateStatus": "PREACTIVATION_DISABLED",
+  "activationAuthorized": false,
+  "candidateMilestoneId": "v1.16-step02-provider-integration-runtime-wiring-activation-review",
+  "requiredSequence": [
+    "Freeze the exact Step 2 candidate bytes and compile with zero errors in Unity 6000.5.9f1",
+    "Run the project validator and v1.16 Step 2 Editor self-test and retain their reports",
+    "Run every EditMode and PlayMode test and retain both NUnit XML result files with zero failed, skipped, or inconclusive tests",
+    "Complete the separate v1.15 Step 2 runtime-economy activation checkpoint with retained evidence and explicit approval",
+    "Record provider, analytics-data, consent, legal/privacy, product-id, rewarded-placement, regional, security, and representative-device failure-path approvals",
+    "Approve a versioned save migration and one atomic idempotent durable fulfillment store that commits candidate balances and replay history together",
+    "Create a new reviewed activation candidate that updates the pinned manifest and private build stop only after every prerequisite is satisfied"
+  ],
+  "exitCriteria": [
+    "Every retained evidence item is bound to the same candidate hashes",
+    "The v1.15 runtime economy gate is explicitly approved",
+    "No purchase or rewarded entitlement can affect live state without separate verification and one durable atomic commit",
+    "Provider failure, denial, cancellation, retry, replay, offline operation, process restart, and interrupted commit preserve a dismissible offline core loop",
+    "Analytics, IAP, rewarded ads, and final runtime activation each receive explicit approval"
+  ],
+  "hardStop": "Do not enable a provider, capability, manifest approval, or build switch in this source candidate. Passing source or Unity tests alone does not authorize runtime economy or commercial activation.",
+  "nextMilestoneAfterApproval": "v1.17 — Android Production Readiness"
+}
