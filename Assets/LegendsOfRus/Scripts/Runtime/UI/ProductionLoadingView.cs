@@ -9,7 +9,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionLoadingView : MonoBehaviour
     {
-        public const int CurrentRevision = 2;
+        public const int CurrentRevision = 3;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public Image Environment;
@@ -17,7 +17,7 @@ namespace LegendsOfRus
         public Image Ivan;
         public Image Firebird;
         public Image TipPanel;
-        public SplashTitleFooterShade LowerShade;
+        public ProductionLoadingShade LowerShade;
         public Text TipTitle;
         public Text TipBody;
         public Text StatusText;
@@ -33,6 +33,8 @@ namespace LegendsOfRus
             LowerShade.GetComponent<CanvasRenderer>() != null && TipTitle != null && TipBody != null &&
             StatusText != null && PercentText != null && ProgressBar != null &&
             ProgressBar.GetComponent<CanvasRenderer>() != null &&
+            GetComponent<ProductionLoadingShadeLayout>() != null &&
+            GetComponent<ProductionLoadingShadeLayout>().Shade == LowerShade &&
             RetryButton != null && RetryText != null;
 
         UnityAction retryListener;

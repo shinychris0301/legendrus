@@ -81,9 +81,10 @@ namespace LegendsOfRus.AndroidBuild
                         "StrictMode are permitted. AutoRunPlayer and unreviewed additional flags " +
                         "remain outside this build-only workflow. Use Build, not Build And Run.";
                 case AndroidBuildReasonCodes.PackageLockUnapproved:
-                    return "The inherited v1.17 resolved-package approval is still closed. " +
-                        "A generated packages-lock.json alone does not open it. Run Android > " +
-                        "Build Fix03 > Export Build Diagnostics; review the resolved packages and stale pins.";
+                    return "The local manifest and resolved-package lock must match the reviewed " +
+                        "development baseline exactly. Missing, unreadable or changed package files " +
+                        "remain blocked. Run Android > Build Fix03 > Export Build Diagnostics; " +
+                        "review the fingerprints before changing any approval pin.";
                 case AndroidBuildReasonCodes.CommercialBoundaryChanged:
                     return "One or more protected-file fingerprints or artifact checks differ from " +
                         "the inherited policy. Export Build Diagnostics; do not update hashes blindly.";
@@ -145,7 +146,8 @@ namespace LegendsOfRus.AndroidBuild
                     uiAutoconnectProfiler = EditorUserBuildSettings.connectProfiler,
                     uiScriptsOnly = EditorUserBuildSettings.buildScriptsOnly,
                     policyEvidence = policy,
-                    resolvedPackageLock = Fingerprint(root, "Packages/packages-lock.json", string.Empty),
+                    resolvedPackageLock = Fingerprint(root, "Packages/packages-lock.json",
+                        AndroidBuildStateReader.ResolvedPackageLockSha256),
                     protectedFiles = AndroidBuildStateReader.ReadProtectedFileEvidence(),
                     registeredUnityPackages = ReadPackages(),
                     lastScheduledOptionsPresent = AndroidDevelopmentBuildOptions.HasScheduledSnapshot,

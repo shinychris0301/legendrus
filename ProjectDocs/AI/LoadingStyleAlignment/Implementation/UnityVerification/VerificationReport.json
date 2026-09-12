@@ -1,0 +1,217 @@
+{
+  "unityVersion": "6000.5.9f1",
+  "project": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+  "run03Builder": {
+    "exitCode": 0,
+    "method": "LegendsOfRus.Editor.Step20ProductionUiFix01SerializedPrefabBuilder.BuildLoadingAligned",
+    "serializedRevision": 3,
+    "guid": "c13dd5d8021e40c04c373c4441044bd8"
+  },
+  "run03Tests": {
+    "exitCode": 0,
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "testNames": [
+      "ActualHomeResources_LoadAsTheTypesConsumedByCurrentHome",
+      "CancelledRequest_CannotReportCompletionOrNavigateAfterLateResult",
+      "LoadingBack_CancelsPreparationAndKeepsSplashAfterLateFrames",
+      "MissingResource_BlocksHomeAndNewAttemptCanRetrySuccessfully",
+      "PreparedAssets_AreConsumedByHomeExactlyOnceAndReleasedAfterBuild",
+      "Progress_FollowsRequestsAndOnlyValidatedAssetsCompleteIt",
+      "RequestException_IsReportedAsFailureWithoutNavigating",
+      "LoadingError_RouterRetryCompletesRealWorkAndNavigatesOnce",
+      "LoadingPortraits_RenderActualPageWithExplicitLayoutFixture",
+      "LoadingRetry_UsesLiveErrorStateAndRejectsRepeatedTap",
+      "SplashStart_UsesMeasuredLoadingAndEntersHomeExactlyOnce"
+    ]
+  },
+  "actualProgressCapture": {
+    "path": "/tmp/lor-loading-unity-run03/captures/ActualLoading_941x1672.png",
+    "displayedProgress": 0.260869562625885,
+    "description": "Observed actual Home resource progress 26%; no injected request, progress value, or delay",
+    "graphicsBackend": "OpenGLCore"
+  },
+  "actualFlow": {
+    "unityVersion": "6000.5.9f1",
+    "route": "Actual RuntimeBootstrap -> Splash Start Button -> Loading -> Home",
+    "progressMeaning": "Observed equal-weight Home resource-operation progress; no injected requests or timer",
+    "observedProgress": [
+      0.0,
+      0.043478261679410934,
+      0.08695652335882187,
+      0.1304347813129425,
+      0.17391304671764374,
+      0.21739129722118378,
+      0.260869562625885,
+      0.30434781312942505,
+      0.3478260934352875,
+      0.3913043439388275,
+      0.43478259444236755,
+      0.47826087474823,
+      0.52173912525177,
+      0.5652173757553101,
+      0.6086956262588501,
+      0.6521739363670349,
+      0.695652186870575,
+      0.739130437374115,
+      0.782608687877655,
+      0.8260869383811951,
+      0.8695651888847351,
+      0.9130434989929199,
+      0.95652174949646,
+      1.0
+    ],
+    "completionFrameVisible": true,
+    "actualProgressCaptureWritten": true,
+    "routeChanges": 2
+  },
+  "layoutFixtures": "Separate 42% captures at 941x1672, 1080x2340, 1080x2400, and 1080x2400 with safe rectangle (45,100,990,2160); actual single router Canvas rendered to target textures.",
+  "errorFixture": "Injected missing resource in the test coordinator; actual router displays error, and its bound retry uses actual resources and enters Home once.",
+  "protectedSplashFilesChecked": 26,
+  "protectedSplashChanged": [],
+  "fileChangesSincePrelaunch": [
+    {
+      "path": "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
+      "change": "mtime only; SHA256 identical",
+      "beforeSize": 4654,
+      "afterSize": 4654,
+      "beforeMtimeNs": 1789214853406959720,
+      "afterMtimeNs": 1789231706505948924
+    },
+    {
+      "path": "Assets/AddressableAssetsData/AssetGroups/LOR_ValidationLocal.asset",
+      "change": "mtime only; SHA256 identical",
+      "beforeSize": 1082,
+      "afterSize": 1082,
+      "beforeMtimeNs": 1789214853418960224,
+      "afterMtimeNs": 1789231706508949049
+    },
+    {
+      "path": "Assets/LegendsOfRus/Tests/PlayMode/LoadingAlignmentPlayModeTests.cs",
+      "change": "content changed",
+      "beforeSize": 17993,
+      "afterSize": 24140,
+      "beforeMtimeNs": 1789230101802322708,
+      "afterMtimeNs": 1789231185429272681
+    },
+    {
+      "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingProgressBar.cs",
+      "change": "content changed",
+      "beforeSize": 3245,
+      "afterSize": 3292,
+      "beforeMtimeNs": 1789229627457701802,
+      "afterMtimeNs": 1789230744605952699
+    },
+    {
+      "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingView.cs",
+      "change": "content changed",
+      "beforeSize": 4695,
+      "afterSize": 5046,
+      "beforeMtimeNs": 1789229627362697872,
+      "afterMtimeNs": 1789231366334790853
+    },
+    {
+      "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingRuntime.cs",
+      "change": "content changed",
+      "beforeSize": 8054,
+      "afterSize": 8501,
+      "beforeMtimeNs": 1789230373963580451,
+      "afterMtimeNs": 1789231366430794843
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/Pages/Loading.prefab",
+      "change": "content changed",
+      "beforeSize": 1868,
+      "afterSize": 39967,
+      "beforeMtimeNs": 1789220750000000000,
+      "afterMtimeNs": 1789231635827000275
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/LoadingAligned/ivan_journey.png.meta",
+      "change": "content changed",
+      "beforeSize": 3483,
+      "afterSize": 3487,
+      "beforeMtimeNs": 1789230303408548628,
+      "afterMtimeNs": 1789230570516193946
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/LoadingAligned/tip_panel.png.meta",
+      "change": "content changed",
+      "beforeSize": 3509,
+      "afterSize": 3509,
+      "beforeMtimeNs": 1789230129301416770,
+      "afterMtimeNs": 1789230571586842150
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/LoadingAligned/environment_journey.png.meta",
+      "change": "content changed",
+      "beforeSize": 3509,
+      "afterSize": 3509,
+      "beforeMtimeNs": 1789230129295734396,
+      "afterMtimeNs": 1789230570057869508
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/LoadingAligned/firebird_journey.png.meta",
+      "change": "content changed",
+      "beforeSize": 3509,
+      "afterSize": 3509,
+      "beforeMtimeNs": 1789230129298951678,
+      "afterMtimeNs": 1789230571056898845
+    },
+    {
+      "path": "ProjectSettings/ProjectAuditorSettings.asset",
+      "change": "mtime changed; unchanged byte length; baseline content identity unverified",
+      "beforeSize": 1036,
+      "afterSize": 1036,
+      "beforeMtimeNs": 1789224073536849923,
+      "afterMtimeNs": 1789231714176163093
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "change": "mtime changed; unchanged byte length; baseline content identity unverified",
+      "beforeSize": 22347,
+      "afterSize": 22347,
+      "beforeMtimeNs": 1789210373972089660,
+      "afterMtimeNs": 1789231714112397780
+    }
+  ],
+  "newAssetPathsSincePrelaunch": [
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingShade.cs.meta",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingShade.cs",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingShadeLayout.cs",
+    "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoadingShadeLayout.cs.meta"
+  ],
+  "settingsLimit": "ProjectSettings and ProjectAuditorSettings sizes unchanged; Unity changed mtimes. No pre-byte/hash backup exists. Contents of ProjectSettings.asset were never read or modified by validation scripts; no claims of byte identity.",
+  "preliminaryBlockersResolved": [
+    "Initial sandbox run exited1: Unity Package Manager local IPC could not connect to Upm-2 after30s. Same authorized command succeeded with sandbox escalation.",
+    "First escalated launch failed on stale generated Bee absolute path under /home/k2/Downloads. Preserved only Library/Bee under /tmp/lor-loading-unity-run01/stale-Bee and regenerated it; source/settings/packages unchanged by failed launches."
+  ],
+  "visualDefectsCaughtAndFixed": [
+    "Run01 state/bounds tests passed but image inspection revealed missing custom-graphic CanvasRenderers. UI owner corrected and revision2 builder serialized both.",
+    "Run02 bar rendered, but tall safe-area image showed finite rectangular shade. Loading-only responsive shade correction in revision3 resolved it."
+  ],
+  "notPerformed": [
+    "Android build/device run",
+    "Full project regression suite",
+    "Exact source-font identification"
+  ],
+  "noValidationAuthoredProductionCode": true,
+  "validationAuthoredFiles": [
+    "Assets/LegendsOfRus/Tests/PlayMode/LoadingAlignmentPlayModeTests.cs",
+    "Assets/LegendsOfRus/Tests/PlayMode/LoadingAlignmentPlayModeTests.cs.meta"
+  ],
+  "commands": {
+    "run03Builder": "XDG_CONFIG_HOME=/tmp/lor-loading-unity-run01/config LOR_LOADING_TEST_CONFIG_ROOT=/tmp/lor-loading-unity-run01/config /home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity -batchmode -nographics -projectPath /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL -executeMethod LegendsOfRus.Editor.Step20ProductionUiFix01SerializedPrefabBuilder.BuildLoadingAligned -quit -logFile /tmp/lor-loading-unity-run03/builder.log",
+    "run03PlayMode": "XDG_CONFIG_HOME=/tmp/lor-loading-unity-run01/config LOR_LOADING_TEST_CONFIG_ROOT=/tmp/lor-loading-unity-run01/config LOR_LOADING_CAPTURE_DIR=/tmp/lor-loading-unity-run03/captures /home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity -batchmode -projectPath /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL -runTests -testPlatform PlayMode -testFilter \"LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.HomeLoadingPreparationPlayModeTests\" -testResults /tmp/lor-loading-unity-run03/playmode.xml -logFile /tmp/lor-loading-unity-run03/playmode.log"
+  },
+  "currentNonsecretAuditorInspection": "ProjectAuditorSettings has empty Rules and diagnostic size thresholds under PlatformGroup Unknown. Current file was inspected; no original content backup exists for comparison.",
+  "visuallyInspectedFinalCaptures": [
+    "ActualLoading_941x1672.png",
+    "Loading_1080x2340.png",
+    "Loading_1080x2400.png",
+    "Loading_1080x2400_safearea.png",
+    "Loading_error_941x1672.png"
+  ]
+}

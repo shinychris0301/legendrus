@@ -1,0 +1,78 @@
+{
+  "task": "Visual Page 03 Home style alignment, R1 design review only",
+  "status": "Unapproved generated concept illustrations; not imported into Unity",
+  "mode": "Built-in image_gen only",
+  "approvedStyleReference": "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png",
+  "referenceRole": "Material/color/craftsmanship reference only; approved logo was not modified",
+  "assets": [
+    {
+      "name": "map",
+      "output": "ProjectDocs/AI/HomeStyleAlignment/R1/nav_map_generated.png",
+      "selectedGeneratedSource": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-a77f848c-1175-4783-b6fa-d76db2693a85.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 6,
+      "transparency": "RGBA channel confirmed; root browser black/white/saturated composite QA pending",
+      "attempts": [
+        {
+          "prompt": "Use case: stylized-concept\nAsset type: one isolated raster navigation illustration for offline Home page design review in the existing Russian fairy-tale game «Легенды Руси: Три в Ряд».\nInput image 1 is ONLY a material, color, and painterly craftsmanship reference: preserve its antique-gold warm brass, deep navy/black lacquer, tiny sapphire accents, subtle fine ornament. Do not reproduce its logo, wording, plaque shape, castle, or crest.\nPrimary request: a partly unrolled aged parchment world map with two curled scroll ends and one small antique brass compass resting against its lower front corner. An elegant readable single compact object silhouette, centered in a 1024 by 1024 square with generous fully transparent padding on every side. Show simple engraved coastlines and river paths with no lettering or symbols resembling text; a few map lines only. Compass has plain cardinal tick marks and a needle, absolutely no letters or numbers.\nStyle: detailed painterly Russian storybook game inventory illustration, tactile parchment and restrained engraved antique metal, softly shaded dimensional surfaces, subtle warm upper-left light, deep navy accents. The compact scroll and compass must read clearly at small navigation size. Parchment is muted aged ivory, not bright yellow. No overexposed glossy 3D plastic and no generic flat vector style.\nBackground: genuinely transparent RGBA outside the complete object, including spaces around curled paper; no checkerboard drawn into pixels, no floor, no cast shadow outside the object, no scenery, no vignette, no glow.\nConstraints: exactly this map-and-compass object; no text, letters, numbers, caption, UI badge, circular enclosing frame, panel, watermark, character, landscape, logo, jewel pile, or extra props.",
+          "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-1bed9968-f57c-45a2-b616-d141df87fc8e.png",
+          "result": "Rejected: RGB PNG with visible baked checkerboard"
+        },
+        {
+          "prompt": "Use case: background-extraction.\nInput image is an edit target. Preserve exactly the illustrated parchment map, curled scrolls, brass compass, all object textures and colors. Remove the entire gray checkerboard background and any pale decorative pattern from outside the object. Return a genuine RGBA PNG with alpha exactly zero outside the object; a checkerboard is NOT transparency. No background, no floor or shadow. Do not redraw any checkerboard. Preserve opaque parchment, metal and compass surfaces. Center the complete intact object on a square canvas with approximately 8 percent genuinely transparent outer margin. Do not add text, numbers, or new objects. This must be a clean isolated sprite that can be composited over black, white, or vivid magenta with only the map-and-compass object visible.",
+          "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-a77f848c-1175-4783-b6fa-d76db2693a85.png",
+          "result": "Selected: RGBA PNG; illustrated map and compass, no visible checkerboard in image inspection"
+        }
+      ],
+      "caveats": [
+        "Generated dimensions are 1254x1254, not requested 1024 square.",
+        "Object uses nearly full horizontal canvas; root should contain it inside padded review navigation layout."
+      ]
+    },
+    {
+      "name": "shop",
+      "output": "ProjectDocs/AI/HomeStyleAlignment/R1/nav_shop_generated.png",
+      "selectedGeneratedSource": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-36374f6e-01e9-428b-9ca8-31464bb0f49a.png",
+      "width": 1254,
+      "height": 1254,
+      "pngColorType": 2,
+      "transparency": "Intentionally opaque RGB dark navy panel after one failed transparency correction; preserve panel opacity",
+      "attempts": [
+        {
+          "prompt": "Use case: stylized-concept\nAsset type: one isolated raster navigation illustration for offline Home page design review in the existing Russian fairy-tale game «Легенды Руси: Три в Ряд».\nInput image 1 is ONLY a material, color, and painterly craftsmanship reference: preserve its antique-gold warm brass, deep navy/black lacquer, tiny sapphire accents, subtle fine ornament. Do not reproduce its logo, wording, plaque shape, castle, or crest.\nPrimary request: a compact carved Russian fairy-tale market stall, three-quarter front view, with a small dark sapphire fabric canopy on two carved wooden supports and a dark carved merchant chest as its counter. The counter bears just three restrained jewel pieces; a subtle antique brass trim and modest Russian floral carving decorate the canopy edge and chest. One compact connected market-stall silhouette, readable as shop navigation art when scaled to small size.\nStyle: detailed painterly storybook game inventory illustration, tactile dark warm carved wood, slightly worn antique brass, matte sapphire woven canopy, restrained fine ornament, softly dimensional surfaces, subtle warm upper-left light and cool deep shadows. Rich but muted antique color. No glossy plastic, no cartoon exaggeration, no generic flat vector kit.\nComposition: centered fully intact object in a 1024 by 1024 square, generous empty alpha padding on all sides. No floor or environmental prop.\nBackground: genuinely transparent RGBA with alpha zero outside the market-stall object, not a painted checkerboard, not black or white pixels. Preserve opaque wood, canopy fabric, jewels, and brass; transparency only outside the object and through open space under the canopy.\nConstraints: no text, lettering, numbers, signs, labels, UI badges, circular enclosing frame, panel behind it, watermark, characters, landscape, background scene, cast shadow outside object, vignette, glow, or logo.",
+          "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-bff844d8-7778-46b6-92b6-e8445eb9c852.png",
+          "result": "Rejected: RGB PNG with baked checkerboard"
+        },
+        {
+          "prompt": "Use case: background-extraction.\nInput image is an edit target. Preserve exactly the illustrated carved wooden Russian market stall, sapphire fabric canopy, antique gold ornaments and its three merchandise pieces. Remove the entire gray checkerboard background including the opening under the canopy. Return a genuine RGBA PNG with alpha exactly zero outside the object and inside the large opening under the canopy; a checkerboard is NOT transparency. No background, no floor or shadow. Do not draw any checkerboard. Preserve opaque wood, brass, fabric and merchandise surfaces. Keep complete intact object centered on a square canvas with empty alpha padding. No new text, numbers, objects, or environmental scenery. This must be a clean isolated sprite that can be composited over black, white, or vivid magenta with only the market stall visible.",
+          "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-eb3abf06-c9b8-446a-8034-f5162f97405b.png",
+          "result": "Rejected: remained RGB with baked checkerboard"
+        },
+        {
+          "prompt": "Use case: precise-object-edit.\nInput image is an edit target. Preserve the carved Russian market stall illustration with its navy sapphire canopy, warm antique brass ornaments, wood carving and its three merchant objects. Change only the background: replace ALL gray-and-white checkerboard outside the stall and inside its open window with a deliberate fully opaque, perfectly flat dark navy panel, sRGB hex #0b1723. Do not simulate transparency or show checkerboard anywhere. This is intentionally an opaque square UI illustration panel. Keep the complete object centered with slight empty navy padding, fully intact, no clipping. Maintain the material detail and readability at small navigation size. No additional text, labels, frame, scenery, vignette or symbols.",
+          "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-36374f6e-01e9-428b-9ca8-31464bb0f49a.png",
+          "result": "Selected: intentional opaque dark navy panel; no visible checkerboard"
+        }
+      ],
+      "caveats": [
+        "Not an isolated alpha sprite; must be treated as intentionally opaque panel.",
+        "Requested background #0b1723 is generative and may not be pixel-exact.",
+        "Generated dimensions are 1254x1254.",
+        "Canopy sapphire and gold highlights are brighter than the approved crest; requires design review at final display size."
+      ]
+    }
+  ],
+  "performedChecks": [
+    "Read imagegen skill.",
+    "Viewed actual approved crest locally before using as reference.",
+    "Used one separate built-in generation call per requested asset, then targeted corrections.",
+    "Inspected all generated images visually.",
+    "Read PNG IHDR metadata for dimensions and alpha channel presence."
+  ],
+  "notPerformed": [
+    "No Unity import, compilation, runtime, APK build or phone test.",
+    "No user design approval.",
+    "No alpha compositing on white/saturated backgrounds by this agent; root to perform browser QA."
+  ]
+}

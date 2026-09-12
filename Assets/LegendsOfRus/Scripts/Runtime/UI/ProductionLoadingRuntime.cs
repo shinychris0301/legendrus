@@ -43,7 +43,7 @@ namespace LegendsOfRus
             view.Firebird = MakeImage(content, "FirebirdJourney", firebird, 425, 715, 315, 345);
             RectTransform shadeRect = MakeRect(content, "LowerContrast", 0, 1110, 941, 562);
             shadeRect.gameObject.AddComponent<CanvasRenderer>();
-            SplashTitleFooterShade shade = shadeRect.gameObject.AddComponent<SplashTitleFooterShade>();
+            ProductionLoadingShade shade = shadeRect.gameObject.AddComponent<ProductionLoadingShade>();
             shade.color = new Color32(3, 9, 17, 222); shade.raycastTarget = false;
             view.LowerShade = shade;
             Image backing = MakeImage(content, "OpaquePaperBacking", null, 156, 1260, 629, 166);
@@ -75,7 +75,10 @@ namespace LegendsOfRus
             SplashTitleResponsiveLayout responsive = root.GetComponent<SplashTitleResponsiveLayout>();
             if (responsive == null) responsive = root.gameObject.AddComponent<SplashTitleResponsiveLayout>();
             responsive.Background = view.Environment;
-            if (Application.isPlaying) { view.RefreshContent(); responsive.ApplyNow(); }
+            ProductionLoadingShadeLayout shadeLayout = root.GetComponent<ProductionLoadingShadeLayout>();
+            if (shadeLayout == null) shadeLayout = root.gameObject.AddComponent<ProductionLoadingShadeLayout>();
+            shadeLayout.Shade = shade;
+            if (Application.isPlaying) { view.RefreshContent(); responsive.ApplyNow(); shadeLayout.ApplyNow(); }
         }
 
         static Sprite RequireSprite(Func<string, Sprite> loadSprite, string key)

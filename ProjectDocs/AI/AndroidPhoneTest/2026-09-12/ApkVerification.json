@@ -1,0 +1,237 @@
+{
+  "status": "SUCCEEDED; APK VERIFIED; NOT DEVICE TESTED",
+  "date": "2026-09-12",
+  "unityVersion": "6000.5.9f1",
+  "unityBuildExitCode": 0,
+  "apk": {
+    "path": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk",
+    "bytes": 121788608,
+    "sha256": "9228eaf915f6a19aa0529d1a236ce3be63ae4f9050802d443985b2ad12c9cf00",
+    "entryCount": 401,
+    "zipCrcError": null,
+    "nativeLibraries": [
+      {
+        "entry": "lib/arm64-v8a/libc++_shared.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ]
+      },
+      {
+        "entry": "lib/arm64-v8a/libgame.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384
+        ]
+      },
+      {
+        "entry": "lib/arm64-v8a/libil2cpp.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ]
+      },
+      {
+        "entry": "lib/arm64-v8a/libmain.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ]
+      },
+      {
+        "entry": "lib/arm64-v8a/libswappywrapper.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384
+        ]
+      },
+      {
+        "entry": "lib/arm64-v8a/libunity.so",
+        "machine": 183,
+        "loadSegmentAlignments": [
+          16384,
+          16384,
+          16384,
+          16384
+        ]
+      }
+    ],
+    "androidManifestPresent": true,
+    "bootConfigSelected": {
+      "player-connection-debug": "0",
+      "wait-for-native-debugger": "0",
+      "build-guid": "820370d605594246b06c61f76709b0fd"
+    }
+  },
+  "application": {
+    "packageId": "com.example.legendsofrus.v117debug",
+    "versionName": "0.0.0",
+    "versionCode": 1,
+    "minimumSdk": 26,
+    "targetSdk": 36,
+    "abi": [
+      "arm64-v8a"
+    ],
+    "orientation": "portrait",
+    "debuggable": true,
+    "label": "LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "activity": "com.unity3d.player.UnityPlayerGameActivity"
+  },
+  "signatureVerification": {
+    "tool": "Android SDK36 apksigner, bundled OpenJDK17",
+    "exitCode": 0,
+    "verified": true,
+    "schemeV2": true,
+    "signerCount": 1,
+    "certificateSubject": "C=US, O=Android, CN=Android Debug",
+    "certificateSha256": "2a40e32f90fa672f67008fee14955c1eb827cf076d8cf4b8e3ee5632fc418a2b"
+  },
+  "zipalign": {
+    "command": "zipalign -c -P 16 4 <apk>",
+    "exitCode": 0
+  },
+  "nativeAlignment": "All six packaged ARM64 ELF shared libraries have 16384-byte PT_LOAD alignment. This is a static check, not a device test.",
+  "tests": {
+    "AndroidGuardEditMode": {
+      "total": 99,
+      "passed": 99,
+      "failed": 0,
+      "skipped": 0
+    },
+    "SplashWiringEditMode": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "preservation": {
+    "SplashProtectedFilesUnchanged": 26,
+    "LoadingDeliveryFilesUnchanged": 31,
+    "reviewedPackagePolicyBoundaryHashesUnchanged": true,
+    "runtimeOrArtworkEditsForThisApk": false
+  },
+  "buildLogMilestones": [
+    "Build Fix04 starting Development APK build. RequestedBits=0x00240001; ActiveFlags=Development, CompressWithLz4, StrictMode; Development=True; AutoRunPlayer=False; DisallowedBits=0x00000000; DisallowedFlags=None.",
+    "Development build uses unverified Splash typography; not approved for release.",
+    "Legends of Rus Android build guard: ANDROID_DEVELOPMENT_APK_ALLOWED. Debug-signed development verification only.",
+    "Build Finished, Result: Success.",
+    "Build Fix04 APK created at the existing policy output: Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk. Not installed, not device-tested, not production-approved."
+  ],
+  "unityBuildTiming": [
+    {
+      "success": true,
+      "type": "PlayerBuildInfo",
+      "version": 2,
+      "phase": "Immediate",
+      "time": 1789234326674,
+      "processId": 3649629,
+      "steps": [
+        {
+          "description": "Preprocess Player",
+          "duration": 48
+        },
+        {
+          "description": "Prepare For Build",
+          "duration": 5576
+        },
+        {
+          "description": "ProducePlayerScriptAssemblies",
+          "duration": 3951
+        },
+        {
+          "description": "Verify Build setup",
+          "duration": 24
+        },
+        {
+          "description": "Prepare assets for target platform",
+          "duration": 0
+        },
+        {
+          "description": "Prepare splash screen",
+          "duration": 630
+        },
+        {
+          "description": "Build scripts DLLs",
+          "duration": 6
+        },
+        {
+          "description": "Building scenes",
+          "duration": 564
+        },
+        {
+          "description": "Build GlobalGameManagers file",
+          "duration": 155
+        },
+        {
+          "description": "Writing asset files",
+          "duration": 475
+        },
+        {
+          "description": "Building Resources/unity_builtin_extra",
+          "duration": 7362
+        },
+        {
+          "description": "Creating compressed player package",
+          "duration": 399
+        },
+        {
+          "description": "Write data build dirty tracking information",
+          "duration": 106
+        },
+        {
+          "description": "Postprocess built player",
+          "duration": 158423
+        }
+      ],
+      "duration": 177719
+    }
+  ],
+  "commands": {
+    "guardTests": "XDG_CONFIG_HOME=/tmp/lor-loading-unity-run01/config Unity -batchmode -nographics -projectPath <project> -runTests -testPlatform EditMode -assemblyNames LegendsOfRus.AndroidBuild.Editor.Tests -testResults /tmp/lor-android-apk-run02/editmode.xml -logFile /tmp/lor-android-apk-run02/editmode.log",
+    "wiringTests": "XDG_CONFIG_HOME=/tmp/lor-loading-unity-run01/config Unity -batchmode -nographics -projectPath <project> -runTests -testPlatform EditMode -testFilter LegendsOfRus.Tests.ProductionCoreLoopUi.SplashTitleBuildWiringEditModeTests -testResults /tmp/lor-android-apk-run02/splash-wiring.xml -logFile /tmp/lor-android-apk-run02/splash-wiring.log",
+    "build": "XDG_CONFIG_HOME=/tmp/lor-loading-unity-run01/config Unity -batchmode -nographics -projectPath <project> -executeMethod LegendsOfRus.AndroidBuild.AndroidDevelopmentBuildCommand.BuildDevelopmentApk -quit -logFile /tmp/lor-android-apk-run02/build-final.log",
+    "apkChecks": [
+      "aapt dump badging <apk>",
+      "aapt dump xmltree <apk> AndroidManifest.xml",
+      "java -jar <SDK36>/lib/apksigner.jar verify --verbose --print-certs <apk>",
+      "zipalign -c -P 16 4 <apk>",
+      "Python zipfile.testzip + SHA-256 + ELF PT_LOAD inspection"
+    ]
+  },
+  "notPerformed": [
+    "APK installation or physical-device launch/rendering/navigation/performance testing",
+    "New Play Mode runtime regression run for this Android task",
+    "Full project test suite",
+    "Release build, custom signing, publishing or exact-source-font verification"
+  ],
+  "earlierAttempts": [
+    {
+      "log": "/tmp/lor-android-apk-run02/build.log",
+      "result": "Stopped in scheduled preflight, incorrect initial UIOrientation serialized value1; verified installed enum and corrected to0."
+    },
+    {
+      "log": "/tmp/lor-android-apk-run02/build-retry.log",
+      "result": "Entered regular Player/Addressables pipeline; stopped by inactive-parent Splash validator false positive. Editor validator corrected; three regression tests passed."
+    }
+  ],
+  "generatedBuildChanges": [
+    "Assets/AddressableAssetsData/Android/addressables_content_state.bin",
+    "Assets/AddressableAssetsData/link.xml",
+    "Assets/AddressableAssetsData/link.xml.meta"
+  ],
+  "generatedArtifactsNote": "Normal Addressables/Player build artifacts are retained locally, separate from the authored source patch. Library/Temp/Logs/Builds outputs and generated content state are not included in AppliedSourceChanges.diff."
+}

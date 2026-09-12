@@ -1,0 +1,114 @@
+{
+  "purpose": "Offline Home design review illustrations only. Not Unity runtime assets, not approved designs.",
+  "tool": "builtin image_gen.imagegen",
+  "materialReference": "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png",
+  "requests": [
+    {
+      "asset": "events",
+      "prompt": "Use case: stylized-concept\nAsset type: isolated navigation illustration for a Russian fairy-tale mobile game Home design review.\nInput image 1 is ONLY a material and rendering reference: its approved carved antique-gold ornament, dark navy lacquer, sapphire palette, painterly polished detail. Do not reproduce the logo, lettering, crest silhouette, castles, or any existing logo elements.\nPrimary request: One crimson embroidered event banner suspended from a short horizontal carved dark-wood staff with small antique-gold finials, seen almost straight on. Rich but restrained dark-crimson fabric hangs with a shallow swallowtail point, gold embroidered border and one bold antique-gold sun/compass emblem centered on the fabric. Clear compact readable silhouette appropriate to a small navigation icon. Golden embroidery and aged wood should belong naturally to the reference artwork's detailed Russian fairy-tale family.\nComposition: a single complete object centered within a square 1024 x 1024 image; generous transparent padding on every edge; fill roughly 70 percent of the image area. Warm top-left highlights, controlled dark shadows, clean edge separation. No pedestal, floor, atmosphere, or cast shadow outside the object.\nBackground: genuinely transparent alpha background, no flat background, no checkerboard drawn into pixels. Preserve transparent negative space around the staff and fabric.\nConstraints: No text, letters, numbers, badges, UI button surrounds, circular frame, scenery, people, extra props, brand marks, watermarks. Do not create a vector symbol, flat generic icon, plastic render, or alternate logo.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-9f881e05-d94a-4a2d-b9e1-a4c4bf67d925.png",
+      "selectedWorkspacePath": "ProjectDocs/AI/HomeStyleAlignment/R1/nav_events_generated.png",
+      "status": "Selected for offline review; RGBA header verified. Actual padding narrower than requested, almost full-width staff."
+    },
+    {
+      "asset": "characters",
+      "prompt": "Use case: stylized-concept\nAsset type: isolated character-navigation illustration for a Russian fairy-tale mobile game Home design review.\nInput image 1 is ONLY a material and painterly-rendering reference: match its approved antique-gold carved ornament, dark navy lacquer, restrained sapphire highlights, nuanced warm light. Do not reproduce the logo, text, crest silhouette, or castles.\nPrimary request: One ornate pointed Slavic warrior helmet, complete and seen at a slight three-quarter angle, no head or person inside. Elegant tall pointed crown with dark navy-black lacquered steel between antique-gold raised filigree ribs; small central protective nose guard; one modest sapphire gemstone on the brow. Rounded open helmet base reads as a solid compact silhouette. Its gold ornament uses the same detailed warm highlights and shaded crevices as the reference. No plume and no mail drape, so the helmet remains clear at small navigation size.\nComposition: centered single object in a square 1024 x 1024 image. The full helmet occupies only the middle 65 percent of both width and height, with genuinely empty transparent margin of at least 15 percent on all four sides; do not crop any tips. Painterly premium Russian fairy-tale object illustration, coherent tangible metal and lacquer, warm top-left light with restrained reflections.\nBackground: genuinely transparent alpha; no painted backdrop, no checkerboard baked into pixels, no scenery, floor, pedestal, atmospheric haze, or external cast shadow.\nConstraints: No letters, words, numbers, badges, circular frame, UI button surround, extra gems or objects, human face, logos, watermarks. No flat vector icon, generic substitute game kit, plastic 3D render, or alternate logo.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-8087820e-7cd4-433d-b955-0f1b6c30577a.png",
+      "status": "Rejected: opaque RGB with baked checkerboard, despite transparency request."
+    },
+    {
+      "asset": "characters",
+      "prompt": "Use case: background-extraction\nEdit target: the supplied isolated ornate Slavic helmet illustration.\nThe input mistakenly has an opaque gray-and-white checkerboard baked into the background. Remove that entire checkerboard and output a real PNG with a genuine alpha channel: every background pixel outside the helmet and visible through its open lower spaces must be alpha 0. Do not draw any checkerboard pattern. Do not replace with a solid color. Preserve only the complete helmet object as the foreground, with clean antialiased edges. Preserve the exact helmet silhouette, filigree, navy lacquer, sapphire gem, gold colors, painterly texture, and lighting. Keep the helmet entirely visible on the square canvas. The only requested change is genuine transparent background; no new art, text, badge, shadow, frame, or scenery.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-3b504707-4582-4066-beb5-a6f3a69fc3e7.png",
+      "status": "Rejected: targeted background extraction still produced opaque RGB with baked checkerboard."
+    },
+    {
+      "asset": "characters",
+      "prompt": "Use case: precise-object-edit\nEdit target: supplied ornate Slavic warrior helmet art.\nReplace only the entire gray-and-white checkerboard backdrop, including the space through the open helmet base, with one perfectly uniform opaque dark navy solid color, hexadecimal #0b1723 (RGB 11,23,35). This is an intentionally opaque illustrated UI panel: NO transparency is requested. Remove ALL checkerboard squares, including small edge remnants. No gradient, glow, light spot, vignette, border, or texture in this solid navy background.\nPreserve the complete helmet's existing navy lacquer, antique-gold filigree, one sapphire jewel, painterly detail, silhouette and lighting. No new objects or text. Keep the full helmet centered with comfortable clean navy margin and no cropping. The delivered image should contain the helmet illustration over a completely flat solid #0b1723 navy background.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-395c7f9f-9bff-4793-b788-4840296f7ed3.png",
+      "selectedWorkspacePath": "ProjectDocs/AI/HomeStyleAlignment/R1/nav_characters_generated.png",
+      "status": "Selected as deliberately opaque navy illustrated panel for offline review; must not be labeled isolated alpha sprite."
+    }
+  ],
+  "checks": {
+    "viewImageInspection": "Approved logo and all selected outputs inspected; checkerboard failure of rejected outputs visually confirmed.",
+    "pngHeader": "Events color type6 RGBA; first two helmet attempts color type2 RGB. Both generated1254 square despite1024request.",
+    "runtimeChecks": "No Unity compilation, Play Mode, APK build or physical device testing performed by this task.",
+    "pngDecode": "Read-only Python3 stdlib PNG decoding verified selected file channels, RGBA alpha distribution, corner pixels, SHA256. No image pixels edited."
+  },
+  "productionEdits": false,
+  "note": "No manual background pixel removal, screenshot crops, or complete screenshot runtime UI. Existing approved logo file read only.",
+  "pixelVerification": [
+    {
+      "filename": "nav_events_generated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "bade9438c81c1baa865afe5e5177e060a813e49d2f9b94a4fe6fa7c0ad3b3006",
+      "cornerPixels": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "fullyTransparentPixels": 756007,
+      "fullyOpaquePixels": 658,
+      "partialAlphaPixels": 815851,
+      "nonzeroAlphaBoundsInclusive": [
+        0,
+        49,
+        1245,
+        1253
+      ]
+    },
+    {
+      "filename": "nav_characters_generated.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "6b0bc19a394e9877199fdf0ee7b51371d9fe510289d77a295a7e5f32162ad1c8",
+      "cornerPixels": [
+        [
+          13,
+          26,
+          38
+        ],
+        [
+          12,
+          26,
+          39
+        ],
+        [
+          12,
+          25,
+          37
+        ],
+        [
+          13,
+          27,
+          40
+        ]
+      ]
+    }
+  ]
+}

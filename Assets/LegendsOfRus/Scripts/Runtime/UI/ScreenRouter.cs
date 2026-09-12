@@ -566,16 +566,14 @@ namespace LegendsOfRus
             switch (id)
             {
                 case ScreenId.Home:
-                    Hotspot(parent, "Profile", 15, 10, 180, 190, () => Show(ScreenId.Profile));
-                    Hotspot(parent, "Settings", 835, 15, 100, 115, () => Show(ScreenId.Settings));
-                    Hotspot(parent, "Play", 218, 1014, 510, 190, OpenChapterMap);
-                    Hotspot(parent, "WorldMap", 52, 1210, 205, 213, () => Show(ScreenId.WorldMap));
-                    Hotspot(parent, "Shop", 266, 1210, 205, 213, () => Show(ScreenId.Shop));
-                    Hotspot(parent, "Events", 478, 1210, 205, 213, () => Show(ScreenId.Events));
-                    Hotspot(parent, "Characters", 688, 1210, 205, 213, () => Show(ScreenId.Characters));
-                    Hotspot(parent, "Mail", 15, 1430, 160, 190, () => Show(ScreenId.Mail));
-                    Hotspot(parent, "DailyReward", 770, 1425, 165, 195, () => Show(ScreenId.DailyReward));
-                    break;
+                    ProductionHomeView home = parent.GetComponentInChildren<ProductionHomeView>(true);
+                    if (home == null || !home.HasRequiredBindings)
+                    {
+                        Debug.LogError("Home page has no complete ProductionHomeView; visible navigation could not be bound.");
+                        return;
+                    }
+                    home.BindNavigation(target => Show(target), OpenChapterMap);
+                    return;
 
                 case ScreenId.WorldMap:
                     Hotspot(
@@ -1932,7 +1930,6 @@ namespace LegendsOfRus
         {
             switch (id)
             {
-                case ScreenId.Home:
                 case ScreenId.WorldMap:
                 case ScreenId.ChapterMap:
                 case ScreenId.PreLevel:

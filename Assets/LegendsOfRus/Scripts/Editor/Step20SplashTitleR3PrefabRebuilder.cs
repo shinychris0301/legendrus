@@ -58,6 +58,9 @@ namespace LegendsOfRus.Editor
         [MenuItem("Legends of Rus/Production UI/Splash R3/Build or Repair")]
         public static void BuildMenu() { EnsureBuilt(true); }
 
+        [MenuItem("Legends of Rus/Production UI/Splash R3/Repair Responsive Layout")]
+        public static void RepairResponsiveLayout() { EnsureBuilt(false); }
+
         [MenuItem("Legends of Rus/Production UI/Splash R3/Select Typography Settings")]
         public static void SelectTypography()
         { Selection.activeObject = AssetDatabase.LoadAssetAtPath<SplashTitleTypography>(TypographyPath); }
@@ -79,6 +82,29 @@ namespace LegendsOfRus.Editor
             GameObject old = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             SplashTitleView existing = old != null ? old.GetComponent<SplashTitleView>() : null;
             if (!force && existing != null && existing.HasRequiredBindings) return;
+            // Upgrade the accepted prefab in place; do not reconstruct its artwork or serialized objects.
+            if (!force && existing != null && existing.HasCompleteBindings &&
+                (existing.Revision == 5 || existing.Revision == SplashTitleView.CurrentRevision))
+            {
+                GameObject contents = PrefabUtility.LoadPrefabContents(PrefabPath);
+                try
+                {
+                    BindResponsiveLayout(contents);
+                    SplashTitleView view = contents.GetComponent<SplashTitleView>();
+                    view.Revision = SplashTitleView.CurrentRevision;
+                    if (!view.HasRequiredBindings) throw new InvalidOperationException(view.GetValidationFailure());
+                    bool saved;
+                    PrefabUtility.SaveAsPrefabAsset(contents, PrefabPath, out saved);
+                    if (!saved) throw new IOException("Unity did not save the Splash responsive repair.");
+                }
+                finally { PrefabUtility.UnloadPrefabContents(contents); }
+                AssetDatabase.ImportAsset(PrefabPath, ImportAssetOptions.ForceSynchronousImport);
+                SplashTitleView repaired = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath).GetComponent<SplashTitleView>();
+                if (!repaired.HasRequiredBindings) throw new InvalidOperationException(repaired.GetValidationFailure());
+                Debug.Log("Splash responsive repair saved and read back at revision " + repaired.Revision +
+                    "; existing artwork, authored rectangles and serialized references preserved.");
+                return;
+            }
             if (!File.Exists(LayoutPath)) throw new FileNotFoundException("Missing authoritative layout",LayoutPath);
             LayoutDoc doc = JsonUtility.FromJson<LayoutDoc>(File.ReadAllText(LayoutPath));
             if (doc == null || doc.schemaVersion != 4) throw new InvalidOperationException("Unsupported Splash layout schema.");
@@ -176,6 +202,7 @@ namespace LegendsOfRus.Editor
                      case "AccountText":view.AccountText=text;break;case "HelpText":view.HelpText=text;break;
                      case "TaglineText":view.TaglineText=text;break;case "LegalText":view.LegalText=text;break;}
                 }
+                BindResponsiveLayout(root);
                 if(!view.HasRequiredBindings)throw new InvalidOperationException("New Splash prefab has incomplete bindings.");
                 bool savedSuccessfully;
                 PrefabUtility.SaveAsPrefabAsset(root, PrefabPath, out savedSuccessfully);
@@ -191,6 +218,18 @@ namespace LegendsOfRus.Editor
                     "Exact font and runtime visual acceptance remain separate checks.");
             }
             finally { UnityEngine.Object.DestroyImmediate(root); }
+        }
+        static void BindResponsiveLayout(GameObject root)
+        {
+            SplashTitleForegroundLayout layout = root.GetComponent<SplashTitleForegroundLayout>();
+            if (layout == null) layout = root.AddComponent<SplashTitleForegroundLayout>();
+            layout.Logo = root.transform.Find("Logo") as RectTransform;
+            layout.Version = root.transform.Find("VersionText") as RectTransform;
+            layout.Language = root.transform.Find("LanguageSelector") as RectTransform;
+            Transform shade = root.transform.Find("FooterContrast");
+            layout.FooterShade = shade != null ? shade.GetComponent<SplashTitleFooterShade>() : null;
+            layout.CaptureAuthoredLayout();
+            if (!layout.HasRequiredBindings) throw new InvalidOperationException("Splash responsive layout has incomplete bindings.");
         }
         static Rect RectOf(float[] v)
         {if(v==null||v.Length!=4)throw new ArgumentException("Expected x/y/w/h rectangle.");return new Rect(v[0],v[1],v[2],v[3]);}

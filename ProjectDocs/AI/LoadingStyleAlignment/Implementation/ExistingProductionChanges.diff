@@ -1,0 +1,1751 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Loading.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Loading.prefab
+@@ -11,6 +11,9 @@
+   - component: {fileID: 224001}
+   - component: {fileID: 114010}
+   - component: {fileID: 114011}
++  - component: {fileID: 4626559332440028164}
++  - component: {fileID: 5040422047232646406}
++  - component: {fileID: 6381059771097885307}
+   m_Layer: 5
+   m_Name: Loading
+   m_TagString: Untagged
+@@ -29,40 +32,1274 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
++  m_Children:
++  - {fileID: 3319414391973098596}
++  m_Father: {fileID: 0}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0.5, y: 0.5}
++  m_AnchorMax: {x: 0.5, y: 0.5}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 941, y: 1672}
++  m_Pivot: {x: 0.5, y: 0.5}
++--- !u!114 &114010
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 100001}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: f1033a9a7f6c4c12a8b9d0e1f2a3b4c5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionUiFix01PageBootstrap
++  screenId: 0
++--- !u!114 &114011
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 100001}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 0c01d01c4a3b4fd99f01020304050607, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionCoreLoopPageMarker
++  screenId: 0
++  styleVersion: v1.20-step03.3
++  screenshotFree: 1
++  referenceResolution: {x: 941, y: 1672}
++--- !u!114 &4626559332440028164
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 100001}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: f93fe479362547ccaa30346ac56dc1d3, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingView
++  Revision: 3
++  Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
++  Environment: {fileID: 5755953744872643519}
++  Logo: {fileID: 2610341730079462722}
++  Ivan: {fileID: 7464538970703872653}
++  Firebird: {fileID: 5923169557638519040}
++  TipPanel: {fileID: 1191140106484597474}
++  LowerShade: {fileID: 4806331818352541717}
++  TipTitle: {fileID: 7721531932822518407}
++  TipBody: {fileID: 3785519114695521902}
++  StatusText: {fileID: 7937307394871902994}
++  PercentText: {fileID: 1979410689976871969}
++  ProgressBar: {fileID: 7155461242533978059}
++  RetryButton: {fileID: 1419280525848228995}
++  RetryText: {fileID: 954738595893684802}
++--- !u!114 &5040422047232646406
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 100001}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 8c24d358865b897272ea84de9ba36cc3, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleResponsiveLayout
++  Background: {fileID: 5755953744872643519}
++--- !u!114 &6381059771097885307
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 100001}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: a9ff85b751764954a1117b46a1c479b6, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingShadeLayout
++  Shade: {fileID: 4806331818352541717}
++--- !u!1 &411460681582757803
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 574758276597708604}
++  - component: {fileID: 6315755646087495052}
++  - component: {fileID: 8474424960303978114}
++  m_Layer: 5
++  m_Name: OpaquePaperBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &574758276597708604
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 411460681582757803}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 0}
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 156, y: -1260}
++  m_SizeDelta: {x: 629, y: 166}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6315755646087495052
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 411460681582757803}
++  m_CullTransparentMesh: 1
++--- !u!114 &8474424960303978114
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 411460681582757803}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.8980392, g: 0.7921569, b: 0.5803922, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 0}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &1611160085955414071
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 9114979475033141557}
++  - component: {fileID: 6425934309141168791}
++  - component: {fileID: 5755953744872643519}
++  m_Layer: 5
++  m_Name: JourneyEnvironment
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &9114979475033141557
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1611160085955414071}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 941, y: 1672}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6425934309141168791
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1611160085955414071}
++  m_CullTransparentMesh: 1
++--- !u!114 &5755953744872643519
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1611160085955414071}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 200af5e3755d407eadaa750b2d2b6771, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &2623650046950659991
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 9147682741067279527}
++  - component: {fileID: 7445032393483034646}
++  - component: {fileID: 6091094618490509355}
++  - component: {fileID: 7152390294658100477}
++  - component: {fileID: 1419280525848228995}
++  m_Layer: 5
++  m_Name: RetryButton
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 0
++--- !u!224 &9147682741067279527
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2623650046950659991}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children:
++  - {fileID: 3741218822150239328}
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 320.5, y: -1595}
++  m_SizeDelta: {x: 300, y: 62}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &7445032393483034646
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2623650046950659991}
++  m_CullTransparentMesh: 1
++--- !u!114 &6091094618490509355
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2623650046950659991}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.07450981, g: 0.22745098, b: 0.20784314, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 0}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!114 &7152390294658100477
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2623650046950659991}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
++  m_EffectColor: {r: 0.60784316, g: 0.4509804, b: 0.22745098, a: 1}
++  m_EffectDistance: {x: 2, y: -2}
++  m_UseGraphicAlpha: 1
++--- !u!114 &1419280525848228995
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2623650046950659991}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
++  m_Navigation:
++    m_Mode: 0
++    m_WrapAround: 0
++    m_SelectOnUp: {fileID: 0}
++    m_SelectOnDown: {fileID: 0}
++    m_SelectOnLeft: {fileID: 0}
++    m_SelectOnRight: {fileID: 0}
++  m_Transition: 1
++  m_Colors:
++    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
++    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
++    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
++    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
++    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
++    m_ColorMultiplier: 1
++    m_FadeDuration: 0.1
++  m_SpriteState:
++    m_HighlightedSprite: {fileID: 0}
++    m_PressedSprite: {fileID: 0}
++    m_SelectedSprite: {fileID: 0}
++    m_DisabledSprite: {fileID: 0}
++  m_AnimationTriggers:
++    m_NormalTrigger: Normal
++    m_HighlightedTrigger: Highlighted
++    m_PressedTrigger: Pressed
++    m_SelectedTrigger: Selected
++    m_DisabledTrigger: Disabled
++  m_Interactable: 1
++  m_TargetGraphic: {fileID: 6091094618490509355}
++  m_OnClick:
++    m_PersistentCalls:
++      m_Calls: []
++--- !u!1 &3079410550974919952
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 8452188656802712003}
++  - component: {fileID: 8622015443375090956}
++  - component: {fileID: 5923169557638519040}
++  m_Layer: 5
++  m_Name: FirebirdJourney
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &8452188656802712003
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3079410550974919952}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 425, y: -715}
++  m_SizeDelta: {x: 315, y: 345}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &8622015443375090956
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3079410550974919952}
++  m_CullTransparentMesh: 1
++--- !u!114 &5923169557638519040
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3079410550974919952}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: a8428c56c40748f79c465571fd8830ab, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3155519308654182999
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 3741218822150239328}
++  - component: {fileID: 1707325295157653844}
++  - component: {fileID: 954738595893684802}
++  m_Layer: 5
++  m_Name: RetryLabel
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &3741218822150239328
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3155519308654182999}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 9147682741067279527}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 600, y: 124}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &1707325295157653844
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3155519308654182999}
++  m_CullTransparentMesh: 1
++--- !u!114 &954738595893684802
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3155519308654182999}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.8901961, g: 0.76862746, b: 0.5176471, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 56
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 56
++    m_Alignment: 4
++    m_AlignByGeometry: 1
++    m_RichText: 0
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
++    m_LineSpacing: 1
++  m_Text: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C"
++--- !u!1 &3218181292406934646
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5057264240703872613}
++  - component: {fileID: 3209349167217345867}
++  - component: {fileID: 7937307394871902994}
++  - component: {fileID: 4877689122503313545}
++  m_Layer: 5
++  m_Name: LoadingStatus
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5057264240703872613
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3218181292406934646}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 170, y: -1490}
++  m_SizeDelta: {x: 1202, y: 92}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &3209349167217345867
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3218181292406934646}
++  m_CullTransparentMesh: 1
++--- !u!114 &7937307394871902994
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3218181292406934646}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.8901961, g: 0.76862746, b: 0.5176471, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 68
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 68
++    m_Alignment: 4
++    m_AlignByGeometry: 1
++    m_RichText: 0
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
++    m_LineSpacing: 1
++  m_Text: "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."
++--- !u!114 &4877689122503313545
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3218181292406934646}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
++  m_EffectColor: {r: 0.019607844, g: 0.039215688, b: 0.0627451, a: 1}
++  m_EffectDistance: {x: 0, y: -2}
++  m_UseGraphicAlpha: 1
++--- !u!1 &3482425935900696955
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5439082537071097175}
++  - component: {fileID: 7970402588845557373}
++  - component: {fileID: 7464538970703872653}
++  m_Layer: 5
++  m_Name: IvanJourney
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5439082537071097175
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3482425935900696955}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 87, y: -623}
++  m_SizeDelta: {x: 398, y: 597}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &7970402588845557373
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3482425935900696955}
++  m_CullTransparentMesh: 1
++--- !u!114 &7464538970703872653
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3482425935900696955}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: d3a7c7a37f264d789bc0ffd6a03df318, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3909116420418620970
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 219397740633663869}
++  - component: {fileID: 6656268423090302720}
++  - component: {fileID: 7155461242533978059}
++  m_Layer: 5
++  m_Name: MeasuredProgressBar
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &219397740633663869
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3909116420418620970}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 170, y: -1554}
++  m_SizeDelta: {x: 601, y: 29}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6656268423090302720
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3909116420418620970}
++  m_CullTransparentMesh: 1
++--- !u!114 &7155461242533978059
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3909116420418620970}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eaadf324d401416e8a854f205d66e2b4, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingProgressBar
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  progress: 0
++  indeterminate: 1
++--- !u!1 &6410068500965593289
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4114271707025170923}
++  - component: {fileID: 3859970738731219749}
++  - component: {fileID: 4806331818352541717}
++  m_Layer: 5
++  m_Name: LowerContrast
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &4114271707025170923
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6410068500965593289}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: -1110}
++  m_SizeDelta: {x: 941, y: 562}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &3859970738731219749
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6410068500965593289}
++  m_CullTransparentMesh: 1
++--- !u!114 &4806331818352541717
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6410068500965593289}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 1813c6e997fc42cd82479064e0ecd29a, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingShade
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.011764706, g: 0.03529412, b: 0.06666667, a: 0.87058824}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++--- !u!1 &7326079688122900128
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4031243453657658850}
++  - component: {fileID: 3801623273232673823}
++  - component: {fileID: 1979410689976871969}
++  m_Layer: 5
++  m_Name: MeasuredPercent
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 0
++--- !u!224 &4031243453657658850
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7326079688122900128}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 320, y: -1590}
++  m_SizeDelta: {x: 602, y: 68}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &3801623273232673823
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7326079688122900128}
++  m_CullTransparentMesh: 1
++--- !u!114 &1979410689976871969
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7326079688122900128}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.8901961, g: 0.76862746, b: 0.5176471, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 48
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 48
++    m_Alignment: 4
++    m_AlignByGeometry: 1
++    m_RichText: 0
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
++    m_LineSpacing: 1
++  m_Text: 0%
++--- !u!1 &7904536501580889271
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 3319414391973098596}
++  m_Layer: 5
++  m_Name: LOADING_ALIGNED_CONTENT
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &3319414391973098596
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7904536501580889271}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children:
++  - {fileID: 9114979475033141557}
++  - {fileID: 2510311856536254419}
++  - {fileID: 5439082537071097175}
++  - {fileID: 8452188656802712003}
++  - {fileID: 4114271707025170923}
++  - {fileID: 574758276597708604}
++  - {fileID: 6884630309359347967}
++  - {fileID: 3060527096907219410}
++  - {fileID: 870143899217408195}
++  - {fileID: 5057264240703872613}
++  - {fileID: 219397740633663869}
++  - {fileID: 4031243453657658850}
++  - {fileID: 9147682741067279527}
++  m_Father: {fileID: 224001}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+   m_AnchorMax: {x: 1, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+   m_SizeDelta: {x: 0, y: 0}
+-  m_Pivot: {x: 0.5, y: 0.5}
+---- !u!114 &114010
+-MonoBehaviour:
+-  m_ObjectHideFlags: 0
+-  m_CorrespondingSourceObject: {fileID: 0}
+-  m_PrefabInstance: {fileID: 0}
+-  m_PrefabAsset: {fileID: 0}
+-  m_GameObject: {fileID: 100001}
+-  m_Enabled: 1
+-  m_EditorHideFlags: 0
+-  m_Script: {fileID: 11500000, guid: f1033a9a7f6c4c12a8b9d0e1f2a3b4c5, type: 3}
+-  m_Name: 
+-  m_EditorClassIdentifier: 
+-  screenId: 0
+---- !u!114 &114011
+-MonoBehaviour:
+-  m_ObjectHideFlags: 0
+-  m_CorrespondingSourceObject: {fileID: 0}
+-  m_PrefabInstance: {fileID: 0}
+-  m_PrefabAsset: {fileID: 0}
+-  m_GameObject: {fileID: 100001}
+-  m_Enabled: 1
+-  m_EditorHideFlags: 0
+-  m_Script: {fileID: 11500000, guid: 0c01d01c4a3b4fd99f01020304050607, type: 3}
+-  m_Name: 
+-  m_EditorClassIdentifier: 
+-  screenId: 0
+-  styleVersion: v1.20-step03.3
+-  screenshotFree: 1
+-  referenceResolution: {x: 941, y: 1672}
++  m_Pivot: {x: 0, y: 1}
++--- !u!1 &8483191093950688479
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 870143899217408195}
++  - component: {fileID: 505613832823459825}
++  - component: {fileID: 3785519114695521902}
++  m_Layer: 5
++  m_Name: TipBody
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &870143899217408195
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8483191093950688479}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 187, y: -1315}
++  m_SizeDelta: {x: 1134, y: 164}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &505613832823459825
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8483191093950688479}
++  m_CullTransparentMesh: 1
++--- !u!114 &3785519114695521902
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8483191093950688479}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.20392157, g: 0.15686275, b: 0.09019608, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 60
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 60
++    m_Alignment: 4
++    m_AlignByGeometry: 1
++    m_RichText: 0
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
++    m_LineSpacing: 1
++  m_Text: "\u0421\u043E\u0432\u0435\u0442: \u043E\u0431\u044A\u0435\u0434\u0438\u043D\u044F\u0439\u0442\u0435
++    \u043E\u0441\u043E\u0431\u044B\u0435 \u0441\u0430\u043C\u043E\u0446\u0432\u0435\u0442\u044B,\n\u0447\u0442\u043E\u0431\u044B
++    \u043E\u0447\u0438\u0449\u0430\u0442\u044C \u0442\u044C\u043C\u0443 \u0431\u044B\u0441\u0442\u0440\u0435\u0435."
++--- !u!1 &8586005991453734140
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 2510311856536254419}
++  - component: {fileID: 2256474495644893915}
++  - component: {fileID: 2610341730079462722}
++  m_Layer: 5
++  m_Name: ApprovedSplashLogo
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &2510311856536254419
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8586005991453734140}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 195.5, y: -35}
++  m_SizeDelta: {x: 550, y: 440.16}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &2256474495644893915
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8586005991453734140}
++  m_CullTransparentMesh: 1
++--- !u!114 &2610341730079462722
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8586005991453734140}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 7711f55e3129f27655998da59ef0850c, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &8961646664170125586
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 3060527096907219410}
++  - component: {fileID: 7610713979586551810}
++  - component: {fileID: 7721531932822518407}
++  m_Layer: 5
++  m_Name: TipTitle
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &3060527096907219410
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8961646664170125586}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 185, y: -1264}
++  m_SizeDelta: {x: 1142, y: 76}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &7610713979586551810
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8961646664170125586}
++  m_CullTransparentMesh: 1
++--- !u!114 &7721531932822518407
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8961646664170125586}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.34509805, g: 0.2509804, b: 0.11372549, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 60
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 60
++    m_Alignment: 4
++    m_AlignByGeometry: 1
++    m_RichText: 0
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
++    m_LineSpacing: 1
++  m_Text: "\u0421\u041E\u0412\u0415\u0422"
++--- !u!1 &9064642071294958535
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 6884630309359347967}
++  - component: {fileID: 2453995136229439222}
++  - component: {fileID: 1191140106484597474}
++  m_Layer: 5
++  m_Name: TipPanel
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &6884630309359347967
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 9064642071294958535}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3319414391973098596}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 125, y: -1210}
++  m_SizeDelta: {x: 691, y: 260}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &2453995136229439222
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 9064642071294958535}
++  m_CullTransparentMesh: 1
++--- !u!114 &1191140106484597474
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 9064642071294958535}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: cd29634bc18f410ab85bb3590e1f5e1d, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
+--- a/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -43,10 +43,17 @@
+         {
+             if (EditorApplication.isPlayingOrWillChangePlaymode)
+                 return;
++            if (EditorApplication.isCompiling || EditorApplication.isUpdating || BuildPipeline.isBuildingPlayer)
++            {
++                EditorApplication.delayCall += AutomaticRepair;
++                return;
++            }
+             try
+             {
+-                if (NeedsBuild())
+-                    BuildAll(false);
++                // Repair only a page that actually failed validation. Loading alignment
++                // must never trigger regeneration of the other accepted/local pages.
++                foreach (ScreenId id in RequiredPages)
++                    if (PageNeedsBuild(id)) BuildPage(id);
+             }
+             catch (Exception e)
+             {
+@@ -80,6 +87,7 @@
+ 
+         public static void BuildAll(bool showDialog)
+         {
++            RequireEditorIdle();
+             EnsureFolder(PageRoot);
+             foreach (ScreenId id in RequiredPages)
+                 BuildPage(id);
+@@ -109,16 +117,40 @@
+         public static bool NeedsBuild()
+         {
+             foreach (ScreenId id in RequiredPages)
+-            {
+-                string path = PageRoot + "/" + id + ".prefab";
+-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+-                if (prefab == null)
+-                    return true;
+-                ProductionUiFix01PageBootstrap bootstrap = prefab.GetComponent<ProductionUiFix01PageBootstrap>();
+-                if (bootstrap == null || bootstrap.ScreenId != id || bootstrap.StyleVersion != Version)
+-                    return true;
+-            }
++                if (PageNeedsBuild(id)) return true;
+             return false;
++        }
++
++        static bool PageNeedsBuild(ScreenId id)
++        {
++            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PageRoot + "/" + id + ".prefab");
++            if (prefab == null) return true;
++            ProductionUiFix01PageBootstrap bootstrap = prefab.GetComponent<ProductionUiFix01PageBootstrap>();
++            if (bootstrap == null || bootstrap.ScreenId != id || bootstrap.StyleVersion != Version) return true;
++            if (id != ScreenId.Loading) return false;
++            ProductionLoadingView view = prefab.GetComponent<ProductionLoadingView>();
++            return view == null || !view.HasRequiredBindings || prefab.transform.Find(ProductionLoadingRuntime.ContentName) == null;
++        }
++
++        [MenuItem("Legends of Rus/Production UI/Loading Alignment/Build or Repair Loading Only")]
++        public static void BuildLoadingAligned()
++        {
++            RequireEditorIdle();
++            EnsureFolder(PageRoot);
++            BuildPage(ScreenId.Loading);
++            AssetDatabase.SaveAssets();
++            AssetDatabase.ImportAsset(PageRoot + "/Loading.prefab", ImportAssetOptions.ForceSynchronousImport);
++            if (PageNeedsBuild(ScreenId.Loading))
++                throw new InvalidOperationException("Saved Loading alignment prefab failed the revision/binding read-back check.");
++            Debug.Log("Loading alignment serialized prefab saved and read back at revision " + ProductionLoadingView.CurrentRevision + ".");
++        }
++
++        static void RequireEditorIdle()
++        {
++            if (EditorApplication.isPlayingOrWillChangePlaymode)
++                throw new InvalidOperationException("Stop Play Mode before building production prefabs.");
++            if (EditorApplication.isCompiling || EditorApplication.isUpdating || BuildPipeline.isBuildingPlayer)
++                throw new InvalidOperationException("Wait for compilation, import and Player builds to finish before repairing production prefabs.");
+         }
+ 
+         public static List<string> ValidateAll()
+@@ -148,6 +180,15 @@
+                     failures.Add(path + ": missing ProductionUiFix01PageBootstrap.");
+                 else if (bootstrap.ScreenId != id)
+                     failures.Add(path + ": FIX01 bootstrap ScreenId mismatch.");
++
++                if (id == ScreenId.Loading)
++                {
++                    ProductionLoadingView view = prefab.GetComponent<ProductionLoadingView>();
++                    if (view == null || !view.HasRequiredBindings)
++                        failures.Add(path + ": Loading alignment revision/standalone artwork/live control bindings incomplete.");
++                    if (prefab.transform.Find(ProductionLoadingRuntime.ContentName) == null)
++                        failures.Add(path + ": serialized aligned Loading children are missing.");
++                }
+ 
+                 ProductionCoreLoopPageMarker core = prefab.GetComponent<ProductionCoreLoopPageMarker>();
+                 if (core == null || core.ScreenId != id || !core.ScreenshotFree)
+@@ -180,37 +221,56 @@
+ 
+         static void BuildPage(ScreenId id)
+         {
++            RequireEditorIdle();
+             GameObject root = new GameObject(id.ToString(), typeof(RectTransform));
+-            RectTransform rect = root.GetComponent<RectTransform>();
+-            rect.anchorMin = Vector2.zero;
+-            rect.anchorMax = Vector2.one;
+-            rect.offsetMin = Vector2.zero;
+-            rect.offsetMax = Vector2.zero;
+-
+-            ProductionUiFix01PageBootstrap bootstrap = root.AddComponent<ProductionUiFix01PageBootstrap>();
+-            bootstrap.Configure(id);
+-            ProductionCoreLoopPageMarker core = root.AddComponent<ProductionCoreLoopPageMarker>();
+-            core.Configure(id);
+-
+-            if (id == ScreenId.Home || id == ScreenId.WorldMap || id == ScreenId.ChapterMap)
+-            {
+-                ProductionReferenceMatchPageMarker marker = root.AddComponent<ProductionReferenceMatchPageMarker>();
+-                marker.Configure(id, ReferenceR2Sha(id), id == ScreenId.Home ? 6 : 4);
+-            }
+-            else if (id == ScreenId.PreLevel || id == ScreenId.Gameplay || id == ScreenId.Pause)
+-            {
+-                ProductionReferenceMatchR3PageMarker marker = root.AddComponent<ProductionReferenceMatchR3PageMarker>();
+-                if (id == ScreenId.PreLevel)
+-                    marker.Configure(id, "32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195", "fix01-independent-assets-prelevel", 12, false, false);
+-                else if (id == ScreenId.Gameplay)
+-                    marker.Configure(id, "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800", "fix01-live-board-preserved", 5, true, false);
+-                else
+-                    marker.Configure(id, "31ae057a57b556ba296d4415678cb6aaa1faf72e8bbe4eb6325e42bd64c55716", "fix01-live-gameplay-modal", 7, false, true);
+-            }
+-
+-            string path = PageRoot + "/" + id + ".prefab";
+-            PrefabUtility.SaveAsPrefabAsset(root, path);
+-            UnityEngine.Object.DestroyImmediate(root);
++            if (id == ScreenId.Loading) root.layer = 5;
++            try
++            {
++                RectTransform rect = root.GetComponent<RectTransform>();
++                rect.anchorMin = Vector2.zero;
++                rect.anchorMax = Vector2.one;
++                rect.offsetMin = Vector2.zero;
++                rect.offsetMax = Vector2.zero;
++
++                ProductionUiFix01PageBootstrap bootstrap = root.AddComponent<ProductionUiFix01PageBootstrap>();
++                bootstrap.Configure(id);
++                ProductionCoreLoopPageMarker core = root.AddComponent<ProductionCoreLoopPageMarker>();
++                core.Configure(id);
++
++                if (id == ScreenId.Loading)
++                {
++                    rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
++                    rect.sizeDelta = new Vector2(ProductionUiFix01Runtime.ReferenceWidth, ProductionUiFix01Runtime.ReferenceHeight);
++                    ProductionLoadingRuntime.BuildInto(rect, key => AssetDatabase.LoadAssetAtPath<Sprite>(
++                        "Assets/LegendsOfRus/Resources/" + key + ".png"),
++                        AssetDatabase.LoadAssetAtPath<SplashTitleTypography>(
++                            "Assets/LegendsOfRus/Resources/" + ProductionLoadingRuntime.TypographyResource + ".asset"));
++                    if (!root.GetComponent<ProductionLoadingView>().HasRequiredBindings)
++                        throw new InvalidOperationException("Loading alignment builder produced incomplete bindings.");
++                }
++
++                if (id == ScreenId.Home || id == ScreenId.WorldMap || id == ScreenId.ChapterMap)
++                {
++                    ProductionReferenceMatchPageMarker marker = root.AddComponent<ProductionReferenceMatchPageMarker>();
++                    marker.Configure(id, ReferenceR2Sha(id), id == ScreenId.Home ? 6 : 4);
++                }
++                else if (id == ScreenId.PreLevel || id == ScreenId.Gameplay || id == ScreenId.Pause)
++                {
++                    ProductionReferenceMatchR3PageMarker marker = root.AddComponent<ProductionReferenceMatchR3PageMarker>();
++                    if (id == ScreenId.PreLevel)
++                        marker.Configure(id, "32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195", "fix01-independent-assets-prelevel", 12, false, false);
++                    else if (id == ScreenId.Gameplay)
++                        marker.Configure(id, "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800", "fix01-live-board-preserved", 5, true, false);
++                    else
++                        marker.Configure(id, "31ae057a57b556ba296d4415678cb6aaa1faf72e8bbe4eb6325e42bd64c55716", "fix01-live-gameplay-modal", 7, false, true);
++                }
++
++                string path = PageRoot + "/" + id + ".prefab";
++                bool success;
++                PrefabUtility.SaveAsPrefabAsset(root, path, out success);
++                if (!success) throw new IOException("Could not save production prefab: " + path);
++            }
++            finally { UnityEngine.Object.DestroyImmediate(root); }
+         }
+ 
+         static string ReferenceR2Sha(ScreenId id)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionCoreLoopPageRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionCoreLoopPageRuntime.cs
+@@ -16,7 +16,8 @@
+                 return false;
+ 
+             string key = ProductionCoreLoopPageRegistry.ResourceKey(id);
+-            GameObject prefab = Resources.Load<GameObject>(key);
++            GameObject prefab = HomeLoadingPreparation.LoadPreparedPrefab(key) ??
++                Resources.Load<GameObject>(key);
+             if (prefab == null)
+             {
+                 Debug.LogError("Missing serialized production UI prefab for " + id + ": " + key + ". Building FIX01 asset-based runtime fallback.");
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionUiFix01Runtime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionUiFix01Runtime.cs
+@@ -39,6 +39,11 @@
+         {
+             if (root == null)
+                 return;
++            if (id == ScreenId.Loading)
++            {
++                ProductionLoadingRuntime.BuildInto(root);
++                return;
++            }
+             if (root.Find("FIX01_CONTENT") != null)
+                 return;
+ 
+@@ -49,7 +54,6 @@
+ 
+             switch (id)
+             {
+-                case ScreenId.Loading: BuildLoading(contentRect); break;
+                 case ScreenId.Home: BuildHome(contentRect); break;
+                 case ScreenId.WorldMap: BuildWorldMap(contentRect); break;
+                 case ScreenId.ChapterMap: BuildChapterMap(contentRect); break;
+@@ -62,16 +66,18 @@
+             }
+         }
+ 
+-        static void BuildLoading(RectTransform root)
+-        {
+-            AddTexture(root, "Background", Root + "bg_home_clean", 0, 0, 941, 1672);
+-            AddTint(root, "Veil", 0, 0, 941, 1672, new Color32(3, 10, 20, 120));
+-            AddKit(root, "TitlePlaque", "ui_header_frame", 155, 420, 631, 225);
+-            AddTitle(root, "ЛЕГЕНДЫ РУСИ", 190, 462, 561, 72, 48);
+-            AddGoldText(root, "ТРИ В РЯД", 260, 540, 421, 54, 28, TextAnchor.MiddleCenter);
+-            AddKit(root, "Track", "ui_progress_track", 175, 1160, 591, 38);
+-            AddKit(root, "Fill", "ui_progress_fill", 185, 1169, 390, 20);
+-            AddGoldText(root, "Загрузка...", 270, 1215, 401, 50, 25, TextAnchor.MiddleCenter);
++        /// <summary>Exactly the distinct textures consumed by BuildHome and its existing HUD/navigation.</summary>
++        public static IReadOnlyList<string> GetHomeTextureResourceKeys()
++        {
++            return new[]
++            {
++                Root + "bg_home_clean", Root + "hero_ivan_firebird", Root + "portrait_ivan", Root + "title_plaque_navy",
++                Kit + "ui_top_bar", Kit + "ui_jewel_round", Kit + "ui_progress_track", Kit + "ui_currency_pill",
++                Kit + "ui_btn_primary", Kit + "ui_nav_tile", Kit + "ui_panel_navy", Kit + "ui_progress_fill",
++                Icons + "icon_coin", Icons + "icon_gem", Icons + "icon_energy", Icons + "icon_gear",
++                Icons + "icon_map", Icons + "icon_shop", Icons + "icon_events", Icons + "icon_character",
++                Icons + "icon_mail", Icons + "icon_chest"
++            };
+         }
+ 
+         static void BuildHome(RectTransform root)
+@@ -421,7 +427,7 @@
+             if (SpriteCache.TryGetValue(key, out cached) && cached != null)
+                 return cached;
+ 
+-            Texture2D texture = Resources.Load<Texture2D>(key);
++            Texture2D texture = HomeLoadingPreparation.LoadPreparedTexture(key) ?? Resources.Load<Texture2D>(key);
+             if (texture == null)
+             {
+                 Debug.LogError("FIX01 missing Texture2D resource: " + key);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenNavigationPolicy.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenNavigationPolicy.cs
+@@ -10,6 +10,8 @@
+         {
+             switch (current)
+             {
++                case ScreenId.Loading:
++                    destination = ScreenId.SplashTitle; return true;
+                 case ScreenId.WorldMap:
+                     destination = ScreenId.Home; return true;
+                 case ScreenId.ChapterMap:
+@@ -51,7 +53,6 @@
+                 case ScreenId.EmptyErrorState:
+                 case ScreenId.TutorialOverlay:
+                 case ScreenId.SplashTitle:
+-                case ScreenId.Loading:
+                     destination = ScreenId.Home; return true;
+                 default:
+                     destination = ScreenId.Home; return false;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -81,6 +81,10 @@
+         int activeAnalyticsAttemptNumber;
+         LocalizedStoryReaction activeOutcomeReaction;
+         bool initialized;
++        Coroutine loadingRoutine;
++        HomeLoadingPreparation homePreparation;
++        ProductionLoadingView loadingView;
++        bool loadingFailed;
+ 
+         public void Initialize()
+         {
+@@ -102,6 +106,7 @@
+ 
+         void OnDestroy()
+         {
++            CancelLoadingPreparation();
+             if (Instance == this)
+                 Instance = null;
+         }
+@@ -310,6 +315,7 @@
+ 
+         public void Show(ScreenId id)
+         {
++            CancelLoadingPreparation();
+             // The transient Back target belongs only to the directly opened auxiliary
+             // page. Preserve it on a refresh of that page; clear it on every departure,
+             // including forward exits that do not happen to pass through Home.
+@@ -383,19 +389,122 @@
+                     "reward_double"
+                 );
+ 
+-            if (id == ScreenId.Loading)
+-                StartCoroutine(AutoHome(routeGeneration));
++            if (id == ScreenId.Loading && designReady)
++                BindLoadingPreparation();
+ 
+             optimization?.CompleteScreenRoute(
+                 id != ScreenId.Gameplay && id != ScreenId.Dialogue
+             );
+         }
+ 
+-        IEnumerator AutoHome(int generation)
+-        {
+-            yield return new WaitForSecondsRealtime(1.25f);
+-            if (generation == routeGeneration && current == ScreenId.Loading)
+-                Show(ScreenId.Home);
++        void BindLoadingPreparation()
++        {
++            loadingView = contentRoot.GetComponentInChildren<ProductionLoadingView>(true);
++            if (loadingView == null)
++            {
++                Debug.LogError("Loading page has no ProductionLoadingView; Home preparation was not started.");
++                return;
++            }
++            int generation = routeGeneration;
++            loadingView.BindRetry(() =>
++            {
++                if (current == ScreenId.Loading && generation == routeGeneration && loadingFailed)
++                    StartLoadingPreparation(generation);
++            });
++            StartLoadingPreparation(generation);
++        }
++
++        void StartLoadingPreparation(int generation)
++        {
++            if (loadingRoutine != null || loadingView == null)
++                return;
++            homePreparation?.Dispose();
++            homePreparation = new HomeLoadingPreparation();
++            loadingFailed = false;
++            loadingView.SetIndeterminate();
++            loadingRoutine = StartCoroutine(PrepareHome(generation, homePreparation));
++        }
++
++        IEnumerator PrepareHome(int generation, HomeLoadingPreparation preparation)
++        {
++            // Let the newly built Loading page render before issuing resource requests.
++            yield return null;
++            if (!IsCurrentLoadingAttempt(generation, preparation))
++                yield break;
++
++            // Bootstrap owns service creation and save recovery. Home requires its existing
++            // local state; this screen must not create a second service/startup system.
++            if (GameState.Instance == null || GameState.Instance.Save == null)
++            {
++                FailLoading("home_local_state_unavailable");
++                yield break;
++            }
++
++            yield return preparation.Run(progress =>
++            {
++                if (IsCurrentLoadingAttempt(generation, preparation))
++                    loadingView.SetProgress(progress);
++            });
++            if (!IsCurrentLoadingAttempt(generation, preparation))
++                yield break;
++            if (!preparation.IsComplete || preparation.HasFailed)
++            {
++                FailLoading(preparation.FailureReason);
++                yield break;
++            }
++
++            loadingView.SetProgress(1f);
++            // Present completed work for one frame. There is no artificial minimum duration.
++            yield return null;
++            if (!IsCurrentLoadingAttempt(generation, preparation))
++                yield break;
++            if (GameState.Instance == null || GameState.Instance.Save == null)
++            {
++                FailLoading("home_local_state_unavailable");
++                yield break;
++            }
++
++            // Detach before Show retires Loading so that its normal cancellation path cannot
++            // clear the resources while the Home prefab's Awake consumes them.
++            loadingRoutine = null;
++            homePreparation = null;
++            try
++            {
++                preparation.TryBuildHome(() => Show(ScreenId.Home));
++            }
++            finally
++            {
++                preparation.Dispose();
++            }
++        }
++
++        bool IsCurrentLoadingAttempt(int generation, HomeLoadingPreparation preparation)
++        {
++            return this != null && current == ScreenId.Loading && routeGeneration == generation &&
++                ReferenceEquals(homePreparation, preparation) && !preparation.IsCancelled &&
++                loadingView != null && contentRoot != null && contentRoot.activeInHierarchy;
++        }
++
++        void FailLoading(string reason)
++        {
++            loadingRoutine = null;
++            loadingFailed = true;
++            homePreparation?.Dispose();
++            loadingView.ShowError();
++            Debug.LogWarning("Home preparation failed: " + reason);
++        }
++
++        void CancelLoadingPreparation()
++        {
++            if (loadingRoutine != null)
++                StopCoroutine(loadingRoutine);
++            loadingRoutine = null;
++            homePreparation?.Dispose();
++            homePreparation = null;
++            if (loadingView != null)
++                loadingView.BindRetry(null);
++            loadingView = null;
++            loadingFailed = false;
+         }
+ 
+         GameObject CreateRoot(string name, Transform parent)

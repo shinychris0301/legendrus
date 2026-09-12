@@ -44,6 +44,11 @@ namespace LegendsOfRus
                 ProductionLoadingRuntime.BuildInto(root);
                 return;
             }
+            if (id == ScreenId.Home)
+            {
+                ProductionHomeRuntime.BuildInto(root);
+                return;
+            }
             if (root.Find("FIX01_CONTENT") != null)
                 return;
 
@@ -54,7 +59,6 @@ namespace LegendsOfRus
 
             switch (id)
             {
-                case ScreenId.Home: BuildHome(contentRect); break;
                 case ScreenId.WorldMap: BuildWorldMap(contentRect); break;
                 case ScreenId.ChapterMap: BuildChapterMap(contentRect); break;
                 case ScreenId.PreLevel: BuildPreLevel(contentRect); break;
@@ -66,44 +70,10 @@ namespace LegendsOfRus
             }
         }
 
-        /// <summary>Exactly the distinct textures consumed by BuildHome and its existing HUD/navigation.</summary>
+        /// <summary>Exactly the distinct textures consumed by the current aligned Home composition.</summary>
         public static IReadOnlyList<string> GetHomeTextureResourceKeys()
         {
-            return new[]
-            {
-                Root + "bg_home_clean", Root + "hero_ivan_firebird", Root + "portrait_ivan", Root + "title_plaque_navy",
-                Kit + "ui_top_bar", Kit + "ui_jewel_round", Kit + "ui_progress_track", Kit + "ui_currency_pill",
-                Kit + "ui_btn_primary", Kit + "ui_nav_tile", Kit + "ui_panel_navy", Kit + "ui_progress_fill",
-                Icons + "icon_coin", Icons + "icon_gem", Icons + "icon_energy", Icons + "icon_gear",
-                Icons + "icon_map", Icons + "icon_shop", Icons + "icon_events", Icons + "icon_character",
-                Icons + "icon_mail", Icons + "icon_chest"
-            };
-        }
-
-        static void BuildHome(RectTransform root)
-        {
-            AddTexture(root, "Background", Root + "bg_home_clean", 0, 0, 941, 1672);
-            AddTexture(root, "HeroIvanFirebird", Root + "hero_ivan_firebird", 0, 0, 941, 1672, true);
-            BuildTopHud(root, true);
-
-            AddTexture(root, "LogoPlaque", Root + "title_plaque_navy", 150, 155, 641, 285, true);
-            AddTitle(root, "ЛЕГЕНДЫ РУСИ", 185, 205, 571, 90, 52);
-            AddGoldText(root, "ТРИ В РЯД", 265, 305, 411, 58, 31, TextAnchor.MiddleCenter);
-
-            AddKit(root, "PlayButton", "ui_btn_primary", 218, 1014, 510, 190);
-            AddTitle(root, "ИГРАТЬ", 275, 1055, 396, 82, 52);
-
-            AddHomeNav(root, "Map", "icon_map", "КАРТА МИРА", 52, 1210);
-            AddHomeNav(root, "Shop", "icon_shop", "МАГАЗИН", 266, 1210);
-            AddHomeNav(root, "Events", "icon_events", "СОБЫТИЯ", 478, 1210);
-            AddHomeNav(root, "Characters", "icon_character", "ПЕРСОНАЖИ", 688, 1210);
-
-            AddKit(root, "QuestPanel", "ui_panel_navy", 145, 1445, 651, 180);
-            AddIcon(root, "Mail", "icon_mail", 18, 1450, 130, 130);
-            AddGoldText(root, "Соберите синие самоцветы", 220, 1470, 500, 45, 24, TextAnchor.MiddleCenter);
-            AddKit(root, "QuestTrack", "ui_progress_track", 235, 1530, 420, 26);
-            AddKit(root, "QuestFill", "ui_progress_fill", 245, 1537, 220, 12);
-            AddIcon(root, "DailyReward", "icon_chest", 793, 1450, 130, 130);
+            return ProductionHomeRuntime.GetTextureResourceKeys();
         }
 
         static void BuildWorldMap(RectTransform root)
@@ -308,13 +278,6 @@ namespace LegendsOfRus
             AddKit(root, "EnergyPill", "ui_currency_pill", 700, 24, 155, 78);
             AddIcon(root, "EnergyIcon", "icon_energy", 705, 29, 64, 64);
             AddIcon(root, "SettingsIcon", "icon_gear", 850, 18, 84, 84);
-        }
-
-        static void AddHomeNav(RectTransform root, string name, string icon, string label, float x, float y)
-        {
-            AddKit(root, name + "Frame", "ui_nav_tile", x, y, 205, 213);
-            AddIcon(root, name + "Icon", icon, x + 45, y + 24, 115, 115);
-            AddGoldText(root, label, x + 10, y + 155, 185, 43, 18, TextAnchor.MiddleCenter);
         }
 
         static void AddWorldNav(RectTransform root, string name, string icon, string label, float x, float y)

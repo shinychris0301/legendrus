@@ -1,0 +1,483 @@
+{
+    "schemaVersion": 2,
+    "revision": "R3-BuildOptionsFix04",
+    "unityVersion": "6000.5.9f1",
+    "activeTarget": "Android",
+    "evidenceScope": "Read-only local preflight; NOT an APK or device test",
+    "editorPlaying": false,
+    "editorPlayingOrEntering": false,
+    "editorCompiling": false,
+    "editorUpdating": false,
+    "uiDevelopment": false,
+    "uiScriptDebugging": false,
+    "uiAutoconnectProfiler": false,
+    "uiScriptsOnly": false,
+    "policyEvidence": {
+        "schemaVersion": 1,
+        "milestone": "v1.17-step01",
+        "status": "DEVELOPMENT_APK_PREFLIGHT_BLOCKED",
+        "intent": "ReleaseApk",
+        "reasonCode": "ANDROID_PACKAGE_LOCK_UNAPPROVED",
+        "expectedPolicySourceSha256": "95eec67ffb9ef8e45ad657524cbfcaa3c852258f4de2c7a54dc53ad18f96751c",
+        "policyValid": true,
+        "exactUnityVersion": true,
+        "projectSettingsPresent": true,
+        "packageLockApproved": false,
+        "androidModuleAvailable": true,
+        "androidTargetActive": true,
+        "buildProfileOverrideAbsent": true,
+        "bootstrapSceneOnly": true,
+        "exactDevelopmentIdentity": false,
+        "exactDevelopmentVersion": false,
+        "targetApi36": false,
+        "minimumApiSupported": true,
+        "il2Cpp": true,
+        "arm64": true,
+        "gameCategory": true,
+        "portrait": false,
+        "developmentBuild": false,
+        "appBundle": false,
+        "gradleExport": false,
+        "splitApkPerCpuArchitecture": false,
+        "splitApplicationBinary": false,
+        "customSigning": false,
+        "nativeDebugSymbolsDisabled": true,
+        "scriptingDefinesSafe": true,
+        "outputPathValidated": false,
+        "outputPathValidationDeferred": true,
+        "commercialBoundaryIntact": false,
+        "productionAndroidBuildCompiled": false,
+        "productionBuildAuthorized": false
+    },
+    "resolvedPackageLock": {
+        "relativePath": "Packages/packages-lock.json",
+        "present": true,
+        "byteLength": 4951,
+        "sha256": "86ca321b25b56367b6bfc109765ca1cc718931c98a81b9bb5bdf4d2a584bc622",
+        "expectedSha256": "",
+        "matchesExpectedPin": false,
+        "status": "observed-not-approved"
+    },
+    "protectedFiles": [
+        {
+            "relativePath": "Packages/manifest.json",
+            "present": true,
+            "byteLength": 445,
+            "sha256": "03924bef7f475ba9f8ae358f7504960715b12362be2668361aa9411ea95e4dfc",
+            "expectedSha256": "f534b3f48018d7c02ddfb1b59588813562837db8167dda7395956065bf4f6713",
+            "matchesExpectedPin": false,
+            "status": "pin-mismatch"
+        },
+        {
+            "relativePath": "ProjectSettings/ProjectVersion.txt",
+            "present": true,
+            "byteLength": 83,
+            "sha256": "e06e05029943a1f6537d7cf3ca00ae2fb38dfe68d41075504802051e78c1d707",
+            "expectedSha256": "55ad613d4cefdd466d10e22bb2885c8a0993cebfe7b01544d843430e36102784",
+            "matchesExpectedPin": false,
+            "status": "pin-mismatch"
+        },
+        {
+            "relativePath": "ProjectSettings/EditorBuildSettings.asset",
+            "present": true,
+            "byteLength": 353,
+            "sha256": "fd8634901fc667466dfc8f08d09c69a0237e50c1e8a4746980ff1a72e445101d",
+            "expectedSha256": "19d5bf4b4915efa6ca636161ee67bb21033b6a9fc919bc9ccdc22ecca0f71162",
+            "matchesExpectedPin": false,
+            "status": "pin-mismatch"
+        },
+        {
+            "relativePath": "Assets/LegendsOfRus/Resources/Config/economy_runtime_activation.json",
+            "present": true,
+            "byteLength": 473,
+            "sha256": "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248",
+            "expectedSha256": "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248",
+            "matchesExpectedPin": true,
+            "status": "pin-matches"
+        },
+        {
+            "relativePath": "Assets/LegendsOfRus/Resources/Config/commercial_runtime_activation.json",
+            "present": true,
+            "byteLength": 1523,
+            "sha256": "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9",
+            "expectedSha256": "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9",
+            "matchesExpectedPin": true,
+            "status": "pin-matches"
+        },
+        {
+            "relativePath": "Assets/LegendsOfRus/Resources/Config/commercial_runtime_config.json",
+            "present": true,
+            "byteLength": 409,
+            "sha256": "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02",
+            "expectedSha256": "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02",
+            "matchesExpectedPin": true,
+            "status": "pin-matches"
+        }
+    ],
+    "registeredUnityPackages": [
+        {
+            "name": "com.unity.addressables",
+            "version": "2.8.1",
+            "source": "Registry"
+        },
+        {
+            "name": "com.unity.ext.nunit",
+            "version": "2.1.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "version": "1.20.0",
+            "source": "Registry"
+        },
+        {
+            "name": "com.unity.modules.androidjni",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.animation",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.assetbundle",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.audio",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.hierarchycore",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.imageconversion",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.imgui",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.jsonserialize",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.physicscore2d",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.screencapture",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.ui",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.uielements",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.unitywebrequest",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.modules.unitywebrequestassetbundle",
+            "version": "1.0.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.profiling.core",
+            "version": "1.0.3",
+            "source": "Registry"
+        },
+        {
+            "name": "com.unity.scriptablebuildpipeline",
+            "version": "2.6.1",
+            "source": "Registry"
+        },
+        {
+            "name": "com.unity.test-framework",
+            "version": "1.7.0",
+            "source": "BuiltIn"
+        },
+        {
+            "name": "com.unity.ugui",
+            "version": "2.5.0",
+            "source": "BuiltIn"
+        }
+    ],
+    "observations": [
+        "The inherited v1.17 resolved-package approval is still closed. A generated packages-lock.json alone does not open it. Run Android > Build Fix03 > Export Build Diagnostics; review the resolved packages and stale pins.",
+        "One or more protected-file fingerprints or artifact checks differ from the inherited policy. Export Build Diagnostics; do not update hashes blindly.",
+        "Build And Run is outside the existing allowed option set. This export does not reconstruct the previous failed build's flags.",
+        "No Addressables content build, Player build, font approval, package approval, signing operation, or settings change was performed."
+    ],
+    "lastScheduledOptionsPresent": false,
+    "lastScheduledOptions": "No Android scheduled-options callback observed in this Editor session since Fix04.",
+    "installedBuildOptions": [
+        {
+            "name": "AcceptExternalModificationsToPlayer",
+            "rawHex": "0x00000020",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "AllowDebugging",
+            "rawHex": "0x00000200",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "AutoRunPlayer",
+            "rawHex": "0x00000004",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "BuildAdditionalStreamedScenes",
+            "rawHex": "0x00000010",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "BuildScriptsOnly",
+            "rawHex": "0x00008000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "CleanBuildCache",
+            "rawHex": "0x00000080",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "CompressTextures",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": true
+        },
+        {
+            "name": "CompressWithLz4",
+            "rawHex": "0x00040000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "CompressWithLz4HC",
+            "rawHex": "0x00080000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "ComputeCRC",
+            "rawHex": "0x00100000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "ConnectToHost",
+            "rawHex": "0x00001000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "ConnectWithProfiler",
+            "rawHex": "0x00000100",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "CustomConnectionID",
+            "rawHex": "0x00002000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "DetailedBuildReport",
+            "rawHex": "0x20000000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "Development",
+            "rawHex": "0x00000001",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "EnableCodeCoverage",
+            "rawHex": "0x04000000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "EnableDeepProfilingSupport",
+            "rawHex": "0x10000000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "EnableHeadlessMode",
+            "rawHex": "0x00004000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": true
+        },
+        {
+            "name": "ForceEnableAssertions",
+            "rawHex": "0x00020000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "ForceOptimizeScriptCompilation",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": true
+        },
+        {
+            "name": "Il2CPP",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": true
+        },
+        {
+            "name": "IncludeTestAssemblies",
+            "rawHex": "0x00400000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "InstallInBuildFolder",
+            "rawHex": "0x00000040",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "NoUniqueIdentifier",
+            "rawHex": "0x00800000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "None",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": false
+        },
+        {
+            "name": "PatchPackage",
+            "rawHex": "0x00010000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "ShaderLivelinkSupport",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": true
+        },
+        {
+            "name": "ShowBuiltPlayer",
+            "rawHex": "0x00000008",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "StrictMode",
+            "rawHex": "0x00200000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "StripDebugSymbols",
+            "rawHex": "0x00000000",
+            "zeroValue": true,
+            "singleBit": false,
+            "obsolete": true
+        },
+        {
+            "name": "SymlinkLibraries",
+            "rawHex": "0x00000400",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": true
+        },
+        {
+            "name": "SymlinkSources",
+            "rawHex": "0x00000400",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "UncompressedAssetBundle",
+            "rawHex": "0x00000800",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        },
+        {
+            "name": "WaitForPlayerConnection",
+            "rawHex": "0x02000000",
+            "zeroValue": false,
+            "singleBit": true,
+            "obsolete": false
+        }
+    ],
+    "permittedDevelopmentOptions": "Development, ShowBuiltPlayer, CompressWithLz4, CompressWithLz4HC, StrictMode"
+}

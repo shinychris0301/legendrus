@@ -79,6 +79,7 @@ namespace LegendsOfRus.Tests.PlayMode
 
             var observed = new List<float>();
             bool completeFrameVisible = false;
+            bool measuredCaptureWritten = false;
             float deadline = Time.realtimeSinceStartup + 30f;
             while (router.CurrentScreen == ScreenId.Loading && Time.realtimeSinceStartup < deadline)
             {
@@ -91,6 +92,16 @@ namespace LegendsOfRus.Tests.PlayMode
                     Assert.That(view.PercentText.text, Is.EqualTo(Mathf.FloorToInt(progress * 100f) + "%"));
                     observed.Add(progress);
                     completeFrameVisible |= progress == 1f && view.PercentText.gameObject.activeInHierarchy;
+                    if (!measuredCaptureWritten && progress >= .25f && progress < .7f &&
+                        !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LOR_LOADING_CAPTURE_DIR")) &&
+                        SystemInfo.graphicsDeviceType != GraphicsDeviceType.Null)
+                    {
+                        Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672),
+                            "ActualLoading_941x1672", false,
+                            "Observed actual Home resource progress " + Mathf.FloorToInt(progress * 100f) +
+                            "%; no injected request, progress value, or delay");
+                        measuredCaptureWritten = true;
+                    }
                 }
                 Assert.That(view.RetryButton.gameObject.activeSelf, Is.False);
                 yield return null;
@@ -112,6 +123,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 progressMeaning = "Observed equal-weight Home resource-operation progress; no injected requests or timer",
                 observedProgress = observed.ToArray(),
                 completionFrameVisible = completeFrameVisible,
+                actualProgressCaptureWritten = measuredCaptureWritten,
                 routeChanges = router.RouteGeneration - beforeStart
             });
         }
@@ -217,7 +229,8 @@ namespace LegendsOfRus.Tests.PlayMode
             field.SetValue(router, null);
         }
 
-        void Capture(ProductionLoadingView view, Vector2Int size, Rect safeRect, string name, bool errorState = false)
+        void Capture(ProductionLoadingView view, Vector2Int size, Rect safeRect, string name,
+            bool errorState = false, string evidenceDescription = null)
         {
             Canvas canvas = router.GameCanvas;
             CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
@@ -275,6 +288,10 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(environmentBounds.yMin, Is.LessThanOrEqualTo(1f));
                 Assert.That(environmentBounds.xMax, Is.GreaterThanOrEqualTo(size.x - 1f));
                 Assert.That(environmentBounds.yMax, Is.GreaterThanOrEqualTo(size.y - 1f));
+                Rect shadeBounds = ScreenBounds(view.LowerShade.rectTransform, camera);
+                Assert.That(shadeBounds.xMin, Is.LessThanOrEqualTo(1f), "Lower shade must reach the physical left edge.");
+                Assert.That(shadeBounds.xMax, Is.GreaterThanOrEqualTo(size.x - 1f), "Lower shade must reach the physical right edge.");
+                Assert.That(shadeBounds.yMin, Is.LessThanOrEqualTo(1f), "Lower shade must continue to the physical bottom edge.");
                 camera.Render();
                 RenderTexture.active = target;
                 texture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false);
@@ -298,11 +315,14 @@ namespace LegendsOfRus.Tests.PlayMode
                 {
                     unityVersion = Application.unityVersion,
                     capture = "Actual Unity Play Mode rendering of active Loading prefab on existing router Canvas",
-                    fixture = errorState ? "Injected missing Home resource; actual router failure and retry presentation"
-                        : "Explicit 42% visual layout fixture; this image does not measure loading duration or progress",
+                    fixture = evidenceDescription ?? (errorState
+                        ? "Injected missing Home resource; actual router failure and retry presentation"
+                        : "Explicit 42% visual layout fixture; this image does not measure loading duration or progress"),
                     width = size.x, height = size.y, safeArea = safeRect,
                     progressBar = barBounds, percent = percentBounds, tipText = bodyBounds,
                     environment = environmentBounds,
+                    lowerShade = shadeBounds,
+                    displayedProgress = view.ProgressBar.Progress,
                     graphicsDevice = SystemInfo.graphicsDeviceType.ToString()
                 });
             }
@@ -394,6 +414,7 @@ namespace LegendsOfRus.Tests.PlayMode
             public string unityVersion, route, progressMeaning;
             public float[] observedProgress;
             public bool completionFrameVisible;
+            public bool actualProgressCaptureWritten;
             public int routeChanges;
         }
 
@@ -408,7 +429,8 @@ namespace LegendsOfRus.Tests.PlayMode
         {
             public string unityVersion, capture, fixture, graphicsDevice;
             public int width, height;
-            public Rect safeArea, progressBar, percent, tipText, environment;
+            public Rect safeArea, progressBar, percent, tipText, environment, lowerShade;
+            public float displayedProgress;
         }
     }
 }

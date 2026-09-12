@@ -1,0 +1,352 @@
+--- a/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs
+@@ -16,18 +16,21 @@
+     internal static class AndroidBuildStateReader
+     {
+         const string PackageManifestSha256 =
+-            "f534b3f48018d7c02ddfb1b59588813562837db8167dda7395956065bf4f6713";
++            "03924bef7f475ba9f8ae358f7504960715b12362be2668361aa9411ea95e4dfc";
+         const string ProjectVersionSha256 =
+-            "55ad613d4cefdd466d10e22bb2885c8a0993cebfe7b01544d843430e36102784";
++            "e06e05029943a1f6537d7cf3ca00ae2fb38dfe68d41075504802051e78c1d707";
+         const string EditorBuildSettingsSha256 =
+-            "19d5bf4b4915efa6ca636161ee67bb21033b6a9fc919bc9ccdc22ecca0f71162";
++            "fd8634901fc667466dfc8f08d09c69a0237e50c1e8a4746980ff1a72e445101d";
+         const string EconomyActivationSha256 =
+             "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248";
+         const string CommercialActivationSha256 =
+             "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9";
+         const string CommercialConfigSha256 =
+             "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02";
+-        private const bool ResolvedPackageLockApproved = false;
++        // Reviewed local development baseline. Approval requires these exact package bytes;
++        // merely having a generated lock never grants build permission.
++        internal const string ResolvedPackageLockSha256 =
++            "86ca321b25b56367b6bfc109765ca1cc718931c98a81b9bb5bdf4d2a584bc622";
+ 
+         static readonly HashSet<string> ForbiddenExtensions =
+             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+@@ -164,7 +167,7 @@
+                 facts.ProjectSettingsPresent = File.Exists(
+                     Path.Combine(root, "ProjectSettings/ProjectSettings.asset")
+                 );
+-                facts.PackageLockApproved = ResolvedPackageLockApproved;
++                facts.PackageLockApproved = ResolvedPackageBaselineIsExact(root);
+                 facts.AndroidModuleAvailable =
+                     BuildPipeline.IsBuildTargetSupported(
+                         BuildTargetGroup.Android,
+@@ -543,6 +546,20 @@
+             );
+         }
+ 
++        internal static bool ResolvedPackageBaselineIsExact(string root)
++        {
++            try
++            {
++                return HashMatches(root, "Packages/manifest.json", PackageManifestSha256) &&
++                    HashMatches(root, "Packages/packages-lock.json", ResolvedPackageLockSha256);
++            }
++            catch
++            {
++                // Missing/unreadable/changed files and all path or I/O failures fail closed.
++                return false;
++            }
++        }
++
+         static bool ProtectedBoundaryIsExact(string root)
+         {
+             return
+--- a/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs
+@@ -81,9 +81,10 @@
+                         "StrictMode are permitted. AutoRunPlayer and unreviewed additional flags " +
+                         "remain outside this build-only workflow. Use Build, not Build And Run.";
+                 case AndroidBuildReasonCodes.PackageLockUnapproved:
+-                    return "The inherited v1.17 resolved-package approval is still closed. " +
+-                        "A generated packages-lock.json alone does not open it. Run Android > " +
+-                        "Build Fix03 > Export Build Diagnostics; review the resolved packages and stale pins.";
++                    return "The local manifest and resolved-package lock must match the reviewed " +
++                        "development baseline exactly. Missing, unreadable or changed package files " +
++                        "remain blocked. Run Android > Build Fix03 > Export Build Diagnostics; " +
++                        "review the fingerprints before changing any approval pin.";
+                 case AndroidBuildReasonCodes.CommercialBoundaryChanged:
+                     return "One or more protected-file fingerprints or artifact checks differ from " +
+                         "the inherited policy. Export Build Diagnostics; do not update hashes blindly.";
+@@ -145,7 +146,8 @@
+                     uiAutoconnectProfiler = EditorUserBuildSettings.connectProfiler,
+                     uiScriptsOnly = EditorUserBuildSettings.buildScriptsOnly,
+                     policyEvidence = policy,
+-                    resolvedPackageLock = Fingerprint(root, "Packages/packages-lock.json", string.Empty),
++                    resolvedPackageLock = Fingerprint(root, "Packages/packages-lock.json",
++                        AndroidBuildStateReader.ResolvedPackageLockSha256),
+                     protectedFiles = AndroidBuildStateReader.ReadProtectedFileEvidence(),
+                     registeredUnityPackages = ReadPackages(),
+                     lastScheduledOptionsPresent = AndroidDevelopmentBuildOptions.HasScheduledSnapshot,
+--- a/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs
+@@ -7,11 +7,12 @@
+     internal static class AndroidBuildMenus
+     {
+         const string Checklist =
+-            "This Step 1 source defines one local Development APK contract " +
+-            "that only a reviewed, package-lock-pinned follow-up may permit.\n" +
+-            "The current candidate is preflight/build-blocked because " +
+-            "ResolvedPackageLockApproved=false. Do not build it.\n\n" +
+-            "Follow-up configuration in Unity 6000.5.9f1:\n" +
++            "This local Development APK contract requires the exact reviewed " +
++            "manifest and resolved-package lock fingerprints.\n" +
++            "Run Build Fix04 > Export Build Diagnostics (Read Only); continue " +
++            "only when every readiness check passes. Missing, changed or unreadable " +
++            "package inputs remain blocked.\n\n" +
++            "Required configuration in Unity 6000.5.9f1:\n" +
+             "• Android must be the active platform.\n" +
+             "• Use the platform profile; no custom Build Profile may exist.\n" +
+             "• Scene: Assets/Scenes/Bootstrap.unity only.\n" +
+--- a/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs
+@@ -1,8 +1,11 @@
+ #if UNITY_EDITOR && UNITY_6000_0_OR_NEWER
++using System;
++using System.IO;
+ using LegendsOfRus.AndroidBuild;
+ using NUnit.Framework;
+ using UnityEditor;
+ using UnityEditor.Build;
++using UnityEngine;
+ 
+ namespace LegendsOfRus.Tests.AndroidBuild
+ {
+@@ -72,5 +75,86 @@
+             Assert.AreEqual("ANDROID_PACKAGE_LOCK_UNAPPROVED", result.ReasonCode);
+         }
+     }
++
++    // Fixtures copy the reviewed package inputs into a unique temporary directory.
++    // No test modifies the workspace's actual manifest or package lock.
++    public sealed class AndroidResolvedPackageBaselineEditModeTests
++    {
++        private string fixtureRoot;
++
++        [SetUp]
++        public void CreateIsolatedPackageFixture()
++        {
++            fixtureRoot = Path.Combine(Path.GetTempPath(),
++                "LegendsOfRus-PackageBaseline-" + Guid.NewGuid().ToString("N"));
++            string packages = Path.Combine(fixtureRoot, "Packages");
++            Directory.CreateDirectory(packages);
++            string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
++            foreach (string fileName in new[] { "manifest.json", "packages-lock.json" })
++                File.Copy(Path.Combine(projectRoot, "Packages", fileName),
++                    Path.Combine(packages, fileName));
++        }
++
++        [TearDown]
++        public void RemoveIsolatedPackageFixture()
++        {
++            if (!string.IsNullOrEmpty(fixtureRoot) && Directory.Exists(fixtureRoot))
++                Directory.Delete(fixtureRoot, true);
++        }
++
++        [Test]
++        public void ExactReviewedManifestAndLockAreAccepted()
++        {
++            Assert.IsTrue(AndroidBuildStateReader.ResolvedPackageBaselineIsExact(fixtureRoot));
++        }
++
++        [TestCase("manifest.json")]
++        [TestCase("packages-lock.json")]
++        public void MissingReviewedInputIsDenied(string fileName)
++        {
++            File.Delete(Path.Combine(fixtureRoot, "Packages", fileName));
++            Assert.IsFalse(AndroidBuildStateReader.ResolvedPackageBaselineIsExact(fixtureRoot));
++        }
++
++        [TestCase("manifest.json")]
++        [TestCase("packages-lock.json")]
++        public void ChangedReviewedInputIsDenied(string fileName)
++        {
++            // Whitespace preserves valid JSON while changing the exact reviewed byte identity.
++            File.AppendAllText(Path.Combine(fixtureRoot, "Packages", fileName), " ");
++            Assert.IsFalse(AndroidBuildStateReader.ResolvedPackageBaselineIsExact(fixtureRoot));
++        }
++
++        [Test]
++        public void DirectoryInsteadOfLockIsDenied()
++        {
++            string lockPath = Path.Combine(fixtureRoot, "Packages", "packages-lock.json");
++            File.Delete(lockPath);
++            Directory.CreateDirectory(lockPath);
++            Assert.IsFalse(AndroidBuildStateReader.ResolvedPackageBaselineIsExact(fixtureRoot));
++        }
++
++        [Test]
++        public void InvalidRootFailsClosedWithoutThrowing()
++        {
++            Assert.DoesNotThrow(() => Assert.IsFalse(
++                AndroidBuildStateReader.ResolvedPackageBaselineIsExact(null)));
++        }
++
++        [Test]
++        public void PackageFingerprintMatchDoesNotApproveReleaseOrSigning()
++        {
++            var policy = AndroidBuildTestFactory.Policy();
++            var facts = AndroidBuildTestFactory.AllowedFacts();
++            facts.PackageLockApproved = AndroidBuildStateReader.ResolvedPackageBaselineIsExact(fixtureRoot);
++            Assert.IsTrue(facts.PackageLockApproved);
++            facts.CustomSigning = true;
++            Assert.AreEqual("ANDROID_CUSTOM_SIGNING_BLOCKED",
++                AndroidBuildPolicyEvaluator.Evaluate(policy, facts).ReasonCode);
++            facts.CustomSigning = false;
++            facts.DevelopmentBuild = false;
++            Assert.IsFalse(AndroidBuildPolicyEvaluator.Evaluate(policy, facts).Allowed);
++        }
++    }
+ }
+ #endif
+--- a/Assets/LegendsOfRus/Scripts/Editor/SplashTitleR3Validation.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/SplashTitleR3Validation.cs
+@@ -24,8 +24,12 @@
+         }
+         public static List<string> ValidateWiring()
+         {
++            GameObject prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Step20SplashTitleR3PrefabRebuilder.PrefabPath);
++            return ValidateWiring(prefab);
++        }
++        public static List<string> ValidateWiring(GameObject prefab)
++        {
+             var issues=new List<string>();
+-            GameObject prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Step20SplashTitleR3PrefabRebuilder.PrefabPath);
+             if(prefab==null){issues.Add("Canonical prefab could not be imported.");return issues;}
+             SplashTitleView view=prefab.GetComponent<SplashTitleView>();
+             if(view==null)issues.Add("Canonical prefab has no root SplashTitleView.");
+@@ -38,7 +42,8 @@
+             {
+                 if(image.sprite==null)issues.Add("Missing sprite: "+image.name);
+                 if(!image.preserveAspect)issues.Add("Sprite aspect ratio is not preserved: "+image.name);
+-                if(image.raycastTarget && image.GetComponentInParent<Button>()==null)issues.Add("Decorative graphic intercepts input: "+image.name);
++                // Imported prefab ancestors are inactive in the hierarchy; button-owned artwork still receives input.
++                if(image.raycastTarget && image.GetComponentInParent<Button>(true)==null)issues.Add("Decorative graphic intercepts input: "+image.name);
+             }
+             foreach(string path in AssetDatabase.GetDependencies(Step20SplashTitleR3PrefabRebuilder.PrefabPath,true))
+                 if(path.Contains("SplashTitleFinal/")||path.Contains("Art/ReferenceOnly/")||path.Contains("Resources/DesignScreens/"))
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/SplashTitleBuildWiringEditModeTests.cs
+@@ -0,0 +1,104 @@
++#if UNITY_EDITOR
++using System;
++using System.Collections.Generic;
++using System.Reflection;
++using NUnit.Framework;
++using UnityEditor;
++using UnityEngine;
++using UnityEngine.UI;
++using Object = UnityEngine.Object;
++
++namespace LegendsOfRus.Tests.ProductionCoreLoopUi
++{
++    public sealed class SplashTitleBuildWiringEditModeTests
++    {
++        const string PrefabPath = "Assets/LegendsOfRus/Resources/ProductionUI/Pages/SplashTitle.prefab";
++        GameObject fixtureRoot;
++
++        [TearDown]
++        public void RemoveIsolatedClone()
++        {
++            if (fixtureRoot != null) Object.DestroyImmediate(fixtureRoot);
++        }
++
++        [Test]
++        public void SavedCanonicalPrefabPassesBuildWiringValidation()
++        {
++            GameObject prefab = LoadCanonicalPrefab();
++            Assert.That(EditorUtility.IsPersistent(prefab), Is.True);
++            Assert.That(Validate(Type.EmptyTypes, new object[0]), Is.Empty);
++        }
++
++        [Test]
++        public void InactiveCloneRetainsFiveValidButtonArtworkTargets()
++        {
++            GameObject clone = CreateInactiveClone();
++            Button[] buttons = clone.GetComponentsInChildren<Button>(true);
++            Assert.That(buttons.Length, Is.EqualTo(5));
++            foreach (Button button in buttons)
++            {
++                Assert.That(button.targetGraphic, Is.Not.Null);
++                Assert.That(button.targetGraphic.transform.IsChildOf(button.transform), Is.True);
++                Assert.That(button.targetGraphic.raycastTarget, Is.True);
++                Assert.That(button.gameObject.activeInHierarchy, Is.False);
++            }
++            Assert.That(ValidateClone(clone), Is.Empty);
++        }
++
++        [Test]
++        public void InactiveCloneStillRejectsRaycastDecorationOutsideButtons()
++        {
++            GameObject clone = CreateInactiveClone();
++            Image source = clone.GetComponentInChildren<Image>(true);
++            Assert.That(source, Is.Not.Null);
++            Assert.That(source.sprite, Is.Not.Null);
++            var decoration = new GameObject("StrayDecoration", typeof(RectTransform),
++                typeof(CanvasRenderer), typeof(Image));
++            decoration.transform.SetParent(clone.transform, false);
++            Image image = decoration.GetComponent<Image>();
++            image.sprite = source.sprite;
++            image.preserveAspect = true;
++            image.raycastTarget = true;
++
++            Assert.That(ValidateClone(clone), Is.EquivalentTo(new[]
++            {
++                "Decorative graphic intercepts input: StrayDecoration"
++            }));
++        }
++
++        GameObject CreateInactiveClone()
++        {
++            // Instantiate beneath an inactive parent so no runtime OnEnable callback runs.
++            fixtureRoot = new GameObject("SplashWiringTestRoot");
++            fixtureRoot.SetActive(false);
++            GameObject clone = Object.Instantiate(LoadCanonicalPrefab(), fixtureRoot.transform, false);
++            clone.SetActive(false);
++            Assert.That(clone.activeInHierarchy, Is.False);
++            return clone;
++        }
++
++        static GameObject LoadCanonicalPrefab()
++        {
++            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
++            Assert.That(prefab, Is.Not.Null, "The accepted canonical prefab must already exist.");
++            return prefab;
++        }
++
++        static List<string> ValidateClone(GameObject clone)
++        {
++            return Validate(new[] { typeof(GameObject) }, new object[] { clone });
++        }
++
++        static List<string> Validate(Type[] argumentTypes, object[] arguments)
++        {
++            // An asmdef test assembly cannot directly reference the predefined Editor assembly.
++            Type validator = Type.GetType(
++                "LegendsOfRus.Editor.SplashTitleR3Validation, Assembly-CSharp-Editor", true);
++            MethodInfo method = validator.GetMethod("ValidateWiring", BindingFlags.Public | BindingFlags.Static,
++                null, argumentTypes, null);
++            Assert.That(method, Is.Not.Null);
++            return (List<string>)method.Invoke(null, arguments);
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/SplashTitleBuildWiringEditModeTests.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 1a408cc3b65644e4bda90c5e5e7d98ac
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

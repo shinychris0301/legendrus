@@ -10,7 +10,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class SplashTitleView : MonoBehaviour
     {
-        public const int CurrentRevision = 5;
+        public const int CurrentRevision = 6;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public Button StartButton;
@@ -35,7 +35,9 @@ namespace LegendsOfRus
             AccountButton != null && HelpButton != null && VersionText != null &&
             LanguageText != null && StartText != null && SettingsText != null &&
             AccountText != null && HelpText != null && TaglineText != null && LegalText != null;
-        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings;
+        public bool HasResponsiveBindings => GetComponent<SplashTitleForegroundLayout>() != null &&
+            GetComponent<SplashTitleForegroundLayout>().HasRequiredBindings;
+        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings && HasResponsiveBindings;
 
         /// <summary>Diagnostic only: do not conflate an old revision with missing references.</summary>
         public string GetValidationFailure()
@@ -53,6 +55,7 @@ namespace LegendsOfRus
             };
             for (int i = 0; i < references.Length; i++)
                 if (references[i] == null) issues.Add("Missing binding: " + names[i]);
+            if (!HasResponsiveBindings) issues.Add("Missing Splash foreground responsive bindings or authored layout");
             return string.Join("; ", issues);
         }
 

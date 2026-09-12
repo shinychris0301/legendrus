@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 114011}
   - component: {fileID: 4626559332440028164}
   - component: {fileID: 5040422047232646406}
+  - component: {fileID: 6381059771097885307}
   m_Layer: 5
   m_Name: Loading
   m_TagString: Untagged
@@ -81,14 +82,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f93fe479362547ccaa30346ac56dc1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingView
-  Revision: 2
+  Revision: 3
   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
   Environment: {fileID: 5755953744872643519}
   Logo: {fileID: 2610341730079462722}
   Ivan: {fileID: 7464538970703872653}
   Firebird: {fileID: 5923169557638519040}
   TipPanel: {fileID: 1191140106484597474}
-  LowerShade: {fileID: 5130316839883125772}
+  LowerShade: {fileID: 4806331818352541717}
   TipTitle: {fileID: 7721531932822518407}
   TipBody: {fileID: 3785519114695521902}
   StatusText: {fileID: 7937307394871902994}
@@ -109,6 +110,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleResponsiveLayout
   Background: {fileID: 5755953744872643519}
+--- !u!114 &6381059771097885307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9ff85b751764954a1117b46a1c479b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingShadeLayout
+  Shade: {fileID: 4806331818352541717}
 --- !u!1 &411460681582757803
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,7 +811,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4114271707025170923}
   - component: {fileID: 3859970738731219749}
-  - component: {fileID: 5130316839883125772}
+  - component: {fileID: 4806331818352541717}
   m_Layer: 5
   m_Name: LowerContrast
   m_TagString: Untagged
@@ -832,7 +846,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6410068500965593289}
   m_CullTransparentMesh: 1
---- !u!114 &5130316839883125772
+--- !u!114 &4806331818352541717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -841,9 +855,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6410068500965593289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00d544d454b23061a3b9a167c704d4f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1813c6e997fc42cd82479064e0ecd29a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleFooterShade
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLoadingShade
   m_Material: {fileID: 0}
   m_Color: {r: 0.011764706, g: 0.03529412, b: 0.06666667, a: 0.87058824}
   m_RaycastTarget: 0

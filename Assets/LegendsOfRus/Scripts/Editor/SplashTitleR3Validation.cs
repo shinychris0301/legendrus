@@ -24,8 +24,12 @@ namespace LegendsOfRus.Editor
         }
         public static List<string> ValidateWiring()
         {
-            var issues=new List<string>();
             GameObject prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Step20SplashTitleR3PrefabRebuilder.PrefabPath);
+            return ValidateWiring(prefab);
+        }
+        public static List<string> ValidateWiring(GameObject prefab)
+        {
+            var issues=new List<string>();
             if(prefab==null){issues.Add("Canonical prefab could not be imported.");return issues;}
             SplashTitleView view=prefab.GetComponent<SplashTitleView>();
             if(view==null)issues.Add("Canonical prefab has no root SplashTitleView.");
@@ -38,7 +42,8 @@ namespace LegendsOfRus.Editor
             {
                 if(image.sprite==null)issues.Add("Missing sprite: "+image.name);
                 if(!image.preserveAspect)issues.Add("Sprite aspect ratio is not preserved: "+image.name);
-                if(image.raycastTarget && image.GetComponentInParent<Button>()==null)issues.Add("Decorative graphic intercepts input: "+image.name);
+                // Imported prefab ancestors are inactive in the hierarchy; button-owned artwork still receives input.
+                if(image.raycastTarget && image.GetComponentInParent<Button>(true)==null)issues.Add("Decorative graphic intercepts input: "+image.name);
             }
             foreach(string path in AssetDatabase.GetDependencies(Step20SplashTitleR3PrefabRebuilder.PrefabPath,true))
                 if(path.Contains("SplashTitleFinal/")||path.Contains("Art/ReferenceOnly/")||path.Contains("Resources/DesignScreens/"))

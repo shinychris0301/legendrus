@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "status": "UNAPPLIED; NOT TESTED",
+  "purpose": "Concrete proposed correction for review before separately authorizing the existing Android guard change. This report does not authorize or establish an APK build.",
+  "userRequest": "build apk for testing at my android phone",
+  "date": "2026-09-12",
+  "unityVersion": "6000.5.9f1",
+  "patch": "GuardCorrection.proposed.diff",
+  "patchSha256": "801e7f2701f56637bfbc21ccc3b662b1b65d80a5c737445c2c4a74b68ab01c51",
+  "productionFilesChanged": [],
+  "proposedFiles": [
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs",
+      "beforeSha256": "993d6e5fbda9912a088fedfca7426e84084b3aa2df0e8243a9e00ac40dd0812c",
+      "proposedSha256": "af564aaf958bd4fc16ddf86de26b77c431af7427d62b00ac38b0b5af29aff91b"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs",
+      "beforeSha256": "8a866fc3fce7ca411d7e36da0a15f962faf4a46821fbaaa26e922f8215227ac6",
+      "proposedSha256": "c5fb69d69c7c71f82144065f9060f895723536aa58176dee34c3112fbf523b18"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs",
+      "beforeSha256": "0861d7b05370937a8f007326d7a059457f78f51f9fe4cbc600ea8af109c547a4",
+      "proposedSha256": "dc129f849809501fa8ee1a02d953d5a3be5849ef6a8d58502c5a6d6f551d3f70"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs",
+      "beforeSha256": "f5818318bd08f63a1d21fb56d390284caf976bc66d3d7f0ab9b641182fe33fcf",
+      "proposedSha256": "17095005992cfba52813acd04575f97f2f1f70be3f1de6510670cc4eb60bf1d6"
+    }
+  ],
+  "policySha256": "95eec67ffb9ef8e45ad657524cbfcaa3c852258f4de2c7a54dc53ad18f96751c",
+  "policyMatchesExistingPin": true,
+  "pinFindings": [
+    {
+      "path": "Packages/manifest.json",
+      "expectedSha256Before": "f534b3f48018d7c02ddfb1b59588813562837db8167dda7395956065bf4f6713",
+      "observedSha256": "03924bef7f475ba9f8ae358f7504960715b12362be2668361aa9411ea95e4dfc",
+      "matchesExistingPin": false,
+      "proposedRepin": true,
+      "finding": "Current bytes match the supplied archive manifest hash recorded in ProjectDocs/AndroidBuildFix03/ArchivePinFindings.json; old pin predates the shipped manifest. Current dependency graph was inspected, not upgraded."
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "expectedSha256Before": "55ad613d4cefdd466d10e22bb2885c8a0993cebfe7b01544d843430e36102784",
+      "observedSha256": "e06e05029943a1f6537d7cf3ca00ae2fb38dfe68d41075504802051e78c1d707",
+      "matchesExistingPin": false,
+      "proposedRepin": true,
+      "finding": "Only the Unity-generated m_EditorVersionWithRevision line differs. Hashing the first line alone exactly reproduces the old pin. Editor remains 6000.5.9f1."
+    },
+    {
+      "path": "ProjectSettings/EditorBuildSettings.asset",
+      "expectedSha256Before": "19d5bf4b4915efa6ca636161ee67bb21033b6a9fc919bc9ccdc22ecca0f71162",
+      "observedSha256": "fd8634901fc667466dfc8f08d09c69a0237e50c1e8a4746980ff1a72e445101d",
+      "matchesExistingPin": false,
+      "proposedRepin": true,
+      "finding": "Only m_configObjects changed from an empty map to the existing Addressables DefaultObject registration. Replacing that mapping with the empty map exactly reproduces the old pin. Bootstrap path and GUID are identical."
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/Config/economy_runtime_activation.json",
+      "expectedSha256Before": "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248",
+      "observedSha256": "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248",
+      "matchesExistingPin": true,
+      "proposedRepin": false,
+      "finding": "Exact existing economy/commercial boundary bytes; preserve pin unchanged."
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/Config/commercial_runtime_activation.json",
+      "expectedSha256Before": "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9",
+      "observedSha256": "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9",
+      "matchesExistingPin": true,
+      "proposedRepin": false,
+      "finding": "Exact existing economy/commercial boundary bytes; preserve pin unchanged."
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/Config/commercial_runtime_config.json",
+      "expectedSha256Before": "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02",
+      "observedSha256": "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02",
+      "matchesExistingPin": true,
+      "proposedRepin": false,
+      "finding": "Exact existing economy/commercial boundary bytes; preserve pin unchanged."
+    }
+  ],
+  "resolvedPackageLock": {
+    "path": "Packages/packages-lock.json",
+    "observedSha256": "86ca321b25b56367b6bfc109765ca1cc718931c98a81b9bb5bdf4d2a584bc622",
+    "existingApproval": "Hardcoded false; no current hash approval",
+    "proposedApproval": "Read-only exact SHA-256 check of both reviewed manifest and lock; any missing, changed or unreadable input returns false. All independent build guard checks still apply.",
+    "dependencies": {
+      "com.unity.addressables": {
+        "version": "2.8.1",
+        "depth": 0,
+        "source": "registry",
+        "dependencies": {
+          "com.unity.profiling.core": "1.0.2",
+          "com.unity.test-framework": "1.4.5",
+          "com.unity.modules.assetbundle": "1.0.0",
+          "com.unity.modules.jsonserialize": "1.0.0",
+          "com.unity.modules.imageconversion": "1.0.0",
+          "com.unity.modules.unitywebrequest": "1.0.0",
+          "com.unity.scriptablebuildpipeline": "2.5.2",
+          "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+        },
+        "url": "https://packages.unity.com"
+      },
+      "com.unity.ext.nunit": {
+        "version": "2.1.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.inputsystem": {
+        "version": "1.20.0",
+        "depth": 0,
+        "source": "registry",
+        "dependencies": {
+          "com.unity.modules.uielements": "1.0.0"
+        },
+        "url": "https://packages.unity.com"
+      },
+      "com.unity.profiling.core": {
+        "version": "1.0.3",
+        "depth": 1,
+        "source": "registry",
+        "dependencies": {},
+        "url": "https://packages.unity.com"
+      },
+      "com.unity.scriptablebuildpipeline": {
+        "version": "2.6.1",
+        "depth": 1,
+        "source": "registry",
+        "dependencies": {
+          "com.unity.test-framework": "1.4.5",
+          "com.unity.modules.assetbundle": "1.0.0"
+        },
+        "url": "https://packages.unity.com"
+      },
+      "com.unity.test-framework": {
+        "version": "1.7.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.ext.nunit": "2.1.0",
+          "com.unity.modules.imgui": "1.0.0",
+          "com.unity.modules.jsonserialize": "1.0.0"
+        }
+      },
+      "com.unity.ugui": {
+        "version": "2.5.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.ui": "1.0.0",
+          "com.unity.modules.imgui": "1.0.0",
+          "com.unity.modules.audio": "1.0.0",
+          "com.unity.modules.physics2d": "1.0.0",
+          "com.unity.modules.physics": "1.0.0"
+        }
+      },
+      "com.unity.modules.androidjni": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.jsonserialize": "1.0.0"
+        }
+      },
+      "com.unity.modules.animation": {
+        "version": "1.0.0",
+        "depth": 2,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.assetbundle": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.audio": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.hierarchycore": {
+        "version": "1.0.0",
+        "depth": 2,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.imageconversion": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.imgui": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.jsonserialize": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.physics": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.physics2d": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.physicscore2d": "1.0.0"
+        }
+      },
+      "com.unity.modules.physicscore2d": {
+        "version": "1.0.0",
+        "depth": 2,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.screencapture": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.imageconversion": "1.0.0"
+        }
+      },
+      "com.unity.modules.ui": {
+        "version": "1.0.0",
+        "depth": 0,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.uielements": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.ui": "1.0.0",
+          "com.unity.modules.imgui": "1.0.0",
+          "com.unity.modules.jsonserialize": "1.0.0",
+          "com.unity.modules.hierarchycore": "1.0.0",
+          "com.unity.modules.physics": "1.0.0",
+          "com.unity.modules.animation": "1.0.0"
+        }
+      },
+      "com.unity.modules.unitywebrequest": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {}
+      },
+      "com.unity.modules.unitywebrequestassetbundle": {
+        "version": "1.0.0",
+        "depth": 1,
+        "source": "builtin",
+        "dependencies": {
+          "com.unity.modules.assetbundle": "1.0.0",
+          "com.unity.modules.unitywebrequest": "1.0.0"
+        }
+      }
+    }
+  },
+  "manifest": {
+    "dependencies": {
+      "com.unity.inputsystem": "1.20.0",
+      "com.unity.modules.androidjni": "1.0.0",
+      "com.unity.modules.audio": "1.0.0",
+      "com.unity.modules.imageconversion": "1.0.0",
+      "com.unity.modules.jsonserialize": "1.0.0",
+      "com.unity.modules.screencapture": "1.0.0",
+      "com.unity.modules.ui": "1.0.0",
+      "com.unity.test-framework": "1.6.0",
+      "com.unity.ugui": "1.0.0",
+      "com.unity.addressables": "2.8.1"
+    }
+  },
+  "graphChecks": {
+    "packageCount": 23,
+    "builtinCount": 19,
+    "registryCount": 4,
+    "registryUrls": [
+      "https://packages.unity.com"
+    ],
+    "unexpectedSources": [],
+    "missingDependencyKeys": [],
+    "manifestResolvedVersionDifferences": [
+      {
+        "name": "com.unity.test-framework",
+        "manifestRequestedVersion": "1.6.0",
+        "resolvedVersion": "1.7.0",
+        "resolvedSource": "builtin",
+        "installedEditorBuiltinVersion": "1.7.0",
+        "matchesInstalledEditorBuiltin": true
+      },
+      {
+        "name": "com.unity.ugui",
+        "manifestRequestedVersion": "1.0.0",
+        "resolvedVersion": "2.5.0",
+        "resolvedSource": "builtin",
+        "installedEditorBuiltinVersion": "2.5.0",
+        "matchesInstalledEditorBuiltin": true
+      }
+    ],
+    "embeddedPackageDirectoryCount": 0
+  },
+  "preservedRestrictions": [
+    "Policy JSON and its SHA-256",
+    "Production compile gate and all production approval flags",
+    "Custom signing prohibited; no credential access",
+    "APK-only, exact Bootstrap scene and output",
+    "Development options allowlist; AutoRunPlayer prohibited",
+    "Active/inactive custom profile rejection",
+    "Economy/commercial config bytes and pins",
+    "Existing .meta GUIDs",
+    "Existing packages and all Player settings",
+    "Approved Splash and implemented Loading"
+  ],
+  "proposedTests": {
+    "location": "Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs",
+    "parameterExpandedCases": 8,
+    "execution": "NOT TESTED; source exists only inside unapplied diff",
+    "cases": [
+      "Exact reviewed manifest and lock copied to temporary directory accepted",
+      "Missing manifest denied",
+      "Missing lock denied",
+      "Mutated manifest denied",
+      "Mutated lock denied",
+      "Directory in place of lock denied",
+      "Null root fails closed without exception",
+      "Package fingerprint match does not approve custom signing or release"
+    ]
+  },
+  "checksPerformed": [
+    "Read current guard, policy, diagnostics, historical archive findings and test assembly",
+    "Computed SHA-256 for six protected files, policy and resolved lock",
+    "Reconstructed historical ProjectVersion/EditorBuildSettings bytes in memory and matched old pins exactly",
+    "Inspected exact 23-package lock graph and verified differing builtin versions against installed Editor package metadata",
+    "Source path scan found no embedded packages or Android native plugin artifacts; no credential files read",
+    "Generated a unified diff in documentation only",
+    "patch --dry-run -p1 accepted all 4 proposed files; no production patch applied"
+  ],
+  "checksNotPerformed": [
+    "Applying the proposed patch",
+    "Compilation or Unity tests of the proposed code",
+    "Changing guard approval, policy, packages, settings or signing",
+    "APK/AAB build",
+    "Installation, launch or phone testing",
+    "Historical sealed-source verifier execution"
+  ],
+  "historicalVerifier": "Tools/verify_v1_17_step01.mjs targets an obsolete sealed 457-file source archive and const-false lock gate. Preserve it as historical evidence; do not claim it verifies this current working project. A separately scoped current-baseline static verifier remains to be prepared before correction execution.",
+  "productionFilesStillMatchBeforeHashes": true,
+  "checklistChange": "Update only obsolete checklist introduction: exact reviewed manifest/lock required, diagnostics and every readiness check must pass. All configuration/signing/production restriction wording below that introduction is preserved.",
+  "finalOutcome": {
+    "status": "AUTHORIZED, APPLIED, TESTED; APK BUILT AND VERIFIED",
+    "report": "BuildReport.md",
+    "evidence": "ApkVerification.json",
+    "note": "Earlier fields in this file preserve its original review/progress checkpoint."
+  }
+}

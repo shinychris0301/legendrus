@@ -7,11 +7,12 @@ namespace LegendsOfRus.AndroidBuild
     internal static class AndroidBuildMenus
     {
         const string Checklist =
-            "This Step 1 source defines one local Development APK contract " +
-            "that only a reviewed, package-lock-pinned follow-up may permit.\n" +
-            "The current candidate is preflight/build-blocked because " +
-            "ResolvedPackageLockApproved=false. Do not build it.\n\n" +
-            "Follow-up configuration in Unity 6000.5.9f1:\n" +
+            "This local Development APK contract requires the exact reviewed " +
+            "manifest and resolved-package lock fingerprints.\n" +
+            "Run Build Fix04 > Export Build Diagnostics (Read Only); continue " +
+            "only when every readiness check passes. Missing, changed or unreadable " +
+            "package inputs remain blocked.\n\n" +
+            "Required configuration in Unity 6000.5.9f1:\n" +
             "• Android must be the active platform.\n" +
             "• Use the platform profile; no custom Build Profile may exist.\n" +
             "• Scene: Assets/Scenes/Bootstrap.unity only.\n" +

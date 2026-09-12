@@ -36,6 +36,7 @@ namespace LegendsOfRus
             rect.localScale = Vector3.one;
             SplashTitleResponsiveLayout layout = instance.GetComponent<SplashTitleResponsiveLayout>();
             if (layout != null) layout.ApplyNow();
+            instance.GetComponent<SplashTitleForegroundLayout>().ApplyNow();
             return true;
         }
     }

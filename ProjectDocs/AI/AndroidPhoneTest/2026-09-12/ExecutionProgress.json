@@ -1,0 +1,41 @@
+{
+  "authorization": "Yes, please go ahead and do that. Make the modifications and build the APK.",
+  "date": "2026-09-12",
+  "reviewedPatchApplied": true,
+  "patchSha256": "801e7f2701f56637bfbc21ccc3b662b1b65d80a5c737445c2c4a74b68ab01c51",
+  "guardTests": {
+    "total": 99,
+    "passed": 99,
+    "failed": 0,
+    "skipped": 0
+  },
+  "buildAttempt01": "Stopped at scheduled preflight: ANDROID_PORTRAIT_REQUIRED; no Player build. Initial serialized orientation1 was incorrect for PlayerSettings; exact installed enum is being verified.",
+  "sourceChanges": [
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs",
+      "beforeSha256": "993d6e5fbda9912a088fedfca7426e84084b3aa2df0e8243a9e00ac40dd0812c",
+      "afterSha256": "af564aaf958bd4fc16ddf86de26b77c431af7427d62b00ac38b0b5af29aff91b"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildFix03Diagnostics.cs",
+      "beforeSha256": "8a866fc3fce7ca411d7e36da0a15f962faf4a46821fbaaa26e922f8215227ac6",
+      "afterSha256": "c5fb69d69c7c71f82144065f9060f895723536aa58176dee34c3112fbf523b18"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidBuildFix03EditModeTests.cs",
+      "beforeSha256": "0861d7b05370937a8f007326d7a059457f78f51f9fe4cbc600ea8af109c547a4",
+      "afterSha256": "dc129f849809501fa8ee1a02d953d5a3be5849ef6a8d58502c5a6d6f551d3f70"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildMenus.cs",
+      "beforeSha256": "f5818318bd08f63a1d21fb56d390284caf976bc66d3d7f0ab9b641182fe33fcf",
+      "afterSha256": "17095005992cfba52813acd04575f97f2f1f70be3f1de6510670cc4eb60bf1d6"
+    }
+  ],
+  "finalOutcome": {
+    "status": "AUTHORIZED, APPLIED, TESTED; APK BUILT AND VERIFIED",
+    "report": "BuildReport.md",
+    "evidence": "ApkVerification.json",
+    "note": "Earlier fields in this file preserve its original review/progress checkpoint."
+  }
+}

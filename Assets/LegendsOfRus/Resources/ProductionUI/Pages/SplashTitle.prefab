@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 114000}
   - component: {fileID: 114001}
   - component: {fileID: 114002}
+  - component: {fileID: 1031913923019345479}
   m_Layer: 5
-  m_Name: "SplashTitle"
+  m_Name: SplashTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,10 +82,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932265e3f21f94275904ca0ad49e9d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Revision: 5
+  Revision: 6
   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
-  LanguageButton: {fileID: 114070}
   StartButton: {fileID: 114090}
+  LanguageButton: {fileID: 114070}
   SettingsButton: {fileID: 114110}
   AccountButton: {fileID: 114130}
   HelpButton: {fileID: 114150}
@@ -109,6 +110,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Background: {fileID: 114010}
+--- !u!114 &1031913923019345479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffa46e2a05e4c6da287f9cf4f8eeb1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleForegroundLayout
+  Logo: {fileID: 224005}
+  Version: {fileID: 224018}
+  Language: {fileID: 224007}
+  FooterShade: {fileID: 114060}
+  logoPosition: {x: 284, y: -70}
+  versionPosition: {x: 24, y: -19}
+  languagePosition: {x: 689, y: -12}
+  footerTop: 1306
+  authoredLayoutCaptured: 1
 --- !u!1 &100001
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +143,7 @@ GameObject:
   - component: {fileID: 222001}
   - component: {fileID: 114010}
   m_Layer: 5
-  m_Name: "BackgroundEnvironment"
+  m_Name: BackgroundEnvironment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +218,7 @@ GameObject:
   - component: {fileID: 222002}
   - component: {fileID: 114020}
   m_Layer: 5
-  m_Name: "Firebird"
+  m_Name: Firebird
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -272,7 +294,7 @@ GameObject:
   - component: {fileID: 114030}
   - component: {fileID: 114031}
   m_Layer: 5
-  m_Name: "Ivan"
+  m_Name: Ivan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +383,7 @@ GameObject:
   - component: {fileID: 114040}
   - component: {fileID: 114041}
   m_Layer: 5
-  m_Name: "Masha"
+  m_Name: Masha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -449,7 +471,7 @@ GameObject:
   - component: {fileID: 222005}
   - component: {fileID: 114050}
   m_Layer: 5
-  m_Name: "Logo"
+  m_Name: Logo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -524,7 +546,7 @@ GameObject:
   - component: {fileID: 222006}
   - component: {fileID: 114060}
   m_Layer: 5
-  m_Name: "FooterContrast"
+  m_Name: FooterContrast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -577,6 +599,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  fadeSpan: 366
 --- !u!1 &100007
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,7 +612,7 @@ GameObject:
   - component: {fileID: 114070}
   - component: {fileID: 114071}
   m_Layer: 5
-  m_Name: "LanguageSelector"
+  m_Name: LanguageSelector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,7 +708,7 @@ GameObject:
   - component: {fileID: 222008}
   - component: {fileID: 114080}
   m_Layer: 5
-  m_Name: "Artwork"
+  m_Name: Artwork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,7 +783,7 @@ GameObject:
   - component: {fileID: 114090}
   - component: {fileID: 114091}
   m_Layer: 5
-  m_Name: "StartButton"
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,7 +879,7 @@ GameObject:
   - component: {fileID: 222010}
   - component: {fileID: 114100}
   m_Layer: 5
-  m_Name: "Artwork"
+  m_Name: Artwork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -931,7 +954,7 @@ GameObject:
   - component: {fileID: 114110}
   - component: {fileID: 114111}
   m_Layer: 5
-  m_Name: "SettingsButton"
+  m_Name: SettingsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1027,7 +1050,7 @@ GameObject:
   - component: {fileID: 222012}
   - component: {fileID: 114120}
   m_Layer: 5
-  m_Name: "Artwork"
+  m_Name: Artwork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1102,7 +1125,7 @@ GameObject:
   - component: {fileID: 114130}
   - component: {fileID: 114131}
   m_Layer: 5
-  m_Name: "AccountButton"
+  m_Name: AccountButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1198,7 +1221,7 @@ GameObject:
   - component: {fileID: 222014}
   - component: {fileID: 114140}
   m_Layer: 5
-  m_Name: "Artwork"
+  m_Name: Artwork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1273,7 +1296,7 @@ GameObject:
   - component: {fileID: 114150}
   - component: {fileID: 114151}
   m_Layer: 5
-  m_Name: "HelpButton"
+  m_Name: HelpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1369,7 +1392,7 @@ GameObject:
   - component: {fileID: 222016}
   - component: {fileID: 114160}
   m_Layer: 5
-  m_Name: "Artwork"
+  m_Name: Artwork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1444,7 +1467,7 @@ GameObject:
   - component: {fileID: 222017}
   - component: {fileID: 114170}
   m_Layer: 5
-  m_Name: "TaglineDivider"
+  m_Name: TaglineDivider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1490,7 +1513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.79607843, g: 0.62352941, b: 0.30980392, a: 1}
+  m_Color: {r: 0.79607844, g: 0.62352943, b: 0.30980393, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1510,7 +1533,7 @@ GameObject:
   - component: {fileID: 114180}
   - component: {fileID: 114181}
   m_Layer: 5
-  m_Name: "VersionText"
+  m_Name: VersionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1576,7 +1599,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "v1.20.0"
+  m_Text: v1.20.0
 --- !u!114 &114181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1606,7 +1629,7 @@ GameObject:
   - component: {fileID: 114190}
   - component: {fileID: 114191}
   m_Layer: 5
-  m_Name: "LanguageText"
+  m_Name: LanguageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1672,7 +1695,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Русский"
+  m_Text: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"
 --- !u!114 &114191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1703,7 +1726,7 @@ GameObject:
   - component: {fileID: 114201}
   - component: {fileID: 114202}
   m_Layer: 5
-  m_Name: "StartText"
+  m_Name: StartText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1769,7 +1792,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Начать"
+  m_Text: "\u041D\u0430\u0447\u0430\u0442\u044C"
 --- !u!114 &114201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1814,7 +1837,7 @@ GameObject:
   - component: {fileID: 114210}
   - component: {fileID: 114211}
   m_Layer: 5
-  m_Name: "SettingsText"
+  m_Name: SettingsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1880,7 +1903,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Настройки"
+  m_Text: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
 --- !u!114 &114211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1910,7 +1933,7 @@ GameObject:
   - component: {fileID: 114220}
   - component: {fileID: 114221}
   m_Layer: 5
-  m_Name: "AccountText"
+  m_Name: AccountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1976,7 +1999,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Аккаунт"
+  m_Text: "\u0410\u043A\u043A\u0430\u0443\u043D\u0442"
 --- !u!114 &114221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2006,7 +2029,7 @@ GameObject:
   - component: {fileID: 114230}
   - component: {fileID: 114231}
   m_Layer: 5
-  m_Name: "HelpText"
+  m_Name: HelpText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2072,7 +2095,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Помощь"
+  m_Text: "\u041F\u043E\u043C\u043E\u0449\u044C"
 --- !u!114 &114231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,7 +2125,7 @@ GameObject:
   - component: {fileID: 114240}
   - component: {fileID: 114241}
   m_Layer: 5
-  m_Name: "TaglineText"
+  m_Name: TaglineText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2168,7 +2191,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Вдохновлено легендами. Собрано для тебя."
+  m_Text: "\u0412\u0434\u043E\u0445\u043D\u043E\u0432\u043B\u0435\u043D\u043E \u043B\u0435\u0433\u0435\u043D\u0434\u0430\u043C\u0438.
+    \u0421\u043E\u0431\u0440\u0430\u043D\u043E \u0434\u043B\u044F \u0442\u0435\u0431\u044F."
 --- !u!114 &114241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2198,7 +2222,7 @@ GameObject:
   - component: {fileID: 114250}
   - component: {fileID: 114251}
   m_Layer: 5
-  m_Name: "LegalText"
+  m_Name: LegalText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2264,7 +2288,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "© 2024–2025 Легенды Руси. Все права защищены."
+  m_Text: "\xA9 2024\u20132025 \u041B\u0435\u0433\u0435\u043D\u0434\u044B \u0420\u0443\u0441\u0438.
+    \u0412\u0441\u0435 \u043F\u0440\u0430\u0432\u0430 \u0437\u0430\u0449\u0438\u0449\u0435\u043D\u044B."
 --- !u!114 &114251
 MonoBehaviour:
   m_ObjectHideFlags: 0

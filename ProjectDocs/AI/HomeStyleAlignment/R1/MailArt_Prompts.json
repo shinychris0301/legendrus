@@ -1,0 +1,50 @@
+{
+  "task": "Home R1 review mail button illustration",
+  "status": "Unapproved generated design review only; not Unity runtime art",
+  "mode": "Built-in image_gen only",
+  "references": [
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/ornate_gold_gear_settings_emblem.png",
+      "role": "Circular silhouette and materials reference; original unchanged"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png",
+      "role": "Approved painterly materials reference; original unchanged"
+    }
+  ],
+  "output": "ProjectDocs/AI/HomeStyleAlignment/R1/mail_medallion_generated.png",
+  "width": 1254,
+  "height": 1254,
+  "pngColorType": 6,
+  "channels": "RGBA",
+  "bytes": 1797771,
+  "sha256": "0288b188aa4d08ef00523494653989ff035f6ce2b17e637addec7f87042b7f38",
+  "attempts": [
+    {
+      "prompt": "Use case: stylized-concept\nAsset type: single ornate mail button medallion for offline Home page design review in «Легенды Руси: Три в Ряд».\nInput image 1 is the approved gear button material and circular silhouette reference. Input image 2 is the approved title crest material reference only. Do not modify the originals or reproduce any lettering.\nCreate a complete round button medallion matching the restrained antique gold, dark navy-black lacquer, and painterly fine craftsmanship of the first reference. Use a modest antique-gold circular rim with small traditional Russian filigree details, dark navy/sapphire subtly embossed center. At its center place one large tactile aged-parchment envelope, sealed shut with a small deep-red wax seal. Make the envelope clear and recognizable at a final 113 pixel display size: generous central envelope size, few strong folds, no tiny clutter. Its parchment is muted warm ivory, dimensional hand-painted shading; the wax is dark red, no lettering or insignia. Warm upper-left light and rich gentle shadows match reference 1. Do not copy its central gear.\nComposition: perfectly centered, whole medallion visible, square 1024x1024 canvas with comfortable genuinely transparent padding outside the rim. Keep the complete circular artwork and all protrusions safely inside the canvas. Inside the circular rim is intentionally opaque dark navy material. Outside the complete medallion must be actual RGBA transparency, alpha zero, with no painted checkerboard, no black or white background pixels, no shadow outside the object.\nConstraints: no words, text, letters, numbers, notification badges, captions, signs, scenery, characters, modern graphic symbols, watermark, glow or generic flat vector styling. One medallion only.",
+      "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-d6434683-84be-4326-89ae-8777c2260248.png",
+      "result": "Rejected: visually baked checkerboard"
+    },
+    {
+      "prompt": "Use case: background-extraction.\nInput image is an edit target. Preserve exactly the complete circular antique gold and navy mail button, large parchment envelope and red wax seal. Remove the entire gray checkerboard background outside the ornate circular button. Return a genuine RGBA PNG with alpha exactly zero outside the object; a checkerboard is NOT transparency. No background, no floor or shadow. Do not redraw any checkerboard. Preserve the intentionally opaque dark navy material INSIDE the button, all the opaque antique gold rim and opaque parchment envelope and wax. Center the whole intact button with outer alpha padding. Do not add text, numbers or objects. This must be a clean isolated button sprite that can be composited over black, white, or vivid magenta with only the circular button and its four ornamental diamond tips visible.",
+      "source": "/home/k2/.codex/generated_images/01a096ee-d659-7ca0-8977-4122b8e01a39/exec-4eda3984-5f59-4525-a3f9-300ea589e26d.png",
+      "result": "Selected: real RGBA channel, exterior checkerboard removed; opaque inner navy medallion preserved"
+    }
+  ],
+  "checksPerformed": [
+    "Viewed local gear and crest references before generation.",
+    "Inspected selected workspace image through view_image.",
+    "Read PNG IHDR: 1254x1254,8bit,color type6.",
+    "Computed selected file SHA256."
+  ],
+  "checksNotPerformed": [
+    "Browser black/white/saturated composites (root to inspect).",
+    "Unity import, runtime, compilation, APK or phone test.",
+    "User design approval."
+  ],
+  "caveats": [
+    "Generated size is 1254 square, not requested1024.",
+    "Antique-gold highlights and central parchment are stronger than approved gear; evaluate at113pixel finaldisplay.",
+    "Transparent padding is present but narrow at ornamental tips."
+  ]
+}

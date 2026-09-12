@@ -16,18 +16,21 @@ namespace LegendsOfRus.AndroidBuild
     internal static class AndroidBuildStateReader
     {
         const string PackageManifestSha256 =
-            "f534b3f48018d7c02ddfb1b59588813562837db8167dda7395956065bf4f6713";
+            "03924bef7f475ba9f8ae358f7504960715b12362be2668361aa9411ea95e4dfc";
         const string ProjectVersionSha256 =
-            "55ad613d4cefdd466d10e22bb2885c8a0993cebfe7b01544d843430e36102784";
+            "e06e05029943a1f6537d7cf3ca00ae2fb38dfe68d41075504802051e78c1d707";
         const string EditorBuildSettingsSha256 =
-            "19d5bf4b4915efa6ca636161ee67bb21033b6a9fc919bc9ccdc22ecca0f71162";
+            "fd8634901fc667466dfc8f08d09c69a0237e50c1e8a4746980ff1a72e445101d";
         const string EconomyActivationSha256 =
             "4c4a3d062257addf9e3bd50008a5bde281aa3e227bffe097982b7890bd597248";
         const string CommercialActivationSha256 =
             "67f31982d6eafcc54f644f8ad1e81f672ddeefe3856da4eaae6b71af3bb753e9";
         const string CommercialConfigSha256 =
             "d5e7705c47f0a7368fa618db0740703e4e0628a2b99ab5318681933f00866c02";
-        private const bool ResolvedPackageLockApproved = false;
+        // Reviewed local development baseline. Approval requires these exact package bytes;
+        // merely having a generated lock never grants build permission.
+        internal const string ResolvedPackageLockSha256 =
+            "86ca321b25b56367b6bfc109765ca1cc718931c98a81b9bb5bdf4d2a584bc622";
 
         static readonly HashSet<string> ForbiddenExtensions =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -164,7 +167,7 @@ namespace LegendsOfRus.AndroidBuild
                 facts.ProjectSettingsPresent = File.Exists(
                     Path.Combine(root, "ProjectSettings/ProjectSettings.asset")
                 );
-                facts.PackageLockApproved = ResolvedPackageLockApproved;
+                facts.PackageLockApproved = ResolvedPackageBaselineIsExact(root);
                 facts.AndroidModuleAvailable =
                     BuildPipeline.IsBuildTargetSupported(
                         BuildTargetGroup.Android,
@@ -541,6 +544,20 @@ namespace LegendsOfRus.AndroidBuild
                 right,
                 StringComparison.OrdinalIgnoreCase
             );
+        }
+
+        internal static bool ResolvedPackageBaselineIsExact(string root)
+        {
+            try
+            {
+                return HashMatches(root, "Packages/manifest.json", PackageManifestSha256) &&
+                    HashMatches(root, "Packages/packages-lock.json", ResolvedPackageLockSha256);
+            }
+            catch
+            {
+                // Missing/unreadable/changed files and all path or I/O failures fail closed.
+                return false;
+            }
         }
 
         static bool ProtectedBoundaryIsExact(string root)

@@ -1,0 +1,41 @@
+{
+  "purpose": "Offline Home R1 design review. Not a Unity runtime asset or approved implementation.",
+  "tool": "builtin image_gen.imagegen",
+  "referenceImages": [
+    "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/ornate_gold_gear_settings_emblem.png",
+    "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png"
+  ],
+  "requests": [
+    {
+      "prompt": "Use case: stylized-concept\nAsset type: reward chest circular button illustration for a Russian fairy-tale mobile game Home design review.\nInput image 1 is the approved gear-button style reference: preserve its round dark navy/sapphire lacquer medallion, substantial antique-gold circular rim, four restrained cardinal gold ornaments, raised carved surfaces and painterly material richness. Input image 2 is ONLY the approved logo's antique-gold filigree and navy material reference; do not copy logo text or crest shape.\nPrimary request: A complete round medallion button with one large detailed treasure chest centered inside. Chest made of richly carved dark wood with substantial antique-gold corner bands and clasps, restrained sapphire inlays, lid closed, slight three-quarter perspective. The chest must be instantly readable at113 pixels, filling the majority of the inner circular surface. Keep ornament precise but visually restrained, warm top-left highlights and dimensional shaded gold, painterly Russian fairy-tale visual family. The medallion's intentionally opaque dark navy/sapphire inner surface remains solid behind the chest.\nComposition: one centered full circular button on a square1024x1024 canvas, with comfortable transparent padding on every side around the exterior gold rim. No part of the circle or its small ornaments clipped.\nBackground: genuinely transparent alpha outside the entire round button. No checkerboard drawn into pixels. The inside of the button is opaque navy lacquer, not transparent.\nConstraints: no letters, text, numbers, extra badge, scenery, coins spilling or flying, glitter, particles, people, other props, logo, watermark. Do not use a flat chest pictogram or generic vector kit; this is a richly textured painterly chest inside the existing round-button family.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-1678ba6e-0354-4f58-a302-128c679c299b.png",
+      "status": "Rejected opaque RGB1254square with checkerboard baked into outside background."
+    },
+    {
+      "prompt": "Use case: precise-object-edit\nEdit target: supplied treasure-chest medallion button illustration.\nReplace ONLY the gray-and-white checkerboard surrounding the outer edge of the complete circular gold medallion with a uniform opaque very dark navy background, #0b1723 (RGB11,23,35). Remove every visible checkerboard square and edge remnant. This is deliberately opaque panel artwork; do not attempt transparency and do not draw checkerboard. No texture, gradient, vignette, glow or extra shadow on the new navy outer background.\nKeep the complete gold ring, cardinal gold points, original inner navy lacquer surface, detailed carved wooden chest, antique-gold ornament, sapphire inlays, proportions, framing and lighting exactly as shown. Preserve every part of the complete medallion with no cropping. No new text, badge, numbers, additional object, ornament or scenery. Only change the outside backdrop from checkerboard to solid dark navy.",
+      "resultPath": "/home/k2/.codex/generated_images/01a096ef-27e8-7143-82ed-38aaf47641ea/exec-3b0ce7a0-0688-4e3d-8ec0-4a1f17c49c00.png",
+      "selectedWorkspacePath": "ProjectDocs/AI/HomeStyleAlignment/R1/reward_medallion_generated.png",
+      "status": "Selected deliberately opaque dark navy outside complete round medallion. No transparency claim. One targeted correction only."
+    }
+  ],
+  "checks": {
+    "viewImage": "Gear material reference and both result images inspected. Detailed chest readable, complete medallion, corrected background has no visible checkerboard.",
+    "productionChecks": "No production assets changed. No Unity compilation, Play Mode, APK build or device testing."
+  },
+  "caveats": [
+    "Requested1024square; generated1254square instead.",
+    "Outer background is intentionally opaque navy and may vary subtly from requested exact #0b1723. Root may use CSS circular clipping for offline review.",
+    "Chest rendering is ornate and somewhat brighter than gear reference; final page-level review remains required."
+  ],
+  "pngMetadata": {
+    "width": 1254,
+    "height": 1254,
+    "bit_depth": 8,
+    "color_type": 2,
+    "compression": 0,
+    "filter": 0,
+    "interlace": 0,
+    "sha256": "68018bde4a2c206a03c1d871172723532e107916be452bd3cbb090ff1c25987e",
+    "hasAlphaChannel": false
+  }
+}
