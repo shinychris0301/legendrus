@@ -58,6 +58,13 @@ namespace LegendsOfRus.Editor
         [MenuItem("Legends of Rus/Production UI/Splash R3/Build or Repair")]
         public static void BuildMenu() { EnsureBuilt(true); }
 
+        [MenuItem("Legends of Rus/Production UI/Home Style/Align Splash and Loading")]
+        public static void BuildHomeAlignedFrontEnd()
+        {
+            EnsureBuilt(true);
+            Step20ProductionUiFix01SerializedPrefabBuilder.BuildLoadingAligned();
+        }
+
         [MenuItem("Legends of Rus/Production UI/Splash R3/Repair Responsive Layout")]
         public static void RepairResponsiveLayout() { EnsureBuilt(false); }
 
@@ -83,12 +90,13 @@ namespace LegendsOfRus.Editor
             SplashTitleView existing = old != null ? old.GetComponent<SplashTitleView>() : null;
             if (!force && existing != null && existing.HasRequiredBindings) return;
             // Upgrade the accepted prefab in place; do not reconstruct its artwork or serialized objects.
-            if (!force && existing != null && existing.HasCompleteBindings &&
-                (existing.Revision == 5 || existing.Revision == SplashTitleView.CurrentRevision))
+            if (existing != null && existing.HasCompleteBindings &&
+                existing.Revision >= 5 && existing.Revision <= SplashTitleView.CurrentRevision)
             {
                 GameObject contents = PrefabUtility.LoadPrefabContents(PrefabPath);
                 try
                 {
+                    ApplyHomeStyle(contents);
                     BindResponsiveLayout(contents);
                     SplashTitleView view = contents.GetComponent<SplashTitleView>();
                     view.Revision = SplashTitleView.CurrentRevision;
@@ -101,8 +109,8 @@ namespace LegendsOfRus.Editor
                 AssetDatabase.ImportAsset(PrefabPath, ImportAssetOptions.ForceSynchronousImport);
                 SplashTitleView repaired = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath).GetComponent<SplashTitleView>();
                 if (!repaired.HasRequiredBindings) throw new InvalidOperationException(repaired.GetValidationFailure());
-                Debug.Log("Splash responsive repair saved and read back at revision " + repaired.Revision +
-                    "; existing artwork, authored rectangles and serialized references preserved.");
+                Debug.Log("Splash Home-style alignment saved and read back at revision " + repaired.Revision +
+                    "; existing object identities and control rectangles preserved.");
                 return;
             }
             if (!File.Exists(LayoutPath)) throw new FileNotFoundException("Missing authoritative layout",LayoutPath);
@@ -202,6 +210,7 @@ namespace LegendsOfRus.Editor
                      case "AccountText":view.AccountText=text;break;case "HelpText":view.HelpText=text;break;
                      case "TaglineText":view.TaglineText=text;break;case "LegalText":view.LegalText=text;break;}
                 }
+                ApplyHomeStyle(root);
                 BindResponsiveLayout(root);
                 if(!view.HasRequiredBindings)throw new InvalidOperationException("New Splash prefab has incomplete bindings.");
                 bool savedSuccessfully;
@@ -219,6 +228,43 @@ namespace LegendsOfRus.Editor
             }
             finally { UnityEngine.Object.DestroyImmediate(root); }
         }
+        static void ApplyHomeStyle(GameObject root)
+        {
+            LayoutDoc doc = JsonUtility.FromJson<LayoutDoc>(File.ReadAllText(LayoutPath));
+            if (doc == null || doc.schemaVersion != 4) throw new InvalidOperationException("Unsupported Splash layout schema.");
+            foreach (ArtSpec item in doc.art)
+            {
+                Image image = root.transform.Find(item.name).GetComponent<Image>();
+                image.sprite = RequireSprite(item.file);
+                Rect r = RectOf(item.rect);
+                image.rectTransform.anchoredPosition = new Vector2(r.x, -r.y);
+                image.rectTransform.sizeDelta = r.size;
+                image.color = item.color != null && item.color.Length == 4
+                    ? new Color(item.color[0], item.color[1], item.color[2], item.color[3]) : Color.white;
+            }
+            SplashTitleView view = root.GetComponent<SplashTitleView>();
+            foreach (ButtonSpec item in doc.buttons)
+            {
+                if (item.name != "StartButton") continue;
+                Image artwork = view.StartButton.targetGraphic as Image;
+                artwork.sprite = RequireSprite(item.file);
+                Rect r = RectOf(item.artRect), parent = RectOf(item.rect);
+                artwork.rectTransform.anchoredPosition = new Vector2(r.x - parent.x, -(r.y - parent.y));
+                artwork.rectTransform.sizeDelta = r.size;
+                artwork.preserveAspect = false; // Same complete artwork proportions as Home.
+            }
+            view.StartText.color = new Color32(244, 199, 100, 255);
+            view.StartText.material = AssetDatabase.LoadAssetAtPath<Material>(
+                "Assets/LegendsOfRus/Resources/" + ProductionHomeRuntime.PlayGoldMaterialResource + ".mat");
+            if (view.StartText.material == null) throw new InvalidOperationException("Missing shared Home gold lettering material.");
+            Shadow shadow = view.StartText.GetComponent<Shadow>();
+            shadow.effectColor = new Color32(34, 15, 2, 230);
+            shadow.effectDistance = new Vector2(0, -2);
+            ProductionHomeGoldText gold = view.StartText.GetComponent<ProductionHomeGoldText>();
+            if (gold == null) gold = view.StartText.gameObject.AddComponent<ProductionHomeGoldText>();
+            gold.enabled = true; gold.BeveledFace = true;
+        }
+
         static void BindResponsiveLayout(GameObject root)
         {
             SplashTitleForegroundLayout layout = root.GetComponent<SplashTitleForegroundLayout>();
@@ -246,13 +292,15 @@ namespace LegendsOfRus.Editor
         }
         static Sprite RequireSprite(string file)
         {
-            string path=ArtRoot+file;Sprite sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            string path=file.StartsWith("ProductionUI/", StringComparison.Ordinal)
+                ? "Assets/LegendsOfRus/Resources/" + file : ArtRoot+file;
+            Sprite sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);
             if(sprite==null)throw new InvalidOperationException("Missing Sprite import: "+path);
             return sprite;
         }
         [Serializable] public class LayoutDoc
         {public int schemaVersion;public float referenceWidth;public float referenceHeight;public ArtSpec[] art;public ButtonSpec[] buttons;public TextSpec[] texts;public ShadeSpec footerShade;}
-        [Serializable] public class ArtSpec {public string name;public string file;public float[] rect;public float fadeBottom;}
+        [Serializable] public class ArtSpec {public string name;public string file;public float[] rect,color;public float fadeBottom;}
         [Serializable] public class ButtonSpec {public string name;public string file;public float[] rect;public float[] artRect;}
         [Serializable] public class ShadeSpec {public float[] rect;public float[] color;}
         [Serializable] public class TextSpec
@@ -278,6 +326,7 @@ namespace LegendsOfRus.Editor
             foreach (string path in paths)
                 if (path == Step20SplashTitleR3PrefabRebuilder.PrefabPath ||
                     path.StartsWith(Step20SplashTitleR3PrefabRebuilder.ConfigRoot, StringComparison.Ordinal) ||
+                    path.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/FrontEndHomeAligned/", StringComparison.Ordinal) ||
                     path.StartsWith(Step20SplashTitleR3PrefabRebuilder.ArtRoot, StringComparison.Ordinal))
                     return true;
             return false;

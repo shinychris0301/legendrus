@@ -1,0 +1,696 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -85,7 +85,7 @@
+   screenId: 1
+   referenceMatchVersion: v1.20-step03.3R2
+   referenceSha256: 7509bdd1fee910207eb5287a1eb69700c6ac44f816fd4f209e524d56be2b64e8
+-  productionComponentCount: 24
++  productionComponentCount: 25
+   fullScreenScreenshotDependency: 0
+   referenceMatchStaticComposition: 1
+ --- !u!114 &5346131818961748011
+@@ -100,7 +100,7 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 7
++  Revision: 8
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
+   Logo: {fileID: 7198921559894690644}
+@@ -116,6 +116,7 @@
+   GemsIcon: {fileID: 2320807757589127272}
+   EnergyIcon: {fileID: 8735314150802410555}
+   QuestFrame: {fileID: 867457256082268395}
++  FooterBase: {fileID: 4524266436629722542}
+   ProfileProgressFrame: {fileID: 6816841301253797163}
+   ProfileProgressText: {fileID: 1170391289864695990}
+   QuestProgressFrame: {fileID: 529238050067193017}
+@@ -170,6 +171,7 @@
+   Play: {fileID: 1845923621520997976}
+   Navigation: {fileID: 7654781394354521722}
+   Footer: {fileID: 2941011719312579029}
++  FooterBase: {fileID: 7977227637786970317}
+   Environment: {fileID: 8511177260388426389}
+   Shade: {fileID: 2507462934149236038}
+ --- !u!1 &9424425330094134
+@@ -682,7 +684,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 4, y: -160.7105}
++  m_AnchoredPosition: {x: 4, y: -148.3182}
+   m_SizeDelta: {x: 390, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6502050999272860666
+@@ -778,7 +780,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 4, y: -160.5335}
++  m_AnchoredPosition: {x: 4, y: -148.5837}
+   m_SizeDelta: {x: 390, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3601731399665313797
+@@ -873,8 +875,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 436, y: -473}
+-  m_SizeDelta: {x: 430, y: 645}
++  m_AnchoredPosition: {x: 495, y: -442}
++  m_SizeDelta: {x: 550, y: 825}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2015789141828952944
+ CanvasRenderer:
+@@ -1085,7 +1087,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 4, y: -159.6483}
++  m_AnchoredPosition: {x: 4, y: -154.6914}
+   m_SizeDelta: {x: 390, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1236721851076368496
+@@ -1916,8 +1918,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -12.086952, y: -0}
+-  m_SizeDelta: {x: 227.1739, y: 222}
++  m_AnchoredPosition: {x: -1.2026978, y: -0}
++  m_SizeDelta: {x: 205.4054, y: 222}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4965452812356580719
+ CanvasRenderer:
+@@ -2149,7 +2151,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 76, y: -114}
++  m_AnchoredPosition: {x: 83.19906, y: -127.33443}
+   m_SizeDelta: {x: 320, y: 20}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3235667842519636122
+@@ -2516,8 +2518,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3.3843212, y: 22.423077}
+-  m_SizeDelta: {x: 183.76865, y: 98.38975}
++  m_AnchoredPosition: {x: -2.1707547, y: 10.954071}
++  m_SizeDelta: {x: 181.3415, y: 80.10856}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9121883527503992907
+ CanvasRenderer:
+@@ -2800,7 +2802,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 443, y: -24}
++  m_AnchoredPosition: {x: 450.19907, y: -21.334427}
+   m_SizeDelta: {x: 114, y: 151}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4759490246825401679
+@@ -2951,7 +2953,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 4, y: -158.7632}
++  m_AnchoredPosition: {x: 4, y: -158.4091}
+   m_SizeDelta: {x: 390, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2950445289753558222
+@@ -3201,8 +3203,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -2.7915869, y: 22.423077}
+-  m_SizeDelta: {x: 151.58318, y: 98.38975}
++  m_AnchoredPosition: {x: -1.7905661, y: 10.954071}
++  m_SizeDelta: {x: 149.58113, y: 80.10856}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9094955743912204113
+ CanvasRenderer:
+@@ -3836,7 +3838,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 38, y: -29}
++  m_AnchoredPosition: {x: 45.19906, y: -42.334427}
+   m_SizeDelta: {x: 796, y: 108}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8642053365777436816
+@@ -4204,8 +4206,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -13.125252, y: -0}
+-  m_SizeDelta: {x: 229.2505, y: 222}
++  m_AnchoredPosition: {x: -11.984154, y: -0}
++  m_SizeDelta: {x: 226.9683, y: 222}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8943745423880496328
+ CanvasRenderer:
+@@ -4236,6 +4238,81 @@
+     m_PersistentCalls:
+       m_Calls: []
+   m_Sprite: {fileID: 21300000, guid: 69135cdae1222fa598c05c4ab1539397, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &6607516277193887013
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 7977227637786970317}
++  - component: {fileID: 3867774408177701409}
++  - component: {fileID: 4524266436629722542}
++  m_Layer: 5
++  m_Name: ConnectedCarvedBase
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &7977227637786970317
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6607516277193887013}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 2941011719312579029}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 941, y: 222}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &3867774408177701409
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6607516277193887013}
++  m_CullTransparentMesh: 1
++--- !u!114 &4524266436629722542
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6607516277193887013}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 51e28d72f0853db939602ec4f6546f7c, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -4918,6 +4995,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 7977227637786970317}
+   - {fileID: 6832188230935005505}
+   - {fileID: 2644577456435547676}
+   - {fileID: 203132397317451852}
+@@ -5099,7 +5177,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 455, y: -39}
++  m_AnchoredPosition: {x: 462.19907, y: -36.334427}
+   m_SizeDelta: {x: 91, y: 122}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2556692930490363690
+@@ -5170,8 +5248,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3.0592732, y: 22.423077}
+-  m_SizeDelta: {x: 166.11855, y: 98.38975}
++  m_AnchoredPosition: {x: -1.9622642, y: 10.954071}
++  m_SizeDelta: {x: 163.92453, y: 80.10856}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8115898268875781046
+ CanvasRenderer:
+@@ -5326,7 +5404,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 47, y: -63}
++  m_AnchoredPosition: {x: 54.19906, y: -76.33443}
+   m_SizeDelta: {x: 377, y: 126}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8572654173637847028
+@@ -5846,8 +5924,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -4.5913467, y: -0}
+-  m_SizeDelta: {x: 212.1827, y: 222}
++  m_AnchoredPosition: {x: -2.307953, y: -0}
++  m_SizeDelta: {x: 207.6159, y: 222}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2623232371413276791
+ CanvasRenderer:
+@@ -6056,8 +6134,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -9.179604, y: -0}
+-  m_SizeDelta: {x: 221.3592, y: 222}
++  m_AnchoredPosition: {x: -5.4053497, y: -0}
++  m_SizeDelta: {x: 213.8107, y: 222}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &192150027049354415
+ CanvasRenderer:
+@@ -6341,8 +6419,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 177, y: -0}
+-  m_SizeDelta: {x: 587, y: 210}
++  m_AnchoredPosition: {x: 169.80095, y: 13.334426}
++  m_SizeDelta: {x: 601.3981, y: 197.02295}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6444805074037318354
+ CanvasRenderer:
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeLayout.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeLayout.cs
+@@ -7,13 +7,13 @@
+     [ExecuteAlways, DisallowMultipleComponent]
+     public sealed class ProductionHomeLayout : MonoBehaviour
+     {
+-        public RectTransform Content, Hud, HudBacking, Logo, Ivan, Firebird, Play, Navigation, Footer;
++        public RectTransform Content, Hud, HudBacking, Logo, Ivan, Firebird, Play, Navigation, Footer, FooterBase;
+         public Image Environment;
+         public ProductionHomeShade Shade;
+         readonly Vector3[] corners = new Vector3[4];
+         bool applying;
+-        public bool HasRequiredBindings => HasBaseBindings && HudBacking != null;
+-        // Older serialized revisions predate the backing binding. The Editor migration
++        public bool HasRequiredBindings => HasBaseBindings && HudBacking != null && FooterBase != null;
++        // Older serialized revisions predate the backing and footer bindings. The Editor migration
+         // uses this base contract so upgrading never destroys an otherwise complete page.
+         public bool HasBaseBindings => Content != null && Hud != null && Logo != null && Ivan != null &&
+             Firebird != null && Play != null && Navigation != null && Footer != null && Environment != null &&
+@@ -41,14 +41,24 @@
+                 Position(Hud, 0, top);
+                 Position(HudBacking, 5, top - 5);
+                 Position(Logo, 210.5f, top - 130);
+-                Position(Ivan, 50, top - 490 - extra * .32f);
+-                Position(Firebird, 436, top - 473 - extra * .32f);
++                // Keep the faces close to the crest on tall phones. Both complete
++                // foreground sprites share this offset so their pose stays coupled;
++                // lower interactive controls remain anchored to the safe bottom.
++                float heroOffset = extra * .10f;
++                Position(Ivan, 50, top - 490 - heroOffset);
++                Position(Firebird, 495, top - 442 - heroOffset);
+                 Quaternion birdPose = Quaternion.Euler(0, 0, -15);
+                 if (Quaternion.Angle(Firebird.localRotation, birdPose) > .001f) Firebird.localRotation = birdPose;
+                 Position(Play, 168.5f, bottom - 1020); Position(Navigation, 51, bottom - 1230);
+                 Position(Footer, 0, bottom - 1450);
+                 canvasRect.GetWorldCorners(corners);
+                 Vector3 lo = Content.InverseTransformPoint(corners[0]), hi = Content.InverseTransformPoint(corners[2]);
++                // The connecting ornament reaches the physical edges beneath system
++                // insets; its interactive children stay inside the safe rectangle.
++                Vector3 footerLo = Footer.InverseTransformPoint(corners[0]);
++                Vector3 footerHi = Footer.InverseTransformPoint(corners[2]);
++                Position(FooterBase, footerLo.x - Footer.rect.xMin, 0);
++                Size(FooterBase, new Vector2(footerHi.x - footerLo.x, Footer.rect.yMax - footerLo.y));
+                 Vector2 native = Environment.sprite.rect.size;
+                 float scale = Mathf.Max((hi.x - lo.x) / native.x, (hi.y - lo.y) / native.y);
+                 Vector2 size = native * scale;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -20,7 +20,7 @@
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+             "home_firebird_generated", "hud_frame", "avatar_ring",
+             "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+-            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem"
++            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated"
+         };
+         static readonly string[] TextureKeys = BuildTextureKeys();
+         static string[] BuildTextureKeys()
+@@ -50,7 +50,7 @@
+             content.offsetMin = content.offsetMax = Vector2.zero;
+             view.Environment = Art(content, "WinterVillageEnvironment", sprites["home_environment_generated"], 0, 0, 941, 1672);
+             // Retain the historical object names so full builds and in-place migrations agree.
+-            view.Firebird = Art(content, "ApprovedFirebird", sprites["home_firebird_generated"], 436, 473, 430, 645);
++            view.Firebird = Art(content, "ApprovedFirebird", sprites["home_firebird_generated"], 495, 442, 550, 825);
+             view.Firebird.rectTransform.localRotation = Quaternion.Euler(0, 0, -15);
+             view.Ivan = Art(content, "ApprovedIvan", sprites["splash_ivan"], 50, 490, 640, 960);
+             view.LowerShade = Rect(content, "LowerContrast", 0, 982, 941, 690).gameObject.AddComponent<ProductionHomeShade>();
+@@ -117,7 +117,7 @@
+             SplashTitleCharacterFade splashFade = view.Ivan.GetComponent<SplashTitleCharacterFade>();
+             if (splashFade == null) splashFade = view.Ivan.gameObject.AddComponent<SplashTitleCharacterFade>();
+             splashFade.enabled = true; splashFade.BottomFraction = .13f;
+-            SetArt(view.Firebird, sprites["home_firebird_generated"], 436, 473, 430, 645);
++            SetArt(view.Firebird, sprites["home_firebird_generated"], 495, 442, 550, 825);
+             view.Firebird.rectTransform.localRotation = Quaternion.Euler(0, 0, -15);
+             view.Firebird.gameObject.SetActive(true);
+             int ivanSibling = view.Ivan.transform.GetSiblingIndex();
+@@ -154,8 +154,8 @@
+             // The complete generated PNGs have different transparent side margins. Scale
+             // their artwork independently to 200 visible pixels while the original hit
+             // rectangles remain disjoint. Captions use measured blank-strip centers.
+-            float[] artWidths = { 212.1827f, 227.1739f, 221.3592f, 229.2505f };
+-            float[] captionTop = { 160.7105f, 158.7632f, 160.5335f, 159.6483f };
++            float[] artWidths = { 207.6159f, 205.4054f, 213.8107f, 226.9683f };
++            float[] captionTop = { 148.3182f, 158.4091f, 148.5837f, 154.6914f };
+             for (int i = 0; i < navigation.Length; i++)
+             {
+                 RectTransform card = navigation[i].transform as RectTransform;
+@@ -176,17 +176,29 @@
+                 EnsureBacking(card.parent as RectTransform, card.name + "OpaqueNavyBacking", i * 212 + 20, 22, 163, 174, 8, card.GetSiblingIndex());
+             }
+             SetRect(layout.Footer, 0, 1450, 941, 222);
++            // A whole independently painted surround joins the three existing footer
++            // controls. It is decoration behind the original native hit surfaces.
++            view.FooterBase = EnsureArt(layout.Footer, "ConnectedCarvedBase", sprites["footer_base_generated"], 0, 0, 941, 222);
++            view.FooterBase.preserveAspect = false;
++            view.FooterBase.raycastTarget = false;
++            view.FooterBase.transform.SetAsFirstSibling();
++            layout.FooterBase = view.FooterBase.rectTransform;
+             AlignMedallion(view.MailButton, sprites["mail_medallion_generated"], 0, 12, 181);
+             AlignMedallion(view.DailyRewardButton, sprites["reward_medallion_generated"], 758, 12, 181);
+             view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, sprites["quest_panel"]);
+-            SetRect(view.QuestFrame.rectTransform, 177, 0, 587, 210);
++            // Map the complete source's near-opaque frame (26,49)-(2146,659) to
++            // 587x166. Transparent margins stay intact, exposing the base's carved
++            // jewel below while preserving the live writing area's coordinates.
++            float questInsetX = 26f / 2120 * 587, questInsetY = 49f / 610 * 166;
++            SetRect(view.QuestFrame.rectTransform, 177 - questInsetX, -questInsetY,
++                2172f / 2120 * 587, 724f / 610 * 166);
+             EnsureBacking(layout.Footer, "QuestOpaqueWoodBacking", 200, 21, 539, 144, 4,
+                 view.QuestFrame.transform.GetSiblingIndex(), new Color32(22, 13, 7, 255));
+-            SetLabel(view.QuestText, 38, 29, 398, 54, 31);
++            SetLabel(view.QuestText, 38 + questInsetX, 29 + questInsetY, 398, 54, 31);
+             view.QuestText.color = new Color32(231, 223, 197, 255);
+             RectTransform quest = view.QuestFrame.rectTransform;
+-            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", sprites["progress_frame"], 47, 63, 377, 126);
+-            EnsureBacking(quest, "ProgressOpaqueTroughBacking", 76, 114, 320, 20, 3,
++            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", sprites["progress_frame"], 47 + questInsetX, 63 + questInsetY, 377, 126);
++            EnsureBacking(quest, "ProgressOpaqueTroughBacking", 76 + questInsetX, 114 + questInsetY, 320, 20, 3,
+                 view.QuestProgressFrame.transform.GetSiblingIndex(), new Color32(19, 12, 4, 255));
+             view.QuestProgressFill = EnsureArt(view.QuestProgressFrame.rectTransform, "MeasuredFill", sprites["progress_fill"], 17, 6, 343, 114.3333f);
+             view.QuestProgressFill.preserveAspect = false; view.QuestProgressFill.type = Image.Type.Filled;
+@@ -194,8 +206,8 @@
+             view.QuestProgressFill.fillAmount = 0; view.QuestProgressFill.gameObject.SetActive(false);
+             view.QuestProgressText = EnsureLabel(view.QuestProgressFrame.rectTransform, "MeasuredValue", "— / —", 25, 44, 327, 34, 29, view.Typography);
+             view.QuestProgressText.color = new Color32(236, 228, 204, 255);
+-            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", sprites["quest_reward_frame"], 443, 24, 114, 151);
+-            EnsureBacking(quest, "RewardOpaqueNavyBacking", 455, 39, 91, 122, 5,
++            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", sprites["quest_reward_frame"], 443 + questInsetX, 8 + questInsetY, 114, 151);
++            EnsureBacking(quest, "RewardOpaqueNavyBacking", 455 + questInsetX, 23 + questInsetY, 91, 122, 5,
+                 view.QuestRewardFrame.transform.GetSiblingIndex());
+             view.QuestRewardIcon = EnsureArt(view.QuestRewardFrame.rectTransform, "RewardGem", sprites["quest_reward_gem"], 18, 12, 79, 83);
+             view.QuestRewardText = EnsureLabel(view.QuestRewardFrame.rectTransform, "RewardValue", "—", 12, 101, 91, 36, 34, view.Typography);
+@@ -267,10 +279,10 @@
+             resourceRoot.color = Color.clear;
+             SetRect(resourceRoot.rectTransform, x, 45, width, 53);
+             // Keep the native number/icon/plus geometry independent of PNG margins.
+-            // Near-opaque source bounds are(40,165)-(2131,554) in2172x724 pixels;
+-            // transform the complete sprite so its visible gold capsule is widthx53.
++            // Near-opaque source bounds are (26,99)-(2146,578) in 2172x724 pixels;
++            // transform the complete sprite so its aged gold capsule is width x 53.
+             capsule = EnsureArt(resourceRoot.rectTransform, "CapsuleArtwork", sprites["resource_capsule"],
+-                -40f / 2092 * width, -165f / 390 * 53, 2172f / 2092 * width, 724f / 390 * 53);
++                -26f / 2120 * width, -99f / 479 * 53, 2172f / 2120 * width, 724f / 479 * 53);
+             capsule.preserveAspect = false; capsule.raycastTarget = false;
+             capsule.transform.SetAsFirstSibling();
+             EnsureBacking(hud, name + "OpaqueNavyBacking", x + 8, 55, width - 16, 33, 16.5f,
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 7;
++        public const int CurrentRevision = 8;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
+@@ -27,6 +27,7 @@
+         public Image GemsIcon;
+         public Image EnergyIcon;
+         public Image QuestFrame;
++        public Image FooterBase;
+         public Image ProfileProgressFrame;
+         public Text ProfileProgressText;
+         public Image QuestProgressFrame;
+@@ -86,7 +87,8 @@
+             HasArtwork(GoldCapsule, "resource_capsule") && HasArtwork(GemsCapsule, "resource_capsule") &&
+             HasArtwork(EnergyCapsule, "resource_capsule") && HasArtwork(GoldIcon, "coin_icon") &&
+             HasArtwork(GemsIcon, "gems_icon") && HasArtwork(EnergyIcon, "energy_icon") &&
+-            HasArtwork(QuestFrame, "quest_panel") && HasButtonArtwork(SettingsButton, "settings_medallion") &&
++            HasArtwork(QuestFrame, "quest_panel") && HasArtwork(FooterBase, "footer_base_generated") &&
++            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings_medallion") &&
+             HasButtonArtwork(WorldMapButton, "nav_map_generated") && HasButtonArtwork(ShopButton, "nav_shop_generated") &&
+             HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
+             HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -96,7 +96,7 @@
+             Assert.That(serialized.transform.Find(ProductionHomeRuntime.ContentName), Is.Not.Null);
+             IReadOnlyList<string> keys = ProductionUiFix01Runtime.GetHomeTextureResourceKeys();
+             CollectionAssert.AreEquivalent(ProductionHomeRuntime.GetTextureResourceKeys(), keys);
+-            Assert.That(keys.Count, Is.EqualTo(24), "Home uses twenty Home sprites, the preserved environment and three exact shared Splash resources.");
++            Assert.That(keys.Count, Is.EqualTo(25), "Home uses twenty-one Home sprites, the preserved environment and three exact shared Splash resources.");
+             Assert.That(new HashSet<string>(keys).Count, Is.EqualTo(keys.Count), "Do not count duplicate resource work.");
+             var textures = new HashSet<Texture>();
+             using (var preparation = new HomeLoadingPreparation())
+@@ -130,6 +130,7 @@
+             Assert.That(view.Ivan.sprite, Is.SameAs(Resources.Load<Sprite>(ProductionHomeRuntime.SplashIvanResource)));
+             Assert.That((view.PlayButton.targetGraphic as Image).sprite, Is.SameAs(Resources.Load<Sprite>(ProductionHomeRuntime.SplashStartResource)));
+             Assert.That(view.Firebird.sprite, Is.SameAs(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot + "home_firebird_generated")));
++            Assert.That(view.FooterBase.sprite, Is.SameAs(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot + "footer_base_generated")));
+             Assert.That(view.ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait").GetComponent<Image>().sprite,
+                 Is.SameAs(view.Ivan.sprite));
+             Assert.That(view.Typography, Is.SameAs(Resources.Load<SplashTitleTypography>(ProductionLoadingRuntime.TypographyResource)));
+@@ -425,6 +426,7 @@
+                 ProductionHomeLayout layout = view.GetComponent<ProductionHomeLayout>();
+                 Assert.That(layout, Is.Not.Null, "The actual Home prefab must own its responsive layout.");
+                 AssertHudComposition(view, layout, camera);
++                AssertForegroundAndFooterComposition(view, layout, camera, safeRect, size);
+                 AssertCoversDisplay(ScreenBounds(view.Environment.rectTransform, camera), size, "First Canvas pass environment");
+                 foreach (Button control in Buttons(view))
+                     AssertInside(ScreenBounds(control.GetComponent<RectTransform>(), camera), safeRect,
+@@ -446,6 +448,7 @@
+                 Assert.That(shade.yMin, Is.LessThanOrEqualTo(1f), "Shade must continue to the physical bottom edge.");
+                 Assert.That(view.LowerShade.GetComponent<CanvasRenderer>(), Is.Not.Null);
+                 AssertHudComposition(view, layout, camera);
++                AssertForegroundAndFooterComposition(view, layout, camera, safeRect, size);
+                 Button[] buttons = Buttons(view);
+                 var bounds = new Rect[buttons.Length];
+                 var names = new string[buttons.Length];
+@@ -508,6 +511,9 @@
+                         width = size.x, height = size.y, safeArea = safeRect,
+                         environment = environment, lowerShade = shade,
+                         logo = ScreenBounds(view.Logo.rectTransform, camera),
++                        ivan = ScreenBounds(view.Ivan.rectTransform, camera),
++                        firebird = ScreenBounds(view.Firebird.rectTransform, camera),
++                        footerBase = ScreenBounds(view.FooterBase.rectTransform, camera),
+                         controls = names, controlBounds = bounds,
+                         gold = view.GoldText.text, gems = view.GemsText.text, energy = view.EnergyText.text, level = view.LevelText.text,
+                         automaticFirstCanvasPass = true, allVisibleControlCentersRaycast = true, repeatedLayoutStable = true
+@@ -550,6 +556,28 @@
+                 "The whole logo crown must remain below the opaque HUD surface.");
+         }
+ 
++        static void AssertForegroundAndFooterComposition(ProductionHomeView view, ProductionHomeLayout layout,
++            Camera camera, Rect safeRect, Vector2Int size)
++        {
++            Rect ivan = ScreenBounds(view.Ivan.rectTransform, camera);
++            float scale = ivan.width / 640f;
++            float extra = Mathf.Max(0, safeRect.height / scale - 1672);
++            Assert.That((safeRect.yMax - ivan.yMax) / scale, Is.LessThanOrEqualTo(490 + extra * .12f + 1),
++                "Tall phones must keep the complete approved hero close to the crest instead of opening a large sky gap.");
++            Assert.That(layout.Ivan.anchoredPosition.y - layout.Firebird.anchoredPosition.y,
++                Is.EqualTo(-48).Within(.01f), "Hero and Firebird must move together so their authored pose remains stable.");
++            Assert.That(ivan.yMin, Is.LessThanOrEqualTo(ScreenBounds(layout.Play, camera).yMax + 1),
++                "The complete hero must still reach behind Start at the reviewed portrait aspect ratios.");
++            Rect footer = ScreenBounds(view.FooterBase.rectTransform, camera);
++            Assert.That(footer.xMin, Is.LessThanOrEqualTo(1));
++            Assert.That(footer.xMax, Is.GreaterThanOrEqualTo(size.x - 1));
++            Assert.That(footer.yMin, Is.EqualTo(0).Within(1),
++                "The continuous footer ornament must finish the physical bottom beneath safe-area insets.");
++            Assert.That(footer.yMax, Is.EqualTo(ScreenBounds(layout.Footer, camera).yMax).Within(1));
++            Assert.That(view.FooterBase.raycastTarget, Is.False);
++            Assert.That(view.FooterBase.transform.GetSiblingIndex(), Is.Zero);
++        }
++
+         static Button[] Buttons(ProductionHomeView view) => view.Buttons();
+ 
+         static Text[] Labels(ProductionHomeView view) => new[]
+@@ -627,13 +655,13 @@
+             // The generated caption strip reserves this central region for live ink. Check
+             // actual glyph quads, not just Text rects, so a low baseline or clipped word fails.
+             // Bounds are the conservative blank-ink regions measured directly in the
+-            // selected R4 PNGs (QA/NavCaptionGeometry.json), mapped through each whole
++            // selected R5 PNGs (QA/NavCaptionGeometry.json), mapped through each whole
+             // artwork transform. The screenshot reference itself is never sampled here.
+             Rect sourceInkRegion = label.name == "CharactersLabel"
+-                ? Rect.MinMaxRect(178, 914, 1074, 1076)
+-                : label.name == "WorldMapLabel" ? Rect.MinMaxRect(199, 904, 1056, 1098)
+-                : label.name == "ShopLabel" ? Rect.MinMaxRect(218, 901, 1035, 1079)
+-                : Rect.MinMaxRect(183, 915, 1070, 1085);
++                ? Rect.MinMaxRect(151, 908, 1104, 1026)
++                : label.name == "WorldMapLabel" ? Rect.MinMaxRect(95, 871, 1160, 991)
++                : label.name == "ShopLabel" ? Rect.MinMaxRect(72, 928, 1182, 1048)
++                : Rect.MinMaxRect(104, 879, 1150, 986);
+             RectTransform artwork = card.Find("ReferenceArtwork") as RectTransform;
+             Assert.That(artwork, Is.Not.Null);
+             Vector2 artPosition = artwork.anchoredPosition;
+@@ -779,7 +807,7 @@
+         {
+             public string unityVersion, capture, fixture, language, graphicsDevice, gold, gems, energy, level;
+             public int width, height;
+-            public Rect safeArea, environment, lowerShade, logo;
++            public Rect safeArea, environment, lowerShade, logo, ivan, firebird, footerBase;
+             public string[] controls;
+             public Rect[] controlBounds;
+             public bool automaticFirstCanvasPass, allVisibleControlCentersRaycast, repeatedLayoutStable;
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -16,7 +16,7 @@
+     {
+         const string ResourcesRoot = "Assets/LegendsOfRus/Resources/";
+         const string PrefabPath = ResourcesRoot + "ProductionUI/Pages/Home.prefab";
+-        const string GeneratedSourceRoot = "ProjectDocs/AI/HomeStyleAlignment/SplashReuseR4/Sources/";
++        const string GeneratedSourceRoot = "ProjectDocs/AI/HomeStyleAlignment/ReferenceRevisionR5/Sources/";
+ 
+         [Test]
+         public void ActiveHomePreservesIdentityAndHasCompleteSerializedViewAndLayout()
+@@ -60,11 +60,11 @@
+         }
+ 
+         [Test]
+-        public void LoadingPreparationListsExactlyTheTwentyFourTexturesUsedBySerializedHome()
++        public void LoadingPreparationListsExactlyTheTwentyFiveTexturesUsedBySerializedHome()
+         {
+             GameObject prefab = LoadHome();
+             IReadOnlyList<string> keys = ProductionUiFix01Runtime.GetHomeTextureResourceKeys();
+-            Assert.That(keys.Count, Is.EqualTo(24));
++            Assert.That(keys.Count, Is.EqualTo(25));
+             Assert.That(keys.Distinct().Count(), Is.EqualTo(keys.Count));
+             var preparedPaths = new HashSet<string>(keys.Select(key => ResourcesRoot + key + ".png"));
+             var renderedPaths = new HashSet<string>();
+@@ -72,7 +72,7 @@
+                 if (image.sprite != null) renderedPaths.Add(AssetDatabase.GetAssetPath(image.sprite));
+             Assert.That(renderedPaths, Is.EquivalentTo(preparedPaths));
+             using (var preparation = new HomeLoadingPreparation())
+-                Assert.That(preparation.TotalResourceCount, Is.EqualTo(25));
++                Assert.That(preparation.TotalResourceCount, Is.EqualTo(26));
+             foreach (string dependency in AssetDatabase.GetDependencies(PrefabPath, true))
+             {
+                 Assert.That(dependency.Contains("/Resources/DesignScreens/") ||
+@@ -104,6 +104,7 @@
+         [TestCase("progress_fill")]
+         [TestCase("quest_reward_frame")]
+         [TestCase("quest_reward_gem")]
++        [TestCase("footer_base_generated")]
+         public void IndividualLayerImportsWithoutPixelResizeOrColorSpaceAlteration(string name)
+         {
+             string path = ResourcesRoot + ProductionHomeRuntime.ArtRoot + name + ".png";
+@@ -169,8 +170,8 @@
+             }
+             Button[] navigation = { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton };
+             Text[] labels = { view.WorldMapText, view.ShopText, view.EventsText, view.CharactersText };
+-            float[] captionTop = { 160.7105f, 158.7632f, 160.5335f, 159.6483f };
+-            float[] artWidths = { 212.1827f, 227.1739f, 221.3592f, 229.2505f };
++            float[] captionTop = { 148.3182f, 158.4091f, 148.5837f, 154.6914f };
++            float[] artWidths = { 207.6159f, 205.4054f, 213.8107f, 226.9683f };
+             for (int i = 0; i < navigation.Length; i++)
+             {
+                 AssertRect(navigation[i].transform as RectTransform, new Vector2(i * 212, 0), new Vector2(203, 222));
+@@ -200,6 +201,31 @@
+         }
+ 
+         [Test]
++        public void ConnectedFooterIsWholeNoninteractiveArtBehindTheExistingControls()
++        {
++            ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
++            ProductionHomeLayout layout = view.GetComponent<ProductionHomeLayout>();
++            Assert.That(view.FooterBase, Is.Not.Null);
++            Assert.That(view.FooterBase.sprite, Is.SameAs(AssetDatabase.LoadAssetAtPath<Sprite>(
++                ResourcesRoot + ProductionHomeRuntime.ArtRoot + "footer_base_generated.png")));
++            Assert.That(view.FooterBase.type, Is.EqualTo(Image.Type.Simple));
++            Assert.That(view.FooterBase.useSpriteMesh, Is.False);
++            Assert.That(view.FooterBase.raycastTarget, Is.False);
++            Assert.That(view.FooterBase.GetComponent<Mask>(), Is.Null);
++            Assert.That(view.FooterBase.GetComponent<RectMask2D>(), Is.Null);
++            Assert.That(view.FooterBase.transform.parent, Is.SameAs(layout.Footer));
++            Assert.That(layout.FooterBase, Is.SameAs(view.FooterBase.rectTransform));
++            Assert.That(view.FooterBase.transform.GetSiblingIndex(), Is.Zero);
++            AssertRect(view.FooterBase.rectTransform, Vector2.zero, new Vector2(941, 222));
++            foreach (Transform control in new[] { view.MailButton.transform, view.QuestFrame.transform, view.DailyRewardButton.transform })
++            {
++                Assert.That(control.parent, Is.SameAs(layout.Footer));
++                Assert.That(control.GetSiblingIndex(), Is.GreaterThan(view.FooterBase.transform.GetSiblingIndex()));
++            }
++            Assert.That(view.FooterBase.GetComponentsInChildren<Button>(true), Is.Empty);
++        }
++
++        [Test]
+         public void BackgroundIsPreservedAndSeparateFirebirdAndSharedPortraitRetainTheirBindings()
+         {
+             ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
+@@ -212,9 +238,11 @@
+             Assert.That(view.Firebird.gameObject.activeSelf, Is.True);
+             Assert.That(view.Firebird.transform.GetSiblingIndex(), Is.GreaterThan(view.Ivan.transform.GetSiblingIndex()));
+             Assert.That(view.Firebird.transform.GetSiblingIndex(), Is.LessThan(view.LowerShade.transform.GetSiblingIndex()));
+-            AssertRect(view.Firebird.rectTransform, new Vector2(436, -473), new Vector2(430, 645));
++            AssertRect(view.Firebird.rectTransform, new Vector2(495, -442), new Vector2(550, 825));
+             Assert.That(Mathf.DeltaAngle(view.Firebird.rectTransform.localEulerAngles.z, -15), Is.EqualTo(0).Within(.001f),
+-                "The unchanged whole Firebird sprite must perch on Ivan's shoulder at its reviewed pose.");
++                "The whole independent Firebird retains the reviewed outward wing and right-edge tail pose.");
++            Assert.That(view.Firebird.rectTransform.rect.width / view.Firebird.rectTransform.rect.height,
++                Is.EqualTo(view.Firebird.sprite.rect.width / view.Firebird.sprite.rect.height).Within(.0001f));
+             Transform portrait = view.ProfileButton.transform.Find("PortraitClip");
+             Assert.That(portrait, Is.Not.Null);
+             Assert.That(portrait.gameObject.activeSelf, Is.True);
+@@ -242,10 +270,10 @@
+                 Assert.That(capsule.raycastTarget, Is.False);
+                 Assert.That(capsule.transform.GetSiblingIndex(), Is.Zero);
+                 Vector2 position = capsule.rectTransform.anchoredPosition, size = capsule.rectTransform.sizeDelta;
+-                Assert.That(position.x + 40f / 2172 * size.x, Is.EqualTo(0).Within(.01f));
+-                Assert.That(position.y - 165f / 724 * size.y, Is.EqualTo(0).Within(.01f));
+-                Assert.That(size.x * 2092 / 2172, Is.EqualTo(root.rect.width).Within(.01f));
+-                Assert.That(size.y * 390 / 724, Is.EqualTo(53).Within(.01f));
++                Assert.That(position.x + 26f / 2172 * size.x, Is.EqualTo(0).Within(.01f));
++                Assert.That(position.y - 99f / 724 * size.y, Is.EqualTo(0).Within(.01f));
++                Assert.That(size.x * 2120 / 2172, Is.EqualTo(root.rect.width).Within(.01f));
++                Assert.That(size.y * 479 / 724, Is.EqualTo(53).Within(.01f));
+                 int index = Array.IndexOf(capsules, capsule);
+                 Assert.That(numbers[index].transform.parent, Is.SameAs(root));
+                 Assert.That(pluses[index].transform.parent, Is.SameAs(root));

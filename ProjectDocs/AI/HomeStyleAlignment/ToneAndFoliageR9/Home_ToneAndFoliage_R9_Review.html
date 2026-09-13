@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home — Background tone and Map foliage</title>
+<style>
+  :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #090e16; color: #eee3cb; }
+  body { margin: 0; text-align: center; }
+  header { padding: 22px 16px 12px; }
+  h1 { font-size: 22px; margin: 0 0 10px; }
+  p { max-width: 700px; margin: 8px auto; line-height: 1.5; font-size: 14px; color: #c4bdaf; }
+  a { color: #e4ba66; }
+  label { display: inline-block; font-size: 14px; margin: 10px 8px; }
+  select { display: block; padding: 9px; margin-top: 6px; max-width: 100%; background: #142133; color: #f5e7cb; border: 1px solid #866a39; border-radius: 5px; }
+  figure { margin: 0 auto 24px; width: min(100%, 560px); }
+  figure.zoom { width: min(100%, 420px); }
+  figcaption { padding: 10px; font-size: 13px; color: #c4bdaf; }
+  #viewport { position: relative; overflow: hidden; }
+  .zoom #viewport { aspect-ratio: 1 / 1.3; }
+  img { display: block; width: 100%; height: auto; }
+  footer { padding: 0 16px 24px; }
+</style>
+<header>
+  <p><a href="../SceneToneR10/Home_SceneTone_R10_Review.html">Latest refinement: R10 subtle character and background tone</a></p>
+  <h1>Home — Background tone and Map foliage</h1>
+  <p>Actual Unity captures, revision 12. Restrained lower-background shading and newly isolated Map-side foliage. Accepted artwork, control layout, badges and live Play lettering are retained.</p>
+  <label>Capture<select id="capture">
+    <option value="ru">After · Russian · 941 × 1672</option>
+    <option value="before">Before · accepted Home R8</option>
+    <option value="reference">Original design reference</option>
+    <option value="phone">After · simulated phone · 576 × 1280</option>
+    <option value="tall">After · simulated safe area · 1080 × 2400</option>
+    <option value="en">After · English · 941 × 1672</option>
+  </select></label>
+  <label>Detail<select id="detail">
+    <option value="full">Complete portrait</option>
+    <option value="foliage">Map-side foliage · magnified</option>
+  </select></label>
+</header>
+<figure id="figure">
+  <figcaption id="caption">Actual Unity capture</figcaption>
+  <div id="viewport"><img id="portrait" src="UnityVerification/Home/Home_941x1672_RU.png" alt="Actual Unity Home portrait with background tone and Map-side foliage"></div>
+</figure>
+<footer>
+  <p>Detail mode magnifies the complete capture in this viewer; no cropped image is used by the game. Phone views use simulated Editor safe areas, not physical-device screenshots.</p>
+  <p><a href="ImplementationReport.md">Changes and exact checks</a> · <a href="UnityVerification/HomeTonePixelComparison.json">Pixel comparison</a></p>
+</footer>
+<script>
+  const views = {
+    ru: ['UnityVerification/Home/Home_941x1672_RU.png', 'After · actual Unity · Russian'],
+    before: ['../PlayLetteringR8/UnityVerification/Home/Home_941x1672_RU.png', 'Before · actual Unity · accepted Home R8'],
+    reference: ['../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Home.png', 'Original design reference · not runtime UI'],
+    phone: ['UnityVerification/Home/Home_576x1280_safearea_RU.png', 'After · actual Unity · simulated phone safe area'],
+    tall: ['UnityVerification/Home/Home_1080x2400_safearea_RU.png', 'After · actual Unity · simulated tall safe area'],
+    en: ['UnityVerification/Home/Home_941x1672_EN.png', 'After · actual Unity · English']
+  };
+  const capture = document.querySelector('#capture'), detail = document.querySelector('#detail');
+  const portrait = document.querySelector('#portrait'), figure = document.querySelector('#figure');
+  function fit() {
+    const zoom = detail.value !== 'full';
+    figure.classList.toggle('zoom', zoom);
+    const width = document.querySelector('#viewport').clientWidth;
+    const scale = Math.min(2, width / 250);
+    portrait.style.cssText = '';
+    if (zoom) {
+      const point = [125, 1330];
+      portrait.style.cssText = `position:absolute;width:${941 * scale}px;left:${width / 2 - point[0] * scale}px;top:${width * 1.3 / 2 - point[1] * scale}px`;
+    }
+    document.querySelector('#caption').textContent = views[capture.value][1] + (zoom ? ` · viewer magnification, ${scale.toFixed(2)}×` : ' · complete portrait');
+  }
+  async function update() {
+    portrait.src = views[capture.value][0];
+    portrait.alt = views[capture.value][1];
+    await portrait.decode();
+    detail.disabled = portrait.naturalWidth !== 941;
+    if (detail.disabled) detail.value = 'full';
+    fit();
+  }
+  capture.addEventListener('change', () => { window.viewReady = update(); });
+  detail.addEventListener('change', fit);
+  window.addEventListener('resize', fit);
+  window.previewReady = window.viewReady = update();
+</script>
+</html>

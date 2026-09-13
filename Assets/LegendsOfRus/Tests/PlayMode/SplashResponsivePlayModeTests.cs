@@ -41,7 +41,7 @@ namespace LegendsOfRus.Tests.PlayMode
             DemoFeatureState.SetLanguage("ru");
             router.Show(ScreenId.SplashTitle);
             Settle();
-            yield return null;
+            yield return WaitForNormalButtonColors();
             AssertSingleInfrastructure();
         }
 
@@ -71,7 +71,12 @@ namespace LegendsOfRus.Tests.PlayMode
             WithDisplay(view, new Vector2Int(1080, 2400), new Rect(45, 100, 990, 2160), "Splash_1080x2400_safearea");
             // A wide Editor view and a subsequent portrait must not accumulate offsets.
             WithDisplay(view, new Vector2Int(1672, 941), new Rect(0, 0, 1672, 941), null);
+            DemoFeatureState.SetLanguage("en"); view.RefreshContent();
+            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Splash_941x1672_EN");
+            Assert.That(view.StartText.text, Is.EqualTo("Start"));
+            DemoFeatureState.SetLanguage("ru"); view.RefreshContent();
             WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Splash_941x1672_roundtrip");
+            AssertCapturePixelsEqual(OutputPath("Splash_941x1672.png"), OutputPath("Splash_941x1672_roundtrip.png"));
             AssertSingleInfrastructure();
             yield return null;
         }
@@ -99,6 +104,44 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(router.RouteGeneration, Is.EqualTo(before + 1));
             AssertSingleInfrastructure();
             yield return null;
+        }
+
+        internal static void AssertCapturePixelsEqual(string before, string after)
+        {
+            var a = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            var b = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            try
+            {
+                Assert.That(a.LoadImage(File.ReadAllBytes(before)), Is.True);
+                Assert.That(b.LoadImage(File.ReadAllBytes(after)), Is.True);
+                Assert.That(new Vector2Int(a.width, a.height), Is.EqualTo(new Vector2Int(b.width, b.height)));
+                Color32[] first = a.GetPixels32(), second = b.GetPixels32();
+                int changed = 0;
+                for (int i = 0; i < first.Length; i++) if (!first[i].Equals(second[i])) changed++;
+                Assert.That(changed, Is.Zero, "RU/EN/RU and portrait changes must restore identical pixels, including live lettering.");
+            }
+            finally { UnityEngine.Object.Destroy(a); UnityEngine.Object.Destroy(b); }
+        }
+
+        IEnumerator WaitForNormalButtonColors()
+        {
+            float deadline = Time.realtimeSinceStartup + 2;
+            int stableFrames = 0;
+            do
+            {
+                yield return null;
+                bool stable = true;
+                foreach (Button button in SplashView().Buttons())
+                {
+                    Color expected = button.colors.normalColor * button.colors.colorMultiplier;
+                    Color actual = button.targetGraphic.canvasRenderer.GetColor();
+                    stable &= button.IsInteractable() && Mathf.Abs(actual.r - expected.r) < .0001f &&
+                        Mathf.Abs(actual.g - expected.g) < .0001f && Mathf.Abs(actual.b - expected.b) < .0001f &&
+                        Mathf.Abs(actual.a - expected.a) < .0001f;
+                }
+                stableFrames = stable ? stableFrames + 1 : 0;
+            } while (stableFrames < 2 && Time.realtimeSinceStartup < deadline);
+            Assert.That(stableFrames, Is.EqualTo(2), "Capture only after native button fades have completed.");
         }
 
         void WithDisplay(SplashTitleView view, Vector2Int size, Rect safeRect, string name, Action<Camera> action = null)
@@ -136,6 +179,8 @@ namespace LegendsOfRus.Tests.PlayMode
                 canvas.scaleFactor = AdaptiveCanvasScaler.ResolveScale(
                     new Vector2Int(Mathf.RoundToInt(safeRect.width), Mathf.RoundToInt(safeRect.height)), 941, 1672);
                 safe.Apply(safeRect, size);
+                // Match Home's synchronous display fixture: refresh glyph geometry at the new Canvas scale.
+                foreach (Text label in view.GetComponentsInChildren<Text>(true)) label.SetVerticesDirty();
                 if (!Baseline)
                 {
                     // Exercise the production callbacks after one normal Canvas pass.
@@ -150,7 +195,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(router.Viewport.rect.width, Is.EqualTo(941f).Within(1f));
                 Assert.That(router.Viewport.rect.height, Is.EqualTo(1672f).Within(1f));
                 Assert.That(logo.rect.size.x, Is.EqualTo(640f).Within(.01f));
-                Assert.That(logo.rect.size.y, Is.EqualTo(512.18f).Within(.01f));
+                Assert.That(logo.rect.size.y, Is.EqualTo(640f * 1041 / 1511).Within(.01f));
                 AssertAuthoredRect(view, "Firebird", new Rect(-137, 49, 450, 562.3f));
                 AssertAuthoredRect(view, "Ivan", new Rect(-203, 421, 738, 1107));
                 AssertAuthoredRect(view, "Masha", new Rect(92, 549, 574, 861));
@@ -199,7 +244,7 @@ namespace LegendsOfRus.Tests.PlayMode
                         unityVersion = Application.unityVersion,
                         capture = "Actual Unity Play Mode production Splash on the existing router Canvas",
                         mode = Baseline ? "BEFORE correction, capture-only baseline" : "AFTER correction, validated geometry",
-                        fixture = "Russian language, live Application.version; motion settled; simulated display/safe area, not physical-device evidence",
+                        fixture = DemoFeatureState.LanguageCode + " language, live Application.version; motion settled; glyph meshes refreshed for synchronous simulated display/safe area, not physical-device evidence",
                         safeAreaNote = name.Contains("inferredsafe") ? "Top inset 50px is inferred from the user image; actual phone safe area is unknown" : "Explicit layout test rectangle",
                         width = size.x, height = size.y, safeArea = safeRect,
                         logo = logoBounds, version = versionBounds, language = languageBounds,

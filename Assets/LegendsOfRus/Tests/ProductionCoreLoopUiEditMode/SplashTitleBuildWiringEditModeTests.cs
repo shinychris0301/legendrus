@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.IO;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -64,6 +65,60 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             {
                 "Decorative graphic intercepts input: StrayDecoration"
             }));
+        }
+
+        [Test]
+        public void SplashAndLoadingShareExactHomeBrandingWithSeparateDuskCharacters()
+        {
+            const string resources = "Assets/LegendsOfRus/Resources/";
+            GameObject splashRoot = LoadCanonicalPrefab();
+            SplashTitleView splash = splashRoot.GetComponent<SplashTitleView>();
+            ProductionHomeView home = AssetDatabase.LoadAssetAtPath<GameObject>(resources +
+                "ProductionUI/Pages/Home.prefab").GetComponent<ProductionHomeView>();
+            ProductionLoadingView loading = AssetDatabase.LoadAssetAtPath<GameObject>(resources +
+                "ProductionUI/Pages/Loading.prefab").GetComponent<ProductionLoadingView>();
+            Assert.That(splash.HasRequiredBindings && loading.HasRequiredBindings, Is.True);
+            Assert.That(splashRoot.transform.Find("Logo").GetComponent<Image>().sprite, Is.SameAs(home.Logo.sprite));
+            Assert.That(loading.Logo.sprite, Is.SameAs(home.Logo.sprite));
+            Assert.That((splash.StartButton.targetGraphic as Image).sprite, Is.SameAs((home.PlayButton.targetGraphic as Image).sprite));
+            Assert.That(splash.StartText.material, Is.SameAs(home.PlayText.material));
+            Assert.That(splash.StartText.GetComponent<ProductionHomeGoldText>().BeveledFace, Is.True);
+            Assert.That(splash.StartText.text, Is.EqualTo("Начать"));
+            Assert.That(splashRoot.transform.Find("BackgroundEnvironment").GetComponent<Image>().sprite, Is.SameAs(home.Environment.sprite));
+            foreach (string name in new[] { "Ivan", "Masha" })
+            {
+                Image character = splashRoot.transform.Find(name).GetComponent<Image>();
+                Assert.That(character.color, Is.EqualTo(ProductionHomeRuntime.HeroTone));
+                Assert.That(character.raycastTarget, Is.False);
+                Assert.That(character.GetComponent<SplashTitleCharacterFade>().BottomFraction, Is.EqualTo(.13f));
+            }
+            Assert.That(loading.Environment.sprite.name, Is.EqualTo("loading_environment_dusk"));
+            Assert.That(loading.Ivan.sprite.name, Is.EqualTo("ivan_loading_dusk"));
+            Assert.That(loading.Environment.color, Is.EqualTo(ProductionHomeRuntime.EnvironmentTone));
+            Assert.That(loading.Ivan.color, Is.EqualTo(ProductionHomeRuntime.HeroTone));
+        }
+
+        [TestCase("masha_dusk", true)]
+        [TestCase("ivan_splash_dusk", true)]
+        [TestCase("ivan_loading_dusk", true)]
+        [TestCase("loading_environment_dusk", false)]
+        public void NewDuskArtUsesCompleteFinalSourcesWithVerifiedTransparency(string name, bool character)
+        {
+            string assetPath = "Assets/LegendsOfRus/Resources/ProductionUI/FrontEndHomeAligned/" + name + ".png";
+            byte[] asset = File.ReadAllBytes(assetPath);
+            CollectionAssert.AreEqual(File.ReadAllBytes("ProjectDocs/AI/FrontEndHomeAlignment/R1/Sources/Final/" + name + ".png"), asset);
+            if (character) Assert.That(asset[25], Is.EqualTo(6), "Character PNG must carry actual RGBA, not a baked RGB checkerboard.");
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+            Assert.That(sprite, Is.Not.Null);
+            Assert.That(sprite.rect.position, Is.EqualTo(Vector2.zero));
+            Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(sprite.texture.width, sprite.texture.height)));
+            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(assetPath);
+            Assert.That(importer.spriteImportMode, Is.EqualTo(SpriteImportMode.Single));
+            Assert.That(importer.sRGBTexture, Is.True);
+            Assert.That(importer.alphaSource, Is.EqualTo(TextureImporterAlphaSource.FromInput));
+            importer.GetSourceTextureWidthAndHeight(out int width, out int height);
+            Assert.That(sprite.texture.width, Is.EqualTo(width));
+            Assert.That(sprite.texture.height, Is.EqualTo(height));
         }
 
         GameObject CreateInactiveClone()

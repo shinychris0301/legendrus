@@ -1,0 +1,233 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -100,7 +100,7 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 12
++  Revision: 13
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
+   BackgroundShade: {fileID: 1584650500042039569}
+@@ -4077,7 +4077,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_Color: {r: 0.9490196, g: 0.9490196, b: 0.9490196, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -7491,7 +7491,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_Color: {r: 0.92156863, g: 0.92156863, b: 0.92156863, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -12,6 +12,9 @@
+         public const string ArtRoot = "ProductionUI/HomeAligned/";
+         public const string PlayGoldMaterialResource = ArtRoot + "home_play_gold";
+         public const string TypographyResource = "ProductionUI/SplashTitleConfig/SplashTitleTypography";
++        // Home-only neutral scene tone; alpha, source artwork and UI lighting stay intact.
++        public static readonly Color EnvironmentTone = new Color32(235, 235, 235, 255);
++        public static readonly Color HeroTone = new Color32(242, 242, 242, 255);
+         static readonly string[] TextureNames = {
+             "home_environment_generated", "nav_map_generated", "nav_shop_generated", "nav_events_generated",
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+@@ -103,6 +106,8 @@
+             SetArt(view.Environment, sprites["home_environment_generated"], 0, 0, 941, 1672);
+             SetArt(view.Logo, sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
+             SetArt(view.Ivan, sprites["home_hero_firebird"], -20, 474, 967, 967);
++            view.Environment.color = EnvironmentTone;
++            view.Ivan.color = HeroTone;
+             ProductionHomeArtFade oldFade = view.Ivan.GetComponent<ProductionHomeArtFade>();
+             if (oldFade != null) oldFade.enabled = false;
+             // Home now uses its own complete reference character and perched Firebird.
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 12;
++        public const int CurrentRevision = 13;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
+@@ -76,6 +76,7 @@
+         public bool HasRequiredBindings => Revision == CurrentRevision && Typography != null &&
+             Environment != null && Environment.sprite != null && Logo != null && Logo.sprite != null &&
+             Ivan != null && Ivan.sprite != null && Firebird != null && !Firebird.gameObject.activeSelf && Firebird.sprite == null &&
++            Environment.color == ProductionHomeRuntime.EnvironmentTone && Ivan.color == ProductionHomeRuntime.HeroTone &&
+             LowerShade != null && LowerShade.GetComponent<CanvasRenderer>() != null &&
+             HeroName != null && LevelText != null && GoldText != null && GemsText != null &&
+             EnergyText != null && PlayText != null && WorldMapText != null && ShopText != null &&
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -350,6 +350,85 @@
+ 
+         static int RgbDifference(Color32 a, Color32 b) => a.r + a.g + a.b - b.r - b.g - b.b;
+ 
++        [UnityTest]
++        public IEnumerator SceneTone_GentlyDarkensEnvironmentHeroAndFirebirdWhilePreservingOpaqueUi()
++        {
++            ProductionHomeView view = HomeView();
++            Assert.That(view.Environment.color, Is.EqualTo(ProductionHomeRuntime.EnvironmentTone));
++            Assert.That(view.Ivan.color, Is.EqualTo(ProductionHomeRuntime.HeroTone));
++            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), null, camera =>
++            {
++                Color32[] toned = ReadCameraPixels(camera);
++                Color environmentColor = view.Environment.color, heroColor = view.Ivan.color;
++                Color32[] r9;
++                try
++                {
++                    // Restore only the previous neutral scene colors. Retain the
++                    // R9 lower background gradient, foliage and every live control.
++                    view.Environment.color = Color.white;
++                    view.Ivan.color = Color.white;
++                    Canvas.ForceUpdateCanvases();
++                    AssertHeroLowerFadeMesh(view);
++                    r9 = ReadCameraPixels(camera);
++                }
++                finally
++                {
++                    view.Environment.color = environmentColor;
++                    view.Ivan.color = heroColor;
++                    Canvas.ForceUpdateCanvases();
++                }
++                int darker = 0, brighter = 0, alphaChanges = 0, largestReduction = 0;
++                for (int i = 0; i < toned.Length; i++)
++                {
++                    Color32 a = toned[i], b = r9[i];
++                    if (a.a != b.a) alphaChanges++;
++                    if (a.r > b.r + 1 || a.g > b.g + 1 || a.b > b.b + 1) brighter++;
++                    if (RgbDifference(a, b) < -3) darker++;
++                    largestReduction = Mathf.Max(largestReduction, b.r - a.r, b.g - a.g, b.b - a.b);
++                }
++                Assert.That(darker, Is.GreaterThan(100000), "The scene adjustment must visibly affect exposed scenery and the hero layer.");
++                Assert.That(brighter, Is.Zero, "A neutral scene tint must not add highlights or shift channels upward.");
++                Assert.That(alphaChanges, Is.Zero, "Color adjustment must preserve compositing alpha.");
++                Assert.That(largestReduction, Is.LessThanOrEqualTo(30), "The new pass must remain a subtle exposure reduction.");
++
++                string[] names = { "Upper sky", "Sunset", "Village steps", "Ivan face", "Ivan tunic", "Firebird tail" };
++                RectInt[] regions =
++                {
++                    new RectInt(740, 200, 60, 50), new RectInt(265, 480, 40, 60), new RectInt(60, 840, 60, 60),
++                    new RectInt(390, 560, 50, 65), new RectInt(375, 810, 90, 115), new RectInt(795, 940, 20, 70)
++                };
++                for (int region = 0; region < regions.Length; region++)
++                {
++                    long actualSum = 0, baselineSum = 0;
++                    RectInt r = regions[region];
++                    for (int y = r.yMin; y < r.yMax; y++)
++                        for (int x = r.xMin; x < r.xMax; x++)
++                        {
++                            int i = (1671 - y) * 941 + x;
++                            actualSum += toned[i].r + toned[i].g + toned[i].b;
++                            baselineSum += r9[i].r + r9[i].g + r9[i].b;
++                        }
++                    Assert.That(baselineSum, Is.GreaterThan(0), names[region]);
++                    Assert.That((double)actualSum / baselineSum, Is.InRange(.85, .995),
++                        names[region] + " must darken gently while retaining its visible detail.");
++                }
++                AssertReferenceRegionsUnchanged(toned, r9, "Scene tint", new[]
++                {
++                    "HUD coins and live balance", "Avatar face", "Logo gold and navy", "Play face and lettering",
++                    "Map face", "Event face", "Event badge", "Gift badge", "Mailbox face", "Quest gem"
++                }, new[]
++                {
++                    new RectInt(350, 48, 160, 40), new RectInt(70, 70, 30, 40), new RectInt(350, 210, 210, 180),
++                    new RectInt(280, 1080, 380, 90), new RectInt(90, 1290, 120, 90), new RectInt(520, 1290, 120, 90),
++                    new RectInt(636, 1240, 14, 14), new RectInt(905, 1475, 12, 12),
++                    new RectInt(55, 1535, 65, 45), new RectInt(645, 1520, 35, 35)
++                });
++                AssertHeroLowerFadeMesh(view);
++                Assert.That(view.HasRequiredBindings, Is.True, "The scene comparison must restore the active presentation.");
++            });
++            yield return null;
++        }
++
+         static void AssertProtectedReferenceRegionsUnchanged(Color32[] actual, Color32[] baseline, string treatment)
+         {
+             // Small fully opaque regions measured in the accepted941x1672 capture;
+@@ -362,6 +441,12 @@
+                 new RectInt(280, 1080, 380, 90), new RectInt(90, 1290, 120, 90), new RectInt(520, 1290, 120, 90),
+                 new RectInt(636, 1240, 14, 14), new RectInt(905, 1475, 12, 12)
+             };
++            AssertReferenceRegionsUnchanged(actual, baseline, treatment, names, regions);
++        }
++
++        static void AssertReferenceRegionsUnchanged(Color32[] actual, Color32[] baseline, string treatment,
++            string[] names, RectInt[] regions)
++        {
+             for (int region = 0; region < regions.Length; region++)
+             {
+                 int worst = 0;
+@@ -848,7 +933,7 @@
+             Assert.That(shade, Is.Not.Null);
+             Assert.That(shade.raycastTarget, Is.False);
+             Assert.That(shade.transform.parent, Is.SameAs(view.Environment.transform));
+-            Assert.That(view.LowerShade.color.a, Is.Zero, "Only the environment may receive the new tone.");
++            Assert.That(view.LowerShade.color.a, Is.Zero, "The R9 gradient must stay under the hero; the historical wash stays disabled.");
+             Mesh mesh = shade.canvasRenderer.GetMesh();
+             Assert.That(mesh, Is.Not.Null);
+             Vector3[] vertices = mesh.vertices;
+@@ -924,15 +1009,16 @@
+             for (int i = 0; i < vertices.Length; i++) { low = Mathf.Min(low, vertices[i].y); high = Mathf.Max(high, vertices[i].y); }
+             Assert.That(high - low, Is.EqualTo(view.Ivan.rectTransform.rect.height).Within(.01f));
+             bool foundTransparentEdge = false, foundPartialFade = false, foundOpaqueUpper = false;
++            Color32 inputColor = view.Ivan.color;
+             float minV = 1, maxV = 0;
+             for (int i = 0; i < vertices.Length; i++)
+             {
+                 float fraction = (vertices[i].y - low) / (high - low);
+-                Assert.That(colors[i].r == 255 && colors[i].g == 255 && colors[i].b == 255, Is.True,
+-                    "The hero fade changes alpha only, never source colors.");
++                Assert.That(colors[i].r == inputColor.r && colors[i].g == inputColor.g && colors[i].b == inputColor.b, Is.True,
++                    "The shared hero fade must preserve the Image's requested RGB while changing alpha only.");
+                 if (fraction <= .0001f) { Assert.That(colors[i].a, Is.Zero); foundTransparentEdge = true; }
+-                if (fraction >= .08f) { Assert.That(colors[i].a, Is.EqualTo(255)); foundOpaqueUpper = true; }
+-                if (fraction > 0 && fraction < .08f && colors[i].a > 0 && colors[i].a < 255) foundPartialFade = true;
++                if (fraction >= .08f) { Assert.That(colors[i].a, Is.EqualTo(inputColor.a)); foundOpaqueUpper = true; }
++                if (fraction > 0 && fraction < .08f && colors[i].a > 0 && colors[i].a < inputColor.a) foundPartialFade = true;
+                 minV = Mathf.Min(minV, uv[i].y); maxV = Mathf.Max(maxV, uv[i].y);
+             }
+             Assert.That(foundTransparentEdge && foundPartialFade && foundOpaqueUpper, Is.True);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -197,12 +197,19 @@
+         }
+ 
+         [Test]
+-        public void HomeUsesDeclaredLayerGeometryWithUntintedArtAndLiveLabels()
++        public void HomeUsesDeclaredLayerGeometryWithSceneOnlyToneAndLiveLabels()
+         {
+             ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
+             Assert.That(view.HasGeneratedControlBindings && view.HasReferenceForegroundBindings, Is.True);
++            Assert.That(ProductionHomeRuntime.EnvironmentTone, Is.EqualTo((Color)new Color32(235, 235, 235, 255)));
++            Assert.That(ProductionHomeRuntime.HeroTone, Is.EqualTo((Color)new Color32(242, 242, 242, 255)));
+             foreach (Image image in view.GetComponentsInChildren<Image>(true))
+-                if (image.sprite != null) Assert.That(image.color, Is.EqualTo(Color.white), image.name);
++                if (image.sprite != null)
++                {
++                    Color expected = image == view.Environment ? ProductionHomeRuntime.EnvironmentTone :
++                        image == view.Ivan ? ProductionHomeRuntime.HeroTone : Color.white;
++                    Assert.That(image.color, Is.EqualTo(expected), image.name);
++                }
+             ProductionHomeLayout layout = view.GetComponent<ProductionHomeLayout>();
+             AssertRect(layout.Hud, Vector2.zero, new Vector2(941, 130));
+             Assert.That(view.HudFrame.transform.parent, Is.SameAs(layout.Hud));
+@@ -381,7 +388,7 @@
+             foreach (Image art in new[] { home.Ivan, home.Logo, home.PlayButton.targetGraphic as Image })
+             {
+                 Assert.That(AssetDatabase.GetAssetPath(art.sprite), Does.StartWith(ResourcesRoot + ProductionHomeRuntime.ArtRoot));
+-                Assert.That(art.color, Is.EqualTo(Color.white));
++                Assert.That(art.color, Is.EqualTo(art == home.Ivan ? ProductionHomeRuntime.HeroTone : Color.white));
+                 Assert.That(art.type, Is.EqualTo(Image.Type.Simple));
+                 Assert.That(art.preserveAspect, Is.EqualTo(art != home.PlayButton.targetGraphic));
+                 Assert.That(art.useSpriteMesh, Is.False);

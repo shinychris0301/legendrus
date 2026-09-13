@@ -24,13 +24,14 @@ namespace LegendsOfRus
         LevelGoalRuntime goalRuntime;
 
         Image[,] cellBackgrounds;
+        Image[,] specialMatchColors;
         Match3CellInput[,] cellInputs;
         Image[,] gemImages;
         Image[,] specialImages;
         RectTransform[,] visualRoots;
         CanvasGroup[,] visualGroups;
 
-        Sprite cellSprite;
+        GameplayCellMechanics[,] cellMechanics;
         Sprite[] gemSprites;
         Sprite rowSpecialSprite;
         Sprite columnSpecialSprite;
@@ -131,6 +132,8 @@ namespace LegendsOfRus
             rows = Mathf.Max(3, currentLevel.rows);
             tileTypes = Mathf.Clamp(currentLevel.tileTypes, 3, DefaultTileTypes);
             cellBackgrounds = new Image[columns, rows];
+            cellMechanics = new GameplayCellMechanics[columns, rows];
+            specialMatchColors = new Image[columns, rows];
             cellInputs = new Match3CellInput[columns, rows];
             gemImages = new Image[columns, rows];
             specialImages = new Image[columns, rows];
@@ -157,25 +160,13 @@ namespace LegendsOfRus
             );
             model = LevelBoardFactory.Create(currentLevel, seed);
 
-            // v1.9 visual lock:
-            // Restore the compact faceted runtime gem set used before v1.8.
-            // At gameplay size this set matches the approved board more clearly
-            // than the later transparent reconstruction and preserves animation readability.
-            cellSprite = LoadRuntimeSprite("Gameplay/Cell_DarkGold");
-            gemSprites = new[]
-            {
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Ruby"),
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Sapphire"),
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Emerald"),
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Amber"),
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Amethyst"),
-                LoadRuntimeSprite("Gameplay/Gems/Gem_Topaz"),
-            };
-
-            rowSpecialSprite = LoadRuntimeSprite("Gameplay/Approved/Special_Row");
-            columnSpecialSprite = LoadRuntimeSprite("Gameplay/Approved/Special_Column");
-            burstSpecialSprite = LoadRuntimeSprite("Gameplay/Approved/Special_Burst");
-            colorSpecialSprite = LoadRuntimeSprite("Gameplay/Approved/Special_Color");
+            // Supplied isolated gem/booster sheets, independent from reference-screen artwork.
+            gemSprites = new Sprite[6];
+            for (int i = 0; i < gemSprites.Length; i++) gemSprites[i] = ProductionGameplayArt.Gem(i);
+            rowSpecialSprite = ProductionGameplayArt.Load("row");
+            columnSpecialSprite = ProductionGameplayArt.Load("column");
+            burstSpecialSprite = ProductionGameplayArt.Load("burst");
+            colorSpecialSprite = ProductionGameplayArt.Load("color");
 
             BuildGrid();
             vfxPresenter = GetComponent<CoreLoopVfxPresenter>();
@@ -246,12 +237,10 @@ namespace LegendsOfRus
                     float y0 = 1f - (float)(y + 1) / rows;
                     float y1 = 1f - (float)y / rows;
 
-                    const float gapX = 0.002f;
-                    const float gapY = 0.0017f;
-                    // The input root owns the complete nominal cell. The old
-                    // layout inset is retained by CellContent below, so the
-                    // approved visuals remain identical while raycast seams
-                    // between cells are eliminated.
+                    const float gapX = 0.0006f;
+                    const float gapY = 0.0005f;
+                    // The input root still owns the complete nominal cell. Only the
+                    // decorative inset changes for the thin reference-style gold grid.
                     cellRt.anchorMin = new Vector2(x0, y0);
                     cellRt.anchorMax = new Vector2(x1, y1);
                     cellRt.offsetMin = Vector2.zero;
@@ -264,7 +253,7 @@ namespace LegendsOfRus
                     var content = new GameObject(
                         "CellContent",
                         typeof(RectTransform),
-                        typeof(Image)
+                        typeof(ProductionGameplayCell)
                     );
                     content.transform.SetParent(cell.transform, false);
                     var contentRt = content.GetComponent<RectTransform>();
@@ -280,7 +269,7 @@ namespace LegendsOfRus
                     contentRt.offsetMax = Vector2.zero;
 
                     var background = content.GetComponent<Image>();
-                    background.sprite = cellSprite;
+                    // The native lacquer cell owns only presentation; the input root is unchanged.
                     background.preserveAspect = false;
                     background.color = Color.white;
                     background.raycastTarget = false;
@@ -299,8 +288,8 @@ namespace LegendsOfRus
                     );
                     visual.transform.SetParent(content.transform, false);
                     var visualRt = visual.GetComponent<RectTransform>();
-                    visualRt.anchorMin = new Vector2(0.10f, 0.08f);
-                    visualRt.anchorMax = new Vector2(0.90f, 0.92f);
+                    visualRt.anchorMin = new Vector2(0.03f, 0.01f);
+                    visualRt.anchorMax = new Vector2(0.97f, 0.99f);
                     visualRt.offsetMin = Vector2.zero;
                     visualRt.offsetMax = Vector2.zero;
                     visualRoots[x, y] = visualRt;
@@ -324,6 +313,21 @@ namespace LegendsOfRus
                     specialImage.raycastTarget = false;
                     specialImage.enabled = false;
                     specialImages[x, y] = specialImage;
+                    // Supplied power-up art has a fixed colour. Preserve the actual match
+                    // identity with a small, untinted gem marker on the travelling visual.
+                    var matchColorGo = new GameObject("SpecialMatchColor", typeof(RectTransform), typeof(Image));
+                    matchColorGo.transform.SetParent(visual.transform, false);
+                    var matchColorRect = (RectTransform)matchColorGo.transform;
+                    matchColorRect.anchorMin = matchColorRect.anchorMax = matchColorRect.pivot = new Vector2(1, 0);
+                    matchColorRect.anchoredPosition = new Vector2(-1, 1);
+                    matchColorRect.sizeDelta = new Vector2(27, 29);
+                    var matchColor = matchColorGo.GetComponent<Image>();
+                    matchColor.preserveAspect = true; matchColor.raycastTarget = false; matchColor.enabled = false;
+                    specialMatchColors[x, y] = matchColor;
+                    var typography = Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
+                    string fontSource;
+                    Font font = typography != null ? typography.Resolve(false, out fontSource) : null;
+                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font);
                 }
             }
         }
@@ -2084,6 +2088,17 @@ namespace LegendsOfRus
             else if (specialType == SpecialGem.Burst) special.sprite = burstSpecialSprite;
             else if (specialType == SpecialGem.Color) special.sprite = colorSpecialSprite;
 
+            BoardObjectiveItemKind item = model.GetObjectiveItem(new BoardPosition(x, y));
+            if (item != BoardObjectiveItemKind.None)
+            {
+                gem.enabled = true;
+                gem.sprite = ProductionGameplayArt.Load("feather");
+                special.enabled = false;
+            }
+            else if (special.enabled) gem.enabled = false;
+            var matchColor = specialMatchColors[x, y];
+            matchColor.enabled = special.enabled && type >= 0 && type < gemSprites.Length;
+            matchColor.sprite = matchColor.enabled ? gemSprites[type] : null;
             ApplyCellMechanicTint(x, y);
         }
 
@@ -2091,19 +2106,8 @@ namespace LegendsOfRus
         {
             var position = new BoardPosition(x, y);
             BoardObstacleData obstacle = model.GetObstacle(position);
-            BoardObjectiveItemKind item = model.GetObjectiveItem(position);
-
-            Color tint = Color.white;
-            if (obstacle.Kind == BoardObstacleKind.Ice)
-                tint = new Color(0.60f, 0.88f, 1f, 1f);
-            else if (obstacle.Kind == BoardObstacleKind.Chain)
-                tint = new Color(1f, 0.76f, 0.28f, 1f);
-            else if (obstacle.Kind == BoardObstacleKind.Crate)
-                tint = new Color(0.53f, 0.30f, 0.16f, 1f);
-            else if (item != BoardObjectiveItemKind.None)
-                tint = new Color(1f, 0.52f, 0.16f, 1f);
-
-            cellBackgrounds[x, y].color = tint;
+            cellBackgrounds[x, y].color = Color.white;
+            cellMechanics[x, y].Refresh(obstacle);
         }
 
         void ResetVisualTransforms()

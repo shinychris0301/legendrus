@@ -1,0 +1,117 @@
+using System;
+using System.Globalization;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using LegendsOfRus.GameplayCore;
+namespace LegendsOfRus
+{
+    [Serializable] public sealed class GameplayGoalView
+    {
+        public RectTransform Root;public Image Icon;public Text Description,Count;
+    }
+    [DisallowMultipleComponent]
+    public sealed class ProductionGameplayView : MonoBehaviour
+    {
+        public const int CurrentRevision=2;
+        public int Revision=CurrentRevision;
+        public SplashTitleTypography Typography;
+        public RectTransform Content,Hud,Footer,BoardArea,BoardMount;
+        public Image Environment,GoalProgress,StarProgress;
+        public Text HeroName,LevelText,MovesHeading,MovesValue,GoalsHeading,ScoreHeading,ScoreValue;
+        public Button[] BoosterButtons;public Text[] BoosterCounts;
+        public ProductionWorldMapGraphic[] Stars,ArmedMarkers;
+        public GameplayGoalView[] Goals;
+        public Button PauseButton;
+        public Match3Board Board{get;private set;}
+        public bool ActionsBound{get;private set;}
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&HasCoreBindings&&HasFramePolishBindings;
+        internal bool HasCoreBindings=>Typography!=null&&Content!=null&&Hud!=null&&Footer!=null&&BoardArea!=null&&BoardMount!=null&&
+            Environment!=null&&Environment.sprite!=null&&GoalProgress!=null&&StarProgress!=null&&HeroName!=null&&LevelText!=null&&MovesHeading!=null&&MovesValue!=null&&GoalsHeading!=null&&ScoreHeading!=null&&ScoreValue!=null&&
+            Valid(BoosterButtons,4)&&Valid(BoosterCounts,4)&&Valid(Stars,3)&&Valid(ArmedMarkers,4)&&PauseButton!=null&&Goals!=null&&Goals.Length==2&&Array.TrueForAll(Goals,g=>g!=null&&g.Root!=null&&g.Icon!=null&&g.Count!=null&&g.Description!=null);
+        public bool HasFramePolishBindings=>BoardArea!=null&&BoardArea.Find("BoardLacquer")!=null&&Hud!=null&&Hud.Find("GoalLacquer")!=null&&
+            Footer!=null&&Footer.Find("ScoreInset")!=null&&Valid(Stars,3)&&Array.TrueForAll(Stars,s=>s.GetComponent<ProductionGameplayStarPolish>()!=null);
+        static bool Valid<T>(T[] a,int length)where T:UnityEngine.Object=>a!=null&&a.Length==length&&Array.TrueForAll(a,x=>x!=null);
+        string language;GameState state;Action pause;
+        readonly UnityAction[] boosterActions=new UnityAction[4];UnityAction pauseAction;
+        void OnEnable(){RefreshContent();}
+        void Update()
+        {
+            if(language!=DemoFeatureState.LanguageCode)RefreshContent();
+            if(Board!=null)RefreshAvailability();
+        }
+        void OnDisable(){Unbind();}
+        public void Bind(Match3Board board,Action showPause)
+        {
+            Unbind();Board=board;pause=showPause;state=GameState.Instance;
+            Board.MovesChanged+=OnValue;Board.ScoreChanged+=OnValue;Board.GoalSlotsChanged+=OnGoals;
+            if(state!=null)state.Changed+=RefreshState;
+            for(int i=0;i<4;i++)
+            {
+                int index=i;boosterActions[i]=()=>{if(Blocked()||!BoosterButtons[index].IsInteractable())return;BoosterButtons[index].GetComponent<ProductionHomeButtonFeedback>()?.NotifyActivated();Board.UseBooster(ProductionPreLevelRuntime.Boosters[index]);RefreshState();};
+                BoosterButtons[i].onClick.AddListener(boosterActions[i]);
+            }
+            pauseAction=()=>{if(!Blocked()&&PauseButton.IsInteractable())pause?.Invoke();};PauseButton.onClick.AddListener(pauseAction);ActionsBound=true;RefreshContent();
+        }
+        bool Blocked()=>!isActiveAndEnabled||Board==null||ScreenRouter.Instance!=null&&ScreenRouter.Instance.HasActiveModalBlocker;
+        void Unbind()
+        {
+            if(Board!=null){Board.MovesChanged-=OnValue;Board.ScoreChanged-=OnValue;Board.GoalSlotsChanged-=OnGoals;}
+            if(state!=null)state.Changed-=RefreshState;
+            if(BoosterButtons!=null)for(int i=0;i<4;i++)if(boosterActions[i]!=null&&BoosterButtons[i]!=null)BoosterButtons[i].onClick.RemoveListener(boosterActions[i]);
+            if(PauseButton!=null&&pauseAction!=null)PauseButton.onClick.RemoveListener(pauseAction);
+            Board=null;state=null;pause=null;ActionsBound=false;
+        }
+        void OnValue(int value)=>RefreshState();void OnGoals(int a,int b)=>RefreshState();
+        public void RefreshContent()
+        {
+            if(!HasRequiredBindings)return;language=DemoFeatureState.LanguageCode;bool en=language=="en";
+            HeroName.text=en?"Ivan":"Иван";MovesHeading.text=en?"MOVES":"ХОДЫ";GoalsHeading.text=en?"GOALS":"ЦЕЛИ";ScoreHeading.text=en?"SCORE":"СЧЁТ";
+            string source;Font font=Application.isPlaying?Typography.Resolve(false,out source):Typography.RegularFont;
+            foreach(var t in GetComponentsInChildren<Text>(true)){t.font=font;t.raycastTarget=false;}
+            RefreshState();
+        }
+        public void RefreshState()
+        {
+            if(!HasRequiredBindings)return;bool en=DemoFeatureState.LanguageCode=="en";
+            LevelData level=Board!=null?Board.CurrentLevel:ChapterLevelCatalog.ResolveSelected(null);
+            LevelText.text=(en?"Level ":"Уровень ")+level.levelId;
+            MovesValue.text=Board!=null?Board.Moves.ToString():"—";ScoreValue.text=Board!=null?Balance(Board.Score):"—";
+            float progress=0;int slots=0;
+            for(int i=0;i<2;i++)
+            {
+                var slot=Goals[i];var goal=Board!=null?(i==0?Board.GoalSlot1:Board.GoalSlot2):null;slot.Root.gameObject.SetActive(goal!=null);if(goal==null)continue;
+                bool tile=goal.Type==LevelGoalTypes.CollectTile;Sprite icon=tile?ProductionGameplayArt.Gem(goal.TileType):goal.Type==LevelGoalTypes.ClearObstacle?ProductionGameplayArt.Obstacle(goal.ObstacleKind):goal.Type==LevelGoalTypes.BringDown?ProductionGameplayArt.Load("feather"):Resources.Load<Sprite>(ProductionChapterMapRuntime.ArtRoot+"node");
+                slot.Icon.sprite=icon;slot.Count.text=goal.IsComplete?"✓":Balance(goal.Remaining);
+                slot.Description.text=tile||goal.Type==LevelGoalTypes.ClearObstacle||goal.Type==LevelGoalTypes.BringDown?"":goal.Type==LevelGoalTypes.Score?(en?"SCORE":"СЧЁТ"):(en?"MOVES":"ХОДОВ");
+                bool writtenGoal=goal.Type==LevelGoalTypes.Score||goal.Type==LevelGoalTypes.Survival;
+                slot.Description.rectTransform.anchoredPosition=new Vector2(9,-25);
+                slot.Description.rectTransform.sizeDelta=new Vector2(176,64);
+                slot.Description.fontSize=writtenGoal?30:26;
+                slot.Count.rectTransform.anchoredPosition=new Vector2(writtenGoal?0:52,-72);
+                slot.Count.rectTransform.sizeDelta=new Vector2(writtenGoal?228:120,70);
+                progress+=Mathf.Clamp01(goal.Current/(float)goal.Target);slots++;
+            }
+            GoalProgress.fillAmount=slots>0?progress/slots:0;
+            int[] thresholds=level.starScoreThresholds;int score=Board!=null?Board.Score:0;
+            StarProgress.fillAmount=thresholds!=null&&thresholds.Length==3?Mathf.Clamp01(score/(float)Mathf.Max(1,thresholds[2])):0;
+            // Reflect the same guaranteed first-star convention used by LevelData.EvaluateStars.
+            int stars=Board!=null?level.EvaluateStars(score):0;
+            for(int i=0;i<3;i++){bool dim=i>=stars;if(Stars[i].Dimmed!=dim){Stars[i].Dimmed=dim;Stars[i].SetVerticesDirty();}}
+            for(int i=0;i<4;i++)BoosterCounts[i].text=state!=null?Balance(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
+            RefreshAvailability();
+        }
+        void RefreshAvailability()
+        {
+            bool can=Board!=null&&Board.CanAcceptPointerInput&&!Blocked();
+            for(int i=0;i<4;i++)
+            {
+                var booster=ProductionPreLevelRuntime.Boosters[i];BoosterButtons[i].interactable=can&&state!=null&&state.BoosterCount(booster)>0;
+                bool armed=Board!=null&&Board.IsBoosterArmed&&Board.ArmedBooster==booster;
+                if(ArmedMarkers[i].gameObject.activeSelf!=armed)ArmedMarkers[i].gameObject.SetActive(armed);
+            }
+            PauseButton.interactable=Board!=null&&!Blocked();
+        }
+        static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
+    }
+}

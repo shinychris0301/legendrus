@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Карта мира — World Map R1 review</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#090e16;color:#eee3cb}
+body{margin:0;text-align:center}header{padding:22px 16px 12px}h1{font-size:23px;margin:0 0 10px}
+p{max-width:690px;margin:8px auto;line-height:1.5;font-size:14px;color:#c4bdaf}a{color:#e4ba66}
+label{display:inline-block;text-align:left;font-size:14px;margin:10px 0;max-width:100%}
+select{display:block;padding:10px;margin-top:6px;max-width:100%;background:#142133;color:#f5e7cb;border:1px solid #866a39;border-radius:5px}
+figure{margin:0 auto 24px;width:min(100%,560px)}figcaption{padding:10px;font-size:13px;color:#c4bdaf}
+img{display:block;width:100%;height:auto}footer{padding:0 16px 24px}
+</style>
+<header>
+<h1>Карта мира · World Map R1</h1>
+<p>Actual Unity implementation with a new clean landscape, separate gold-and-sapphire controls, live chapter states and the accepted Home HUD.</p>
+<p>Fresh-save captures show Chapter 1 available. Chapters 2–15 remain locked because their level content is not authored yet. The original reference depicts a completed-state design.</p>
+<label>View<select id="capture">
+<option value="ru">Implemented · Russian · 941 × 1672</option>
+<option value="reference">Original World Map design reference</option>
+<option value="before">Before · previous Unity implementation</option>
+<option value="phone">Implemented · simulated phone · 576 × 1280</option>
+<option value="tall">Implemented · simulated safe area · 1080 × 2400</option>
+<option value="en">Implemented · English · 941 × 1672</option>
+<option value="tasks">Tasks · actual chapter progress · Russian</option>
+<option value="tasksphone">Tasks · simulated phone safe area</option>
+<option value="tasksen">Tasks · English</option>
+</select></label>
+</header>
+<figure><figcaption id="caption">Actual Unity Play Mode capture</figcaption><img id="portrait" src="UnityVerification/WorldMap/WorldMap_941x1672_RU.png" alt="World Map implemented in Unity"></figure>
+<footer>
+<p>Each selection shows one complete portrait. Phone safe areas are simulated in the Editor; these are not physical-device screenshots. The game uses whole isolated sprites, live labels and individual controls.</p>
+<p><a href="ImplementationReport.md">Implementation, checks and remaining limits</a> · <a href="UnityVerification/FinalPlayMode.json">Play Mode results</a> · <a href="FinalSourceAudit.json">Preservation audit</a></p>
+</footer>
+<script>
+const base='UnityVerification/WorldMap/';
+const views={
+ru:[base+'WorldMap_941x1672_RU.png','Actual Unity · Russian · fresh save'],
+reference:['../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/WorldMap.png','Original design reference · not runtime UI'],
+before:['UnityVerification/Before/WorldMap_941x1672_RU.png','Before · actual Unity · prior FIX01 page'],
+phone:[base+'WorldMap_576x1280_safearea_RU.png','Actual Unity · simulated 576 × 1280 display and safe area'],
+tall:[base+'WorldMap_1080x2400_safearea_RU.png','Actual Unity · simulated 1080 × 2400 display and safe area'],
+en:[base+'WorldMap_941x1672_EN.png','Actual Unity · English · fresh save'],
+tasks:[base+'WorldMap_Tasks_941x1672_RU.png','Actual Unity · Tasks panel · saved chapter completion'],
+tasksphone:[base+'WorldMap_Tasks_576x1280_safearea_RU.png','Actual Unity · Tasks panel · simulated phone safe area'],
+tasksen:[base+'WorldMap_Tasks_941x1672_EN.png','Actual Unity · Tasks panel · English']};
+const select=document.querySelector('#capture'),portrait=document.querySelector('#portrait');
+async function update(){const v=views[select.value];portrait.src=v[0];portrait.alt=v[1];document.querySelector('#caption').textContent=v[1]+' · complete portrait';await portrait.decode();}
+select.addEventListener('change',()=>window.viewReady=update());window.previewReady=window.viewReady=update();
+</script>
+</html>

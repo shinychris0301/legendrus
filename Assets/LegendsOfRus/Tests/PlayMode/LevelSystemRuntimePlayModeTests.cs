@@ -235,8 +235,13 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(board.ColumnCount, Is.EqualTo(level.columns));
             Assert.That(board.RowCount, Is.EqualTo(level.rows));
             Assert.That(board.Moves, Is.EqualTo(level.moveLimit));
-            Assert.That(board.RedRemaining, Is.EqualTo(level.goals[0].target));
-            Assert.That(board.BlueRemaining, Is.EqualTo(level.goals[1].target));
+            // Score goals include the authored starting score; collect/obstacle goals start at zero.
+            int firstRemaining=level.goals[0].type==LevelGoalTypes.Score
+                ? Mathf.Max(0,level.goals[0].target-level.startingScore) : level.goals[0].target;
+            int secondRemaining=level.goals[1].type==LevelGoalTypes.Score
+                ? Mathf.Max(0,level.goals[1].target-level.startingScore) : level.goals[1].target;
+            Assert.That(board.RedRemaining, Is.EqualTo(firstRemaining));
+            Assert.That(board.BlueRemaining, Is.EqualTo(secondRemaining));
             Assert.That(board.GoalSlot1.Type, Is.EqualTo(level.goals[0].type));
             Assert.That(board.GoalSlot2.Type, Is.EqualTo(level.goals[1].type));
             Assert.That(board.GoalSlot1Remaining, Is.EqualTo(board.RedRemaining));

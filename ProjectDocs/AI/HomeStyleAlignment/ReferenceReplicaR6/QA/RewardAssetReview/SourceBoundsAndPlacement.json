@@ -1,0 +1,140 @@
+{
+  "scope": "Read-only source QA and candidate whole-image geometry, not a Unity capture or implementation",
+  "pixelEdits": false,
+  "sourceBounds": [
+    {
+      "asset": "quest_reward_frame.png",
+      "sha256": "ccc396379ee04f3f108b8937e5c8c3837f10cc1a8c7791027159279bd5fc45db",
+      "sourceSize": [
+        1095,
+        1437
+      ],
+      "nearOpaqueAlphaBounds": {
+        "minX": 189,
+        "minY": 193,
+        "maxX": 900,
+        "maxY": 1245
+      },
+      "coreSize": [
+        712,
+        1053
+      ],
+      "note": "Bounds use decoded alpha >=245. Faint antialiasing and incidental low-alpha pixels can extend farther; whole sprite must be retained."
+    },
+    {
+      "asset": "quest_reward_gem.png",
+      "sha256": "dc1b816e1bd05b7579d1e72bf51914a9897a1215d8b8b7855baf64ffa8d55b1a",
+      "sourceSize": [
+        1230,
+        1278
+      ],
+      "nearOpaqueAlphaBounds": {
+        "minX": 281,
+        "minY": 262,
+        "maxX": 945,
+        "maxY": 1058
+      },
+      "coreSize": [
+        665,
+        797
+      ],
+      "note": "Bounds use decoded alpha >=245. Faint antialiasing and incidental low-alpha pixels can extend farther; whole sprite must be retained."
+    },
+    {
+      "asset": "progress_frame.png",
+      "sha256": "dc0bf16ec527dde0277fde2ab504fe3c1cfa438d979e99fa0593fd2bf04c03e8",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "nearOpaqueAlphaBounds": {
+        "minX": 47,
+        "minY": 255,
+        "maxX": 2127,
+        "maxY": 453
+      },
+      "coreSize": [
+        2081,
+        199
+      ],
+      "note": "Bounds use decoded alpha >=245. Faint antialiasing and incidental low-alpha pixels can extend farther; whole sprite must be retained."
+    },
+    {
+      "asset": "progress_fill.png",
+      "sha256": "7345650d027a0e6de2ae13dedff770dd6116c9c18a16a6b8c1cd4c6ec1d51705",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "nearOpaqueAlphaBounds": {
+        "minX": 14,
+        "minY": 290,
+        "maxX": 2161,
+        "maxY": 432
+      },
+      "coreSize": [
+        2148,
+        143
+      ],
+      "note": "Bounds use decoded alpha >=245. Faint antialiasing and incidental low-alpha pixels can extend farther; whole sprite must be retained."
+    }
+  ],
+  "targets": {
+    "frameVisible": {
+      "x": 612,
+      "y": 1488,
+      "w": 114,
+      "h": 158
+    },
+    "gemVisible": {
+      "center": [
+        671,
+        1535
+      ],
+      "approximateSize": [
+        65,
+        77
+      ]
+    }
+  },
+  "candidateWholeSourceTransforms": {
+    "frameExactVisibleTarget": {
+      "x": 581.7387640449438,
+      "y": 1459.0408357075023,
+      "w": 175.32303370786516,
+      "h": 215.61823361823363
+    },
+    "frameNativeAspectAlternative": {
+      "x": 587.2241215574549,
+      "y": 1459.0408357075023,
+      "w": 164.3019943019943,
+      "h": 215.61823361823363
+    },
+    "frameNativeAspectVisibleSize": [
+      106.8338081671415,
+      158
+    ],
+    "frameExactTargetAspectAdjustmentPercent": 6.707794054899718,
+    "gemNativeAspect": {
+      "x": 611.7766624843161,
+      "y": 1471.2358845671267,
+      "w": 118.83312421580929,
+      "h": 123.47051442910916
+    },
+    "gemNativeVisibleSize": [
+      64.24717691342535,
+      77
+    ],
+    "gemRelativeToExactFrame": {
+      "x": 30.037898439372384,
+      "y": 12.195048859624421,
+      "w": 118.83312421580929,
+      "h": 123.47051442910916
+    }
+  },
+  "notes": [
+    "All transforms retain the entire source image. No region extraction is proposed.",
+    "Exact frame target slightly changes decorative-frame aspect; native-aspect alternative is narrower. Gem uses uniform scaling.",
+    "Transforms are candidate reference geometry; native Unity screenshot and live-value clearance must be checked by integration owner."
+  ]
+}

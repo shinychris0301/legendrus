@@ -8,7 +8,9 @@ namespace LegendsOfRus
     public static class ProductionLoadingRuntime
     {
         public const string ArtRoot = "ProductionUI/LoadingAligned/";
-        public const string LogoResource = "ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest";
+        public const string LogoResource = "ProductionUI/HomeAligned/home_logo";
+        public const string EnvironmentResource = "ProductionUI/FrontEndHomeAligned/loading_environment_dusk";
+        public const string IvanResource = "ProductionUI/FrontEndHomeAligned/ivan_loading_dusk";
         public const string TypographyResource = "ProductionUI/SplashTitleConfig/SplashTitleTypography";
         public const string ContentName = "LOADING_ALIGNED_CONTENT";
 
@@ -24,9 +26,9 @@ namespace LegendsOfRus
             }
             if (loadSprite == null) loadSprite = Resources.Load<Sprite>;
             if (typography == null) typography = Resources.Load<SplashTitleTypography>(TypographyResource);
-            Sprite environment = RequireSprite(loadSprite, ArtRoot + "environment_journey");
+            Sprite environment = RequireSprite(loadSprite, EnvironmentResource);
             Sprite logo = RequireSprite(loadSprite, LogoResource);
-            Sprite ivan = RequireSprite(loadSprite, ArtRoot + "ivan_journey");
+            Sprite ivan = RequireSprite(loadSprite, IvanResource);
             Sprite firebird = RequireSprite(loadSprite, ArtRoot + "firebird_journey");
             Sprite panel = RequireSprite(loadSprite, ArtRoot + "tip_panel");
             if (typography == null) throw new InvalidOperationException("Missing shared SplashTitleTypography resource.");
@@ -38,9 +40,12 @@ namespace LegendsOfRus
             content.anchorMin = Vector2.zero; content.anchorMax = Vector2.one;
             content.offsetMin = content.offsetMax = Vector2.zero;
             view.Environment = MakeImage(content, "JourneyEnvironment", environment, 0, 0, 941, 1672);
-            view.Logo = MakeImage(content, "ApprovedSplashLogo", logo, 195.5f, 35, 550, 440.16f);
+            view.Logo = MakeImage(content, "ApprovedSplashLogo", logo, 195.5f, 35, 550, 550f * 1041 / 1511);
             view.Ivan = MakeImage(content, "IvanJourney", ivan, 87, 623, 398, 597);
             view.Firebird = MakeImage(content, "FirebirdJourney", firebird, 425, 715, 315, 345);
+            view.Environment.color = ProductionHomeRuntime.EnvironmentTone;
+            view.Ivan.color = ProductionHomeRuntime.HeroTone;
+            view.Firebird.color = ProductionHomeRuntime.HeroTone;
             RectTransform shadeRect = MakeRect(content, "LowerContrast", 0, 1110, 941, 562);
             shadeRect.gameObject.AddComponent<CanvasRenderer>();
             ProductionLoadingShade shade = shadeRect.gameObject.AddComponent<ProductionLoadingShade>();
@@ -79,6 +84,23 @@ namespace LegendsOfRus
             if (shadeLayout == null) shadeLayout = root.gameObject.AddComponent<ProductionLoadingShadeLayout>();
             shadeLayout.Shade = shade;
             if (Application.isPlaying) { view.RefreshContent(); responsive.ApplyNow(); shadeLayout.ApplyNow(); }
+        }
+
+        /// <summary>Change only authorized artwork/tone on the existing serialized page.</summary>
+        public static void UpgradeHomeStyle(ProductionLoadingView view, Func<string, Sprite> loadSprite)
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Loading art migration must run outside Play Mode.");
+            if (view == null || view.Revision < 3 || view.Revision > ProductionLoadingView.CurrentRevision)
+                throw new InvalidOperationException("Loading Home-style migration requires the installed aligned page.");
+            view.Environment.sprite = RequireSprite(loadSprite, EnvironmentResource);
+            view.Logo.sprite = RequireSprite(loadSprite, LogoResource);
+            view.Ivan.sprite = RequireSprite(loadSprite, IvanResource);
+            view.Environment.color = ProductionHomeRuntime.EnvironmentTone;
+            view.Ivan.color = ProductionHomeRuntime.HeroTone;
+            view.Firebird.color = ProductionHomeRuntime.HeroTone;
+            view.Logo.rectTransform.sizeDelta = new Vector2(550, 550f * 1041 / 1511);
+            view.Revision = ProductionLoadingView.CurrentRevision;
+            if (!view.HasRequiredBindings) throw new InvalidOperationException("Loading migration produced incomplete bindings.");
         }
 
         static Sprite RequireSprite(Func<string, Sprite> loadSprite, string key)

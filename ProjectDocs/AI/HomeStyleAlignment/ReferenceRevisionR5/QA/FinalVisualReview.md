@@ -1,0 +1,9 @@
+# Final R5 visual review
+
+Root directly inspected the original whole Home reference and actual revision8 Unity captures at941×1672 RU/EN,576×1280 simulated safe area and maximum balances, and1080×2400 simulated safe area. The independent reviewer additionally compared retained R4 reference/tall captures. See [independent findings and image hashes](IndependentVisualReview.md).
+
+All four authorized changes are visible. The Firebird has a much wider luminous wing and a longer tail flowing along the right side; claws contact fur and the beak leaves Ivan’s face clear. The tail remains visible against the lower shade without a shade/draw-order change. The new dark HUD/capsules and carved navigation edges have stronger aged bronze recesses. A continuous wood-and-gold footer now joins mailbox, quest and gift to the physical bottom edge. Tall portraits bring Ivan and Firebird closer beneath the crest while retaining the exact shared Splash sprites.
+
+Normal balances and RU/EN captions remain readable and clear of plus buttons/art. The footer has an intentional top border with no accidental background gap. Reference and tall controls are complete in the inspected fixtures. The maximum-balance fixture retains all digits of2,147,483,647 on two lines; they are small and phone comfort is not established. Navigation plate positions produce slightly staggered caption baselines. The broad wing reaches the right edge; peripheral feather/glow bleed is part of its foreground composition.
+
+This is an improvement in the authorized directions, not an exact copy of the original. The winter daytime plate, mandatory Splash identity, independently painted ornamentation/colors, unavailable quest/XP values and unverified exact font remain different. User visual approval and physical-phone review remain outstanding. Functional test passes are separate evidence and do not establish visual acceptance.

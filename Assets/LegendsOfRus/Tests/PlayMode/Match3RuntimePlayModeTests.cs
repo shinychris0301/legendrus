@@ -254,6 +254,8 @@ namespace LegendsOfRus.Tests.PlayMode
 
             board.SimulateStuckCommandForTesting(BoosterType.Firebird);
             Assert.That(board.HasActiveCommand, Is.True);
+            LogAssert.Expect(LogType.Error,
+                "Gameplay command recovered: qa:stuck-command. Reason=Command timeout: qa:stuck-command; board="+beforeHash);
             board.ForceCommandTimeoutForTesting();
 
             yield return null;

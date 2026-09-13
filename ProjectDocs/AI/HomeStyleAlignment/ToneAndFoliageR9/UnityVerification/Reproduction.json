@@ -1,0 +1,54 @@
+{
+  "unityExecutable": "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+  "projectPath": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+  "unityVersion": "6000.5.9f1 (b57deb96f08d)",
+  "isolatedTestConfiguration": "/tmp/lor-home-r3/test-config",
+  "environmentVariables": [
+    "XDG_CONFIG_HOME",
+    "LOR_LOADING_TEST_CONFIG_ROOT",
+    "LOR_HOME_CAPTURE_DIR",
+    "LOR_LOADING_CAPTURE_DIR",
+    "LOR_SPLASH_CAPTURE_DIR"
+  ],
+  "owner": "LegendsOfRus.Editor.Step20ProductionUiFix01SerializedPrefabBuilder.RebuildHomeAlignment",
+  "ownerArguments": [
+    "-batchmode",
+    "-quit",
+    "-projectPath",
+    "<project>",
+    "-executeMethod",
+    "<owner>",
+    "-logFile",
+    "<iteration log>"
+  ],
+  "testArguments": [
+    "-batchmode",
+    "-projectPath",
+    "<project>",
+    "-runTests",
+    "-testPlatform",
+    "<EditMode or PlayMode>",
+    "-testFilter",
+    "<semicolon-delimited fixtures>",
+    "-testResults",
+    "<iteration XML>",
+    "-logFile",
+    "<iteration log>"
+  ],
+  "EditModeFixtures": [
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.HomeAlignmentDeliveryEditModeTests",
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.SplashTitleBuildWiringEditModeTests"
+  ],
+  "PlayModeFixtures": [
+    "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests",
+    "LegendsOfRus.Tests.PlayMode.SplashResponsivePlayModeTests",
+    "LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests",
+    "LegendsOfRus.Tests.PlayMode.HomeLoadingPreparationPlayModeTests"
+  ],
+  "scope": "Focused Editor and graphics-enabled Play Mode tests with real camera renders and simulated display/safe-area fixtures. 26 validated texture operations plus the prefab = 27 measured loading operations. No Android build or physical-device run.",
+  "finalRunFolders": {
+    "EditMode": "/tmp/lor-home-r9/editmode2",
+    "PlayMode": "/tmp/lor-home-r9/playmode2"
+  },
+  "initialPlayModeFailure": "22/23 passed; first portrait captured unfinished native Selectable color transitions. Fixture now waits for actual normal renderer colors for two frames with a bounded deadline. No production color, shader, timing or assertion threshold changed."
+}

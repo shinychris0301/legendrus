@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-13 21:45:22Z" end-time="2026-09-13 21:45:25Z" duration="2.8201455">
+  <test-suite type="TestSuite" id="1338" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="271" result="Failed" site="Child" start-time="2026-09-13 21:45:22Z" end-time="2026-09-13 21:45:25Z" duration="2.820146" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1332" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="233" result="Failed" site="Child" start-time="2026-09-13 21:45:22Z" end-time="2026-09-13 21:45:25Z" duration="2.811466" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2978299" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1333" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="233" result="Failed" site="Child" start-time="2026-09-13 21:45:22Z" end-time="2026-09-13 21:45:25Z" duration="2.798202" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1334" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="233" result="Failed" site="Child" start-time="2026-09-13 21:45:23Z" end-time="2026-09-13 21:45:25Z" duration="2.782110" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1335" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="233" result="Failed" site="Child" start-time="2026-09-13 21:45:23Z" end-time="2026-09-13 21:45:25Z" duration="2.765362" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1276" name="PreLevelAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-13 21:45:23Z" end-time="2026-09-13 21:45:25Z" duration="2.747568" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1277" name="AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave" methodname="AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" seed="530762373" result="Failed" start-time="2026-09-13 21:45:23Z" end-time="2026-09-13 21:45:23Z" duration="0.780227" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected string length 16 but was 0. Strings differ at index 0.
+  Expected: "НАГРАДА ПОЛУЧЕНА"
+  But was:  <string.Empty>
+  -----------^
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests+<AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave>d__8.MoveNext () [0x003f5] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs:96
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1279" name="BoosterModalBackAndHudRoutesRemainNativeAndInventoryIsNotSpent" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.BoosterModalBackAndHudRoutesRemainNativeAndInventoryIsNotSpent" methodname="BoosterModalBackAndHudRoutesRemainNativeAndInventoryIsNotSpent" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" seed="310351885" result="Passed" start-time="2026-09-13 21:45:23Z" end-time="2026-09-13 21:45:24Z" duration="0.608928" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus EDITOR memory observation: allocated=322 MiB, reserved=841 MiB, managed=20 MiB. Exceeded guardrails: reserved >= 768 MiB (critical). Comparison band=Critical. Editor measurements are not an Android Player budget verdict. Profile a Development Build on the target device. Evidence remains local and bounded.
+]]></output>
+              </test-case>
+              <test-case id="1280" name="CaptureReferenceAndPhonePortraits" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits" methodname="CaptureReferenceAndPhonePortraits" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" seed="1466585518" result="Passed" start-time="2026-09-13 21:45:24Z" end-time="2026-09-13 21:45:25Z" duration="0.981511" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1278" name="EnergyGateCanCloseAndPlayAgainWithoutDoubleSpendingOrConsumingBoosters" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.EnergyGateCanCloseAndPlayAgainWithoutDoubleSpendingOrConsumingBoosters" methodname="EnergyGateCanCloseAndPlayAgainWithoutDoubleSpendingOrConsumingBoosters" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" seed="1549200941" result="Passed" start-time="2026-09-13 21:45:25Z" end-time="2026-09-13 21:45:25Z" duration="0.355778" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=chapter01.level01, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Paused
+Gameplay phase: Paused -> Idle
+Saving results to: /tmp/lor-prelevel-r1/playmode1/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

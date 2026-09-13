@@ -1,0 +1,524 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -100,7 +100,7 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 10
++  Revision: 11
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
+   Logo: {fileID: 7198921559894690644}
+@@ -1629,7 +1629,7 @@
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+-  m_Material: {fileID: 0}
++  m_Material: {fileID: 2100000, guid: 7bdfb3c5cbf64372b7a94b23ac0eb8ce, type: 2}
+   m_Color: {r: 0.95686275, g: 0.78039217, b: 0.39215687, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+@@ -1700,6 +1700,7 @@
+   BottomColor:
+     serializedVersion: 2
+     rgba: 4279921072
++  BeveledFace: 1
+ --- !u!1 &2329601675065297181
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1906,6 +1907,7 @@
+   BottomColor:
+     serializedVersion: 2
+     rgba: 4284463336
++  BeveledFace: 0
+ --- !u!1 &2436933906653320980
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4320,6 +4322,7 @@
+   BottomColor:
+     serializedVersion: 2
+     rgba: 4284463336
++  BeveledFace: 0
+ --- !u!1 &5265791798792541695
+ GameObject:
+   m_ObjectHideFlags: 0
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeGoldText.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeGoldText.cs
+@@ -1,3 +1,4 @@
++using System.Collections.Generic;
+ using UnityEngine;
+ using UnityEngine.UI;
+ 
+@@ -9,11 +10,16 @@
+     {
+         public Color32 TopColor = new Color32(255, 231, 164, 255);
+         public Color32 BottomColor = new Color32(176, 105, 26, 255);
++        // Only Play opts into the matching material. UV0.zw carries an inward
++        // bevel sample direction; badges retain their accepted default mesh.
++        public bool BeveledFace;
++        readonly List<UIVertex> bevelVertices = new List<UIVertex>();
+ 
+         public override void ModifyMesh(VertexHelper vertices)
+         {
+             if (!IsActive() || vertices.currentVertCount == 0) return;
+             Color32 foreground = graphic.color;
++            if (BeveledFace) AddBevelCoordinates(vertices, foreground);
+             float low = float.PositiveInfinity, high = float.NegativeInfinity;
+             UIVertex vertex = default;
+             for (int i = 0; i < vertices.currentVertCount; i++)
+@@ -39,6 +45,44 @@
+             }
+         }
+ 
++        void AddBevelCoordinates(VertexHelper vertices, Color32 foreground)
++        {
++            // Bounds travel in UV1 so a wider bevel cannot sample a neighboring
++            // character after Unity repacks the dynamic font atlas.
++            if (graphic.canvas != null &&
++                (graphic.canvas.additionalShaderChannels & AdditionalCanvasShaderChannels.TexCoord1) == 0)
++                graphic.canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1;
++            bevelVertices.Clear();
++            vertices.GetUIVertexStream(bevelVertices);
++            for (int start = 0; start + 2 < bevelVertices.Count; start += 3)
++            {
++                UIVertex a = bevelVertices[start], b = bevelVertices[start + 1], c = bevelVertices[start + 2];
++                Vector2 p = b.position - a.position, q = c.position - a.position;
++                Vector2 u = b.uv0 - a.uv0, v = c.uv0 - a.uv0;
++                float determinant = p.x * q.y - p.y * q.x;
++                Vector2 sample = Vector2.zero;
++                Vector2 lowUv = Vector2.Min(a.uv0, Vector2.Min(b.uv0, c.uv0));
++                Vector2 highUv = Vector2.Max(a.uv0, Vector2.Max(b.uv0, c.uv0));
++                if (IsForeground(a.color, foreground) && Mathf.Abs(determinant) > .001f)
++                {
++                    // Map a 3.5-local-pixel upper-left step through each actual
++                    // glyph triangle. This also handles rotated dynamic atlas glyphs.
++                    Vector2 dx = (u * q.y - v * p.y) / determinant;
++                    Vector2 dy = (v * p.x - u * q.x) / determinant;
++                    sample = -3.5f * dx + 3.5f * dy;
++                }
++                for (int i = start; i < start + 3; i++)
++                {
++                    UIVertex vertex = bevelVertices[i];
++                    vertex.uv0.z = sample.x; vertex.uv0.w = sample.y;
++                    vertex.uv1 = new Vector4(lowUv.x, lowUv.y, highUv.x, highUv.y);
++                    bevelVertices[i] = vertex;
++                }
++            }
++            vertices.Clear();
++            vertices.AddUIVertexTriangleStream(bevelVertices);
++        }
++
+         static bool IsForeground(Color32 color, Color32 foreground) =>
+             color.a > 0 && color.r == foreground.r && color.g == foreground.g && color.b == foreground.b;
+     }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -10,6 +10,7 @@
+     {
+         public const string ContentName = "HOME_ALIGNED_CONTENT";
+         public const string ArtRoot = "ProductionUI/HomeAligned/";
++        public const string PlayGoldMaterialResource = ArtRoot + "home_play_gold";
+         public const string TypographyResource = "ProductionUI/SplashTitleConfig/SplashTitleTypography";
+         static readonly string[] TextureNames = {
+             "home_environment_generated", "nav_map_generated", "nav_shop_generated", "nav_events_generated",
+@@ -293,6 +294,10 @@
+             ProductionHomeGoldText gold = view.PlayText.GetComponent<ProductionHomeGoldText>();
+             if (gold == null) gold = view.PlayText.gameObject.AddComponent<ProductionHomeGoldText>();
+             gold.enabled = true;
++            gold.BeveledFace = true;
++            view.PlayText.material = Resources.Load<Material>(PlayGoldMaterialResource);
++            if (view.PlayText.material == null || view.PlayText.material.shader.name != "LegendsOfRus/UI/HomePlayGold")
++                throw new InvalidOperationException("Home requires its live Play gold material.");
+             ColorBlock colors = view.PlayButton.colors;
+             colors.normalColor = Color.white; colors.highlightedColor = new Color(.98f, .98f, .96f, 1);
+             colors.selectedColor = Color.white; colors.pressedColor = new Color(.76f, .80f, .86f, 1);
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 10;
++        public const int CurrentRevision = 11;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
+@@ -102,6 +102,8 @@
+             Ivan.GetComponent<SplashTitleCharacterFade>().enabled &&
+             PlayText != null && PlayText.GetComponent<SplashTitleTextGeometry>() != null &&
+             PlayText.GetComponent<ProductionHomeGoldText>() != null && PlayText.GetComponent<ProductionHomeGoldText>().enabled &&
++            PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace &&
++            PlayText.material != null && PlayText.material.shader.name == "LegendsOfRus/UI/HomePlayGold" &&
+             HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
+             HasArtwork(QuestProgressFrame, "progress_frame") && HasArtwork(QuestProgressFill, "progress_fill") &&
+             HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -186,6 +186,92 @@
+                 AssertCompleteBalanceGlyphs(view.GemsText);
+             });
+             AssertSingleInfrastructure();
++        }
++
++        [UnityTest]
++        public IEnumerator PlayBevel_RendersLightAndRecessInsideLiveGlyphsInBothLanguages()
++        {
++            ProductionHomeView view = HomeView();
++            Color32[] firstRussian = null;
++            foreach (string language in new[] { "ru", "en", "ru" })
++            {
++                DemoFeatureState.SetLanguage(language);
++                yield return null;
++                yield return null;
++                WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), null, camera =>
++                {
++                    ProductionHomeGoldText effect = view.PlayText.GetComponent<ProductionHomeGoldText>();
++                    Mesh original = view.PlayText.canvasRenderer.GetMesh();
++                    Vector3[] positions = original.vertices;
++                    int[] triangles = original.triangles;
++                    Color32[] lit = ReadCameraPixels(camera);
++                    if (language == "ru")
++                    {
++                        if (firstRussian == null) firstRussian = lit;
++                        else
++                        {
++                            int worst = 0;
++                            for (int i = 0; i < lit.Length; i++)
++                            {
++                                worst = Mathf.Max(worst, Mathf.Abs(lit[i].r - firstRussian[i].r));
++                                worst = Mathf.Max(worst, Mathf.Abs(lit[i].g - firstRussian[i].g));
++                                worst = Mathf.Max(worst, Mathf.Abs(lit[i].b - firstRussian[i].b));
++                            }
++                            Assert.That(worst, Is.LessThanOrEqualTo(2),
++                                "Atlas repacking during RU/EN/RU must not change gold edge lighting beyond capture rounding.");
++                        }
++                    }
++                    Color32[] flat;
++                    try
++                    {
++                        effect.BeveledFace = false;
++                        view.PlayText.SetVerticesDirty(); Canvas.ForceUpdateCanvases();
++                        Mesh unlit = view.PlayText.canvasRenderer.GetMesh();
++                        CollectionAssert.AreEqual(positions, unlit.vertices, "Bevel must retain the exact live glyph geometry.");
++                        CollectionAssert.AreEqual(triangles, unlit.triangles);
++                        flat = ReadCameraPixels(camera);
++                    }
++                    finally
++                    {
++                        effect.BeveledFace = true;
++                        view.PlayText.SetVerticesDirty(); Canvas.ForceUpdateCanvases();
++                    }
++                    Rect ink = ScreenBounds(view.PlayText.rectTransform, camera);
++                    int highlights = 0, recesses = 0, changed = 0, alphaChanges = 0;
++                    for (int i = 0; i < lit.Length; i++)
++                    {
++                        if (lit[i].a != flat[i].a) alphaChanges++;
++                        int delta = lit[i].r + lit[i].g + lit[i].b - flat[i].r - flat[i].g - flat[i].b;
++                        if (Mathf.Abs(delta) <= 3) continue;
++                        Assert.That(ink.Contains(new Vector2(i % 941, i / 941)), Is.True, "Only Play ink may change.");
++                        if (delta > 30) highlights++;
++                        if (delta < -30) recesses++;
++                        changed++;
++                    }
++                    Assert.That(highlights, Is.GreaterThan(50), language + " needs real rendered bright bevel edges.");
++                    Assert.That(recesses, Is.GreaterThan(50), language + " needs real rendered dark bevel edges.");
++                    Assert.That(alphaChanges, Is.Zero, "Bevel preserves alpha.");
++                    Assert.That(changed, Is.LessThan(6000), "Edge lighting must stay restrained, not recolor the whole face.");
++                });
++            }
++        }
++
++        static Color32[] ReadCameraPixels(Camera camera)
++        {
++            RenderTexture previous = RenderTexture.active;
++            Texture2D pixels = null;
++            try
++            {
++                camera.Render(); RenderTexture.active = camera.targetTexture;
++                pixels = new Texture2D(camera.targetTexture.width, camera.targetTexture.height, TextureFormat.RGBA32, false);
++                pixels.ReadPixels(new Rect(0, 0, pixels.width, pixels.height), 0, 0); pixels.Apply();
++                return pixels.GetPixels32();
++            }
++            finally
++            {
++                RenderTexture.active = previous;
++                if (pixels != null) UnityEngine.Object.Destroy(pixels);
++            }
+         }
+ 
+         [UnityTest]
+@@ -371,7 +457,9 @@
+             Assert.That(SystemInfo.graphicsDeviceType, Is.Not.EqualTo(GraphicsDeviceType.Null),
+                 "A real graphics device is required; do not run capture with -nographics.");
+             ProductionHomeView view = HomeView();
+-            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_RU");
++            Color32[] firstRussian = null;
++            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_RU",
++                camera => firstRussian = ReadCameraPixels(camera));
+             WithDisplay(view, new Vector2Int(576, 1280), new Rect(0, 24, 576, 1206), "Home_576x1280_safearea_RU");
+             WithDisplay(view, new Vector2Int(1080, 2340), new Rect(0, 0, 1080, 2340), "Home_1080x2340_RU");
+             WithDisplay(view, new Vector2Int(1080, 2400), new Rect(45, 100, 990, 2160), "Home_1080x2400_safearea_RU");
+@@ -380,7 +468,19 @@
+             WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_EN");
+             DemoFeatureState.SetLanguage("ru");
+             yield return null; yield return null;
+-            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_RU_roundtrip");
++            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_RU_roundtrip", camera =>
++            {
++                Color32[] finalRussian = ReadCameraPixels(camera);
++                int worst = 0;
++                for (int i = 0; i < finalRussian.Length; i++)
++                {
++                    worst = Mathf.Max(worst, Mathf.Abs(finalRussian[i].r - firstRussian[i].r));
++                    worst = Mathf.Max(worst, Mathf.Abs(finalRussian[i].g - firstRussian[i].g));
++                    worst = Mathf.Max(worst, Mathf.Abs(finalRussian[i].b - firstRussian[i].b));
++                }
++                Assert.That(worst, Is.LessThanOrEqualTo(2),
++                    "Changing display scales and language must preserve the Play bevel beyond capture rounding.");
++            });
+             AssertSingleInfrastructure();
+         }
+ 
+@@ -845,17 +945,28 @@
+             Color32 expectedShadow = label.GetComponent<Shadow>().effectColor;
+             int shadowVertices = 0;
+             Color32[] paintedColors = mesh.colors32;
++            var bevelUvs = new List<Vector4>();
++            mesh.GetUVs(0, bevelUvs);
++            Assert.That(bevelUvs.Count, Is.EqualTo(vertices.Length));
+             float highestForeground = float.NegativeInfinity, lowestForeground = float.PositiveInfinity;
+             for (int i = 0; i < paintedColors.Length; i++)
+             {
+                 Color32 color = paintedColors[i];
+                 if (color.a == 255)
+                 {
++                    Assert.That(new Vector2(bevelUvs[i].z, bevelUvs[i].w).sqrMagnitude, Is.GreaterThan(0),
++                        "Every live Play vertex carries its own font-atlas bevel direction.");
+                     foregroundColors.Add(color);
+                     highestForeground = Mathf.Max(highestForeground, vertices[i].y);
+                     lowestForeground = Mathf.Min(lowestForeground, vertices[i].y);
+                 }
+-                else if (color.a != 0) { Assert.That(color, Is.EqualTo(expectedShadow), "Gold treatment must preserve the native dark emboss shadow."); shadowVertices++; }
++                else if (color.a != 0)
++                {
++                    Assert.That(color, Is.EqualTo(expectedShadow), "Gold treatment must preserve the native dark emboss shadow.");
++                    Assert.That(new Vector2(bevelUvs[i].z, bevelUvs[i].w), Is.EqualTo(Vector2.zero),
++                        "The retained shadow must not receive bevel lighting.");
++                    shadowVertices++;
++                }
+             }
+             ProductionHomeGoldText goldEffect = label.GetComponent<ProductionHomeGoldText>();
+             for (int i = 0; i < paintedColors.Length; i++)
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -341,6 +341,16 @@
+             Assert.That(home.PlayText.fontStyle, Is.EqualTo(FontStyle.Bold));
+             Assert.That(home.PlayText.GetComponent<ProductionHomeGoldText>(), Is.Not.Null);
+             Assert.That(home.PlayText.GetComponent<ProductionHomeGoldText>().enabled, Is.True);
++            Assert.That(home.PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace, Is.True);
++            Material playGold = AssetDatabase.LoadAssetAtPath<Material>(ResourcesRoot + ProductionHomeRuntime.PlayGoldMaterialResource + ".mat");
++            Assert.That(playGold, Is.Not.Null);
++            Assert.That(home.PlayText.material, Is.SameAs(playGold));
++            Assert.That(playGold.shader.name, Is.EqualTo("LegendsOfRus/UI/HomePlayGold"));
++            Assert.That(ShaderUtil.ShaderHasError(playGold.shader), Is.False, "The serialized Play shader must compile.");
++            Assert.That(home.GetComponentsInChildren<Text>(true).Count(t => t.material == playGold), Is.EqualTo(1),
++                "Only Play may use the new material; accepted badges and other text stay unchanged.");
++            Assert.That(AssetDatabase.GetDependencies(PrefabPath, true),
++                Does.Contain(AssetDatabase.GetAssetPath(playGold.shader)), "Prefab loading must include its shader dependency.");
+             Assert.That(home.QuestText.fontStyle, Is.EqualTo(FontStyle.Bold));
+             SplashTitleTextGeometry geometry = home.PlayText.GetComponent<SplashTitleTextGeometry>();
+             Assert.That(geometry, Is.Not.Null);
+@@ -378,6 +388,7 @@
+                 Assert.That(label.raycastTarget, Is.False);
+                 Assert.That(label.GetComponent<Shadow>(), Is.Not.Null);
+                 Assert.That(label.GetComponent<ProductionHomeGoldText>(), Is.Not.Null);
++                Assert.That(label.GetComponent<ProductionHomeGoldText>().BeveledFace, Is.False);
+                 Component[] effects = label.GetComponents<Component>();
+                 Assert.That(Array.IndexOf(effects, label.GetComponent<SplashTitleTextGeometry>()),
+                     Is.LessThan(Array.IndexOf(effects, label.GetComponent<Shadow>())));
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_play_gold.mat
+@@ -0,0 +1,43 @@
++%YAML 1.1
++%TAG !u! tag:unity3d.com,2011:
++--- !u!21 &2100000
++Material:
++  serializedVersion: 8
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_Name: home_play_gold
++  m_Shader: {fileID: 4800000, guid: 9918b9eef946479289b912ab3242ba69, type: 3}
++  m_Parent: {fileID: 0}
++  m_ModifiedSerializedProperties: 0
++  m_ValidKeywords: []
++  m_InvalidKeywords: []
++  m_LightmapFlags: 4
++  m_EnableInstancingVariants: 0
++  m_DoubleSidedGI: 0
++  m_CustomRenderQueue: -1
++  stringTagMap: {}
++  disabledShaderPasses: []
++  m_LockedProperties:
++  m_SavedProperties:
++    serializedVersion: 3
++    m_TexEnvs:
++    - _MainTex:
++        m_Texture: {fileID: 0}
++        m_Scale: {x: 1, y: 1}
++        m_Offset: {x: 0, y: 0}
++    m_Ints: []
++    m_Floats:
++    - _ColorMask: 15
++    - _Stencil: 0
++    - _StencilComp: 8
++    - _StencilOp: 0
++    - _StencilReadMask: 255
++    - _StencilWriteMask: 255
++    - _UseUIAlphaClip: 0
++    m_Colors:
++    - _Color: {r: 1, g: 1, b: 1, a: 1}
++    - _Highlight: {r: 1, g: 0.94, b: 0.68, a: 1}
++    - _Recess: {r: 0.30, g: 0.13, b: 0.025, a: 1}
++  m_BuildTextureStacks: []
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_play_gold.mat.meta
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: 7bdfb3c5cbf64372b7a94b23ac0eb8ce
++NativeFormatImporter:
++  externalObjects: {}
++  mainObjectFileID: 2100000
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_play_gold.shader
+@@ -0,0 +1,114 @@
++Shader "LegendsOfRus/UI/HomePlayGold"
++{
++    Properties
++    {
++        [PerRendererData] _MainTex ("Font atlas", 2D) = "white" {}
++        _Color ("Tint", Color) = (1,1,1,1)
++        _Highlight ("Bevel highlight", Color) = (1,0.94,0.68,1)
++        _Recess ("Bevel recess", Color) = (0.30,0.13,0.025,1)
++        _StencilComp ("Stencil Comparison", Float) = 8
++        _Stencil ("Stencil ID", Float) = 0
++        _StencilOp ("Stencil Operation", Float) = 0
++        _StencilWriteMask ("Stencil Write Mask", Float) = 255
++        _StencilReadMask ("Stencil Read Mask", Float) = 255
++        _ColorMask ("Color Mask", Float) = 15
++        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
++    }
++    SubShader
++    {
++        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" "CanUseSpriteAtlas"="True" }
++        Stencil
++        {
++            Ref [_Stencil]
++            Comp [_StencilComp]
++            Pass [_StencilOp]
++            ReadMask [_StencilReadMask]
++            WriteMask [_StencilWriteMask]
++        }
++        Cull Off
++        Lighting Off
++        ZWrite Off
++        ZTest [unity_GUIZTestMode]
++        Blend SrcAlpha OneMinusSrcAlpha
++        ColorMask [_ColorMask]
++        Pass
++        {
++            CGPROGRAM
++            #pragma vertex vert
++            #pragma fragment frag
++            #pragma target 2.0
++            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
++            #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
++            #include "UnityCG.cginc"
++            #include "UnityUI.cginc"
++            struct appdata
++            {
++                float4 vertex : POSITION;
++                fixed4 color : COLOR;
++                float4 uv : TEXCOORD0;
++                float4 bounds : TEXCOORD1;
++                UNITY_VERTEX_INPUT_INSTANCE_ID
++            };
++            struct v2f
++            {
++                float4 vertex : SV_POSITION;
++                fixed4 color : COLOR;
++                float4 uv : TEXCOORD0;
++                float4 mask : TEXCOORD1;
++                float4 bounds : TEXCOORD2;
++                UNITY_VERTEX_OUTPUT_STEREO
++            };
++            sampler2D _MainTex;
++            fixed4 _Color, _TextureSampleAdd, _Highlight, _Recess;
++            float4 _ClipRect;
++            float _UIMaskSoftnessX, _UIMaskSoftnessY;
++            v2f vert(appdata v)
++            {
++                v2f o;
++                UNITY_SETUP_INSTANCE_ID(v);
++                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
++                o.vertex = UnityObjectToClipPos(v.vertex);
++                o.color = v.color * _Color;
++                o.uv = v.uv;
++                o.bounds = v.bounds;
++                float2 pixelSize = o.vertex.w / abs(mul((float2x2)UNITY_MATRIX_P, _ScreenParams.xy));
++                float4 rect = clamp(_ClipRect, -2e10, 2e10);
++                o.mask = float4(v.vertex.xy * 2 - rect.xy - rect.zw,
++                    0.25 / (0.25 * float2(_UIMaskSoftnessX, _UIMaskSoftnessY) + abs(pixelSize.xy)));
++                return o;
++            }
++            half GlyphAlpha(float2 uv, float4 bounds, float2 pixel)
++            {
++                // A continuous half-pixel border avoids a hard comparison at
++                // packed atlas boundaries. Derive spacing from this glyph's UV
++                // step, rather than the material's shared atlas texture size.
++                float2 inside = saturate(min((uv - bounds.xy) / pixel, (bounds.zw - uv) / pixel) + .5);
++                uv = clamp(uv, bounds.xy + pixel * .5, bounds.zw - pixel * .5);
++                return (tex2D(_MainTex, uv) + _TextureSampleAdd).a * inside.x * inside.y;
++            }
++            fixed4 frag(v2f i) : SV_Target
++            {
++                fixed4 atlas = tex2D(_MainTex, i.uv.xy) + _TextureSampleAdd;
++                fixed4 color = atlas * i.color;
++                // Light is evaluated inside the existing glyph alpha: no stroke
++                // expansion, raster word image, or change to its silhouette.
++                float2 pixel = max(abs(i.uv.zw) / 3.5, .00000001);
++                half upper = GlyphAlpha(i.uv.xy + i.uv.zw, i.bounds, pixel);
++                half lower = GlyphAlpha(i.uv.xy - i.uv.zw, i.bounds, pixel);
++                half bevel = saturate(dot(abs(i.uv.zw), float2(1e7, 1e7)));
++                color.rgb = lerp(color.rgb, _Highlight.rgb, saturate(atlas.a - upper) * .95 * bevel);
++                color.rgb = lerp(color.rgb, _Recess.rgb, saturate(atlas.a - lower) * .85 * bevel);
++                // Shadow vertices have a zero sample step and keep their color.
++                #ifdef UNITY_UI_CLIP_RECT
++                half2 mask = saturate((_ClipRect.zw - _ClipRect.xy - abs(i.mask.xy)) * i.mask.zw);
++                color.a *= mask.x * mask.y;
++                #endif
++                #ifdef UNITY_UI_ALPHACLIP
++                clip(color.a - .001);
++                #endif
++                return color;
++            }
++            ENDCG
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_play_gold.shader.meta
+@@ -0,0 +1,9 @@
++fileFormatVersion: 2
++guid: 9918b9eef946479289b912ab3242ba69
++ShaderImporter:
++  externalObjects: {}
++  defaultTextures: []
++  nonModifiableTextures: []
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

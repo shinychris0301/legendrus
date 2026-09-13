@@ -210,9 +210,16 @@ namespace LegendsOfRus.Tests.PlayMode
                 .GetComponent<CanvasRenderer>(), Is.Not.Null, "The lower contrast graphic must render.");
             AssertSingleInfrastructure();
             Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672");
+            Capture(view, new Vector2Int(576, 1280), new Rect(0, 0, 576, 1230), "Loading_576x1280_safearea");
             Capture(view, new Vector2Int(1080, 2340), new Rect(0, 0, 1080, 2340), "Loading_1080x2340");
             Capture(view, new Vector2Int(1080, 2400), new Rect(0, 0, 1080, 2400), "Loading_1080x2400");
             Capture(view, new Vector2Int(1080, 2400), new Rect(45, 100, 990, 2160), "Loading_1080x2400_safearea");
+            DemoFeatureState.SetLanguage("en"); view.RefreshContent();
+            Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672_EN");
+            Assert.That(view.StatusText.text, Is.EqualTo("Loading..."));
+            DemoFeatureState.SetLanguage("ru"); view.RefreshContent();
+            Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672_roundtrip");
+            SplashResponsivePlayModeTests.AssertCapturePixelsEqual(OutputPath("Loading_941x1672.png"), OutputPath("Loading_941x1672_roundtrip.png"));
             AssertSingleInfrastructure();
             yield return null;
         }
@@ -268,6 +275,8 @@ namespace LegendsOfRus.Tests.PlayMode
                 canvas.scaleFactor = AdaptiveCanvasScaler.ResolveScale(
                     new Vector2Int(Mathf.RoundToInt(safeRect.width), Mathf.RoundToInt(safeRect.height)), 941, 1672);
                 safe.Apply(safeRect, size);
+                // Match Home's synchronous display fixture: refresh glyph geometry at the new Canvas scale.
+                foreach (Text label in view.GetComponentsInChildren<Text>(true)) label.SetVerticesDirty();
                 for (int i = 0; i < 3; i++)
                 {
                     Canvas.ForceUpdateCanvases();

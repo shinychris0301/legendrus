@@ -1,0 +1,720 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -100,7 +100,7 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 13
++  Revision: 14
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
+   BackgroundShade: {fileID: 1584650500042039569}
+@@ -4030,6 +4030,7 @@
+   - component: {fileID: 237484906469378612}
+   - component: {fileID: 192191768577853547}
+   - component: {fileID: 8227591002248109440}
++  - component: {fileID: 7577479237227911009}
+   m_Layer: 5
+   m_Name: ApprovedIvan
+   m_TagString: Untagged
+@@ -4076,7 +4077,7 @@
+   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+-  m_Material: {fileID: 0}
++  m_Material: {fileID: 2100000, guid: 660fc306bc214a14badf495cc8373e9e, type: 2}
+   m_Color: {r: 0.9490196, g: 0.9490196, b: 0.9490196, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+@@ -4119,6 +4120,20 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleCharacterFade
+   BottomFraction: 0.08
++--- !u!114 &7577479237227911009
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4701620183106207633}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 7f313650c43a424795cf1b3760cbce11, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeSceneLighting
++  Strength: 1
++  Padding: 0.03
+ --- !u!1 &4863892689736233250
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5376,6 +5391,7 @@
+   - component: {fileID: 2018594972847864278}
+   - component: {fileID: 1558803172930652857}
+   - component: {fileID: 1344163355500975160}
++  - component: {fileID: 8061596382926968899}
+   m_Layer: 5
+   m_Name: MapSideFoliage
+   m_TagString: Untagged
+@@ -5422,7 +5438,7 @@
+   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+-  m_Material: {fileID: 0}
++  m_Material: {fileID: 2100000, guid: 22129f52d7f54529b4bde5fb8dbabe62, type: 2}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+@@ -5440,6 +5456,20 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!114 &8061596382926968899
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7149313010442236589}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 7f313650c43a424795cf1b3760cbce11, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeSceneLighting
++  Strength: 1
++  Padding: 0.03
+ --- !u!1 &7262862687185323770
+ GameObject:
+   m_ObjectHideFlags: 0
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -11,6 +11,9 @@
+         public const string ContentName = "HOME_ALIGNED_CONTENT";
+         public const string ArtRoot = "ProductionUI/HomeAligned/";
+         public const string PlayGoldMaterialResource = ArtRoot + "home_play_gold";
++        public const string HeroLightingMaterialResource = ArtRoot + "home_hero_lighting";
++        public const string FoliageLightingMaterialResource = ArtRoot + "home_foliage_lighting";
++        public const string SceneLightingShader = "LegendsOfRus/UI/HomeSceneLighting";
+         public const string TypographyResource = "ProductionUI/SplashTitleConfig/SplashTitleTypography";
+         // Home-only neutral scene tone; alpha, source artwork and UI lighting stay intact.
+         public static readonly Color EnvironmentTone = new Color32(235, 235, 235, 255);
+@@ -245,7 +248,20 @@
+             AlignBadgeLabel(view.DailyRewardBadgeText);
+             view.DailyRewardBadge.gameObject.SetActive(false);
+             AlignReferenceBackdrop(view, layout, sprites["home_map_foliage"]);
++            AlignSceneLighting(view.Ivan, HeroLightingMaterialResource);
++            AlignSceneLighting(view.MapFoliage, FoliageLightingMaterialResource);
+             view.Revision = ProductionHomeView.CurrentRevision;
++        }
++
++        static void AlignSceneLighting(Image image, string materialResource)
++        {
++            Material material = Resources.Load<Material>(materialResource);
++            if (material == null || material.shader.name != SceneLightingShader)
++                throw new InvalidOperationException("Missing Home scene-lighting material: " + materialResource);
++            image.material = material;
++            ProductionHomeSceneLighting lighting = image.GetComponent<ProductionHomeSceneLighting>();
++            if (lighting == null) lighting = image.gameObject.AddComponent<ProductionHomeSceneLighting>();
++            lighting.Strength = 1f; lighting.Padding = .03f; lighting.enabled = true;
+         }
+ 
+         static void AlignReferenceBackdrop(ProductionHomeView view, ProductionHomeLayout layout, Sprite foliage)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 13;
++        public const int CurrentRevision = 14;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
+@@ -84,7 +84,19 @@
+             ProfileButton != null && SettingsButton != null && PlayButton != null &&
+             WorldMapButton != null && ShopButton != null && EventsButton != null &&
+             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
+-            HasGeneratedControlBindings && HasReferenceForegroundBindings && HasReferenceBackdropBindings;
++            HasGeneratedControlBindings && HasReferenceForegroundBindings && HasReferenceBackdropBindings && HasSceneLightingBindings;
++
++        public bool HasSceneLightingBindings => HasSceneLighting(Ivan, "home_hero_lighting", 0) &&
++            HasSceneLighting(MapFoliage, "home_foliage_lighting", 1);
++
++        static bool HasSceneLighting(Image image, string materialName, int profile)
++        {
++            if (image == null || image.material == null || image.material.name != materialName ||
++                image.material.shader.name != ProductionHomeRuntime.SceneLightingShader ||
++                image.material.GetFloat("_Profile") != profile) return false;
++            ProductionHomeSceneLighting lighting = image.GetComponent<ProductionHomeSceneLighting>();
++            return lighting != null && lighting.enabled && lighting.Strength == 1f && lighting.Padding == .03f;
++        }
+ 
+         public bool HasReferenceBackdropBindings =>
+             Environment != null && Ivan != null && Environment.transform.parent == Ivan.transform.parent &&
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -326,7 +326,8 @@
+                     Canvas.ForceUpdateCanvases();
+                 }
+                 Rect foliage = ScreenBounds(view.MapFoliage.rectTransform, camera);
+-                foliage.xMin -= 1; foliage.xMax += 1; foliage.yMin -= 1; foliage.yMax += 1;
++                float foliagePadding = view.MapFoliage.GetComponent<ProductionHomeSceneLighting>().Padding;
++                foliage = Expanded(foliage, foliagePadding);
+                 Rect map = ScreenBounds(view.WorldMapButton.transform as RectTransform, camera);
+                 int visibleLeftLeaves = 0, outsideFoliage = 0;
+                 for (int i = 0; i < toned.Length; i++)
+@@ -340,7 +341,7 @@
+                 }
+                 Assert.That(visibleLeftLeaves, Is.GreaterThan(20),
+                     "The independently layered sprig must actually render beside Map rather than disappear behind Ivan or the card.");
+-                Assert.That(outsideFoliage, Is.Zero, "Adding the whole sprig must affect only its own footprint.");
++                Assert.That(outsideFoliage, Is.Zero, "The whole sprig and its faint light must stay within the declared padded footprint.");
+                 AssertProtectedReferenceRegionsUnchanged(toned, withoutFoliage, "Map foliage");
+                 Assert.That(view.MapFoliage.raycastTarget, Is.False);
+                 Assert.That(view.HasRequiredBindings, Is.True, "Temporary visual comparisons must restore the active page.");
+@@ -349,6 +350,123 @@
+         }
+ 
+         static int RgbDifference(Color32 a, Color32 b) => a.r + a.g + a.b - b.r - b.g - b.b;
++
++        static Rect Expanded(Rect rect, float padding)
++        {
++            float x = rect.width * padding + 1, y = rect.height * padding + 1;
++            return Rect.MinMaxRect(rect.xMin - x, rect.yMin - y, rect.xMax + x, rect.yMax + y);
++        }
++
++        [UnityTest]
++        public IEnumerator SelectiveSceneLighting_DeepensSurfacesAddsLocalLightAndPreservesFaceAndUi()
++        {
++            ProductionHomeView view = HomeView();
++            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), null, camera =>
++            {
++                Color32[] lit = ReadCameraPixels(camera);
++                var hero = view.Ivan.GetComponent<ProductionHomeSceneLighting>();
++                var foliage = view.MapFoliage.GetComponent<ProductionHomeSceneLighting>();
++                Material heroMaterial = view.Ivan.material, foliageMaterial = view.MapFoliage.material;
++                Color32[] baseline;
++                try
++                {
++                    hero.Strength = 0; foliage.Strength = 0;
++                    view.Ivan.material = null; view.MapFoliage.material = null;
++                    view.Ivan.SetVerticesDirty(); view.MapFoliage.SetVerticesDirty(); Canvas.ForceUpdateCanvases();
++                    baseline = ReadCameraPixels(camera);
++                }
++                finally
++                {
++                    hero.Strength = 1; foliage.Strength = 1;
++                    view.Ivan.material = heroMaterial; view.MapFoliage.material = foliageMaterial;
++                    view.Ivan.SetVerticesDirty(); view.MapFoliage.SetVerticesDirty(); Canvas.ForceUpdateCanvases();
++                }
++                Rect heroBounds = Expanded(ScreenBounds(view.Ivan.rectTransform, camera), hero.Padding);
++                Rect leafBounds = Expanded(ScreenBounds(view.MapFoliage.rectTransform, camera), foliage.Padding);
++                int darker = 0, brighter = 0, outside = 0, alphaChanged = 0, leafDark = 0, leafLight = 0;
++                for (int i = 0; i < lit.Length; i++)
++                {
++                    if (lit[i].a != baseline[i].a) alphaChanged++;
++                    int delta = RgbDifference(lit[i], baseline[i]);
++                    if (Mathf.Abs(delta) <= 3) continue;
++                    Vector2 pixel = new Vector2(i % 941 + .5f, i / 941 + .5f);
++                    if (!heroBounds.Contains(pixel) && !leafBounds.Contains(pixel)) outside++;
++                    if (delta < -3) darker++; else brighter++;
++                    if (leafBounds.Contains(pixel) && pixel.x < 55)
++                    { if (delta < -3) leafDark++; else leafLight++; }
++                }
++                Assert.That(darker, Is.GreaterThan(15000), "Clothing and leaf shadows must visibly deepen.");
++                Assert.That(brighter, Is.GreaterThan(300), "Rim and feather light must actually render.");
++                Assert.That(leafDark, Is.GreaterThan(50), "Visible Map foliage needs darker surfaces.");
++                Assert.That(leafLight, Is.GreaterThan(5), "Visible Map foliage needs faint warm edge light.");
++                Assert.That(outside, Is.Zero, "Lighting stays local to the two existing sprites.");
++                Assert.That(alphaChanged, Is.Zero, "Lighting must preserve the existing composite alpha.");
++                AssertReferenceRegionsUnchanged(lit, baseline, "Selective lighting", new[]
++                {
++                    "Ivan face", "HUD balance", "Avatar", "Logo", "Play and lettering", "Map", "Event", "Event badge", "Gift badge", "Mail", "Quest gem"
++                }, new[]
++                {
++                    new RectInt(400, 560, 35, 40), new RectInt(350, 48, 160, 40), new RectInt(70, 70, 30, 40),
++                    new RectInt(350, 210, 210, 180), new RectInt(280, 1080, 380, 90), new RectInt(90, 1290, 120, 90),
++                    new RectInt(520, 1290, 120, 90), new RectInt(636, 1240, 14, 14), new RectInt(905, 1475, 12, 12),
++                    new RectInt(55, 1535, 65, 45), new RectInt(645, 1520, 35, 35)
++                });
++                Color32[] restored = ReadCameraPixels(camera);
++                CollectionAssert.AreEqual(lit, restored, "Toggling lighting must restore exactly the same portrait pixels.");
++                AssertHeroLowerFadeMesh(view);
++                Assert.That(view.HasRequiredBindings, Is.True);
++                CaptureLightingBackgroundDiagnostics(view, camera);
++            });
++            yield return null;
++        }
++
++        void CaptureLightingBackgroundDiagnostics(ProductionHomeView view, Camera camera)
++        {
++            string directory = Environment.GetEnvironmentVariable("LOR_HOME_CAPTURE_DIR");
++            if (string.IsNullOrEmpty(directory)) return;
++            var disabled = new List<GameObject>();
++            Color previous = camera.backgroundColor;
++            Transform navigation = view.GetComponent<ProductionHomeLayout>().Navigation;
++            try
++            {
++                // The router's full-canvas letterbox otherwise covers the camera clear color.
++                GameObject letterbox = router.GameCanvas.transform.Find("LetterboxBackground").gameObject;
++                if (letterbox.activeSelf)
++                { disabled.Add(letterbox); letterbox.SetActive(false); }
++                foreach (Transform child in view.transform.Find(ProductionHomeRuntime.ContentName))
++                    if (child != view.Ivan.transform && child != navigation && child.gameObject.activeSelf)
++                    { disabled.Add(child.gameObject); child.gameObject.SetActive(false); }
++                foreach (Transform child in navigation)
++                    if (child != view.MapFoliage.transform && child.gameObject.activeSelf)
++                    { disabled.Add(child.gameObject); child.gameObject.SetActive(false); }
++                string[] names = { "Black", "White", "Magenta" };
++                Color[] backgrounds = { Color.black, Color.white, new Color(1, 0, .85f, 1) };
++                for (int i = 0; i < names.Length; i++)
++                {
++                    camera.backgroundColor = backgrounds[i]; Canvas.ForceUpdateCanvases();
++                    Color32[] pixels = ReadCameraPixels(camera);
++                    Color32 expected = backgrounds[i], emptyCorner = pixels[941 * 1600 + 900];
++                    Assert.That(Mathf.Abs(emptyCorner.r - expected.r), Is.LessThanOrEqualTo(1), names[i] + " background red");
++                    Assert.That(Mathf.Abs(emptyCorner.g - expected.g), Is.LessThanOrEqualTo(1), names[i] + " background green");
++                    Assert.That(Mathf.Abs(emptyCorner.b - expected.b), Is.LessThanOrEqualTo(1), names[i] + " background blue");
++                    var texture = new Texture2D(941, 1672, TextureFormat.RGBA32, false);
++                    try
++                    {
++                        texture.SetPixels32(pixels); texture.Apply();
++                        string path = Path.Combine(directory, "LightingBackground_" + names[i] + ".png");
++                        Assert.That(File.Exists(path), Is.False);
++                        File.WriteAllBytes(path, texture.EncodeToPNG());
++                    }
++                    finally { UnityEngine.Object.Destroy(texture); }
++                }
++            }
++            finally
++            {
++                camera.backgroundColor = previous;
++                foreach (GameObject child in disabled) child.SetActive(true);
++                Canvas.ForceUpdateCanvases();
++            }
++        }
+ 
+         [UnityTest]
+         public IEnumerator SceneTone_GentlyDarkensEnvironmentHeroAndFirebirdWhilePreservingOpaqueUi()
+@@ -1004,15 +1122,21 @@
+             Vector3[] vertices = mesh.vertices;
+             Color32[] colors = mesh.colors32;
+             Vector2[] uv = mesh.uv;
++            var lighting = new List<Vector4>(); mesh.GetUVs(1, lighting);
+             Assert.That(vertices.Length, Is.GreaterThan(4), "The lower fade needs a subdivided native image surface.");
+             float low = float.PositiveInfinity, high = float.NegativeInfinity;
+-            for (int i = 0; i < vertices.Length; i++) { low = Mathf.Min(low, vertices[i].y); high = Mathf.Max(high, vertices[i].y); }
++            for (int i = 0; i < vertices.Length; i++)
++            {
++                if (lighting.Count > i && lighting[i].z > .5f) continue; // Separate padded glow quad.
++                low = Mathf.Min(low, vertices[i].y); high = Mathf.Max(high, vertices[i].y);
++            }
+             Assert.That(high - low, Is.EqualTo(view.Ivan.rectTransform.rect.height).Within(.01f));
+             bool foundTransparentEdge = false, foundPartialFade = false, foundOpaqueUpper = false;
+             Color32 inputColor = view.Ivan.color;
+             float minV = 1, maxV = 0;
+             for (int i = 0; i < vertices.Length; i++)
+             {
++                if (lighting.Count > i && lighting[i].z > .5f) continue;
+                 float fraction = (vertices[i].y - low) / (high - low);
+                 Assert.That(colors[i].r == inputColor.r && colors[i].g == inputColor.g && colors[i].b == inputColor.b, Is.True,
+                     "The shared hero fade must preserve the Image's requested RGB while changing alpha only.");
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -197,6 +197,32 @@
+         }
+ 
+         [Test]
++        public void SelectiveLightingUsesOnlyTheTwoExistingWholeSceneSprites()
++        {
++            ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
++            Assert.That(view.HasSceneLightingBindings, Is.True);
++            Assert.That(view.GetComponentsInChildren<ProductionHomeSceneLighting>(true).Length, Is.EqualTo(2));
++            foreach (Image image in new[] { view.Ivan, view.MapFoliage })
++            {
++                Assert.That(image.raycastTarget, Is.False);
++                Assert.That(image.type, Is.EqualTo(Image.Type.Simple));
++                Assert.That(image.useSpriteMesh, Is.False);
++                Assert.That(image.sprite.rect.position, Is.EqualTo(Vector2.zero));
++                Assert.That(image.sprite.rect.size, Is.EqualTo(new Vector2(image.sprite.texture.width, image.sprite.texture.height)));
++                Assert.That(image.material.shader.name, Is.EqualTo(ProductionHomeRuntime.SceneLightingShader));
++                TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(image.sprite));
++                Assert.That(importer.spritePackingTag, Is.Empty, "Lighting masks use the existing full, unpacked sprite UVs.");
++            }
++            Component[] effects = view.Ivan.GetComponents<Component>();
++            Assert.That(Array.IndexOf(effects, view.Ivan.GetComponent<ProductionHomeSceneLighting>()),
++                Is.GreaterThan(Array.IndexOf(effects, view.Ivan.GetComponent<SplashTitleCharacterFade>())),
++                "Append lighting after the accepted lower-fade mesh has been produced.");
++            string[] dependencies = AssetDatabase.GetDependencies(PrefabPath, true);
++            Assert.That(dependencies, Does.Contain(ResourcesRoot + ProductionHomeRuntime.HeroLightingMaterialResource + ".mat"));
++            Assert.That(dependencies, Does.Contain(ResourcesRoot + ProductionHomeRuntime.FoliageLightingMaterialResource + ".mat"));
++        }
++
++        [Test]
+         public void HomeUsesDeclaredLayerGeometryWithSceneOnlyToneAndLiveLabels()
+         {
+             ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_foliage_lighting.mat
+@@ -0,0 +1,49 @@
++%YAML 1.1
++%TAG !u! tag:unity3d.com,2011:
++--- !u!21 &2100000
++Material:
++  serializedVersion: 8
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_Name: home_foliage_lighting
++  m_Shader: {fileID: 4800000, guid: 9005a1becf4249ba82e5d433fd047e6a, type: 3}
++  m_Parent: {fileID: 0}
++  m_ModifiedSerializedProperties: 0
++  m_ValidKeywords: []
++  m_InvalidKeywords: []
++  m_LightmapFlags: 4
++  m_EnableInstancingVariants: 0
++  m_DoubleSidedGI: 0
++  m_CustomRenderQueue: -1
++  stringTagMap: {}
++  disabledShaderPasses: []
++  m_LockedProperties:
++  m_SavedProperties:
++    serializedVersion: 3
++    m_TexEnvs:
++    - _MainTex:
++        m_Texture: {fileID: 0}
++        m_Scale: {x: 1, y: 1}
++        m_Offset: {x: 0, y: 0}
++    m_Ints: []
++    m_Floats:
++    - _Profile: 1
++    - _ShadowStrength: 0.22
++    - _RimStrength: 0.4
++    - _GlowStrength: 0.65
++    - _NearRadius: 12
++    - _FarRadius: 32
++    - _BottomFade: 0
++    - _ColorMask: 15
++    - _Stencil: 0
++    - _StencilComp: 8
++    - _StencilOp: 0
++    - _StencilReadMask: 255
++    - _StencilWriteMask: 255
++    - _UseUIAlphaClip: 0
++    m_Colors:
++    - _LightColor: {r: 1, g: 0.56, b: 0.16, a: 1}
++    - _Color: {r: 1, g: 1, b: 1, a: 1}
++  m_BuildTextureStacks: []
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_foliage_lighting.mat.meta
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: 22129f52d7f54529b4bde5fb8dbabe62
++NativeFormatImporter:
++  externalObjects: {}
++  mainObjectFileID: 2100000
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_hero_lighting.mat
+@@ -0,0 +1,49 @@
++%YAML 1.1
++%TAG !u! tag:unity3d.com,2011:
++--- !u!21 &2100000
++Material:
++  serializedVersion: 8
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_Name: home_hero_lighting
++  m_Shader: {fileID: 4800000, guid: 9005a1becf4249ba82e5d433fd047e6a, type: 3}
++  m_Parent: {fileID: 0}
++  m_ModifiedSerializedProperties: 0
++  m_ValidKeywords: []
++  m_InvalidKeywords: []
++  m_LightmapFlags: 4
++  m_EnableInstancingVariants: 0
++  m_DoubleSidedGI: 0
++  m_CustomRenderQueue: -1
++  stringTagMap: {}
++  disabledShaderPasses: []
++  m_LockedProperties:
++  m_SavedProperties:
++    serializedVersion: 3
++    m_TexEnvs:
++    - _MainTex:
++        m_Texture: {fileID: 0}
++        m_Scale: {x: 1, y: 1}
++        m_Offset: {x: 0, y: 0}
++    m_Ints: []
++    m_Floats:
++    - _Profile: 0
++    - _ShadowStrength: 0.16
++    - _RimStrength: 0.45
++    - _GlowStrength: 0.9
++    - _NearRadius: 6
++    - _FarRadius: 16
++    - _BottomFade: 0.08
++    - _ColorMask: 15
++    - _Stencil: 0
++    - _StencilComp: 8
++    - _StencilOp: 0
++    - _StencilReadMask: 255
++    - _StencilWriteMask: 255
++    - _UseUIAlphaClip: 0
++    m_Colors:
++    - _LightColor: {r: 1, g: 0.56, b: 0.16, a: 1}
++    - _Color: {r: 1, g: 1, b: 1, a: 1}
++  m_BuildTextureStacks: []
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_hero_lighting.mat.meta
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: 660fc306bc214a14badf495cc8373e9e
++NativeFormatImporter:
++  externalObjects: {}
++  mainObjectFileID: 2100000
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_scene_lighting.shader
+@@ -0,0 +1,146 @@
++Shader "LegendsOfRus/UI/HomeSceneLighting"
++{
++    Properties
++    {
++        [PerRendererData] _MainTex ("Original whole sprite", 2D) = "white" {}
++        _Color ("Tint", Color) = (1,1,1,1)
++        _Profile ("Hero 0 / foliage 1", Float) = 0
++        _ShadowStrength ("Selected surface shadow", Range(0,0.4)) = 0.16
++        _RimStrength ("Directional rim", Range(0,1)) = 0.45
++        _GlowStrength ("Exterior light", Range(0,2)) = 0.9
++        _NearRadius ("Near radius in source pixels", Float) = 6
++        _FarRadius ("Far radius in source pixels", Float) = 16
++        _BottomFade ("Existing lower fade fraction", Float) = 0.08
++        _LightColor ("Warm reflected light", Color) = (1,0.56,0.16,1)
++        _StencilComp ("Stencil Comparison", Float) = 8
++        _Stencil ("Stencil ID", Float) = 0
++        _StencilOp ("Stencil Operation", Float) = 0
++        _StencilWriteMask ("Stencil Write Mask", Float) = 255
++        _StencilReadMask ("Stencil Read Mask", Float) = 255
++        _ColorMask ("Color Mask", Float) = 15
++        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
++    }
++    SubShader
++    {
++        // These two imported resources are whole, unpacked sprites. UV masks refer to that stable artwork.
++        Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" "CanUseSpriteAtlas"="False" }
++        Stencil { Ref [_Stencil] Comp [_StencilComp] Pass [_StencilOp] ReadMask [_StencilReadMask] WriteMask [_StencilWriteMask] }
++        Cull Off
++        Lighting Off
++        ZWrite Off
++        ZTest [unity_GUIZTestMode]
++        // Premultiplied RGB permits additive exterior light with zero alpha.
++        // Match the current UGUI premultiplied surface blend, including destination alpha.
++        Blend One OneMinusSrcAlpha
++        ColorMask [_ColorMask]
++        Pass
++        {
++            CGPROGRAM
++            #pragma vertex vert
++            #pragma fragment frag
++            #pragma target 3.0
++            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
++            #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
++            #include "UnityCG.cginc"
++            #include "UnityUI.cginc"
++            struct appdata
++            {
++                float4 vertex : POSITION;
++                fixed4 color : COLOR;
++                float2 uv : TEXCOORD0;
++                float4 lighting : TEXCOORD1;
++                UNITY_VERTEX_INPUT_INSTANCE_ID
++            };
++            struct v2f
++            {
++                float4 vertex : SV_POSITION;
++                fixed4 color : COLOR;
++                float2 uv : TEXCOORD0;
++                float4 mask : TEXCOORD1;
++                float2 lighting : TEXCOORD2;
++                UNITY_VERTEX_OUTPUT_STEREO
++            };
++            sampler2D _MainTex;
++            float4 _MainTex_TexelSize, _ClipRect;
++            fixed4 _Color, _TextureSampleAdd, _LightColor;
++            float _Profile, _ShadowStrength, _RimStrength, _GlowStrength, _NearRadius, _FarRadius, _BottomFade;
++            float _UIMaskSoftnessX, _UIMaskSoftnessY;
++            v2f vert(appdata v)
++            {
++                v2f o;
++                UNITY_SETUP_INSTANCE_ID(v);
++                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
++                o.vertex = UnityObjectToClipPos(v.vertex);
++                o.color = v.color * _Color; o.uv = v.uv;
++                o.lighting = v.lighting.xz;
++                float2 pixelSize = o.vertex.w / abs(mul((float2x2)UNITY_MATRIX_P, _ScreenParams.xy));
++                float4 rect = clamp(_ClipRect, -2e10, 2e10);
++                o.mask = float4(v.vertex.xy * 2 - rect.xy - rect.zw,
++                    0.25 / (0.25 * float2(_UIMaskSoftnessX, _UIMaskSoftnessY) + abs(pixelSize.xy)));
++                return o;
++            }
++            half SpriteAlpha(float2 uv)
++            {
++                float2 inside = step(0, uv) * step(uv, 1);
++                return (tex2D(_MainTex, saturate(uv)) + _TextureSampleAdd).a * inside.x * inside.y;
++            }
++            half RingAlpha(float2 uv, float radius)
++            {
++                float2 d = _MainTex_TexelSize.xy * radius;
++                return (SpriteAlpha(uv + float2(d.x, 0)) + SpriteAlpha(uv - float2(d.x, 0)) +
++                    SpriteAlpha(uv + float2(0, d.y)) + SpriteAlpha(uv - float2(0, d.y)) +
++                    SpriteAlpha(uv + d * .7071) + SpriteAlpha(uv - d * .7071) +
++                    SpriteAlpha(uv + float2(d.x, -d.y) * .7071) +
++                    SpriteAlpha(uv + float2(-d.x, d.y) * .7071)) * .125;
++            }
++            fixed4 frag(v2f i) : SV_Target
++            {
++                float2 uv = i.uv;
++                half strength = saturate(i.lighting.x);
++                half foliage = step(.5, _Profile);
++                float y = 1 - uv.y;
++                // The diagonal split follows the accepted perched bird's neck, wing and tail.
++                half bird = smoothstep(.57 + .20 * smoothstep(.15, .55, y) - .015,
++                    .57 + .20 * smoothstep(.15, .55, y) + .035, uv.x);
++                half clothing = smoothstep(.24, .36, y) * (1 - bird);
++                half heroRim = (1 - bird) * (1 - smoothstep(.38, .72, y));
++                half4 color;
++                half coverage;
++                if (i.lighting.y > .5)
++                {
++                    half alpha = SpriteAlpha(uv);
++                    half spread = RingAlpha(uv, _NearRadius) * .65 + RingAlpha(uv, _FarRadius) * .35;
++                    half selection = lerp(heroRim * .32 + bird, .16, foliage);
++                    half lowerFade = smoothstep(0, max(_BottomFade, .0001), uv.y);
++                    coverage = saturate(spread - alpha) * (1 - alpha) * selection * _GlowStrength * strength * i.color.a * lowerFade;
++                    color = half4(_LightColor.rgb * i.color.rgb * coverage, 0);
++                }
++                else
++                {
++                    fixed4 source = tex2D(_MainTex, uv) + _TextureSampleAdd;
++                    color = source * i.color;
++                    half lightness = max(source.r, max(source.g, source.b));
++                    half recess = 1 - smoothstep(.40, .92, lightness);
++                    color.rgb *= 1 - lerp(clothing, 1, foliage) * recess * _ShadowStrength * strength;
++                    half edge = saturate(source.a - SpriteAlpha(uv + _MainTex_TexelSize.xy * float2(-3, 3)));
++                    half rimSelection = lerp(heroRim + bird * .22, .7, foliage);
++                    color.rgb = saturate(color.rgb + _LightColor.rgb * edge * rimSelection *
++                        _RimStrength * strength * (1 - lightness * .65));
++                    // The original surface alpha, vertex RGB tint and lower-fade mesh stay intact.
++                    coverage = color.a;
++                    color.rgb *= color.a;
++                }
++                #ifdef UNITY_UI_CLIP_RECT
++                half2 mask = saturate((_ClipRect.zw - _ClipRect.xy - abs(i.mask.xy)) * i.mask.zw);
++                color *= mask.x * mask.y;
++                coverage *= mask.x * mask.y;
++                #endif
++                #ifdef UNITY_UI_ALPHACLIP
++                clip(coverage - .001);
++                #endif
++                return color;
++            }
++            ENDCG
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_scene_lighting.shader.meta
+@@ -0,0 +1,9 @@
++fileFormatVersion: 2
++guid: 9005a1becf4249ba82e5d433fd047e6a
++ShaderImporter:
++  externalObjects: {}
++  defaultTextures: []
++  nonModifiableTextures: []
++  userData:
++  assetBundleName:
++  assetBundleVariant:
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSceneLighting.cs
+@@ -0,0 +1,61 @@
++using System.Collections.Generic;
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus
++{
++    /// <summary>Home-only light around an unchanged sprite, with its original mesh/fade above it.</summary>
++    [DisallowMultipleComponent, RequireComponent(typeof(Image))]
++    public sealed class ProductionHomeSceneLighting : BaseMeshEffect
++    {
++        [Range(0f, 1f)] public float Strength = 1f;
++        [Range(0f, .1f)] public float Padding = .03f;
++        readonly List<UIVertex> surface = new List<UIVertex>();
++        readonly List<UIVertex> combined = new List<UIVertex>();
++
++        public override void ModifyMesh(VertexHelper vertices)
++        {
++            if (!IsActive() || vertices.currentVertCount == 0 || Strength <= 0) return;
++            if (graphic.canvas != null &&
++                (graphic.canvas.additionalShaderChannels & AdditionalCanvasShaderChannels.TexCoord1) == 0)
++                graphic.canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1;
++            surface.Clear(); vertices.GetUIVertexStream(surface);
++            Vector2 low = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
++            Vector2 high = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
++            Vector2 lowUv = Vector2.one, highUv = Vector2.zero;
++            foreach (UIVertex vertex in surface)
++            {
++                low = Vector2.Min(low, vertex.position); high = Vector2.Max(high, vertex.position);
++                lowUv = Vector2.Min(lowUv, vertex.uv0); highUv = Vector2.Max(highUv, vertex.uv0);
++            }
++            Vector2 padding = (high - low) * Padding, uvPadding = (highUv - lowUv) * Padding;
++            combined.Clear();
++            UIVertex bl = GlowVertex(low - padding, lowUv - uvPadding);
++            UIVertex tl = GlowVertex(new Vector2(low.x - padding.x, high.y + padding.y),
++                new Vector2(lowUv.x - uvPadding.x, highUv.y + uvPadding.y));
++            UIVertex tr = GlowVertex(high + padding, highUv + uvPadding);
++            UIVertex br = GlowVertex(new Vector2(high.x + padding.x, low.y - padding.y),
++                new Vector2(highUv.x + uvPadding.x, lowUv.y - uvPadding.y));
++            // Render light first, behind the original sprite. No extra Image, hitbox or layout rectangle.
++            combined.Add(bl); combined.Add(tl); combined.Add(tr);
++            combined.Add(tr); combined.Add(br); combined.Add(bl);
++            foreach (UIVertex input in surface)
++            {
++                UIVertex vertex = input;
++                vertex.uv1 = new Vector4(Strength, 0, 0, 0);
++                combined.Add(vertex);
++            }
++            vertices.Clear(); vertices.AddUIVertexTriangleStream(combined);
++        }
++
++        UIVertex GlowVertex(Vector2 position, Vector2 uv)
++        {
++            UIVertex vertex = UIVertex.simpleVert;
++            vertex.position = new Vector3(position.x, position.y, 0);
++            vertex.uv0 = uv;
++            vertex.uv1 = new Vector4(Strength, 0, 1, 0);
++            vertex.color = graphic.color;
++            return vertex;
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSceneLighting.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 7f313650c43a424795cf1b3760cbce11
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

@@ -1,0 +1,212 @@
+[
+  {
+    "name": "BaselinePlayMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Passed",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:20:07Z",
+      "end-time": "2026-09-13 22:20:07Z",
+      "duration": "0.4717048"
+    },
+    "note": "Legacy Gameplay, existing tutorial visible.",
+    "sha256": "61007927c08078c7902c35a3848daab863b0de4fcb275874cb93105c869c4f56"
+  },
+  {
+    "name": "FirstNativeCapture",
+    "run": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Passed",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:32:17Z",
+      "end-time": "2026-09-13 22:32:18Z",
+      "duration": "1.1322046"
+    },
+    "note": "Five native portraits before mask, tone, tile-size and atlas-neighbour refinements.",
+    "sha256": "717485de9c4f9942afaecc234ce684f3e6b8d1097ac4bd5930c7d1abe456404e"
+  },
+  {
+    "name": "InitialGameplayPlayMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "68",
+      "result": "Failed(Child)",
+      "total": "68",
+      "passed": "66",
+      "failed": "2",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:40:02Z",
+      "end-time": "2026-09-13 22:40:26Z",
+      "duration": "24.2557687"
+    },
+    "note": "66/68. Four new Gameplay tests passed; two older runtime assertions needed score-goal and expected watchdog-log corrections.",
+    "sha256": "fbfddcc18c225a071e2eea22f29c4d9abde3c3c33cff86818d6e5099dfa664b1"
+  },
+  {
+    "name": "InitialUiEditMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "56",
+      "result": "Passed",
+      "total": "56",
+      "passed": "56",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:41:49Z",
+      "end-time": "2026-09-13 22:41:57Z",
+      "duration": "7.240063"
+    },
+    "note": "56/56. Additional intended namespace filter did not match gameplay-core tests; these were run separately.",
+    "sha256": "7dce96b2a0f72a4073ebca69077be79d8065333cc39e080b205199e62a77bd6d"
+  },
+  {
+    "name": "GameplayCoreEditMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "66",
+      "result": "Failed(Child)",
+      "total": "66",
+      "passed": "64",
+      "failed": "2",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:43:14Z",
+      "end-time": "2026-09-13 22:43:15Z",
+      "duration": "0.4102424"
+    },
+    "note": "64/66. Two failures retained in unchanged pure core/test source. See QA/ExistingCoreTestFailures.json.",
+    "sha256": "a36ba7d6e3cc736239fbf10db7301402cd47ef0c0675c7534849ac64ebb50ba3"
+  },
+  {
+    "name": "BeforeMatchColorUiEditMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "56",
+      "result": "Passed",
+      "total": "56",
+      "passed": "56",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:45:54Z",
+      "end-time": "2026-09-13 22:46:02Z",
+      "duration": "7.6492871"
+    },
+    "note": "Final native prefab/import and all six earlier-page checks.",
+    "sha256": "be6e578f3e2467c3b209a5d1e18be280c4fd8d88011cbf02f7b01ec66fe0e25e"
+  },
+  {
+    "name": "BeforeMatchColorPlayMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "105",
+      "result": "Failed(Child)",
+      "total": "105",
+      "passed": "104",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:46:20Z",
+      "end-time": "2026-09-13 22:47:13Z",
+      "duration": "53.6904638"
+    },
+    "note": "104/105. All Gameplay/runtime checks passed. Existing strict Splash roundtrip assertion failed by seven pixels; source and tolerance preserved.",
+    "sha256": "ea38db90e5a186f49a02e298e0b0b8ff114df68441ae90fc67cc0aa38184bc15"
+  },
+  {
+    "name": "FinalUiEditMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "56",
+      "result": "Passed",
+      "total": "56",
+      "passed": "56",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:55:16Z",
+      "end-time": "2026-09-13 22:55:24Z",
+      "duration": "7.5732592"
+    },
+    "note": "Final UI checks after adding the special match-colour marker.",
+    "sha256": "2bcddcc003d5c63c1c2a94baded999124d6922fecb2362e8b37a420e23f2a88d"
+  },
+  {
+    "name": "FinalPlayMode",
+    "run": {
+      "id": "2",
+      "testcasecount": "105",
+      "result": "Failed(Child)",
+      "total": "105",
+      "passed": "104",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:55:42Z",
+      "end-time": "2026-09-13 22:56:35Z",
+      "duration": "52.7955472"
+    },
+    "note": "Final combined checks after adding the special match-colour marker; exact result retained.",
+    "sha256": "18bf75e64bf5642e4940eb1f3aaf3053effc749da244245a17cb2801f8c89b64"
+  },
+  {
+    "name": "SplashRecheck",
+    "run": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Passed",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 22:49:46Z",
+      "end-time": "2026-09-13 22:49:48Z",
+      "duration": "1.5400567"
+    },
+    "note": "Same strict Splash assertion rerun once without source/tolerance changes.",
+    "sha256": "f18b41e9405605c764a8518989ff993a757533ed4807ba9fd86be162f30caf0c"
+  }
+]

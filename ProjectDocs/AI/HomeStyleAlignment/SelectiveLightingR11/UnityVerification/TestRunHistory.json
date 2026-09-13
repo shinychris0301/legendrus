@@ -1,0 +1,105 @@
+[
+  {
+    "folder": "editmode",
+    "results": {
+      "id": "2",
+      "testcasecount": "44",
+      "result": "Passed",
+      "total": "44",
+      "passed": "44",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:07:10Z",
+      "end-time": "2026-09-13 18:07:17Z",
+      "duration": "6.8590216"
+    },
+    "sha256": "547c61424166141d78c2a57e21c55e3edb5d6ba00fcdf6338da575a67e40e86e"
+  },
+  {
+    "folder": "playmode",
+    "results": {
+      "id": "2",
+      "testcasecount": "23",
+      "result": "Failed(Child)",
+      "total": "23",
+      "passed": "22",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:08:35Z",
+      "end-time": "2026-09-13 18:08:47Z",
+      "duration": "11.8365726"
+    },
+    "sha256": "8ee6091cbc6854b85f9e003b5f9a0d0b63041a7e8f0b4ea533fa9787fa62e68a",
+    "note": "Composite-alpha failure fixed in shader; misspelled Splash filter corrected. See QA/Iterations/Initial/README.md."
+  },
+  {
+    "folder": "playmode2",
+    "results": {
+      "id": "2",
+      "testcasecount": "25",
+      "result": "Passed",
+      "total": "25",
+      "passed": "25",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:11:56Z",
+      "end-time": "2026-09-13 18:12:16Z",
+      "duration": "19.3195667"
+    },
+    "sha256": "0cda3dbf15e8e1900092bbb020d76741d16f70a49408b7fe6cdd7f9cc83bc7b5",
+    "note": "25 passed, but all three named diagnostic backgrounds were navy: router backdrop hid camera clear. Fixture disables/restores backdrop and now asserts empty-corner RGB. Production unchanged for final rerun."
+  },
+  {
+    "folder": "playmode3",
+    "results": {
+      "id": "2",
+      "testcasecount": "25",
+      "result": "Passed",
+      "total": "25",
+      "passed": "25",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:17:14Z",
+      "end-time": "2026-09-13 18:17:33Z",
+      "duration": "19.6284266"
+    },
+    "sha256": "7a50e50bc0af38d99d07cd114da1fb61aac3c5a09e09ceabd6adc36855cfb41b",
+    "note": "25 passed, backgrounds corrected. External R10 comparison then found 407073 composite-alpha differences: the toggle test retained the custom material in its baseline. Final test removes/restores custom materials; final shader uses premultiplied UGUI blending for both RGB and alpha."
+  },
+  {
+    "folder": "playmode4",
+    "results": {
+      "id": "2",
+      "testcasecount": "25",
+      "result": "Passed",
+      "total": "25",
+      "passed": "25",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:27:27Z",
+      "end-time": "2026-09-13 18:27:48Z",
+      "duration": "21.4166722"
+    },
+    "sha256": "9dfa41797a6c4521d13ae40edb6de5f9563dfe03abf8c0a4add82bd13c625792"
+  }
+]

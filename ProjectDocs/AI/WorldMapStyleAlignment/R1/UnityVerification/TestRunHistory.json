@@ -1,0 +1,191 @@
+[
+  {
+    "folder": "baseline",
+    "run": {
+      "id": "2",
+      "testcasecount": "1",
+      "result": "Passed",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 18:56:41Z",
+      "end-time": "2026-09-13 18:56:42Z",
+      "duration": "0.9050042"
+    },
+    "note": "Original page, before production edits.",
+    "xmlSha256": "f573bbf37df3d144210e0f485919315ac933a462a75aadfc8cad8769415d891c"
+  },
+  {
+    "folder": "playmode1",
+    "run": {
+      "id": "2",
+      "testcasecount": "3",
+      "result": "Passed",
+      "total": "3",
+      "passed": "3",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:33:43Z",
+      "end-time": "2026-09-13 19:33:44Z",
+      "duration": "1.6533077"
+    },
+    "note": "Navigation/layout tests passed; direct capture review revealed invisible custom graphics. No CanvasRenderer yet; this is not final visual evidence.",
+    "xmlSha256": "59ee02907b6abe55f7d1c37d0ec4141fe3824bc1efd1501eecf8282afd062c6f"
+  },
+  {
+    "folder": "playmode2",
+    "run": {
+      "id": "2",
+      "testcasecount": "3",
+      "result": "Passed",
+      "total": "3",
+      "passed": "3",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:38:13Z",
+      "end-time": "2026-09-13 19:38:15Z",
+      "duration": "2.1066608"
+    },
+    "note": "CanvasRenderer and mesh checks added; title/nav alignment and mipmaps corrected. Three map tests passed.",
+    "xmlSha256": "00712468b3e28c2c563d845b20e644caf129c87220f852e862dfba77850ba2c9"
+  },
+  {
+    "folder": "editmode",
+    "run": {
+      "id": "2",
+      "testcasecount": "47",
+      "result": "Passed",
+      "total": "47",
+      "passed": "47",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:40:00Z",
+      "end-time": "2026-09-13 19:40:06Z",
+      "duration": "6.7003677"
+    },
+    "note": "47 focused Edit Mode tests passed before final chapter-number adjustment.",
+    "xmlSha256": "be79ea871bd524ca96e35f65027bd206052c18719395ca8d5aca53b56488b251"
+  },
+  {
+    "folder": "editmode2",
+    "run": {
+      "id": "2",
+      "testcasecount": "47",
+      "result": "Passed",
+      "total": "47",
+      "passed": "47",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:59:27Z",
+      "end-time": "2026-09-13 19:59:34Z",
+      "duration": "7.9464359"
+    },
+    "note": "47 focused Edit Mode tests passed against final serialized World Map.",
+    "xmlSha256": "a794ff8dc30b9cbe7864225bd828d4936defe68b8669d826bc795e80122d2d5f"
+  },
+  {
+    "folder": "finalplay",
+    "run": {
+      "id": "2",
+      "testcasecount": "29",
+      "result": "Failed(Child)",
+      "total": "29",
+      "passed": "28",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:42:00Z",
+      "end-time": "2026-09-13 19:42:22Z",
+      "duration": "21.9492409"
+    },
+    "note": "28/29 passed. Immediate same-frame panel activation did not yet register Close for the capture raycast. Fixture corrected to wait two render frames.",
+    "xmlSha256": "9ff9d90286226c17668b5f8e548f2eee9ea0231a35774f060f670b54ed166104"
+  },
+  {
+    "folder": "finalplay2",
+    "run": {
+      "id": "2",
+      "testcasecount": "29",
+      "result": "Passed",
+      "total": "29",
+      "passed": "29",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:44:22Z",
+      "end-time": "2026-09-13 19:44:45Z",
+      "duration": "22.4225726"
+    },
+    "note": "29/29 passed. External pixel comparison then found capture-time native HUD color fades and one stale snapped glyph after resolution changes; no accepted page source drift.",
+    "xmlSha256": "968683b21be0538556bbda76d6b109744c7bd1066e9956d75b7b3f42ac536882"
+  },
+  {
+    "folder": "finalplay3",
+    "run": {
+      "id": "2",
+      "testcasecount": "29",
+      "result": "Passed",
+      "total": "29",
+      "passed": "29",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:51:30Z",
+      "end-time": "2026-09-13 19:51:54Z",
+      "duration": "23.1716039"
+    },
+    "note": "29/29 passed after waiting for normal native colors. One chapter number still crossed a pixel-snap boundary after resolution/language changes.",
+    "xmlSha256": "078f05e073d1de72b921b77a442bc71a7a3ec6c6c8867319c01d449626a12411"
+  },
+  {
+    "folder": "finalplay4",
+    "run": {
+      "id": "2",
+      "testcasecount": "29",
+      "result": "Passed",
+      "total": "29",
+      "passed": "29",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0",
+      "engine-version": "3.5.0.0",
+      "clr-version": "4.0.30319.42000",
+      "start-time": "2026-09-13 19:55:24Z",
+      "end-time": "2026-09-13 19:55:47Z",
+      "duration": "23.2070733"
+    },
+    "note": "29/29 passed after disabling pixel snapping only on responsive World Map chapter numbers.",
+    "xmlSha256": "0a3f6c9aaa194d72d9ba7f6e796fbc956775eef83ef704925ae8a7b1b321cd81"
+  }
+]

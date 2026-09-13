@@ -1,0 +1,101 @@
+{
+  "date": "2026-09-12",
+  "context": "Actual Unity review identified opaque black exterior rectangles on first four RGB cards and live labels too low. Root requested actual-alpha replacements while preserving opaque navy control surfaces.",
+  "mode": "Built-in image_gen.imagegen only. One failed referenced extraction; then four fresh no-input selected generations and one unselected helmet margin candidate. No manual pixel edits.",
+  "attempts": [
+    {
+      "role": "Rejected extraction",
+      "file": "QA/Candidates/nav_map_extraction_attempt.png",
+      "prompt": "Use case: background-extraction. EDIT TARGET: attached single complete square map navigation card sprite. Make ONLY the narrow black exterior OUTSIDE the complete rounded antique-gold card frame truly transparent (alpha zero). Preserve the entire opaque navy interior, map illustration, compass, gold rim, corner ornaments, bottom blank label compartment, exact colors, exact pixel framing and square canvas dimensions. Do not make navy panel or any black shadow inside the rim transparent. Do not crop, rescale, rearrange, redraw, add or remove any decoration. Preserve all complete outer gold edges. Output PNG with an actual alpha channel and transparent pixels outside the rounded gold outline. Do not replace the exterior with black, white, grey, checkerboard pattern or any other background. No fake transparency. No text.",
+      "inputImages": [
+        {
+          "path": "Sources/nav_map_generated.png",
+          "role": "Exact edit target: first RGB generated map card"
+        }
+      ],
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-34280278-48c3-4aa0-99d7-0c0542bb5a53.png",
+      "selected": false,
+      "reason": "RGB output with opaque baked checkerboard outside, rejected; not installed."
+    },
+    {
+      "role": "Selected fresh individual card",
+      "file": "QA/Candidates/nav_map_transparent_generated.png",
+      "prompt": "One isolated square fantasy mobile-game WORLD MAP navigation card sprite on a transparent background. PNG with real alpha transparency outside the rounded rectangular gold frame. The entire navy lacquer panel inside its frame is intentionally opaque, including all shadowed areas. Painterly Russian fairy-tale game materials: dark navy-black lacquer, restrained aged antique-gold thin carved double border with tiny sapphire accents, warm upper-left highlights. Small modest corner curls occupying only the rim, never the text space. Rounded rectangle fills98%of canvas with full gold outline visible. The upper70%of card contains an unfurled warm parchment illustrated map with rolled wooden gold-capped ends and a small antique-gold/sapphire compass at lower right, recognizable clean silhouette. A fine straight antique-gold horizontal divider separates illustration from lower30%of card. Lower30%is an entirely blank opaque dark navy label compartment, free of icons or decorative intrusions; readable live text will be added separately. Whole complete card, front orthographic view, square canvas. No text, numbers, letters, markings, logo, watermark, screenshot, scenery outside card, or other objects. Only the single framed card is opaque; all canvas pixels beyond its rounded outline are actually transparent.",
+      "inputImages": [],
+      "referenceContext": "Materials and subject based on inspected approved Splash crest and R1 Home/current Unity captures; no input image attached to this generation call.",
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-558d52d5-b1f8-4b2b-8355-ed44b57812e7.png",
+      "selected": true,
+      "actualDimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6,
+      "alpha": "Genuine RGBA exterior. Navy panel near-opaque, not assumed255; native inner backing recommended.",
+      "copy": "Exact generated PNG copied unchanged; no crop, rescale, alpha stripping or color edit."
+    },
+    {
+      "role": "Selected fresh individual card",
+      "file": "QA/Candidates/nav_shop_transparent_generated.png",
+      "prompt": "One isolated square fantasy mobile-game SHOP navigation card sprite on a transparent background. PNG with real alpha transparency outside the rounded rectangular gold frame. Entire navy lacquer panel inside frame intentionally opaque, including shadowed areas. Painterly Russian fairy-tale game materials: dark navy-black subtly cracked lacquer, restrained aged antique-gold thin carved double border with four tiny round sapphire accents, warm upper-left highlights. Small modest corner curls occupying only the rim, never text space. Rounded rectangle fills96–98%canvas with full gold outline visible. Upper70%of card contains ONE isolated ornate carved wooden market stall with deep sapphire-blue fabric canopy, antique-gold embroidery, slim wood pillars capped with modest finials, warmly carved wooden counter and a few tiny goods/chests. Front three-quarter view, full stall visible and recognizable, rich crafted texture, NOground/grass/scenery. Fine straight gold horizontal divider at70%height separates illustration from lower30%card. Lower30%is entirely blank opaque dark navy label compartment, free of icons/decorative intrusions. Specifically whole text ink rectangle from8%to92%canvaswidth and76%to91%canvasheight MUSTbequietnavy; bottomcornerfiligreeonlybelow92%heightoroutside8–92%width. Whole complete card front orthographic view square canvas, tight margin. No text,numbers,letters,logo,watermark,screenshot,background,othercardsorcharacters. Only single framed card opaque; all pixels beyond its rounded outline actually transparent.",
+      "inputImages": [],
+      "referenceContext": "Materials and subject based on inspected approved Splash crest and R1 Home/current Unity captures; no input image attached to this generation call.",
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-b3ff2167-c6af-4900-87ec-208dd320adb8.png",
+      "selected": true,
+      "actualDimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6,
+      "alpha": "Genuine RGBA exterior. Navy panel near-opaque, not assumed255; native inner backing recommended.",
+      "copy": "Exact generated PNG copied unchanged; no crop, rescale, alpha stripping or color edit."
+    },
+    {
+      "role": "Selected fresh individual card",
+      "file": "QA/Candidates/nav_events_transparent_generated.png",
+      "prompt": "One isolated square fantasy mobile-game EVENTS navigation card sprite on a transparent background. PNG with real alpha transparency outside rounded rectangular gold frame. Entire navy lacquer panel inside frame intentionally opaque, including shadowed areas. Painterly Russian fairy-tale game materials: dark navy-black subtly cracked lacquer, restrained aged antique-gold thin carved double border with four tiny round sapphire accents, warm upper-left highlights. Small modest corner curls occupying only rim, never text space. Rounded rectangle fills96–98%canvas with full gold outline visible. Upper70%of card contains ONE rich crimson embroidered hanging banner, with a large golden Slavic sun medallion centered on cloth, thin gold geometric embroidered border, antique-gold top rod with small finials, pointed chevron hem. Crimson cloth with gentle natural folds, full banner/rod contained within upper compartment, recognizable clean silhouette, beautiful aged gold cloth embroidery. No scenery. Fine straight gold horizontal divider at70%height separates illustration from lower30%card. Lower30%entirely blank opaque dark navy label compartment, free of icons/decorative intrusions. Specifically whole text ink rectangle from8%to92%canvaswidth and76%to91%canvasheight MUSTbequietnavy; bottomcornerfiligreeonlybelow92%heightoroutside8–92%width. Whole complete card front orthographic view square canvas tight margin. No text,numbers,letters,logo,watermark,screenshot,background,othercardsorcharacters. Only single framed card opaque; all pixels beyond rounded outline actually transparent.",
+      "inputImages": [],
+      "referenceContext": "Materials and subject based on inspected approved Splash crest and R1 Home/current Unity captures; no input image attached to this generation call.",
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-e6dd03a1-a0f1-4552-a606-93fb828df6ea.png",
+      "selected": true,
+      "actualDimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6,
+      "alpha": "Genuine RGBA exterior. Navy panel near-opaque, not assumed255; native inner backing recommended.",
+      "copy": "Exact generated PNG copied unchanged; no crop, rescale, alpha stripping or color edit."
+    },
+    {
+      "role": "Selected fresh individual card",
+      "file": "QA/Candidates/nav_characters_transparent_generated.png",
+      "prompt": "A single SQUARE game UI button card sprite on TRANSPARENT background, with a deep navy opaque panel inside a thin antique-gold rounded-square border. IMPORTANT silhouette almost entirely fills the square image: left gold rim at3%canvaswidth, right rim at97%, top at3%, bottom at97%; samewidthandheight. Rounded corners with very small antique-gold curls and four tiny round sapphire cabochons. No large exterior margins. Painterly Russian fairy-tale game craftsmanship, muted aged-gold metal, dark blue-black lacquer, warm upper-left light. Upper68%contains a centered empty Slavic warrior helmet: pointed sapphire-blue enamel dome with gold filigree ribs, golden nose guard and cheek plates, no face. Helmet fits comfortably INSIDE square card; do not turn the card into a tall rectangle. Thin gold divider horizontal at70%height. Bottom30%is quiet plain navy empty live-label area. No ornament intrusion into rectanglex8–92%,y76–91%. Finecornercurlsonlyatoutermostcorners. Front-facing square completecard, oneobject. Actual alpha-transparent pixels beyondroundedframe; entire navyinterior opaque. No words, numbers, symbols, face, people, scenery, watermark, checkerboard, black backdrop or othercards.",
+      "inputImages": [],
+      "referenceContext": "Materials and subject based on inspected approved Splash crest and R1 Home/current Unity captures; no input image attached to this generation call.",
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-0a588862-01ef-48b9-93a2-aa5cbdaa23ed.png",
+      "selected": true,
+      "actualDimensions": [
+        1254,
+        1254
+      ],
+      "pngColorType": 6,
+      "alpha": "Genuine RGBA exterior. Navy panel near-opaque, not assumed255; native inner backing recommended.",
+      "copy": "Exact generated PNG copied unchanged; no crop, rescale, alpha stripping or color edit."
+    },
+    {
+      "role": "Unselected fresh helmet candidate",
+      "file": "QA/Candidates/nav_characters_transparent_margin_candidate.png",
+      "prompt": "One isolated square fantasy mobile-game CHARACTERS navigation card sprite on a transparent background. PNG with real alpha transparency outside rounded rectangular gold frame. Entire navy lacquer panel inside frame intentionally opaque, including shadowed areas. Painterly Russian fairy-tale game materials: dark navy-black subtly cracked lacquer, restrained aged antique-gold thin carved double border with four tiny round sapphire accents, warm upper-left highlights. Small modest corner curls occupying only rim, never text space. Rounded rectangle fills96–98%canvas with full gold outline visible. Upper70%of card contains ONE empty medieval Slavic pointed warrior helmet with deep sapphire-blue enamel dome, antique-gold engraved curling filigree ribs and brow band, small sapphire ornament, nose guard and cheek plates. Slight three-quarter front view, complete helmet contained within upper compartment, elegant recognizable clean silhouette, beautiful crafted aged-metal textures. No face,eyes,bodyorperson. Fine straight gold horizontal divider at70%height separates illustration from lower30%card. Lower30%entirely blank opaque dark navy label compartment free of icons/decorative intrusions. Specifically whole text ink rectangle from8%to92%canvaswidth and76%to91%canvasheight MUSTbequietnavy; bottomcornerfiligreeonlybelow92%heightoroutside8–92%width. Whole complete card front orthographic view square canvas tight margin. No text,numbers,letters,logo,watermark,screenshot,background,othercardsorcharacters. Only single framed card opaque; all pixels beyond rounded outline actually transparent.",
+      "inputImages": [],
+      "toolOutputPath": "/home/k2/.codex/generated_images/01a09768-3a24-7191-9733-a4c8bbc4f318/exec-81af1cad-cce5-4f17-9ca9-18760b21799e.png",
+      "selected": false,
+      "reason": "RGBA but excessive lateral margins relative to other three cards; narrower complete silhouette. Preserved for history, not selected."
+    }
+  ],
+  "scope": "Only candidate images and QA/provenance written. Root owns copying selected candidates into Sources and production with original .meta files preserved.",
+  "labelGeometry": {
+    "currentRgbAssessment": "Original quiet upper-wide strip approximately x12..188,y140..156 at200x191; lower-central strip approximatelyx29..171,y156..178. Oldy151,font25 live labels overlapped ornaments.",
+    "selectedRgbaIntent": "Near-square frame with blank lower30%, smaller corner curls. Integration owns y144/font23 live label adjustment and actual glyph/Unity verification.",
+    "backingAdvice": "At least10logicalpx inset(180x171inside200x191), radius8, for opaque navy backing; outer alpha must remain transparent."
+  },
+  "verification": "See QA/NavTransparentAlphaChecks.json and QA/NavTransparentReview.html/.png for actual source alpha and browser review; no Unity invocation by asset task."
+}

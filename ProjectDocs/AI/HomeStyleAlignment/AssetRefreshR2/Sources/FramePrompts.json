@@ -1,0 +1,77 @@
+{
+  "tool": "Built-in imagegen; no CLI/API fallback, no deterministic image edits",
+  "references": [
+    "ProjectDocs/AI/HomeStyleAlignment/R1/Home_Alignment_R1_OFFLINE_NOT_UNITY.png",
+    "Assets/LegendsOfRus/Resources/ProductionUI/SplashTitleReconstructed/legends_of_rus_ornate_crest.png"
+  ],
+  "hud": [
+    {
+      "prompt": "Use case: stylized-concept / isolated game UI asset.\nCreate ONE new blank top HUD frame sprite for the existing Russian fairy-tale mobile game, based on attached Home R1 composition (reference only) and approved crest (material reference only).\nAsset: landscape 3:1 image, one rectangular blank panel occupying the ENTIRE canvas; frame's outer edges at image bounds, no surrounding backdrop or padding. UI will use nine-slice scaling to a very wide 897x136 HUD. Keep corners and straight edge bands compatible with nine slicing: no center emblems or central ornament.\nOpaque near-black navy lacquer interior, extremely subtle painted grain. Narrow hand-carved antique-gold double rim, restrained shallow filigree ONLY in small corners; same aged warm gold, navy and painterly fidelity as the crest. Thin frame: max 6% of image height, corner decoration fits within 11% of height. Broad quiet completely empty center must remain usable for live portrait, counter icons, texts and settings overlay.\nFront orthographic view, softly lit warm upper-left bevel, subdued shadow lower-right. Complete frame entirely visible.\nNO text, NO numbers, NO icons, NO jewels in center, NO portrait or logo, NO background scenery, NO buttons, NO drop shadow outside image, NO checkerboard, NO title or asset sheet. Output the control alone as one landscape bitmap with intentionally opaque navy center. Do not reproduce the reference screen.",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-ae904297-2073-42d6-b984-a5cf7b11d941.png",
+      "selected": false,
+      "reason": "Exterior black margins rejected."
+    },
+    {
+      "prompt": "Edit only the attached individual blank UI panel asset. Remove the black bars above and below the frame by changing the panel to fill the whole 3:1 image height: expand the navy panel vertically, move top gold rim to the top image edge and bottom gold rim to the bottom image edge. Gold outer frame must touch all four canvas edges, no margins, no backdrop, no vignette outside frame. Keep same corner filigree and opaque navy textured center, same thin gold borders and antique materials. Entire image is the blank game HUD control surface. No text or icons. This is a production nine-slice rectangle, and blank exterior pixels cannot be used. Do not add new decoration.",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-ba7754c0-36a9-4e78-a62c-88d487ecb8ec.png",
+      "selected": true
+    }
+  ],
+  "initialFrames": [
+    {
+      "key": "quest_panel",
+      "prompt": "Create one blank rectangular quest text panel UI sprite for Russian fairy-tale mobile game. Attached blank HUD is the exact navy/antique-gold material reference. New design has a restrained narrow carved gold double rim, small leaf filigree tucked entirely into corners, opaque very dark navy lacquer interior with barely visible texture for readable LIVE cream text. Landscape canvas 3:1, entire panel fills canvas edge-to-edge; gold rim touches all four edges, absolutely no exterior margins or backdrop. Border only 4% of image height, corner ornaments within 18% of height, wide center completely empty. Front orthographic perspective, soft warm upper-left bevel and subdued lower-right shadow. Intended for nine-slice use at585x137. No text, no numbers, no icons, no quest symbol, no gems at center, no scenery, no checkerboard, no decorative showcase. One complete standalone blank panel.",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-39af2a9b-453b-4e2d-a6e4-be17fb1588f5.png",
+      "selected": true,
+      "reason": "Opaque navy panel accepted; final QA pending."
+    },
+    {
+      "key": "resource_capsule",
+      "prompt": "Generate ONE genuinely isolated game HUD resource counter capsule SPRITE PNG with ACTUAL TRANSPARENT ALPHA background outside its silhouette. Material reference attached blank HUD: aged antique-gold thin double rim with subtle carved detail, very dark navy almost black lacquer opaque center. Landscape3:1 canvas, horizontal stadium/pill shape, occupy whole width and height except a minimal2% transparent safety margin, semicircular rounded ends. Modest bevel, narrow rim about3% of height, no protruding decorations. Broad center is opaque quiet navy, entirely EMPTY for live number and separately placed icon. Front orthographic rendering, warm upper-left light, subdued shadows. Must work at160x59 and142x59 via nine-slice, no backdrop, no black rectangle outside silhouette, no text/numbers/icons, no glow, no checkerboard pattern baked into pixels. Output only one isolated blank capsule; retain opaque navy inside while exterior is actual transparent alpha.",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-e21664e9-c29a-42e2-b761-c0e920df6ef4.png",
+      "selected": false,
+      "reason": "Opaque checkerboard rejected."
+    },
+    {
+      "key": "avatar_ring",
+      "prompt": "Generate ONE isolated thin circular avatar frame sprite PNG with ACTUAL TRANSPARENT ALPHA outside AND in the empty circular portrait opening. Match attached dark navy/antique-gold HUD materials: concentric thin antique-gold sculpted bevels with subtly engraved slavic leaf motif, restrained sapphire tiny inlays at cardinal points only if barely visible. Ring is perfectly circular, centered square canvas, outside diameter96% canvaswidth; narrow annular thickness5% of diameter so interior opening about86% canvaswidth. Designed to go behind an existing portrait at109x109pixels. Front orthographic perspective, subtle warm top-left illumination, smooth strong silhouette, no heavy protrusions. No face/character, no portrait placeholder, no navy disk filling opening, no text, no numbers, no symbols, no backdrop, no checkerboard baked into pixels. Only the golden ring and small dark navy edging remain opaque. Exterior and circular center hole are real transparent alpha.",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-a807a76a-00a2-499f-b46f-648d77d7815d.png",
+      "selected": false,
+      "reason": "Opaque checkerboard rejected."
+    }
+  ],
+  "extractions": [
+    {
+      "key": "resource_capsule",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-e21664e9-c29a-42e2-b761-c0e920df6ef4.png",
+      "prompt": "Background extraction edit. The checkerboard in this image is painted opaque and must be removed, not copied. Return the same blank gold-rimmed navy resource capsule isolated on REAL transparent alpha pixels outside its capsule contour. All grey/white checkerboard squares and exterior shadow must be removed entirely, leaving alpha zero. Preserve the opaque navy panel interior exactly and complete golden border. Fill canvas closely to capsule bounds, at most2% exterior padding; no replacement black, white or colored backdrop and no checkerboard drawing. Actual transparent PNG cutout, not a visualization of transparency.",
+      "result": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-757e28f1-ba04-4c87-a877-e8c04810f557.png",
+      "selected": false,
+      "reason": "Checkerboard remained opaque; rejected."
+    },
+    {
+      "key": "avatar_ring",
+      "path": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-a807a76a-00a2-499f-b46f-648d77d7815d.png",
+      "prompt": "Background extraction edit. The grey checkerboard is currently painted opaque; remove ALL of it from outside the golden ring AND the circular center opening and replace these regions with REAL transparent alpha pixels. Keep only the gold/navy/sapphire ring opaque, complete and unmodified. No portrait, no backing disk. Output one true transparent PNG cutout. Do not paint a checkerboard to represent transparency. Preserve exact original square framing and ring placement and gold filigree. Actual alpha zero where checkerboard existed, no grey/white edge fringe.",
+      "result": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-57dbb1c4-9774-45bf-96c4-594f8305ce0e.png",
+      "selected": false,
+      "reason": "Checkerboard remained opaque; rejected."
+    }
+  ],
+  "fresh": [
+    {
+      "key": "avatar_ring",
+      "prompt": "A thin circular ornate antique-gold avatar portrait frame for a Russian fairy-tale mobile game, on a transparent background. PNG with real alpha transparency outside and in its empty center hole. Navy lacquer and finely engraved golden leaf filigree around the narrow ring, four tiny sapphire accents, softly painted antique metal with warm upper-left light. Perfect centered front view, square canvas, outside diameter98% canvas width, ring thickness4% diameter. Only the ring is visible; no portrait, no text, no backdrop. The open center and exterior are alpha-transparent.",
+      "result": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-9f623472-24aa-44b9-aa48-d3baaf612920.png",
+      "selected": true,
+      "referenceMechanism": "Fresh generation from described inspected material references; no input image on this call."
+    },
+    {
+      "key": "resource_capsule",
+      "prompt": "One empty horizontal pill-shaped resource counter panel for a Russian fairy-tale mobile game, on a transparent background. PNG with real alpha transparency. Landscape3:1 canvas, capsule fills canvas with1% safety margin. Very dark navy lacquer opaque center, narrow embossed antique-gold double rim, perfectly rounded ends, warm upper-left soft painted light, understated metal highlights. Blank center for live UI text and icons. Opaque navy inside, alpha-transparent beyond silhouette. No text, symbols, icons or backdrop.",
+      "result": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-c9a60614-f0a6-49b6-9b4e-6b740173c37e.png",
+      "selected": true,
+      "referenceMechanism": "Fresh generation from described inspected material references; no input image on this call."
+    }
+  ]
+}

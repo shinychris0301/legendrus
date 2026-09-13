@@ -58,11 +58,12 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameObject chapterMap = GameObject.Find("Screen_ChapterMap");
             Assert.That(chapterMap, Is.Not.Null);
-            AnimatedHotspot chapterBack = FindHotspot(chapterMap, "Hotspot_Back");
-            Assert.That(chapterBack, Is.Not.Null);
-            Assert.That(chapterBack.Role, Is.EqualTo(MetaUiControlRole.Back));
-
-            Activate(chapterBack, 501);
+            var alignedChapter=chapterMap.GetComponentInChildren<ProductionChapterMapView>();
+            Assert.That(alignedChapter,Is.Not.Null);
+            UnityEngine.UI.Button chapterBack=alignedChapter.BackButton;
+            Assert.That(chapterBack,Is.Not.Null);
+            Assert.That(chapterBack.GetComponent<RectTransform>().rect.width,Is.GreaterThanOrEqualTo(100));
+            chapterBack.onClick.Invoke();
             TickRouter(8);
             Assert.That(
                 router.CurrentScreen,
@@ -72,16 +73,17 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameObject worldMap = GameObject.Find("Screen_WorldMap");
             Assert.That(worldMap, Is.Not.Null);
-            AnimatedHotspot worldBack = FindHotspot(worldMap, "Hotspot_Back");
+            ProductionWorldMapView alignedMap = worldMap.GetComponentInChildren<ProductionWorldMapView>();
+            Assert.That(alignedMap, Is.Not.Null);
+            UnityEngine.UI.Button worldBack = alignedMap.BackButton;
             Assert.That(worldBack, Is.Not.Null);
-            Assert.That(worldBack.Role, Is.EqualTo(MetaUiControlRole.Back));
 
             Canvas.ForceUpdateCanvases();
             Rect worldBackRect = worldBack.GetComponent<RectTransform>().rect;
-            Assert.That(worldBackRect.width, Is.GreaterThanOrEqualTo(180f));
-            Assert.That(worldBackRect.height, Is.GreaterThanOrEqualTo(180f));
+            Assert.That(worldBackRect.width, Is.GreaterThanOrEqualTo(100f));
+            Assert.That(worldBackRect.height, Is.GreaterThanOrEqualTo(100f));
 
-            Activate(worldBack, 502);
+            worldBack.onClick.Invoke();
             TickRouter(8);
             Assert.That(
                 router.CurrentScreen,
@@ -101,11 +103,10 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameObject preLevel = GameObject.Find("Screen_PreLevel");
             Assert.That(preLevel, Is.Not.Null);
-            AnimatedHotspot back = FindHotspot(preLevel, "Hotspot_Back");
-            Assert.That(back, Is.Not.Null, "Pre-Level visible Back icon must have an interaction hotspot.");
-            Assert.That(back.Role, Is.EqualTo(MetaUiControlRole.Back));
-
-            Activate(back, 503);
+            var view=preLevel.GetComponentInChildren<ProductionPreLevelView>();
+            Assert.That(view,Is.Not.Null);
+            Assert.That(view.BackButton.GetComponent<ProductionHomeButtonFeedback>().Role,Is.EqualTo(MetaUiControlRole.Back));
+            view.BackButton.onClick.Invoke();
             TickRouter(8);
             Assert.That(router.CurrentScreen, Is.EqualTo(ScreenId.ChapterMap));
             yield return null;

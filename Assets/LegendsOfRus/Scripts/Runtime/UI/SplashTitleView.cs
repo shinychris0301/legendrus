@@ -10,7 +10,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class SplashTitleView : MonoBehaviour
     {
-        public const int CurrentRevision = 6;
+        public const int CurrentRevision = 7;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public Button StartButton;
@@ -37,7 +37,22 @@ namespace LegendsOfRus
             AccountText != null && HelpText != null && TaglineText != null && LegalText != null;
         public bool HasResponsiveBindings => GetComponent<SplashTitleForegroundLayout>() != null &&
             GetComponent<SplashTitleForegroundLayout>().HasRequiredBindings;
-        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings && HasResponsiveBindings;
+        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings && HasResponsiveBindings && HasHomeStyleBindings;
+
+        public bool HasHomeStyleBindings => HasArt("Logo", "home_logo") &&
+            HasArt("BackgroundEnvironment", "home_environment_generated") &&
+            HasArt("Ivan", "ivan_splash_dusk") && HasArt("Masha", "masha_dusk") &&
+            StartButton != null && StartButton.targetGraphic is Image start && start.sprite != null &&
+            start.sprite.name == "home_play_button" && StartText != null &&
+            StartText.GetComponent<ProductionHomeGoldText>() != null &&
+            StartText.GetComponent<ProductionHomeGoldText>().BeveledFace;
+
+        bool HasArt(string objectName, string spriteName)
+        {
+            Transform child = transform.Find(objectName);
+            Image image = child != null ? child.GetComponent<Image>() : null;
+            return image != null && image.sprite != null && image.sprite.name == spriteName;
+        }
 
         /// <summary>Diagnostic only: do not conflate an old revision with missing references.</summary>
         public string GetValidationFailure()
@@ -56,6 +71,7 @@ namespace LegendsOfRus
             for (int i = 0; i < references.Length; i++)
                 if (references[i] == null) issues.Add("Missing binding: " + names[i]);
             if (!HasResponsiveBindings) issues.Add("Missing Splash foreground responsive bindings or authored layout");
+            if (!HasHomeStyleBindings) issues.Add("Missing shared Home-style artwork or Start lettering");
             return string.Join("; ", issues);
         }
 

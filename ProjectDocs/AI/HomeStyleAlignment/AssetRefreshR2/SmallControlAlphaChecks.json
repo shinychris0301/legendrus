@@ -1,0 +1,151 @@
+{
+  "kind": "Read-only decoded PNG alpha inspection; no pixel edits",
+  "results": [
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/coin_icon.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 711331,
+      "opaquePixels": 690,
+      "partialAlphaPixels": 860495,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 0,
+        "minY": 95,
+        "maxX": 1199,
+        "maxY": 1198
+      },
+      "sha256": "48245d0b3952aa9eb7258b29077aae76a45f6ee61a7b8d7feb8339d380893f45",
+      "sourceBytesEqual": true
+    },
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/gems_icon.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 1091458,
+      "opaquePixels": 768,
+      "partialAlphaPixels": 480290,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 49,
+        "minY": 21,
+        "maxX": 1199,
+        "maxY": 1229
+      },
+      "sha256": "e93fdcdc24e7cfc98f1854dc374822a7d9ea00c902f4e3b2dc12282257f006df",
+      "sourceBytesEqual": true
+    },
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/energy_icon.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 1291030,
+      "opaquePixels": 655,
+      "partialAlphaPixels": 280831,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 33,
+        "minY": 26,
+        "maxX": 1191,
+        "maxY": 1226
+      },
+      "sha256": "8c3e9b2f9c7680ef7b16926e82e0a148d06cddf920d750985bbb58b7f4c6ca99",
+      "sourceBytesEqual": true
+    },
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/settings_medallion.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 764451,
+      "opaquePixels": 161,
+      "partialAlphaPixels": 807904,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 49,
+        "minY": 19,
+        "maxX": 1199,
+        "maxY": 1253
+      },
+      "sha256": "be580f7e91a607baa224709ccc1065cb5b06b2991d87404c02b36230457c2137",
+      "sourceBytesEqual": true
+    },
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/mail_medallion_generated.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 745769,
+      "opaquePixels": 353,
+      "partialAlphaPixels": 826394,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 0,
+        "minY": 20,
+        "maxX": 1221,
+        "maxY": 1253
+      },
+      "sha256": "df6fa8ed47b3fb7a5032daa5dbf3e8956de611d8b847aae330940ab07c08fa15",
+      "sourceBytesEqual": true
+    },
+    {
+      "file": "ProjectDocs/AI/HomeStyleAlignment/AssetRefreshR2/Sources/reward_medallion_generated.png",
+      "width": 1254,
+      "height": 1254,
+      "channels": 4,
+      "transparentPixels": 733052,
+      "opaquePixels": 655,
+      "partialAlphaPixels": 838809,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "nonzeroAlphaBounds": {
+        "minX": 0,
+        "minY": 29,
+        "maxX": 1221,
+        "maxY": 1253
+      },
+      "sha256": "07b3c6fd7b01bf7d99a544a909e7c32d282d689b5e78dd1971a778cb20329cc4",
+      "sourceBytesEqual": true
+    }
+  ],
+  "visualReview": {
+    "passed": true,
+    "method": "Local headless Chrome screenshot rendered unchanged source PNGs at 160px over black, white and saturated magenta, plus 47/88/113px intended runtime sizes. Inspected screenshot directly.",
+    "artifact": "SmallControlAlphaReview.png",
+    "findings": "No visible checkerboard, scenery contamination, clipped contour or colored matte. Currency symbols remain distinguishable at 47px. Three medallions share restrained dark navy and gold family. Navy interiors remain visually opaque at intended size.",
+    "sourceAlphaCaveat": "Image generator outputs mostly alpha252\u2013253 interior instead of exact255, and sparse alpha1\u20132 speckles outside visible contours. No offline edits, recoloring, thresholding or alpha postprocessing performed. Native opaque backing is suitable if strict interior opacity is needed.",
+    "notPerformed": "Unity import, runtime layout, device test; root agent owns integration and verification."
+  }
+}

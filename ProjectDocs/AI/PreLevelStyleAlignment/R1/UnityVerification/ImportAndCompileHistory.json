@@ -1,0 +1,77 @@
+[
+  {
+    "source": "/tmp/lor-prelevel-r1/import1.log",
+    "sha256": "1f77e8039196b1cd969bc55b6c8aa8d9d444c2a00a3707b6958c495b48aef929",
+    "exitCode": 1,
+    "saveReadbackObserved": false,
+    "errors": [],
+    "note": "Invocation used an incorrect namespace; corrected."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/import2.log",
+    "sha256": "62bed7c6100f4d87bebd11aed36f234c26a60eab14fc94e074ff04278cd03c25",
+    "exitCode": 1,
+    "saveReadbackObserved": false,
+    "errors": [
+      "NullReferenceException: Object reference not set to an instance of an object"
+    ],
+    "note": "Existing Pre-Level uses the R3 marker, not the earlier marker class. Owner corrected, original component retained."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/import3.log",
+    "sha256": "539dea1521229e182583313d2939201ba3488573d03b36c05e9ea773bbfc9455",
+    "exitCode": 1,
+    "saveReadbackObserved": false,
+    "errors": [
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(116,20): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)",
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(132,24): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)",
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(116,20): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)",
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(132,24): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)",
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(116,20): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)",
+      "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs(132,24): error CS1061: 'ScreenRouter' does not contain a definition for 'CloseModal' and no accessible extension method 'CloseModal' accepting a first argument of type 'ScreenRouter' could be found (are you missing a using directive or an assembly reference?)"
+    ],
+    "note": "Test attempted private CloseModal; replaced with actual visible Close interaction."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/import4.log",
+    "sha256": "5ec6cb2100fb622ecc9e9455b8776156ad8db385bba805ad692e2cc25a73e4b1",
+    "exitCode": 0,
+    "saveReadbackObserved": true,
+    "errors": [],
+    "note": "Native prefab saved and read back."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/import-polish.log",
+    "sha256": "911bf20bb35435348d223699d3e5bb92a3890e00497e653d77a1452120e72d7a",
+    "exitCode": 0,
+    "saveReadbackObserved": true,
+    "errors": [],
+    "note": "Lettering moved inside panel surfaces; exact marker/IDs retained."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/import-rewards.log",
+    "sha256": "ec0451edc87989681395d171e777bac08aa134f35e451b6fc6c18107602ed419",
+    "exitCode": 0,
+    "saveReadbackObserved": true,
+    "errors": [],
+    "note": "Bonus reward row lifted clear of lower trim."
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/editmode2/unity.log",
+    "sha256": "f9f0fea3adffe2b7253428fcf48f45aa390790c221ad171aa1cfa55fc17bc5b4",
+    "exitCode": 0,
+    "compilerOrShaderErrors": []
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/finalplay2/unity.log",
+    "sha256": "0a2e63ec2e9966a10a3f72028965978ba90fcc741c668c96704b7de4393901af",
+    "exitCode": 2,
+    "compilerOrShaderErrors": []
+  },
+  {
+    "source": "/tmp/lor-prelevel-r1/splash-recheck/unity.log",
+    "sha256": "e22c2f9e083ac3b6360b4c578a24985ee1652071ddcabfa5fafc230252876fa7",
+    "exitCode": 0,
+    "compilerOrShaderErrors": []
+  }
+]

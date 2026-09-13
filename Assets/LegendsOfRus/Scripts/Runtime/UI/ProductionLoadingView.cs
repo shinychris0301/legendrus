@@ -9,7 +9,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionLoadingView : MonoBehaviour
     {
-        public const int CurrentRevision = 3;
+        public const int CurrentRevision = 4;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public Image Environment;
@@ -29,6 +29,8 @@ namespace LegendsOfRus
         public bool HasRequiredBindings => Revision == CurrentRevision && Typography != null &&
             Environment != null && Environment.sprite != null && Logo != null && Logo.sprite != null &&
             Ivan != null && Ivan.sprite != null && Firebird != null && Firebird.sprite != null &&
+            Logo.sprite.name == "home_logo" && Environment.sprite.name == "loading_environment_dusk" &&
+            Ivan.sprite.name == "ivan_loading_dusk" &&
             TipPanel != null && TipPanel.sprite != null && LowerShade != null &&
             LowerShade.GetComponent<CanvasRenderer>() != null && TipTitle != null && TipBody != null &&
             StatusText != null && PercentText != null && ProgressBar != null &&

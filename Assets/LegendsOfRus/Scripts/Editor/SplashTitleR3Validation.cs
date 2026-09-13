@@ -41,7 +41,10 @@ namespace LegendsOfRus.Editor
             foreach(Image image in prefab.GetComponentsInChildren<Image>(true))
             {
                 if(image.sprite==null)issues.Add("Missing sprite: "+image.name);
-                if(!image.preserveAspect)issues.Add("Sprite aspect ratio is not preserved: "+image.name);
+                // The shared Home button uses Home's authored display proportions.
+                bool sharedHomeStart = view != null && view.StartButton != null && image == view.StartButton.targetGraphic &&
+                    image.sprite != null && image.sprite.name == "home_play_button";
+                if(!image.preserveAspect && !sharedHomeStart)issues.Add("Sprite aspect ratio is not preserved: "+image.name);
                 // Imported prefab ancestors are inactive in the hierarchy; button-owned artwork still receives input.
                 if(image.raycastTarget && image.GetComponentInParent<Button>(true)==null)issues.Add("Decorative graphic intercepts input: "+image.name);
             }

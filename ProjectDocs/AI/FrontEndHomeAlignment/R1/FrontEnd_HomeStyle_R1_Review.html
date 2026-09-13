@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Splash and Loading — Home style alignment</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#090e16;color:#eee3cb}
+body{margin:0;text-align:center}header{padding:22px 16px 12px}h1{font-size:22px;margin:0 0 10px}
+p{max-width:720px;margin:8px auto;line-height:1.5;font-size:14px;color:#c4bdaf}a{color:#e4ba66}
+label{display:inline-block;font-size:14px;margin:10px 8px}select{display:block;padding:9px;margin-top:6px;max-width:100%;background:#142133;color:#f5e7cb;border:1px solid #866a39;border-radius:5px}
+figure{margin:0 auto 24px;width:min(100%,560px)}figcaption{padding:10px;font-size:13px;color:#c4bdaf}img{display:block;width:100%;height:auto}footer{padding:0 16px 24px}
+</style>
+<header>
+<h1>Splash and Loading — Home style alignment</h1>
+<p><a href="../../HomeStyleAlignment/SelectiveLightingR11/Home_SelectiveLighting_R11_Review.html">New Home R11 selective lighting review</a></p>
+<p>Actual Unity captures. Splash and Loading share Home's original crest; Splash also shares its complete emerald button and gold lettering material. Separate dusk-lit characters and autumn environments connect the three pages.</p>
+<label>Page and version<select id="capture">
+<option value="splash">Splash · after · Russian · 941 × 1672</option>
+<option value="splashBefore">Splash · before</option>
+<option value="splashEn">Splash · after · English</option>
+<option value="splashPhone">Splash · narrow phone safe area</option>
+<option value="splashTall">Splash · tall phone safe area</option>
+<option value="loading">Loading · after · Russian · 941 × 1672</option>
+<option value="loadingBefore">Loading · before</option>
+<option value="loadingEn">Loading · after · English</option>
+<option value="loadingPhone">Loading · narrow phone safe area</option>
+<option value="loadingTall">Loading · tall phone safe area</option>
+<option value="actualLoading">Loading · actual measured preparation</option>
+<option value="home">Accepted Home R10 · style reference</option>
+</select></label>
+</header>
+<figure>
+<figcaption id="caption">Actual Unity Splash capture</figcaption>
+<img id="portrait" src="UnityVerification/Splash/Splash_941x1672.png" alt="Home-style Splash screen">
+</figure>
+<footer>
+<p>One complete portrait at a time. Phone sizes and safe areas are simulated in the Editor. Loading's 42% views are explicit layout fixtures; the measured-preparation view records real resource loading.</p>
+<p><a href="ImplementationReport.md">Changes and exact checks</a> · <a href="QA/CharacterAlphaReview.html">Character transparency review</a> · <a href="PromptSet.json">Generated assets and prompts</a></p>
+</footer>
+<script>
+const prior='../../HomeStyleAlignment/SceneToneR10/UnityVerification/';
+const views={
+ splash:['UnityVerification/Splash/Splash_941x1672.png','Splash after · revision 7 · actual Unity · Russian'],
+ splashBefore:[prior+'SplashRegression/Splash_941x1672.png','Splash before · revision 6 · actual Unity'],
+ splashEn:['UnityVerification/Splash/Splash_941x1672_EN.png','Splash after · actual Unity · English'],
+ splashPhone:['UnityVerification/Splash/Splash_576x1280_inferredsafe.png','Splash after · actual Unity · simulated 576 × 1280 safe area'],
+ splashTall:['UnityVerification/Splash/Splash_1080x2400_safearea.png','Splash after · actual Unity · simulated 1080 × 2400 safe area'],
+ loading:['UnityVerification/Loading/Loading_941x1672.png','Loading after · revision 4 · actual Unity · 42% layout fixture'],
+ loadingBefore:[prior+'LoadingRegression/Loading_941x1672.png','Loading before · revision 3 · actual Unity · 42% layout fixture'],
+ loadingEn:['UnityVerification/Loading/Loading_941x1672_EN.png','Loading after · actual Unity · English · 42% layout fixture'],
+ loadingPhone:['UnityVerification/Loading/Loading_576x1280_safearea.png','Loading after · actual Unity · simulated 576 × 1280 safe area · layout fixture'],
+ loadingTall:['UnityVerification/Loading/Loading_1080x2400_safearea.png','Loading after · actual Unity · simulated 1080 × 2400 safe area · layout fixture'],
+ actualLoading:['UnityVerification/Loading/ActualLoading_941x1672.png','Loading after · actual Unity · measured Home resource preparation'],
+ home:[prior+'Home/Home_941x1672_RU.png','Accepted Home R10 · revision 13 · actual Unity · unchanged style reference']
+};
+const capture=document.querySelector('#capture'),portrait=document.querySelector('#portrait');
+async function update(){const [src,label]=views[capture.value];portrait.src=src;portrait.alt=label;await portrait.decode();document.querySelector('#caption').textContent=label;}
+capture.addEventListener('change',()=>{window.viewReady=update();});
+const requested=new URLSearchParams(location.search).get('page');if(views[requested])capture.value=requested;
+window.viewReady=update();
+</script>
+</html>

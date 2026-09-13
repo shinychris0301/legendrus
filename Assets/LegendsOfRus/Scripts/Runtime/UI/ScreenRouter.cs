@@ -181,6 +181,11 @@ namespace LegendsOfRus
 
         public void NavigateBack()
         {
+            if (current == ScreenId.WorldMap && contentRoot != null)
+            {
+                ProductionWorldMapView map = contentRoot.GetComponentInChildren<ProductionWorldMapView>();
+                if (map != null && map.TaskPanel.activeSelf) { map.TaskPanel.SetActive(false); return; }
+            }
             if (splashAuxiliaryRoot.HasValue && current == splashAuxiliaryRoot.Value)
             {
                 splashAuxiliaryRoot = null;
@@ -360,9 +365,7 @@ namespace LegendsOfRus
             if (designReady)
                 BuildInteractionLayer(id, root);
 
-            if (designReady && id == ScreenId.PreLevel)
-                BuildPreLevelDataOverlay(root);
-            else if (designReady && id == ScreenId.Dialogue)
+            if (designReady && id == ScreenId.Dialogue)
                 BuildStoryDialogueOverlay(root);
             else if (designReady && (id == ScreenId.Victory || id == ScreenId.Fail))
                 BuildOutcomeReactionOverlay(root, id);
@@ -576,69 +579,34 @@ namespace LegendsOfRus
                     return;
 
                 case ScreenId.WorldMap:
-                    Hotspot(
-                        parent,
-                        "Chapter1",
-                        180,
-                        260,
-                        600,
-                        1120,
-                        OpenChapterMap,
-                        MetaUiControlRole.MapNode,
-                        true
-                    );
-                    // Step 5 functional QA hardening: use an explicit source-bound
-                    // callback and a larger touch target around the visible icon.
-                    // This removes ambiguity from delayed button dispatch while the
-                    // hardware Back path continues to use the same central policy.
-                    Hotspot(
-                        parent,
-                        "Back",
-                        0,
-                        1450,
-                        210,
-                        205,
-                        () => NavigateBackFrom(ScreenId.WorldMap)
-                    );
-                    break;
+                    ProductionWorldMapView worldMap = parent.GetComponentInChildren<ProductionWorldMapView>();
+                    if (worldMap == null || !worldMap.HasRequiredBindings)
+                    {
+                        Debug.LogError("World Map has no complete native bindings.");
+                        return;
+                    }
+                    worldMap.BindNavigation(target => Show(target), OpenChapterMap,
+                        () => NavigateBackFrom(ScreenId.WorldMap), Toast);
+                    return;
 
                 case ScreenId.ChapterMap:
-                    Hotspot(
-                        parent,
-                        "LevelPath",
-                        250,
-                        350,
-                        450,
-                        900,
-                        OpenSelectedLevel,
-                        MetaUiControlRole.MapNode,
-                        true
-                    );
-                    Hotspot(
-                        parent,
-                        "Back",
-                        0,
-                        1400,
-                        210,
-                        250,
-                        () => NavigateBackFrom(ScreenId.ChapterMap)
-                    );
-                    Hotspot(parent, "Play", 270, 1435, 400, 130, OpenSelectedLevel);
-                    break;
+                    ProductionChapterMapView chapterMap=parent.GetComponentInChildren<ProductionChapterMapView>();
+                    if(chapterMap==null||!chapterMap.HasRequiredBindings)
+                    {
+                        Debug.LogError("Chapter Map has no complete native bindings.");return;
+                    }
+                    chapterMap.BindNavigation(target=>Show(target),OpenSelectedLevel,
+                        ()=>NavigateBackFrom(ScreenId.ChapterMap),Toast);
+                    return;
 
                 case ScreenId.PreLevel:
-                    Hotspot(parent, "Boosters", 110, 850, 720, 285, () => ShowModal(ScreenId.BoosterSelect));
-                    Hotspot(parent, "StartLevel", 205, 1435, 535, 190, StartLevel);
-                    Hotspot(
-                        parent,
-                        "Back",
-                        0,
-                        1395,
-                        205,
-                        260,
-                        () => NavigateBackFrom(ScreenId.PreLevel)
-                    );
-                    break;
+                    var preparation=parent.GetComponentInChildren<ProductionPreLevelView>();
+                    if(preparation==null||!preparation.HasRequiredBindings)
+                        throw new InvalidOperationException("Pre-Level native bindings are missing.");
+                    preparation.BindNavigation(target=>Show(target),
+                        ()=>{StartLevel();return current!=ScreenId.PreLevel;},
+                        ()=>NavigateBackFrom(ScreenId.PreLevel),()=>ShowModal(ScreenId.BoosterSelect));
+                    return;
 
                 case ScreenId.Gameplay:
                     BuildGameplayOverlay(parent);
@@ -1502,12 +1470,12 @@ namespace LegendsOfRus
 
         void BuildGameplayOverlay(RectTransform parent)
         {
-            // Exact board bounds measured from the approved Gameplay page:
-            // x 79..865, y 357..1299. Data-driven dimensions scale inside this locked rect.
+            var view = parent.GetComponentInChildren<ProductionGameplayView>();
+            if (view == null || !view.HasRequiredBindings)
+                throw new InvalidOperationException("Gameplay requires the aligned native prefab.");
             var boardGo = new GameObject("RuntimeMatch3Board", typeof(RectTransform), typeof(Match3Board));
-            boardGo.transform.SetParent(parent, false);
-            var rt = boardGo.GetComponent<RectTransform>();
-            SetPixelRect(rt, 79, 357, 786, 942);
+            boardGo.transform.SetParent(view.BoardMount, false);
+            Stretch(boardGo.GetComponent<RectTransform>());
 
             activeBoard = boardGo.GetComponent<Match3Board>();
             activeBoard.Initialize(
@@ -1561,63 +1529,8 @@ namespace LegendsOfRus
                 }
             );
 
-            var movesText = CreateMaskedValue(
-                parent,
-                "MovesDynamic",
-                425,
-                122,
-                130,
-                90,
-                activeBoard.Moves.ToString(),
-                54
-            );
-            var goalSlot1Text = CreateMaskedValue(
-                parent,
-                "GoalSlot1Dynamic",
-                672,
-                132,
-                70,
-                62,
-                activeBoard.GoalSlot1Remaining.ToString(),
-                35
-            );
-            var goalSlot2Text = CreateMaskedValue(
-                parent,
-                "GoalSlot2Dynamic",
-                798,
-                132,
-                70,
-                62,
-                activeBoard.GoalSlot2Remaining.ToString(),
-                35
-            );
-            var scoreText = CreateMaskedValue(
-                parent,
-                "ScoreDynamic",
-                265,
-                1530,
-                410,
-                82,
-                activeBoard.Score.ToString("N0").Replace(",", " "),
-                44
-            );
-
-            activeBoard.MovesChanged += value => movesText.text = value.ToString();
-            activeBoard.GoalSlotsChanged += (first, second) =>
-            {
-                goalSlot1Text.text = first.ToString();
-                goalSlot2Text.text = second.ToString();
-            };
-            activeBoard.ScoreChanged += value => scoreText.text = value.ToString("N0").Replace(",", " ");
-
-            // Keep the baked button artwork untouched while preventing its
-            // invisible hit rectangles from overlapping the board's bottom
-            // row (board ends at design y=1299).
-            Hotspot(parent, "Mace", 45, 1300, 195, 195, () => activeBoard?.UseBooster(BoosterType.BogatyrMace), MetaUiControlRole.Gameplay);
-            Hotspot(parent, "Firebird", 245, 1300, 195, 195, () => activeBoard?.UseBooster(BoosterType.Firebird), MetaUiControlRole.Gameplay);
-            Hotspot(parent, "LivingLight", 445, 1300, 195, 195, () => activeBoard?.UseBooster(BoosterType.LivingLight), MetaUiControlRole.Gameplay);
-            Hotspot(parent, "SeaPearl", 645, 1300, 189, 195, () => activeBoard?.UseBooster(BoosterType.SeaPearl), MetaUiControlRole.Gameplay);
-            Hotspot(parent, "Pause", 835, 1310, 100, 165, ShowPause, MetaUiControlRole.Gameplay);
+            view.Bind(activeBoard, ShowPause);
+            view.GetComponent<ProductionGameplayLayout>().ApplyNow();
 
             var tutorialGo = new GameObject(
                 "LevelTutorialPresenter",
@@ -1928,6 +1841,9 @@ namespace LegendsOfRus
 
         bool UsesTopHud(ScreenId id)
         {
+            if (id == ScreenId.PreLevel) return false; // Native page owns its live HUD.
+            if (id == ScreenId.ChapterMap) return false; // Native page owns its live HUD.
+            if (id == ScreenId.WorldMap) return false; // The aligned page owns its live Home-style HUD.
             switch (id)
             {
                 case ScreenId.WorldMap:

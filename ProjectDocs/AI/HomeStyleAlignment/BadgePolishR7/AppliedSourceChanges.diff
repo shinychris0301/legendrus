@@ -1,0 +1,566 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -100,7 +100,7 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 9
++  Revision: 10
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
+   Logo: {fileID: 7198921559894690644}
+@@ -379,6 +379,7 @@
+   Radius: 16.5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -1374,6 +1375,7 @@
+   Radius: 16.5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -1563,6 +1565,7 @@
+   Radius: 8
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -1783,6 +1786,9 @@
+   - component: {fileID: 1583323253002149699}
+   - component: {fileID: 2109964010306383607}
+   - component: {fileID: 5066404954832983803}
++  - component: {fileID: 6232196878931347945}
++  - component: {fileID: 406410210569812257}
++  - component: {fileID: 6190284611048053595}
+   m_Layer: 5
+   m_Name: EventMarkerCopy
+   m_TagString: Untagged
+@@ -1851,6 +1857,55 @@
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: '!'
++--- !u!114 &6232196878931347945
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2352221135156648217}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 2050f6ff92824cffa76944e85fd81368, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleTextGeometry
++  CenterHorizontally: 1
++  CenterVertically: 1
++  SnapToScreenPixels: 1
++  OpticalOffset: {x: 0, y: 0}
++--- !u!114 &406410210569812257
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2352221135156648217}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
++  m_EffectColor: {r: 0.2, g: 0.03529412, b: 0.011764706, a: 0.9019608}
++  m_EffectDistance: {x: 1.6, y: -2}
++  m_UseGraphicAlpha: 1
++--- !u!114 &6190284611048053595
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2352221135156648217}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: e33c805ca54fc546883e1086b3b567a9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeGoldText
++  TopColor:
++    serializedVersion: 2
++    rgba: 4292934399
++  BottomColor:
++    serializedVersion: 2
++    rgba: 4284463336
+ --- !u!1 &2436933906653320980
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2003,6 +2058,7 @@
+   Radius: 0
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0, g: 0, b: 0, a: 0}
+   RightColor: {r: 0, g: 0, b: 0, a: 0}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -2513,6 +2569,7 @@
+   Radius: 3
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.07450981, g: 0.047058824, b: 0.015686275, a: 1}
+   RightColor: {r: 0.07450981, g: 0.047058824, b: 0.015686275, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -2957,6 +3014,7 @@
+   Radius: 8
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -3717,6 +3775,7 @@
+   Radius: 70.5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -4141,6 +4200,9 @@
+   - component: {fileID: 5857074310462076416}
+   - component: {fileID: 1069884975258159892}
+   - component: {fileID: 8721207939940877628}
++  - component: {fileID: 9183332892550360482}
++  - component: {fileID: 6167761878203260907}
++  - component: {fileID: 8071587870949448504}
+   m_Layer: 5
+   m_Name: AvailableCount
+   m_TagString: Untagged
+@@ -4188,7 +4250,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.9098039, g: 0.81960785, b: 0.63529414, a: 1}
++  m_Color: {r: 0.972549, g: 0.8784314, b: 0.627451, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -4209,6 +4271,55 @@
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: 1
++--- !u!114 &9183332892550360482
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5106325731597952188}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 2050f6ff92824cffa76944e85fd81368, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleTextGeometry
++  CenterHorizontally: 1
++  CenterVertically: 1
++  SnapToScreenPixels: 1
++  OpticalOffset: {x: 0, y: 0}
++--- !u!114 &6167761878203260907
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5106325731597952188}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
++  m_EffectColor: {r: 0.2, g: 0.03529412, b: 0.011764706, a: 0.9019608}
++  m_EffectDistance: {x: 1.6, y: -2}
++  m_UseGraphicAlpha: 1
++--- !u!114 &8071587870949448504
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5106325731597952188}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: e33c805ca54fc546883e1086b3b567a9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeGoldText
++  TopColor:
++    serializedVersion: 2
++    rgba: 4292934399
++  BottomColor:
++    serializedVersion: 2
++    rgba: 4284463336
+ --- !u!1 &5265791798792541695
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4357,6 +4468,7 @@
+   Radius: 16.5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -4428,6 +4540,7 @@
+   Radius: 0
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -4499,6 +4612,7 @@
+   Radius: 8
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -4721,6 +4835,7 @@
+   Radius: 23
+   Frame: 1
+   CornerJewels: 0
++  RaisedBadge: 1
+   LeftColor: {r: 0.49411765, g: 0.08627451, b: 0.02745098, a: 1}
+   RightColor: {r: 0.49411765, g: 0.08627451, b: 0.02745098, a: 1}
+   BorderColor: {r: 0.72156864, g: 0.5176471, b: 0.20784314, a: 1}
+@@ -5291,6 +5406,7 @@
+   Radius: 8
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -5516,6 +5632,7 @@
+   Radius: 4
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.08627451, g: 0.050980393, b: 0.02745098, a: 1}
+   RightColor: {r: 0.08627451, g: 0.050980393, b: 0.02745098, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -5765,6 +5882,7 @@
+   Radius: 5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -6073,6 +6191,7 @@
+   Radius: 0
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0, g: 0, b: 0, a: 0}
+   RightColor: {r: 0, g: 0, b: 0, a: 0}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -6215,6 +6334,7 @@
+   Radius: 22
+   Frame: 1
+   CornerJewels: 0
++  RaisedBadge: 1
+   LeftColor: {r: 0.43137255, g: 0.0627451, b: 0.02745098, a: 1}
+   RightColor: {r: 0.43137255, g: 0.0627451, b: 0.02745098, a: 1}
+   BorderColor: {r: 0.72156864, g: 0.5176471, b: 0.20784314, a: 1}
+@@ -6288,6 +6408,7 @@
+   Radius: 67
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.02745098, g: 0.09411765, b: 0.16470589, a: 1}
+   RightColor: {r: 0.02745098, g: 0.09411765, b: 0.16470589, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -6594,6 +6715,7 @@
+   Radius: 12
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0, g: 0, b: 0, a: 0}
+   RightColor: {r: 0, g: 0, b: 0, a: 0}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -6932,6 +7054,7 @@
+   Radius: 0
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.023529412, g: 0.03137255, b: 0.043137256, a: 1}
+   RightColor: {r: 0.023529412, g: 0.03137255, b: 0.043137256, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+@@ -7003,6 +7126,7 @@
+   Radius: 70.5
+   Frame: 0
+   CornerJewels: 0
++  RaisedBadge: 0
+   LeftColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   RightColor: {r: 0.019607844, g: 0.039215688, b: 0.07058824, a: 1}
+   BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomePanel.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomePanel.cs
+@@ -10,6 +10,7 @@
+         public float Radius = 13f;
+         public bool Frame = true;
+         public bool CornerJewels;
++        public bool RaisedBadge;
+         public Color LeftColor = new Color32(15, 29, 42, 255);
+         public Color RightColor = new Color32(9, 19, 32, 255);
+         public Color BorderColor = new Color32(176, 140, 80, 255);
+@@ -19,6 +20,7 @@
+             vh.Clear();
+             Rect r = GetPixelAdjustedRect();
+             if (r.width <= 0 || r.height <= 0) return;
++            if (RaisedBadge) { DrawRaisedBadge(vh, r); return; }
+             if (Frame)
+             {
+                 Rounded(vh, r, Radius, BorderColor, BorderColor);
+@@ -34,6 +36,98 @@
+                 Diamond(vh, new Vector2(r.xMax - 17, r.yMax - 17), 10, BorderColor);
+                 Diamond(vh, new Vector2(r.xMax - 17, r.yMax - 17), 9, new Color32(22, 43, 66, 255));
+             }
++        }
++
++        // Badge-only native geometry. Lighting is authored in UI space, so the small
++        // ruby dome and rolled metal rim remain legible at either phone scale.
++        const int BadgeSegments = 72;
++        void DrawRaisedBadge(VertexHelper vh, Rect rect)
++        {
++            float radius = Mathf.Min(rect.width, rect.height) * .5f;
++            Vector2 center = rect.center;
++            Vector2 shadowCenter = center + new Vector2(.045f, -.095f) * radius;
++            for (int i = 0; i < 5; i++)
++            {
++                float outer = 1.19f - i * .05f, inner = outer - .05f;
++                Color a = new Color(0.035f, .012f, .008f, i * i * .025f);
++                Color b = new Color(a.r, a.g, a.b, (i + 1) * (i + 1) * .025f);
++                BadgeBand(vh, shadowCenter, radius, outer, inner, a, a, b, b);
++            }
++            Color contact = new Color(.035f, .012f, .008f, .625f);
++            BadgeBand(vh, shadowCenter, radius, .94f, 0, contact, contact, contact, contact);
++            // Alternating lit shoulders and shaded grooves model a rolled gold rim.
++            Color32 dark = new Color32(49, 20, 6, 255);
++            BadgeBand(vh, center, radius, 1.015f, 1f,
++                new Color32(129, 76, 21, 0), new Color32(35, 12, 3, 0),
++                new Color32(194, 129, 43, 255), dark);
++            BadgeBand(vh, center, radius, 1f, .967f,
++                new Color32(194, 129, 43, 255), dark,
++                new Color32(255, 242, 190, 255), new Color32(167, 95, 24, 255));
++            BadgeBand(vh, center, radius, .967f, .895f,
++                new Color32(255, 242, 190, 255), new Color32(167, 95, 24, 255),
++                new Color32(205, 145, 49, 255), new Color32(96, 43, 9, 255));
++            BadgeBand(vh, center, radius, .895f, .85f,
++                new Color32(205, 145, 49, 255), new Color32(96, 43, 9, 255),
++                new Color32(69, 26, 6, 255), new Color32(38, 11, 3, 255));
++            BadgeBand(vh, center, radius, .85f, .807f,
++                new Color32(100, 45, 11, 255), new Color32(221, 146, 47, 255),
++                new Color32(176, 101, 22, 255), new Color32(255, 214, 121, 255));
++            BadgeBand(vh, center, radius, .807f, .78f,
++                new Color32(85, 14, 6, 255), new Color32(51, 6, 4, 255),
++                RubyColor(Vector2.up), RubyColor(Vector2.down));
++
++            const int rings = 14;
++            int origin = vh.currentVertCount;
++            vh.AddVert(center, RubyColor(Vector2.zero) * color, Vector2.zero);
++            for (int ring = 1; ring <= rings; ring++)
++            {
++                int start = vh.currentVertCount;
++                for (int segment = 0; segment < BadgeSegments; segment++)
++                {
++                    float angle = segment * 2 * Mathf.PI / BadgeSegments;
++                    Vector2 point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * (ring / (float)rings);
++                    vh.AddVert(center + point * (.78f * radius), RubyColor(point) * color, Vector2.zero);
++                }
++                for (int segment = 0; segment < BadgeSegments; segment++)
++                {
++                    int next = (segment + 1) % BadgeSegments;
++                    if (ring == 1) vh.AddTriangle(origin, start + segment, start + next);
++                    else
++                    {
++                        int previous = start - BadgeSegments;
++                        vh.AddTriangle(previous + segment, start + segment, start + next);
++                        vh.AddTriangle(previous + segment, start + next, previous + next);
++                    }
++                }
++            }
++        }
++
++        void BadgeBand(VertexHelper vh, Vector2 center, float radius, float outer, float inner,
++            Color upperOuter, Color lowerOuter, Color upperInner, Color lowerInner)
++        {
++            int start = vh.currentVertCount;
++            for (int i = 0; i <= BadgeSegments; i++)
++            {
++                float angle = i * 2 * Mathf.PI / BadgeSegments;
++                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
++                float light = Mathf.Clamp01(.5f + .5f * Vector2.Dot(direction, new Vector2(-.6f, .8f)));
++                vh.AddVert(center + direction * (radius * outer), Color.Lerp(lowerOuter, upperOuter, light) * color, Vector2.zero);
++                vh.AddVert(center + direction * (radius * inner), Color.Lerp(lowerInner, upperInner, light) * color, Vector2.zero);
++                if (i == 0) continue;
++                int n = start + i * 2;
++                vh.AddTriangle(n - 2, n, n + 1);
++                vh.AddTriangle(n - 2, n + 1, n - 1);
++            }
++        }
++
++        static Color RubyColor(Vector2 point)
++        {
++            Vector2 slope = point * .82f;
++            Vector3 normal = new Vector3(slope.x, slope.y, Mathf.Sqrt(Mathf.Max(0, 1 - slope.sqrMagnitude)));
++            float diffuse = Mathf.Clamp01(Vector3.Dot(normal, new Vector3(-.4f, .55f, .7331439f)));
++            Color ruby = Color.Lerp(new Color32(46, 2, 6, 255), new Color32(204, 33, 21, 255), diffuse * diffuse);
++            float highlight = Mathf.Pow(Mathf.Clamp01(Vector3.Dot(normal, new Vector3(-.25f, .37f, .8947625f))), 70);
++            return Color.Lerp(ruby, new Color32(255, 203, 159, 255), highlight * .73f);
+         }
+ 
+         static Rect Inset(Rect r, float d) => new Rect(r.x + d, r.y + d, Mathf.Max(0, r.width - d * 2), Mathf.Max(0, r.height - d * 2));
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -185,6 +185,7 @@
+             view.EventsBadgeText = EnsureLabel(view.EventsBadge.rectTransform, "EventMarkerCopy", "!", 0, 0, 46, 46, 38, view.Typography);
+             view.EventsBadgeText.color = new Color32(248, 224, 160, 255);
+             view.EventsBadgeText.fontStyle = FontStyle.Bold;
++            AlignBadgeLabel(view.EventsBadgeText);
+             view.EventsBadge.gameObject.SetActive(true);
+             SetRect(layout.Footer, 0, 1450, 941, 222);
+             // A whole independently painted surround joins the three existing footer
+@@ -234,6 +235,7 @@
+             RectTransform reward = view.DailyRewardButton.transform as RectTransform;
+             view.DailyRewardBadge = EnsureNativeDisk(reward, "AvailableRewardBadge", 132, 0, 44, new Color32(110, 16, 7, 255));
+             view.DailyRewardBadgeText = EnsureLabel(view.DailyRewardBadge.rectTransform, "AvailableCount", "1", 0, 0, 44, 44, 29, view.Typography);
++            AlignBadgeLabel(view.DailyRewardBadgeText);
+             view.DailyRewardBadge.gameObject.SetActive(false);
+             view.Revision = ProductionHomeView.CurrentRevision;
+         }
+@@ -400,9 +402,27 @@
+             Transform found = parent.Find(name);
+             ProductionHomePanel panel = found != null ? found.GetComponent<ProductionHomePanel>() : Panel(parent, name, x, y, size, size, size * .5f);
+             SetRect(panel.rectTransform, x, y, size, size);
+-            panel.Frame = true; panel.BorderColor = new Color32(184, 132, 53, 255);
++            panel.Frame = true; panel.RaisedBadge = true;
++            panel.BorderColor = new Color32(184, 132, 53, 255);
+             panel.LeftColor = panel.RightColor = color; panel.raycastTarget = false;
+             return panel;
++        }
++        static void AlignBadgeLabel(Text label)
++        {
++            label.color = new Color32(248, 224, 160, 255);
++            SplashTitleTextGeometry geometry = label.GetComponent<SplashTitleTextGeometry>();
++            if (geometry == null) geometry = label.gameObject.AddComponent<SplashTitleTextGeometry>();
++            geometry.enabled = true;
++            geometry.CenterHorizontally = geometry.CenterVertically = geometry.SnapToScreenPixels = true;
++            geometry.OpticalOffset = Vector2.zero;
++            Shadow shadow = label.GetComponent<Shadow>();
++            if (shadow == null) shadow = label.gameObject.AddComponent<Shadow>();
++            shadow.enabled = true; shadow.effectColor = new Color32(51, 9, 3, 230);
++            shadow.effectDistance = new Vector2(1.6f, -2f); shadow.useGraphicAlpha = true;
++            ProductionHomeGoldText gold = label.GetComponent<ProductionHomeGoldText>();
++            if (gold == null) gold = label.gameObject.AddComponent<ProductionHomeGoldText>();
++            gold.enabled = true; gold.TopColor = new Color32(255, 250, 224, 255);
++            gold.BottomColor = new Color32(232, 184, 95, 255);
+         }
+         static void EnsureBacking(RectTransform parent, string name, float x, float y, float w, float h, float radius, int sibling, Color? tint = null)
+         {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 9;
++        public const int CurrentRevision = 10;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
+@@ -108,7 +108,8 @@
+             HasButtonArtwork(GoldPlusButton, "resource_plus") && HasButtonArtwork(GemsPlusButton, "resource_plus") &&
+             HasButtonArtwork(EnergyPlusButton, "resource_plus") && QuestProgressText != null &&
+             QuestRewardText != null && DailyRewardBadge != null && DailyRewardBadgeText != null &&
+-            EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget;
++            EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget &&
++            EventsBadge.RaisedBadge && DailyRewardBadge.RaisedBadge && !DailyRewardBadge.raycastTarget;
+ 
+         bool HasReferencePortrait => ProfileButton != null &&
+             ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait") != null &&
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -628,7 +628,39 @@
+             Assert.That(view.EventsBadge.raycastTarget, Is.False);
+             Assert.That(view.EventsBadgeText.text, Is.EqualTo("!"));
+             Assert.That(view.EventsBadgeText.canvasRenderer.GetMesh().vertexCount, Is.GreaterThan(0));
+-
++            AssertRaisedBadge(view.EventsBadge, view.EventsBadgeText);
++            AssertRaisedBadge(view.DailyRewardBadge, view.DailyRewardBadgeText);
++        }
++
++        static void AssertRaisedBadge(ProductionHomePanel badge, Text label)
++        {
++            Assert.That(badge.RaisedBadge, Is.True);
++            Assert.That(badge.raycastTarget || label.raycastTarget, Is.False,
++                "Raised notification artwork must not intercept the underlying control.");
++            if (!badge.isActiveAndEnabled) return;
++            Mesh mesh = badge.canvasRenderer.GetMesh();
++            Assert.That(mesh, Is.Not.Null);
++            var colors = new HashSet<Color32>(mesh.colors32);
++            Assert.That(colors.Count, Is.GreaterThan(32), "Dome and metal need directional shading, not flat fill bands.");
++            float radius = badge.rectTransform.rect.width * .5f;
++            Vector2 center = badge.rectTransform.rect.center;
++            bool partialShadowOutsideFace = false;
++            Vector3[] vertices = mesh.vertices;
++            Color32[] paintedColors = mesh.colors32;
++            for (int i = 0; i < vertices.Length; i++)
++            {
++                Vector3 p = vertices[i];
++                Assert.That(float.IsNaN(p.x) || float.IsNaN(p.y) || float.IsInfinity(p.x) || float.IsInfinity(p.y), Is.False);
++                float distance = Vector2.Distance(p, center);
++                Assert.That(distance, Is.LessThanOrEqualTo(radius * 1.35f), "Badge shadow must stay close to its unchanged footprint.");
++                Color32 c = paintedColors[i];
++                if (distance > radius && c.a > 0 && c.a < 255 && c.r < 20) partialShadowOutsideFace = true;
++            }
++            Assert.That(partialShadowOutsideFace, Is.True, "A translucent contact shadow must separate the badge from its icon.");
++            Mesh lettering = label.canvasRenderer.GetMesh();
++            Assert.That(lettering, Is.Not.Null);
++            Assert.That(lettering.triangles.Length, Is.EqualTo(label.text.Length * 12), "Live badge glyphs and one native emboss shadow stay complete.");
++            Assert.That(label.GetComponent<ProductionHomeGoldText>().enabled, Is.True);
+         }
+ 
+         static void AssertHeroLowerFadeMesh(ProductionHomeView view)
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -367,6 +367,23 @@
+             Assert.That(home.EventsBadgeText.text, Is.EqualTo("!"));
+             Assert.That(home.EventsBadgeText.raycastTarget, Is.False);
+             Assert.That(home.EventsBadge.GetComponentsInChildren<Button>(true), Is.Empty);
++            foreach (ProductionHomePanel badge in new[] { home.EventsBadge, home.DailyRewardBadge })
++            {
++                Assert.That(badge.RaisedBadge, Is.True);
++                Assert.That(badge.raycastTarget, Is.False);
++            }
++            AssertRect(home.DailyRewardBadge.rectTransform, new Vector2(132, 0), new Vector2(44, 44));
++            foreach (Text label in new[] { home.EventsBadgeText, home.DailyRewardBadgeText })
++            {
++                Assert.That(label.raycastTarget, Is.False);
++                Assert.That(label.GetComponent<Shadow>(), Is.Not.Null);
++                Assert.That(label.GetComponent<ProductionHomeGoldText>(), Is.Not.Null);
++                Component[] effects = label.GetComponents<Component>();
++                Assert.That(Array.IndexOf(effects, label.GetComponent<SplashTitleTextGeometry>()),
++                    Is.LessThan(Array.IndexOf(effects, label.GetComponent<Shadow>())));
++            }
++            Assert.That(home.GetComponentsInChildren<ProductionHomePanel>(true).Count(p => p.RaisedBadge), Is.EqualTo(2),
++                "The shared panel renderer's new style must apply only to the Event and Gift badges.");
+             Assert.That(home.Buttons().Length, Is.EqualTo(12));
+         }
+ 

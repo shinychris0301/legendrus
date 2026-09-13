@@ -1,0 +1,839 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -85,7 +85,7 @@
+   screenId: 1
+   referenceMatchVersion: v1.20-step03.3R2
+   referenceSha256: 7509bdd1fee910207eb5287a1eb69700c6ac44f816fd4f209e524d56be2b64e8
+-  productionComponentCount: 25
++  productionComponentCount: 26
+   fullScreenScreenshotDependency: 0
+   referenceMatchStaticComposition: 1
+ --- !u!114 &5346131818961748011
+@@ -100,9 +100,11 @@
+   m_Script: {fileID: 11500000, guid: 4b896bf9fb7a41d898da4fc5448e873b, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeView
+-  Revision: 11
++  Revision: 12
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Environment: {fileID: 8511177260388426389}
++  BackgroundShade: {fileID: 1584650500042039569}
++  MapFoliage: {fileID: 1344163355500975160}
+   Logo: {fileID: 7198921559894690644}
+   Ivan: {fileID: 237484906469378612}
+   Firebird: {fileID: 810242076078606372}
+@@ -1407,6 +1409,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 2018594972847864278}
+   - {fileID: 4687560382616178551}
+   - {fileID: 6813047075803215114}
+   - {fileID: 5745207334874800501}
+@@ -4116,6 +4119,72 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleCharacterFade
+   BottomFraction: 0.08
++--- !u!1 &4863892689736233250
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 1972584308000218835}
++  - component: {fileID: 6069292662172766145}
++  - component: {fileID: 1584650500042039569}
++  m_Layer: 5
++  m_Name: BackgroundTone
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &1972584308000218835
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4863892689736233250}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3210408682002951492}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 0}
++  m_AnchorMax: {x: 1, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 0, y: 0}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6069292662172766145
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4863892689736233250}
++  m_CullTransparentMesh: 1
++--- !u!114 &1584650500042039569
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4863892689736233250}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 83e51f4e2a1647cb93a90817f84be5c6, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeBackdropShade
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.015686275, g: 0.03529412, b: 0.0627451, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Strength: 1
+ --- !u!1 &5067105076234566755
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5289,6 +5358,81 @@
+   m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &7149313010442236589
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 2018594972847864278}
++  - component: {fileID: 1558803172930652857}
++  - component: {fileID: 1344163355500975160}
++  m_Layer: 5
++  m_Name: MapSideFoliage
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &2018594972847864278
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7149313010442236589}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 7654781394354521722}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: -68, y: 15}
++  m_SizeDelta: {x: 117, y: 234}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &1558803172930652857
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7149313010442236589}
++  m_CullTransparentMesh: 1
++--- !u!114 &1344163355500975160
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7149313010442236589}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 94bad924675b43dcadb2595547a51117, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -7317,7 +7461,8 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children: []
++  m_Children:
++  - {fileID: 1972584308000218835}
+   m_Father: {fileID: 4216658642492348165}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -17,7 +17,8 @@
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+             "home_hero_firebird", "home_logo", "home_play_button", "avatar_portrait", "hud_frame", "avatar_ring",
+             "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+-            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated"
++            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
++            "home_map_foliage"
+         };
+         static readonly string[] TextureKeys = Array.ConvertAll(TextureNames, name => ArtRoot + name);
+         public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);
+@@ -238,7 +239,35 @@
+             view.DailyRewardBadgeText = EnsureLabel(view.DailyRewardBadge.rectTransform, "AvailableCount", "1", 0, 0, 44, 44, 29, view.Typography);
+             AlignBadgeLabel(view.DailyRewardBadgeText);
+             view.DailyRewardBadge.gameObject.SetActive(false);
++            AlignReferenceBackdrop(view, layout, sprites["home_map_foliage"]);
+             view.Revision = ProductionHomeView.CurrentRevision;
++        }
++
++        static void AlignReferenceBackdrop(ProductionHomeView view, ProductionHomeLayout layout, Sprite foliage)
++        {
++            // The wash follows the full environment plate on every aspect ratio. As
++            // its child, it can never dim the separately layered hero or controls.
++            RectTransform environment = view.Environment.rectTransform;
++            Transform found = environment.Find("BackgroundTone");
++            view.BackgroundShade = found != null ? found.GetComponent<ProductionHomeBackdropShade>() :
++                Rect(environment, "BackgroundTone", 0, 0, 941, 1672).gameObject.AddComponent<ProductionHomeBackdropShade>();
++            RectTransform shade = view.BackgroundShade.rectTransform;
++            shade.anchorMin = Vector2.zero; shade.anchorMax = Vector2.one;
++            shade.offsetMin = shade.offsetMax = Vector2.zero;
++            view.BackgroundShade.color = new Color32(4, 9, 16, 255);
++            view.BackgroundShade.Strength = 1;
++            view.BackgroundShade.raycastTarget = false;
++            view.BackgroundShade.enabled = true; shade.gameObject.SetActive(true);
++            shade.SetAsFirstSibling();
++
++            // Keep the complete isolated sprig above the hero, but below BOTH the
++            // existing opaque card backings and their artwork. Navigation already
++            // follows the safe bottom, so this decoration needs no layout owner.
++            view.MapFoliage = EnsureArt(layout.Navigation, "MapSideFoliage", foliage, -68, -15, 117, 234);
++            view.MapFoliage.raycastTarget = false;
++            view.MapFoliage.enabled = true;
++            view.MapFoliage.gameObject.SetActive(true);
++            view.MapFoliage.transform.SetAsFirstSibling();
+         }
+ 
+         static void AlignReferencePortrait(ProductionHomeView view, Sprite referencePortrait)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -10,10 +10,12 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionHomeView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 11;
++        public const int CurrentRevision = 12;
+         public int Revision = CurrentRevision;
+         public SplashTitleTypography Typography;
+         public Image Environment;
++        public ProductionHomeBackdropShade BackgroundShade;
++        public Image MapFoliage;
+         public Image Logo;
+         public Image Ivan;
+         public Image Firebird;
+@@ -81,7 +83,21 @@
+             ProfileButton != null && SettingsButton != null && PlayButton != null &&
+             WorldMapButton != null && ShopButton != null && EventsButton != null &&
+             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
+-            HasGeneratedControlBindings && HasReferenceForegroundBindings;
++            HasGeneratedControlBindings && HasReferenceForegroundBindings && HasReferenceBackdropBindings;
++
++        public bool HasReferenceBackdropBindings =>
++            Environment != null && Ivan != null && Environment.transform.parent == Ivan.transform.parent &&
++            Environment.transform.GetSiblingIndex() < Ivan.transform.GetSiblingIndex() &&
++            BackgroundShade != null && BackgroundShade.enabled && BackgroundShade.gameObject.activeSelf &&
++            BackgroundShade.GetComponent<CanvasRenderer>() != null && !BackgroundShade.raycastTarget &&
++            BackgroundShade.transform.parent == Environment.transform &&
++            BackgroundShade.rectTransform.anchorMin == Vector2.zero && BackgroundShade.rectTransform.anchorMax == Vector2.one &&
++            BackgroundShade.rectTransform.offsetMin == Vector2.zero && BackgroundShade.rectTransform.offsetMax == Vector2.zero &&
++            HasArtwork(MapFoliage, "home_map_foliage") && MapFoliage.enabled && MapFoliage.gameObject.activeSelf && !MapFoliage.raycastTarget &&
++            WorldMapButton != null && MapFoliage.transform.parent == WorldMapButton.transform.parent &&
++            MapFoliage.transform.parent != null && MapFoliage.transform.parent.parent == Ivan.transform.parent &&
++            MapFoliage.transform.parent.GetSiblingIndex() > Ivan.transform.GetSiblingIndex() &&
++            MapFoliage.transform.GetSiblingIndex() == 0;
+ 
+         public bool HasGeneratedControlBindings =>
+             HasArtwork(HudFrame, "hud_frame") && HasArtwork(AvatarFrame, "avatar_ring") &&
+--- before/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs
+@@ -56,7 +56,7 @@
+             DemoFeatureState.SetLanguage("ru");
+             router.Show(ScreenId.Home);
+             Settle();
+-            yield return null;
++            yield return WaitForNormalHomeButtonColors(HomeView());
+             AssertSingleInfrastructure();
+         }
+ 
+@@ -96,7 +96,7 @@
+             Assert.That(serialized.transform.Find(ProductionHomeRuntime.ContentName), Is.Not.Null);
+             IReadOnlyList<string> keys = ProductionUiFix01Runtime.GetHomeTextureResourceKeys();
+             CollectionAssert.AreEquivalent(ProductionHomeRuntime.GetTextureResourceKeys(), keys);
+-            Assert.That(keys.Count, Is.EqualTo(25), "Home uses twenty-four independently generated foreground textures and one clean dusk environment.");
++            Assert.That(keys.Count, Is.EqualTo(26), "Home uses twenty-five independently generated foreground textures, including the isolated Map foliage, and one clean dusk environment.");
+             Assert.That(new HashSet<string>(keys).Count, Is.EqualTo(keys.Count), "Do not count duplicate resource work.");
+             var textures = new HashSet<Texture>();
+             using (var preparation = new HomeLoadingPreparation())
+@@ -171,7 +171,7 @@
+             state.AddEnergy(1);
+             router.Show(ScreenId.Home);
+             Settle();
+-            yield return null;
++            yield return WaitForNormalHomeButtonColors(HomeView());
+             AssertHud(HomeView(), state.Save);
+             state.AddGold(int.MaxValue - state.Save.gold);
+             state.AddGems(int.MaxValue - state.Save.gems);
+@@ -275,6 +275,109 @@
+         }
+ 
+         [UnityTest]
++        public IEnumerator BackgroundToneAndMapFoliage_RenderWithoutDimmingOpaqueArtOrCoveringCards()
++        {
++            ProductionHomeView view = HomeView();
++            WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), null, camera =>
++            {
++                Color32[] toned = ReadCameraPixels(camera);
++                Color32[] untoned;
++                try
++                {
++                    view.BackgroundShade.enabled = false;
++                    Canvas.ForceUpdateCanvases();
++                    untoned = ReadCameraPixels(camera);
++                }
++                finally
++                {
++                    view.BackgroundShade.enabled = true;
++                    view.BackgroundShade.SetVerticesDirty();
++                    Canvas.ForceUpdateCanvases();
++                }
++                Rect environment = ScreenBounds(view.Environment.rectTransform, camera);
++                float untouchedSkyBottom = environment.yMax - environment.height * .46f;
++                int darker = 0, brighter = 0, skyChanges = 0, alphaChanges = 0;
++                for (int i = 0; i < toned.Length; i++)
++                {
++                    if (toned[i].a != untoned[i].a) alphaChanges++;
++                    int delta = RgbDifference(toned[i], untoned[i]);
++                    if (Mathf.Abs(delta) <= 3) continue;
++                    if (i / 941 + .5f >= untouchedSkyBottom + 1) skyChanges++;
++                    if (delta < -3) darker++;
++                    if (delta > 6) brighter++;
++                }
++                Assert.That(darker, Is.GreaterThan(500), "The retained background treatment must visibly quiet exposed lower scenery.");
++                Assert.That(brighter, Is.Zero, "Background tone must not introduce bright highlights.");
++                Assert.That(skyChanges, Is.Zero, "The upper46% of the environment must remain unaffected.");
++                Assert.That(alphaChanges, Is.Zero);
++                AssertProtectedReferenceRegionsUnchanged(toned, untoned, "Background tone");
++
++                Color32[] withoutFoliage;
++                try
++                {
++                    view.MapFoliage.enabled = false;
++                    Canvas.ForceUpdateCanvases();
++                    withoutFoliage = ReadCameraPixels(camera);
++                }
++                finally
++                {
++                    view.MapFoliage.enabled = true;
++                    view.MapFoliage.SetVerticesDirty();
++                    Canvas.ForceUpdateCanvases();
++                }
++                Rect foliage = ScreenBounds(view.MapFoliage.rectTransform, camera);
++                foliage.xMin -= 1; foliage.xMax += 1; foliage.yMin -= 1; foliage.yMax += 1;
++                Rect map = ScreenBounds(view.WorldMapButton.transform as RectTransform, camera);
++                int visibleLeftLeaves = 0, outsideFoliage = 0;
++                for (int i = 0; i < toned.Length; i++)
++                {
++                    Color32 a = toned[i], b = withoutFoliage[i];
++                    int largestDelta = Mathf.Max(Mathf.Abs(a.r - b.r), Mathf.Abs(a.g - b.g), Mathf.Abs(a.b - b.b));
++                    if (largestDelta <= 2) continue;
++                    Vector2 pixel = new Vector2(i % 941 + .5f, i / 941 + .5f);
++                    if (!foliage.Contains(pixel)) outsideFoliage++;
++                    if (pixel.x < map.xMin && pixel.y >= map.yMin && pixel.y <= map.yMax) visibleLeftLeaves++;
++                }
++                Assert.That(visibleLeftLeaves, Is.GreaterThan(20),
++                    "The independently layered sprig must actually render beside Map rather than disappear behind Ivan or the card.");
++                Assert.That(outsideFoliage, Is.Zero, "Adding the whole sprig must affect only its own footprint.");
++                AssertProtectedReferenceRegionsUnchanged(toned, withoutFoliage, "Map foliage");
++                Assert.That(view.MapFoliage.raycastTarget, Is.False);
++                Assert.That(view.HasRequiredBindings, Is.True, "Temporary visual comparisons must restore the active page.");
++            });
++            yield return null;
++        }
++
++        static int RgbDifference(Color32 a, Color32 b) => a.r + a.g + a.b - b.r - b.g - b.b;
++
++        static void AssertProtectedReferenceRegionsUnchanged(Color32[] actual, Color32[] baseline, string treatment)
++        {
++            // Small fully opaque regions measured in the accepted941x1672 capture;
++            // transparent feathers and ornamental antialiasing intentionally reveal the plate behind them.
++            string[] names = { "Ivan face", "Ivan tunic", "Firebird tail", "Play face and lettering",
++                "Map face", "Event face", "Event badge", "Gift badge" };
++            RectInt[] regions =
++            {
++                new RectInt(390, 560, 50, 65), new RectInt(375, 810, 90, 115), new RectInt(795, 940, 20, 70),
++                new RectInt(280, 1080, 380, 90), new RectInt(90, 1290, 120, 90), new RectInt(520, 1290, 120, 90),
++                new RectInt(636, 1240, 14, 14), new RectInt(905, 1475, 12, 12)
++            };
++            for (int region = 0; region < regions.Length; region++)
++            {
++                int worst = 0;
++                RectInt r = regions[region];
++                for (int y = r.yMin; y < r.yMax; y++)
++                    for (int x = r.xMin; x < r.xMax; x++)
++                    {
++                        int i = (1671 - y) * 941 + x;
++                        Color32 a = actual[i], b = baseline[i];
++                        worst = Mathf.Max(worst, Mathf.Abs(a.r - b.r), Mathf.Abs(a.g - b.g), Mathf.Abs(a.b - b.b));
++                    }
++                Assert.That(worst, Is.LessThanOrEqualTo(1), treatment + " must preserve the accepted opaque " + names[region] + ".");
++            }
++        }
++
++        [UnityTest]
+         public IEnumerator QuestUnavailableAndDailyRewardBadgeReflectRealPersistedState()
+         {
+             ProductionHomeView view = HomeView();
+@@ -530,6 +633,8 @@
+                 AssertHudComposition(view, layout, camera);
+                 AssertForegroundAndFooterComposition(view, layout, camera, safeRect, size);
+                 AssertCoversDisplay(ScreenBounds(view.Environment.rectTransform, camera), size, "First Canvas pass environment");
++                AssertRect(ScreenBounds(view.BackgroundShade.rectTransform, camera),
++                    ScreenBounds(view.Environment.rectTransform, camera), "First Canvas pass background tone must stretch over the environment");
+                 foreach (Button control in Buttons(view))
+                     AssertInside(ScreenBounds(control.GetComponent<RectTransform>(), camera), safeRect,
+                         "Automatic first Canvas pass: " + control.name);
+@@ -543,8 +648,11 @@
+                 }
+                 Assert.That(view.HasRequiredBindings, Is.True);
+                 Rect environment = ScreenBounds(view.Environment.rectTransform, camera);
++                Rect backgroundTone = ScreenBounds(view.BackgroundShade.rectTransform, camera);
+                 Rect shade = ScreenBounds(view.LowerShade.rectTransform, camera);
+                 AssertCoversDisplay(environment, size, "Environment");
++                AssertCoversDisplay(backgroundTone, size, "Background tone");
++                AssertRect(backgroundTone, environment, "Background tone must cover the whole plate at every aspect ratio");
+                 Assert.That(shade.xMin, Is.LessThanOrEqualTo(1f), "Shade must reach the physical left edge.");
+                 Assert.That(shade.xMax, Is.GreaterThanOrEqualTo(size.x - 1f), "Shade must reach the physical right edge.");
+                 Assert.That(shade.yMin, Is.LessThanOrEqualTo(1f), "Shade must continue to the physical bottom edge.");
+@@ -595,6 +703,7 @@
+                 for (int i = 0; i < buttons.Length; i++)
+                     AssertRect(ScreenBounds(buttons[i].GetComponent<RectTransform>(), camera), bounds[i], names[i] + " must not drift");
+                 AssertRect(ScreenBounds(view.LowerShade.rectTransform, camera), shade, "Shade must not drift");
++                AssertRect(ScreenBounds(view.BackgroundShade.rectTransform, camera), backgroundTone, "Background tone must not drift");
+                 AssertHudComposition(view, layout, camera);
+                 camera.Render();
+                 if (name != null)
+@@ -702,6 +811,7 @@
+         static void AssertForegroundAndFooterComposition(ProductionHomeView view, ProductionHomeLayout layout,
+             Camera camera, Rect safeRect, Vector2Int size)
+         {
++            AssertBackgroundToneMesh(view);
+             AssertHeroLowerFadeMesh(view);
+             Rect ivan = ScreenBounds(view.Ivan.rectTransform, camera);
+             float scale = ivan.width / 967f;
+@@ -732,6 +842,42 @@
+             AssertRaisedBadge(view.DailyRewardBadge, view.DailyRewardBadgeText);
+         }
+ 
++        static void AssertBackgroundToneMesh(ProductionHomeView view)
++        {
++            ProductionHomeBackdropShade shade = view.BackgroundShade;
++            Assert.That(shade, Is.Not.Null);
++            Assert.That(shade.raycastTarget, Is.False);
++            Assert.That(shade.transform.parent, Is.SameAs(view.Environment.transform));
++            Assert.That(view.LowerShade.color.a, Is.Zero, "Only the environment may receive the new tone.");
++            Mesh mesh = shade.canvasRenderer.GetMesh();
++            Assert.That(mesh, Is.Not.Null);
++            Vector3[] vertices = mesh.vertices;
++            Color32[] colors = mesh.colors32;
++            Assert.That(vertices.Length, Is.GreaterThan(4), "The treatment needs a smooth lower/edge gradient.");
++            Assert.That(colors.Length, Is.EqualTo(vertices.Length));
++            Rect bounds = shade.rectTransform.rect;
++            var alphaLevels = new HashSet<byte>();
++            int transparentUpperVertices = 0;
++            for (int i = 0; i < vertices.Length; i++)
++            {
++                Vector3 vertex = vertices[i];
++                Assert.That(float.IsNaN(vertex.x) || float.IsNaN(vertex.y) || float.IsNaN(vertex.z) ||
++                    float.IsInfinity(vertex.x) || float.IsInfinity(vertex.y) || float.IsInfinity(vertex.z), Is.False);
++                Assert.That(vertex.x, Is.InRange(bounds.xMin - 1, bounds.xMax + 1));
++                Assert.That(vertex.y, Is.InRange(bounds.yMin - 1, bounds.yMax + 1));
++                Assert.That(colors[i].a, Is.LessThanOrEqualTo(59), "Maximum23% opacity keeps the dusk plate restrained.");
++                alphaLevels.Add(colors[i].a);
++                float fromTop = (bounds.yMax - vertex.y) / bounds.height;
++                if (fromTop <= .4601f)
++                {
++                    Assert.That(colors[i].a, Is.Zero, "The upper46% must have no background wash.");
++                    transparentUpperVertices++;
++                }
++            }
++            Assert.That(transparentUpperVertices, Is.GreaterThan(4));
++            Assert.That(alphaLevels.Count, Is.GreaterThan(8), "The visible lower tone must not collapse to a flat overlay.");
++        }
++
+         static void AssertRaisedBadge(ProductionHomePanel badge, Text label)
+         {
+             Assert.That(badge.RaisedBadge, Is.True);
+@@ -1117,6 +1263,35 @@
+             Canvas.ForceUpdateCanvases();
+         }
+ 
++        static IEnumerator WaitForNormalHomeButtonColors(ProductionHomeView view)
++        {
++            // Completing the custom page transition enables its CanvasGroup and
++            // starts UGUI's separate disabled-to-normal color coroutines. Observe
++            // their real completion before captures; never force production tints.
++            float deadline = Time.realtimeSinceStartup + 2f;
++            int stableFrames = 0;
++            var pending = new StringBuilder();
++            do
++            {
++                yield return null;
++                pending.Clear();
++                foreach (Button button in view.Buttons())
++                {
++                    Color expected = button.colors.normalColor * button.colors.colorMultiplier;
++                    Color actual = button.targetGraphic.canvasRenderer.GetColor();
++                    float error = Mathf.Max(Mathf.Abs(actual.r - expected.r), Mathf.Abs(actual.g - expected.g),
++                        Mathf.Abs(actual.b - expected.b), Mathf.Abs(actual.a - expected.a));
++                    if (!button.IsInteractable() || error > .0001f)
++                        pending.Append(button.name).Append(": actual=").Append(actual)
++                            .Append(", expected=").Append(expected).Append("; ");
++                }
++                stableFrames = pending.Length == 0 ? stableFrames + 1 : 0;
++            }
++            while (stableFrames < 2 && Time.realtimeSinceStartup < deadline);
++            Assert.That(stableFrames, Is.EqualTo(2),
++                "Home captures require completed native button color transitions: " + pending);
++        }
++
+         void AssertSingleInfrastructure()
+         {
+             Assert.That(UnityEngine.Object.FindObjectsByType<ScreenRouter>().Length, Is.EqualTo(1));
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs
+@@ -60,11 +60,11 @@
+         }
+ 
+         [Test]
+-        public void LoadingPreparationListsExactlyTheTwentyFiveTexturesUsedBySerializedHome()
++        public void LoadingPreparationListsExactlyTheTwentySixTexturesUsedBySerializedHome()
+         {
+             GameObject prefab = LoadHome();
+             IReadOnlyList<string> keys = ProductionUiFix01Runtime.GetHomeTextureResourceKeys();
+-            Assert.That(keys.Count, Is.EqualTo(25));
++            Assert.That(keys.Count, Is.EqualTo(26));
+             Assert.That(keys.Distinct().Count(), Is.EqualTo(keys.Count));
+             var preparedPaths = new HashSet<string>(keys.Select(key => ResourcesRoot + key + ".png"));
+             var renderedPaths = new HashSet<string>();
+@@ -72,7 +72,7 @@
+                 if (image.sprite != null) renderedPaths.Add(AssetDatabase.GetAssetPath(image.sprite));
+             Assert.That(renderedPaths, Is.EquivalentTo(preparedPaths));
+             using (var preparation = new HomeLoadingPreparation())
+-                Assert.That(preparation.TotalResourceCount, Is.EqualTo(26));
++                Assert.That(preparation.TotalResourceCount, Is.EqualTo(27));
+             foreach (string dependency in AssetDatabase.GetDependencies(PrefabPath, true))
+             {
+                 Assert.That(dependency.Contains("/Resources/DesignScreens/") ||
+@@ -108,11 +108,13 @@
+         [TestCase("quest_reward_frame")]
+         [TestCase("quest_reward_gem")]
+         [TestCase("footer_base_generated")]
++        [TestCase("home_map_foliage")]
+         public void IndividualLayerImportsWithoutPixelResizeOrColorSpaceAlteration(string name)
+         {
+             string path = ResourcesRoot + ProductionHomeRuntime.ArtRoot + name + ".png";
+             bool foreground = name != "home_environment_generated";
+-            string sourceRoot = GeneratedSourceRoot;
++            string sourceRoot = name == "home_map_foliage"
++                ? "ProjectDocs/AI/HomeStyleAlignment/ToneAndFoliageR9/Sources/" : GeneratedSourceRoot;
+             Assert.That(Sha256(path), Is.EqualTo(Sha256(sourceRoot + name + ".png")),
+                 "Runtime assets must retain exact selected independently generated bytes, including the new dusk background.");
+             TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+@@ -144,6 +146,57 @@
+         }
+ 
+         [Test]
++        public void BackgroundToneAndWholeMapFoliageRemainSeparateNoninteractiveLayers()
++        {
++            ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
++            ProductionHomeLayout layout = view.GetComponent<ProductionHomeLayout>();
++            ProductionHomeBackdropShade shade = view.BackgroundShade;
++            Assert.That(shade, Is.Not.Null);
++            Assert.That(view.GetComponentsInChildren<ProductionHomeBackdropShade>(true).Length, Is.EqualTo(1));
++            Assert.That(shade.transform.parent, Is.SameAs(view.Environment.transform));
++            Assert.That(view.Environment.transform.parent, Is.SameAs(view.Ivan.transform.parent));
++            Assert.That(view.Environment.transform.GetSiblingIndex(), Is.LessThan(view.Ivan.transform.GetSiblingIndex()));
++            Assert.That(shade.rectTransform.anchorMin, Is.EqualTo(Vector2.zero));
++            Assert.That(shade.rectTransform.anchorMax, Is.EqualTo(Vector2.one));
++            Assert.That(shade.rectTransform.offsetMin, Is.EqualTo(Vector2.zero));
++            Assert.That(shade.rectTransform.offsetMax, Is.EqualTo(Vector2.zero));
++            Assert.That(shade.enabled && shade.gameObject.activeSelf, Is.True);
++            Assert.That(shade.raycastTarget, Is.False);
++            Assert.That(shade.Strength, Is.GreaterThan(0).And.LessThanOrEqualTo(1));
++            Assert.That(shade.GetComponentsInChildren<Selectable>(true), Is.Empty);
++            Assert.That(view.LowerShade.color.a, Is.Zero, "The old wash above the hero must remain disabled by alpha.");
++
++            Image foliage = view.MapFoliage;
++            Assert.That(foliage, Is.Not.Null);
++            Assert.That(foliage.sprite, Is.SameAs(AssetDatabase.LoadAssetAtPath<Sprite>(
++                ResourcesRoot + ProductionHomeRuntime.ArtRoot + "home_map_foliage.png")));
++            Assert.That(view.GetComponentsInChildren<Image>(true).Count(i => i.sprite == foliage.sprite), Is.EqualTo(1));
++            Assert.That(foliage.enabled && foliage.gameObject.activeSelf, Is.True);
++            Assert.That(foliage.transform.parent, Is.SameAs(layout.Navigation));
++            Assert.That(layout.Navigation.parent, Is.SameAs(view.Ivan.transform.parent));
++            Assert.That(layout.Navigation.GetSiblingIndex(), Is.GreaterThan(view.Ivan.transform.GetSiblingIndex()));
++            Assert.That(foliage.transform.GetSiblingIndex(), Is.Zero);
++            Assert.That(foliage.type, Is.EqualTo(Image.Type.Simple));
++            Assert.That(foliage.useSpriteMesh, Is.False);
++            Assert.That(foliage.preserveAspect, Is.True);
++            Assert.That(foliage.color, Is.EqualTo(Color.white));
++            Assert.That(foliage.raycastTarget, Is.False);
++            Assert.That(foliage.sprite.rect.position, Is.EqualTo(Vector2.zero));
++            Assert.That(foliage.sprite.rect.size, Is.EqualTo(new Vector2(foliage.sprite.texture.width, foliage.sprite.texture.height)));
++            Assert.That(foliage.GetComponent<Mask>(), Is.Null);
++            Assert.That(foliage.GetComponent<RectMask2D>(), Is.Null);
++            Assert.That(foliage.GetComponentsInChildren<Selectable>(true), Is.Empty);
++            foreach (Button card in new[] { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton })
++            {
++                Transform backing = layout.Navigation.Find(card.name + "OpaqueNavyBacking");
++                Assert.That(backing, Is.Not.Null, card.name);
++                Assert.That(backing.GetSiblingIndex(), Is.GreaterThan(foliage.transform.GetSiblingIndex()), card.name);
++                Assert.That(card.transform.GetSiblingIndex(), Is.GreaterThan(backing.GetSiblingIndex()), card.name);
++            }
++            Assert.That(view.GetComponentsInChildren<Button>(true).Length, Is.EqualTo(12));
++        }
++
++        [Test]
+         public void HomeUsesDeclaredLayerGeometryWithUntintedArtAndLiveLabels()
+         {
+             ProductionHomeView view = LoadHome().GetComponent<ProductionHomeView>();
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/home_map_foliage.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 94bad924675b43dcadb2595547a51117
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: dfab5582fe9c4250b2534d6cbcad455e
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeBackdropShade.cs
+@@ -0,0 +1,39 @@
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus
++{
++    /// <summary>Restrained lower and edge tone on Home's environment plate only.</summary>
++    [DisallowMultipleComponent, RequireComponent(typeof(CanvasRenderer))]
++    public sealed class ProductionHomeBackdropShade : MaskableGraphic
++    {
++        [Range(0, 1)] public float Strength = 1;
++
++        static readonly float[] Columns = { 0f, .05f, .12f, .22f, .35f, .5f, .65f, .78f, .88f, .95f, 1f };
++        static readonly float[] Rows = { 0f, .30f, .46f, .50f, .56f, .62f, .68f, .74f, .80f, .86f, .92f, 1f };
++
++        protected override void OnPopulateMesh(VertexHelper vh)
++        {
++            vh.Clear();
++            Rect r = GetPixelAdjustedRect();
++            for (int y = 0; y < Rows.Length; y++)
++            {
++                float lower = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.50f, 1, Rows[y]));
++                float edgeFalloff = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.46f, .86f, Rows[y]));
++                for (int x = 0; x < Columns.Length; x++)
++                {
++                    float edge = Mathf.Pow(Mathf.Abs(Columns[x] * 2 - 1), 2.5f);
++                    Color tint = color;
++                    // At full strength: zero above46%, at most16% at the lower
++                    // center and23% at its edges. No global UI exposure changes.
++                    tint.a *= (.16f * lower + .07f * edgeFalloff * edge) * Mathf.Clamp01(Strength);
++                    vh.AddVert(new Vector3(r.xMin + r.width * Columns[x], r.yMax - r.height * Rows[y]), tint, Vector2.zero);
++                    if (x == 0 || y == 0) continue;
++                    int n = y * Columns.Length + x;
++                    vh.AddTriangle(n - Columns.Length - 1, n - Columns.Length, n);
++                    vh.AddTriangle(n - Columns.Length - 1, n, n - 1);
++                }
++            }
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeBackdropShade.cs.meta
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: 83e51f4e2a1647cb93a90817f84be5c6
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

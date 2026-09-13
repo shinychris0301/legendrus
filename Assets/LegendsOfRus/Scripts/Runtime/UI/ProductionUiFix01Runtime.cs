@@ -49,6 +49,26 @@ namespace LegendsOfRus
                 ProductionHomeRuntime.BuildInto(root);
                 return;
             }
+            if (id == ScreenId.Gameplay)
+            {
+                ProductionGameplayRuntime.BuildInto(root);
+                return;
+            }
+            if (id == ScreenId.PreLevel)
+            {
+                ProductionPreLevelRuntime.BuildInto(root);
+                return;
+            }
+            if (id == ScreenId.ChapterMap)
+            {
+                ProductionChapterMapRuntime.BuildInto(root);
+                return;
+            }
+            if (id == ScreenId.WorldMap)
+            {
+                ProductionWorldMapRuntime.BuildInto(root);
+                return;
+            }
             if (root.Find("FIX01_CONTENT") != null)
                 return;
 

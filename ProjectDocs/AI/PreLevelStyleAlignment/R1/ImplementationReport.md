@@ -1,0 +1,42 @@
+Visual Page 06 — Pre-Level R1 is implemented in the canonical Unity prefab. The accepted Chapter Map scene, red velvet chapter banner, Home HUD, Play button and Back/footer artwork now frame live goals, moves, booster stock and first-clear rewards. Chapter Map R1 was accepted by “It's good, continue to Pre-Level page”; this new page is delivered for review, without inferred acceptance.
+
+[Open the standalone portrait review](PreLevel_Alignment_R1_Review.html). Each view is one complete actual Unity capture, or the explicitly labelled original reference/before capture. The phone views use simulated Editor safe areas, not a physical Android device.
+
+The project root is `/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL`; ProjectVersion.txt and the running Editor record Unity **6000.5.9f1 (b57deb96f08d)**. Root instructions, ConversationHandoff, CurrentTask, reference provenance and existing working-tree changes were inspected first. All 1,556 preceding production hashes matched. Historical handoff claims were checked against actual files: PreLevel was still a FIX01 composition with hard-coded artwork/counts, masked data values and a broad booster hotspot. Its preserved reference marker is the R3 marker type; the accepted Chapter Map uses the earlier marker type.
+
+The active resource remains `ProductionUI/Pages/PreLevel`, owned by `Step20ProductionUiFix01SerializedPrefabBuilder.RebuildPreLevelAlignment`. The prefab, repair/runtime owner, importer and router now agree on native revision 1. Eleven visible native buttons replace the broad invisible hotspots. Goals and headings are live text. Decorative images do not receive raycasts; the page adds no Canvas, EventSystem, startup or service.
+
+| Element | Final implementation |
+| --- | --- |
+| Scenery/banner/HUD/navigation | Whole accepted Chapter Map/Home resources and existing typography/materials, with no changes to their source pages |
+| Goal and wide panels | Two independently generated navy/gold/sapphire panels; the wide panel is reused for boosters and rewards |
+| Goal gems | New isolated ruby and actual Home sapphire; actual target counts from the selected level |
+| Other objectives | Localized named medallions distinguish ice, chains, crates, score, feathers and survival; no misleading gem substitutes |
+| Moves | Shared navy/gold medallion with selected-level move limit |
+| Booster stock | New isolated mace, glowing Firebird, lion shield and blue potion medallions; four live inventory counts in native raised emerald badges |
+| Rewards | New isolated chest, shared currency icons and live first-clear quantities; additional authored booster rewards appear above the lower trim |
+| Replay | “НАГРАДА ПОЛУЧЕНА” / “REWARD RECEIVED”, zero unearned currencies and no repeated booster reward promise |
+
+All eight generated PNG sources, prompts and hashes are retained in [Generation.json](Generation.json), Sources/ and [AssetAlphaChecks.json](AssetAlphaChecks.json). The source PNGs already had transparent exteriors, despite one inline preview appearing backed. Only alpha values ≥245 were restored to 255 under the existing local-transparency-cleanup authorization. RGB was preserved; no matting, screenshot crops or full-reference runtime image was used. Every resource was visually inspected over black, white and magenta. Intentional navy panel faces remain opaque. All imported sprites are whole single Texture2D resources with uncompressed alpha; exact source-font identity remains unverified.
+
+Selected-level rendering is read-only. The test traverses all ten authored levels and verifies their targets, moves, currencies and bonus boosters. The reference's example 30/30, 500 and 10 values do not override authored balance: level 1 displays 12/12, 28 moves and 120 gold/0 gems. The profile HUD's level is the existing saved progression value; the separate goal heading identifies the selected level.
+
+Play uses the unchanged energy-gated `StartLevel`. Out-of-energy can close and Play can be used again; successful Play spends one energy even on a double invocation. Back returns Chapter Map. Profile, settings and resource controls retain their routes. Each booster icon opens the existing BoosterSelect modal, without consuming inventory. **The existing modal has no implemented pre-game loadout selection.** This visual page does not claim to add that gameplay feature; gameplay booster consumption is unchanged.
+
+Performed checks:
+
+- Graphics-enabled Unity import, compilation, owner execution, prefab save/readback; original five prefab object IDs retained.
+- Final **53/53 focused Edit Mode tests**, no failures/skips: canonical wiring, whole-resource dependencies/imports, shared art/font bindings and earlier-page validation.
+- Final broad **36/37 Play Mode tests**, including **4/4 Pre-Level tests**: all authored data/replay/inventory, energy and double-use protection, four booster modal routes, Back/HUD routes, individual button raycasts, rendered badge geometry, full-display environment coverage, safe-area containment, repeat layout, panel/Play non-overlap and bonus reward clearance. Earlier Home/Loading/World Map/Chapter Map checks passed.
+- The remaining broad-run assertion was unchanged Splash RU/EN/RU exact pixels: seven lettering pixels differed by at most **1/255**. The identical test then **passed 1/1 on a separate rerun**, with no source/tolerance changes. This establishes intermittent capture behavior, not a diagnosed root cause or a uniformly clean broad run. Both results and unedited captures are retained in [test history](UnityVerification/TestRunHistory.json) and [Splash recheck](UnityVerification/SplashRecheck.json).
+- Nine final Pre-Level portraits/fixtures (RU, EN, 576×1280, 1080×2400, language roundtrip, level 8 RU/EN, level 10 rewards and claimed reward), within 96 final unedited capture files across six pages. RU/EN, tall, phone and reward/goal variants were directly reviewed across the final spacing iterations.
+- Local Chrome review viewer: all ten full-portrait selections loaded, three local links resolved, and the 360px viewport had no horizontal overflow. This checks the viewer, not Unity runtime rendering. [Browser evidence](QA/StandaloneReviewBrowserChecks.json).
+- [Source audit](FinalSourceAudit.json): 1,550 of 1,556 previous production paths unchanged; six modified and 29 added. All **807 existing metadata files/GUIDs**, five original PreLevel IDs and earlier accepted pages preserved. New GUIDs are unique. No generated caches or secrets are included in delivery.
+
+Compared with Chapter Map R1 captures: Chapter Map 6/6 and Loading 8/8 are pixel-identical. Home 6/7 are exact (one has eight pixels differing by ≤1/255); Splash 6/7 are exact (one has seven); World Map 5/8 are exact (others have 1, 6 and 2). Pre-Level's own RU roundtrip differs on 34 pixels by at most 1/255. These are recorded, not described as pixel-perfect. [Pixel comparison](UnityVerification/RegressionPixelComparison.json).
+
+Earlier iterations are retained: baseline 1/1; initial Pre-Level 3/4 because the replay test failed to reselect level 1 after the game's automatic advance; initial wider 53/53 and 37/37. Visual review then moved panel lettering off trim and added an explicit bonus-row clearance assertion. Initial owner namespace/marker and test API errors were corrected before final delivery. Default Python lacked Pillow for the comparison script; the existing local image environment ran it successfully without package/project changes.
+
+Exactly six prior production files changed: `Pages/PreLevel.prefab`, `Step20ProductionUiFix01SerializedPrefabBuilder.cs`, `LockedDesignImporter.cs`, `ProductionUiFix01Runtime.cs`, `ScreenRouter.cs`, and the existing Pre-Level Back navigation test. Added: four Pre-Level runtime classes, two focused test fixtures, eight PNGs and their metadata/folder metadata. Full paths and hashes: [change manifest](SourceChangeManifest.json); [diff from this task's baseline](AppliedSourceChanges.diff).
+
+Not performed: APK/AAB/Android Player build, physical-phone install/render/touch, full-project test suite, performance or memory profiling, release/signing checks, or physical display-change testing. Existing APKs predate this page. Packages, project settings, Android guards/signing, Splash 7, Loading 4, Home 14, World Map 1 and accepted Chapter Map 1 are unchanged. The new ornaments are reference-informed recreations, not pixel-identical copies. Next: review Pre-Level R1; the gameplay board is the following visual page in the route.
