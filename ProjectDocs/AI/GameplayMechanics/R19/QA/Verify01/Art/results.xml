@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.7556031">
+  <test-suite type="TestSuite" id="1668" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="550" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.755603" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1088" name="LegendsOfRus.Campaign.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Campaign.PlayModeTests.dll" runstate="Runnable" testcasecount="61" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.726978" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1829780" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1089" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="61" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.722902" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1090" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="61" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.697972" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1091" name="CampaignPlayMode" fullname="LegendsOfRus.Tests.CampaignPlayMode" runstate="Runnable" testcasecount="61" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.682740" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1073" name="MechanicsSequenceArtTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.664875" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1077" name="ArtLayersAreBoundedClippedAndClearOnRecoveryAndDisable" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests.ArtLayersAreBoundedClippedAndClearOnRecoveryAndDisable" methodname="ArtLayersAreBoundedClippedAndClearOnRecoveryAndDisable" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" runstate="Runnable" seed="1909699380" result="Failed" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.400951" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect
+TearDown : Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.EnableRectClipping (UnityEngine.Rect rect) (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:158)
+UnityEngine.UI.RectMask2D.PerformClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:253)
+UnityEngine.UI.ClipperRegistry.Cull () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/Culling/ClipperRegistry.cs:47)
+UnityEngine.UI.CanvasUpdateRegistry.PerformUpdate () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/CanvasUpdateRegistry.cs:201)
+UnityEngine.Canvas.SendWillRenderCanvases () (at /home/bokken/build/output/unity/unity/Modules/UI/ScriptBindings/UICanvas.bindings.cs:123)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceMaterials" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceMaterials". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.RecalculateClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:288)
+UnityEngine.UI.MaskUtilities.Notify2DMaskStateChanged (UnityEngine.Component mask) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskUtilities.cs:26)
+UnityEngine.UI.RectMask2D.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:151)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></output>
+              </test-case>
+              <test-case id="1075" name="BombFormationUsesMaterialLayerAndKeepsResolution" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests.BombFormationUsesMaterialLayerAndKeepsResolution" methodname="BombFormationUsesMaterialLayerAndKeepsResolution" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" runstate="Runnable" seed="679821508" result="Failed" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.087451" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect
+TearDown : Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.EnableRectClipping (UnityEngine.Rect rect) (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:158)
+UnityEngine.UI.RectMask2D.PerformClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:253)
+UnityEngine.UI.ClipperRegistry.Cull () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/Culling/ClipperRegistry.cs:47)
+UnityEngine.UI.CanvasUpdateRegistry.PerformUpdate () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/CanvasUpdateRegistry.cs:201)
+UnityEngine.Canvas.SendWillRenderCanvases () (at /home/bokken/build/output/unity/unity/Modules/UI/ScriptBindings/UICanvas.bindings.cs:123)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceMaterials" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceMaterials". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.RecalculateClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:288)
+UnityEngine.UI.MaskUtilities.Notify2DMaskStateChanged (UnityEngine.Component mask) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskUtilities.cs:26)
+UnityEngine.UI.RectMask2D.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:151)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></output>
+              </test-case>
+              <test-case id="1076" name="CombinedAttackAndChainUseRealContactsAndReleaseInput" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests.CombinedAttackAndChainUseRealContactsAndReleaseInput" methodname="CombinedAttackAndChainUseRealContactsAndReleaseInput" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" runstate="Runnable" seed="1416322640" result="Failed" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.076319" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect
+TearDown : Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.EnableRectClipping (UnityEngine.Rect rect) (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:158)
+UnityEngine.UI.RectMask2D.PerformClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:253)
+UnityEngine.UI.ClipperRegistry.Cull () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/Culling/ClipperRegistry.cs:47)
+UnityEngine.UI.CanvasUpdateRegistry.PerformUpdate () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/CanvasUpdateRegistry.cs:201)
+UnityEngine.Canvas.SendWillRenderCanvases () (at /home/bokken/build/output/unity/unity/Modules/UI/ScriptBindings/UICanvas.bindings.cs:123)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceMaterials" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceMaterials". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.RecalculateClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:288)
+UnityEngine.UI.MaskUtilities.Notify2DMaskStateChanged (UnityEngine.Component mask) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskUtilities.cs:26)
+UnityEngine.UI.RectMask2D.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:151)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></output>
+              </test-case>
+              <test-case id="1074" name="DirectionalFormationUsesArtworkAndKeepsResolution" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests.DirectionalFormationUsesArtworkAndKeepsResolution" methodname="DirectionalFormationUsesArtworkAndKeepsResolution" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSequenceArtTests" runstate="Runnable" seed="909837442" result="Failed" start-time="2026-09-27 13:34:27Z" end-time="2026-09-27 13:34:27Z" duration="0.077642" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect
+TearDown : Unhandled log message: '[Exception] MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                  <stack-trace><![CDATA[UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.EnableRectClipping (UnityEngine.Rect rect) (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:158)
+UnityEngine.UI.RectMask2D.PerformClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:253)
+UnityEngine.UI.ClipperRegistry.Cull () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/Culling/ClipperRegistry.cs:47)
+UnityEngine.UI.CanvasUpdateRegistry.PerformUpdate () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/CanvasUpdateRegistry.cs:201)
+UnityEngine.Canvas.SendWillRenderCanvases () (at /home/bokken/build/output/unity/unity/Modules/UI/ScriptBindings/UICanvas.bindings.cs:123)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceMaterials" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceMaterials". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:186)
+LegendsOfRus.SpecialSequenceView.OnDisable () (at Assets/LegendsOfRus/Scripts/Runtime/Gameplay/SpecialSequenceView.cs:66)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+MissingComponentException: There is no 'CanvasRenderer' attached to the "SpecialSequenceEffects" game object, but a script is trying to access it.
+You probably need to add a CanvasRenderer to the game object "SpecialSequenceEffects". Or your script needs to check if the component is attached before using it.
+UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1163)
+UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61)
+UnityEngine.CanvasRenderer.DisableRectClipping () (at <d75ec13d7b0642f582ce8dfa1db3e993>:0)
+UnityEngine.UI.MaskableGraphic.SetClipRect (UnityEngine.Rect clipRect, System.Boolean validRect) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:160)
+UnityEngine.UI.RectMask2D.RemoveClippable (UnityEngine.UI.IClippable clippable) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:334)
+UnityEngine.UI.MaskableGraphic.UpdateClipParent () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:272)
+UnityEngine.UI.MaskableGraphic.RecalculateClipping () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskableGraphic.cs:288)
+UnityEngine.UI.MaskUtilities.Notify2DMaskStateChanged (UnityEngine.Component mask) (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/MaskUtilities.cs:26)
+UnityEngine.UI.RectMask2D.OnDisable () (at ./Library/PackageCache/com.unity.ugui@241bd5dd93e7/Runtime/UGUI/UI/Core/RectMask2D.cs:151)
+UnityEngine.Object:Destroy(Object)
+LegendsOfRus.Tests.CampaignPlayMode.<Cleanup>d__2:MoveNext() (at Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSequenceArtTests.cs:17)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+Saving results to: /tmp/lor-gameplay-mechanics-r19/Verify01/Art/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
