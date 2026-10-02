@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="35" result="Passed" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.1626894">
+  <test-suite type="TestSuite" id="2484" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1334" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.162689" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="2478" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="545" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.135660" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="445940" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="2479" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="545" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.122528" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2480" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="545" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.106369" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2481" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="545" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:42Z" duration="20.089674" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2017" name="CoreLoopMotionFeedbackPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" testcasecount="23" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:33Z" duration="11.720591" total="23" passed="23" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2029" name="AmbiguousDrag_WaitsForDominantAxisBeforeCommit" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousDrag_WaitsForDominantAxisBeforeCommit" methodname="AmbiguousDrag_WaitsForDominantAxisBeforeCommit" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="812603685" result="Passed" start-time="2026-09-30 12:58:21Z" end-time="2026-09-30 12:58:22Z" duration="0.511611" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2030" name="AmbiguousRelease_CancelsWithoutSwapOrTapSelection" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousRelease_CancelsWithoutSwapOrTapSelection" methodname="AmbiguousRelease_CancelsWithoutSwapOrTapSelection" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1805551792" result="Passed" start-time="2026-09-30 12:58:22Z" end-time="2026-09-30 12:58:22Z" duration="0.099951" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2032" name="ApplicationPause_ReleasesOwnershipForNextGesture" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ApplicationPause_ReleasesOwnershipForNextGesture" methodname="ApplicationPause_ReleasesOwnershipForNextGesture" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="806339899" result="Passed" start-time="2026-09-30 12:58:22Z" end-time="2026-09-30 12:58:22Z" duration="0.377540" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2019" name="BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation" methodname="BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="859302301" result="Passed" start-time="2026-09-30 12:58:22Z" end-time="2026-09-30 12:58:23Z" duration="0.236390" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2031" name="CancelledPointer_ReleasesOwnershipForNextGesture" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CancelledPointer_ReleasesOwnershipForNextGesture" methodname="CancelledPointer_ReleasesOwnershipForNextGesture" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="528313953" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:23Z" duration="0.369457" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2034" name="CascadeWave_UsesOneWaveLevelFeedbackCue" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CascadeWave_UsesOneWaveLevelFeedbackCue" methodname="CascadeWave_UsesOneWaveLevelFeedbackCue" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="2071133192" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:23Z" duration="0.056958" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2026" name="CellHitRoots_CoverFormerHorizontalVerticalAndJunctionSeams" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CellHitRoots_CoverFormerHorizontalVerticalAndJunctionSeams" methodname="CellHitRoots_CoverFormerHorizontalVerticalAndJunctionSeams" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1124312880" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:23Z" duration="0.103210" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2038" name="DefaultFeedbackSinks_AreSafeNoOps" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.DefaultFeedbackSinks_AreSafeNoOps" methodname="DefaultFeedbackSinks_AreSafeNoOps" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1982126209" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:23Z" duration="0.053570" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2033" name="FeedbackSettings_GateSfxAndHapticsIndependently" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FeedbackSettings_GateSfxAndHapticsIndependently" methodname="FeedbackSettings_GateSfxAndHapticsIndependently" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="156284457" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:23Z" duration="0.052657" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2028" name="ForeignPointer_CannotStealBoardGestureOwnership" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ForeignPointer_CannotStealBoardGestureOwnership" methodname="ForeignPointer_CannotStealBoardGestureOwnership" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1949630378" result="Passed" start-time="2026-09-30 12:58:23Z" end-time="2026-09-30 12:58:24Z" duration="0.369510" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2023" name="FourGemMatch_EmitsSpecialCreationHook" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FourGemMatch_EmitsSpecialCreationHook" methodname="FourGemMatch_EmitsSpecialCreationHook" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="264903052" result="Passed" start-time="2026-09-30 12:58:24Z" end-time="2026-09-30 12:58:25Z" duration="1.085937" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1423649060 waves=1 score=150 final=86B1B09AE1EE79FE plan=FB5E99328D0558BD
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2027" name="GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle" methodname="GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="863920200" result="Passed" start-time="2026-09-30 12:58:25Z" end-time="2026-09-30 12:58:26Z" duration="1.336487" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2025" name="InputRemainsLockedForEveryResolvedMotionHook" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InputRemainsLockedForEveryResolvedMotionHook" methodname="InputRemainsLockedForEveryResolvedMotionHook" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="300633596" result="Passed" start-time="2026-09-30 12:58:26Z" end-time="2026-09-30 12:58:27Z" duration="1.052732" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2020" name="InvalidSwap_EmitsForwardAndReturnTimeline" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InvalidSwap_EmitsForwardAndReturnTimeline" methodname="InvalidSwap_EmitsForwardAndReturnTimeline" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1289042828" result="Passed" start-time="2026-09-30 12:58:27Z" end-time="2026-09-30 12:58:28Z" duration="0.370697" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2018" name="MotionProfile_HasPositiveBoundedPresentationTimings" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MotionProfile_HasPositiveBoundedPresentationTimings" methodname="MotionProfile_HasPositiveBoundedPresentationTimings" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1966507106" result="Passed" start-time="2026-09-30 12:58:28Z" end-time="2026-09-30 12:58:28Z" duration="0.053329" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2024" name="MultiWavePlan_EmitsCascadeHookWithIncreasingDepth" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MultiWavePlan_EmitsCascadeHookWithIncreasingDepth" methodname="MultiWavePlan_EmitsCascadeHookWithIncreasingDepth" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="807380561" result="Passed" start-time="2026-09-30 12:58:28Z" end-time="2026-09-30 12:58:29Z" duration="1.036324" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1876286068 waves=2 score=330 final=AEE95334109AE63C plan=80CE2B1FD231D6C9
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2022" name="SamePreset_ProducesSameSemanticMotionTrace" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SamePreset_ProducesSameSemanticMotionTrace" methodname="SamePreset_ProducesSameSemanticMotionTrace" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1485842972" result="Passed" start-time="2026-09-30 12:58:29Z" end-time="2026-09-30 12:58:31Z" duration="2.023790" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2021" name="SpecialCombination_EmitsOrderedActivationWaveAndFallHooks" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SpecialCombination_EmitsOrderedActivationWaveAndFallHooks" methodname="SpecialCombination_EmitsOrderedActivationWaveAndFallHooks" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1156146474" result="Passed" start-time="2026-09-30 12:58:31Z" end-time="2026-09-30 12:58:32Z" duration="1.055275" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2037" name="ThrowingFeedbackObserver_CannotBlockConfiguredSinks" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingFeedbackObserver_CannotBlockConfiguredSinks" methodname="ThrowingFeedbackObserver_CannotBlockConfiguredSinks" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="522341703" result="Passed" start-time="2026-09-30 12:58:32Z" end-time="2026-09-30 12:58:32Z" duration="0.053142" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Core-loop feedback observer failed and was isolated: feedback observer fault
+]]></output>
+              </test-case>
+              <test-case id="2036" name="ThrowingHapticSink_IsolatedWhileSfxStillRuns" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingHapticSink_IsolatedWhileSfxStillRuns" methodname="ThrowingHapticSink_IsolatedWhileSfxStillRuns" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1995613387" result="Passed" start-time="2026-09-30 12:58:32Z" end-time="2026-09-30 12:58:32Z" duration="0.053646" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Core-loop haptic sink failed and was isolated: haptic fault
+]]></output>
+              </test-case>
+              <test-case id="2040" name="ThrowingLegacyBoardObserver_CannotStallResolvedSwap" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingLegacyBoardObserver_CannotStallResolvedSwap" methodname="ThrowingLegacyBoardObserver_CannotStallResolvedSwap" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1365694081" result="Passed" start-time="2026-09-30 12:58:32Z" end-time="2026-09-30 12:58:33Z" duration="1.053002" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+MovesChanged observer failed and was isolated: moves observer fault
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2039" name="ThrowingMotionObserver_CannotStallRejectedSwap" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingMotionObserver_CannotStallRejectedSwap" methodname="ThrowingMotionObserver_CannotStallRejectedSwap" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="1572716999" result="Passed" start-time="2026-09-30 12:58:33Z" end-time="2026-09-30 12:58:33Z" duration="0.237015" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay motion observer failed and was isolated: observer fault
+Gameplay phase: Swapping -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2035" name="ThrowingSfxSink_IsolatedWhileHapticStillRuns" fullname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingSfxSink_IsolatedWhileHapticStillRuns" methodname="ThrowingSfxSink_IsolatedWhileHapticStillRuns" classname="LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests" runstate="Runnable" seed="940308819" result="Passed" start-time="2026-09-30 12:58:33Z" end-time="2026-09-30 12:58:33Z" duration="0.056392" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Core-loop SFX sink failed and was isolated: sfx fault
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2259" name="Match3RuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-30 12:58:33Z" end-time="2026-09-30 12:58:42Z" duration="8.350707" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2261" name="ActualCellGesture_MapsDownCorrectly" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsDownCorrectly" methodname="ActualCellGesture_MapsDownCorrectly" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1801301666" result="Passed" start-time="2026-09-30 12:58:33Z" end-time="2026-09-30 12:58:34Z" duration="0.909088" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1697654830 waves=1 score=455 final=32CA912167F469F1 plan=2280C9C7CA8D65E9
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2262" name="ActualCellGesture_MapsLeftCorrectly" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsLeftCorrectly" methodname="ActualCellGesture_MapsLeftCorrectly" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1988163757" result="Passed" start-time="2026-09-30 12:58:34Z" end-time="2026-09-30 12:58:36Z" duration="1.653816" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1697653868 waves=3 score=1025 final=55ED9919BCD540B7 plan=C9C01A1851A1E3AB
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2263" name="ActualCellGesture_MapsRightCorrectly" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsRightCorrectly" methodname="ActualCellGesture_MapsRightCorrectly" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1529777390" result="Passed" start-time="2026-09-30 12:58:36Z" end-time="2026-09-30 12:58:37Z" duration="0.871042" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1697655790 waves=1 score=490 final=8EF59AFF15315EB0 plan=0EAFDE99CC60F171
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2260" name="ActualCellGesture_MapsUpCorrectly" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsUpCorrectly" methodname="ActualCellGesture_MapsUpCorrectly" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1040401937" result="Passed" start-time="2026-09-30 12:58:37Z" end-time="2026-09-30 12:58:38Z" duration="1.689168" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1697654828 waves=3 score=845 final=9E8E729DCD075770 plan=DB3619C33E30A771
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2268" name="BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend" methodname="BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="55400178" result="Passed" start-time="2026-09-30 12:58:38Z" end-time="2026-09-30 12:58:39Z" duration="0.237755" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2266" name="BoosterCancel_DoesNotConsumeInventory" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BoosterCancel_DoesNotConsumeInventory" methodname="BoosterCancel_DoesNotConsumeInventory" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1331407379" result="Passed" start-time="2026-09-30 12:58:39Z" end-time="2026-09-30 12:58:39Z" duration="0.106643" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2267" name="InvalidBoosterTarget_DoesNotConsumeInventory" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.InvalidBoosterTarget_DoesNotConsumeInventory" methodname="InvalidBoosterTarget_DoesNotConsumeInventory" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="2052341393" result="Passed" start-time="2026-09-30 12:58:39Z" end-time="2026-09-30 12:58:39Z" duration="0.107132" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> BoosterTargeting
+]]></output>
+              </test-case>
+              <test-case id="2265" name="PauseResume_PreservesStableBoardHash" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.PauseResume_PreservesStableBoardHash" methodname="PauseResume_PreservesStableBoardHash" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="123334817" result="Passed" start-time="2026-09-30 12:58:39Z" end-time="2026-09-30 12:58:39Z" duration="0.103570" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Paused
+Gameplay phase: Paused -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2271" name="SpecialCombination_VerifiesEveryRuntimeWaveHash" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpecialCombination_VerifiesEveryRuntimeWaveHash" methodname="SpecialCombination_VerifiesEveryRuntimeWaveHash" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="143305050" result="Passed" start-time="2026-09-30 12:58:39Z" end-time="2026-09-30 12:58:40Z" duration="1.056723" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1487962580 waves=1 score=640 final=8AD64B1C0C8F0D09 plan=96DCCB7EDD5D795F
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2264" name="TapThenAdjacentTap_RequestsSameSwap" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.TapThenAdjacentTap_RequestsSameSwap" methodname="TapThenAdjacentTap_RequestsSameSwap" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="971341566" result="Passed" start-time="2026-09-30 12:58:40Z" end-time="2026-09-30 12:58:40Z" duration="0.387598" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> Selected
+Gameplay phase: Selected -> Swapping
+Gameplay phase: Swapping -> InvalidSwapReturning
+Gameplay phase: InvalidSwapReturning -> Idle
+]]></output>
+              </test-case>
+              <test-case id="2270" name="TimeoutRecovery_RestoresBoardAndRefundsBooster" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.TimeoutRecovery_RestoresBoardAndRefundsBooster" methodname="TimeoutRecovery_RestoresBoardAndRefundsBooster" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="1472226969" result="Passed" start-time="2026-09-30 12:58:40Z" end-time="2026-09-30 12:58:40Z" duration="0.121987" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay command recovered: qa:stuck-command. Reason=Command timeout: qa:stuck-command; board=F55AF44F8CC1FC4B
+]]></output>
+              </test-case>
+              <test-case id="2269" name="ValidBoosterTarget_ConsumesExactlyOne" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ValidBoosterTarget_ConsumesExactlyOne" methodname="ValidBoosterTarget_ConsumesExactlyOne" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="573545710" result="Passed" start-time="2026-09-30 12:58:40Z" end-time="2026-09-30 12:58:42Z" duration="1.089937" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1922903863 waves=1 score=750 final=6724CECD0D2D99D9 plan=FDC5BFE197D4B4F2
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R1/QA/FixtureFix/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
