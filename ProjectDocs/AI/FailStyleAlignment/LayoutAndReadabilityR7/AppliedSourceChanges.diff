@@ -1,0 +1,813 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 6
++  Revision: 7
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -642,8 +642,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 256, y: -13}
+-  m_SizeDelta: {x: 45, y: 45}
++  m_AnchoredPosition: {x: 256, y: -12}
++  m_SizeDelta: {x: 40, y: 40}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2857243400489489980
+ CanvasRenderer:
+@@ -794,7 +794,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: -102}
++  m_AnchoredPosition: {x: 0, y: -100}
+   m_SizeDelta: {x: 380, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6880022463797537067
+@@ -980,8 +980,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 26, y: -18}
+-  m_SizeDelta: {x: 134, y: 134}
++  m_AnchoredPosition: {x: 27, y: -18}
++  m_SizeDelta: {x: 140, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9178243374362987699
+ CanvasRenderer:
+@@ -1100,7 +1100,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 126, y: -124}
++  m_AnchoredPosition: {x: 132, y: -130}
+   m_SizeDelta: {x: 49, y: 49}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3605856994039849150
+@@ -1261,8 +1261,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3, y: -170}
+-  m_SizeDelta: {x: 190, y: 53}
++  m_AnchoredPosition: {x: 0, y: -178}
++  m_SizeDelta: {x: 194, y: 56}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7458513285824095593
+ CanvasRenderer:
+@@ -1538,7 +1538,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 9, y: -0}
+-  m_SizeDelta: {x: 166, y: 166}
++  m_SizeDelta: {x: 176, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4261451426001118672
+ CanvasRenderer:
+@@ -1688,7 +1688,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 9, y: -0}
+-  m_SizeDelta: {x: 166, y: 166}
++  m_SizeDelta: {x: 176, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8616701682175454211
+ CanvasRenderer:
+@@ -2321,8 +2321,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -178}
+-  m_SizeDelta: {x: 352, y: 86}
++  m_AnchoredPosition: {x: 3, y: -182}
++  m_SizeDelta: {x: 376, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &93123236864979424
+ CanvasRenderer:
+@@ -2354,7 +2354,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -2664,7 +2664,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: -102}
++  m_AnchoredPosition: {x: 0, y: -100}
+   m_SizeDelta: {x: 380, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3646573730107447237
+@@ -3386,7 +3386,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 9, y: -0}
+-  m_SizeDelta: {x: 166, y: 166}
++  m_SizeDelta: {x: 176, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3191516986726975338
+ CanvasRenderer:
+@@ -3426,6 +3426,96 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3217252015906930541
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 769905383982963247}
++  - component: {fileID: 1845561508370703840}
++  - component: {fileID: 1533722222358476504}
++  - component: {fileID: 5236744912526435792}
++  m_Layer: 5
++  m_Name: GoalsOuterPanel
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &769905383982963247
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3217252015906930541}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5447443005004833745}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 130, y: -622}
++  m_SizeDelta: {x: 681, y: 247}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &1845561508370703840
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3217252015906930541}
++  m_CullTransparentMesh: 1
++--- !u!114 &1533722222358476504
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3217252015906930541}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 8c5d1d4038f8366b6ac5764ffaff090c, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!114 &5236744912526435792
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3217252015906930541}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
++  TopProtectedFraction: 0.25
++  BottomProtectedFraction: 0.25
+ --- !u!1 &3225398997983378583
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -3537,8 +3627,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 140, y: -92}
+-  m_SizeDelta: {x: 88, y: 62}
++  m_AnchoredPosition: {x: 140, y: -104}
++  m_SizeDelta: {x: 88, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5456759259171582905
+ CanvasRenderer:
+@@ -3570,7 +3660,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 52
++    m_FontSize: 44
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -4061,7 +4151,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 512, y: -999}
+-  m_SizeDelta: {x: 324, y: 136}
++  m_SizeDelta: {x: 324, y: 132.57422}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7581123159915034496
+ CanvasRenderer:
+@@ -4257,8 +4347,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 91, y: -1220}
+-  m_SizeDelta: {x: 189, y: 216}
++  m_AnchoredPosition: {x: 83, y: -1210}
++  m_SizeDelta: {x: 194, y: 234}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &4327775460190469757
+ GameObject:
+@@ -4430,8 +4520,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 26, y: -18}
+-  m_SizeDelta: {x: 134, y: 134}
++  m_AnchoredPosition: {x: 27, y: -18}
++  m_SizeDelta: {x: 140, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4782480108259549477
+ CanvasRenderer:
+@@ -4550,7 +4640,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 126, y: -124}
++  m_AnchoredPosition: {x: 132, y: -130}
+   m_SizeDelta: {x: 49, y: 49}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &378955669684832923
+@@ -4621,8 +4711,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 105, y: -999}
+-  m_SizeDelta: {x: 324, y: 136}
++  m_AnchoredPosition: {x: 105, y: -1015}
++  m_SizeDelta: {x: 324, y: 118.108376}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5590398645453770370
+ CanvasRenderer:
+@@ -4855,8 +4945,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 661, y: -1220}
+-  m_SizeDelta: {x: 189, y: 216}
++  m_AnchoredPosition: {x: 665, y: -1210}
++  m_SizeDelta: {x: 194, y: 234}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &4706346812625497990
+ GameObject:
+@@ -4894,8 +4984,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 42, y: -82}
+-  m_SizeDelta: {x: 480, y: 42}
++  m_AnchoredPosition: {x: 42, y: -76}
++  m_SizeDelta: {x: 480, y: 40}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8207354783645223317
+ CanvasRenderer:
+@@ -4927,7 +5017,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 32
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -5004,8 +5094,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 117, y: -83}
+-  m_SizeDelta: {x: 30, y: 32}
++  m_AnchoredPosition: {x: 117, y: -86}
++  m_SizeDelta: {x: 26, y: 26}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2623364927183477300
+ CanvasRenderer:
+@@ -5081,8 +5171,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 90, y: -1137}
+-  m_SizeDelta: {x: 1522, y: 60}
++  m_AnchoredPosition: {x: 104, y: -1158}
++  m_SizeDelta: {x: 1036, y: 98}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4406292742693476472
+ CanvasRenderer:
+@@ -5114,7 +5204,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 40
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -5192,7 +5282,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 126, y: -124}
++  m_AnchoredPosition: {x: 132, y: -130}
+   m_SizeDelta: {x: 49, y: 49}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2969360148757361740
+@@ -5259,8 +5349,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 32, y: -15}
+-  m_SizeDelta: {x: 874, y: 76}
++  m_AnchoredPosition: {x: 10, y: -5}
++  m_SizeDelta: {x: 360, y: 92}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3805330708199980758
+ CanvasRenderer:
+@@ -5292,7 +5382,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 50
++    m_FontSize: 38
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -5300,7 +5390,7 @@
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+-    m_HorizontalOverflow: 1
++    m_HorizontalOverflow: 0
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+   m_Text: "\u041A \u041A\u0410\u0420\u0422\u0415 \u0413\u041B\u0410\u0412\u042B"
+@@ -5704,8 +5794,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -178}
+-  m_SizeDelta: {x: 352, y: 86}
++  m_AnchoredPosition: {x: 3, y: -182}
++  m_SizeDelta: {x: 376, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &357769677848500320
+ CanvasRenderer:
+@@ -5737,7 +5827,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -6241,8 +6331,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -178}
+-  m_SizeDelta: {x: 352, y: 86}
++  m_AnchoredPosition: {x: 3, y: -182}
++  m_SizeDelta: {x: 376, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1027816466407742971
+ CanvasRenderer:
+@@ -6274,7 +6364,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -6352,8 +6442,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 26, y: -18}
+-  m_SizeDelta: {x: 134, y: 134}
++  m_AnchoredPosition: {x: 27, y: -18}
++  m_SizeDelta: {x: 140, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8033513977026840974
+ CanvasRenderer:
+@@ -6472,8 +6562,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3, y: -170}
+-  m_SizeDelta: {x: 190, y: 53}
++  m_AnchoredPosition: {x: 0, y: -178}
++  m_SizeDelta: {x: 194, y: 56}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7949328535781548967
+ CanvasRenderer:
+@@ -6562,8 +6652,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3, y: -170}
+-  m_SizeDelta: {x: 190, y: 53}
++  m_AnchoredPosition: {x: 0, y: -178}
++  m_SizeDelta: {x: 194, y: 56}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8906863811524356802
+ CanvasRenderer:
+@@ -6654,8 +6744,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 220, y: -1442}
+-  m_SizeDelta: {x: 501, y: 68}
++  m_AnchoredPosition: {x: 642, y: -1158}
++  m_SizeDelta: {x: 200, y: 56}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3906067895041848897
+ CanvasRenderer:
+@@ -6789,8 +6879,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 110, y: -1180}
+-  m_SizeDelta: {x: 1442, y: 74}
++  m_AnchoredPosition: {x: 104, y: -1160}
++  m_SizeDelta: {x: 1036, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4435562069715201904
+ CanvasRenderer:
+@@ -7048,8 +7138,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -13}
+-  m_SizeDelta: {x: 552, y: 84}
++  m_AnchoredPosition: {x: 24, y: -12}
++  m_SizeDelta: {x: 552, y: 74}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2525319068280211376
+ CanvasRenderer:
+@@ -7346,8 +7436,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -3, y: -170}
+-  m_SizeDelta: {x: 190, y: 53}
++  m_AnchoredPosition: {x: 0, y: -178}
++  m_SizeDelta: {x: 194, y: 56}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4388246482438679524
+ CanvasRenderer:
+@@ -7548,7 +7638,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 126, y: -124}
++  m_AnchoredPosition: {x: 132, y: -130}
+   m_SizeDelta: {x: 49, y: 49}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7755711264260632837
+@@ -7710,7 +7800,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: -102}
++  m_AnchoredPosition: {x: 0, y: -100}
+   m_SizeDelta: {x: 380, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9040455435150831862
+@@ -7930,6 +8020,7 @@
+   - {fileID: 3759023213593208717}
+   - {fileID: 5103263950418791048}
+   - {fileID: 7293218086131328649}
++  - {fileID: 769905383982963247}
+   - {fileID: 4064170603354827023}
+   - {fileID: 6053909361932615193}
+   - {fileID: 8001486373292923289}
+@@ -7992,8 +8083,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 72, y: -1166}
+-  m_SizeDelta: {x: 797, y: 272}
++  m_AnchoredPosition: {x: 72, y: -1145}
++  m_SizeDelta: {x: 797, y: 300}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8152969660436103840
+ CanvasRenderer:
+@@ -8084,8 +8175,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 281, y: -1220}
+-  m_SizeDelta: {x: 189, y: 216}
++  m_AnchoredPosition: {x: 277, y: -1210}
++  m_SizeDelta: {x: 194, y: 234}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &7966458627948972151
+ GameObject:
+@@ -8124,8 +8215,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 471, y: -1220}
+-  m_SizeDelta: {x: 189, y: 216}
++  m_AnchoredPosition: {x: 471, y: -1210}
++  m_SizeDelta: {x: 194, y: 234}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &7970506258091001499
+ GameObject:
+@@ -8489,8 +8580,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 26, y: -18}
+-  m_SizeDelta: {x: 134, y: 134}
++  m_AnchoredPosition: {x: 27, y: -18}
++  m_SizeDelta: {x: 140, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6552961067771450850
+ CanvasRenderer:
+@@ -8722,7 +8813,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 9, y: -0}
+-  m_SizeDelta: {x: 166, y: 166}
++  m_SizeDelta: {x: 176, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1908664872965002733
+ CanvasRenderer:
+@@ -8918,8 +9009,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 149, y: -680}
+-  m_SizeDelta: {x: 643, y: 185}
++  m_AnchoredPosition: {x: 169, y: -680}
++  m_SizeDelta: {x: 603, y: 179}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6298159416945104450
+ CanvasRenderer:
+@@ -9009,8 +9100,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 42, y: -55}
+-  m_SizeDelta: {x: 480, y: 46}
++  m_AnchoredPosition: {x: 42, y: -50}
++  m_SizeDelta: {x: 480, y: 42}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4645430481062124632
+ CanvasRenderer:
+@@ -9121,8 +9212,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 151, y: -84}
+-  m_SizeDelta: {x: 108, y: 60}
++  m_AnchoredPosition: {x: 151, y: -86}
++  m_SizeDelta: {x: 108, y: 52}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2679999608740035958
+ CanvasRenderer:
+@@ -9367,8 +9458,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -30}
+-  m_SizeDelta: {x: 552, y: 108}
++  m_AnchoredPosition: {x: 24, y: -27}
++  m_SizeDelta: {x: 552, y: 94}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5260431335434088739
+ CanvasRenderer:
+@@ -9575,8 +9666,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -178}
+-  m_SizeDelta: {x: 352, y: 86}
++  m_AnchoredPosition: {x: 3, y: -182}
++  m_SizeDelta: {x: 376, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4157139819559285992
+ CanvasRenderer:
+@@ -9608,7 +9699,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,7 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R6 fits the title plaque to the reference dimensions; independent Scenario
++            // R7 aligns native offer faces, nested goals and footer/booster spacing; independent Scenario
+             // surfaces and live lettering retain all prior actions and references.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -87,48 +87,56 @@
+             ProductionVictoryView.PlaceText(v.Title,153,460,635,92,76);
+             ProductionVictoryView.PlaceText(v.Subtitle,149,550,643,45,34);
+             Gold(v.Title,1.2f);Gold(v.Subtitle,.65f);
+-            SetPanel(v,"GoalsPanel","goals_r2",149,680,643,185,true);
++            // Enclose the heading and inset separately, behind all live goal content.
++            SetPanel(v,"GoalsOuterPanel","goals_r2",130,622,681,247,true);
++            v.Body.Find("GoalsOuterPanel").SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
++            SetPanel(v,"GoalsPanel","goals_r2",169,680,603,179,true);
+             ProductionVictoryView.PlaceText(v.GoalsHeading,143,630,655,45,30);
+             // Retain the live round score as metadata, but the reference's hierarchy gives
+             // this space to the failed-goal icons. It is not a decorative sample score.
+             v.Score.gameObject.SetActive(false);
+             foreach(var goal in v.Goals)
+-                ProductionVictoryView.PlaceText(goal.Count,0,102,190,40,31);
++                ProductionVictoryView.PlaceText(goal.Count,0,100,190,40,31);
+             var retrySprite=Load(ArtRoot+"retry_r2");v.Retry.GetComponent<Image>().sprite=retrySprite;
+             float retryWidth=625,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
+             ProductionVictoryView.Place((RectTransform)v.Retry.transform,(941-retryWidth)*.5f,877,retryWidth,retryHeight);
+             ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,36);Gold(v.RetryText,.8f);
+             var exit=v.Exit.GetComponent<Image>();exit.sprite=Load(ArtRoot+"goals_r2");
+-            ProductionVictoryView.Place((RectTransform)v.Exit.transform,220,1442,501,68);
+-            ProductionVictoryView.PlaceText(v.ExitText,32,15,437,38,25);
+-            ProductionVictoryView.PlaceText(v.Reaction,90,1137,761,30,20);
++            ProductionVictoryView.Place((RectTransform)v.Exit.transform,642,1158,200,56);
++            ProductionVictoryView.PlaceText(v.ExitText,10,5,180,46,19);
++            v.ExitText.horizontalOverflow=HorizontalWrapMode.Wrap;
++            ProductionVictoryView.PlaceText(v.Reaction,104,1158,518,49,18);
++            v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
+             v.Reaction.gameObject.SetActive(false);
+-            SetPanel(v,"BoostersPanel","goals_r2",72,1166,797,272,true);
+-            ProductionVictoryView.PlaceText(v.BoostersHeading,110,1180,721,37,26);
++            SetPanel(v,"BoostersPanel","goals_r2",72,1145,797,300,true);
++            ProductionVictoryView.PlaceText(v.BoostersHeading,104,1160,518,40,26);
+             for(int i=0;i<4;i++)
+             {
+                 var group=v.Body.Find("Booster_"+i) as RectTransform;
+-                ProductionVictoryView.Place(group,91+i*190,1220,189,216);
+-                var frame=EnsureArt(group,"Medallion",Load(ArtRoot+"medallion_r2"),9,0,166,166);frame.transform.SetAsFirstSibling();
++                ProductionVictoryView.Place(group,83+i*194,1210,194,234);
++                var frame=EnsureArt(group,"Medallion",Load(ArtRoot+"medallion_r2"),9,0,176,176);frame.transform.SetAsFirstSibling();
+                 frame.preserveAspect=true;
+                 frame.color=new Color32(205,199,184,255);
+                 // Keep a generous interactive rectangle while preserving the whole booster illustration.
+                 var art=v.BoosterButtons[i].GetComponent<Image>();
+-                ProductionVictoryView.Place(art.rectTransform,26,18,134,134);art.preserveAspect=true;art.color=new Color32(225,225,225,255);
+-                ProductionVictoryView.Place(group.Find("StockBadge") as RectTransform,126,124,49,49);
++                ProductionVictoryView.Place(art.rectTransform,27,18,140,140);art.preserveAspect=true;art.color=new Color32(225,225,225,255);
++                ProductionVictoryView.Place(group.Find("StockBadge") as RectTransform,132,130,49,49);
+                 ProductionVictoryView.PlaceText(v.BoosterCounts[i],0,0,49,49,28);
+-                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r2"),-3,170,190,53);
++                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r2"),0,178,194,56);
+                 var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit==null)plate.gameObject.AddComponent<ProductionFailPanelFit>();
+                 plate.transform.SetSiblingIndex(1);
+-                ProductionVictoryView.PlaceText(v.BoosterLabels[i],3,178,176,43,19);
++                ProductionVictoryView.PlaceText(v.BoosterLabels[i],3,182,188,48,20);
+                 v.BoosterLabels[i].transform.SetAsLastSibling();
+             }
+         }
+         internal static void ApplyOffers(ProductionFailView v)
+         {
+             if(v.Body==null)return;
+-            var paid=EnsureArt(v.Body,"PaidMovesOffer",Load(ArtRoot+"paid_r4"),105,999,324,136);
+-            var ad=EnsureArt(v.Body,"RewardedContinueOffer",Load(ArtRoot+"ad_r4"),512,999,324,136);
++            // Match the painted face and green inset baselines, allowing for the ad crest.
++            // Keep both complete sprites at their native aspect ratio.
++            var paidSprite=Load(ArtRoot+"paid_r4");var adSprite=Load(ArtRoot+"ad_r4");
++            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,1015,324,324*paidSprite.rect.height/paidSprite.rect.width);
++            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,999,324,324*adSprite.rect.height/adSprite.rect.width);
+             v.PaidOffer=paid.GetComponent<Button>()??Button(paid);
+             v.AdOffer=ad.GetComponent<Button>()??Button(ad);
+             foreach(var b in new[]{v.PaidOffer,v.AdOffer})
+@@ -137,15 +145,15 @@
+                 var colors=b.colors;colors.disabledColor=new Color(.82f,.82f,.82f,1);b.colors=colors;
+                 b.GetComponent<Image>().preserveAspect=true;b.GetComponent<Image>().raycastTarget=true;
+             }
+-            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,13,276,42,30);
+-            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,30,276,54,22);
++            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,12,276,37,30);
++            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,27,276,47,22);
+             v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
+-            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,55,240,23,17);
+-            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),117,83,30,32);gem.preserveAspect=true;
+-            EnsureLabel(v,paid.transform,"Price",151,84,54,30,24).text="—";
+-            var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,13,45,45);lightning.preserveAspect=true;
+-            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,82,240,21,15);
+-            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,92,44,31,26);play.text="▶";
++            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,21,17);
++            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),117,86,26,26);gem.preserveAspect=true;
++            EnsureLabel(v,paid.transform,"Price",151,86,54,26,24).text="—";
++            var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;
++            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,76,240,20,16);
++            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,104,44,22,22);play.text="▶";
+             v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);
+         }
+         static Text EnsureLabel(ProductionFailView v,Transform parent,string name,float x,float y,float w,float h,int size)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=6;
++        public const int CurrentRevision=7;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+@@ -79,6 +79,7 @@
+             var story=result!=null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure):null;
+             Reaction.text=story!=null?story.Speaker+": "+story.Text:"";
+             Reaction.gameObject.SetActive(inspected>=0);
++            BoostersHeading.gameObject.SetActive(inspected<0);
+             if(inspected>=0)
+             {
+                 string[] info=en?new[]{"Mace: clears a row; swipe vertically for a column.","Firebird feather: clears a 3×3 area.","Living light: clears all gems of the selected color.","Sea king's pearl: adds 5 moves during gameplay."}:new[]{"Булава: очистить ряд; вертикальный жест — столбец.","Перо Жар-птицы: очистить область 3×3.","Живой свет: убрать все самоцветы выбранного цвета.","Жемчужина: добавить 5 ходов во время игры."};
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -258,6 +258,25 @@
+             Rect paid=Bounds((RectTransform)v.PaidOffer.transform,camera),ad=Bounds((RectTransform)v.AdOffer.transform,camera);
+             Assert.That(paid.Overlaps(ad)||paid.Overlaps(retry)||ad.Overlaps(retry)||paid.Overlaps(exit)||ad.Overlaps(exit),Is.False);
+             Rect mainPanel=Bounds(v.Body.Find("MainPanel") as RectTransform,camera);
++            // The return action must clear the lower ornamental band and booster hit areas.
++            Assert.That(exit.yMin,Is.GreaterThan(mainPanel.yMin+mainPanel.height*.09f),"Chapter-map action covers footer carving.");
++            Assert.That(exit.Overlaps(heading),Is.False,"Return action overlaps booster heading.");
++            foreach(var button in v.BoosterButtons)Assert.That(exit.Overlaps(Bounds((RectTransform)button.transform,camera)),Is.False);
++            // Landmarks measured on the whole source art: upper face and green face centers.
++            // Verify painted alignment, not just equal outer rectangles.
++            float paidFace=paid.yMax-paid.height*(36f/370),adFace=ad.yMax-ad.height*(85f/419);
++            float paidGreen=paid.yMax-paid.height*(310f/370),adGreen=ad.yMax-ad.height*(363f/419);
++            float tolerance=paid.width/324*3;
++            Assert.That(Mathf.Abs(paidFace-adFace),Is.LessThan(tolerance),"Offer upper painted faces misaligned.");
++            Assert.That(Mathf.Abs(paidGreen-adGreen),Is.LessThan(tolerance),"Offer green faces misaligned.");
++            foreach(var offer in new[]{v.PaidOffer,v.AdOffer})
++            {
++                var offerArt=offer.GetComponent<Image>();var rect=Bounds(offerArt.rectTransform,camera);
++                Assert.That(rect.width/rect.height,Is.EqualTo(offerArt.sprite.rect.width/offerArt.sprite.rect.height).Within(.001f),"Whole offer art must retain native aspect.");
++            }
++            Assert.That(Bounds(v.AdOfferTitle.rectTransform,camera).Overlaps(Bounds(v.AdOfferStatus.rectTransform,camera)),Is.False,"Ad title/status need separate lines.");
++            Rect outerGoals=Bounds(v.Body.Find("GoalsOuterPanel") as RectTransform,camera);
++            Assert.That(outerGoals.Contains(goalPanel.min)&&outerGoals.Contains(goalPanel.max),Is.True,"Goal inset must stay inside heading enclosure.");
+             foreach(var label in v.BoosterLabels)Assert.That(Bounds(label.rectTransform,camera).yMin,Is.GreaterThan(mainPanel.yMin+mainPanel.height*.055f),"Booster label must clear bottom carving.");
+             Assert.That(Root().GetComponentsInChildren<Button>(true).Length,Is.EqualTo(13));
+         }
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(6));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(7));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
