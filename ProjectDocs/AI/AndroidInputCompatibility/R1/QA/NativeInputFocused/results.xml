@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.0747604">
+  <test-suite type="TestSuite" id="2492" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1340" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.074760" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2486" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="551" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.045088" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1557407" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2487" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="551" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.033845" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2488" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="551" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.018029" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2489" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="551" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="4.001109" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1873" name="AndroidInputCompatibilityPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="3.971775" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1874" name="PlayerUsesOnlyNewInputBackend" fullname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests.PlayerUsesOnlyNewInputBackend" methodname="PlayerUsesOnlyNewInputBackend" classname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests" runstate="Runnable" seed="1094467310" result="Passed" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:35Z" duration="0.019399" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1875" name="QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput" fullname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests.QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput" methodname="QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput" classname="LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests" runstate="Runnable" seed="1786059880" result="Failed" label="Error" start-time="2026-09-30 23:03:35Z" end-time="2026-09-30 23:03:39Z" duration="3.928966" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.ArgumentNullException : Value cannot be null.
+Parameter name: value]]></message>
+                  <stack-trace><![CDATA[  at UnityEngine.InputSystem.InputSystem.set_settings (UnityEngine.InputSystem.InputSettings value) [0x00032] in ./Library/PackageCache/com.unity.inputsystem@7a4e1a2a8194/InputSystem/Runtime/InputSystem.cs:2869 
+  at LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests+<QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput>d__1.<>m__Finally1 () [0x00028] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/AndroidInputCompatibilityPlayModeTests.cs:86 
+  at LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests+<QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput>d__1.MoveNext () [0x00494] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/AndroidInputCompatibilityPlayModeTests.cs:80 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidInputCompatibility/R1/QA/NativeInputFocused/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
