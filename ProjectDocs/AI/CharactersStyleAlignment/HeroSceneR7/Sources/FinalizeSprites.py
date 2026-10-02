@@ -1,0 +1,16 @@
+from pathlib import Path
+from PIL import Image,ImageDraw,ImageFilter
+import numpy as np,cv2,json,hashlib,shutil
+b=Path(__file__).resolve().parent;out=Path('Assets/LegendsOfRus/Resources/ProductionUI/CharactersAligned');src=Image.open('ProjectDocs/AI/CharactersStyleAlignment/R1/Sources/OriginalReference.png').convert('RGBA');records=[]
+original=Image.open(b/'Inputs/hero_firebird_r7.png').convert('RGBA');raw=Image.open(b/'Scenario/hero_firebird_r7/booster_medallion_trial01.png').convert('RGBA').resize(original.size,Image.Resampling.LANCZOS);alpha=np.array(raw.getchannel('A'));count,labels,stats,_=cv2.connectedComponentsWithStats(np.uint8(alpha>30),8);keep=1+np.argmax(stats[1:,cv2.CC_STAT_AREA]);support=cv2.dilate(np.uint8(labels==keep),np.ones((3,3),np.uint8));alpha*=support
+# The source portrait meets the decorative frame at its bottom-left corner. Remove that attached scroll from the character alpha.
+mask=Image.new('L',original.size);ImageDraw.Draw(mask).polygon([(0,484),(8,491),(15,502),(33,513),(0,513)],fill=255);mask=mask.filter(ImageFilter.GaussianBlur(.5));alpha=np.minimum(alpha,255-np.array(mask));original.putalpha(Image.fromarray(alpha));p=out/'hero_firebird_r7.png';original.save(p);mask.save(b/'HeroAlphaRepairMask.png');records.append({'asset':str(p),'operation':'Scenario subject alpha plus connected-component and lower-left frame-remnant cleanup; original RGB retained','rgbOriginalPreserved':bool(np.array_equal(np.array(original)[:,:,:3],np.array(Image.open(b/'Inputs/hero_firebird_r7.png').convert('RGB'))))})
+frame=src.crop((10,308,445,843));w,h=frame.size;mask=Image.new('L',frame.size);ImageDraw.Draw(mask).rounded_rectangle((11,10,w-11,h-10),radius=25,fill=255);mask=mask.filter(ImageFilter.GaussianBlur(.6));prior=Image.open(out/'portrait_frame.png').getchannel('A');a=np.minimum(np.array(prior),255-np.array(mask));rgb=np.array(frame)[:,:,:3].astype(float);yy,xx=np.mgrid[:h,:w];remnant=(yy<20)&(xx>35)&(xx<w-35)&(rgb[:,:,2]>rgb[:,:,1])&(rgb[:,:,2]>rgb[:,:,0]*.8)&(rgb[:,:,2]>25);a[remnant]=0;Image.fromarray(np.uint8(remnant)*255).save(b/'FrameTopRemnantMask.png');frame.putalpha(Image.fromarray(a));p=out/'portrait_frame_r7.png';frame.save(p);mask.save(b/'FrameInteriorRemovalMask.png');records.append({'asset':str(p),'operation':'Original reference frame RGB, existing Scenario alpha, transparent portrait interior','rgbOriginalPreserved':True})
+background=out/'sunset_r7.png';shutil.copy2(b/'Scenario/backgrounds/booster_medallion_trial01.png',background);records.append({'asset':str(background),'operation':'One Scenario generated clean hidden sunset plate, unmodified output; no foreground characters or UI'})
+for r in records:r['sha256']=hashlib.sha256(Path(r['asset']).read_bytes()).hexdigest()
+(b.parent/'AssetProvenance.json').write_text(json.dumps({'assets':records,'originalAssessment':'Sources/Assessment.json','mainHomeSpriteUnchanged':True,'limitations':'Joint original subject sprite; source size411x513. Hidden background generated separately, not exact recovered pixels.'},indent=2))
+for color,name in [((0,0,0),'black'),((255,255,255),'white'),((180,0,160),'magenta')]:
+ sheet=Image.new('RGB',(900,560),color)
+ for i,r in enumerate(records[:2]):
+  im=Image.open(r['asset']);sheet.paste(im,(i*450,10),im)
+ sheet.save(b.parent/'QA'/f'Alpha_{name}.png')
