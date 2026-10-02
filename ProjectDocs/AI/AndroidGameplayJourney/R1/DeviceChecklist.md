@@ -55,3 +55,7 @@ For each row record: pending/pass/fail, APK hash, baseline/actual result, eviden
 - Reader: `FunctionalDemoNavigationPlayModeTests.PersistenceReaderRestoresWithoutDuplicateReward`, options in `Sources/ReadOptions.json`; run after Writer in a separate process sharing only the isolated product store. For another run, update both phase options to a new isolated store/checkpoint.
 
 Use the `LegendsOfRus.Tests.PlayMode.` namespace prefix. Previously authorized `-force-vulkan` applies only to verification processes; project graphics settings remain unchanged.
+
+### 2026-10-02 fixture preparation update
+
+[Fixed fixture scope and Editor rehearsal](../../AndroidGameplayProfile/R3FixturePreparation/TestResults.md) now defines the stock boundaries, eight-round/three-scene early recap and fully acknowledged 500-round finale. Fourteen isolated Unity process checks and 34 fake-JNI entry checks pass. The current APK has no new selectors and reference DTOs have no supported import route. STOCK-01/02/03 and RECAP-02/03 still require selector/factory implementation, a separately verified APK refresh and resumed physical execution. Every device row remains pending. This preparation does not turn service-level synthetic completions into earned phone evidence.

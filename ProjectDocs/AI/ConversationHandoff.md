@@ -4,7 +4,17 @@
 
 The original handoff below is historical. Resume from the newest entries in [CurrentTask](CurrentTask.md), [DevelopmentSchedule](DevelopmentSchedule.md) and [SessionLog](SessionLog.md), verified against local files. Core-first work supersedes the old Loading-only and backend-first next steps. Chapter 1 rounds1–500 and finale are installed; R5 recorded1,334 distinct runtime passes with3 deferred backend cases. These are prior results, not a new runtime acceptance claim.
 
-Latest completed task: [Core regression R7 after recap](CoreGameplayRegression/R7RecapIntegration/TestResults.md), 2026-10-02.
+Latest completed task: [Disposable fixture preparation R3](AndroidGameplayProfile/R3FixturePreparation/TestResults.md), 2026-10-02.
+
+Prepared six bounded Editor reference fixtures: stock 999/1 000/9 999/Int32.MaxValue, early acknowledged story and fully acknowledged round500 finale. **14 separate Unity process checks passed**, zero runtime failures/skips; **34 compiled entry-guard checks passed** with fake JNI/preferences. These are phase executions of two methods, not a full sweep or phone evidence. Initial temporary NUnit API compile failure retained and corrected; every final launcher exited 0.
+
+Six fresh writer/resume reader pairs preserve exact payloads and five synthetic normal preference fingerprints, bracketed by normal writer/reader processes. Early has eight completed rounds/three scenes/History page2; finale has 500 rounds/58 scenes/1 500 stars and acknowledged Chapter1. Both actual native recap returns preserve page/full save/journal; replay rejects duplicate grants. Active v6 profile kept separate from v9 campaign development state. Maximum stock is display/consumption only because reward additions lack overflow protection.
+
+[Results](AndroidGameplayProfile/R3FixturePreparation/TestResults.md) · [Fixed scope](AndroidGameplayProfile/R3FixturePreparation/FixtureScope.md) · [Reference plan](AndroidGameplayProfile/R3FixturePreparation/FixturePlan.json) · [Final validation](AndroidGameplayProfile/R3FixturePreparation/QA/FinalValidation.json). Current profile/APK still accepts only fresh/resume/empty-energy; proposed selectors are not installed, exports are not an import API. Foreign-owner rejection for new presets remains part of implementation.
+
+All 7,833 project inputs unchanged; temporary rehearsal C#/meta removed. Production scripts/tests/art/fonts/prefabs/GUIDs/metas/approved Splash/settings/packages/backend/guards and prior edits preserved. Six existing docs updated plus new preparation evidence. Current R3 APK/sidecar unchanged at 766,017,314 bytes/SHA256 2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e; five normal manual exports unchanged. Isolated test storage only; no new Edit Mode suite/build/device/ADB/normal personal journal/credentials/hosting/commit or visual/human acceptance.
+
+Previous completed task: [Core regression R7 after recap](CoreGameplayRegression/R7RecapIntegration/TestResults.md), 2026-10-02.
 
 **1,377 latest distinct Unity checks passed, zero failures; three backend cases deferred.** Current broad sweep: eight Play Mode assemblies,1,339passed/zero failed/14conditional skips,39.59minutes. All17 separate restart/profile processes pass, resolving ten distinct local skips; explicit fresh-QA recap1/1 and targeted recap/Profile/story Edit27/27 resolve the remaining local skip and add27distinct checks. Counts are deduplicated, not summed executions.
 
@@ -38,7 +48,7 @@ All500rounds ×3seeds =1,500 replay witnesses finish within move budgets, using2
 
 Only MechanicsSpectacleTests.cs and AndroidInputCompatibilityPlayModeTests.cs changed;7,819 other Assets/Packages/ProjectSettings/Backend inputs unchanged, zero added/deleted. Production runtime/services/rules/art/fonts/prefabs/GUIDs/metadata/approved Splash/settings/packages/backend/guards and prior user changes preserved. Current R4 APK remains765,772,146bytes/SHA256 `924ecabcdbdb58f30512e6e2b134db4246be22c8f9ecc6b6086551e4ad937eff`, sidecar matches, includes R3 captions (revisions23/12). No new Edit suite, APK, phone test, hosting, deployment or commit.
 
-Next independent scheduled action: Prepare the bounded scope and ownership checks for disposable large-stock and acknowledged-story/finale QA fixtures through the existing development profile. Human201–210 recording remains parallel, followed by the prepared gap matrix before tuning. Phone execution and hosting remain deferred; physical readability, exact font provenance and Android lifecycle/performance remain open. Final gameplay effects stay last. Preserve historical decisions below.
+Next independent scheduled action: Implement the six bounded preset selectors and a pure fixture factory in the existing DevelopmentGameplayProfile, including foreign-owner rejection and failed-commit isolation. Preserve the current fresh/resume/empty-energy behavior and development/release guards; verify normal saves, cold resume, native stock and recap before a separate guarded APK refresh. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last. Preserve historical decisions below.
 
 Prepared 2026-09-12. Source: the current user/assistant conversation and supplied project artifacts. This is a focused decision summary, not a verbatim transcript or an independently verified local Unity audit.
 

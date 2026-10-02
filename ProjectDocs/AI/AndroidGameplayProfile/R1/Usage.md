@@ -52,3 +52,7 @@ Only `LegendsOfRus_GameplayQA_v1_` keys are reset: the primary/backup/staging sa
 
 
 Optional recap is reached through Profile → History → Story. Eligible scenes must already be acknowledged through the normal story flow; milestone scenes also need their completed round. These Android commands do not seed arbitrary story acknowledgements or the finale. Existing [pending device rows](../../AndroidGameplayJourney/R1/DeviceChecklist.md) separate naturally earned intro/early scenes from a reviewed disposable finale fixture. Packaging and preceding Editor tests do not establish phone input, readability or lifecycle acceptance.
+
+## Fixed fixtures — Editor preparation only
+
+[Fixture preparation R3](../R3FixturePreparation/TestResults.md) supplies six rehearsed reference DTOs and a [bounded implementation scope](../R3FixturePreparation/FixtureScope.md): four stock sizes and early/fully acknowledged finale story. All six proposed names are rejected by the current entry logic; the APK still accepts only fresh/resume/empty-energy. Do not pass proposed selectors as supported extras or import the DTOs. Selector/factory implementation and a later guarded APK refresh remain prerequisites. Physical rows stay pending; normal saves are never a fixture source.
