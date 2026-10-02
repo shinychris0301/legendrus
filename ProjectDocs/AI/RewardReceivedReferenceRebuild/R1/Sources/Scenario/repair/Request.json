@@ -1,0 +1,15 @@
+{
+  "model": "model_openai-gpt-image-2",
+  "body": {
+    "prompt": "Repair the THREE exact UI surfaces in this reference atlas. Keep exact positions and sizes. Large upper panel at x20,y10,width795,height982: retain the gold carved perimeter and sapphire top/bottom crests exactly. Remove ALL inner text, chest, coins, gems, light rays, reward boxes, and the green lower button. Reconstruct a continuous empty dark navy floral lacquer face matching the visible original material; no rectangle seams, no bright patches. Remove any unrelated outside scenery; outer area black. Separate emerald button below at x50,y1060,width451,height138: remove only its letters, preserve original gold ornaments and sapphire bottom crest. Separate small reward card at x600,y1060,width122,height130: remove coins and number, preserve its fine gold frame and repair empty dark navy interior. No new text, objects or ornaments. Do not rearrange or resize the three parts. Output is used only beneath bounded masks; original visible perimeter pixels will be restored separately.",
+    "referenceImages": [
+      "asset_SkTVNgvo7gStsGJs8PFaZvhM"
+    ],
+    "width": 1024,
+    "height": 1536,
+    "quality": "medium",
+    "background": "opaque",
+    "numOutputs": 1
+  },
+  "reason": "Original faces are occluded by sample lettering and icons; replace only bounded interior masks, retaining original gold and alpha."
+}

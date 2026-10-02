@@ -1,0 +1,11 @@
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+namespace LegendsOfRus.Editor { public static class PreLevelImportDiagnostic {
+ public static void Run(){
+ foreach(var key in ProductionPreLevelSourceControls.ArtNames){var p="Assets/LegendsOfRus/Resources/"+ProductionPreLevelSourceControls.ArtRoot+key+".png";var a=AssetDatabase.LoadAllAssetsAtPath(p);foreach(var x in a)Debug.Log("PRELEVEL ASSET "+key+" "+x.GetType().Name+" "+x.name);Debug.Log("PRELEVEL LOAD "+key+" "+(ProductionPreLevelSourceControls.Load(key)!=null));}
+ var v=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab").GetComponent<ProductionPreLevelView>();Debug.Log("PRELEVEL BIND "+v.HasRequiredBindings+" HEADER "+v.Header.HasBindings);
+ foreach(var f in typeof(ProductionPreLevelView).GetFields()){if(typeof(Object).IsAssignableFrom(f.FieldType)&&!(Object)f.GetValue(v))Debug.Log("PRELEVEL MISSING "+f.Name);}
+ }
+}}
+#endif
