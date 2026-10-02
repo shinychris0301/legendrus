@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 20:06:27Z" end-time="2026-09-29 20:06:28Z" duration="0.1678694">
+  <test-suite type="TestSuite" id="2406" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1267" result="Failed" site="Child" start-time="2026-09-29 20:06:27Z" end-time="2026-09-29 20:06:28Z" duration="0.167869" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2400" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="478" result="Failed" site="Child" start-time="2026-09-29 20:06:27Z" end-time="2026-09-29 20:06:28Z" duration="0.130128" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="524526" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2401" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="478" result="Failed" site="Child" start-time="2026-09-29 20:06:27Z" end-time="2026-09-29 20:06:28Z" duration="0.119775" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2402" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="478" result="Failed" site="Child" start-time="2026-09-29 20:06:27Z" end-time="2026-09-29 20:06:28Z" duration="0.102980" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2403" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="478" result="Failed" site="Child" start-time="2026-09-29 20:06:28Z" end-time="2026-09-29 20:06:28Z" duration="0.086027" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2275" name="RetainedRoundRestartPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-29 20:06:28Z" end-time="2026-09-29 20:06:28Z" duration="0.068018" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2278" name="ReadDeclinedRoundAfterSecondRestart" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadDeclinedRoundAfterSecondRestart" methodname="ReadDeclinedRoundAfterSecondRestart" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests" runstate="Runnable" seed="256756674" result="Failed" start-time="2026-09-29 20:06:28Z" end-time="2026-09-29 20:06:28Z" duration="0.047453" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: null
+  But was:  <LegendsOfRus.RetainedRoundData>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests+<ReadDeclinedRoundAfterSecondRestart>d__7.MoveNext () [0x00031] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundRestartPlayModeTests.cs:60
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/RestartCleared/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
