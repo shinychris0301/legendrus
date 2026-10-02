@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Failed(Child)" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.7970552">
+  <test-suite type="TestSuite" id="1533" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="435" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.797055" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1527" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="397" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.788154" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1432039" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1528" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="397" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.774769" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1529" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="397" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.758722" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1530" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="397" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.741980" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1300" name="IndividualRankingAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="1.724455" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1301" name="LiveHeaderLocalizationAndPortraitCaptures" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.LiveHeaderLocalizationAndPortraitCaptures" methodname="LiveHeaderLocalizationAndPortraitCaptures" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="491415779" result="Failed" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:05Z" duration="0.369080" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionIndividualRankingView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x003f9] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:264
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x003ae] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:213
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests+<LiveHeaderLocalizationAndPortraitCaptures>d__11.MoveNext () [0x00113] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:66
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+]]></output>
+              </test-case>
+              <test-case id="1305" name="MaximumBalancesStayVisibleWithoutBecomingRankScores" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.MaximumBalancesStayVisibleWithoutBecomingRankScores" methodname="MaximumBalancesStayVisibleWithoutBecomingRankScores" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="221752200" result="Failed" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:05Z" duration="0.162994" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionIndividualRankingView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x003f9] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:264
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x003ae] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:213
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests+<MaximumBalancesStayVisibleWithoutBecomingRankScores>d__16.MoveNext () [0x000f1] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:124
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1303" name="NativeHeaderRoutesOnce" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.NativeHeaderRoutesOnce" methodname="NativeHeaderRoutesOnce" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="1361891690" result="Passed" start-time="2026-09-23 18:36:05Z" end-time="2026-09-23 18:36:06Z" duration="0.450976" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1304" name="ProfileShortcutAndNativeBackKeepExistingDestinations" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.ProfileShortcutAndNativeBackKeepExistingDestinations" methodname="ProfileShortcutAndNativeBackKeepExistingDestinations" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="358832321" result="Failed" start-time="2026-09-23 18:36:06Z" end-time="2026-09-23 18:36:06Z" duration="0.160671" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests+<ProfileShortcutAndNativeBackKeepExistingDestinations>d__15.MoveNext () [0x000b7] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:110
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1306" name="RulesOverlayBlocksUnderlyingControlsAndBackClosesItFirst" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.RulesOverlayBlocksUnderlyingControlsAndBackClosesItFirst" methodname="RulesOverlayBlocksUnderlyingControlsAndBackClosesItFirst" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="6237011" result="Passed" start-time="2026-09-23 18:36:06Z" end-time="2026-09-23 18:36:06Z" duration="0.382839" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1302" name="TabsAndRepeatedBindingsKeepPreviewReadOnly" fullname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.TabsAndRepeatedBindingsKeepPreviewReadOnly" methodname="TabsAndRepeatedBindingsKeepPreviewReadOnly" classname="LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests" runstate="Runnable" seed="1140098155" result="Failed" start-time="2026-09-23 18:36:06Z" end-time="2026-09-23 18:36:06Z" duration="0.177082" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionIndividualRankingView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x003f9] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:264
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x003ae] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:213
+at LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests+<TabsAndRepeatedBindingsKeepPreviewReadOnly>d__13.MoveNext () [0x00203] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs:90
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /tmp/lor-individual-ranking-reference-r1/Verify01/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
