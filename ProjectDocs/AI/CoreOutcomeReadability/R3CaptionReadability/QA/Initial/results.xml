@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.4860196">
+  <test-suite type="TestSuite" id="2497" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1345" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.486020" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2491" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.439317" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1469668" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2492" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.427464" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2493" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.411397" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2494" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:35Z" duration="3.394678" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2164" name="GameplayAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:33Z" duration="0.617548" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2176" name="LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" fullname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" methodname="LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" classname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" runstate="Runnable" seed="285585281" result="Failed" label="Error" start-time="2026-10-01 20:11:32Z" end-time="2026-10-01 20:11:33Z" duration="0.596509" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.NullReferenceException : Object reference not set to an instance of an object]]></message>
+                  <stack-trace><![CDATA[  at LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests+<LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput>d__29.MoveNext () [0x00088] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs:565 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=chapter01.level01, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Legends of Rus level=chapter01.level01, attempt=2, board=8x7, seed=508542, hash=E431630E82D49A08
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2469" name="VictoryAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-01 20:11:33Z" end-time="2026-10-01 20:11:35Z" duration="2.745063" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2482" name="LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" methodname="LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="1396237526" result="Failed" label="Error" start-time="2026-10-01 20:11:33Z" end-time="2026-10-01 20:11:35Z" duration="2.719013" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[UnityEngine.MissingReferenceException : The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.]]></message>
+                  <stack-trace><![CDATA[  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0005f] in /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/UnityEngineObject.bindings.cs:1150 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x0000a] in /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/BindingsHelpers.cs:61 
+  at UnityEngine.Transform.FindRelativeTransformWithPath (System.String path, System.Boolean isActiveOnly) [0x00006] in <f1b7b21189b645c8af0437a04dbf7cf9>:0 
+  at UnityEngine.Transform.Find (System.String n) [0x0000e] in /home/bokken/build/output/unity/unity/Runtime/Transform/ScriptBindings/Transform.bindings.cs:394 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<>c__DisplayClass23_3.<LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics>b__0 (UnityEngine.Camera camera) [0x00006] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:342 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00258] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:437 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics>d__23.MoveNext () [0x00372] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:339 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R3CaptionReadability/QA/Initial/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
