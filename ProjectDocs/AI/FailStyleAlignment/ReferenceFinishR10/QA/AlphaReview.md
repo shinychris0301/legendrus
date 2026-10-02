@@ -1,0 +1,1 @@
+Six completed resources inspected: clean opaque environment; Ivan, main/title/goal/name plaques over black, white and magenta. No opaque exterior glow or checkerboard. Raw-preview RGB outside alpha was misleading; no rembg required or used. Interior RGB preserved, only alpha endpoint cleanup and transparent padding trim. Offers/medallions not generated or inspected.

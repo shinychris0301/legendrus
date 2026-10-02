@@ -1,0 +1,239 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 11
++  Revision: 12
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -1293,7 +1293,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 0025f8a29d8143ea894efbf1d7e6ca1a, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -2433,7 +2433,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 2008651777289769893}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -4003,7 +4003,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4004045328758958983}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -5939,7 +5939,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 5249739676175126967}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -6475,7 +6475,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 5842558506911922675}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -6719,7 +6719,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 69c196bf3eca49cc8f4badaded7619e7, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -6810,7 +6810,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 4ddc40309f7840dca267bda999db1877, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -7597,7 +7597,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 7556cb55cb0e4823a942a0a3beffd8b9, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -9053,7 +9053,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: db89c1818e47461884978ce116a03082, type: 3}
++  m_Sprite: {fileID: 21300000, guid: defba64a06ae442999cc89eba06ed87c, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -9818,7 +9818,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 8984409356744609570}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,8 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R11 imports isolated reference UI using Scenario alpha and bounded live-label repairs.
++            // R12 adds original Russian lettering variants to the isolated Scenario-derived UI.
++            // Runtime restores live English/no-result labels; quantities and controls remain live.
+             // Retain the independently generated R10 scene/hero/main panel and all existing object IDs.
+             // Reference captions retain existing functions; live data and routes remain intact.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -6,8 +6,9 @@
+     public static class ProductionFailRuntime
+     {
+         public const string ContentName="FAIL_ALIGNED_CONTENT",ArtRoot="ProductionUI/FailAligned/";
+-        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10","title_r11","retry_r11","paid_r11","ad_r11","nameplate_r11","goals_r11","heading_r11","mace_r11","firebird_r11","shield_r11","potion_r11"};
++        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10","title_r11","retry_r11","paid_r11","ad_r11","nameplate_r11","goals_r11","heading_r11","mace_r11","firebird_r11","shield_r11","potion_r11","title_ru_r12","retry_ru_r12","name_mace_ru_r12","name_firebird_ru_r12","name_shield_ru_r12","name_potion_ru_r12"};
+         public static readonly string[] ReferenceBoosters={"mace_r11","firebird_r11","shield_r11","potion_r11"};
++        public static readonly string[] ReferenceNameplatesRu={"name_mace_ru_r12","name_firebird_ru_r12","name_shield_ru_r12","name_potion_ru_r12"};
+         public const float SceneTop=-35;
+         public static void BuildInto(RectTransform root)
+         {
+@@ -150,6 +151,21 @@
+                 v.BoosterLabels[i].transform.SetAsLastSibling();
+             }
+         }
++        internal static void ApplyLocalizedArtwork(ProductionFailView v,bool russian,bool hasFailure)
++        {
++            // R12 retains original fixed Russian lettering with the artwork. Keep
++            // Text bindings/content for localization, but render exactly one label layer.
++            bool sourceTitle=russian&&hasFailure;
++            v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite=Load(ArtRoot+(sourceTitle?"title_ru_r12":"title_r11"));
++            v.Title.enabled=v.Subtitle.enabled=!sourceTitle;
++            v.Retry.GetComponent<Image>().sprite=Load(ArtRoot+(russian?"retry_ru_r12":"retry_r11"));
++            v.RetryText.enabled=!russian;
++            for(int i=0;i<4;i++)
++            {
++                v.Body.Find("Booster_"+i+"/Nameplate").GetComponent<Image>().sprite=Load(ArtRoot+(russian?ReferenceNameplatesRu[i]:"nameplate_r11"));
++                v.BoosterLabels[i].enabled=!russian;
++            }
++        }
+         internal static void ApplyOffers(ProductionFailView v)
+         {
+             if(v.Body==null)return;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=11;
++        public const int CurrentRevision=12;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+@@ -74,6 +74,7 @@
+                 Goals[i].Icon.sprite=icon;ProductionFailRuntime.Fit(Goals[i].Icon,95,50,88,88);
+                 Goals[i].Count.text=Number(result.CurrentAt(index))+"/"+Number(data.target);
+             }
++            ProductionFailRuntime.ApplyLocalizedArtwork(this,DemoFeatureState.LanguageCode=="ru",result!=null);
+             Retry.interactable=result!=null;
+             for(int i=0;i<4;i++)BoosterCounts[i].text=state!=null?Number(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
+             var story=result!=null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure):null;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -60,6 +60,22 @@
+         {
+             GameState.Instance.Save.selectedLevel=level;GameState.Instance.RecordLevelFailure(ChapterLevelCatalog.Find(1,level),score,progress);router.Show(ScreenId.Fail);Settle();
+         }
++        static void VerifyLocalizedArtwork(ProductionFailView v,bool russian,bool hasFailure)
++        {
++            bool sourceTitle=russian&&hasFailure;
++            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite.name,Is.EqualTo(sourceTitle?"title_ru_r12":"title_r11"));
++            Assert.That(v.Title.enabled||v.Subtitle.enabled,Is.EqualTo(!sourceTitle),"Never double-render Russian title or show out-of-moves without a failed round.");
++            Assert.That(v.Title.enabled,Is.EqualTo(v.Subtitle.enabled));
++            Assert.That(v.RetryText.enabled,Is.EqualTo(!russian));
++            Assert.That(v.Retry.GetComponent<Image>().sprite.name,Is.EqualTo(russian?"retry_ru_r12":"retry_r11"));
++            for(int i=0;i<4;i++)
++            {
++                Assert.That(v.Body.Find("Booster_"+i+"/Nameplate").GetComponent<Image>().sprite.name,Is.EqualTo(russian?ProductionFailRuntime.ReferenceNameplatesRu[i]:"nameplate_r11"));
++                Assert.That(v.BoosterLabels[i].enabled,Is.EqualTo(!russian));
++                Assert.That(v.BoosterCounts[i].enabled,Is.True,"Quantities stay live in every locale.");
++            }
++            Assert.That(v.PaidOfferTitle.enabled&&v.AdOfferTitle.enabled&&v.PaidOfferStatus.enabled&&v.AdOfferStatus.enabled,Is.True);
++        }
+         [UnityTest]public IEnumerator ActualProgressAndStockRenderInBothLanguagesAndSafeAreas()
+         {
+             var level=ChapterLevelCatalog.Find(1,2);var counts=new int[level.goals.Length];counts[0]=level.goals[0].target-2;
+@@ -69,10 +85,13 @@
+             Assert.That(v.Goals[0].Count.text,Is.EqualTo(counts[0]+"/"+level.goals[0].target));
+             for(int i=0;i<4;i++)Assert.That(v.BoosterCounts[i].text,Is.EqualTo(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i]).ToString()));
+             v.RefreshContent();Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(save));
++            VerifyLocalizedArtwork(v,true,true);
+             Capture("Fail_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return null;
++            VerifyLocalizedArtwork(v,false,true);
+             Capture("Fail_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             DemoFeatureState.SetLanguage("ru");v.RefreshContent();yield return null;
++            VerifyLocalizedArtwork(v,true,true);
+             Capture("Fail_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Capture("Fail_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(0,96,1080,2184));
+         }
+@@ -90,7 +109,12 @@
+             Fail(10,910,null);yield return null;Assert.That(View().Goals[0].Root.gameObject.activeSelf,Is.False);Assert.That(View().GoalsHeading.text,Does.Contain("UNAVAILABLE"));
+             GameState.Instance.ResetProgress();View().RefreshContent();yield return WaitForNormalButtonColors();
+             Assert.That(GameState.Instance.LastFailureResult,Is.Null);Assert.That(View().Retry.interactable,Is.False);
++            VerifyLocalizedArtwork(View(),false,false);
+             Capture("Fail_NoResult_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            DemoFeatureState.SetLanguage("ru");View().RefreshContent();yield return null;
++            VerifyLocalizedArtwork(View(),true,false);
++            Assert.That(View().Subtitle.text,Does.Contain("НЕТ ЗАВЕРШЁННОЙ"));
++            Capture("Fail_NoResult_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+         }
+         [UnityTest]public IEnumerator RetryExitAndBoosterGuidePreserveExistingTransactions()
+         {
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(11));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(12));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+@@ -20,7 +20,7 @@
+             foreach(string dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
+             Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_r10")));
+             Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_r10")));
+-            Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"retry_r11")));
++            Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+(v.RetryText.enabled?"retry_r11":"retry_ru_r12"))));
+             Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_r10")));
+             Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r11")));
+             Assert.That(v.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);

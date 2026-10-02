@@ -1,0 +1,26 @@
+{
+  "modelId": "model_openai-gpt-image-2",
+  "referenceImages": [
+    "Sources/reference_edit_input.png"
+  ],
+  "mask": "Sources/nameplate_caption_mask.png",
+  "editableBox": [
+    101,
+    1531,
+    262,
+    1560
+  ],
+  "inputSize": [
+    944,
+    1680
+  ],
+  "padding": "3 pixels right and8 bottom; original941×1672 pixels unchanged",
+  "outputSize": [
+    944,
+    1680
+  ],
+  "quality": "medium",
+  "numOutputs": 1,
+  "postprocessRequirement": "If successful, retain original source RGB everywhere outside the editable caption area. Output remains intermediate until isolated alpha and original frame-pixel checks pass. No full-screen runtime image.",
+  "prompt": "Edit only the transparent area of the supplied mask: erase the baked Russian caption МОЛОТ ГРОМА from the first booster nameplate at the bottom left. Reconstruct only the dark navy subtly textured surface behind those letters, using the neighboring surface. Preserve the exact gold frame, dimensions, colors, ornamentation and all unmasked pixels. Do not create another plaque or redesign anything. Keep the full image composition and resolution unchanged. Do not add text."
+}
