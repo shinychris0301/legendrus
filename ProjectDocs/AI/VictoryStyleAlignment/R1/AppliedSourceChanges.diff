@@ -1,0 +1,194 @@
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -136,6 +136,12 @@
+                 var layout=prefab.GetComponent<ProductionGameplayLayout>();
+                 return gameplayView==null||!gameplayView.HasRequiredBindings||layout==null||layout.View!=gameplayView||prefab.transform.Find(ProductionGameplayRuntime.ContentName)==null;
+             }
++            if (id == ScreenId.Victory)
++            {
++                var victory=prefab.GetComponent<ProductionVictoryView>();
++                var victoryLayout=prefab.GetComponent<ProductionVictoryLayout>();
++                return victory==null||!victory.HasRequiredBindings||victoryLayout==null||victoryLayout.View!=victory||prefab.transform.Find(ProductionVictoryRuntime.ContentName)==null;
++            }
+             if (id == ScreenId.PreLevel)
+             {
+                 ProductionPreLevelView map = prefab.GetComponent<ProductionPreLevelView>();
+@@ -280,6 +286,11 @@
+                     if(view==null||!view.HasRequiredBindings)failures.Add(path+": Gameplay native bindings incomplete.");
+                     continue;
+                 }
++                if(id==ScreenId.Victory)
++                {
++                    var view=prefab.GetComponent<ProductionVictoryView>();
++                    if(view==null||!view.HasRequiredBindings)failures.Add(path+": Victory native bindings incomplete.");
++                }
+                 if (id == ScreenId.PreLevel)
+                 {
+                     ProductionPreLevelView view = prefab.GetComponent<ProductionPreLevelView>();
+@@ -351,6 +362,7 @@
+         static void BuildPage(ScreenId id)
+         {
+             RequireEditorIdle();
++            if (id == ScreenId.Victory) { BuildVictoryPage(); return; }
+             if (id == ScreenId.Gameplay) { BuildGameplayPage(); return; }
+             if (id == ScreenId.PreLevel) { BuildPreLevelPage(); return; }
+             if (id == ScreenId.ChapterMap) { BuildChapterMapPage(); return; }
+@@ -498,6 +510,34 @@
+                     "a1f5768c4c9b74ee9d631784ae531559c05ea618cace93d13364f79d8fa20852",
+                     "gameplay-readability-r11-junctions-oriented-specials",8,true,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
++            }
++            finally{PrefabUtility.UnloadPrefabContents(root);}
++        }
++
++        [MenuItem("Legends of Rus/Production UI/Victory Alignment/Rebuild Victory Only")]
++        public static void RebuildVictoryAlignment()
++        {
++            RequireEditorIdle();BuildPage(ScreenId.Victory);AssetDatabase.SaveAssets();
++            AssetDatabase.ImportAsset(PageRoot+"/Victory.prefab",ImportAssetOptions.ForceSynchronousImport);
++            if(PageNeedsBuild(ScreenId.Victory))throw new InvalidOperationException("Victory save/readback failed.");
++            Debug.Log("Victory alignment saved and read back at revision "+ProductionVictoryView.CurrentRevision+".");
++        }
++        static void BuildVictoryPage()
++        {
++            foreach(string name in ProductionVictoryRuntime.ArtNames)
++            {
++                string artPath="Assets/LegendsOfRus/Resources/"+ProductionVictoryRuntime.ArtRoot+name+".png";
++                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
++                if(importer==null)throw new InvalidOperationException("Missing Victory artwork: "+artPath);
++                LockedDesignImporter.ConfigureWorldMapTexture(importer,name);importer.SaveAndReimport();
++            }
++            string path=PageRoot+"/Victory.prefab";var root=PrefabUtility.LoadPrefabContents(path);
++            try
++            {
++                var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
++                var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
++                ProductionVictoryRuntime.BuildInto(rect);
++                bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Victory.");
+             }
+             finally{PrefabUtility.UnloadPrefabContents(root);}
+         }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -28,6 +28,7 @@
+ 
+     public sealed class LevelCompletionResult
+     {
++        public int Score { get; }
+         public LevelData Level { get; }
+         public int Stars { get; }
+         public int GoldReward { get; }
+@@ -39,7 +40,8 @@
+             int stars,
+             int goldReward,
+             int gemReward,
+-            bool firstClearRewardGranted
++            bool firstClearRewardGranted,
++            int score = 0
+         )
+         {
+             Level = level;
+@@ -47,6 +49,7 @@
+             GoldReward = goldReward;
+             GemReward = gemReward;
+             FirstClearRewardGranted = firstClearRewardGranted;
++            Score = Mathf.Max(0, score);
+         }
+     }
+ 
+@@ -139,6 +142,8 @@
+         public event Action Changed;
+ 
+         public PlayerSaveLoadResult LastLoadResult { get; private set; }
++        // Current-session outcome, distinct from the saved personal best on replays.
++        public LevelCompletionResult LastCompletionResult { get; private set; }
+         public PlayerSaveWriteResult LastWriteResult { get; private set; }
+         public bool CanPersist
+         {
+@@ -621,15 +626,16 @@
+             Save.chapter = Save.selectedChapter;
+             Save.level = Save.highestUnlockedLevel;
+             Save.stars = CalculateTotalStars();
+-            Persist();
+-
+-            return new LevelCompletionResult(
++            LastCompletionResult = new LevelCompletionResult(
+                 levelData,
+                 earnedStars,
+                 grantedGold,
+                 grantedGems,
+-                grantReward
++                grantReward,
++                score
+             );
++            Persist();
++            return LastCompletionResult;
+         }
+ 
+         public bool TryDoubleLastLevelGoldReward()
+@@ -915,6 +921,7 @@
+             }
+ 
+             StoryService.ResetRuntime();
++            LastCompletionResult = null;
+             Save = reset;
+             canPersist = writeCompleted;
+             if (!writeCompleted)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionUiFix01Runtime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionUiFix01Runtime.cs
+@@ -47,6 +47,11 @@
+             if (id == ScreenId.Home)
+             {
+                 ProductionHomeRuntime.BuildInto(root);
++                return;
++            }
++            if (id == ScreenId.Victory)
++            {
++                ProductionVictoryRuntime.BuildInto(root);
+                 return;
+             }
+             if (id == ScreenId.Gameplay)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -617,17 +617,10 @@
+                     break;
+ 
+                 case ScreenId.Victory:
+-                    Hotspot(parent, "Continue", 185, 1330, 570, 149, ContinueAfterVictory);
+-                    Hotspot(
+-                        parent,
+-                        "DoubleReward",
+-                        180,
+-                        1480,
+-                        580,
+-                        120,
+-                        RequestRewardedDouble
+-                    );
+-                    break;
++                    var victory=parent.GetComponentInChildren<ProductionVictoryView>();
++                    if(victory==null||!victory.HasRequiredBindings)throw new InvalidOperationException("Victory native bindings are missing.");
++                    victory.BindNavigation(ContinueAfterVictory,RequestRewardedDouble,target=>Show(target));
++                    return;
+ 
+                 case ScreenId.Fail:
+                     Hotspot(parent, "Retry", 185, 1260, 570, 140, RestartCurrentLevel);
+@@ -1683,6 +1676,7 @@
+ 
+         void BuildOutcomeReactionOverlay(RectTransform parent, ScreenId id)
+         {
++            if(id==ScreenId.Victory&&parent.GetComponentInChildren<ProductionVictoryView>()!=null)return;
+             LocalizedStoryReaction reaction = activeOutcomeReaction;
+             if (reaction == null) return;
+ 
+@@ -1919,6 +1913,11 @@
+ 
+         public void Toast(string message)
+         {
++            if(current==ScreenId.Victory&&contentRoot!=null)
++            {
++                var victory=contentRoot.GetComponentInChildren<ProductionVictoryView>();
++                if(victory!=null){victory.SetStatus(message);return;}
++            }
+             // Gameplay owns one styled status slot; other screens keep their existing presentation.
+             if (current == ScreenId.Gameplay && contentRoot != null && !HasActiveModalBlocker)
+             {

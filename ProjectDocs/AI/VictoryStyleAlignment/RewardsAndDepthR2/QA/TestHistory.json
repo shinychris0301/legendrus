@@ -1,0 +1,69 @@
+{
+  "runs": [
+    {
+      "run": 1,
+      "steps": [
+        {
+          "step": "ImportVictory",
+          "exitCode": 0
+        },
+        {
+          "step": "EditMode",
+          "exitCode": 0,
+          "tests": {
+            "total": "6",
+            "passed": "6",
+            "failed": "0",
+            "skipped": "0"
+          }
+        },
+        {
+          "step": "PlayMode",
+          "exitCode": 0,
+          "tests": {
+            "total": "12",
+            "passed": "12",
+            "failed": "0",
+            "skipped": "0"
+          }
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "steps": [
+        {
+          "step": "ImportVictory",
+          "exitCode": 0
+        },
+        {
+          "step": "EditMode",
+          "exitCode": 0,
+          "tests": {
+            "total": "6",
+            "passed": "6",
+            "failed": "0",
+            "skipped": "0"
+          }
+        },
+        {
+          "step": "PlayMode",
+          "exitCode": 2,
+          "tests": {
+            "total": "12",
+            "passed": "11",
+            "failed": "1",
+            "skipped": "0"
+          }
+        }
+      ]
+    }
+  ],
+  "targetedRetry": {
+    "test": "PreLevel.BoosterGuideExplainsEachToolInBothLanguagesAndDoesNotSpendInventory",
+    "passed": 1,
+    "failed": 0,
+    "codeChangesBeforeRetry": false,
+    "reason": "Run2 failed strict save equality solely on lastEnergyUtcTicks after a slow capture sequence."
+  }
+}

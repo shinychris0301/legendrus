@@ -1,0 +1,27 @@
+{
+  "mode": "builtin image_gen",
+  "useCase": "precise-object-edit",
+  "inputs": [
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/VictoryAligned/banner.png",
+      "role": "Existing ribbon edit target"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Victory.png",
+      "role": "Style guidance only; never cropped or used as runtime background"
+    }
+  ],
+  "attempts": [
+    {
+      "source": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-a7cbc887-d181-4f01-a994-e72abab0f7bf.png",
+      "prompt": "Use case: precise-object-edit. Create a replacement isolated Victory ribbon sprite for the existing Russian fairy-tale mobile game. Image 1 is the current ribbon edit target; Image 2 is the complete Victory reference used ONLY as artistic guidance. Redesign the blank ribbon to closely match the reference's deeper red-brown arched ribbon, antique warm gold engraving and long trailing curled side ribbons. NO screen crop, no background scenery, no text. The main face must be substantially taller, a broad shallow upward arch, with a clear large empty curved dark oxblood/crimson velvet-lacquer surface for live title lettering, delicate gold engraved foliate motifs at left and right margins only. Main face takes roughly middle 76% of width; both top and bottom edges arch upward in center, reference's gold frame thickness and burgundy shadowed folds, small ruby top-center and bottom-center ornaments. Long elegant side tails curl down and out like the reference, leaving wide transparent central space BELOW the main face for separately rendered stars. No stars, no character, no reward panel. Retain premium painterly materials and rich golden edges, not shiny plastic or oversized leaf appliques. Main face is about 30% of total image height; complete curled ribbon about 90% width and 85% height. Landscape 1536x1024 canvas, front-on symmetrical composition, complete tails inside safe margins. REAL RGBA TRANSPARENT background outside ribbon, no checkerboard/no black/no matte/no shadow backdrop. Opaque face and folds preserved, subtle narrow golden light along rim only. Deliver one independent blank ribbon runtime asset, not a mockup.",
+      "status": "Painted checkerboard; further color/edge refinement requested"
+    },
+    {
+      "prompt": "Edit this isolated blank game Victory ribbon. Make ONLY these refinements: deepen the red face to dark warm red-brown oxblood, with restrained amber-red highlights instead of vivid candy crimson. Replace the very large raised leaf appliques along the left and right face edges with fine delicate engraved antique-gold patterns, leaving more blank space for live lettering. Keep complete curved silhouette, both long curling ribbon tails, main face height, centered rubies, rich painterly gold rim and deep fold shadows. Remove the painted checkerboard entirely and output a REAL TRANSPARENT RGBA background with zero alpha outside the ribbon. This is a runtime sprite, not a picture of transparency. No text, no stars, no background, no confetti, no mockup, no floor shadow, no halo cloud. Keep artwork opaque inside its surfaces, clean anti-aliased outside edges. Full ribbon and tails fit within canvas.",
+      "status": "Selected art after authorized exterior transparency cleanup; no recolor applied locally",
+      "source": "/home/k2/.codex/generated_images/01a09624-160e-7f10-a32e-7cc91172628e/exec-7db870e3-d204-48bc-b8db-c176dcd7d064.png",
+      "workspaceSource": "Sources/Banner_Generated_Raw.png"
+    }
+  ]
+}
