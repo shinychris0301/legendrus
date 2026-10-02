@@ -1,0 +1,47 @@
+"""Copy final run2 evidence and audit this task against its dirty-workspace baseline."""
+from pathlib import Path
+import hashlib,json,re,shutil,ast
+import xml.etree.ElementTree as E
+from PIL import Image
+import numpy as np
+r=Path.cwd();o=r/'ProjectDocs/AI/ChapterCompleteStyleAlignment/EdgesAndRewardsR2';uv=o/'UnityVerification';uv.mkdir(exist_ok=True)
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+for name in ['ImportChapterComplete','EditMode','PlayMode','ChapterComplete','Pause']:
+ shutil.copytree(Path('/tmp/lor-chaptercomplete-r2/run2')/name,uv/name,dirs_exist_ok=True)
+for stage in ['ImportChapterComplete','EditMode','PlayMode']:
+ source=Path('/tmp/lor-chaptercomplete-r2/run1')/stage;target=o/'QA/EarlierRuns/run1'/stage;target.mkdir(parents=True,exist_ok=True)
+ for f in source.iterdir():
+  if f.suffix in ['.log','.xml','.json']:shutil.copy2(f,target/f.name)
+before={x['path']:x['sha256'] for x in json.loads((o/'BeforeProductionHashes.json').read_text())};after={str(p.relative_to(r)):sha(p) for p in sorted((r/'Assets/LegendsOfRus').rglob('*')) if p.is_file()}
+changed=[p for p,h in before.items() if p in after and after[p]!=h];removed=[p for p in before if p not in after];added=[p for p in after if p not in before];assert not removed
+expected=['Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab','Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs','Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteRuntime.cs','Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteView.cs','Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs']
+expected+=['Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned/'+n+'.png' for n in ['header_ru','header_blank','foreground_ru','foreground_blank']]
+assert set(changed)==set(expected),(changed,expected)
+metas=[p for p in before if p.endswith('.meta')];assert all(before[p]==after[p] for p in metas)
+pref='Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab';old=(Path('/tmp/lor-chaptercomplete-r2/before')/pref).read_text();new=(r/pref).read_text();ids=lambda s:set(re.findall(r'^--- !u!\d+ &(-?\d+)',s,re.M));assert ids(old)<=ids(new)
+prior=json.loads((r/'ProjectDocs/AI/ChapterCompleteStyleAlignment/R1/UnityVerification/EvidenceHashes.json').read_text());assert all(sha(r/x['path'])==x['sha256'] for x in prior)
+guidPaths={}
+for p in (r/'Assets').rglob('*.meta'):
+ m=re.search(r'^guid: ([a-f0-9]+)',p.read_text(),re.M)
+ if m:guidPaths.setdefault(m[1],[]).append(str(p.relative_to(r)))
+newGuids=[]
+for name in added:
+ if name.endswith('.meta'):
+  g=re.search(r'^guid: ([a-f0-9]+)',(r/name).read_text(),re.M).group(1);assert len(guidPaths[g])==1;newGuids.append(g)
+audit=json.loads((o/'QA/ExtractionAudit.json').read_text());art=r/'Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned';assert all(sha(art/(x['name']+'.png'))==x['sha256'] for x in audit)
+provenance=json.loads((o/'Sources/Provenance.json').read_text());src=Image.open(r/provenance['source']).convert('RGB');assert sha(r/provenance['source'])==provenance['sha256']
+for name in ['header','foreground']:
+ assert np.array_equal(np.array(src.crop(provenance['boxes'][name])),np.array(Image.open(art/(name+'_ru.png')).convert('RGB')))
+edge={}
+for name in ['header_ru','foreground_ru']:
+ olda=np.array(Image.open(Path('/tmp/lor-chaptercomplete-r2/before')/art.relative_to(r)/(name+'.png')).convert('RGBA'))[:,:,3];a=np.array(Image.open(art/(name+'.png')).convert('RGBA'))[:,:,3]
+ edge[name]={'beforeSize':list(olda.shape[::-1]),'afterSize':list(a.shape[::-1]),'beforeBottomOpaque':int((olda[-1]>128).sum()),'afterBottomOpaque':int((a[-1]>128).sum()),'beforeRightOpaque':int((olda[:,-1]>128).sum()),'afterRightOpaque':int((a[:,-1]>128).sum())}
+assert edge['header_ru']['afterBottomOpaque']==0;assert edge['foreground_ru']['afterRightOpaque']==0
+foreground=np.array(Image.open(art/'foreground_ru.png').convert('RGBA'))[:,:,3];edge['recoveredForegroundPixelsBeyondR1RightEdge']=int((foreground[:,789:]>128).sum());assert edge['recoveredForegroundPixelsBeyondR1RightEdge']>0
+results={}
+for stage in ['EditMode','PlayMode']:
+ node=E.parse(uv/stage/'results.xml').getroot();assert node.get('failed')=='0' and node.get('skipped')=='0';results[stage]={k:node.get(k) for k in ['total','passed','failed','skipped']}
+for f in o.rglob('*.py'):ast.parse(f.read_text(),filename=str(f))
+result={'baselineFiles':len(before),'unchangedFiles':len(before)-len(changed),'changedExisting':changed,'newFiles':added,'removedFiles':removed,'preservedMetaFiles':len(metas),'preservedOriginalPrefabObjects':len(ids(old)),'finalPrefabObjects':len(ids(new)),'uniqueNewGuids':len(newGuids),'preservedR1EvidenceFiles':len(prior),'spriteAuditMatches':len(audit),'originalRgbVerified':['header_ru','foreground_ru'],'edges':edge,'tests':results,'scenarioCuTotal':sum(json.loads(p.read_text())['cuCost'] for p in (o/'Sources/Scenario').glob('*/Billing.json'))}
+(o/'QA/FinalAudit.json').write_text(json.dumps(result,indent=2)+'\n');(o/'AfterProductionHashes.json').write_text(json.dumps([{'path':p,'sha256':h} for p,h in after.items()],indent=2)+'\n')
+(uv/'EvidenceHashes.json').write_text(json.dumps([{'path':str(p.relative_to(r)),'sha256':sha(p)} for p in sorted(uv.rglob('*')) if p.is_file() and p.name!='EvidenceHashes.json'],indent=2)+'\n');print(json.dumps(result,indent=2))

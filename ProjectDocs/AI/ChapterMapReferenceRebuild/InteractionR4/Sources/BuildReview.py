@@ -1,0 +1,18 @@
+from pathlib import Path
+import html
+b=Path(__file__).resolve().parent.parent
+views=[
+('QA/ChapterMap/ChapterMap_941x1672_RU.png','Chapter Map · nine rounds / Russian'),
+('QA/ChapterMap/ChapterMap_Pressed_RU.png','Chapter Map · held round button'),
+('QA/ChapterMap/ChapterMap_LockedNotice_RU.png','Chapter Map · locked-round notice'),
+('QA/ChapterMap/ChapterMap_576x1280_safearea_RU.png','Chapter Map · tall phone / safe edges'),
+('QA/ChapterMap/ChapterMap_1080x2400_safearea_RU.png','Chapter Map · tall phone with side insets'),
+('QA/ChapterMap/ChapterMap_941x1672_EN.png','Chapter Map · English'),
+('QA/ChapterMap/ChapterMap_Progress_941x1672_RU.png','Chapter Map · saved stars / round 2 fixture'),
+('QA/ChapterMap/ChapterMap_End500_RU.png','Chapter Map · planned round 500 notice'),
+('QA/WorldMap/WorldMap_Pressed_RU.png','World Map · held chapter card'),
+('QA/WorldMap/WorldMap_LockedNotice_RU.png','World Map · locked-chapter notice'),
+('../ResponsiveEdgesR3/QA/ChapterMap/ChapterMap_941x1672_RU.png','Previous R3 · wider zigzag comparison')]
+options=''.join(f'<option value="{html.escape(p)}">{html.escape(label)}</option>' for p,label in views)
+page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Maps — interaction and route spacing R4</title><style>body{margin:0;background:#080e17;color:#ead6ad;font:16px/1.5 system-ui,sans-serif}header,footer{max-width:850px;margin:22px auto;padding:0 18px}h1{font-size:24px;margin-bottom:6px}p{margin:8px 0}select{background:#182438;color:#ffe2a8;padding:10px;border:1px solid #947343;border-radius:5px;max-width:100%}main{max-width:520px;margin:20px auto}img{width:100%;height:auto;display:block}a{color:#a9d9ff}.note{color:#b4bbc7;font-size:14px}</style><header><h1>Maps · press feedback, round entry and spacing</h1><p>Visible pressed shading on both maps. Available rounds open the existing story/pre-level flow. Locked messages use the original navy-and-gold panel style. Narrower horizontal staggering and greater vertical spacing show nine rounds at rest.</p><select id="view" aria-label="Review capture">OPTIONS</select><p class="note">Actual Unity captures, isolated test saves. 35 targeted Unity checks passed. Held-state images show temporary button shading, not new locked states. The notice fades after 3.5 seconds and does not block input.</p></header><main><img id="capture" src="QA/ChapterMap/ChapterMap_941x1672_RU.png" alt="Selected native map capture"></main><footer><a href="ImplementationReport.md">Implementation and verification report</a><p class="note">Existing approved sprites reused; no Scenario generation or credits. Only ten authored rounds are playable. The other positions in the 500-round map remain unpublished.</p></footer><script>document.querySelector('#view').addEventListener('change',e=>document.querySelector('#capture').src=e.target.value);</script></html>'''
+(b/'ChapterMap_Interaction_R4_Review.html').write_text(page.replace('OPTIONS',options))
