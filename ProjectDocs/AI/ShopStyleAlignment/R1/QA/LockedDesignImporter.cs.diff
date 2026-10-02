@@ -1,0 +1,23 @@
+--- before/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -28,6 +28,8 @@
+ 
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned/"))
+             { ConfigureFailTexture(ti);return; }
++            if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ShopAligned/"))
++            { ConfigureShopTexture(ti);return; }
+             // Pause's extracted lettering/filigree retains source pixels on every platform.
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/PauseAligned/"))
+             {
+@@ -124,6 +126,11 @@
+             android.format = TextureImporterFormat.ASTC_6x6;
+             android.compressionQuality = 70;
+             ti.SetPlatformTextureSettings(android);
++        }
++
++        internal static void ConfigureShopTexture(TextureImporter ti)
++        {
++            ConfigureFailTexture(ti);ti.mipmapEnabled=false;ti.filterMode=FilterMode.Bilinear;
+         }
+ 
+         internal static void ConfigureFailTexture(TextureImporter ti)

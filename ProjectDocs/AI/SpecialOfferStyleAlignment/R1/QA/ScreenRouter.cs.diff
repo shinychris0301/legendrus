@@ -1,0 +1,24 @@
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -735,9 +735,10 @@
+                     break;
+ 
+                 case ScreenId.SpecialOffer:
+-                    Hotspot(parent, "Buy", 250, 1270, 441, 120, () => RequestPurchase("starter", null));
+-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
+-                    break;
++                    var offer=parent.GetComponentInChildren<ProductionSpecialOfferView>();
++                    if(offer==null||!offer.HasRequiredBindings)throw new InvalidOperationException("Special Offer native bindings are missing.");
++                    offer.Bind(NavigateBack,()=>Show(ScreenId.Shop),idToBuy=>RequestPurchase(idToBuy,null));
++                    return;
+ 
+                 case ScreenId.LanguageSelect:
+                     Hotspot(parent, "Ru", 220, 780, 501, 105, () => SetDemoLanguage("ru"));
+@@ -1737,6 +1738,7 @@
+ 
+         bool UsesTopHud(ScreenId id)
+         {
++            if (id == ScreenId.SpecialOffer && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
+             if (id == ScreenId.Shop && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
+             if (id == ScreenId.PreLevel) return false; // Native page owns its live HUD.
+             if (id == ScreenId.ChapterMap) return false; // Native page owns its live HUD.

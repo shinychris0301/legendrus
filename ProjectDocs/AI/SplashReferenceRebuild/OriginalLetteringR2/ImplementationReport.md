@@ -1,0 +1,9 @@
+# Splash — original lettering R2
+
+User requested extracting button and text together. The Russian Start sprite now preserves all original RGB from source bounds159,1356–788,1554, including gold letters, shading and complete navy surface. It reuses the accepted Scenario alpha from R1. No regeneration, text removal, inpainting or additional API call/credit was needed. Alpha inspected over black, white and magenta. Original title/crest lettering was already retained.
+
+The canonical prefab and owning configuration/builder/view are revision9. Serialized Russian and blank sprites switch with language: Russian displays the original lettered sprite with its live overlay disabled; English displays the existing blank sprite with live TAP TO START. The Text binding and Russian wording remain available, preventing loss of semantic label data. Application.version remains live. Native Start/Loading/Home behavior and source proportions are unchanged. No shared art, other screen or service was modified.
+
+Unity6000.5.9f1 compiled, rebuilt and read back revision9. Final9EditMode+6PlayMode=15checks passed, no skips/failures. Includes language sprite/label switching and round-trip, safe-area geometry, actual Start pointer handling, duplicate-tap rejection, measured Loading retry/error/success/Home routing and unchanged Home branding. Seven Splash captures retained; Russian/English reference-size and narrow-safe captures reviewed. Browser results are in QA/BrowserChecks.json. No APK/device/full-suite test.
+
+Remaining differences are inherited from R1: reconstructed scenery, fine alpha edges and English fallback typography. Russian Start artwork retains source pixels; screenshot rendering still depends on display scaling. Changed files are enumerated in QA/ScopeChanges.json. One new PNG and meta; existing source sprite/GUIDs retained. Next: user review, then Loading in the approved page sequence.

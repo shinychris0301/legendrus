@@ -1,0 +1,29 @@
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -629,15 +629,9 @@
+                     return;
+ 
+                 case ScreenId.Shop:
+-                    Hotspot(parent, "Pack1", 55, 360, 390, 370, () =>
+-                        RequestPurchase("starter", null));
+-                    Hotspot(parent, "Pack2", 490, 360, 390, 370, () =>
+-                        RequestPurchase("hero", null));
+-                    Hotspot(parent, "Pack3", 55, 760, 390, 370, () =>
+-                        RequestPurchase("firebird", null));
+-                    DemoShortcut(parent, "SpecialOffer", "СПЕЦПРЕДЛОЖЕНИЕ", 260, 1420, 421, 100, () => Show(ScreenId.SpecialOffer));
+-                    Hotspot(parent, "Back", 0, 0, 180, 180, NavigateBack);
+-                    break;
++                    var shop=parent.GetComponentInChildren<ProductionShopView>();
++                    if(shop!=null&&shop.HasRequiredBindings){shop.Bind(target=>Show(target),NavigateBack,offer=>RequestPurchase(offer,null));return;}
++                    throw new InvalidOperationException("Shop native bindings are missing.");
+ 
+                 case ScreenId.DailyReward:
+                     Hotspot(parent, "Back", 15, 1470, 145, 160, () => Show(ScreenId.Home));
+@@ -1743,6 +1737,7 @@
+ 
+         bool UsesTopHud(ScreenId id)
+         {
++            if (id == ScreenId.Shop && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
+             if (id == ScreenId.PreLevel) return false; // Native page owns its live HUD.
+             if (id == ScreenId.ChapterMap) return false; // Native page owns its live HUD.
+             if (id == ScreenId.WorldMap) return false; // The aligned page owns its live Home-style HUD.

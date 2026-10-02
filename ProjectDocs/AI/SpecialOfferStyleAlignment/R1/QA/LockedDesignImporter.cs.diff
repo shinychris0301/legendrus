@@ -1,0 +1,12 @@
+--- before/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -28,7 +28,8 @@
+ 
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned/"))
+             { ConfigureFailTexture(ti);return; }
+-            if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ShopAligned/"))
++            if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ShopAligned/") ||
++                assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/SpecialOfferAligned/"))
+             { ConfigureShopTexture(ti);return; }
+             // Pause's extracted lettering/filigree retains source pixels on every platform.
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/PauseAligned/"))

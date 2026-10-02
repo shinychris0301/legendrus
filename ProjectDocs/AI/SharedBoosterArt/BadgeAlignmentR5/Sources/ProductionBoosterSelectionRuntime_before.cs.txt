@@ -1,0 +1,85 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public static class ProductionBoosterSelectionRuntime
+    {
+        public const string ArtRoot="ProductionUI/BoosterSelectionAligned/";
+        public static Sprite Load(string name)=>Resources.Load<Sprite>(ArtRoot+name);
+        public static void BuildInto(RectTransform root)
+        {
+            var existing=root.GetComponent<ProductionBoosterSelectionView>();
+            if(existing!=null){if(Application.isPlaying&&!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Booster Selection bindings outside Play Mode.");Align(existing);existing.RefreshContent();return;}
+            var v=root.gameObject.AddComponent<ProductionBoosterSelectionView>();v.Typography=Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
+            v.Content=Rect(root,"BOOSTER_SELECTION_CONTENT",0,0,941,1672);
+            v.Environment=Art(v.Content,"StandaloneEnvironment",Resources.Load<Sprite>("ProductionUI/ChapterMapAligned/environment"),0,0,941,1672);v.Environment.color=ProductionHomeRuntime.EnvironmentTone;
+            v.Shade=Art(v.Content,"DimLivePage",null,0,0,941,1672);v.Shade.color=new Color(0,0,0,.65f);v.Shade.raycastTarget=true;
+            v.Body=Rect(v.Content,"BoosterPanel",72,218,796,1240);
+            v.Panel=Art(v.Body,"NavyGoldFrame",Load("panel"),0,0,796,1240);
+            v.Title=Label(v,v.Body,"Heading",70,112,656,65,45);
+            v.Subtitle=Label(v,v.Body,"Subtitle",70,219,656,44,28);
+            v.Tools=new Button[4];v.Names=new Text[4];v.Effects=new Text[4];v.Counts=new Text[4];v.Availability=new Text[4];
+            string[] art={"mace","firebird","shield","potion"};
+            for(int i=0;i<4;i++)
+            {
+                float x=70+(i%2)*342,y=270+(i/2)*332;
+                var face=Art(v.Body,"Tool_"+art[i],ProductionBoosterArt.Icon(i,true),x+73,y,170,170);v.Tools[i]=Button(face);
+                var badge=Rect(face.transform,"StockBadge",128,121,55,55).gameObject.AddComponent<ProductionPreLevelBadge>();badge.raycastTarget=false;
+                v.Counts[i]=Label(v,badge.transform,"Count",5,5,45,45,31);v.Counts[i].resizeTextForBestFit=true;v.Counts[i].resizeTextMinSize=12;v.Counts[i].resizeTextMaxSize=31;
+                v.Names[i]=Label(v,v.Body,"Name_"+i,x,y+172,314,63,27);
+                v.Availability[i]=Label(v,v.Body,"Availability_"+i,x,y+234,314,27,19);
+                v.Effects[i]=Label(v,v.Body,"Effect_"+i,x,y+266,314,60,21);
+            }
+            v.Hint=Label(v,v.Body,"UsageHint",80,938,636,58,24);
+            var play=Art(v.Body,"Play",Load("play"),146,1006,504,170);v.Play=Button(play);v.PlayText=Label(v,play.transform,"Label",72,48,360,68,48);
+            v.Close=Button(Art(v.Body,"Close",Load("close"),707,60,79,82));
+            var layout=root.gameObject.AddComponent<ProductionBoosterSelectionLayout>();layout.View=v;Align(v);v.RefreshContent();layout.ApplyNow();
+            if(!v.HasRequiredBindings)throw new InvalidOperationException("Booster Selection native bindings incomplete.");
+        }
+        static void Align(ProductionBoosterSelectionView v)
+        {
+            v.Revision=ProductionBoosterSelectionView.CurrentRevision;
+            v.Body.sizeDelta=new Vector2(795,1194);v.Panel.sprite=Load("panel_r2");v.Panel.rectTransform.sizeDelta=v.Body.sizeDelta;
+            if(v.HeadingLettering==null)v.HeadingLettering=Art(v.Body,"OriginalHeading",Load("title_ru_r2"),150,110,502,59);
+            v.Title.rectTransform.anchoredPosition=new Vector2(70,-110);v.Title.rectTransform.sizeDelta=new Vector2(655,65);v.Title.fontSize=42;
+            if(v.PreviewIcons==null||v.PreviewIcons.Length!=4)v.PreviewIcons=new Image[4];
+            if(v.PreviewNames==null||v.PreviewNames.Length!=4)v.PreviewNames=new Text[4];
+            if(v.PreviewLabels==null||v.PreviewLabels.Length!=4)v.PreviewLabels=new Text[4];
+            for(int i=0;i<4;i++)
+            {
+                float x=34+i*184;
+                v.Tools[i].image.sprite=ProductionBoosterArt.Icon(i,true);
+                v.Tools[i].image.rectTransform.anchoredPosition=new Vector2(x+4,-260);
+                v.Names[i].rectTransform.anchoredPosition=new Vector2(x,-436);v.Names[i].rectTransform.sizeDelta=new Vector2(176,51);v.Names[i].fontSize=19;
+                v.Availability[i].rectTransform.anchoredPosition=new Vector2(x,-489);v.Availability[i].rectTransform.sizeDelta=new Vector2(176,24);v.Availability[i].fontSize=16;
+                v.Effects[i].rectTransform.anchoredPosition=new Vector2(x,-518);
+                v.Effects[i].rectTransform.sizeDelta=new Vector2(176,75);v.Effects[i].fontSize=17;
+                var badge=(RectTransform)v.Counts[i].transform.parent;badge.anchoredPosition=new Vector2(10,-130);badge.sizeDelta=new Vector2(44,44);
+                v.Counts[i].rectTransform.anchoredPosition=new Vector2(3,-3);v.Counts[i].rectTransform.sizeDelta=new Vector2(38,38);v.Counts[i].resizeTextMaxSize=26;
+                if(v.PreviewIcons[i]==null)v.PreviewIcons[i]=Art(v.Body,"PreviewOnly_"+i,Load("preview_"+i+"_r2"),x,605,176,180);
+                v.PreviewIcons[i].sprite=ProductionBoosterArt.Icon(i+4,true);
+                if(v.PreviewNames[i]==null)v.PreviewNames[i]=Label(v,v.Body,"PreviewName_"+i,x,796,176,50,19);
+                if(v.PreviewLabels[i]==null)v.PreviewLabels[i]=Label(v,v.Body,"PreviewAvailability_"+i,x,850,176,48,17);
+                v.PreviewLabels[i].color=new Color32(190,169,141,255);
+            }
+            v.Subtitle.rectTransform.anchoredPosition=new Vector2(70,-213);v.Subtitle.rectTransform.sizeDelta=new Vector2(656,44);v.Subtitle.fontSize=26;
+            v.Hint.rectTransform.anchoredPosition=new Vector2(80,-918);v.Hint.rectTransform.sizeDelta=new Vector2(636,57);v.Hint.fontSize=23;
+            v.Play.image.rectTransform.anchoredPosition=new Vector2(157,-984);v.Play.image.rectTransform.sizeDelta=new Vector2(480,158);
+            v.PlayText.rectTransform.anchoredPosition=new Vector2(74,-37);v.PlayText.rectTransform.sizeDelta=new Vector2(332,79);v.PlayText.fontSize=48;
+            v.Close.image.rectTransform.anchoredPosition=new Vector2(695,-63);v.Close.image.rectTransform.sizeDelta=new Vector2(92,96);
+        }
+        public static void ApplySourceState(ProductionBoosterSelectionView v,bool english)
+        {
+            v.HeadingLettering.gameObject.SetActive(!english);v.Title.enabled=english;
+            v.Play.image.sprite=Load(english?"play_blank_r2":"play_ru_r2");v.PlayText.enabled=english;
+        }
+        static RectTransform Rect(Transform p,string n,float x,float y,float w,float h)
+        {var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
+        static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h)
+        {var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.preserveAspect=s!=null;a.raycastTarget=false;return a;}
+        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};return b;}
+        static Text Label(ProductionBoosterSelectionView v,Transform p,string n,float x,float y,float w,float h,int size)
+        {var t=Rect(p,n,x,y,w,h).gameObject.AddComponent<Text>();t.font=v.Typography.RegularFont;t.fontSize=size;t.color=new Color32(245,211,147,255);t.alignment=TextAnchor.MiddleCenter;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;t.raycastTarget=false;return t;}
+    }
+}
