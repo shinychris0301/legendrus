@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.4844591">
+  <test-suite type="TestSuite" id="1587" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="489" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.484459" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1581" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="451" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.470170" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2062745" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1582" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="451" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.457700" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1583" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="451" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.441530" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1584" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="451" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.424916" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1277" name="FunctionalDemoNavigationPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests" runstate="Runnable" testcasecount="11" result="Failed" site="Child" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.402637" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1283" name="NativeJourneyFailsRetriesAndExitsHome" fullname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyFailsRetriesAndExitsHome" methodname="NativeJourneyFailsRetriesAndExitsHome" classname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests" runstate="Runnable" seed="679344628" result="Failed" start-time="2026-09-26 13:38:21Z" end-time="2026-09-26 13:38:22Z" duration="0.280097" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: not null and not <empty>
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.CaptureJourney (System.String stage, UnityEngine.UI.Button button) [0x0000b] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs:463
+at LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests+<Step>d__22.MoveNext () [0x00045] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs:389
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+]]></output>
+              </test-case>
+              <test-case id="1282" name="NativeJourneyWinsAndReturnsHome" fullname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyWinsAndReturnsHome" methodname="NativeJourneyWinsAndReturnsHome" classname="LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests" runstate="Runnable" seed="1009292110" result="Failed" start-time="2026-09-26 13:38:22Z" end-time="2026-09-26 13:38:22Z" duration="0.102225" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: not null and not <empty>
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.CaptureJourney (System.String stage, UnityEngine.UI.Button button) [0x0000b] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs:463
+at LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests+<Step>d__22.MoveNext () [0x00045] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs:389
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /tmp/lor-campaign-foundation-r1/Verify02/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
