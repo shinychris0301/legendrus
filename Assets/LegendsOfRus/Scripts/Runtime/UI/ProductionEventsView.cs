@@ -10,7 +10,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionEventsView:MonoBehaviour
     {
-        public const int CurrentRevision=7;
+        public const int CurrentRevision=9;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
         public ProductionPlayerHeader Header;
@@ -60,7 +60,8 @@ namespace LegendsOfRus
             for(int i=0;i<3;i++)
             {
                 bool selected=(int)Category==i;TabLabels[i].text=tabs[i];
-                Tabs[i].image.sprite=ProductionEventsRuntime.Load(selected?"tab_selected_r7":"tab_r3");
+                TabLabels[i].enabled=en;
+                Tabs[i].image.sprite=ProductionEventsRuntime.Load(en?(selected?"tab_selected_r7":"tab_r3"):("tab_lettered_"+i+"_"+(selected?"selected":"normal")+"_r9"));
                 Tabs[i].image.color=Color.white;
                 TabLabels[i].color=selected?new Color32(255,239,181,255):new Color32(220,188,123,255);
             }
@@ -71,7 +72,10 @@ namespace LegendsOfRus
                 Cards[i].gameObject.SetActive(Category==EventsCategory.Upcoming);Names[i].text=names[i];Descriptions[i].text=descriptions[i];
                 Statuses[i].text=en?"Date to be announced":"Дата будет объявлена";Rewards[i].text=en?"To be announced":"Будут объявлены";
                 Cards[i].Find("RewardHeading").GetComponent<Text>().text=en?"Reward examples:":"Пример наград:";
-                ActionLabels[i].text=CanPreview(i)?(en?"PREVIEW":"ПРЕДПРОСМОТР"):(en?"COMING SOON":"СКОРО");
+                ActionLabels[i].enabled=en;
+                ActionLabels[i].text=en?new[]{"PARTICIPATE","START","OPEN","TO BATTLE"}[i]:new[]{"УЧАСТВОВАТЬ","НАЧАТЬ","ОТКРЫТЬ","В БОЙ"}[i];
+                DetailsButtons[i].image.sprite=ProductionEventsRuntime.Load(en?"action_r3":"action_lettered_"+i+"_r9");
+                Cards[i].Find("ActionAvailability").GetComponent<Text>().text=CanPreview(i)?(en?"Preview only":"Только предпросмотр"):(en?"Unavailable":"Недоступно");
                 DetailsButtons[i].interactable=ActionsBound&&!committed&&CanPreview(i)&&Category==EventsCategory.Upcoming;
             }
             EmptyPanel.SetActive(Category!=EventsCategory.Upcoming);

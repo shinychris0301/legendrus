@@ -34,7 +34,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
                 Assert.That(ProductionGameplayArt.Booster(i),Is.SameAs(ProductionBoosterArt.Icon(i)));
                 Assert.That(ProductionPreLevelSourceControls.Load(ProductionBoosterArt.Names[i]),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
                 Assert.That(ProductionPauseRuntime.Load(ProductionBoosterArt.Names[i]+"_r2"),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
-                Assert.That(ProductionInventoryRuntime.ItemArt(i+20),Is.SameAs(ProductionBoosterArt.Icon(i)));
+                Assert.That(ProductionInventoryRuntime.ItemArt(i+20),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
             }
             Assert.That(ProductionBoosterArt.Replacement("GameplayAligned/gem_gold_r8"),Is.Null);
             Assert.That(ProductionBoosterArt.Replacement("CharactersAligned/hero_firebird_r7"),Is.Null);

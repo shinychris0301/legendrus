@@ -207,8 +207,12 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("ChapterMap_LockedNotice_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             view.Notice.Hide();
             view.Scroller.JumpToLevel(500);
+            string saved = JsonUtility.ToJson(GameState.Instance.Save);
+            Assert.That(ChapterLevelCatalog.Find(1,500),Is.Not.Null,"Round 500 is published in Chapter 1.");
             view.Nodes.First(n=>n.LevelId==500).Button.onClick.Invoke();
-            Assert.That(view.Notice.Message.text,Does.Contain("скоро"));
+            Assert.That(view.Notice.Message.text,Does.Contain("предыдущий"));
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
+            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(saved));
             Assert.That(view.GetComponentsInChildren<ProductionMapNotice>(true).Length,Is.EqualTo(1));
             yield return new WaitForSecondsRealtime(3.8f);
             Assert.That(view.Notice.Group.alpha,Is.Zero);

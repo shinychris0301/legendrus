@@ -176,6 +176,81 @@ namespace LegendsOfRus
                 h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
             view.Header=h;h.ApplyPresentation();
         }
+        public static void Attach(ProductionIndividualRankingView view)
+        {
+            var hud=view.Hud;
+            foreach(var graphic in hud.GetComponentsInChildren<Graphic>(true))graphic.enabled=false;
+            foreach(var effect in hud.GetComponentsInChildren<BaseMeshEffect>(true))effect.enabled=false;
+            var h=hud.GetComponent<ProductionPlayerHeader>() ?? hud.gameObject.AddComponent<ProductionPlayerHeader>();
+            h.Backing=Need<Image>(hud,"ReferenceArtwork");h.Profile=view.ProfileButton;h.Settings=view.SettingsButton;
+            h.Avatar=Need<Image>(h.Profile.transform,"SharedAvatar");
+            h.PlayerName=view.HeroName;h.Level=view.LevelText;h.Experience=Need<Text>(h.Profile.transform,"SharedExperience");
+            h.Balances=new[]{view.GoldText,view.GemsText,view.EnergyText};h.Plus=view.PlusButtons;
+            var capsules=h.Capsules;h.Capsules=new Image[3];
+            for(int i=0;i<3;i++)
+                h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
+            view.Header=h;h.ApplyPresentation();
+        }
+        public static void Attach(ProductionTeamHubView view)
+        {
+            var hud=view.Hud;
+            foreach(var graphic in hud.GetComponentsInChildren<Graphic>(true))graphic.enabled=false;
+            foreach(var effect in hud.GetComponentsInChildren<BaseMeshEffect>(true))effect.enabled=false;
+            var h=hud.GetComponent<ProductionPlayerHeader>() ?? hud.gameObject.AddComponent<ProductionPlayerHeader>();
+            h.Backing=Need<Image>(hud,"ReferenceArtwork");h.Profile=view.ProfileButton;h.Settings=view.SettingsButton;
+            h.Avatar=Need<Image>(h.Profile.transform,"SharedAvatar");
+            h.PlayerName=view.HeroName;h.Level=view.LevelText;h.Experience=Need<Text>(h.Profile.transform,"SharedExperience");
+            h.Balances=new[]{view.GoldText,view.GemsText,view.EnergyText};h.Plus=view.PlusButtons;
+            var capsules=h.Capsules;h.Capsules=new Image[3];
+            for(int i=0;i<3;i++)
+                h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
+            view.Header=h;h.ApplyPresentation();
+        }
+        public static void Attach(ProductionTeamRankingView view)
+        {
+            var hud=view.Hud;
+            foreach(var graphic in hud.GetComponentsInChildren<Graphic>(true))graphic.enabled=false;
+            foreach(var effect in hud.GetComponentsInChildren<BaseMeshEffect>(true))effect.enabled=false;
+            var h=hud.GetComponent<ProductionPlayerHeader>() ?? hud.gameObject.AddComponent<ProductionPlayerHeader>();
+            h.Backing=Need<Image>(hud,"ReferenceArtwork");h.Profile=view.ProfileButton;h.Settings=view.SettingsButton;
+            h.Avatar=Need<Image>(h.Profile.transform,"SharedAvatar");
+            h.PlayerName=view.HeroName;h.Level=view.LevelText;h.Experience=Need<Text>(h.Profile.transform,"SharedExperience");
+            h.Balances=new[]{view.GoldText,view.GemsText,view.EnergyText};h.Plus=view.PlusButtons;
+            var capsules=h.Capsules;h.Capsules=new Image[3];
+            for(int i=0;i<3;i++)
+                h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
+            view.Header=h;h.ApplyPresentation();
+        }
+        public static void Attach(ProductionTeamChatView view)
+        {
+            var hud=view.Hud;
+            foreach(var graphic in hud.GetComponentsInChildren<Graphic>(true))graphic.enabled=false;
+            foreach(var effect in hud.GetComponentsInChildren<BaseMeshEffect>(true))effect.enabled=false;
+            var h=hud.GetComponent<ProductionPlayerHeader>() ?? hud.gameObject.AddComponent<ProductionPlayerHeader>();
+            h.Backing=Need<Image>(hud,"ReferenceArtwork");h.Profile=view.ProfileButton;h.Settings=view.SettingsButton;
+            h.Avatar=Need<Image>(h.Profile.transform,"SharedAvatar");
+            h.PlayerName=view.HeroName;h.Level=view.LevelText;h.Experience=Need<Text>(h.Profile.transform,"SharedExperience");
+            h.Balances=new[]{view.GoldText,view.GemsText,view.EnergyText};h.Plus=view.PlusButtons;
+            var capsules=h.Capsules;h.Capsules=new Image[3];
+            for(int i=0;i<3;i++)
+                h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
+            view.Header=h;h.ApplyPresentation();
+        }
+        public static void Attach(ProductionFriendsListView view)
+        {
+            var hud=view.Hud;
+            foreach(var graphic in hud.GetComponentsInChildren<Graphic>(true))graphic.enabled=false;
+            foreach(var effect in hud.GetComponentsInChildren<BaseMeshEffect>(true))effect.enabled=false;
+            var h=hud.GetComponent<ProductionPlayerHeader>() ?? hud.gameObject.AddComponent<ProductionPlayerHeader>();
+            h.Backing=Need<Image>(hud,"ReferenceArtwork");h.Profile=view.ProfileButton;h.Settings=view.SettingsButton;
+            h.Avatar=Need<Image>(h.Profile.transform,"SharedAvatar");
+            h.PlayerName=view.HeroName;h.Level=view.LevelText;h.Experience=Need<Text>(h.Profile.transform,"SharedExperience");
+            h.Balances=new[]{view.GoldText,view.GemsText,view.EnergyText};h.Plus=view.PlusButtons;
+            var capsules=h.Capsules;h.Capsules=new Image[3];
+            for(int i=0;i<3;i++)
+                h.Capsules[i]=capsules!=null && capsules.Length==3 && capsules[i]!=null ? capsules[i] : hud.Find("ResourceCapsule_"+i)?.GetComponent<Image>() ?? Need<Image>(hud,"SharedResource_"+i);
+            view.Header=h;h.ApplyPresentation();
+        }
         public static void Attach(ProductionSpecialOfferView view)
         {
             if(view.Hud==null)view.Hud=Need<RectTransform>(view.Body,"SharedPlayerHeader");
@@ -203,6 +278,9 @@ namespace LegendsOfRus
         }
         public void ApplyPresentation()
         {
+            // Old cloned headers keep this container for serialized identity only.
+            var legacyProgress = Profile.transform.Find("ProfileProgressFrame");
+            if (legacyProgress != null) legacyProgress.GetComponent<Image>().sprite = null;
             Place((RectTransform)transform,transform.parent,0,0,941,140);
             Art(Backing,transform,"source_header",0,0,941,140);Backing.transform.SetAsFirstSibling();
             Place((RectTransform)Profile.transform,transform,0,0,337,140);
@@ -225,11 +303,11 @@ namespace LegendsOfRus
             Control(Settings,transform,"source_settings",853,23,88,95);
             RefreshValues();
         }
-        public void RefreshValues()
+        public void RefreshValues() => RefreshValues(GameState.Instance!=null?GameState.Instance.Save:null);
+        public void RefreshValues(PlayerSaveData save)
         {
             if(!HasBindings)return;
             bool en=DemoFeatureState.LanguageCode=="en";
-            var save=GameState.Instance!=null?GameState.Instance.Save:null;
             PlayerName.text=en?"Ivan":"Иван";
             Level.text=(en?"Level ":"Уровень ")+(save!=null?save.level.ToString(CultureInfo.InvariantCulture):"—");
             Experience.text="—";

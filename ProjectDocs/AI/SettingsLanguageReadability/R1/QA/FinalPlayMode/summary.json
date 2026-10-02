@@ -1,0 +1,56 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SettingsLanguageReadability/R1/QA/FinalPlayMode/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SettingsLanguageReadability/R1/QA/FinalPlayMode/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 24.896165370941162,
+  "isolatedConfig": "/tmp/lor-settings-language-r1/FinalPlayMode/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "13",
+    "result": "Failed(Child)",
+    "total": "13",
+    "passed": "10",
+    "failed": "3",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 17:33:13Z",
+    "end-time": "2026-09-30 17:33:21Z",
+    "duration": "8.386809"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.LanguageAndUnavailableServicesPreserveProgress",
+      "result": "Failed",
+      "message": "  CloudValue fitted font size\n  Expected: in range (26,34)\n  But was:  25.0799999f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "  CloudValue fitted font size\n  Expected: in range (26,34)\n  But was:  25.0799999f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SmallPortraitExplanationsKeepTextInsideTheirPanel",
+      "result": "Failed",
+      "message": "  CloudValue fitted font size\n  Expected: in range (26,34)\n  But was:  25.0799999f\n"
+    }
+  ]
+}

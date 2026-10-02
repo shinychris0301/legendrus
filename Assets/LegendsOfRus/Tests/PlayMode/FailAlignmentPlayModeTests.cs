@@ -55,6 +55,31 @@ namespace LegendsOfRus.Tests.PlayMode
             yield return null;
         }
 
+        [UnityTest] public IEnumerator LocalizedReactionDoesNotReplaceBoosterHelp()
+        {
+            GameState.Instance.Save.highestUnlockedLevel=55;
+            Fail(55,120,new[]{1,1,0});yield return null;
+            var v=View();var snapshot=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));snapshot.lastEnergyUtcTicks=0;
+            string before=JsonUtility.ToJson(snapshot);
+            foreach(string lang in new[]{"en","ru"})
+            {
+                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+                var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(55,"failure"),StoryCatalog.LoadDialogueLanguage(lang));
+                Assert.That(v.Reaction.text,Is.EqualTo(expected.Speaker+": "+expected.Text));
+                Assert.That(v.Reaction.gameObject.activeSelf,Is.False,"Keep accepted Fail caption visibility");
+            }
+            v.BoosterButtons[0].onClick.Invoke();Assert.That(v.Reaction.gameObject.activeSelf,Is.True);
+            DemoFeatureState.SetLanguage("en");yield return null;yield return null;
+            Assert.That(v.Reaction.text,Does.Contain("Thunder hammer"));
+            Capture("Outcome55_FailHelp_EN_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            v.BoosterButtons[0].onClick.Invoke();Assert.That(v.Reaction.gameObject.activeSelf,Is.False);
+            var en=StoryService.GetLocalizedReaction(ChapterLevelCatalog.Find(1,55),"failure","en");
+            Assert.That(v.Reaction.text,Is.EqualTo(en.Speaker+": "+en.Text));
+            snapshot=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));snapshot.lastEnergyUtcTicks=0;
+            Assert.That(JsonUtility.ToJson(snapshot),Is.EqualTo(before));
+            Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null);
+        }
+
         ProductionFailView View()=>Root().GetComponentInChildren<ProductionFailView>();
         void Fail(int level,int score,int[] progress)
         {
@@ -90,9 +115,12 @@ namespace LegendsOfRus.Tests.PlayMode
             v.RefreshContent();Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(save));
             VerifyLocalizedArtwork(v,true,true);
             Capture("Fail_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Fail_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return null;
             VerifyLocalizedArtwork(v,false,true);
             Capture("Fail_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Fail_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+            Capture("Fail_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             DemoFeatureState.SetLanguage("ru");v.RefreshContent();yield return null;
             VerifyLocalizedArtwork(v,true,true);
             Capture("Fail_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
@@ -133,6 +161,16 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before),"Inspecting an alias must not spend stock or resources.");
             }
             Capture("Fail_BoosterGuide_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            foreach(string lang in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);v.RefreshContent();yield return null;
+                for(int i=0;i<4;i++)
+                {
+                    v.BoosterButtons[i].onClick.Invoke();
+                    if(!v.Reaction.gameObject.activeSelf)v.BoosterButtons[i].onClick.Invoke();
+                    Capture("Fail_Help_360_"+lang+"_"+i,new Vector2Int(360,640),new Rect(0,20,360,600));
+                }
+            }
             int energy=state.Save.energy,gold=state.Save.gold;
             v.Retry.onClick.Invoke();Settle();yield return null;
             var board=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(board,Is.Not.Null);Assert.That(board.CurrentLevel.levelId,Is.EqualTo(2));Assert.That(board.Score,Is.Zero);
@@ -171,7 +209,11 @@ namespace LegendsOfRus.Tests.PlayMode
             var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
             var tracker=(LevelGoalRuntime)typeof(Match3Board).GetField("goalRuntime",flags).GetValue(board);
             tracker.RestoreSnapshot(new LevelGoalRuntimeSnapshot(new[]{3,4}));
-            var callback=(Action<int>)typeof(Match3Board).GetField("onFail",flags).GetValue(board);callback(567);Settle();yield return null;
+            // Explicitly settle the fixture before invoking the real end-state transition.
+            typeof(Match3Board).GetField("moves",flags).SetValue(board,0);
+            typeof(Match3Board).GetField("score",flags).SetValue(board,567);
+            if (board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Paused) board.TryResume();
+            yield return (IEnumerator)typeof(Match3Board).GetMethod("CheckEndState",flags).Invoke(board,null);Settle();yield return null;
             var result=GameState.Instance.LastFailureResult;Assert.That(result.Score,Is.EqualTo(567));Assert.That(result.CurrentAt(0),Is.EqualTo(3));Assert.That(result.CurrentAt(1),Is.EqualTo(4));
             Assert.That(View().Goals[0].Count.text,Does.StartWith("3/"));Assert.That(View().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
             Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null,"No legacy story overlay over Ivan.");
@@ -290,10 +332,18 @@ namespace LegendsOfRus.Tests.PlayMode
             }
             foreach(var t in v.GetComponentsInChildren<Text>())
             {
-                if(string.IsNullOrEmpty(t.text))continue;
-                if(t.horizontalOverflow!=HorizontalWrapMode.Wrap)Assert.That(t.preferredWidth,Is.LessThanOrEqualTo(t.rectTransform.rect.width+2),t.name+" width");
-                Assert.That(t.preferredHeight,Is.LessThanOrEqualTo(t.rectTransform.rect.height+2),t.name+" height");
+                if(!t.enabled||string.IsNullOrEmpty(t.text))continue;
+                if(t.horizontalOverflow!=HorizontalWrapMode.Wrap)Assert.That(t.preferredWidth,Is.LessThanOrEqualTo(t.rectTransform.rect.width+2),t.transform.parent.name+"/"+t.name+" width");
+                Assert.That(t.preferredHeight,Is.LessThanOrEqualTo(t.rectTransform.rect.height+2),t.transform.parent.name+"/"+t.name+" height");
             }
+            foreach(var text in new[]{v.PaidOfferStatus,v.AdOfferStatus,v.ExitText})
+            {
+                Rect bounds=Bounds(text.rectTransform,camera);
+                Assert.That(text.fontSize*bounds.height/text.rectTransform.rect.height,Is.GreaterThanOrEqualTo(10.5f),text.name+" effective font pixels");
+            }
+            if(v.Reaction.gameObject.activeSelf)
+                foreach(var booster in v.BoosterButtons)
+                    Assert.That(Bounds(v.Reaction.rectTransform,camera).Overlaps(Bounds((RectTransform)booster.transform,camera)),Is.False,"Booster explanation overlaps icon controls");
             Rect retry=Bounds((RectTransform)v.Retry.transform,camera),exit=Bounds((RectTransform)v.Exit.transform,camera);
             Assert.That(retry.Overlaps(exit),Is.False,"Retry and Exit cannot overlap.");
             var art=v.Retry.GetComponent<Image>();Assert.That(retry.width/retry.height,Is.EqualTo(art.sprite.rect.width/art.sprite.rect.height).Within(.001f));

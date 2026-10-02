@@ -1,0 +1,266 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+namespace LegendsOfRus.Tests.PlayMode
+{
+    public sealed class LanguageSelectAlignmentPlayModeTests
+    {
+        ScreenRouter router; string priorLanguage, priorPreference; bool hadPreference;
+        [UnitySetUp] public IEnumerator SetUp()
+        {
+            string isolated = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
+            if (string.IsNullOrEmpty(isolated)) Assert.Ignore("Requires isolated storage.");
+            Assert.That(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), Is.EqualTo(isolated));
+            Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar), Is.True);
+            yield return SceneManager.LoadSceneAsync("Bootstrap", LoadSceneMode.Single);
+            router=ScreenRouter.Instance; priorLanguage=DemoFeatureState.LanguageCode;
+            hadPreference=PlayerPrefs.HasKey(LanguagePreference.Key); priorPreference=PlayerPrefs.GetString(LanguagePreference.Key);
+            DemoFeatureState.SetLanguage("ru"); router.Show(ScreenId.SplashTitle); Settle();
+            router.Show(ScreenId.LanguageSelect); Settle(); yield return null;
+        }
+        [UnityTearDown] public IEnumerator TearDown()
+        {
+            if (router) { router.Show(ScreenId.SplashTitle); Settle(); }
+            PlayerPrefs.DeleteKey(LanguagePreference.Key); if(hadPreference)PlayerPrefs.SetString(LanguagePreference.Key,priorPreference);PlayerPrefs.Save();
+            DemoFeatureState.SetLanguage(priorLanguage); yield return null;
+        }
+        ProductionLanguageSelectView View()=>router.Viewport.GetComponentInChildren<ProductionLanguageSelectView>();
+        GameObject Root()=>View().gameObject;
+        void Settle(){for(int i=0;i<24;i++)router.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds);Canvas.ForceUpdateCanvases();}
+        static string StableSave(){var c=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));c.lastEnergyUtcTicks=0;return JsonUtility.ToJson(c);}
+        [UnityTest] public IEnumerator LocalizedPortraitsAndPointerSelection()
+        {
+            var v=View(); Assert.That(v.HasRequiredBindings&&v.ActionsBound,Is.True);
+            string save=StableSave(); int generation=router.RouteGeneration;
+            yield return WaitForNormalButtonColors();
+            Capture("LanguageSelect_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("LanguageSelect_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            Capture("LanguageSelect_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+            ExecuteEvents.Execute(v.English.gameObject,new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left},ExecuteEvents.pointerClickHandler);
+            Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("en")); Assert.That(LanguagePreference.Load(),Is.EqualTo("en"));
+            Assert.That(v.English.image.sprite.name,Is.EqualTo("language_selected"));
+            Assert.That(v.Russian.image.sprite.name,Is.EqualTo("language_unselected"));
+            yield return null;yield return WaitForNormalButtonColors();
+            Capture("LanguageSelect_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("LanguageSelect_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            Assert.That(StableSave(),Is.EqualTo(save));Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+        }
+        [UnityTest] public IEnumerator CloseBackAndRepeatedBindingReturnToOrigin()
+        {
+            var v=View();int closed=0;v.Bind(()=>closed++);v.Bind(()=>closed++);
+            v.Close.onClick.Invoke();v.Close.onClick.Invoke();Assert.That(closed,Is.EqualTo(1));
+            v.Bind(router.NavigateBack);v.Close.onClick.Invoke();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.SplashTitle));
+            router.Show(ScreenId.Settings);Settle();router.Show(ScreenId.LanguageSelect);Settle();
+            router.Show(ScreenId.LanguageSelect);Settle();router.NavigateBack();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Settings));
+            router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.SplashTitle));
+            router.Show(ScreenId.Home);Settle();router.Show(ScreenId.LanguageSelect);Settle();router.NavigateBack();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));
+        }
+        [UnityTest] public IEnumerator PreferenceReloadAndSettingsShareSelectionWithoutChangingProgress()
+        {
+            string save=StableSave();PlayerPrefs.DeleteKey(LanguagePreference.Key);DemoFeatureState.ResetSession();
+            Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));
+            PlayerPrefs.SetString(LanguagePreference.Key,"unsupported");DemoFeatureState.ResetSession();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));
+            View().English.onClick.Invoke();DemoFeatureState.ResetSession();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("en"));
+            GameState.Instance.Persist();Assert.That(LanguagePreference.Load(),Is.EqualTo("en"));
+            router.Show(ScreenId.Settings);Settle();yield return null;
+            var settings=router.Viewport.GetComponentInChildren<ProductionSettingsView>();Assert.That(settings.LanguageValue.text,Is.EqualTo("English"));
+            settings.Rows[0].onClick.Invoke();settings.LanguageButtons[0].onClick.Invoke();
+            DemoFeatureState.ResetSession();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));Assert.That(LanguagePreference.Load(),Is.EqualTo("ru"));
+            Assert.That(StableSave(),Is.EqualTo(save));
+        }
+        [UnityTest] public IEnumerator CurrentBackdropAndModalPressFeedbackStayIsolated()
+        {
+            var v=View();string save=StableSave();string language=DemoFeatureState.LanguageCode;
+            var source=Resources.Load<GameObject>("ProductionUI/Pages/SplashTitle").GetComponent<SplashTitleView>();
+            Assert.That(v.BackdropView.HasRequiredBindings,Is.True);Assert.That(v.BackdropView.ActionsBound,Is.False);
+            Assert.That(v.BackdropView.ReferenceStartRussian,Is.SameAs(source.ReferenceStartRussian));
+            foreach(string name in new[]{"Logo","BackgroundEnvironment","Ivan","SourceOuterFrame"})
+                Assert.That(v.Backdrop.transform.Find(name).GetComponent<Image>().sprite,Is.SameAs(source.transform.Find(name).GetComponent<Image>().sprite));
+            var settings=Resources.Load<GameObject>("ProductionUI/Pages/Settings").GetComponent<ProductionSettingsView>();
+            Assert.That(v.Panel.sprite,Is.SameAs(settings.LanguagePanel.sprite));
+            foreach(var button in new[]{v.Russian,v.English,v.Close})Assert.That(button.GetComponent<ProductionMapButtonFeedback>(),Is.Not.Null);
+            yield return WaitForNormalButtonColors();
+            var pointer=new PointerEventData(EventSystem.current){pointerId=42,button=PointerEventData.InputButton.Left};
+            var rect=(RectTransform)v.English.transform;var position=rect.anchoredPosition;
+            ExecuteEvents.Execute(v.English.gameObject,pointer,ExecuteEvents.pointerDownHandler);
+            Assert.That(v.English.GetComponent<ProductionMapButtonFeedback>().IsPressed,Is.True);
+            Capture("LanguageSelect_PressedEnglish_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            ExecuteEvents.Execute(v.English.gameObject,pointer,ExecuteEvents.pointerUpHandler);
+            Assert.That(v.English.GetComponent<ProductionMapButtonFeedback>().IsPressed,Is.False);
+            Assert.That(rect.anchoredPosition,Is.EqualTo(position));Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo(language));Assert.That(StableSave(),Is.EqualTo(save));
+        }
+
+        [UnityTest] public IEnumerator NativeSelectionExpandedCloseAndOriginsPreserveSave()
+        {
+            string save=StableSave();
+            foreach(var origin in new[]{ScreenId.SplashTitle,ScreenId.Home,ScreenId.Settings})
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(origin);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);
+                router.Show(ScreenId.LanguageSelect);Settle();yield return null;
+                yield return WaitForNormalButtonColors();
+                var v=View();int generation=router.RouteGeneration;
+                Capture("LanguageSelect_Tall_"+origin+"_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>
+                    Click(language=="ru"?v.English:v.Russian,camera));
+                string selected=language=="ru"?"en":"ru";
+                Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo(selected));
+                Assert.That(LanguagePreference.Load(),Is.EqualTo(selected));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+                Assert.That((selected=="en"?v.English:v.Russian).image.sprite.name,Is.EqualTo("language_selected"));
+                yield return null;yield return WaitForNormalButtonColors();
+                Capture("LanguageSelect_CloseEdge_"+origin+"_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    Rect art=Bounds(v.Close.image.rectTransform,camera);
+                    Click(v.Close,camera,new Vector2(art.xMax+1,art.center.y));
+                    v.Close.onClick.Invoke();
+                });
+                Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(origin));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation+1),"Close returns only once.");
+                Assert.That(StableSave(),Is.EqualTo(save));
+            }
+        }
+        static void Click(Button button,Camera camera,Vector2? point=null)
+        {
+            var pointer=new PointerEventData(EventSystem.current){position=point??Bounds(button.image.rectTransform,camera).center,button=PointerEventData.InputButton.Left};
+            var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+            Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
+            ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+        }
+
+        IEnumerator WaitForNormalButtonColors()
+        {
+            float deadline=Time.realtimeSinceStartup+2f;
+            int stable=0;
+            do
+            {
+                yield return null;
+                bool ready=true;
+                foreach(Button button in Root().GetComponentsInChildren<Button>())
+                {
+                    Color expected=button.transition==Selectable.Transition.None?Color.white:(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
+                    Color actual=button.targetGraphic.canvasRenderer.GetColor();
+                    if(Mathf.Max(Mathf.Abs(actual.r-expected.r),Mathf.Abs(actual.g-expected.g),
+                        Mathf.Abs(actual.b-expected.b),Mathf.Abs(actual.a-expected.a))>.0001f)ready=false;
+                }
+                stable=ready?stable+1:0;
+            } while(stable<2&&Time.realtimeSinceStartup<deadline);
+            Assert.That(stable,Is.EqualTo(2),"Capture only after native disabled-to-normal button fades finish.");
+        }
+
+        [Serializable] sealed class CaptureInfo
+        {
+            public string capture = "Actual Unity Play Mode capture; simulated display/safe area; real router and isolated new save";
+            public string unityVersion, graphicsDevice, language;
+            public int width, height, buttonCount;
+            public Rect safeArea;
+        }
+
+        void Capture(string name, Vector2Int size, Rect safeArea, Action<Camera> inspect = null)
+        {
+
+            Assert.That(View().Heading.enabled,Is.EqualTo(DemoFeatureState.LanguageCode=="en"));
+            string directory = Environment.GetEnvironmentVariable("LOR_LANGUAGE_SELECT_CAPTURE_DIR");
+            Assert.That(directory, Is.Not.Null.And.Not.Empty);
+            Directory.CreateDirectory(directory);
+            Canvas canvas = router.GameCanvas;
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            AdaptiveCanvasScaler adaptive = canvas.GetComponent<AdaptiveCanvasScaler>();
+            SafeAreaFitter safe = router.SafeArea.GetComponent<SafeAreaFitter>();
+            RenderMode mode = canvas.renderMode; Camera oldCamera = canvas.worldCamera;
+            float distance = canvas.planeDistance, scale = canvas.scaleFactor;
+            bool se = scaler.enabled, ae = adaptive.enabled, fe = safe.enabled;
+            RenderTexture active = RenderTexture.active;
+            var target = new RenderTexture(size.x,size.y,24,RenderTextureFormat.ARGB32);
+            var cameraGo = new GameObject("SettingsCaptureCamera",typeof(Camera));
+            var texture = new Texture2D(size.x,size.y,TextureFormat.RGBA32,false);
+            try
+            {
+                target.Create(); scaler.enabled = false; adaptive.enabled = false; safe.enabled = false;
+                Camera camera = cameraGo.GetComponent<Camera>(); camera.enabled = false;
+                camera.transform.position = new Vector3(0,0,-100); camera.orthographic = true;
+                camera.nearClipPlane = .1f; camera.farClipPlane = 1000;
+                camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color32(4,13,24,255);
+                camera.targetTexture = target; canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = camera; canvas.planeDistance = 100;
+                adaptive.Apply(safeArea,size);
+                canvas.scaleFactor = AdaptiveCanvasScaler.ResolveScale(new Vector2Int(Mathf.RoundToInt(safeArea.width),Mathf.RoundToInt(safeArea.height)),941,1672);
+                safe.Apply(safeArea,size);
+                foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
+                Canvas.ForceUpdateCanvases();
+                // Rebuild glyph snapping after the capture camera's responsive layout has settled.
+                foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
+                Canvas.ForceUpdateCanvases();
+                camera.Render(); RenderTexture.active = target;
+                texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
+                string output = Path.Combine(directory,name);
+                Assert.That(File.Exists(output + ".png"), Is.False, "Keep earlier evidence.");
+                File.WriteAllBytes(output + ".png",texture.EncodeToPNG());
+                File.WriteAllText(output + ".json",JsonUtility.ToJson(new CaptureInfo
+                {
+                    unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceType.ToString(),
+                    language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
+                    buttonCount = Root().GetComponentsInChildren<Button>(true).Length
+                },true) + "\n");
+                VerifyLayoutAndInput(View(),camera,size,safeArea);
+                inspect?.Invoke(camera);
+            }
+            finally
+            {
+                RenderTexture.active = active; canvas.renderMode = mode; canvas.worldCamera = oldCamera;
+                canvas.planeDistance = distance; canvas.scaleFactor = scale;
+                scaler.enabled = se; adaptive.enabled = ae; safe.enabled = fe;
+                adaptive.ApplyNow(); safe.ApplyNow();
+                UnityEngine.Object.Destroy(texture); UnityEngine.Object.Destroy(cameraGo);
+                target.Release(); UnityEngine.Object.Destroy(target);
+            }
+        }
+
+        static Rect Bounds(RectTransform rect,Camera camera)
+        {
+            var corners=new Vector3[4];rect.GetWorldCorners(corners);Vector2 a=RectTransformUtility.WorldToScreenPoint(camera,corners[0]),b=RectTransformUtility.WorldToScreenPoint(camera,corners[2]);return Rect.MinMaxRect(a.x,a.y,b.x,b.y);
+        }
+        static void VerifyLayoutAndInput(ProductionLanguageSelectView v,Camera camera,Vector2Int size,Rect safeArea)
+        {
+            Assert.That(v.HasRequiredBindings,Is.True);
+            Rect shield=Bounds(v.Shield,camera);Assert.That(shield.xMin,Is.LessThanOrEqualTo(1));Assert.That(shield.yMin,Is.LessThanOrEqualTo(1));Assert.That(shield.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(shield.yMax,Is.GreaterThanOrEqualTo(size.y-1));
+            foreach(var b in new[]{v.Russian,v.English,v.Close})
+            {
+                Rect r=Bounds((RectTransform)b.transform,camera);Assert.That(safeArea.Contains(r.min)&&safeArea.Contains(r.max),Is.True,b.name);
+                Assert.That(b.image.type,Is.EqualTo(Image.Type.Simple),b.name);
+                Assert.That(b.image.preserveAspect,Is.True,b.name);
+                float scale=r.width/b.image.rectTransform.rect.width;
+                Vector4 padding=b.image.raycastPadding;
+                Rect target=Rect.MinMaxRect(r.xMin+padding.x*scale,r.yMin+padding.y*scale,r.xMax-padding.z*scale,r.yMax-padding.w*scale);
+                Assert.That(target.width,Is.GreaterThanOrEqualTo(44),b.name+" target width");
+                Assert.That(target.height,Is.GreaterThanOrEqualTo(44),b.name+" target height");
+                Assert.That(safeArea.Contains(target.min)&&safeArea.Contains(target.max),Is.True,b.name+" target safe edges");
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=r.center},hits);
+                Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(b));
+            }
+            var blocked=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=new Vector2(size.x*.5f,size.y*.85f)},blocked);
+            Assert.That(blocked[0].gameObject,Is.EqualTo(v.Shield.gameObject));
+            foreach(Vector2 point in new[]{new Vector2(2,2),new Vector2(size.x-2,2),new Vector2(2,size.y-2),new Vector2(size.x-2,size.y-2)})
+            {
+                var edgeHits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},edgeHits);
+                Assert.That(edgeHits.Count,Is.GreaterThan(0));Assert.That(edgeHits[0].gameObject,Is.SameAs(v.Shield.gameObject),"Full-screen modal shield");
+            }
+            Rect panel=Bounds(v.Panel.rectTransform,camera);Assert.That(safeArea.Contains(panel.min)&&safeArea.Contains(panel.max),Is.True,"Whole panel within safe area");
+            Assert.That(v.Panel.type,Is.EqualTo(Image.Type.Simple));Assert.That(v.Panel.preserveAspect,Is.True);
+            Assert.That(Bounds(v.Russian.image.rectTransform,camera).Overlaps(Bounds(v.English.image.rectTransform,camera)),Is.False);
+            foreach(var b in v.Backdrop.GetComponentsInChildren<Button>())Assert.That(b.IsInteractable(),Is.False);
+            foreach(var label in v.Body.GetComponentsInChildren<Text>())if(label.enabled){Assert.That(label.cachedTextGenerator.vertexCount,Is.GreaterThan(0));}
+        }
+    }
+}

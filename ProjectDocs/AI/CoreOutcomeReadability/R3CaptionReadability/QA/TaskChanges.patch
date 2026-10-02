@@ -1,0 +1,1268 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -103,7 +103,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 22
++  Revision: 23
+   SourceControls: 1
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+@@ -1234,8 +1234,9 @@
+   m_Children:
+   - {fileID: 2458129824362471231}
+   - {fileID: 3724315308523035358}
++  - {fileID: 9168653241091263462}
++  - {fileID: 2197802995288142465}
+   - {fileID: 3354784920745706049}
+-  - {fileID: 9168653241091263462}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -2708,8 +2709,9 @@
+   m_Children:
+   - {fileID: 2271072849010180116}
+   - {fileID: 622922741575247284}
++  - {fileID: 6728665183223279658}
++  - {fileID: 4718543339439978310}
+   - {fileID: 4403881780174026728}
+-  - {fileID: 6728665183223279658}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -3602,6 +3604,78 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3943817032349022729
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 2197802995288142465}
++  - component: {fileID: 7539619980971982658}
++  - component: {fileID: 903875929920022836}
++  m_Layer: 5
++  m_Name: CaptionBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &2197802995288142465
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3943817032349022729}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 4701323611185058877}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 84}
++  m_SizeDelta: {x: 192, y: 82}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &7539619980971982658
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3943817032349022729}
++  m_CullTransparentMesh: 1
++--- !u!114 &903875929920022836
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3943817032349022729}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 8
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
++  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &4434765733803639987
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4089,8 +4163,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -215}
+-  m_SizeDelta: {x: 316, y: 76}
++  m_AnchoredPosition: {x: 1, y: 81}
++  m_SizeDelta: {x: 380, y: 152}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7648515659779284591
+ CanvasRenderer:
+@@ -4122,17 +4196,17 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 32
++    m_FontSize: 46
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 46
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+-    m_LineSpacing: 0.85
++    m_LineSpacing: 0.95
+   m_Text: "\u0416\u0418\u0412\u041E\u0419 \u0421\u0412\u0415\u0422"
+ --- !u!114 &8737215682775310718
+ MonoBehaviour:
+@@ -4180,6 +4254,7 @@
+   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
++  ExpandedCaption: 1
+ --- !u!1 &4761893612207056134
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5305,6 +5380,78 @@
+   Dimmed: 0
+   StarFilledArt: {fileID: 0}
+   StarEmptyArt: {fileID: 0}
++--- !u!1 &5432336099724866659
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5331993099753239815}
++  - component: {fileID: 636030839011413368}
++  - component: {fileID: 1219770633928010234}
++  m_Layer: 5
++  m_Name: CaptionBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5331993099753239815
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5432336099724866659}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 9211076187924112702}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 84}
++  m_SizeDelta: {x: 192, y: 82}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &636030839011413368
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5432336099724866659}
++  m_CullTransparentMesh: 1
++--- !u!114 &1219770633928010234
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5432336099724866659}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 8
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
++  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &5622855954873124094
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5342,8 +5489,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -215}
+-  m_SizeDelta: {x: 316, y: 76}
++  m_AnchoredPosition: {x: 1, y: 81}
++  m_SizeDelta: {x: 380, y: 152}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5049475929828424530
+ CanvasRenderer:
+@@ -5375,17 +5522,17 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 32
++    m_FontSize: 46
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 46
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+-    m_LineSpacing: 0.85
++    m_LineSpacing: 0.95
+   m_Text: "\u0416\u0415\u041C\u0427\u0423\u0416\u0418\u041D\u0410\n\u041C\u041E\u0420\u0421\u041A\u041E\u0413\u041E
+     \u0426\u0410\u0420\u042F"
+ --- !u!114 &8955584151603396838
+@@ -5434,6 +5581,7 @@
+   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
++  ExpandedCaption: 1
+ --- !u!1 &5720272870168945646
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6246,8 +6394,9 @@
+   m_Children:
+   - {fileID: 1188338952394138536}
+   - {fileID: 3865632607170423115}
++  - {fileID: 5241344649840255527}
++  - {fileID: 1746382859902639823}
+   - {fileID: 6797702965365544627}
+-  - {fileID: 5241344649840255527}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -6306,6 +6455,78 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayBoosterCard
+   Target: {fileID: 5399189098199060825}
++--- !u!1 &6622679910300952962
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4718543339439978310}
++  - component: {fileID: 5514881713973607705}
++  - component: {fileID: 4595679015639237070}
++  m_Layer: 5
++  m_Name: CaptionBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &4718543339439978310
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6622679910300952962}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5938433476754378070}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 84}
++  m_SizeDelta: {x: 192, y: 82}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &5514881713973607705
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6622679910300952962}
++  m_CullTransparentMesh: 1
++--- !u!114 &4595679015639237070
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6622679910300952962}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 8
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
++  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &6689926845254175377
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6634,8 +6855,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -215}
+-  m_SizeDelta: {x: 316, y: 76}
++  m_AnchoredPosition: {x: 1, y: 81}
++  m_SizeDelta: {x: 380, y: 152}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6259402085393196260
+ CanvasRenderer:
+@@ -6667,17 +6888,17 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 32
++    m_FontSize: 46
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 46
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+-    m_LineSpacing: 0.85
++    m_LineSpacing: 0.95
+   m_Text: "\u0411\u041E\u0413\u0410\u0422\u042B\u0420\u0421\u041A\u0410\u042F\n\u0411\u0423\u041B\u0410\u0412\u0410"
+ --- !u!114 &4096554400371750206
+ MonoBehaviour:
+@@ -6725,6 +6946,7 @@
+   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
++  ExpandedCaption: 1
+ --- !u!1 &7601876404679409946
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6801,8 +7023,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -215}
+-  m_SizeDelta: {x: 316, y: 76}
++  m_AnchoredPosition: {x: 1, y: 81}
++  m_SizeDelta: {x: 380, y: 152}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &972933387211779832
+ CanvasRenderer:
+@@ -6834,17 +7056,17 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 32
++    m_FontSize: 46
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 46
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+-    m_LineSpacing: 0.85
++    m_LineSpacing: 0.95
+   m_Text: "\u041F\u0415\u0420\u041E\n\u0416\u0410\u0420-\u041F\u0422\u0418\u0426\u042B"
+ --- !u!114 &6412445270061999862
+ MonoBehaviour:
+@@ -6892,6 +7114,7 @@
+   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
++  ExpandedCaption: 1
+ --- !u!1 &8028730957893219296
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6925,8 +7148,9 @@
+   m_Children:
+   - {fileID: 8364956270531602872}
+   - {fileID: 303684999950616351}
++  - {fileID: 5440304680423997586}
++  - {fileID: 5331993099753239815}
+   - {fileID: 4758810458422433118}
+-  - {fileID: 5440304680423997586}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -7282,6 +7506,78 @@
+   GridOnly: 0
+   Columns: 8
+   Rows: 7
++--- !u!1 &8345606962675745735
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 1746382859902639823}
++  - component: {fileID: 2996972208755085846}
++  - component: {fileID: 2015431463240286250}
++  m_Layer: 5
++  m_Name: CaptionBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &1746382859902639823
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8345606962675745735}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 1448291901246882471}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 84}
++  m_SizeDelta: {x: 192, y: 82}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &2996972208755085846
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8345606962675745735}
++  m_CullTransparentMesh: 1
++--- !u!114 &2015431463240286250
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8345606962675745735}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 8
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
++  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &8356209022218806649
+ GameObject:
+   m_ObjectHideFlags: 0
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: a42b554f130b44d3c8eb1726a91daf3a, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionVictoryView
+-  Revision: 11
++  Revision: 12
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 8872949891654648113}
+   Hud: {fileID: 3265037020903500840}
+@@ -730,8 +730,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 300, y: -142}
+-  m_SizeDelta: {x: 682, y: 70}
++  m_AnchoredPosition: {x: 300, y: -133}
++  m_SizeDelta: {x: 682, y: 88}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8850101467404612946
+ CanvasRenderer:
+@@ -748,7 +748,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 466442158766767938}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -763,11 +763,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 56
++    m_FontSize: 72
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 72
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -861,8 +861,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -156}
+-  m_SizeDelta: {x: 400, y: 76}
++  m_AnchoredPosition: {x: 10, y: -118}
++  m_SizeDelta: {x: 222, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1825908586819981071
+ CanvasRenderer:
+@@ -894,11 +894,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 76
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 76
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -973,8 +973,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 101, y: -26}
+-  m_SizeDelta: {x: 230, y: 102}
++  m_AnchoredPosition: {x: 101, y: -20}
++  m_SizeDelta: {x: 230, y: 128}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &343481059494112112
+ CanvasRenderer:
+@@ -1006,11 +1006,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 70
++    m_FontSize: 84
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 70
++    m_MaxSize: 84
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -1086,8 +1086,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 270, y: -306}
+-  m_SizeDelta: {x: 802, y: 56}
++  m_AnchoredPosition: {x: 270, y: -294}
++  m_SizeDelta: {x: 802, y: 88}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5829890925513312785
+ CanvasRenderer:
+@@ -1104,7 +1104,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 1383692584217074140}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -1119,11 +1119,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 52
++    m_FontSize: 72
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 72
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -2787,8 +2787,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 310, y: -22}
+-  m_SizeDelta: {x: 642, y: 64}
++  m_AnchoredPosition: {x: 310, y: -6}
++  m_SizeDelta: {x: 642, y: 76}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2877380927697207145
+ CanvasRenderer:
+@@ -2805,7 +2805,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 3083646608918775519}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -2820,11 +2820,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 54
++    m_FontSize: 72
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 72
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -3984,8 +3984,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -156}
+-  m_SizeDelta: {x: 400, y: 76}
++  m_AnchoredPosition: {x: 10, y: -118}
++  m_SizeDelta: {x: 222, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4686363929903325907
+ CanvasRenderer:
+@@ -4017,11 +4017,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 76
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 76
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -4171,8 +4171,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -156}
+-  m_SizeDelta: {x: 400, y: 76}
++  m_AnchoredPosition: {x: 10, y: -118}
++  m_SizeDelta: {x: 222, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3681939886016823173
+ CanvasRenderer:
+@@ -4204,11 +4204,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 76
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 76
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -5516,8 +5516,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 101, y: -26}
+-  m_SizeDelta: {x: 230, y: 102}
++  m_AnchoredPosition: {x: 101, y: -20}
++  m_SizeDelta: {x: 230, y: 128}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3846933057044138680
+ CanvasRenderer:
+@@ -5549,11 +5549,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 70
++    m_FontSize: 84
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 70
++    m_MaxSize: 84
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -5835,8 +5835,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -156}
+-  m_SizeDelta: {x: 400, y: 76}
++  m_AnchoredPosition: {x: 10, y: -118}
++  m_SizeDelta: {x: 222, y: 80}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8232882012271378113
+ CanvasRenderer:
+@@ -5868,11 +5868,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 76
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 76
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -6464,8 +6464,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 190, y: -370}
+-  m_SizeDelta: {x: 1122, y: 164}
++  m_AnchoredPosition: {x: 190, y: -358}
++  m_SizeDelta: {x: 1122, y: 192}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4847046592684916485
+ CanvasRenderer:
+@@ -6497,11 +6497,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 46
++    m_FontSize: 68
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 64
++    m_MaxSize: 68
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -6626,7 +6626,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 9ee5feaf75cbc3c218155e02fc586d84, type: 3}
++  m_Sprite: {fileID: 21300000, guid: bd4e9bb0fa04ad5b4962d1d009a51d83, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCaptionFit.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCaptionFit.cs
+@@ -6,11 +6,16 @@
+     [RequireComponent(typeof(Text)),DisallowMultipleComponent]
+     public sealed class ProductionGameplayCaptionFit : BaseMeshEffect
+     {
++        public bool ExpandedCaption;
++        public float LastScale { get; private set; } = 1;
+         public override void ModifyMesh(VertexHelper vh)
+         {
++            LastScale = 1;
+             if(!IsActive()||vh.currentVertCount==0)return;
+             Rect area=graphic.rectTransform.rect;
+-            area=Rect.MinMaxRect(area.xMin+46,area.yMin+10,area.xMax-54,area.yMax-8);
++            area=ExpandedCaption
++                ? Rect.MinMaxRect(area.xMin+8,area.yMin+4,area.xMax-8,area.yMax-4)
++                : Rect.MinMaxRect(area.xMin+46,area.yMin+10,area.xMax-54,area.yMax-8);
+             if(area.width<=0||area.height<=0)return;
+             Vector2 low=new Vector2(float.PositiveInfinity,float.PositiveInfinity),high=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
+             UIVertex vertex=default;
+@@ -21,6 +26,7 @@
+             }
+             Vector2 size=high-low,center=(low+high)*.5f;
+             float scale=Mathf.Min(1,Mathf.Min(area.width/Mathf.Max(.001f,size.x),area.height/Mathf.Max(.001f,size.y)));
++            LastScale = scale;
+             for(int i=0;i<vh.currentVertCount;i++)
+             {
+                 vh.PopulateUIVertex(ref vertex,i);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplaySourceControls.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplaySourceControls.cs
+@@ -72,12 +72,42 @@
+         public static void ApplyReadability(ProductionGameplayView v)
+         {
+             ProductionControlTouchTarget.Ensure(v.PauseButton);
++            ApplyCaptionReadability(v);
+             foreach (var count in v.BoosterCounts)
+             {
+                 count.horizontalOverflow = HorizontalWrapMode.Overflow;
+                 count.resizeTextMinSize = 12;
+                 var fit = count.GetComponent<ProductionGameplayNumberFit>() ?? count.gameObject.AddComponent<ProductionGameplayNumberFit>();
+                 fit.enabled = true;
++            }
++        }
++        public static void ApplyCaptionReadability(ProductionGameplayView v)
++        {
++            for (int i = 0; i < v.BoosterButtons.Length; i++)
++            {
++                var card = v.Footer.Find("BoosterCard_" + i);
++                var found = card.Find("CaptionBacking");
++                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
++                    : ProductionGameplayRuntime.Rect(card, "CaptionBacking", 0, -84, 192, 82)
++                        .gameObject.AddComponent<ProductionHomePanel>();
++                Place(backing.rectTransform, 0, -84, 192, 82);
++                backing.Radius = 8;
++                backing.Frame = true;
++                backing.raycastTarget = true; // Existing parent card forwards native input to its retained Button.
++                var label = card.Find("BoosterLabel").GetComponent<Text>();
++                Place(label.rectTransform, 1, -81, 380, 152);
++                label.fontSize = 46;
++                label.resizeTextForBestFit = false;
++                label.lineSpacing = .95f;
++                label.horizontalOverflow = HorizontalWrapMode.Wrap;
++                label.verticalOverflow = VerticalWrapMode.Truncate;
++                label.raycastTarget = false;
++                var fit = label.GetComponent<ProductionGameplayCaptionFit>();
++                fit.ExpandedCaption = true;
++                fit.enabled = true;
++                backing.transform.SetAsLastSibling();
++                label.transform.SetAsLastSibling();
++                label.SetVerticesDirty();
+             }
+         }
+         static void Art(Transform t,string name,float x,float y,float w,float h)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=22;
++        public const int CurrentRevision=23;
+         public int Revision=CurrentRevision;
+         public bool SourceControls;
+         public SplashTitleTypography Typography;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryReferenceStyle.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryReferenceStyle.cs
+@@ -70,6 +70,24 @@
+             Place(video.rectTransform,94,125+CaptionHeight,752,142);Text(v.DoubleText,208,25,460,92,32);v.DoubleText.color=new Color32(255,226,166,255);
+             v.FooterOrnament.sprite=Load("footer");Place(v.FooterOrnament.rectTransform,317,252+CaptionHeight,308,60);
+             ApplyTouchTargets(v);
++            ApplyCaptionReadability(v);
++        }
++        public static void ApplyCaptionReadability(ProductionVictoryView v)
++        {
++            // Reuse the existing clean panel for both languages; these headings are live/localizable.
++            v.RewardsPanel.sprite = Load("panel");
++            Text(v.RewardsHeading, 300, 133, 341, 44, 36);
++            v.RewardsHeading.enabled = true;
++            var scoreHeading = v.RewardsArea.Find("ScoreHeading").GetComponent<Text>();
++            Text(scoreHeading, 310, 6, 321, 38, 36);
++            scoreHeading.enabled = true;
++            var boosterHeading = v.RewardsArea.Find("BoosterHeading").GetComponent<Text>();
++            Text(boosterHeading, 270, 294, 401, 44, 36);
++            boosterHeading.enabled = true;
++            Text(v.RewardsArea.Find("BoosterEmpty").GetComponent<Text>(), 190, 358, 561, 96, 34);
++            for (int i = 0; i < v.RewardValues.Length; i++)
++                if (i < 2) Text(v.RewardValues[i], 101, 20, 115, 64, 42);
++                else Text(v.RewardValues[i], 10, 118, 111, 40, 38);
+         }
+         public static void ApplyTouchTargets(ProductionVictoryView v)
+         {
+@@ -94,10 +112,7 @@
+             bool en=DemoFeatureState.LanguageCode=="en";
+             v.Body.Find("VictoryBanner").GetComponent<Image>().sprite=Load(en?"title":"title_ru");
+             v.ContinueButton.GetComponent<Image>().sprite=Load(en?"continue":"continue_ru");
+-            v.RewardsPanel.sprite=Load(en?"panel":"panel_ru");
+-            v.Title.enabled=en;v.ContinueText.enabled=en;v.RewardsHeading.enabled=en;
+-            v.RewardsArea.Find("ScoreHeading").GetComponent<Text>().enabled=en;
+-            v.RewardsArea.Find("BoosterHeading").GetComponent<Text>().enabled=en;
++            v.Title.enabled=en;v.ContinueText.enabled=en;
+             bool sourceVideo=!en&&v.DoubleButton.interactable;
+             v.DoubleButton.GetComponent<Image>().sprite=Load(sourceVideo?"video_ru":"video");
+             v.DoubleText.enabled=!sourceVideo;
+@@ -143,6 +158,7 @@
+                 }
+             }
+             foreach(var star in v.Stars)star.SetMaterialDirty();
++            ApplyCaptionReadability(v);
+         }
+         public static void Layout(ProductionVictoryView v,float top,float bottom)
+         {
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
+@@ -11,7 +11,7 @@
+     public sealed class ProductionVictoryView : MonoBehaviour
+     {
+         public Func<CampaignPlayerSave> CampaignSaveProvider;
+-        public const int CurrentRevision=11;
++        public const int CurrentRevision=12;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Body,Footer,RewardsArea;
+--- a/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -559,6 +559,34 @@
+             ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerUpHandler);
+             ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerClickHandler);
+         }
++        [UnityTest] public IEnumerator LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput()
++        {
++            GameState.Instance.SelectLevel(1,8);router.Show(ScreenId.Gameplay);Settle();yield return null;
++            var view=Root().GetComponentInChildren<ProductionGameplayView>();var originalButtons=(Button[])view.BoosterButtons.Clone();
++            string board=view.Board.BoardStateHash;var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;string before=JsonUtility.ToJson(save);GameObject target=null;
++            foreach(var language in new[]{"ru","en"})
++            {
++                DemoFeatureState.SetLanguage(language);view.RefreshContent();yield return null;yield return null;
++                foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
++                {
++                    Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
++                    Capture("CaptionNames_"+language+"_"+size.x,size,safe,camera=>
++                    {
++                        var rows=new List<CoreCaptionAssertions.Row>();
++                        for(int i=0;i<4;i++)rows.Add(CoreCaptionAssertions.Check(view.Footer.Find("BoosterCard_"+i+"/BoosterLabel").GetComponent<Text>(),camera,8.1f));
++                        var caption=view.Footer.Find("BoosterCard_2/CaptionBacking").GetComponent<ProductionHomePanel>();
++                        Rect rect=CoreCaptionAssertions.Bounds(caption.rectTransform,camera);
++                        var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
++                        Assert.That(hits,Is.Not.Empty);Assert.That(hits[0].gameObject.GetComponentInParent<ProductionGameplayBoosterCard>().Target,Is.SameAs(originalButtons[2]));target=hits[0].gameObject;
++                        CoreCaptionAssertions.Save("Gameplay_"+language+"_"+size.x,rows);
++                    });
++                }
++            }
++            CoreOutcomeTouchAssertions.Click(target);yield return null;
++            Assert.That(view.Board.ArmedBooster,Is.EqualTo(BoosterType.LivingLight));view.Board.CancelArmedBooster(showToast:false);
++            Assert.That(view.BoosterButtons,Is.EqualTo(originalButtons));Assert.That(view.Board.BoardStateHash,Is.EqualTo(board));
++            save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;Assert.That(JsonUtility.ToJson(save),Is.EqualTo(before));
++        }
+         static void VerifyBoosterCards(ProductionGameplayView view,Camera camera,Rect safe)
+         {
+             for(int i=0;i<view.BoosterButtons.Length;i++)
+@@ -569,26 +597,24 @@
+                 AssertInside(cardBounds,safe,card.name+" must fit the safe area.");
+                 var label=card.transform.Find("BoosterLabel").GetComponent<Text>();
+                 Rect labelBounds=Bounds(label.rectTransform,camera);
+-                AssertInside(labelBounds,cardBounds,label.text+" label must remain inside its card.");
++                var caption=card.transform.Find("CaptionBacking").GetComponent<ProductionHomePanel>();
++                Rect captionBounds=Bounds(caption.rectTransform,camera);
++                AssertInside(captionBounds,safe,label.text+" caption must fit the safe area.");
++                AssertInside(labelBounds,captionBounds,label.text+" label must remain inside its native caption face.");
++                Assert.That(captionBounds.Overlaps(cardBounds),Is.False,"Names occupy the existing gap above the unchanged cards.");
++                Assert.That(captionBounds.Overlaps(Bounds(view.BoardArea.Find("BoardFrame").GetComponent<RectTransform>(),camera)),Is.False,"Names must clear the board frame.");
+                 Assert.That(label.text,Is.Not.Empty);
+-                Assert.That(label.cachedTextGenerator.lineCount,Is.InRange(1,2),label.text);
+-                Assert.That(label.preferredWidth,Is.LessThanOrEqualTo(label.rectTransform.rect.width+1),label.text+" must fit without horizontal clipping.");
++                Assert.That(label.cachedTextGenerator.lineCount,Is.InRange(1,3),label.text);
++                Assert.That(label.cachedTextGenerator.characterCountVisible,Is.GreaterThanOrEqualTo(label.text.Replace("\n","").Length),"All name characters must survive wrapping.");
+                 Assert.That(label.preferredHeight,Is.LessThanOrEqualTo(label.rectTransform.rect.height+1),label.text+" must fit without vertical truncation.");
++                Assert.That(label.GetComponent<ProductionGameplayCaptionFit>().LastScale,Is.GreaterThanOrEqualTo(.98f),"Larger names must not silently shrink back into the old well.");
+                 var textMesh=label.canvasRenderer.GetMesh();
+                 Assert.That(textMesh.vertexCount,Is.GreaterThan(0),label.text);
+                 var glyphBounds=textMesh.bounds;
+                 var a=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.min));
+                 var b=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.max));
+                 AssertInside(Rect.MinMaxRect(a.x,a.y,b.x,b.y),labelBounds,label.text+" rendered lettering must stay inside its label well.");
+-                // Restored inward curls narrow the clear aperture to x40..148, y219..248. Check ink,
+-                // against the wooden caption face rather than merely the full card rectangle.
+-                var cardRect=card.GetComponent<RectTransform>();
+-                Vector3 inkMin=cardRect.InverseTransformPoint(label.rectTransform.TransformPoint(glyphBounds.min));
+-                Vector3 inkMax=cardRect.InverseTransformPoint(label.rectTransform.TransformPoint(glyphBounds.max));
+-                Assert.That(inkMin.y,Is.GreaterThanOrEqualTo(-248.01f),label.text+" must clear lower gold scrollwork.");
+-                Assert.That(inkMax.y,Is.LessThanOrEqualTo(-218.99f),label.text+" must clear upper caption rail.");
+-                Assert.That(inkMin.x,Is.GreaterThanOrEqualTo(39.99f),label.text+" must clear left carving.");
+-                Assert.That(inkMax.x,Is.LessThanOrEqualTo(148.01f),label.text+" must clear right carving.");
++                AssertInside(Rect.MinMaxRect(a.x,a.y,b.x,b.y),captionBounds,"Actual name ink must remain on its lacquer face.");
+                 Rect badge=Bounds(view.BoosterCounts[i].transform.parent.GetComponent<RectTransform>(),camera);
+                 AssertInside(badge,cardBounds,card.name+" stock badge must remain inside its card.");
+                 Assert.That(badge.Overlaps(labelBounds),Is.False,card.name+" stock badge must not cover the live label.");
+--- a/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
+@@ -320,6 +320,41 @@
+             Capture("Victory_EnergyCountdown_576_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             state.Save.energy=state.Save.energyMax;view.RefreshState();Assert.That(view.EnergyTimer.text,Is.EqualTo("ПОЛНАЯ"));
+             DemoFeatureState.SetLanguage("en");view.RefreshContent();Assert.That(view.EnergyTimer.text,Is.EqualTo("FULL"));
++        }
++        [UnityTest] public IEnumerator LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics()
++        {
++            GameState.Instance.Save.highestUnlockedLevel=500;Win(500,int.MaxValue);yield return new WaitForSecondsRealtime(1);var view=View();
++            foreach(var state in new[]{"FirstClear","NoBoosters","Replay","Unavailable","NoResult"})
++            {
++                if(state=="NoBoosters"){Win(1,3500);view=View();}
++                if(state=="Replay"){Win(500,3500);view=View();}
++                if(state=="Unavailable")view.SetStatus("Видео с наградой недоступно");
++                if(state=="NoResult"){GameState.Instance.ResetProgress();view.RefreshContent();}
++                yield return null;string before=OutcomeStateWithoutClock();
++                foreach(var language in new[]{"ru","en"})
++                {
++                    DemoFeatureState.SetLanguage(language);view.RefreshContent();yield return null;yield return null;
++                    foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
++                    {
++                        Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
++                        Capture("LiveCaptions_"+state+"_"+language+"_"+size.x,size,safe,camera=>
++                        {
++                            var rows=new List<CoreCaptionAssertions.Row>();
++                            foreach(var text in new[]{view.RewardsHeading,view.RewardsArea.Find("ScoreHeading").GetComponent<Text>(),view.RewardsArea.Find("BoosterHeading").GetComponent<Text>()})rows.Add(CoreCaptionAssertions.Check(text,camera,11.9f));
++                            Assert.That(view.RewardsPanel.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("panel")));
++                            Assert.That(view.RewardsHeading.text,Is.EqualTo(language=="ru"?"НАГРАДЫ":"REWARDS"));
++                            for(int i=0;i<view.RewardValues.Length;i++)if(view.RewardCards[i].gameObject.activeSelf)rows.Add(CoreCaptionAssertions.Check(view.RewardValues[i],camera,i<2?13.9f:12.5f));
++                            var empty=view.RewardsArea.Find("BoosterEmpty").GetComponent<Text>();if(empty.gameObject.activeInHierarchy)rows.Add(CoreCaptionAssertions.Check(empty,camera,11.2f));
++                            if(state=="FirstClear")Assert.That(view.Score.text,Is.EqualTo("2 147 483 647"));
++                            if(state=="FirstClear")Assert.That(view.RewardCards[2].gameObject.activeSelf,Is.True,"Current round500 booster quantity must be covered.");
++                            if(state=="NoBoosters")Assert.That(empty.gameObject.activeInHierarchy,Is.True);
++                            if(state=="Replay"||state=="Unavailable"||state=="NoResult")Assert.That(view.DoubleButton.interactable,Is.False);
++                            CoreCaptionAssertions.Save("Victory_"+state+"_"+language+"_"+size.x,rows);
++                        });
++                    }
++                    Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
++                }
++            }
+         }
+         static int TimerSeconds(string text)
+         {
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
+@@ -13,7 +13,7 @@
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Victory),Is.EqualTo("ProductionUI/Pages/Victory"));
+             var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=prefab.GetComponent<ProductionVictoryView>();
+             Assert.That(view,Is.Not.Null);Assert.That(view.HasRequiredBindings,Is.True);
+-            Assert.That(view.Revision,Is.EqualTo(11));
++            Assert.That(view.Revision,Is.EqualTo(ProductionVictoryView.CurrentRevision));
+             Assert.That(view.Hud.gameObject.activeSelf,Is.False);
+             Assert.That(view.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+             Assert.That(view.ContinueButton.GetComponent<Image>().sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("continue_ru")));
+@@ -24,7 +24,7 @@
+             Assert.That(view.ResourceHeader.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionVictoryRuntime.ArtRoot+"resource_header_r3")));
+             Assert.That(view.Firebird.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("firebird")));
+             Assert.That(view.EnergyTimer.raycastTarget,Is.False);
+-            Assert.That(view.RewardsPanel.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("panel_ru")));
++            Assert.That(view.RewardsPanel.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("panel")));
+             Assert.That(view.Body.Find("VictoryBanner").GetComponent<Image>().sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("title_ru")));
+             Assert.That(view.Title.GetComponents<ProductionVictoryTitleLettering>().Length,Is.EqualTo(1));
+             Assert.That(view.Title.GetComponent<ProductionVictoryTitleLettering>().enabled,Is.True);
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/CoreCaptionAssertions.cs
+@@ -0,0 +1,71 @@
++using System;
++using System.Collections.Generic;
++using System.IO;
++using System.Linq;
++using NUnit.Framework;
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus.Tests.PlayMode
++{
++    internal static class CoreCaptionAssertions
++    {
++        [Serializable] internal sealed class Row
++        {
++            public string name, text;
++            public float fontPixels, meshScale;
++            public int lines, visibleCharacters;
++            public Rect labelBounds, glyphBounds;
++        }
++        [Serializable] internal sealed class Record { public Row[] captions; }
++        internal static Row Check(Text text, Camera camera, float minimumPixels)
++        {
++            Assert.That(text.enabled, Is.True, text.name);
++            Assert.That(text.text, Is.Not.Empty, text.name);
++            Rect label = Bounds(text.rectTransform, camera);
++            float font = text.resizeTextForBestFit
++                ? text.cachedTextGenerator.fontSizeUsedForBestFit / text.pixelsPerUnit : text.fontSize;
++            float pixels = font * label.height / text.rectTransform.rect.height;
++            Assert.That(pixels, Is.GreaterThanOrEqualTo(minimumPixels), text.text);
++            Assert.That(text.cachedTextGenerator.characterCountVisible,
++                Is.GreaterThanOrEqualTo(text.text.Replace("\n", "").Length), text.text + " lost characters");
++            Assert.That(text.preferredHeight, Is.LessThanOrEqualTo(text.rectTransform.rect.height + 1), text.text);
++            var mesh = text.canvasRenderer.GetMesh();
++            Assert.That(mesh.vertexCount, Is.GreaterThan(0), text.text);
++            var points = mesh.vertices.Select(vertex => RectTransformUtility.WorldToScreenPoint(
++                camera, text.rectTransform.TransformPoint(vertex))).ToArray();
++            Rect glyph = Rect.MinMaxRect(points.Min(point => point.x), points.Min(point => point.y),
++                points.Max(point => point.x), points.Max(point => point.y));
++            Inside(glyph, label, text.text);
++            var fit = text.GetComponent<ProductionGameplayCaptionFit>();
++            if (fit != null) Assert.That(fit.LastScale, Is.GreaterThanOrEqualTo(.98f), text.text + " silently shrank");
++            Assert.That(pixels * (fit != null ? fit.LastScale : 1), Is.GreaterThanOrEqualTo(minimumPixels),
++                text.text + " effective glyph scale fell below the measured target");
++            return new Row { name = text.name, text = text.text, fontPixels = pixels,
++                meshScale = fit != null ? fit.LastScale : 1, lines = text.cachedTextGenerator.lineCount,
++                visibleCharacters = text.cachedTextGenerator.characterCountVisible, labelBounds = label, glyphBounds = glyph };
++        }
++        internal static Rect Bounds(RectTransform rect, Camera camera)
++        {
++            var corners = new Vector3[4];
++            rect.GetWorldCorners(corners);
++            var low = RectTransformUtility.WorldToScreenPoint(camera, corners[0]);
++            var high = RectTransformUtility.WorldToScreenPoint(camera, corners[2]);
++            return Rect.MinMaxRect(low.x, low.y, high.x, high.y);
++        }
++        internal static void Inside(Rect inner, Rect outer, string message)
++        {
++            Assert.That(inner.xMin, Is.GreaterThanOrEqualTo(outer.xMin - 1), message);
++            Assert.That(inner.yMin, Is.GreaterThanOrEqualTo(outer.yMin - 1), message);
++            Assert.That(inner.xMax, Is.LessThanOrEqualTo(outer.xMax + 1), message);
++            Assert.That(inner.yMax, Is.LessThanOrEqualTo(outer.yMax + 1), message);
++        }
++        internal static void Save(string name, IEnumerable<Row> rows)
++        {
++            string folder = Environment.GetEnvironmentVariable("LOR_CORE_OUTCOME_READABILITY_DIR");
++            if (string.IsNullOrEmpty(folder)) return;
++            File.WriteAllText(Path.Combine(folder, "CaptionMeasurements_" + name + ".json"),
++                JsonUtility.ToJson(new Record { captions = rows.ToArray() }, true));
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/CoreCaptionAssertions.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: f0bf1c728e8149f8a2efbb26871403be
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/CoreCaptionReadabilityEditModeTests.cs
+@@ -0,0 +1,73 @@
++#if UNITY_EDITOR
++using System.Linq;
++using NUnit.Framework;
++using UnityEditor;
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus.Tests.ProductionCoreLoopUi
++{
++    public sealed class CoreCaptionReadabilityEditModeTests
++    {
++        [TestCase("Gameplay", true)] [TestCase("Gameplay", false)]
++        [TestCase("Victory", true)] [TestCase("Victory", false)]
++        public void CaptionOwnersPreserveNativeObjectsControlsAndFontsOnRepeatedBuild(string page, bool fresh)
++        {
++            var root = fresh ? new GameObject("Fresh" + page, typeof(RectTransform))
++                : Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(
++                    "Assets/LegendsOfRus/Resources/ProductionUI/Pages/" + page + ".prefab"));
++            try
++            {
++                Build(root, page);
++                var components = root.GetComponentsInChildren<Component>(true);
++                var buttons = root.GetComponentsInChildren<Button>(true);
++                var targets = buttons.Select(button => button.targetGraphic).ToArray();
++                var texts = root.GetComponentsInChildren<Text>(true);
++                var fonts = texts.Select(text => text.font).ToArray();
++                for (int repeat = 0; repeat < 2; repeat++)
++                {
++                    Build(root, page);
++                    CollectionAssert.AreEquivalent(components, root.GetComponentsInChildren<Component>(true));
++                    CollectionAssert.AreEqual(buttons, root.GetComponentsInChildren<Button>(true));
++                    CollectionAssert.AreEqual(targets, buttons.Select(button => button.targetGraphic));
++                    CollectionAssert.AreEquivalent(texts, root.GetComponentsInChildren<Text>(true));
++                    CollectionAssert.AreEqual(fonts, texts.Select(text => text.font));
++                }
++                Assert.That(root.GetComponentsInChildren<Canvas>(true), Is.Empty);
++                if (page == "Gameplay")
++                {
++                    var view = root.GetComponent<ProductionGameplayView>();
++                    Assert.That(view.HasRequiredBindings, Is.True);
++                    Assert.That(view.Revision, Is.EqualTo(ProductionGameplayView.CurrentRevision));
++                    for (int i = 0; i < 4; i++)
++                    {
++                        var card = view.Footer.Find("BoosterCard_" + i);
++                        Assert.That(card.Cast<Transform>().Count(child => child.name == "CaptionBacking"), Is.EqualTo(1));
++                        var label = card.Find("BoosterLabel").GetComponent<Text>();
++                        Assert.That(label.fontSize, Is.EqualTo(46));
++                        Assert.That(label.resizeTextForBestFit, Is.False);
++                        Assert.That(label.GetComponent<ProductionGameplayCaptionFit>().ExpandedCaption, Is.True);
++                        Assert.That(card.GetComponent<ProductionGameplayBoosterCard>().Target, Is.SameAs(view.BoosterButtons[i]));
++                    }
++                }
++                else
++                {
++                    var view = root.GetComponent<ProductionVictoryView>();
++                    Assert.That(view.HasRequiredBindings, Is.True);
++                    Assert.That(view.Revision, Is.EqualTo(ProductionVictoryView.CurrentRevision));
++                    Assert.That(view.RewardsPanel.sprite, Is.SameAs(ProductionVictoryReferenceStyle.Load("panel")));
++                    Assert.That(view.RewardsHeading.enabled, Is.True);
++                    Assert.That(view.RewardsArea.Find("ScoreHeading").GetComponent<Text>().enabled, Is.True);
++                    Assert.That(view.RewardsArea.Find("BoosterHeading").GetComponent<Text>().enabled, Is.True);
++                }
++            }
++            finally { Object.DestroyImmediate(root); }
++        }
++        static void Build(GameObject root, string page)
++        {
++            if (page == "Gameplay") ProductionGameplayRuntime.BuildInto((RectTransform)root.transform);
++            else ProductionVictoryRuntime.BuildInto((RectTransform)root.transform);
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/CoreCaptionReadabilityEditModeTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 42c9a9ecc7f64f6d975ee44bca45fd75

@@ -21,13 +21,11 @@ namespace LegendsOfRus.Editor
             try{
                 var rect=(RectTransform)root.transform;rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;root.layer=5;
                 var marker=root.GetComponent<ProductionCoreLoopPageMarker>()??root.AddComponent<ProductionCoreLoopPageMarker>();marker.Configure(ScreenId.TeamRanking);
-                var oldView=root.GetComponent<ProductionTeamRankingView>();
-                if(oldView){var oldLayout=root.GetComponent<ProductionTeamRankingLayout>();if(oldLayout)UnityEngine.Object.DestroyImmediate(oldLayout);if(oldView.Content)UnityEngine.Object.DestroyImmediate(oldView.Content.gameObject);UnityEngine.Object.DestroyImmediate(oldView);}
                 ProductionTeamRankingRuntime.BuildInto(rect);var view=root.GetComponent<ProductionTeamRankingView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Team Ranking bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/TeamRankingCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:TeamRanking\",\n  \"revision\": 1,\n  \"rankingService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
-            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionTeamRankingView>().HasRequiredBindings)throw new InvalidOperationException("Team Ranking prefab readback failed.");Debug.Log("TEAM_RANKING_R1_REBUILD_PASS: native page and cutover readback.");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:TeamRanking\",\n  \"revision\": 10,\n  \"rankingService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionTeamRankingView>().HasRequiredBindings)throw new InvalidOperationException("Team Ranking prefab readback failed.");Debug.Log("TEAM_RANKING_FOOTER_ORNAMENTS_R8_REBUILD_PASS: native page and cutover readback.");
         }
     }
 }

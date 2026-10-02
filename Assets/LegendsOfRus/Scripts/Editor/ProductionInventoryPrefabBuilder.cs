@@ -26,7 +26,7 @@ namespace LegendsOfRus.Editor
                 ProductionInventoryRuntime.BuildInto(rect);var view=root.GetComponent<ProductionInventoryView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Inventory bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/InventoryCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Inventory\",\n  \"revision\": 1,\n  \"collectibleInventoryService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Inventory\",\n  \"revision\": 6,\n  \"collectibleInventoryService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
             var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionInventoryView>().HasRequiredBindings)throw new InvalidOperationException("Inventory prefab readback failed.");Debug.Log("INVENTORY_R1_REBUILD_PASS: native page and cutover readback.");
         }
     }

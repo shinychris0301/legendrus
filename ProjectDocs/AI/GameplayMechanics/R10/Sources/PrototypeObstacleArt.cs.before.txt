@@ -1,0 +1,28 @@
+using UnityEngine;
+using UnityEngine.UI;
+using LegendsOfRus.GameplayCore;
+namespace LegendsOfRus
+{
+    public static class PrototypeObstacleArt
+    {
+        public static Sprite Load(BoardObstacleKind kind)
+        {
+            string name=kind==BoardObstacleKind.Crate?"crate":kind==BoardObstacleKind.Ice?"ice":kind==BoardObstacleKind.Chain?"chain":kind==BoardObstacleKind.RunicSeal?"seal":null;
+            return name==null?null:Resources.Load<Sprite>("ProductionUI/MechanicsPowerupsR9/"+name);
+        }
+        public static void Apply(Image host,BoardObstacleKind kind,int layers,bool showDamage)
+        {
+            var legacy=host.transform.Find("RunicSealGlyph");if(legacy)legacy.gameObject.SetActive(false);
+            host.sprite=Load(kind);host.enabled=kind!=BoardObstacleKind.None&&layers>0;
+            host.color=new Color(1,1,1,kind==BoardObstacleKind.Ice&&showDamage?(layers>1?.67f:.46f):1);
+            var child=host.transform.Find("DamageFissures");
+            if(!child)
+            {
+                var go=new GameObject("DamageFissures",typeof(RectTransform),typeof(PrototypeObstacleDamage));go.transform.SetParent(host.transform,false);
+                var rt=(RectTransform)go.transform;rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;child=go.transform;
+            }
+            child.gameObject.SetActive(showDamage&&host.enabled&&layers==1);
+            var damage=child.GetComponent<PrototypeObstacleDamage>();damage.raycastTarget=false;damage.Ice=kind==BoardObstacleKind.Ice;damage.EdgeOnly=kind==BoardObstacleKind.Chain;damage.SetVerticesDirty();
+        }
+    }
+}

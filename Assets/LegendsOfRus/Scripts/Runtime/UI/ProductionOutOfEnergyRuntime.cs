@@ -55,40 +55,46 @@ namespace LegendsOfRus
         {
             v.Revision=ProductionOutOfEnergyView.CurrentRevision;
             v.Panel.sprite=Load("panel_r2");
-            v.Emblem.sprite=Load("medallion_r2");Place(v.Emblem.rectTransform,225,193,354,247);
+            v.Emblem.sprite=Load("medallion_r2");Place(v.Emblem.rectTransform,238,193,320,223);
             if(v.HeadingLettering==null)v.HeadingLettering=Art(v.Body,"OriginalHeading",Load("title_ru_r2"),231,131,338,54);
             Place(v.Title.rectTransform,85,127,626,63);v.Title.fontSize=43;
             var badge=(RectTransform)v.Count.transform.parent;
             badge.GetComponent<ProductionPreLevelBadge>().enabled=false;
-            Place(badge,438,350,78,79);
+            Place(badge,432,325,78,79);
             if(v.CountBacking==null)v.CountBacking=Art(badge,"OriginalNavyFace",Load("badge_r2"),0,0,78,79);
             v.CountBacking.transform.SetAsFirstSibling();Place(v.Count.rectTransform,7,8,64,62);v.Count.fontSize=43;
-            Place(v.Message.rectTransform,50,439,696,74);v.Message.fontSize=29;
-            Place(v.TimerHeading.rectTransform,177,531,430,43);v.TimerHeading.fontSize=30;
+            Place(v.Message.rectTransform,50,420,696,110);v.Message.fontSize=34;
+            Place(v.TimerHeading.rectTransform,177,531,430,43);v.TimerHeading.fontSize=34;
             Place((RectTransform)v.Body.Find("Hourglass"),292,572,55,61);
             Place(v.Countdown.rectTransform,359,573,202,65);v.Countdown.fontSize=53;
             if(v.ActionLettering==null||v.ActionLettering.Length!=3)v.ActionLettering=new Image[3];
-            float[] titleY={692,826,959};float[] titleW={312,306,302};float[] buttonY={677,816,945};float[] buttonH={93,87,87};
+            float[] titleY={660,793,926};float[] titleW={312,306,302};
             for(int i=0;i<3;i++)
             {
                 if(v.ActionLettering[i]==null)v.ActionLettering[i]=Art(v.Body,"OriginalActionHeading_"+i,Load("action_title_"+i+"_ru_r2"),193,titleY[i],titleW[i],37);
-                Place(v.ActionTitles[i].rectTransform,193,titleY[i],306,38);v.ActionTitles[i].fontSize=26;v.ActionTitles[i].alignment=TextAnchor.MiddleLeft;
-                Place(v.ActionDetails[i].rectTransform,193,titleY[i]+39,306,38);v.ActionDetails[i].fontSize=20;v.ActionDetails[i].alignment=TextAnchor.UpperLeft;
-                Place((RectTransform)v.Actions[i].transform,502,buttonY[i],228,buttonH[i]);
-                Place(v.ActionLabels[i].rectTransform,12,17,204,57);v.ActionLabels[i].fontSize=22;
+                Place(v.ActionTitles[i].rectTransform,193,titleY[i],306,72);v.ActionTitles[i].fontSize=32;v.ActionTitles[i].alignment=TextAnchor.MiddleLeft;
+                Place(v.ActionDetails[i].rectTransform,72,titleY[i]+74,658,36);v.ActionDetails[i].fontSize=30;v.ActionDetails[i].alignment=TextAnchor.MiddleCenter;
+                Place((RectTransform)v.Actions[i].transform,502,titleY[i],228,72);
+                Place(v.ActionLabels[i].rectTransform,32,11,164,50);v.ActionLabels[i].fontSize=22;v.ActionLabels[i].horizontalOverflow=HorizontalWrapMode.Overflow;
             }
-            var energy=v.Body.Find("ActionIcon_0").GetComponent<Image>();energy.sprite=Load("energy_r2");Place(energy.rectTransform,86,675,80,100);
-            Place((RectTransform)v.Body.Find("ActionIcon_1"),74,806,93,95);
-            Place((RectTransform)v.Body.Find("ActionIcon_2"),71,936,100,94);
+            Place((RectTransform)v.Close.transform,686,38,112,119);
+            var energy=v.Body.Find("ActionIcon_0").GetComponent<Image>();energy.sprite=Load("energy_r2");Place(energy.rectTransform,99,662,55,68);
+            Place((RectTransform)v.Body.Find("ActionIcon_1"),89,801,64,65);
+            Place((RectTransform)v.Body.Find("ActionIcon_2"),87,934,68,64);
         }
         public static void ApplySourceState(ProductionOutOfEnergyView v,bool ready,bool en)
         {
             v.HeadingLettering.gameObject.SetActive(!ready&&!en);v.Title.enabled=ready||en;
             for(int i=0;i<3;i++)
             {
-                v.ActionLettering[i].gameObject.SetActive(!en);v.ActionTitles[i].enabled=en;
+                v.ActionLettering[i].gameObject.SetActive(false);v.ActionTitles[i].enabled=true;
                 string key=i==0?"buy_blank_r2":i==1?(en?"ask_blank_r2":"ask_ru_r2"):(en?"watch_blank_r2":"watch_ru_r2");
                 v.Actions[i].image.sprite=Load(key);v.ActionLabels[i].enabled=i==0||en;
+                // UI Image keeps this top-left pivot when preserving the source aspect.
+                // Center the label in the painted face, not the wider Button rectangle.
+                var face=v.Actions[i].image;var rect=face.rectTransform.rect;
+                float drawnWidth=Mathf.Min(rect.width,rect.height*face.sprite.rect.width/face.sprite.rect.height);
+                v.ActionLabels[i].rectTransform.anchoredPosition=new Vector2((drawnWidth-v.ActionLabels[i].rectTransform.rect.width)*.5f,-11);
             }
         }
         static Button Button(Image image)

@@ -16,20 +16,20 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         {
             var v=Load();Assert.That(AssetDatabase.AssetPathToGUID(Path),Is.EqualTo("a3c6628ddb0a3bcc3d254d89a5b54043"));
             Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.GetComponent<ProductionHomeLayout>().SourceComposition,Is.True);
-            Assert.That(v.GetComponentsInChildren<Button>(true),Is.EquivalentTo(v.Buttons()));Assert.That(v.Buttons().Length,Is.EqualTo(12));
+            Assert.That(v.GetComponentsInChildren<Button>(true),Is.EquivalentTo(v.Buttons()));Assert.That(v.Buttons().Length,Is.EqualTo(15));
             Assert.That(v.GetComponentsInChildren<Canvas>(true),Is.Empty);
             foreach(var button in v.Buttons()){Assert.That(button.targetGraphic.enabled,Is.True,button.name);Assert.That(button.targetGraphic.raycastTarget,Is.True,button.name);Assert.That(button.targetGraphic.transform.IsChildOf(button.transform),Is.True,button.name);}
             Type owner=Type.GetType("LegendsOfRus.Editor.Step20ProductionUiFix01SerializedPrefabBuilder, Assembly-CSharp-Editor",true);
             Assert.That((bool)owner.GetMethod("PageNeedsBuild",BindingFlags.NonPublic|BindingFlags.Static).Invoke(null,new object[]{ScreenId.Home}),Is.False);
         }
-        [Test] public void ReapplyingSourceMigrationKeepsTheSameTwelveButtons()
+        [Test] public void ReapplyingSourceMigrationKeepsTheSameFifteenButtons()
         {
             var root=UnityEngine.Object.Instantiate(Load().gameObject);
             try {
                 var v=root.GetComponent<ProductionHomeView>();var original=v.Buttons();
                 ProductionHomeSourceComposition.Apply(v);ProductionHomeSourceComposition.Apply(v);
                 Assert.That(v.HasRequiredBindings,Is.True);
-                Assert.That(v.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(12));
+                Assert.That(v.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(15));
                 CollectionAssert.AreEqual(original,v.Buttons());
             } finally { UnityEngine.Object.DestroyImmediate(root); }
         }
@@ -46,7 +46,9 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             foreach(var key in ProductionHomeRuntime.GetTextureResourceKeys()){
                 var p="Assets/LegendsOfRus/Resources/"+key+".png";var importer=(TextureImporter)AssetImporter.GetAtPath(p);var sprite=AssetDatabase.LoadAssetAtPath<Sprite>(p);
                 importer.GetSourceTextureWidthAndHeight(out int w,out int h);
-                Assert.That(sprite.rect.size,Is.EqualTo(new Vector2(w,h)),p);Assert.That(sprite.border,Is.EqualTo(Vector4.zero));
+                Assert.That(sprite.rect.size,Is.EqualTo(new Vector2(w,h)),p);
+                // Shared shortcut art retains the owning page's importer and slice borders.
+                if(key.StartsWith(ProductionHomeSourceComposition.ArtRoot,StringComparison.Ordinal))Assert.That(sprite.border,Is.EqualTo(Vector4.zero));
                 Assert.That(importer.textureCompression,Is.EqualTo(TextureImporterCompression.Uncompressed));Assert.That(importer.mipmapEnabled,Is.False);Assert.That(importer.sRGBTexture,Is.True);
             }
         }

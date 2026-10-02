@@ -1,0 +1,58 @@
+{
+  "distinctMeasurementTestMethods": 1,
+  "passingExecutions": 5,
+  "runs": [
+    {
+      "name": "Baseline",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 30.324606895446777,
+      "summary": "QA/Baseline/summary.json"
+    },
+    {
+      "name": "Candidate512",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 35.26363658905029,
+      "summary": "QA/Candidate512/summary.json"
+    },
+    {
+      "name": "BaselineCorrected",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 30.98011326789856,
+      "summary": "QA/BaselineCorrected/summary.json"
+    },
+    {
+      "name": "Candidate1024",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 35.78800392150879,
+      "summary": "QA/Candidate1024/summary.json"
+    },
+    {
+      "name": "Restored",
+      "exitCode": 0,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 35.59145259857178,
+      "summary": "QA/Restored/summary.json"
+    }
+  ],
+  "candidateAcceptance": {
+    "512": "rejected:40/40 native comparisons outside limits; initial alpha diagnostic pairs excluded",
+    "1024": "rejected:52/52 corrected comparisons outside limits",
+    "restored": "retained:52/52 comparisons exactly match original coin regions"
+  },
+  "initialAlphaDiagnosticImagesExcluded": 24,
+  "physicalDeviceTested": false
+}

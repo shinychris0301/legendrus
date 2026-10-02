@@ -7,7 +7,7 @@ namespace LegendsOfRus
 {
     public sealed class ProductionLoginView : MonoBehaviour
     {
-        public const int CurrentRevision=1;
+        public const int CurrentRevision=3;
         public int Revision=CurrentRevision;
         public RectTransform Content,Body;
         public Image Environment,Panel;

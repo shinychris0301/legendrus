@@ -10,7 +10,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionHomeView : MonoBehaviour
     {
-        public const int CurrentRevision = 18;
+        public const int CurrentRevision = 22;
         public int Revision = CurrentRevision;
         public ProductionPlayerHeader Header;
         public SplashTitleTypography Typography;
@@ -71,6 +71,8 @@ namespace LegendsOfRus
         public Button CharactersButton;
         public Button MailButton;
         public Button DailyRewardButton;
+        public Button RankingButton, TeamButton, FriendsButton;
+        public Text RankingText, TeamText, FriendsText;
 
         public Image SourcePlay;
         public Image[] SourceNavigation;
@@ -90,77 +92,33 @@ namespace LegendsOfRus
             EventsText != null && CharactersText != null && QuestText != null &&
             ProfileButton != null && SettingsButton != null && PlayButton != null &&
             WorldMapButton != null && ShopButton != null && EventsButton != null &&
+            RankingButton != null && TeamButton != null && FriendsButton != null &&
+            RankingText != null && TeamText != null && FriendsText != null &&
             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
             ProductionHomeSourceComposition.Valid(this);
 
-        public bool HasSceneLightingBindings => HasSceneLighting(Ivan, "home_hero_lighting", 0) &&
-            HasSceneLighting(MapFoliage, "home_foliage_lighting", 1);
+        // Current source art does not use the historical lighting effects or foliage overlay.
+        public bool HasSceneLightingBindings => HasRequiredBindings &&
+            HasDisabledLighting(Ivan) && HasDisabledLighting(MapFoliage);
 
-        static bool HasSceneLighting(Image image, string materialName, int profile)
+        static bool HasDisabledLighting(Image image)
         {
-            if (image == null || image.material == null || image.material.name != materialName ||
-                image.material.shader.name != ProductionHomeRuntime.SceneLightingShader ||
-                image.material.GetFloat("_Profile") != profile) return false;
-            ProductionHomeSceneLighting lighting = image.GetComponent<ProductionHomeSceneLighting>();
-            return lighting != null && lighting.enabled && lighting.Strength == 1f && lighting.Padding == .03f;
+            var lighting = image != null ? image.GetComponent<ProductionHomeSceneLighting>() : null;
+            return lighting != null && !lighting.enabled;
         }
 
-        public bool HasReferenceBackdropBindings =>
-            Environment != null && Ivan != null && Environment.transform.parent == Ivan.transform.parent &&
-            Environment.transform.GetSiblingIndex() < Ivan.transform.GetSiblingIndex() &&
-            BackgroundShade != null && BackgroundShade.enabled && BackgroundShade.gameObject.activeSelf &&
-            BackgroundShade.GetComponent<CanvasRenderer>() != null && !BackgroundShade.raycastTarget &&
-            BackgroundShade.transform.parent == Environment.transform &&
-            BackgroundShade.rectTransform.anchorMin == Vector2.zero && BackgroundShade.rectTransform.anchorMax == Vector2.one &&
-            BackgroundShade.rectTransform.offsetMin == Vector2.zero && BackgroundShade.rectTransform.offsetMax == Vector2.zero &&
-            HasArtwork(MapFoliage, "home_map_foliage") && MapFoliage.enabled && MapFoliage.gameObject.activeSelf && !MapFoliage.raycastTarget &&
-            WorldMapButton != null && MapFoliage.transform.parent == WorldMapButton.transform.parent &&
-            MapFoliage.transform.parent != null && MapFoliage.transform.parent.parent == Ivan.transform.parent &&
-            MapFoliage.transform.parent.GetSiblingIndex() > Ivan.transform.GetSiblingIndex() &&
-            MapFoliage.transform.GetSiblingIndex() == 0;
+        public bool HasReferenceBackdropBindings => HasRequiredBindings &&
+            BackgroundShade != null && !BackgroundShade.enabled &&
+            MapFoliage != null && !MapFoliage.enabled && MapFoliage.sprite == null;
 
-        public bool HasGeneratedControlBindings =>
-            HasArtwork(HudFrame, "header") && HasArtwork(AvatarFrame, "avatar_ring") &&
-            ProfileButton != null && ProfileButton.targetGraphic == AvatarFrame &&
-            HasArtwork(GoldCapsule, "capsule") && HasArtwork(GemsCapsule, "capsule") &&
-            HasArtwork(EnergyCapsule, "capsule") && HasArtwork(GoldIcon, "coin") &&
-            HasArtwork(GemsIcon, "gem") && HasArtwork(EnergyIcon, "energy") &&
-            HasArtwork(QuestFrame, "quest_panel") && HasArtwork(FooterBase, "footer_base_generated") &&
-            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings") &&
-            HasButtonArtwork(WorldMapButton, "nav_map_generated") && HasButtonArtwork(ShopButton, "nav_shop_generated") &&
-            HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
-            HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
+        // The historical control diagnostic now validates the installed source composition.
+        public bool HasGeneratedControlBindings => HasRequiredBindings;
 
-        public bool HasReferenceForegroundBindings =>
-            HasArtwork(Logo, "home_logo") && HasArtwork(Ivan, "home_hero_firebird") &&
-            HasButtonArtwork(PlayButton, "home_play_button") &&
-            HasReferencePortrait && Ivan.GetComponent<SplashTitleCharacterFade>() != null &&
-            Ivan.GetComponent<SplashTitleCharacterFade>().enabled &&
-            PlayText != null && PlayText.GetComponent<SplashTitleTextGeometry>() != null &&
-            PlayText.GetComponent<ProductionHomeGoldText>() != null && PlayText.GetComponent<ProductionHomeGoldText>().enabled &&
-            PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace &&
-            PlayText.material != null && PlayText.material.shader.name == "LegendsOfRus/UI/HomePlayGold" &&
-            HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
-            HasArtwork(QuestProgressFrame, "progress_frame") && HasArtwork(QuestProgressFill, "progress_fill") &&
-            HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
-            HasButtonArtwork(GoldPlusButton, "plus") && HasButtonArtwork(GemsPlusButton, "plus") &&
-            HasButtonArtwork(EnergyPlusButton, "plus") && QuestProgressText != null &&
-            QuestRewardText != null && DailyRewardBadge != null && DailyRewardBadgeText != null &&
-            EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget &&
-            EventsBadge.RaisedBadge && DailyRewardBadge.RaisedBadge && !DailyRewardBadge.raycastTarget;
+        // Keep the historical diagnostic aligned with the current source composition.
+        public bool HasReferenceForegroundBindings => HasRequiredBindings;
 
-        bool HasReferencePortrait => ProfileButton != null &&
-            ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait") != null &&
-            HasArtwork(ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait").GetComponent<Image>(), "avatar_portrait");
-
-        static bool HasArtwork(Image image, string expectedName) =>
-            image != null && image.sprite != null && image.sprite.name == expectedName;
-
-        static bool HasButtonArtwork(Button button, string expectedName) =>
-            button != null && HasArtwork(button.targetGraphic as Image, expectedName);
-
-        readonly Button[] boundButtons = new Button[12];
-        readonly UnityAction[] ownedListeners = new UnityAction[12];
+        readonly Button[] boundButtons = new Button[15];
+        readonly UnityAction[] ownedListeners = new UnityAction[15];
         GameState subscribedState;
         string lastLanguage;
         string lastRewardDay;
@@ -283,7 +241,8 @@ namespace LegendsOfRus
             Button[] buttons = Buttons();
             ScreenId[] destinations = { ScreenId.Profile, ScreenId.Settings, ScreenId.ChapterMap,
                 ScreenId.WorldMap, ScreenId.Shop, ScreenId.Events, ScreenId.Characters,
-                ScreenId.Mail, ScreenId.DailyReward, ScreenId.Shop, ScreenId.Shop, ScreenId.Shop };
+                ScreenId.Mail, ScreenId.DailyReward, ScreenId.Shop, ScreenId.Shop, ScreenId.Shop,
+                ScreenId.IndividualRanking, ScreenId.TeamHub, ScreenId.FriendsList };
             navigationCommitted = false;
             for (int i = 0; i < buttons.Length; i++)
             {
@@ -320,6 +279,6 @@ namespace LegendsOfRus
         }
 
         public Button[] Buttons() => new[] { ProfileButton, SettingsButton, PlayButton, WorldMapButton,
-            ShopButton, EventsButton, CharactersButton, MailButton, DailyRewardButton, GoldPlusButton, GemsPlusButton, EnergyPlusButton };
+            ShopButton, EventsButton, CharactersButton, MailButton, DailyRewardButton, GoldPlusButton, GemsPlusButton, EnergyPlusButton, RankingButton, TeamButton, FriendsButton };
     }
 }

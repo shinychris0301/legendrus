@@ -198,15 +198,17 @@ namespace LegendsOfRus.Tests.PlayMode
         public void StagedChapterBoardsRemainPlayableAcrossSeeds()
         {
             var catalog=ChapterLevelCatalog.LoadChapter1();
-            Assert.That(LevelDataValidator.ValidateCatalog(catalog).IsValid,Is.True);
-            Assert.That(Chapter01ProgressionValidator.Validate(catalog).IsValid,Is.True);
+            var report=LevelDataValidator.ValidateCampaignCatalog(catalog);
+            Assert.That(report.IsValid,Is.True,string.Join("\n",report.Errors));
+            Assert.That(catalog.levels.Length,Is.EqualTo(500));
+            Assert.That(Chapter01ProgressionValidator.Validate(LegacyChapterTestFixture.Levels()).IsValid,Is.True,"The ten-round teaching validator applies to the retained historical fixture.");
             foreach(var level in catalog.levels)
             {
                 Assert.That(level.columns,Is.EqualTo(8));Assert.That(level.rows,Is.EqualTo(7));
-                Assert.That(level.goals.Length,Is.EqualTo(level.levelId<6?2:3));
+                Assert.That(level.goals.Length,Is.InRange(1,3),level.id);
                 for(int offset=0;offset<12;offset++)
                 {
-                    var board=LevelBoardFactory.Create(level,level.boardSeed+offset);
+                    var board=LevelBoardFactory.Create(level,level.boardSeed+offset,rules:Match3Board.CurrentGameplayRules);
                     Assert.That(board.HasAnyMatches(),Is.False,level.id);Assert.That(board.HasLegalMove(),Is.True,level.id);
                     foreach(var cell in level.fixedCells)
                     {

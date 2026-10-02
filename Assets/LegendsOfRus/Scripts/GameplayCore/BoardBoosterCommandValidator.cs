@@ -45,7 +45,7 @@ namespace LegendsOfRus.GameplayCore
         public static BoardBoosterValidationResult Validate(
             BoardModel board,
             BoardBoosterRequest request,
-            BoardBalanceProfile balance = null
+            BoardBalanceProfile balance = null, bool allowSealTarget = false
         )
         {
             if (board == null) throw new ArgumentNullException(nameof(board));
@@ -68,7 +68,7 @@ namespace LegendsOfRus.GameplayCore
             }
 
             BoardCellData target = board.GetCell(request.Target);
-            if (target.IsEmpty)
+            if (target.IsEmpty && !(allowSealTarget && board.GetObstacle(request.Target).Kind == BoardObstacleKind.RunicSeal && request.Kind != BoardBoosterCommandKind.LivingLightColor))
             {
                 return Reject(
                     BoardBoosterValidationCode.EmptyTarget,
@@ -157,7 +157,7 @@ namespace LegendsOfRus.GameplayCore
         )
         {
             if (!board.IsInside(position)) return;
-            if (!board.GetCell(position).IsEmpty)
+            if (!board.GetCell(position).IsEmpty || board.GetObstacle(position).Kind == BoardObstacleKind.RunicSeal)
                 affected.Add(position);
         }
     }

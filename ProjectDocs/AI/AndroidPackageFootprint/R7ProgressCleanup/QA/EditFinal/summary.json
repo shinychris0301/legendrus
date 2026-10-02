@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "EditMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.RetiredProgressArtworkEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.FreshPageBuilderEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.HomeAlignmentDeliveryEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.GameplayAlignmentEditModeTests;LegendsOfRus.Tests.AndroidBuild;LegendsOfRus.Tests.ContentDelivery",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidPackageFootprint/R7ProgressCleanup/QA/EditFinal/results.xml",
+    "-logFile",
+    "/tmp/lor-progress-cleanup-r7/EditFinal/unity.log",
+    "-nographics"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 36.87905764579773,
+  "isolatedConfig": "/tmp/lor-progress-cleanup-r7/EditFinal/config",
+  "graphics": false,
+  "result": {
+    "id": "2",
+    "testcasecount": "163",
+    "result": "Failed(Child)",
+    "total": "163",
+    "passed": "162",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 11:23:42Z",
+    "end-time": "2026-10-01 11:23:45Z",
+    "duration": "2.9762833"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.GameplayAlignmentEditModeTests.CanonicalGameplayHasFiveNativeControlsAndNoReferenceScreenDependencies",
+      "result": "Failed",
+      "message": "  GoalProgressFrame\n  Expected: not null\n  But was:  null\n"
+    }
+  ]
+}

@@ -96,7 +96,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(serialized.transform.Find(ProductionHomeRuntime.ContentName), Is.Not.Null);
             IReadOnlyList<string> keys = ProductionUiFix01Runtime.GetHomeTextureResourceKeys();
             CollectionAssert.AreEquivalent(ProductionHomeRuntime.GetTextureResourceKeys(), keys);
-            Assert.That(keys.Count, Is.EqualTo(ProductionHomeSourceComposition.Names.Length), "Prepare every original sprite and localization variant.");
+            Assert.That(keys.Count, Is.EqualTo(ProductionHomeSourceComposition.Names.Length + ProductionHomeSourceComposition.ShortcutResources.Length), "Prepare every original sprite, localization variant and shared shortcut.");
             Assert.That(new HashSet<string>(keys).Count, Is.EqualTo(keys.Count), "Do not count duplicate resource work.");
             var textures = new HashSet<Texture>();
             using (var preparation = new HomeLoadingPreparation())
@@ -132,8 +132,8 @@ namespace LegendsOfRus.Tests.PlayMode
                 if (image.isActiveAndEnabled && image.sprite != null)
                     Assert.That(textures.Contains(image.sprite.texture), Is.True,
                         image.name + " uses a texture missing from Loading's actual Home resource contract.");
-            Assert.That(ActiveRoot(ScreenId.Home).GetComponentsInChildren<Button>(true).Length, Is.EqualTo(12),
-                "The nine established controls and three visible resource plus controls must receive real input.");
+            Assert.That(ActiveRoot(ScreenId.Home).GetComponentsInChildren<Button>(true).Length, Is.EqualTo(15),
+                "Existing controls and three social shortcuts must receive real input.");
             AssertSingleInfrastructure();
         }
 
@@ -393,13 +393,14 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator VisibleControls_RouteNineActionsAndThreeResourceButtonsOnceFromTallSafeArea()
+        public IEnumerator VisibleControls_RouteAllActionsAndSocialShortcutsOnceFromTallSafeArea()
         {
             var expected = new[]
             {
                 ScreenId.Profile, ScreenId.Settings, ScreenId.ChapterMap, ScreenId.WorldMap,
                 ScreenId.Shop, ScreenId.Events, ScreenId.Characters, ScreenId.Mail, ScreenId.DailyReward,
-                ScreenId.Shop, ScreenId.Shop, ScreenId.Shop
+                ScreenId.Shop, ScreenId.Shop, ScreenId.Shop,
+                ScreenId.IndividualRanking, ScreenId.TeamHub, ScreenId.FriendsList
             };
             for (int index = 0; index < expected.Length; index++)
             {
@@ -508,6 +509,23 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator SocialShortcutsReturnHomeAndTeamFriendsRetainsItsParent()
+        {
+            foreach(var target in new[]{ScreenId.IndividualRanking,ScreenId.TeamHub,ScreenId.FriendsList})
+            {
+                router.Show(ScreenId.Home);Settle();yield return null;
+                var view=HomeView();var button=target==ScreenId.IndividualRanking?view.RankingButton:target==ScreenId.TeamHub?view.TeamButton:view.FriendsButton;
+                button.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(target));
+                if(target==ScreenId.FriendsList){var friends=router.Viewport.GetComponentInChildren<ProductionFriendsListView>();friends.RemoveButton.onClick.Invoke();router.NavigateBack();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.FriendsList));Assert.That(friends.InfoPanel.activeSelf,Is.False);}
+                router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));
+            }
+            router.Show(ScreenId.TeamHub);Settle();yield return null;
+            router.Viewport.GetComponentInChildren<ProductionTeamHubView>().FriendsButton.onClick.Invoke();Settle();yield return null;
+            router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.TeamHub));
+        }
+
+        [UnityTest]
         public IEnumerator HomePortraits_RenderLivePageAndKeepControlsInsideSafeArea()
         {
             if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LOR_HOME_CAPTURE_DIR")))
@@ -523,6 +541,7 @@ namespace LegendsOfRus.Tests.PlayMode
             WithDisplay(view, new Vector2Int(1080, 2400), new Rect(45, 100, 990, 2160), "Home_1080x2400_safearea_RU");
             DemoFeatureState.SetLanguage("en");
             yield return null; yield return null;
+            WithDisplay(view, new Vector2Int(1080, 2400), new Rect(45, 100, 990, 2160), "Home_1080x2400_safearea_EN");
             WithDisplay(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Home_941x1672_EN");
             DemoFeatureState.SetLanguage("ru");
             yield return null; yield return null;
@@ -585,6 +604,22 @@ namespace LegendsOfRus.Tests.PlayMode
                 ProductionHomeLayout layout = view.GetComponent<ProductionHomeLayout>();
                 Assert.That(layout, Is.Not.Null, "The actual Home prefab must own its responsive layout.");
                 if (name != null) WritePreAssertionDiagnostic(camera, target, size, name);
+                // Containment alone missed the old centered-stage layout on tall phones.
+                // Assert actual edge distances, preserving the header's original inset.
+                float pixelScale = ScreenBounds(layout.Footer, camera).width / 941f;
+                Assert.That(ScreenBounds(layout.Hud, camera).yMax,
+                    Is.EqualTo(safeRect.yMax).Within(1f), "Home header must follow safe top");
+                Assert.That(ScreenBounds(layout.Footer, camera).yMin,
+                    Is.EqualTo(safeRect.yMin).Within(1f), "Home footer must follow safe bottom");
+                Assert.That(ScreenBounds(layout.Navigation, camera).yMin - ScreenBounds(layout.Footer, camera).yMax,
+                    Is.EqualTo(4f * pixelScale).Within(1f), "Keep the original navigation/footer join");
+                Assert.That(ScreenBounds((RectTransform)view.PlayButton.transform, camera).yMin,
+                    Is.EqualTo(ScreenBounds(layout.Navigation, camera).yMax).Within(1f),
+                    "Keep Play and navigation registered");
+                Rect heroBounds = ScreenBounds(view.Ivan.rectTransform, camera);
+                Rect playBounds = ScreenBounds((RectTransform)view.PlayButton.transform, camera);
+                Assert.That(heroBounds.yMax - playBounds.yMax,
+                    Is.EqualTo(532f * pixelScale).Within(1f), "Hero cutout must remain behind Play");
                 Rect environment = ScreenBounds(view.Environment.rectTransform,camera);
                 Rect shade = ScreenBounds(view.LowerShade.rectTransform,camera);
                 Button[] buttons=Buttons(view);var bounds=new Rect[buttons.Length];var names=new string[buttons.Length];
@@ -844,12 +879,9 @@ namespace LegendsOfRus.Tests.PlayMode
 
         static Button[] Buttons(ProductionHomeView view) => view.Buttons();
 
-        static Text[] Labels(ProductionHomeView view) => new[]
-        {
-            view.HeroName, view.LevelText, view.GoldText, view.GemsText, view.EnergyText, view.PlayText,
-            view.WorldMapText, view.ShopText, view.EventsText, view.CharactersText, view.QuestText,
-            view.QuestProgressText, view.QuestRewardText, view.ProfileProgressText, view.DailyRewardBadgeText, view.EventsBadgeText
-        };
+        // Include added controls automatically: every dynamic label must rebuild when
+        // this synchronous capture fixture changes Canvas scale without a display frame.
+        static Text[] Labels(ProductionHomeView view) => view.GetComponentsInChildren<Text>(true);
 
         static GameObject PointerTarget(Button button, Camera camera)
         {

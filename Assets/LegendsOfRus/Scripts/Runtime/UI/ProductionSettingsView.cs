@@ -8,11 +8,13 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionSettingsView : MonoBehaviour
     {
-        public const int CurrentRevision=2;
+        public const int CurrentRevision=5;
         public int Revision=CurrentRevision;
         public RectTransform Content, Body, Hud;
         public Image Environment, Title;
         public Font BodyFont, TitleFont;
+        public ProductionPlayerHeader Header;
+        public Text SignOutNote;
         public Text Heading, HeroName, LevelText, GoldText, GemsText, EnergyText, VersionText;
         public Text LanguageValue, CloudValue, InfoHeading, InfoDescription, CloseInfoLabel;
         public Button ProfileButton, SettingsButton, BackButton, CloseInfoButton;
@@ -23,7 +25,7 @@ namespace LegendsOfRus
         public Text LanguageHeading;
         public Button CloseLanguageButton;
         public bool ActionsBound { get; private set; }
-        public bool HasRequiredBindings => Revision==CurrentRevision && Content && Body && Hud && Environment && Environment.sprite && Title && Title.sprite && BodyFont && TitleFont && Heading && HeroName && LevelText && GoldText && GemsText && EnergyText && VersionText && LanguageValue && CloudValue && InfoHeading && InfoDescription && CloseInfoLabel && ProfileButton && SettingsButton && BackButton && CloseInfoButton && InfoPanel && LanguageChoices && GeneralInfoContent && LanguagePanel && LanguageHeading && CloseLanguageButton && Valid(PlusButtons,3) && Valid(SwitchButtons,4) && Valid(SwitchLabels,4) && Valid(Rows,6) && Valid(RowLabels,6) && Valid(LanguageButtons,2) && Valid(LanguageLabels,2);
+        public bool HasRequiredBindings => Revision==CurrentRevision && Header && Header.HasBindings && SignOutNote && Content && Body && Hud && Environment && Environment.sprite && Title && Title.sprite && BodyFont && TitleFont && Heading && HeroName && LevelText && GoldText && GemsText && EnergyText && VersionText && LanguageValue && CloudValue && InfoHeading && InfoDescription && CloseInfoLabel && ProfileButton && SettingsButton && BackButton && CloseInfoButton && InfoPanel && LanguageChoices && GeneralInfoContent && LanguagePanel && LanguageHeading && CloseLanguageButton && Valid(PlusButtons,3) && Valid(SwitchButtons,4) && Valid(SwitchLabels,4) && Valid(Rows,6) && Valid(RowLabels,6) && Valid(LanguageButtons,2) && Valid(LanguageLabels,2);
         static bool Valid<T>(T[] values,int count) where T:UnityEngine.Object => values!=null && values.Length==count && Array.TrueForAll(values,x=>x!=null);
         readonly List<Button> buttons=new List<Button>();
         readonly List<UnityAction> listeners=new List<UnityAction>();
@@ -84,9 +86,9 @@ namespace LegendsOfRus
         public void RefreshContent()
         {
             if(!HasRequiredBindings)return;language=DemoFeatureState.LanguageCode;bool en=language=="en";
-            foreach(var text in GetComponentsInChildren<Text>(true)){text.font=BodyFont;text.fontStyle=FontStyle.Normal;}
+            foreach(var text in GetComponentsInChildren<Text>(true)){if(text.transform.IsChildOf(Hud))continue;text.font=BodyFont;text.fontStyle=FontStyle.Normal;}
             Heading.font=TitleFont;Title.sprite=ProductionSettingsRuntime.Load(en?"title_blank":"title_ru");Heading.enabled=en;Heading.text=en?"SETTINGS":"НАСТРОЙКИ";
-            HeroName.text=en?"Ivan":"Иван";
+            SignOutNote.text=en?"Not available yet":"Пока недоступно";
             string[] labels=en?new[]{"Music","Sound","Vibration","Notifications"}:new[]{"Музыка","Звуки","Вибрация","Уведомления"};
             for(int i=0;i<4;i++)SwitchLabels[i].text=labels[i];
             for(int i=0;i<6;i++)RowLabels[i].text=(en?EnRows:RuRows)[i];
@@ -97,7 +99,7 @@ namespace LegendsOfRus
         public void RefreshState()
         {
             if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
-            LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":ProductionInventoryView.Number(s.gold);GemsText.text=s==null?"—":ProductionInventoryView.Number(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;
+            Header.RefreshValues();
             for(int i=0;i<4;i++){SwitchButtons[i].image.sprite=ProductionSettingsRuntime.Load(Preference(i)?"switch_on":"switch_off");SwitchButtons[i].interactable=s!=null;}
         }
     }

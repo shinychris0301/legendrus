@@ -67,6 +67,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("Events_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Capture("Events_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en");yield return null;View().RefreshContent();
+            Capture("Events_1080x2400_safe_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             Capture("Events_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             Capture("Events_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Assert.That(StableSave(),Is.EqualTo(save));
@@ -113,6 +114,38 @@ namespace LegendsOfRus.Tests.PlayMode
             yield return WaitForNormalButtonColors();Capture("Events_MaxBalances_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             Assert.That(View().Category,Is.EqualTo(EventsCategory.Upcoming));
         }
+        [UnityTest]public IEnumerator TallCategoryTransitionsAndExpandedBackTarget()
+        {
+            string save=StableSave();
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(ScreenId.Events);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);View().RefreshContent();
+                foreach(int tab in new[]{0,2,1})
+                {
+                    View().Tabs[tab].onClick.Invoke();yield return WaitForNormalButtonColors();
+                    Capture("Events_TallCategory_"+tab+"_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172));
+                }
+                View().DetailsButtons[0].onClick.Invoke();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.EventDetail));
+                router.NavigateBack();Settle();yield return null;yield return WaitForNormalButtonColors();
+                Capture("Events_TallReturn_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+                int generation=router.RouteGeneration;
+                Capture("Events_BackTarget_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    var back=View().BackButton;Rect visual=Bounds(back.image.rectTransform,camera);
+                    var pointer=new PointerEventData(EventSystem.current){position=new Vector2(visual.center.x,visual.yMax+3)};
+                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+                    Assert.That(hits.Count,Is.GreaterThan(0));
+                    Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(back),"Expanded area above the icon receives taps");
+                    ExecuteEvents.Execute(back.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                });
+                Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));
+            }
+            Assert.That(StableSave(),Is.EqualTo(save));
+        }
+
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -174,8 +207,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionEventsView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -187,6 +218,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionEventsView>(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -210,7 +243,9 @@ namespace LegendsOfRus.Tests.PlayMode
             // A single textured selection follows category changes in both languages.
             for(int tab=0;tab<3;tab++)
             {
-                Assert.That(v.Tabs[tab].image.sprite.name,Is.EqualTo((int)v.Category==tab?"tab_selected_r7":"tab_r3"));
+                bool en=DemoFeatureState.LanguageCode=="en",selected=(int)v.Category==tab;
+                Assert.That(v.Tabs[tab].image.sprite.name,Is.EqualTo(en?(selected?"tab_selected_r7":"tab_r3"):("tab_lettered_"+tab+"_"+(selected?"selected":"normal")+"_r9")));
+                Assert.That(v.TabLabels[tab].enabled,Is.EqualTo(en));
                 Assert.That(v.Tabs[tab].image.color,Is.EqualTo(Color.white),"Do not recolor antique gold together with the blue face");
                 var flat=v.Tabs[tab].transform.Find("ActiveFace");
                 if(flat!=null)Assert.That(flat.gameObject.activeSelf,Is.False);
@@ -220,6 +255,23 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(footerBounds.xMin,Is.GreaterThan(Bounds((RectTransform)v.BackButton.transform,camera).xMax),"Back must not cover source curls");
             Assert.That(footerBounds.yMin,Is.GreaterThanOrEqualTo(safeArea.yMin),"Footer jewel below safe edge");
             Assert.That(footerBounds.Contains(note.min)&&footerBounds.Contains(note.max),Is.True,"Live footer note must fit its source face");
+            float unit=Bounds(v.Body,camera).width/v.Body.rect.width;
+            Assert.That(footerBounds.yMin,Is.EqualTo(safeArea.yMin+(1672-1615-835f*58/941)*unit).Within(.5f),"Footer retains source clearance at safe bottom");
+            Assert.That(footer.type,Is.EqualTo(Image.Type.Simple));Assert.That(footer.preserveAspect,Is.True);
+            Assert.That(footer.sprite.rect.size,Is.EqualTo(new Vector2(footer.sprite.texture.width,footer.sprite.texture.height)));
+            var back=v.BackButton.image;Rect visual=Bounds(back.rectTransform,camera);Vector4 padding=back.raycastPadding;
+            Rect target=Rect.MinMaxRect(visual.xMin+padding.x*unit,visual.yMin+padding.y*unit,visual.xMax-padding.z*unit,visual.yMax-padding.w*unit);
+            Assert.That(Mathf.Min(target.width,target.height),Is.GreaterThanOrEqualTo(44),"Back touch target at tested phone sizes");
+            Assert.That(target.yMin,Is.GreaterThanOrEqualTo(safeArea.yMin));Assert.That(target.xMin,Is.GreaterThanOrEqualTo(safeArea.xMin));
+            Assert.That(target.xMax,Is.LessThan(footerBounds.xMin),"Back touch area clears footer ornament");
+            Assert.That(visual.yMin,Is.EqualTo(safeArea.yMin+3*unit).Within(.5f));
+            Assert.That(back.type,Is.EqualTo(Image.Type.Simple));Assert.That(back.preserveAspect,Is.True);
+            Assert.That(back.sprite.rect.size,Is.EqualTo(new Vector2(back.sprite.texture.width,back.sprite.texture.height)));
+            foreach(var point in new[]{new Vector2(target.center.x,target.yMax-1),new Vector2(target.xMin+1,target.center.y),new Vector2(target.xMax-1,target.center.y)})
+            {
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(v.BackButton),"Expanded Back edge is clickable");
+            }
             Assert.That(footer.raycastTarget,Is.False);
             Assert.That(footer.transform.GetSiblingIndex(),Is.LessThan(v.Footer.transform.GetSiblingIndex()));
             Assert.That(Bounds(v.Hud,camera).yMax,Is.EqualTo(safeArea.yMax).Within(.5f),"Header must reach safe top");
@@ -235,6 +287,14 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(description.yMin,Is.GreaterThanOrEqualTo(reward.yMax),"Description overlaps reward heading");
                 Assert.That(Bounds(v.Names[i].rectTransform,camera).yMin,Is.GreaterThan(status.yMax),"Name overlaps status");
                 Rect pending=Bounds((RectTransform)v.Cards[i].Find("RewardExamples"),camera),action=Bounds((RectTransform)v.DetailsButtons[i].transform,camera);
+                bool english=DemoFeatureState.LanguageCode=="en";
+                Assert.That(v.ActionLabels[i].enabled,Is.EqualTo(english),"No duplicate text over source lettering");
+                Assert.That(v.DetailsButtons[i].image.sprite.name,Is.EqualTo(english?"action_r3":"action_lettered_"+i+"_r9"));
+                var availability=v.Cards[i].Find("ActionAvailability").GetComponent<Text>();
+                Rect availabilityBounds=Bounds(availability.rectTransform,camera);
+                Assert.That(availabilityBounds.yMin,Is.GreaterThan(action.yMax),"Availability note clears button metalwork");
+                Assert.That(availability.text,Is.EqualTo(i==0?(english?"Preview only":"Только предпросмотр"):(english?"Unavailable":"Недоступно")));
+
                 Assert.That(pending.xMax,Is.LessThan(action.xMin),"Reward examples overlap action");
                 var window=(RectTransform)v.Cards[i].Find("IllustrationWindow");var subject=window.Find("Illustration").GetComponent<Image>();var painting=window.Find("CleanScene").GetComponent<Image>();
                 Assert.That(subject.sprite.name,Does.EndWith("_r3"));

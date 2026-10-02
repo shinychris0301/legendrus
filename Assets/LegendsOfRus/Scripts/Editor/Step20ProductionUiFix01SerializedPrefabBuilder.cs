@@ -221,7 +221,7 @@ namespace LegendsOfRus.Editor
             AssetDatabase.ImportAsset(PageRoot + "/Home.prefab", ImportAssetOptions.ForceSynchronousImport);
             if (PageNeedsBuild(ScreenId.Home))
                 throw new InvalidOperationException("Saved Home alignment prefab failed the revision/binding read-back check.");
-            Debug.Log("Home alignment serialized prefab saved and read back at revision " + ProductionHomeView.CurrentRevision + ".");
+            Debug.Log("Home safe-edge header/footer with preserved source artwork and social shortcuts saved and read back at revision " + ProductionHomeView.CurrentRevision + ".");
         }
 
         static void RequireEditorIdle()
@@ -240,7 +240,7 @@ namespace LegendsOfRus.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.ImportAsset(PageRoot + "/WorldMap.prefab",ImportAssetOptions.ForceSynchronousImport);
             if(PageNeedsBuild(ScreenId.WorldMap)) throw new InvalidOperationException("World Map save/readback failed.");
-            Debug.Log("World Map alignment serialized prefab saved and read back at revision " + ProductionWorldMapView.CurrentRevision + ".");
+            Debug.Log("World Map safe-edge navigation and expanding chapter viewport saved and read back at revision " + ProductionWorldMapView.CurrentRevision + ".");
         }
 
         [MenuItem("Legends of Rus/Production UI/Rebuild Chapter Map Alignment")]
@@ -608,12 +608,12 @@ namespace LegendsOfRus.Editor
         }
         static void BuildChapterCompletePage()
         {
-            // R8 preserves source scenery/lettering and imports repaired localized faces.
+            // Preserve approved artwork; configure the footer border for larger live captions.
             foreach(string name in ProductionChapterCompleteRuntime.ArtNames)
             {
                 var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionChapterCompleteRuntime.ArtRoot+name+".png") as TextureImporter;
                 if(importer==null)throw new InvalidOperationException("Missing ChapterComplete sprite: "+name);
-                LockedDesignImporter.ConfigureFailTexture(importer);importer.SaveAndReimport();
+                LockedDesignImporter.ConfigureChapterCompleteTexture(importer);importer.SaveAndReimport();
             }
             string path=PageRoot+"/ChapterComplete.prefab";var root=PrefabUtility.LoadPrefabContents(path);
             try
@@ -626,8 +626,8 @@ namespace LegendsOfRus.Editor
                 if(!view.HasRequiredBindings||view.SceneRailLeft.raycastTarget||view.SceneRailRight.raycastTarget)
                     throw new InvalidOperationException("ChapterComplete scene rails must be bound and non-interactive.");
                 var footer=view.Body.Find("CarvedWoodFooter").GetComponent<UnityEngine.UI.Image>();
-                if(!footer.preserveAspect||footer.raycastTarget||footer.sprite==null||footer.rectTransform.sizeDelta!=footer.sprite.rect.size)
-                    throw new InvalidOperationException("ChapterComplete reward frame must retain its native aspect and remain non-interactive.");
+                if(footer.type!=UnityEngine.UI.Image.Type.Sliced||footer.raycastTarget||footer.sprite==null||footer.sprite.border!=new Vector4(80,80,80,80))
+                    throw new InvalidOperationException("ChapterComplete reward frame must preserve sliced corners and remain non-interactive.");
                 var scene=view.Body.Find("VillageScene").GetComponent<UnityEngine.UI.Image>();
                 if(scene.sprite==null||scene.sprite!=view.Environment.sprite||scene.raycastTarget)
                     throw new InvalidOperationException("ChapterComplete must use the same clean scenery plate in both background layers.");

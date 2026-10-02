@@ -17,7 +17,9 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionPreLevelView : MonoBehaviour
     {
-        public const int CurrentRevision=5;
+        public Func<CampaignPlayerSave> CampaignSaveProvider;
+        public Func<LevelData> CampaignLevelProvider;
+        public const int CurrentRevision=6;
         public int Revision=CurrentRevision;
         public bool SourceControls;
         public ProductionPlayerHeader Header;
@@ -56,13 +58,13 @@ namespace LegendsOfRus
         void OnEnable(){InspectedBoosterIndex=-1;committed=false;BindState();RefreshContent();}
         void Update()
         {
-            if(subscribed!=GameState.Instance){BindState();RefreshState();}
+            if(CampaignSaveProvider==null&&subscribed!=GameState.Instance){BindState();RefreshState();}
             if(language!=DemoFeatureState.LanguageCode)RefreshContent();
         }
         void OnDisable(){Unbind();if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=null;}
         void BindState()
         {
-            if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=GameState.Instance;
+            if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=CampaignSaveProvider==null?GameState.Instance:null;
             if(isActiveAndEnabled&&subscribed!=null)subscribed.Changed+=RefreshState;
         }
         public void RefreshContent()
@@ -81,10 +83,11 @@ namespace LegendsOfRus
         public void RefreshState()
         {
             if(!HasRequiredBindings)return;
-            GameState state=GameState.Instance;PlayerSaveData save=state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
+            var campaign=CampaignSaveProvider?.Invoke();GameState state=CampaignSaveProvider==null?GameState.Instance:null;PlayerSaveData save=campaign!=null?campaign.player:state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
             GoldText.text=save!=null?Balance(save.gold):"—";GemsText.text=save!=null?Balance(save.gems):"—";EnergyText.text=save!=null?save.energy+"/"+save.energyMax:"— / —";
             LevelText.text=(en?"Level ":"Уровень ")+(save!=null?save.level.ToString():"—");
-            LevelData level=ChapterLevelCatalog.ResolveSelected(save);
+            LevelData level=CampaignLevelProvider!=null?CampaignLevelProvider():ChapterLevelCatalog.ResolveSelected(save);if(level==null){PlayButton.interactable=false;return;}
+            if(campaign!=null&&Header!=null)Header.RefreshValues(save);
             SelectedLevel.text=(en?"LEVEL ":"УРОВЕНЬ ")+level.levelId;MovesValue.text=level.moveLimit.ToString();
             for(int i=0;i<Goals.Length;i++)
             {
@@ -97,20 +100,20 @@ namespace LegendsOfRus
                 slot.Icon.sprite=tile?ProductionGameplayArt.Gem(goal.tileType):goal.type==LevelGoalTypes.Score?ProductionGameplayArt.Load("goal_score_r5"):goal.type==LevelGoalTypes.Survival?ProductionGameplayArt.Load("goal_survival_r5"):goal.type==LevelGoalTypes.BringDown?ProductionGameplayArt.Load("feather"):ProductionGameplayArt.Obstacle(goal.obstacleType==LevelObstacleTypes.Ice?LegendsOfRus.GameplayCore.BoardObstacleKind.Ice:goal.obstacleType==LevelObstacleTypes.Chain?LegendsOfRus.GameplayCore.BoardObstacleKind.Chain:LegendsOfRus.GameplayCore.BoardObstacleKind.Crate);
                 slot.Description.text="";slot.Count.text=Balance(goal.target);
             }
-            bool claimed=state!=null&&state.GetLevelProgress(level.chapterId,level.levelId)?.rewardClaimed==true;
+            bool claimed=campaign!=null?campaign.player.levelProgress.Exists(p=>p.chapterId==level.chapterId&&p.levelId==level.levelId&&p.rewardClaimed):state!=null&&state.GetLevelProgress(level.chapterId,level.levelId)?.rewardClaimed==true;
             var reward=level.rewards;
             RewardStatus.text=claimed?(en?"REWARD RECEIVED":"НАГРАДА ПОЛУЧЕНА"):"";
             RewardGold.text=Balance(!claimed&&reward!=null?reward.gold:0);RewardGems.text=Balance(!claimed&&reward!=null?reward.gems:0);
             int slotIndex=0;
             for(int i=0;i<4;i++)
             {
-                BoosterCounts[i].text=state!=null?Balance(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
+                BoosterCounts[i].text=campaign!=null?Balance(CampaignBoosterTransactions.Count(save,ProductionPreLevelRuntime.Boosters[i])):state!=null?Balance(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
                 int bonus=claimed?0:BoosterReward(reward,i);BonusCounts[i].text="+"+bonus;BonusRoots[i].gameObject.SetActive(bonus>0);
                 if(bonus>0)BonusRoots[i].anchoredPosition=new Vector2(310+slotIndex++*83,-200);
             }
             if(SourceControls)ProductionPreLevelSourceControls.RefreshState(this,level.goals!=null?level.goals.Length:0);
             RefreshBoosterDetails(en);
-            PlayButton.interactable=save!=null&&state.IsLevelUnlocked(level.chapterId,level.levelId);
+            PlayButton.interactable=save!=null&&(campaign!=null||state!=null&&state.IsLevelUnlocked(level.chapterId,level.levelId));
         }
         public void InspectBooster(int index)
         {
@@ -139,10 +142,10 @@ namespace LegendsOfRus
                 "Добавляет 5 ходов\nв текущем раунде."};
             BoostersHeading.text=names[i];
             BoosterDetailIcon.sprite=BoosterButtons[i].GetComponent<Image>().sprite;
-            int stock=GameState.Instance!=null?GameState.Instance.BoosterCount(ProductionPreLevelRuntime.Boosters[i]):0;
+            var campaign=CampaignSaveProvider?.Invoke();int stock=campaign!=null?CampaignBoosterTransactions.Count(campaign.player,ProductionPreLevelRuntime.Boosters[i]):GameState.Instance!=null?GameState.Instance.BoosterCount(ProductionPreLevelRuntime.Boosters[i]):0;
             BoosterDetailText.text=(en?"In-game • In stock: ":"В игре • В запасе: ")+Balance(stock)+"\n"+effects[i];
             BoosterDetailsBackText.text=en?"BACK":"НАЗАД";
-            BoosterCatalogText.text=en?"ALL BOOSTERS":"ВСЕ БУСТЕРЫ";
+            BoosterCatalogText.text=en?"ALL\nBOOSTERS":"ВСЕ\nБУСТЕРЫ";
         }
         public static int BoosterReward(LevelRewardData reward,int index)
         {

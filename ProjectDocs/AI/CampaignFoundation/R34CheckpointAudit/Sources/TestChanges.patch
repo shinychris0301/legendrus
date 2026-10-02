@@ -1,0 +1,79 @@
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignCheckpointLifecycleTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignCheckpointLifecycleTests.cs
+@@ -163,6 +163,76 @@
+             Assert.That(State.HasCompletedChapter(1), Is.False);
+         }
+ 
++        [Test] public void InterruptedMultiLineCatchUpRestartsUnreadSceneWithoutSkippingOrPayingAgain()
++        {
++            PrepareCompletedFixture(200, false);
++            var milestones = StoryCatalog.LoadChapter1().milestones;
++            string before = NonStoryState();
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
++            Assert.That(StoryService.ActiveSceneId, Is.EqualTo(milestones[0].sceneId));
++            string firstLine = StoryService.CurrentLineForLanguage("ru").Text;
++            Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.MoreLines));
++            string secondLine = StoryService.CurrentLineForLanguage("ru").Text;
++            Assert.That(secondLine, Is.Not.EqualTo(firstLine));
++            // Repeated navigation requests must not advance or replace the active scene.
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
++            Assert.That(StoryService.CurrentLineForLanguage("ru").Text, Is.EqualTo(secondLine));
++            Assert.That(State.Save.completedStoryScenes.Count, Is.EqualTo(1));
++            Reload();
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
++            Assert.That(StoryService.ActiveSceneId, Is.EqualTo(milestones[0].sceneId));
++            Assert.That(StoryService.CurrentLineForLanguage("ru").Text, Is.EqualTo(firstLine));
++            Assert.That(FinishDialogue(), Is.EqualTo(StoryAdvanceResult.ChapterMap));
++            Reload();
++            Assert.That(State.Save.completedStoryScenes.Count(id => id == milestones[0].sceneId), Is.EqualTo(1));
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
++            Assert.That(StoryService.ActiveSceneId, Is.EqualTo(milestones[1].sceneId));
++            Assert.That(NonStoryState(), Is.EqualTo(before));
++        }
++
++        [Test] public void SparseCatchUpSkipsAcknowledgedScenesButRetainsUnreadOrderAcrossReload()
++        {
++            PrepareCompletedFixture(200, false);
++            var milestones = StoryCatalog.LoadChapter1().milestones;
++            // Model a migrated save with non-contiguous acknowledgements, not a linear playthrough.
++            var acknowledged = milestones.Where((m, index) => index % 2 == 0).Select(m => m.sceneId).ToArray();
++            State.Save.completedStoryScenes.AddRange(acknowledged);
++            State.Persist();
++            Reload();
++            string before = NonStoryState();
++            foreach (var milestone in milestones.Where((m, index) => index % 2 != 0)) {
++                Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
++                Assert.That(StoryService.ActiveSceneId, Is.EqualTo(milestone.sceneId));
++                Assert.That(FinishDialogue(), Is.EqualTo(StoryAdvanceResult.ChapterMap));
++                Reload();
++                Assert.That(NonStoryState(), Is.EqualTo(before));
++            }
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.False);
++            foreach (var milestone in milestones)
++                Assert.That(State.Save.completedStoryScenes.Count(id => id == milestone.sceneId), Is.EqualTo(1));
++            Assert.That(State.HasCompletedChapter(1), Is.False);
++        }
++
++        [Test] public void UnlockAndLastCompletedMarkersCannotSubstituteForMilestoneCompletion()
++        {
++            PrepareCompletedFixture(200, true);
++            // Highest-unlocked/last-completed metadata alone must not unlock a story reward route.
++            var progress = State.GetLevelProgress(1, 200);
++            progress.completions = 0;
++            progress.rewardClaimed = false;
++            progress.bestStars = 0;
++            progress.failures = 1;
++            State.Persist();
++            Reload();
++            string before = JsonUtility.ToJson(State.Save);
++            Assert.That(State.Save.highestUnlockedLevel, Is.EqualTo(200));
++            Assert.That(State.Save.lastCompletedLevel, Is.EqualTo(200));
++            Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.False);
++            Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.None));
++            Assert.That(StoryService.ShouldShowChapterComplete(), Is.False);
++            Assert.That(JsonUtility.ToJson(State.Save), Is.EqualTo(before));
++        }
++
+         [Test] public void UnavailableRoundAndChapterCannotChangeCompletedTwoHundredSave()
+         {
+             PrepareCompletedFixture(200, true);

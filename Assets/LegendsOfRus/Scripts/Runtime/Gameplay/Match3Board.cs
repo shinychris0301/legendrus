@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace LegendsOfRus
 {
-    public sealed class Match3Board : MonoBehaviour
+    public sealed partial class Match3Board : MonoBehaviour
     {
         const int DefaultColumns = 8;
         const int DefaultRows = 7;
@@ -20,6 +20,14 @@ namespace LegendsOfRus
 
         BoardModel model;
         BoardResolutionPlanner resolutionPlanner;
+        GameplayRuleVersion ruleVersion = GameplayRuleVersion.Legacy;
+        PrototypeBoardAudio mechanicsAudio;
+        public const GameplayRuleVersion CurrentGameplayRules = GameplayRuleVersion.PrototypeR4;
+        public GameplayRuleVersion RuleVersion => ruleVersion;
+        // Artwork adoption is independent from matching rules and prototype animation rollout.
+        bool useCurrentBoardArt = true;
+        public bool UsesCurrentBoardArt => useCurrentBoardArt || ruleVersion != GameplayRuleVersion.Legacy;
+        public MechanicsReplayCommand LastMechanicsCommand {get;private set;}
         LevelData currentLevel;
         LevelGoalRuntime goalRuntime;
 
@@ -64,6 +72,10 @@ namespace LegendsOfRus
         GameplayMotionEvent lastMotionEvent;
         int activePointerId = int.MinValue;
 
+        bool campaignManaged;
+        ICampaignBoardInventory campaignInventory;
+        void ShowLegacyToast(string message){if(!campaignManaged)ScreenRouter.Instance?.Toast(message);}
+        public bool CampaignInventoryBlocked => campaignInventory != null && campaignInventory.Blocked;
         Action<int> onWin;
         Action<int> onFail;
 
@@ -90,7 +102,7 @@ namespace LegendsOfRus
         public int RedRemaining => GoalSlot1Remaining;
         public int BlueRemaining => GoalSlot2Remaining;
         public GameplayPhase Phase => interaction.Current;
-        public bool CanAcceptPointerInput => interaction.CanAcceptPointerInput;
+        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && interaction.CanAcceptPointerInput;
         public string BoardStateHash => model != null ? model.ComputeStateHash() : string.Empty;
         public int? BoardSeed => model != null ? model.Seed : null;
         public string BoardReplayToken =>
@@ -125,6 +137,34 @@ namespace LegendsOfRus
             Action<int> onFail
         )
         {
+            ruleVersion = CurrentGameplayRules;
+            useCurrentBoardArt = true;
+            campaignInventory = null;
+            InitializeCore(levelData, onWin, onFail, null);
+        }
+
+        // Explicit development campaign entry: the coordinator already committed the attempt.
+        public void InitializeCampaign(LevelData levelData, int committedAttempt, Action<int> onWin, Action<int> onFail, ICampaignBoardInventory inventory = null)
+        {
+            if (levelData == null || committedAttempt < 1) throw new ArgumentException("Committed campaign level/attempt required.");
+            ruleVersion = CurrentGameplayRules;
+            useCurrentBoardArt = true;
+            campaignInventory = inventory;
+            InitializeCore(levelData, onWin, onFail, committedAttempt);
+        }
+
+        // Explicit disposable sandbox, never an entry for a saved campaign receipt.
+        public void InitializeMechanicsSandbox(LevelData level, GameplayRuleVersion rules, ICampaignBoardInventory inventory)
+        {
+            if(!Enum.IsDefined(typeof(GameplayRuleVersion),rules))throw new ArgumentException("Unknown rules");
+            ruleVersion=rules;useCurrentBoardArt=false;campaignInventory=inventory;
+            InitializeCore(level,_=>{},_=>{},1);
+
+        }
+
+        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null)
+        {
+            campaignManaged = committedAttempt.HasValue;
             this.onWin = onWin;
             this.onFail = onFail;
             currentLevel = levelData ?? ChapterLevelCatalog.ResolveSelected(null);
@@ -150,36 +190,51 @@ namespace LegendsOfRus
             score = Mathf.Max(0, currentLevel.startingScore);
             goalRuntime = new LevelGoalRuntime(currentLevel, score);
 
-            int attempt = GameState.Instance != null
+            int attempt = retained?.attempt ?? committedAttempt ?? (GameState.Instance != null
                 ? GameState.Instance.RegisterLevelAttempt(currentLevel)
-                : 1;
+                : 1);
+            retainedAttemptNumber = attempt;
+            retainedAttemptId = retained?.attemptId ?? Guid.NewGuid().ToString("N");
             int seed = BoardSeedUtility.CreateRuntimeSeed(
                 currentLevel.chapterId,
                 currentLevel.levelId,
                 currentLevel.boardSeed + Mathf.Max(1, attempt)
             );
-            model = LevelBoardFactory.Create(currentLevel, seed);
+            model = LevelBoardFactory.Create(currentLevel, seed, rules:ruleVersion);
+            model.SquareMatches = ruleVersion >= GameplayRuleVersion.PrototypeR2;
+            model.StandaloneSpecials = ruleVersion >= GameplayRuleVersion.PrototypeR4;
+            if (retained != null)
+            {
+                model.RestoreSnapshot(retained.Snapshot(currentLevel));moves=retained.moves;score=retained.score;
+                goalRuntime.RestoreSnapshot(new LevelGoalRuntimeSnapshot(retained.goals));
+                interaction.Force(GameplayPhase.Failed);
+            }
 
             // Supplied isolated gem/booster sheets, independent from reference-screen artwork.
             gemSprites = new Sprite[6];
             for (int i = 0; i < gemSprites.Length; i++) gemSprites[i] = ProductionGameplayArt.Gem(i);
             rowSpecialSprite = ProductionGameplayArt.Load("row");
             columnSpecialSprite = ProductionGameplayArt.Load("column");
-            burstSpecialSprite = ProductionGameplayArt.Load("burst");
-            colorSpecialSprite = ProductionGameplayArt.Load("color");
+            burstSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("bomb") : ProductionGameplayArt.Load("burst");
+            colorSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("color") : ProductionGameplayArt.Load("color");
 
             BuildGrid();
             vfxPresenter = GetComponent<CoreLoopVfxPresenter>();
             if (vfxPresenter == null)
                 vfxPresenter = gameObject.AddComponent<CoreLoopVfxPresenter>();
             vfxPresenter.Initialize(this);
-            resolutionPlanner = new BoardResolutionPlanner(model);
+            resolutionPlanner = new BoardResolutionPlanner(model,null,ruleVersion);
             Debug.Log(
                 $"Legends of Rus level={currentLevel.id}, attempt={attempt}, " +
                 $"board={columns}x{rows}, seed={seed}, " +
                 $"hash={model.ComputeStateHash()}"
             );
             RefreshAll();
+            // Shared composition for the adopted rules and explicit sandbox profiles.
+            // Existing R25 presentation is retained; further effect refinement is deferred.
+            if(ruleVersion!=GameplayRuleVersion.Legacy){GemShatterView.Attach(this);PrototypeImpactView.Attach(this);PrototypeBoosterView.Attach(this);mechanicsAudio=PrototypeBoardAudio.Attach(this);}
+            if(ruleVersion>=GameplayRuleVersion.PrototypeR2)SparkFlightView.Attach(this);
+            if(ruleVersion>=GameplayRuleVersion.PrototypeR4){MaterialBreakView.Attach(this);SpecialSequenceView.Attach(this);}
             PublishState();
         }
 
@@ -316,7 +371,7 @@ namespace LegendsOfRus
                     var typography = Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
                     string fontSource;
                     Font font = typography != null ? typography.Resolve(false, out fontSource) : null;
-                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font);
+                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font, UsesCurrentBoardArt);
                 }
             }
             var grid = new GameObject("SharedGrid", typeof(RectTransform), typeof(ProductionGameplayCell));
@@ -350,6 +405,13 @@ namespace LegendsOfRus
                 return true;
             }
 
+            if(ruleVersion!=GameplayRuleVersion.Legacy && model.GetSpecial(ToCore(p))!=SpecialGem.None)
+            {
+                var plan=resolutionPlanner.PlanTapSpecial(ToCore(p));
+                if(!plan.IsResolved)return false;
+                ClearSelectionVisual();StartCoroutine(ExecutePrototypeTap(plan));return true;
+            }
+
             if (selected.x < 0)
             {
                 return Select(p);
@@ -373,6 +435,19 @@ namespace LegendsOfRus
             if (!TrySetPhase(GameplayPhase.Swapping)) return false;
             StartCoroutine(TrySwap(first, p));
             return true;
+        }
+
+        IEnumerator ExecutePrototypeTap(BoardResolutionPlan plan)
+        {
+            if(!BeginRuntimeCommand("tap-special",plan))yield break;
+            LastMechanicsCommand=new MechanicsReplayCommand{Rules=ruleVersion,BeforeToken=plan.BeforeSnapshot.ToReplayToken(),Tap=true,X=plan.PrimaryPosition.X,Y=plan.PrimaryPosition.Y,ExpectedPlanHash=plan.PlanHash};
+            EnsurePhase(GameplayPhase.Swapping);
+            moves--;goalRuntime?.RecordConsumedMove();SafeInvoke(MovesChanged,moves,"MovesChanged");PublishGoalState();
+            EnsurePhase(GameplayPhase.ResolvingMatches);
+            lastResolutionPlanHash=plan.PlanHash;lastPlanFinalStateHash=plan.FinalSnapshot.StateHash;
+            yield return ExecuteResolutionPlan(plan);
+            if(!HasActiveCommand || !CompleteRuntimeCommand())yield break;
+            yield return CheckEndState();
         }
 
         public bool TryAcquirePointer(int pointerId)
@@ -538,6 +613,8 @@ namespace LegendsOfRus
                 yield break;
             }
 
+            if(ruleVersion!=GameplayRuleVersion.Legacy)LastMechanicsCommand=new MechanicsReplayCommand{Rules=ruleVersion,BeforeToken=plan.BeforeSnapshot.ToReplayToken(),X=a.x,Y=a.y,ToX=b.x,ToY=b.y,ExpectedPlanHash=plan.PlanHash};
+
             PublishMotion(
                 GameplayMotionKind.SwapStarted,
                 a,
@@ -624,7 +701,7 @@ namespace LegendsOfRus
             if (!HasActiveCommand)
                 yield break;
 
-            CompleteRuntimeCommand();
+            if (!CompleteRuntimeCommand()) yield break;
             yield return CheckEndState();
         }
 
@@ -798,7 +875,7 @@ namespace LegendsOfRus
                 float q = Mathf.Clamp01(t / duration);
                 float pulse = Mathf.Sin(q * Mathf.PI);
                 rt.localScale = Vector3.one * (1f + 0.34f * pulse);
-                overlay.color = new Color(1f, 1f, 1f, Mathf.Lerp(0.55f, 1f, pulse));
+                overlay.color = new Color(1f, 1f, 1f, ruleVersion>=GameplayRuleVersion.PrototypeR4 && MechanicsSequenceArt.Available && SpecialSequenceView.Supports(special) ? Mathf.Clamp01((q-.35f)/.65f) : Mathf.Lerp(0.55f, 1f, pulse));
                 yield return null;
             }
 
@@ -808,6 +885,12 @@ namespace LegendsOfRus
 
         public void UseBooster(BoosterType type)
         {
+            if (campaignManaged && (campaignInventory == null || campaignInventory.Blocked))
+            {
+                LastRejectedCommandReason = "Campaign booster transactions are not enabled.";
+                SafeCommandRejected(LastRejectedCommandReason);
+                return;
+            }
             // Board-changing UI actions cannot race a held board gesture from
             // another finger. Pointer-up releases ownership before a normal
             // single-touch booster tap can enter here.
@@ -841,7 +924,7 @@ namespace LegendsOfRus
                 }
 
                 var state = GameState.Instance;
-                if (state == null || !state.TryUseBooster(type))
+                if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
                 {
                     CompleteRuntimeCommand();
                     LastRejectedCommandReason = "Booster inventory is empty.";
@@ -853,7 +936,7 @@ namespace LegendsOfRus
                         GameplayBoosterKind.SeaPearl
                     );
                     SafeCommandRejected(LastRejectedCommandReason);
-                    ScreenRouter.Instance?.Toast("Жемчужина закончилась.");
+                    ShowLegacyToast("Жемчужина закончилась.");
                     return;
                 }
 
@@ -883,11 +966,11 @@ namespace LegendsOfRus
             EnsurePhase(GameplayPhase.BoosterTargeting);
 
             if (type == BoosterType.BogatyrMace)
-                ScreenRouter.Instance?.Toast("Булава: коснитесь клетки для ряда или проведите вверх/вниз для столбца.");
+                ShowLegacyToast("Булава: коснитесь клетки для ряда или проведите вверх/вниз для столбца.");
             else if (type == BoosterType.Firebird)
-                ScreenRouter.Instance?.Toast("Перо Жар-Птицы: выберите клетку — очистится область 3×3.");
+                ShowLegacyToast("Перо Жар-Птицы: выберите клетку — очистится область 3×3.");
             else if (type == BoosterType.LivingLight)
-                ScreenRouter.Instance?.Toast("Живой Свет: выберите самоцвет — будут очищены все самоцветы этого цвета.");
+                ShowLegacyToast("Живой Свет: выберите самоцвет — будут очищены все самоцветы этого цвета.");
         }
 
         public void CancelArmedBooster(bool showToast = true)
@@ -899,7 +982,7 @@ namespace LegendsOfRus
                 EnsurePhase(GameplayPhase.Idle);
 
             if (showToast)
-                ScreenRouter.Instance?.Toast("Бустер отменён.");
+                ShowLegacyToast("Бустер отменён.");
         }
 
         IEnumerator ExecuteSeaPearlCommand()
@@ -916,7 +999,7 @@ namespace LegendsOfRus
                 string.Empty,
                 GameplayBoosterKind.SeaPearl
             );
-            CompleteRuntimeCommand();
+            if (!CompleteRuntimeCommand()) yield break;
             EnsurePhase(GameplayPhase.Idle);
         }
 
@@ -984,7 +1067,7 @@ namespace LegendsOfRus
                 );
                 armedBooster = null;
                 EnsurePhase(GameplayPhase.Idle);
-                ScreenRouter.Instance?.Toast(
+                ShowLegacyToast(
                     "Бустер восстановлен после ошибки. Повторите действие."
                 );
                 yield break;
@@ -1001,7 +1084,7 @@ namespace LegendsOfRus
                     boosterKind
                 );
                 SafeCommandRejected(LastRejectedCommandReason);
-                ScreenRouter.Instance?.Toast(
+                ShowLegacyToast(
                     string.IsNullOrEmpty(plan.RejectionReason)
                         ? "Выберите заполненную клетку."
                         : plan.RejectionReason
@@ -1026,7 +1109,7 @@ namespace LegendsOfRus
             }
 
             var state = GameState.Instance;
-            if (state == null || !state.TryUseBooster(type))
+            if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
             {
                 CompleteRuntimeCommand();
                 armedBooster = null;
@@ -1040,7 +1123,7 @@ namespace LegendsOfRus
                     boosterKind
                 );
                 SafeCommandRejected(LastRejectedCommandReason);
-                ScreenRouter.Instance?.Toast("Этот бустер закончился.");
+                ShowLegacyToast("Этот бустер закончился.");
                 yield break;
             }
 
@@ -1057,15 +1140,16 @@ namespace LegendsOfRus
             );
 
             if (command == BoardBoosterCommandKind.MaceRow || command == BoardBoosterCommandKind.MaceColumn)
-                ScreenRouter.Instance?.Toast("Булава Богатыря сокрушает преграды.");
+                ShowLegacyToast("Булава Богатыря сокрушает преграды.");
             else if (command == BoardBoosterCommandKind.FirebirdArea)
-                ScreenRouter.Instance?.Toast("Перо Жар-Птицы вспыхивает живым огнём.");
+                ShowLegacyToast("Перо Жар-Птицы вспыхивает живым огнём.");
             else if (command == BoardBoosterCommandKind.LivingLightColor)
-                ScreenRouter.Instance?.Toast("Живой Свет очищает выбранный цвет.");
+                ShowLegacyToast("Живой Свет очищает выбранный цвет.");
 
             lastResolutionPlanHash = plan.PlanHash;
             lastPlanFinalStateHash = plan.FinalSnapshot?.StateHash ?? string.Empty;
             Debug.Log($"Booster resolution plan: {plan.ToDebugString()}");
+            if(ruleVersion!=GameplayRuleVersion.Legacy)yield return new WaitForSecondsRealtime(.18f);
             yield return ExecuteResolutionPlan(plan);
 
             if (!HasActiveCommand)
@@ -1078,7 +1162,7 @@ namespace LegendsOfRus
                 plan.PlanHash,
                 boosterKind
             );
-            CompleteRuntimeCommand();
+            if (!CompleteRuntimeCommand()) yield break;
             yield return CheckEndState();
         }
 
@@ -1130,6 +1214,8 @@ namespace LegendsOfRus
                     );
                 }
 
+                bool sparkWave = ContainsSpark(wave.Activations);
+                if (!sparkWave && ruleVersion == GameplayRuleVersion.Legacy)
                 PublishMotion(
                     GameplayMotionKind.MatchWaveStarted,
                     ToView(plan.PrimaryPosition),
@@ -1143,6 +1229,13 @@ namespace LegendsOfRus
                     wave.ClearedCells
                 );
 
+                if (ruleVersion >= GameplayRuleVersion.PrototypeR4)
+                {
+                    EnsurePhase(GameplayPhase.ResolvingMatches);
+                    yield return AnimateCausalWave(wave, plan);
+                }
+                else
+                {
                 if (wave.Activations.Count > 0)
                 {
                     EnsurePhase(GameplayPhase.ActivatingSpecials);
@@ -1155,6 +1248,20 @@ namespace LegendsOfRus
                     );
                 }
 
+                if (sparkWave || ruleVersion != GameplayRuleVersion.Legacy)
+                PublishMotion(
+                    GameplayMotionKind.MatchWaveStarted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    wave.ComboIndex,
+                    wave.ClearedCells.Count,
+                    SpecialGem.None,
+                    plan.PlanHash,
+                    wave.Combination,
+                    waveBooster,
+                    wave.ClearedCells
+                );
+
                 EnsurePhase(GameplayPhase.ResolvingMatches);
                 var clear = new HashSet<Vector2Int>();
                 for (int i = 0; i < wave.ClearedCells.Count; i++)
@@ -1162,6 +1269,8 @@ namespace LegendsOfRus
 
                 yield return AnimateClear(clear, wave.ComboIndex);
                 yield return AnimateObstacleInteractions(wave.ObstacleInteractions);
+
+                }
 
                 if (!RestorePlannedSnapshot(
                     wave.SnapshotAfterClear,
@@ -1177,7 +1286,13 @@ namespace LegendsOfRus
                 if (wave.Creations.Count > 0)
                 {
                     EnsurePhase(GameplayPhase.CreatingSpecials);
-                    for (int i = 0; i < wave.Creations.Count; i++)
+                    if(ruleVersion>=GameplayRuleVersion.PrototypeR4)
+                    {
+                        // Hide restored idle sprites before yielding into the completion coroutine.
+                        foreach(var creation in wave.Creations)specialImages[creation.Position.X,creation.Position.Y].enabled=false;
+                        yield return AnimateCreationsR21(wave,plan.PlanHash,waveBooster);
+                    }
+                    else for (int i = 0; i < wave.Creations.Count; i++)
                     {
                         BoardSpecialCreationInstruction creation = wave.Creations[i];
                         PublishMotion(
@@ -1300,7 +1415,7 @@ namespace LegendsOfRus
                 }
                 RefreshAll();
                 yield return AnimateReshuffle(false);
-                ScreenRouter.Instance?.Toast(DemoFeatureState.LanguageCode == "en"
+                ShowLegacyToast(DemoFeatureState.LanguageCode == "en"
                     ? "No available moves — the board was reshuffled."
                     : "Нет доступных ходов — поле перемешано.");
                 PublishMotion(
@@ -1391,10 +1506,16 @@ namespace LegendsOfRus
                 Vector2Int position = ToView(activation.Position);
                 if (!Inside(position)) continue;
 
+                if(activation.Kind == SpecialGem.Spark)
+                {
+                    gemImages[position.x,position.y].enabled=false;
+                    specialImages[position.x,position.y].enabled=false;
+                    GetComponentInChildren<SparkFlightView>()?.Present(activation);
+                }
                 PublishMotion(
                     GameplayMotionKind.SpecialActivationStarted,
                     position,
-                    position,
+                    activation.Target.HasValue ? ToView(activation.Target.Value) : position,
                     comboIndex,
                     i == 0 ? activations.Count : 0,
                     activation.Kind,
@@ -1404,9 +1525,28 @@ namespace LegendsOfRus
                 );
             }
 
-            yield return new WaitForSecondsRealtime(
-                CoreLoopMotionProfile.SpecialActivationHoldSeconds
-            );
+            float hold = ContainsSpark(activations) ? SparkFlightView.Duration + .06f : ruleVersion != GameplayRuleVersion.Legacy ? PrototypeImpactView.ActivationSeconds : CoreLoopMotionProfile.SpecialActivationHoldSeconds;
+            float elapsed=0;
+            while(elapsed<hold)
+            {
+                if(ruleVersion!=GameplayRuleVersion.Legacy)
+                    foreach(var a in activations)
+                    {
+                        if(a.Kind==SpecialGem.Spark)continue;
+                        float windup=Mathf.Clamp01(elapsed/PrototypeImpactView.Anticipation);
+                        float release=Mathf.Clamp01((elapsed-PrototypeImpactView.Anticipation)/.16f);
+                        float scale=elapsed<PrototypeImpactView.Anticipation?Mathf.Lerp(1,.82f,windup):Mathf.Lerp(1.22f,1,release);
+                        visualRoots[a.Position.X,a.Position.Y].localScale=Vector3.one*scale;
+                    }
+                elapsed+=Time.unscaledDeltaTime;yield return null;
+            }
+            foreach(var a in activations)visualRoots[a.Position.X,a.Position.Y].localScale=Vector3.one;
+        }
+
+        static bool ContainsSpark(IReadOnlyList<BoardSpecialActivationInstruction> activations)
+        {
+            for(int i=0;i<activations.Count;i++)if(activations[i].Kind==SpecialGem.Spark)return true;
+            return false;
         }
 
         IEnumerator AnimateObstacleInteractions(
@@ -1538,7 +1678,7 @@ namespace LegendsOfRus
 
         IEnumerator SeaPearlAnimation()
         {
-            ScreenRouter.Instance?.Toast("Жемчужина Морского Царя: +5 ходов.");
+            ShowLegacyToast("Жемчужина Морского Царя: +5 ходов.");
             yield return new WaitForSecondsRealtime(0.30f);
         }
 
@@ -1547,6 +1687,7 @@ namespace LegendsOfRus
             BoardResolutionPlan plan
         )
         {
+            if (CampaignInventoryBlocked) return false;
             if (activeCommand != null)
             {
                 Debug.LogError(
@@ -1579,14 +1720,17 @@ namespace LegendsOfRus
             activeCommand?.MarkBoosterConsumed(booster);
         }
 
-        void CompleteRuntimeCommand()
+        bool CompleteRuntimeCommand()
         {
-            if (activeCommand == null)
-                return;
-
+            if (activeCommand == null) return !CampaignInventoryBlocked;
+            if (campaignManaged && activeCommand.ConsumedBooster.HasValue && !campaignInventory.Complete())
+            {
+                commandWatchdog.Cancel(); activeCommand = null; interaction.Force(GameplayPhase.Paused); return false;
+            }
             commandWatchdog.Complete(activeCommand.Token);
             activeCommand = null;
             recoveringCommand = false;
+            return !CampaignInventoryBlocked;
         }
 
         void RecoverActiveCommand(string reason)
@@ -1612,7 +1756,8 @@ namespace LegendsOfRus
             if (goalRuntime != null && failed.GoalsBefore != null)
                 goalRuntime.RestoreSnapshot(failed.GoalsBefore);
 
-            if (failed.ConsumedBooster.HasValue && GameState.Instance != null)
+            if (campaignManaged && failed.ConsumedBooster.HasValue) campaignInventory?.Refund();
+            if (!campaignManaged && failed.ConsumedBooster.HasValue && GameState.Instance != null)
                 GameState.Instance.AddBooster(failed.ConsumedBooster.Value, 1);
 
             armedBooster = null;
@@ -1639,7 +1784,7 @@ namespace LegendsOfRus
                 $"Gameplay command recovered: {failed.Label}. " +
                 $"Reason={reason}; board={model.ComputeStateHash()}"
             );
-            ScreenRouter.Instance?.Toast(
+            ShowLegacyToast(
                 "Ход восстановлен после ошибки анимации. Повторите действие."
             );
             recoveringCommand = false;
@@ -1695,7 +1840,8 @@ namespace LegendsOfRus
             string planHash,
             SpecialCombinationKind combinationKind = SpecialCombinationKind.None,
             GameplayBoosterKind boosterKind = GameplayBoosterKind.None,
-            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null,
+            SpecialGem payload = SpecialGem.None
         )
         {
             var motion = new GameplayMotionEvent(
@@ -1709,12 +1855,12 @@ namespace LegendsOfRus
                 planHash,
                 combinationKind,
                 boosterKind,
-                clearedCells
+                clearedCells, payload
             );
             lastMotionEvent = motion;
             motionEventCount++;
 
-            CoreLoopFeedbackService.Publish(motion);
+            CoreLoopFeedbackService.Publish(motion, mechanicsAudio != null && mechanicsAudio.HandlesSound);
 
             Action<GameplayMotionEvent> handlers = MotionEventPublished;
             if (handlers == null) return;
@@ -1883,7 +2029,7 @@ namespace LegendsOfRus
             return LoadSnapshotForTesting(preset.Snapshot);
         }
 
-        public bool LoadSnapshotForTesting(BoardSnapshot snapshot)
+        public bool LoadSnapshotForTesting(BoardSnapshot snapshot, bool preserveGoals = false)
         {
             if (activeCommand != null || snapshot == null)
                 return false;
@@ -1901,12 +2047,14 @@ namespace LegendsOfRus
             model.RestoreSnapshot(snapshot);
             resolutionPlanner = new BoardResolutionPlanner(
                 model,
-                BoardBalanceProfile.CommercialDefault
+                BoardBalanceProfile.CommercialDefault, ruleVersion
             );
             armedBooster = null;
             selected = new Vector2Int(-1, -1);
-            moves = 50;
+            moves = preserveGoals ? currentLevel.moveLimit : 50;
             score = 0;
+            if(preserveGoals) goalRuntime = new LevelGoalRuntime(currentLevel,score);
+            else
             goalRuntime = new LevelGoalRuntime(
                 new[]
                 {
@@ -1973,7 +2121,7 @@ namespace LegendsOfRus
                 return;
 
             if (
-                consumedBooster.HasValue &&
+                !campaignManaged && consumedBooster.HasValue &&
                 GameState.Instance != null &&
                 GameState.Instance.TryUseBooster(consumedBooster.Value)
             )
@@ -2129,19 +2277,26 @@ namespace LegendsOfRus
             Stretch(special.rectTransform);
             if (specialType == SpecialGem.Row || specialType == SpecialGem.Column)
             {
-                special.sprite = ProductionGameplayArt.LineSpecial(type);
-                special.preserveAspect = false;
+                special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("line") : ProductionGameplayArt.LineSpecial(type);
+                special.preserveAspect = UsesCurrentBoardArt;
                 var specialRect = special.rectTransform;
                 // Relative anchors stay valid when Refresh precedes the first layout,
                 // and when the board is resized. Give the colored body a readable thickness.
-                specialRect.anchorMin = new Vector2(0, .21f);
-                specialRect.anchorMax = new Vector2(1, .79f);
+                specialRect.anchorMin = new Vector2(0, UsesCurrentBoardArt?0:.21f);
+                specialRect.anchorMax = new Vector2(1, UsesCurrentBoardArt?1:.79f);
                 specialRect.offsetMin = specialRect.offsetMax = Vector2.zero;
                 // A single elongated object carries direction through physical orientation.
                 special.rectTransform.localRotation = Quaternion.Euler(0, 0, specialType == SpecialGem.Column ? 90 : 0);
             }
             else if (specialType == SpecialGem.Burst) special.sprite = burstSpecialSprite;
             else if (specialType == SpecialGem.Color) special.sprite = colorSpecialSprite;
+            else if (specialType == SpecialGem.Spark) special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("spark") : ProductionBoosterArt.Icon(1);
+
+            if(UsesCurrentBoardArt && special.enabled)
+            {
+                special.rectTransform.anchorMin = Vector2.one * -.04f;
+                special.rectTransform.anchorMax = Vector2.one * 1.04f;
+            }
 
             BoardObjectiveItemKind item = model.GetObjectiveItem(new BoardPosition(x, y));
             if (item != BoardObjectiveItemKind.None)
@@ -2164,6 +2319,7 @@ namespace LegendsOfRus
 
         void ResetVisualTransforms()
         {
+            ClearCreationGraphics();
             for (int y = 0; y < rows; y++)
             for (int x = 0; x < columns; x++)
             {

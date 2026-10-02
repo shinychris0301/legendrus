@@ -68,6 +68,12 @@ namespace LegendsOfRus
         public static LocalizedStoryReaction GetLocalizedReaction(
             LevelData level,
             string outcome
+        ) => GetLocalizedReaction(level, outcome, "ru");
+
+        public static LocalizedStoryReaction GetLocalizedReaction(
+            LevelData level,
+            string outcome,
+            string language
         )
         {
             if (level == null || !StoryReactionOutcomes.IsValid(outcome))
@@ -78,7 +84,7 @@ namespace LegendsOfRus
                 return null;
 
             StoryReactionData reaction = StoryCatalog.FindReaction(level.levelId, outcome);
-            return StoryCatalog.LocalizeReaction(reaction, StoryCatalog.LoadRussian());
+            return StoryCatalog.LocalizeReaction(reaction, StoryCatalog.LoadDialogueLanguage(language));
         }
 
         public static LocalizedChapterCompletion GetLocalizedChapterCompletion()

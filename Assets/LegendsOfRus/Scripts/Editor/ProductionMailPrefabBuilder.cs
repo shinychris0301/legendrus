@@ -26,8 +26,8 @@ namespace LegendsOfRus.Editor
                 ProductionMailRuntime.BuildInto(rect);var view=root.GetComponent<ProductionMailView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Mail bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/MailCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Mail\",\n  \"revision\": 1,\n  \"mailService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
-            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionMailView>().HasRequiredBindings)throw new InvalidOperationException("Mail prefab readback failed.");Debug.Log("MAIL_R1_REBUILD_PASS: native page and cutover readback.");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Mail\",\n  \"revision\": 6,\n  \"mailService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionMailView>().HasRequiredBindings)throw new InvalidOperationException("Mail prefab readback failed.");Debug.Log("MAIL_REFERENCE_REBUILD_PASS: native page and cutover readback.");
         }
     }
 }

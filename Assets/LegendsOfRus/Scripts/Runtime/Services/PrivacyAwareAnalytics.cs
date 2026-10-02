@@ -11,6 +11,7 @@ namespace LegendsOfRus
     public static class PrivacyAwareAnalytics
     {
         static bool Allowed =>
+            !DevelopmentGameplayProfile.Active &&
             PrivacySupportService.Instance != null &&
             PrivacySupportService.Instance.MayUseAnalytics;
 

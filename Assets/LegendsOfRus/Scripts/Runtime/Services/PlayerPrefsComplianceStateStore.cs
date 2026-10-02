@@ -26,10 +26,10 @@ namespace LegendsOfRus
         internal bool TryLoad(out ComplianceStateSnapshot state)
         {
             state = null;
-            if (!PlayerPrefs.HasKey(Key))
+            if (!PlayerPrefs.HasKey(DevelopmentGameplayProfile.PreferenceKey(Key)))
                 return false;
 
-            string serialized = PlayerPrefs.GetString(Key, string.Empty);
+            string serialized = PlayerPrefs.GetString(DevelopmentGameplayProfile.PreferenceKey(Key), string.Empty);
             if (string.IsNullOrEmpty(serialized) ||
                 serialized.Length > MaximumSerializedCharacters)
                 return false;
@@ -68,14 +68,14 @@ namespace LegendsOfRus
                 serialized.Length > MaximumSerializedCharacters)
                 return false;
 
-            PlayerPrefs.SetString(Key, serialized);
+            PlayerPrefs.SetString(DevelopmentGameplayProfile.PreferenceKey(Key), serialized);
             PlayerPrefs.Save();
             return true;
         }
 
         internal void Clear()
         {
-            PlayerPrefs.DeleteKey(Key);
+            PlayerPrefs.DeleteKey(DevelopmentGameplayProfile.PreferenceKey(Key));
             PlayerPrefs.Save();
         }
 

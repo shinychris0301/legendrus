@@ -1,0 +1,131 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using LegendsOfRus.ContentPipeline;
+using LegendsOfRus.SaveCore;
+using UnityEditor;
+using UnityEngine;
+namespace LegendsOfRus.Editor
+{
+    public static class CampaignDevelopmentPreviewMenu
+    {
+        // Preview-only store: survives reopening within this preview, discarded on leaving Play Mode.
+        sealed class PreviewStore : ISaveJournalStore
+        {
+            Dictionary<string,string> values=new Dictionary<string,string>(),durable=new Dictionary<string,string>();
+            public bool TryRead(string key,out string value)=>values.TryGetValue(key,out value);
+            public void Write(string key,string value)=>values[key]=value;
+            public void Delete(string key)=>values.Remove(key);
+            public void Flush(){durable=new Dictionary<string,string>(values);}
+            public void Reload(){values=new Dictionary<string,string>(durable);}
+        }
+        const string Menu="Legends of Rus/Development/Campaign UI Preview (In Memory)";
+        [MenuItem(Menu,true)] static bool Available()=>Application.isPlaying&&ScreenRouter.Instance!=null&&ScreenRouter.Instance.CurrentScreen==ScreenId.Home&&!ScreenRouter.Instance.HasActiveModalBlocker&&UnityEngine.Object.FindFirstObjectByType<CampaignDevelopmentUI>()==null&&UnityEngine.Object.FindFirstObjectByType<MechanicsSandbox>()==null;
+        public static bool CanOpenActivePlaytest => Available();
+        public static void OpenActivePlaytest(int firstRound)
+        {
+            if (!Available()) throw new InvalidOperationException("Open Home in Play Mode and close other previews first.");
+            var fixture = CampaignActivePlaytestSetup.Create(firstRound);
+            var parent = ScreenRouter.Instance.SafeArea;
+            var previous = parent.Cast<Transform>().Where(t => t.gameObject.activeSelf).Select(t => t.gameObject).ToArray();
+            fixture.Open(parent, () => { foreach (var item in previous) if (item) item.SetActive(true); });
+            foreach (var item in previous) item.SetActive(false);
+            CampaignPlaytestWindow.ShowMonitor();
+        }
+        const string CandidateMenu="Legends of Rus/Development/Campaign Sector 01 Candidate (Rounds 1-20)";
+        [MenuItem(CandidateMenu,true)] static bool CandidateAvailable()=>Available();
+        [MenuItem(CandidateMenu)] static void OpenCandidate()=>OpenPreview(true);
+        [MenuItem(Menu)] static void Open()=>OpenPreview(false);
+        const string SectorJumpMenu="Legends of Rus/Development/Campaign Sector Candidate - Start at 11 (Test Progress)";
+        [MenuItem(SectorJumpMenu,true)] static bool SectorJumpAvailable()=>Available();
+        [MenuItem(SectorJumpMenu)] static void OpenSectorJump()=>OpenPreview(true,true);
+        const string PlaytestMenu="Legends of Rus/Development/Campaign Playtest 11-20 (Recorded)";
+        [MenuItem(PlaytestMenu,true)] static bool PlaytestAvailable()=>Available();
+        [MenuItem(PlaytestMenu)] static void OpenPlaytest()=>OpenPreview(true,true,true);
+        const string TunedPlaytestMenu="Legends of Rus/Development/Campaign Playtest 11-20 R12 Tuning (Recorded)";
+        [MenuItem(TunedPlaytestMenu,true)] static bool TunedPlaytestAvailable()=>Available();
+        [MenuItem(TunedPlaytestMenu)] static void OpenTunedPlaytest()=>OpenPreview(true,true,true,12);
+        const string GranaryMenu="Legends of Rus/Development/Campaign Playtest 21-30 R13 Granary (Recorded)";
+        [MenuItem(GranaryMenu,true)] static bool GranaryAvailable()=>Available();
+        [MenuItem(GranaryMenu)] static void OpenGranary()=>OpenPreview(true,true,true,13);
+        const string RiverbankMenu="Legends of Rus/Development/Campaign Playtest 31-40 R14 Riverbank (Recorded)";
+        [MenuItem(RiverbankMenu,true)] static bool RiverbankAvailable()=>Available();
+        [MenuItem(RiverbankMenu)] static void OpenRiverbank()=>OpenPreview(true,true,true,14);
+        static void OpenPreview(bool candidate,bool testProgress=false,bool record=false,int candidateRevision=9)
+        {
+            if(!Available())return;
+            int firstRound=candidateRevision==14?31:candidateRevision==13?21:11;
+            var definition=JsonUtility.FromJson<CampaignDefinition>(File.ReadAllText(Path.Combine(Application.dataPath,"../ProjectDocs/ContentPipeline/CampaignV2/campaign_definition.json")));
+            var catalog=new ValidatedCampaignCatalog(definition);
+            var input=new CampaignPackageInput{ChapterId=1,ContentRevision=definition.ContentRevision,LegacyChapterOne=true,
+                LevelsJson=Resources.Load<TextAsset>("Config/chapter01_levels").text,StoryJson=Resources.Load<TextAsset>("Config/chapter01_story").text,
+                RussianJson=Resources.Load<TextAsset>("Localization/story_ru").text,EnglishJson=Resources.Load<TextAsset>("Localization/story_en").text};
+            if(candidate)
+            {
+                // Explicit editor-only candidate. Never scanned or selected by production startup.
+                var folder=Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/"+(candidateRevision>=13?"Chapter01Sector01R"+candidateRevision:"Chapter01Sector01"));
+                input=new CampaignPackageInput{ChapterId=1,ContentRevision=definition.ContentRevision,
+                    LevelsJson=File.ReadAllText(Path.Combine(folder,"levels.json")),StoryJson=File.ReadAllText(Path.Combine(folder,"story.json")),
+                    RussianJson=File.ReadAllText(Path.Combine(folder,"story_ru.json")),EnglishJson=File.ReadAllText(Path.Combine(folder,"story_en.json"))};
+                if(candidateRevision==12)input.LevelsJson=File.ReadAllText(Path.Combine(folder,"../Chapter01Sector01R12/levels.json"));
+            }
+            if(!catalog.TryAdd(input,out var errors))
+                throw new InvalidOperationException(string.Join(";",errors));
+            var store=new PreviewStore();Func<CampaignSaveSession> reopen=()=>{store.Reload();return new CampaignSaveSession(store,definition,catalog);};
+            var session=reopen();var initial=new PlayerSaveData{lastEnergyUtcTicks=DateTime.UtcNow.Ticks};
+            if(testProgress)
+            {
+                // Explicit disposable test fixture, not imported live-player achievements.
+                initial.selectedLevel=10;
+                initial.levelProgress=Enumerable.Range(1,10).Select(n=>new LevelProgressData{
+                    chapterId=1,levelId=n,completions=1,bestStars=1,rewardClaimed=true}).ToList();
+            }
+            if(record)
+            {
+                // Disposable playtest allowance, never a production economy change.
+                initial.energy=initial.energyMax=candidateRevision==14?50:30;
+                initial.boosterMace=initial.boosterFirebird=initial.boosterLivingLight=initial.boosterSeaPearl=0;
+            }
+            var imported=session.ImportLegacyCopy(JsonUtility.ToJson(initial));
+            if(!imported.Committed)throw new InvalidOperationException(imported.Diagnostic);
+            if(testProgress)
+            {
+                if(candidateRevision>=13)
+                {
+                    // Disposable fixture before this block: real transactions, never fabricated legacy records.
+                    // R14 reserves50 energy, leaving30 after20 fixture starts; earned stock is retained.
+                    for(int n=11;n<firstRound;n++)
+                    {
+                        var select=session.SelectRound(1,n);if(!select.Committed)throw new InvalidOperationException(select.Diagnostic);
+                        var start=session.StartRound(n-11,DateTime.UtcNow.Ticks);if(!start.Committed)throw new InvalidOperationException(start.Diagnostic);
+                        var level=session.ResolveSelectedRound();
+                        var finish=session.FinishRound(n-10,true,3000,level.goals.Select(g=>g.target).ToArray());if(!finish.Committed)throw new InvalidOperationException(finish.Diagnostic);
+                        var ack=session.AcknowledgeResult(n-10);if(!ack.Committed)throw new InvalidOperationException(ack.Diagnostic);
+                    }
+                }
+                var selected=session.SelectRound(1,firstRound);if(!selected.Committed)throw new InvalidOperationException(selected.Diagnostic);
+                // Start with the previous milestone; acknowledge earlier fixture scenes.
+                for(int guard=0;guard<20;guard++)
+                {
+                    if(!session.TryGetPendingStory(out var pending,out var reason))throw new InvalidOperationException(reason);
+                    if(pending==null||pending.Scene.id==(candidateRevision==14?"campaign.chapter01.granary_open":candidateRevision==13?"campaign.chapter01.well_cleared":"campaign.chapter01.hearth_secured"))break;
+                    var read=session.AcknowledgeStory(pending.Key);if(!read.Committed)throw new InvalidOperationException(read.Diagnostic);
+                }
+            }
+            var parent=ScreenRouter.Instance.SafeArea;
+            var previous=parent.Cast<Transform>().Where(t=>t.gameObject.activeSelf).Select(t=>t.gameObject).ToArray();
+            var ui=CampaignDevelopmentUI.Open(parent,session,reopen,()=>{foreach(var item in previous)if(item)item.SetActive(true);});
+            if(record)
+            {
+                string fingerprint=("CampaignSector01R"+candidateRevision+"-")+CampaignPlaytestRecorder.Fingerprint(
+                    input.LevelsJson+"\n"+input.StoryJson+"\n"+input.RussianJson+"\n"+input.EnglishJson);
+                CampaignPlaytestRecorder.Attach(ui,session,fingerprint,endRound:firstRound+9,startRound:firstRound);
+                CampaignPlaytestWindow.ShowMonitor();
+            }
+            foreach(var item in previous)item.SetActive(false);
+        }
+    }
+}
+#endif

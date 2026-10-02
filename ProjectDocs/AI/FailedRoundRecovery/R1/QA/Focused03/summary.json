@@ -1,0 +1,51 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests;LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.SaveMigrationRecoveryPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/Focused03/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/Focused03/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 32.43909549713135,
+  "isolatedConfig": "/tmp/lor-retained-round-r1/Focused03/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "34",
+    "result": "Failed(Child)",
+    "total": "34",
+    "passed": "32",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 20:02:02Z",
+    "end-time": "2026-09-29 20:02:07Z",
+    "duration": "4.9322338"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.RegisteredGameplayFailureCallbackCopiesGoalsBeforeBoardRetirement",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.RetryExitAndBoosterGuidePreserveExistingTransactions",
+      "result": "Failed",
+      "message": "  Preserve existing retry policy.\n  Expected: 5\n  But was:  4\n"
+    }
+  ]
+}

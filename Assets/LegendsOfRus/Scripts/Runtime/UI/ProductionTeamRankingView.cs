@@ -11,9 +11,10 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionTeamRankingView:MonoBehaviour
     {
-        public const int CurrentRevision=1;
+        public const int CurrentRevision=10;
         public int Revision=CurrentRevision;
         public RectTransform Content,Body,Hud;
+        public ProductionPlayerHeader Header;
         public Image Environment,Title;
         public Font BodyFont,NamesFont,TitleFont,RankFont;
         public Text Heading,HeroName,LevelText,GoldText,GemsText,EnergyText,PreviewLabel,SeasonNote,PlayerGuildLabel;
@@ -28,7 +29,7 @@ namespace LegendsOfRus
         public TeamRankingPeriod Period{get;private set;}=TeamRankingPeriod.Season;
         public bool HasLiveLeaderboard=>false;
         public bool ActionsBound{get;private set;}
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Hud&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&RankFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&SeasonNote&&PlayerGuildLabel&&DetailsLabel&&InfoHeading&&InfoDescription&&CloseInfoLabel&&InfoPanel&&ProfileButton&&SettingsButton&&BackButton&&DetailsButton&&CloseInfoButton&&Valid(PlusButtons,3)&&Valid(Tabs,4)&&Valid(TabLabels,4)&&Valid(Podiums,3)&&Valid(PodiumNames,3)&&Valid(PodiumMembers,3)&&Valid(PodiumScores,3)&&Valid(PodiumRewards,9)&&Valid(ColumnLabels,5)&&Valid(Rows,7)&&Valid(Ranks,7)&&Valid(Names,7)&&Valid(Members,7)&&Valid(Scores,7)&&Valid(Rewards,21)&&Valid(Crests,7);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Header&&Header.HasBindings&&Content&&Body&&Hud&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&RankFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&SeasonNote&&PlayerGuildLabel&&DetailsLabel&&InfoHeading&&InfoDescription&&CloseInfoLabel&&InfoPanel&&ProfileButton&&SettingsButton&&BackButton&&DetailsButton&&CloseInfoButton&&Valid(PlusButtons,3)&&Valid(Tabs,4)&&Valid(TabLabels,4)&&Valid(Podiums,3)&&Valid(PodiumNames,3)&&Valid(PodiumMembers,3)&&Valid(PodiumScores,3)&&Valid(PodiumRewards,9)&&Valid(ColumnLabels,5)&&Valid(Rows,7)&&Valid(Ranks,7)&&Valid(Names,7)&&Valid(Members,7)&&Valid(Scores,7)&&Valid(Rewards,21)&&Valid(Crests,7);
         static bool Valid<T>(T[] a,int n)where T:UnityEngine.Object=>a!=null&&a.Length==n&&Array.TrueForAll(a,x=>x!=null);
         readonly List<Button> buttons=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
         GameState observed;string language;bool committed;
@@ -56,17 +57,39 @@ namespace LegendsOfRus
             Title.sprite=ProductionTeamRankingRuntime.Load(en?"title_blank":"title_ru");Heading.enabled=en;Heading.text=en?"GUILD RANKING":"РЕЙТИНГ ГИЛЬДИЙ";
             HeroName.text=en?"Ivan":"Иван";PreviewLabel.text=en?"PREVIEW · SAMPLE STANDINGS AND REWARDS":"ПРЕДПРОСМОТР · ПРИМЕР РЕЙТИНГА И НАГРАД";SeasonNote.text=en?"Season dates to be announced":"Даты сезона будут объявлены позже";
             string[] tabs=en?new[]{"LOCAL","GLOBAL","WEEK","SEASON"}:new[]{"ЛОКАЛЬНЫЙ","ГЛОБАЛЬНЫЙ","НЕДЕЛЯ","СЕЗОН"};
-            for(int i=0;i<4;i++){TabLabels[i].text=tabs[i];bool active=i<2?i==(int)Scope:i-2==(int)Period;Tabs[i].image.sprite=ProductionTeamRankingRuntime.Shared(active?"tab_active":"tab");}
-            string[] podiumNames=en?new[]{"Slavs","Northern Shield","Ancient Kin"}:new[]{"Славяне","Северный Щит","Род Древних"};string[] podiumMembers={"30/30","29/30","28/30"},podiumScores={"125 680","98 450","76 230"};string[] podiumRewards={"600","800","1","600","600","1","300","300","1"};
+            for(int i=0;i<4;i++)
+            {
+                TabLabels[i].text=tabs[i];bool active=i<2?i==(int)Scope:i-2==(int)Period;
+                Tabs[i].image.sprite=ProductionTeamRankingRuntime.Load("tab_"+i+(active?"_active_r6":"_normal_r6"));
+                TabLabels[i].color=active?new Color32(243,196,108,255):new Color32(198,190,166,255);
+            }
+            string[] podiumNames=en?new[]{"Slavs","Northern Shield","Ancient Kin"}:new[]{"Славяне","Северный Щит","Род Древних"};string[] podiumMembers={"30/30","29/30","28/30"},podiumScores={"125 680","98 450","76 230"};string[] podiumRewards={"600","800","1","600","600","1","300","400","1"};
             for(int i=0;i<3;i++){PodiumNames[i].text=podiumNames[i];PodiumMembers[i].text=podiumMembers[i];PodiumScores[i].text=podiumScores[i];}for(int i=0;i<9;i++)PodiumRewards[i].text=podiumRewards[i];
-            string[] columns=en?new[]{"RANK","GUILD","MEMBERS","CONTRIBUTION","REWARDS"}:new[]{"МЕСТО","ГИЛЬДИЯ","УЧАСТНИКИ","ВКЛАД","НАГРАДЫ"};for(int i=0;i<5;i++)ColumnLabels[i].text=columns[i];
+            string[] columns=en?new[]{"RANK","GUILD","MEMBERS","CONTRIBUTION","REWARDS"}:new[]{"Место","Гильдия","Участники","Вклад","Награды"};for(int i=0;i<5;i++)ColumnLabels[i].text=columns[i];
             string[] names=en?new[]{"Wolf Guard","Stone Circle","Forest Shadows","Brotherhood of Rus","Iron Horn","Dawn Guardians","Fiery Hearts"}:new[]{"Волчья Стража","Каменный Круг","Лесные Тени","Братство Руси","Железный Рог","Стражи Рассвета","Огненные Сердца"};string[] members={"28/30","27/30","27/30","30/30","26/30","25/30","24/30"};int[] scores={58760,46120,38940,34560,29310,22870,18450};int[] rainbow={250,200,180,160,140,120,100},gems={300,250,200,180,150,130,110};
             for(int i=0;i<7;i++){Ranks[i].text=(i+4).ToString();Names[i].text=names[i];Members[i].text=members[i];Scores[i].text=Balance(scores[i]);Rewards[i*3].text=rainbow[i].ToString();Rewards[i*3+1].text=gems[i].ToString();Rewards[i*3+2].text="1";}
             PlayerGuildLabel.text=en?"PLAYER GUILD · EXAMPLE":"ГИЛЬДИЯ ИГРОКА · ПРИМЕР";DetailsLabel.text=en?"GUILD DETAILS":"ПОДРОБНОСТИ ГИЛЬДИИ";InfoHeading.text=en?"BROTHERHOOD OF RUS":"БРАТСТВО РУСИ";
             InfoDescription.text=en?"Sample guild · Rank 7\n30/30 members · Contribution 34 560\n\nLocal/Global and Week/Season show the same example standings. Guild membership, scores, season dates and rewards are not live.\n\nOnline ranking and guild details will be available in a later feature phase.":"Пример гильдии · Место 7\n30/30 участников · Вклад 34 560\n\nЛокальный/глобальный рейтинг и неделя/сезон показывают одну таблицу-пример. Состав гильдии, очки, даты сезона и награды пока не являются реальными данными.\n\nОнлайн-рейтинг и подробности гильдий появятся на этапе разработки функций.";
-            CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";RefreshState();
+            DetailsLabel.enabled=en;DetailsButton.image.sprite=ProductionTeamRankingRuntime.Load(en?"details":"details_ru_r7");
+            CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";FitGuildNames(true);Header.ApplyPresentation();RefreshState();
         }
-        public void RefreshState(){if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;}
+        public void RefreshState(){if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;Header.RefreshValues();}
+        float nameFitPixelsPerUnit=-1;
+        public void FitGuildNames(bool force=false)
+        {
+            if(Names==null||Names.Length==0||Names[0]==null)return;
+            float units=Names[0].pixelsPerUnit;
+            if(!force&&Mathf.Approximately(units,nameFitPixelsPerUnit))return;
+            foreach(var label in Names)FitGuildName(label);
+            nameFitPixelsPerUnit=units;
+        }
+        static void FitGuildName(Text label)
+        {
+            // Store the measured size itself: UI best-fit + Overflow can still spill into the next column.
+            label.resizeTextForBestFit=false;label.horizontalOverflow=HorizontalWrapMode.Overflow;
+            label.fontSize=22;
+            while(label.fontSize>17 && label.preferredWidth>label.rectTransform.rect.width-4)label.fontSize--;
+        }
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
     }
 }

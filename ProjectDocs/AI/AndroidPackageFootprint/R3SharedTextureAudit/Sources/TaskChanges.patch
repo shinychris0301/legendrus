@@ -1,0 +1,452 @@
+--- a/ProjectDocs/AI/CurrentTask.md
++++ b/ProjectDocs/AI/CurrentTask.md
+@@ -1,3 +1,15 @@
++# 2026-10-01 — Shared UI texture usage and size audit R3
++
++User repeated the request to review and resume the development schedule after chat loss. Rechecked current instructions, handoff, task/schedule and working files; R2 packaging remains complete. Executed the scheduled read-only texture audit using source/GUID analysis and actual Unity 6000.5.9f1 page measurements. Approved Splash and all prior local work preserved.
++
++**Final: 1 Play Mode measurement test passed, 0 failed/skipped**, covering 10 routes × 2 languages × 5 displays (100 configurations, 200 image observations). Isolated /tmp storage; existing bootstrap/router/Canvas; prior process-only Vulkan authorization. Ten standalone actual Unity reference-page captures retained. Earlier seven-page pass was extended after finding three cloned-header consumers; initial temporary-fixture GetMesh API compile error corrected, with no production fix. These are layout measurements, not a broad gameplay or phone acceptance run.
++
++Scanned 5,498 Assets text files, recording 23 GUID-reference lines, 24 literal source-reference lines and 20 serialized image components. Coin texture is imported at 1254×1254 but peaks at 229.54×229.54 painted pixels on DailyReward at 1440×3200. Live uses also include PreLevel and SpecialOffer. Current Home/shared headers and Victory rewards use replacement assets. Both 2172×724 progress textures were invisible in sampled states but retain serialized/runtime dependencies; do not delete them based on visibility alone.
++
++[Results and candidate checks](AndroidPackageFootprint/R3SharedTextureAudit/TestResults.md) · [Measurements](AndroidPackageFootprint/R3SharedTextureAudit/QA/RuntimeSummary.json) · [Scope](AndroidPackageFootprint/R3SharedTextureAudit/QA/Scope.json). All 7,774 baseline Assets/Packages/ProjectSettings files unchanged, zero changed/added/deleted; R2 APK hash unchanged. Temporary fixture/meta removed. Added audit scripts, measurements, captures and documentation only. No importer/source-art/prefab change, new APK, Edit Mode/full regression, device run, deployment or commit.
++
++**Next:** bounded Android-only coin 512 import experiment through existing LockedDesignImporter owner and coin metadata, keeping PNG/GUID/default resolution/RGBA32/mipmaps/layout intact. Compare native DailyReward/SpecialOffer/PreLevel renders at largest and smallest sampled sizes and alpha over black/white/saturated backgrounds before retaining it. Raw mip payload reduction estimate 6.66 MiB is not measured APK or device-memory savings. Dormant progress resources remain intact. Human 31–500 pacing, font provenance and Android lifecycle/performance/readability remain open; phone work and hosting deferred, final effects last.
++
+ # 2026-10-01 — Project recovery review and fresh Android packaging R2
+ 
+ User requested reviewing the current project and continuing the development schedule after chat deletion. Reviewed current instructions, handoff, task/schedule/session evidence, working tree and owning guarded build path. Unity 6000.5.9f1 confirmed. Retained the core-first priority, installed 500-round Chapter 1, historical R5 baseline (1,334 distinct runtime passes, 3 deferred backend cases), approved Splash and all existing local edits. Phone execution and hosting remain deferred; effects last.
+--- a/ProjectDocs/AI/SessionLog.md
++++ b/ProjectDocs/AI/SessionLog.md
+@@ -5687,3 +5687,17 @@
+ 
+ **Next:** read-only complete-use/largest-size audit of shared UI texture candidates (Home coin/progress fill), establishing a bounded candidate and native visual acceptance checks before any import change. No blanket compression or duplicate deletion. Human 31–500 pacing, font provenance and physical Android lifecycle/performance/readability remain pending; hosting deferred, effects last.
+ 
++
++
++# 2026-10-01 — Shared UI texture usage and size audit R3
++
++User repeated the request to review and resume the development schedule after chat loss. Rechecked current instructions, handoff, task/schedule and working files; R2 packaging remains complete. Executed the scheduled read-only texture audit using source/GUID analysis and actual Unity 6000.5.9f1 page measurements. Approved Splash and all prior local work preserved.
++
++**Final: 1 Play Mode measurement test passed, 0 failed/skipped**, covering 10 routes × 2 languages × 5 displays (100 configurations, 200 image observations). Isolated /tmp storage; existing bootstrap/router/Canvas; prior process-only Vulkan authorization. Ten standalone actual Unity reference-page captures retained. Earlier seven-page pass was extended after finding three cloned-header consumers; initial temporary-fixture GetMesh API compile error corrected, with no production fix. These are layout measurements, not a broad gameplay or phone acceptance run.
++
++Scanned 5,498 Assets text files, recording 23 GUID-reference lines, 24 literal source-reference lines and 20 serialized image components. Coin texture is imported at 1254×1254 but peaks at 229.54×229.54 painted pixels on DailyReward at 1440×3200. Live uses also include PreLevel and SpecialOffer. Current Home/shared headers and Victory rewards use replacement assets. Both 2172×724 progress textures were invisible in sampled states but retain serialized/runtime dependencies; do not delete them based on visibility alone.
++
++[Results and candidate checks](AndroidPackageFootprint/R3SharedTextureAudit/TestResults.md) · [Measurements](AndroidPackageFootprint/R3SharedTextureAudit/QA/RuntimeSummary.json) · [Scope](AndroidPackageFootprint/R3SharedTextureAudit/QA/Scope.json). All 7,774 baseline Assets/Packages/ProjectSettings files unchanged, zero changed/added/deleted; R2 APK hash unchanged. Temporary fixture/meta removed. Added audit scripts, measurements, captures and documentation only. No importer/source-art/prefab change, new APK, Edit Mode/full regression, device run, deployment or commit.
++
++**Next:** bounded Android-only coin 512 import experiment through existing LockedDesignImporter owner and coin metadata, keeping PNG/GUID/default resolution/RGBA32/mipmaps/layout intact. Compare native DailyReward/SpecialOffer/PreLevel renders at largest and smallest sampled sizes and alpha over black/white/saturated backgrounds before retaining it. Raw mip payload reduction estimate 6.66 MiB is not measured APK or device-memory savings. Dormant progress resources remain intact. Human 31–500 pacing, font provenance and Android lifecycle/performance/readability remain open; phone work and hosting deferred, final effects last.
++
+--- a/ProjectDocs/AI/DevelopmentSchedule.md
++++ b/ProjectDocs/AI/DevelopmentSchedule.md
+@@ -33,7 +33,9 @@
+ 
+ **2026-10-01 fresh packaging completed:** [R2 results](AndroidPackageFootprint/R2FreshPackaging/TestResults.md): guarded development APK now838,219,234bytes, down550,165,625bytes (39.63%). Unused ZIP records removed; Unity asset payload and compiled runtime content preserved (three identical DEX files renumbered).130policy/content-delivery Edit Mode tests passed; signing/permissions/identity/CRC/ZIP/ELF alignment passed. All7,774 source/config files unchanged. Old APK archived BeforeFreshPackagingR2; no phone testing or new Play Mode run.
+ 
+-**Immediate next action:** audit complete usage and largest rendered size of high-resolution shared UI controls, beginning with Home coin/progress fill. Select a bounded candidate and define native visual/alpha/readability checks before changing its importer. Preserve Splash and approved art; no blanket compression or duplicate-resource deletion. Phone work, hosting/live services deferred; final effects last. Human Chapter1 pacing, optional recap, font provenance and Android lifecycle/performance/readability remain open.
++**2026-10-01 shared texture audit completed:** [R3 results](AndroidPackageFootprint/R3SharedTextureAudit/TestResults.md): actual Unity measurements across 10 routes, RU/EN and five displays; final one measurement test passed (100 configurations, 200 image observations). The 1254px coin texture peaks at 229.54 visible pixels; DailyReward is the largest sampled use. Progress fill/frame remain hidden but referenced. All 7,774 source/config files and R2 APK unchanged.
++
++**Immediate next action:** perform a bounded Android-only 512 import experiment for HomeAligned/coin_icon through its existing importer owner and metadata. Preserve source PNG/GUID, default resolution, RGBA32, mipmaps, all other resources and layout. Compare actual native coin renders and alpha at the measured sizes before retaining a change, then guarded fresh packaging if fidelity passes. The 6.66 MiB theoretical raw-mip saving is not an APK saving. Do not delete dormant progress assets or blanket-compress textures. Phone work and hosting remain deferred; final effects last. Human Chapter 1 pacing, font provenance and Android lifecycle/performance/readability remain open.
+ 
+ Evidence reviewed for this reprioritization: [R43 regression audit](CampaignFoundation/R43RegressionAudit/TestResults.md), [R44 Chapter 1 implementation](CampaignFoundation/R44ChapterOneCompletion/TestResults.md), [failed-round recovery](FailedRoundRecovery/R1/TestResults.md), [continuation transaction foundation](ContinuationTransactions/R1/TestResults.md), [Android storage verification](AndroidCredentialStorage/R5DeviceExecution/TestResults.md), [local HTTPS staging verification](BackendHttpsStaging/R1/TestResults.md). No tests were rerun during this planning update; prior counts remain historical.
+ 
+--- a/ProjectDocs/AI/ConversationHandoff.md
++++ b/ProjectDocs/AI/ConversationHandoff.md
+@@ -4,7 +4,7 @@
+ 
+ The original handoff below is historical. Resume from the newest entries in [CurrentTask](CurrentTask.md), [DevelopmentSchedule](DevelopmentSchedule.md) and [SessionLog](SessionLog.md), verified against local files. Core-first work supersedes the old Loading-only and backend-first next steps. Chapter1 rounds1–500 and finale are installed; R5 recorded1,334 distinct runtime passes with3 deferred backend cases. These are prior results, not a new runtime acceptance claim.
+ 
+-Latest completed task: [fresh Android packaging R2](AndroidPackageFootprint/R2FreshPackaging/TestResults.md),838,219,234-byte development APK,39.63% smaller through archive cleanup alone.130 current build-policy/content-delivery tests passed; all7,774 project source/config files unchanged. Approved Splash/art remain intact. Next: complete-use/largest-rendered-size audit of shared texture candidates before any importer change. Physical-phone execution and hosting remain deferred; final gameplay effects last. Preserve historical acceptance decisions below.
++Latest completed task: [shared UI texture audit R3](AndroidPackageFootprint/R3SharedTextureAudit/TestResults.md). Actual Unity measurements found the 1254px coin's largest sampled display at 229.54px; final measurement test passed across 100 display/page/language configurations. Progress fill/frame are dormant but still referenced. All 7,774 source/config files and the R2 development APK remain unchanged. R2 already reduced packaging to 838,219,234 bytes without art changes. Next: bounded Android-only coin 512 import experiment with native visual/alpha checks before retaining changes. Physical-phone execution and hosting remain deferred; final gameplay effects last. Preserve historical acceptance decisions below.
+ 
+ Prepared 2026-09-12. Source: the current user/assistant conversation and supplied project artifacts. This is a focused decision summary, not a verbatim transcript or an independently verified local Unity audit.
+ 
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R3SharedTextureAudit/Sources/Audit.py
+@@ -0,0 +1,110 @@
++"""Read-only source/importer/reference audit, paired with current Unity measurements."""
++from pathlib import Path
++import collections
++import hashlib
++import json
++import re
++import struct
++
++ROOT=Path(__file__).resolve().parents[5]
++BASE=Path(__file__).resolve().parent.parent
++QA=BASE/'QA'
++names=('coin_icon','progress_fill','progress_frame')
++
++def sha(path):
++    with path.open('rb') as stream:return hashlib.file_digest(stream,'sha256').hexdigest()
++
++def save(name,value):(QA/name).write_text(json.dumps(value,indent=2)+'\n')
++
++def mip_bytes(width,height):
++    total=0
++    while True:
++        total+=width*height*4
++        if width==height==1:return total
++        width=max(1,width//2);height=max(1,height//2)
++
++packed=json.loads((BASE.parent/'R1/QA/PackedAssetsRounded.json').read_text())
++assets={}
++for name in names:
++    path=ROOT/'Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned'/(name+'.png')
++    meta=path.with_suffix('.png.meta').read_text()
++    with path.open('rb') as stream:header=stream.read(26)
++    assert header[:8]==b'\x89PNG\r\n\x1a\n'
++    width,height=struct.unpack('>II',header[16:24])
++    android=re.search(r'    buildTarget: Android\n(.*?)(?=  - serializedVersion:|  spriteSheet:)',meta,re.S).group(1)
++    assets[name]={'path':str(path.relative_to(ROOT)),'sha256':sha(path),'metaSha256':sha(path.with_suffix('.png.meta')),
++        'guid':re.search(r'^guid: (\w+)',meta,re.M).group(1),'width':width,'height':height,'pngColorType':header[25],
++        'sourceFileBytes':path.stat().st_size,'mipmaps':re.search(r'enableMipMap: (\d+)',meta).group(1)=='1',
++        'readable':re.search(r'isReadable: (\d+)',meta).group(1)=='1',
++        'android':{key:int(re.search(r'    '+key+r': (-?\d+)',android).group(1)) for key in ('maxTextureSize','textureFormat','textureCompression','overridden')},
++        'rgba32MipPayloadEstimateBytes':mip_bytes(width,height),
++        'historicalPackedAssetReport':next(x for x in packed if x['path']==str(path.relative_to(ROOT)))}
++save('Assets.json',assets)
++
++references=[];source=[];serialized=[];scanned=collections.Counter()
++for path in (ROOT/'Assets').rglob('*'):
++    if not path.is_file() or path.suffix not in ('.cs','.prefab','.unity','.asset','.mat','.json','.meta','.shader','.compute'):
++        continue
++    try:text=path.read_text()
++    except UnicodeDecodeError:continue
++    scanned[path.suffix]+=1
++    rel=str(path.relative_to(ROOT))
++    for name,asset in assets.items():
++        if asset['guid'] in text:
++            for i,line in enumerate(text.splitlines(),1):
++                if asset['guid'] in line:references.append({'asset':name,'path':rel,'line':i,'text':line.strip()})
++        if path.suffix=='.cs':
++            for i,line in enumerate(text.splitlines(),1):
++                if re.search(r'(?<![\w])'+name+r'(?![\w])',line):source.append({'asset':name,'path':rel,'line':i,'text':line.strip()})
++    if path.suffix not in ('.prefab','.unity') or not any(v['guid'] in text for v in assets.values()):continue
++    objects={m.group(2):(int(m.group(1)),m.group(3)) for m in re.finditer(r'^--- !u!(\d+) &(-?\d+)\n(.*?)(?=^--- !u!|\Z)',text,re.M|re.S)}
++    def field(body,key):
++        m=re.search(r'^  '+re.escape(key)+r': (.+)$',body,re.M)
++        return m.group(1) if m else None
++    def fileid(body,key):
++        value=field(body,key)
++        return re.search(r'fileID: (-?\d+)',value).group(1) if value else None
++    rects={fileid(body,'m_GameObject'):(oid,body) for oid,(typ,body) in objects.items() if typ==224}
++    for oid,(typ,body) in objects.items():
++        if typ!=114:continue
++        for name,asset in assets.items():
++            if not re.search(r'm_Sprite:.*'+asset['guid'],body):continue
++            goid=fileid(body,'m_GameObject');go=objects[goid][1];rid,rect=rects[goid]
++            ancestors=[];active=True;cursor=rid;visited=set()
++            while cursor and cursor!='0':
++                assert cursor not in visited;visited.add(cursor)
++                rb=objects[cursor][1];gb=objects[fileid(rb,'m_GameObject')][1]
++                ancestors.insert(0,field(gb,'m_Name'));active=active and field(gb,'m_IsActive')=='1'
++                cursor=fileid(rb,'m_Father')
++            serialized.append({'asset':name,'prefab':rel,'componentFileId':oid,'hierarchy':'/'.join(ancestors),
++                'enabled':field(body,'m_Enabled')=='1','activeThroughAncestors':active,'sizeDelta':field(rect,'m_SizeDelta'),
++                'localScale':field(rect,'m_LocalScale'),'preserveAspect':field(body,'m_PreserveAspect'),
++                'imageType':field(body,'m_Type'),'fillAmount':field(body,'m_FillAmount')})
++save('GuidReferences.json',references);save('SourceReferences.json',source);save('SerializedImages.json',serialized)
++save('ScanCoverage.json',{'textFilesByExtension':dict(scanned),'guidReferenceLines':len(references),'sourceReferenceLines':len(source),
++    'serializedImageComponents':len(serialized),'limitations':'Literal/GUID search plus manually traced loaders and runtime sample, not a proof about arbitrary future dynamic paths or every gameplay state.'})
++
++runtime=QA/'RuntimeFinal/RuntimeMeasurements.json'
++if runtime.exists():
++    data=json.loads(runtime.read_text());summary={}
++    for name in names:
++        rows=[r for r in data['rows'] if r['asset']==name]
++        visible=[r for r in rows if r['enabled'] and r['active'] and not r['culled'] and r['hasMesh'] and r['alpha']>.001]
++        summary[name]={'measurements':len(rows),'visibleMeasurements':len(visible),
++            'visiblePages':sorted({r['page'] for r in visible}),
++            'maxVisibleMeshWidth':max((r['meshPixels']['width'] for r in visible),default=0),
++            'maxVisibleMeshHeight':max((r['meshPixels']['height'] for r in visible),default=0),
++            'largestVisible':max(visible,key=lambda r:r['meshPixels']['width']*r['meshPixels']['height'],default=None)}
++    save('RuntimeSummary.json',summary)
++    print(json.dumps(summary,indent=2))
++
++before=json.loads((QA/'BeforeHashes.json').read_text())
++after={str(p.relative_to(ROOT)):sha(p) for folder in ('Assets','Packages','ProjectSettings') for p in (ROOT/folder).rglob('*')
++    if p.is_file() and p.suffix.lower() not in ('.keystore','.jks','.p12','.pem','.key') and not p.name.startswith('.env')}
++scope={'changed':sorted(p for p in before if p in after and before[p]!=after[p]),'added':sorted(set(after)-set(before)),
++    'deleted':sorted(set(before)-set(after)),'unchanged':sum(after.get(p)==h for p,h in before.items())}
++apk=ROOT/'Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk'
++artifact=json.loads((BASE.parent/'R2FreshPackaging/QA/Artifact.json').read_text())
++scope['apkUnchanged']=sha(apk)==artifact['sha256'];save('Scope.json',scope)
++assert not(scope['changed'] or scope['added'] or scope['deleted']) and scope['apkUnchanged']
++print('Scope:',json.dumps(scope))
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R3SharedTextureAudit/Sources/Measure.py
+@@ -0,0 +1,55 @@
++"""Run a temporary measurement fixture in the existing assembly with isolated saves."""
++from pathlib import Path
++import hashlib
++import json
++import os
++import resource
++import shutil
++import subprocess
++import sys
++import time
++import xml.etree.ElementTree as ET
++
++ROOT=Path(__file__).resolve().parents[5]
++BASE=Path(__file__).resolve().parent.parent
++QA=BASE/'QA'
++run_name=sys.argv[1] if len(sys.argv)>1 else 'Runtime'
++assert run_name.isalnum()
++LOCAL=Path('/tmp/lor-shared-texture-r3')/run_name
++source=BASE/'Sources/SharedTextureAuditPlayModeTests.cs'
++target=ROOT/'Assets/LegendsOfRus/Tests/PlayMode'/source.name
++assert not target.exists() and not target.with_suffix('.cs.meta').exists()
++assert not any(n.strip() in ('Unity','Unity Main Thre') for n in subprocess.check_output(['ps','-eo','comm='],text=True).splitlines())
++out=QA/run_name;out.mkdir(exist_ok=False)
++config=LOCAL/'config';license_parent=config/'unity3d/Unity';license_parent.mkdir(parents=True)
++(license_parent/'licenses').symlink_to('/home/k2/.config/unity3d/Unity/licenses',target_is_directory=True)
++env={k:v for k,v in os.environ.items() if not k.startswith('LOR_')}
++env.update(XDG_CONFIG_HOME=str(config),LOR_LOADING_TEST_CONFIG_ROOT=str(config),LOR_SHARED_TEXTURE_AUDIT_DIR=str(out))
++command=['/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity','-batchmode','-projectPath',str(ROOT),
++    '-runTests','-testPlatform','PlayMode','-testFilter','LegendsOfRus.Tests.PlayMode.SharedTextureAuditPlayModeTests',
++    '-testResults',str(out/'results.xml'),'-logFile',str(LOCAL/'unity.log'),'-force-vulkan']
++def limits():resource.setrlimit(resource.RLIMIT_NOFILE,(4096,resource.getrlimit(resource.RLIMIT_NOFILE)[1]))
++shutil.copy2(source,target)
++start=time.time()
++try:
++    with (LOCAL/'launcher.log').open('w') as log:
++        code=subprocess.call(command,env=env,stdout=log,stderr=subprocess.STDOUT,preexec_fn=limits)
++    record={'command':command,'exitCode':code,'durationSeconds':time.time()-start,'isolatedConfig':str(config),'processOnlyVulkan':True}
++    if (out/'results.xml').exists():
++        tree=ET.parse(out/'results.xml');record['result']=tree.getroot().attrib
++        record['nonPassing']=[{'name':t.get('fullname'),'result':t.get('result'),'message':t.findtext('.//message')}
++            for t in tree.findall('.//test-case') if t.get('result')!='Passed']
++    (out/'summary.json').write_text(json.dumps(record,indent=2)+'\n')
++    print(json.dumps(record,indent=2),flush=True)
++finally:
++    assert target.read_bytes()==source.read_bytes(),'Temporary fixture changed externally; retain for review'
++    target.unlink()
++    if target.with_suffix('.cs.meta').exists():target.with_suffix('.cs.meta').unlink()
++    before=json.loads((QA/'BeforeHashes.json').read_text())
++    cleaned=[]
++    for p in (ROOT/'Assets').glob('InitTestScene*'):
++        rel=str(p.relative_to(ROOT))
++        if rel not in before and p.name.endswith(('.unity','.unity.meta')):
++            p.unlink();cleaned.append(rel)
++    (QA/'TemporaryFixtureCleanup.json').write_text(json.dumps({'fixtureRemoved':str(target.relative_to(ROOT)),'newTestScenesRemoved':cleaned},indent=2)+'\n')
++assert code==0 and record.get('result',{}).get('result')=='Passed' and int(record['result']['passed'])>0
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R3SharedTextureAudit/Sources/SharedTextureAuditPlayModeTests.cs
+@@ -0,0 +1,141 @@
++using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.IO;
++using NUnit.Framework;
++using UnityEngine;
++using UnityEngine.TestTools;
++using UnityEngine.UI;
++
++namespace LegendsOfRus.Tests.PlayMode
++{
++    // Temporary measurement fixture; copied into the existing test assembly only for this audit.
++    public sealed class SharedTextureAuditPlayModeTests
++    {
++        [Serializable] public sealed class Row
++        {
++            public string page, language, asset, hierarchy;
++            public int screenWidth, screenHeight, textureWidth, textureHeight, mipCount;
++            public bool enabled, active, culled, hasMesh;
++            public float alpha;
++            public Rect safeArea, rectPixels, meshPixels;
++        }
++        [Serializable] public sealed class Report { public List<Row> rows = new List<Row>(); public int measuredPages; }
++        readonly string[] names = { "coin_icon", "progress_fill", "progress_frame" };
++        ScreenRouter router;
++
++        [UnityTest]
++        public IEnumerator MeasureExistingPagesWithoutChangingImports()
++        {
++            string config = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            Assert.That(config, Is.Not.Null.And.Not.Empty);
++            Assert.That(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), Is.EqualTo(config));
++            Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(config + Path.DirectorySeparatorChar), Is.True);
++            string output = Environment.GetEnvironmentVariable("LOR_SHARED_TEXTURE_AUDIT_DIR");
++            Assert.That(output, Is.Not.Null.And.Not.Empty);
++            router = ScreenRouter.Instance;
++            Assert.That(router, Is.Not.Null);
++            GameState.Instance.ResetProgress(); StoryService.ResetRuntime();
++            foreach (var level in ChapterLevelCatalog.LoadChapter1().levels)
++                foreach (var step in level.tutorialSteps) GameState.Instance.CompleteTutorial(step.id);
++            var assets = new Sprite[names.Length];
++            for (int i = 0; i < names.Length; i++)
++            {
++                assets[i] = Resources.Load<Sprite>("ProductionUI/HomeAligned/" + names[i]);
++                Assert.That(assets[i], Is.Not.Null);
++            }
++            var report = new Report();
++            foreach (string language in new[] { "ru", "en" })
++            {
++                DemoFeatureState.SetLanguage(language);
++                foreach (ScreenId page in new[] { ScreenId.Home, ScreenId.PreLevel, ScreenId.Gameplay,
++                    ScreenId.Victory, ScreenId.Shop, ScreenId.SpecialOffer, ScreenId.DailyReward,
++                    ScreenId.Fail, ScreenId.ChapterMap, ScreenId.WorldMap })
++                {
++                    router.Show(page); Settle(); yield return null; yield return null; Settle();
++                    Assert.That(router.CurrentScreen, Is.EqualTo(page));
++                    foreach (var size in new[] { new Vector2Int(360,640), new Vector2Int(941,1672),
++                        new Vector2Int(1080,2340), new Vector2Int(1080,2400), new Vector2Int(1440,3200) })
++                    {
++                        Rect safe = size.y == 2400 ? new Rect(45,100,990,2160) : new Rect(0,0,size.x,size.y);
++                        Measure(page, language, size, safe, assets, report, output);
++                    }
++                    report.measuredPages++;
++                }
++            }
++            Assert.That(report.rows.Count, Is.GreaterThan(0));
++            File.WriteAllText(Path.Combine(output,"RuntimeMeasurements.json"), JsonUtility.ToJson(report, true));
++            router.Show(ScreenId.SplashTitle); Settle();
++        }
++
++        void Settle()
++        {
++            for(int i=0;i<24;i++) router.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds);
++            Canvas.ForceUpdateCanvases();
++        }
++        static string Hierarchy(Transform t)
++        {
++            string name=t.name;while(t.parent!=null){t=t.parent;name=t.name+"/"+name;}return name;
++        }
++        static Rect Bounds(Vector3[] points, Transform transform, Camera camera)
++        {
++            Vector2 lo=new Vector2(float.MaxValue,float.MaxValue),hi=new Vector2(float.MinValue,float.MinValue);
++            foreach(var p in points)
++            {
++                Vector2 v=camera.WorldToScreenPoint(transform==null?p:transform.TransformPoint(p));
++                lo=Vector2.Min(lo,v);hi=Vector2.Max(hi,v);
++            }
++            return Rect.MinMaxRect(lo.x,lo.y,hi.x,hi.y);
++        }
++        void Measure(ScreenId page,string language,Vector2Int size,Rect safeRect,Sprite[] assets,Report report,string output)
++        {
++            var canvas=router.GameCanvas;var scaler=canvas.GetComponent<CanvasScaler>();
++            var adaptive=canvas.GetComponent<AdaptiveCanvasScaler>();var safe=router.SafeArea.GetComponent<SafeAreaFitter>();
++            var oldMode=canvas.renderMode;var oldCamera=canvas.worldCamera;float oldDistance=canvas.planeDistance,oldScale=canvas.scaleFactor;
++            bool oldScaler=scaler.enabled,oldAdaptive=adaptive.enabled,oldSafe=safe.enabled;
++            var oldTarget=RenderTexture.active;
++            var target=new RenderTexture(size.x,size.y,24,RenderTextureFormat.ARGB32);target.Create();
++            var go=new GameObject("SharedTextureAuditCamera",typeof(Camera));var camera=go.GetComponent<Camera>();
++            Texture2D capture=null;
++            try
++            {
++                scaler.enabled=false;adaptive.enabled=false;safe.enabled=false;
++                camera.enabled=false;camera.transform.position=new Vector3(0,0,-100);
++                camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color32(4,13,24,255);
++                camera.orthographic=true;camera.nearClipPlane=.1f;camera.farClipPlane=1000;camera.targetTexture=target;
++                canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=camera;canvas.planeDistance=100;
++                adaptive.Apply(safeRect,size);
++                canvas.scaleFactor=AdaptiveCanvasScaler.ResolveScale(new Vector2Int((int)safeRect.width,(int)safeRect.height),941,1672);
++                safe.Apply(safeRect,size);
++                foreach(var text in router.Viewport.GetComponentsInChildren<Text>(true))text.SetVerticesDirty();
++                Canvas.ForceUpdateCanvases();camera.Render();
++                foreach(var image in router.Viewport.GetComponentsInChildren<Image>(true))
++                {
++                    int index=Array.IndexOf(assets,image.sprite);if(index<0)continue;
++                    Vector3[] corners=new Vector3[4];image.rectTransform.GetWorldCorners(corners);
++                    var mesh=image.canvasRenderer.GetMesh();bool hasMesh=mesh!=null&&mesh.vertexCount>0;
++                    report.rows.Add(new Row { page=page.ToString(),language=language,asset=names[index],hierarchy=Hierarchy(image.transform),
++                        screenWidth=size.x,screenHeight=size.y,safeArea=safeRect,enabled=image.enabled,active=image.gameObject.activeInHierarchy,
++                        culled=image.canvasRenderer.cull,hasMesh=hasMesh,alpha=image.canvasRenderer.GetInheritedAlpha(),
++                        rectPixels=Bounds(corners,null,camera),meshPixels=hasMesh?Bounds(mesh.vertices,image.transform,camera):new Rect(),
++                        textureWidth=image.sprite.texture.width,textureHeight=image.sprite.texture.height,mipCount=image.sprite.texture.mipmapCount });
++                }
++                if(size.x==941 && language=="ru")
++                {
++                    RenderTexture.active=target;capture=new Texture2D(size.x,size.y,TextureFormat.RGB24,false);
++                    capture.ReadPixels(new Rect(0,0,size.x,size.y),0,0);capture.Apply();
++                    File.WriteAllBytes(Path.Combine(output,page+"_941x1672_RU_ACTUAL_UNITY.png"),capture.EncodeToPNG());
++                }
++            }
++            finally
++            {
++                RenderTexture.active=oldTarget;canvas.renderMode=oldMode;canvas.worldCamera=oldCamera;
++                canvas.planeDistance=oldDistance;canvas.scaleFactor=oldScale;
++                scaler.enabled=oldScaler;adaptive.enabled=oldAdaptive;safe.enabled=oldSafe;
++                adaptive.ApplyNow();safe.ApplyNow();
++                if(capture!=null)UnityEngine.Object.Destroy(capture);
++                UnityEngine.Object.Destroy(go);target.Release();UnityEngine.Object.Destroy(target);
++            }
++        }
++    }
++}
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R3SharedTextureAudit/TestResults.md
+@@ -0,0 +1,72 @@
++# Shared texture audit R3 — 2026-10-01
++
++**The next bounded candidate is the Android import size of `HomeAligned/coin_icon.png`, tested at 512×512 while preserving its source PNG, RGBA32 format and mipmaps.** No import change or further APK reduction was made in this audit. Current approved art and the 838,219,234-byte R2 APK are unchanged.
++
++The coin is imported at **1,254×1,254** but its largest measured visible mesh is **229.54×229.54 pixels**, on Daily Reward at a simulated 1440×3200 display. The similarly oversized progress fill/frame were **not visible in any sampled state**; they remain referenced by disabled legacy objects and runtime builders. They are not safe deletion candidates merely because they are hidden.
++
++## Current project review
++
++The repeated request to resume after chat loss was resolved against current files, not the original 2026-09-12 handoff alone. Reviewed AGENTS.md, latest CurrentTask, current DevelopmentSchedule, updated handoff, local changes and R2 evidence. Unity version remains **6000.5.9f1**. R2 packaging was already complete and was not repeated. This task follows the recorded immediate next action: complete-use and largest-size audit before import changes.
++
++The core-first schedule, approved Splash, 500-round Chapter 1 and recent UI/gameplay work remain in place. No phone execution, hosting/service activation or final-effects work was initiated. Previous acceptance/test totals remain historical; the checks below are this task's actual work.
++
++## Reference audit
++
++Scanned **5,498 text files** under Assets: 936 C# sources, 72 prefabs, one scene, 23 assets, 428 JSON files, 4,032 metadata files, three shaders and three materials. Recorded **23 GUID-reference lines**, **24 literal source-reference lines**, and **20 serialized Image components**. Traced constructed Resources paths, shared header replacement, runtime style refresh and builder ownership in source. The runtime-only `Resources.LoadAll<Sprite>` usage is confined to gameplay atlas sheets, not these Home assets.
++
++| Texture | Source/imported size | Serialized image references | Current observed use |
++|---|---:|---:|---|
++| coin_icon | 1254×1254 | 9 across Home, DailyReward, PreLevel, SpecialOffer, Victory | Visible on DailyReward, PreLevel and SpecialOffer. Home's old icon is disabled; shared headers use separate reference art. Victory's old header icon and unused reward slots are inactive; live coin rewards switch to VictoryReferenceR1/coin. Shop replaces its original header icon too. |
++| progress_fill | 2172×724 | 3 across Home and Gameplay | Home's old quest fill and Gameplay's old goal/star fills are inactive. Gameplay now presents its score through the current score-meter component. |
++| progress_frame | 2172×724 | 8 across Home, Gameplay, Fail, PreLevel, ChapterMap, WorldMap | Retained old profile/quest/gameplay frames are disabled or inactive. Cloned headers account for several references absent from direct literal searches. |
++
++[GUID references](QA/GuidReferences.json) · [source references](QA/SourceReferences.json) · [serialized hierarchy/activation inventory](QA/SerializedImages.json) · [coverage and limits](QA/ScanCoverage.json).
++
++This covers the current known literal/GUID paths and sampled routes. It is not a proof about every future dynamic path, all gameplay/reward states, or every possible device resolution. In particular, hidden serialized references still hold dependencies, and old builders could restore their content unless changed together. No GUID, component, prefab or Resources entry was removed.
++
++## Actual Unity measurements
++
++The final Play Mode measurement fixture used the **existing RuntimeBootstrap, ScreenRouter and Canvas**, with isolated `/tmp` product storage and the previously approved process-only Vulkan option. It visited **10 routes × 2 languages × 5 display configurations = 100 configurations**, recording **200 matching image observations**. Routes: Home, PreLevel, Gameplay, Victory, Shop, SpecialOffer, DailyReward, Fail, ChapterMap and WorldMap. Captures/measurement use each current page's native layout. Page visits are layout fixtures, not completed gameplay journeys.
++
++Display configurations: 360×640, 941×1672, 1080×2340, 1080×2400 with safe rectangle (45,100,990,2160), and 1440×3200. Values below measure the actual CanvasRenderer mesh projected through Unity's capture camera, rather than assuming the whole RectTransform is painted.
++
++| Coin location | Reference 941×1672 | 1080×2340 | 1440×3200 |
++|---|---:|---:|---:|
++| PreLevel reward | 70.00 px | 80.34 px | 107.12 px |
++| SpecialOffer preview | 99.00 px | 113.62 px | 151.50 px |
++| DailyReward day 1 | **150.00 px** | **172.16 px** | **229.54 px** |
++
++The DailyReward rectangle is 150×157 reference units, but the square coin's painted mesh is 150×150. PreLevel's active prefab uses 70×70; relying on an older 42×42 source adjustment alone would have understated this. RU/EN observations agree on these asset sizes. At 360×640 the respective coin widths are 26.78, 37.87 and 57.39 pixels.
++
++The coin had **30 visible observations out of 90**. Progress fill had **0/30**, and frame **0/80**. Visibility required an enabled, active, non-culled graphic with a nonempty mesh and positive inherited alpha. No assumption that zero observed visibility means an asset is unused or unloaded.
++
++[Final measurement test](QA/RuntimeFinal/results.xml) · [run command/outcome](QA/RuntimeFinal/summary.json) · [all observations](QA/RuntimeFinal/RuntimeMeasurements.json) · [summary](QA/RuntimeSummary.json).
++
++Ten standalone 941×1672 Russian page captures were saved by the final run. These are **actual Unity offscreen Play Mode captures**, not Android screenshots or generated design references. Inspected the DailyReward, SpecialOffer and Gameplay captures from the initial successful run and the final PreLevel capture. Example: [DailyReward page](QA/RuntimeFinal/DailyReward_941x1672_RU_ACTUAL_UNITY.png). No new visual approval or all-page design acceptance is claimed.
++
++## Candidate and acceptance requirements
++
++Current importer owner is `LockedDesignImporter.ConfigureHomeAlignmentTexture`, also called by `Step20ProductionUiFix01SerializedPrefabBuilder` during Home art preparation. It deliberately retains RGBA32, sRGB, full-rect sprites, alpha transparency, clamp wrapping, box mipmaps and trilinear filtering for foreground controls. Android currently overrides max size to 4096. **Do not apply the generic ASTC rule or shrink the entire HomeAligned folder.**
++
++The next experiment should change only the coin's Android max size to 512 through that owner and its existing `.png.meta`; keep default/editor source resolution, PNG bytes, GUID, sprite border, layout and all other assets unchanged. No prefab reference/geometry revision is needed for a pure platform import setting, but owning importer and serialized metadata must agree. This is a candidate to test, not an already accepted quality change.
++
++RGBA32 full-mip arithmetic estimates **8,384,072 bytes currently versus 1,398,100 bytes at 512**, a **6,985,972-byte (6.66 MiB) raw texture payload reduction**. This is neither measured compressed APK savings nor measured device memory. The actual import dimensions, mip chain and build delta must be measured.512 gives about 2.23 source texels per displayed pixel at the largest sampled use; that ratio alone does not establish visual equivalence.
++
++Before retaining the change:
++
++1. Compare the actual original versus512 Unity import on DailyReward, SpecialOffer and PreLevel at all measured sizes, both languages, with native standalone captures and coin-region error measurements. Include active/inactive DailyReward card state and normal unavailable SpecialOffer state; keep services unavailable.
++2. Inspect alpha edges over black, white and saturated backgrounds using the imported sprite. Check gold ornament detail, thin outlines, highlight clipping and mip shimmer. Preserve opaque coin interior. Do not regenerate, crop or recolor the source PNG.
++3. Run affected page/importer checks; verify all serialized references, names and geometry still resolve. Retain existing Home source-pixel assertions for its separate HomeReferenceAligned assets rather than weakening them.
++4. If visual checks pass, use the existing guarded Android build and fresh packaging procedure; compare measured artifact bytes, asset payload delta, signing/identity/permissions and ZIP/ELF alignment. Archive the current R2 artifact first. Revert only the experimental importer/meta changes if fidelity fails.
++
++## Verification, changes and limits
++
++**Final measurement run: 1 Play Mode test passed, 0 failed/skipped.** It exercised the 100 configurations above; those are not 100 independent tests. An earlier seven-page pass succeeded, then the GUID scan identified three additional cloned-header consumers, justifying the final expanded pass. An initial temporary-fixture compile error called an outdated CanvasRenderer.GetMesh overload; corrected to the installed API. No production fix was necessary, and the failed compilation attempt is not counted as a test pass.
++
++The fixture was temporarily installed in the existing PlayMode test assembly, then removed with its generated `.meta` after each run. Its source and runner are retained under this task's Sources directory. No extra startup or Canvas was installed. [Cleanup](QA/TemporaryFixtureCleanup.json).
++
++**All 7,774 baseline Assets/Packages/ProjectSettings files are unchanged; zero changed/added/deleted.** The current APK hash is unchanged from R2: `480cb80ddeea115741fb25b779fed855da0b740cf3c55d88721c5b1dfd12057c`. [Scope](QA/Scope.json). Authored changes are this report, three audit/fixture source files, evidence/captures, and CurrentTask/SessionLog/DevelopmentSchedule/handoff updates. Raw logs remain under `/tmp/lor-shared-texture-r3/`; generated caches are not part of the patch.
++
++Not run: importer optimization, original/512 visual comparison, new APK build, Edit Mode suite, full gameplay regression, physical Android input/lifecycle/performance tests, release build or backend deployment. No source-font provenance resolution. Human rounds 31–500 pacing remains open. Phone work and hosting remain deferred; final gameplay effects remain last.
++
++**Next action:** run the bounded coin-only Android 512 import experiment and its native visual/alpha checks; retain it only if those checks pass. Keep the dormant progress resources intact pending a separate dependency-cleanup task.

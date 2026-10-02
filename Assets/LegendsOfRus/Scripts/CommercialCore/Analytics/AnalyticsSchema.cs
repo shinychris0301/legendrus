@@ -184,7 +184,22 @@ namespace LegendsOfRus.CommercialCore.Analytics
             "characters",
             "mail",
             "out_of_energy",
-            "chapter_complete"
+            "chapter_complete",
+            "splash_title",
+            "event_detail",
+            "individual_ranking",
+            "team_hub",
+            "team_ranking",
+            "team_chat",
+            "friends_list",
+            "inventory",
+            "special_offer",
+            "language_select",
+            "login",
+            "tutorial_overlay",
+            "offline_state",
+            "maintenance_state",
+            "empty_error_state"
         };
 
         static readonly string[] PurchaseOutcomes =

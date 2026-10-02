@@ -60,8 +60,14 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             {
                 Assert.That(path,Does.Not.Contain("ReferenceOnly"));Assert.That(path,Does.Not.Contain("DesignScreens"));Assert.That(path,Does.Not.Contain("/Assets/Fix01/"));
             }
+            var retired=new[]{view.GoalProgress,view.StarProgress,
+                view.Hud.Find("GoalProgressFrame").GetComponent<Image>(),view.Hud.Find("StarProgressFrame").GetComponent<Image>()};
             foreach(var image in prefab.GetComponentsInChildren<Image>(true))
-                if(!(image is ProductionGameplayCell))Assert.That(image.sprite,Is.Not.Null,image.name);
+            {
+                if(retired.Contains(image))
+                { Assert.That(image.sprite,Is.Null,image.name);Assert.That(image.gameObject.activeSelf,Is.False,image.name); }
+                else if(!(image is ProductionGameplayCell))Assert.That(image.sprite,Is.Not.Null,image.name);
+            }
             var clip=prefab.transform.Find(ProductionGameplayRuntime.ContentName+"/GameplayHud/PortraitClip");Assert.That(clip.GetComponent<Mask>(),Is.Not.Null);
         }
         [Test] public void SourceStarsUseDistinctTexturesAndKeepOtherPagesNative()

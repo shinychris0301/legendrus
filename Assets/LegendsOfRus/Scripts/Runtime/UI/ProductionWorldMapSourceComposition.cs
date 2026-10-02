@@ -31,6 +31,7 @@ namespace LegendsOfRus
         {
             if(v.SourceComposition)
             {
+                ProductionWorldMapRuntime.ClearDormantFooterArtwork(v);
                 ProductionPlayerHeader.Attach(v);
                 foreach(var card in v.Cards)
                 {
@@ -90,6 +91,7 @@ namespace LegendsOfRus
             }
             v.Footer=Rect(stage,"ReferenceNavigation",0,1436,941,236);
             v.FooterOrnament=Art(v.Footer,"CarvedBacking",Load("footer_backing"),0,0,941,236);
+            ProductionWorldMapRuntime.ClearDormantFooterArtwork(v);
             Art(v.Footer,"HomeLowerCarving",Home("source_footer_carving"),0,18,941,218);
             v.NavButtons=new Button[5];v.NavLabels=new Text[5];
             string[] nav={"map","tasks","guild","home","shop"};float[] navX={192,377,565,0,751},navW={185,188,186,192,190};

@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "unity": "6000.5.9f1",
+  "suites": [
+    {
+      "run": "Verify01",
+      "suite": "EditMode",
+      "total": "332",
+      "passed": "332",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify01/EditMode/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "Seal",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/Seal/results.xml"
+    },
+    {
+      "run": "Verify04Mechanics",
+      "suite": "Mechanics",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04Mechanics/Mechanics/results.xml"
+    },
+    {
+      "run": "Verify04Spark",
+      "suite": "Spark",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04Spark/Spark/results.xml"
+    },
+    {
+      "run": "Verify04CampaignUI",
+      "suite": "CampaignUI",
+      "total": "5",
+      "passed": "5",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04CampaignUI/CampaignUI/results.xml"
+    },
+    {
+      "run": "Verify04CampaignBoard",
+      "suite": "CampaignBoard",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04CampaignBoard/CampaignBoard/results.xml"
+    },
+    {
+      "run": "Verify04NativeJourney",
+      "suite": "NativeJourney",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04NativeJourney/NativeJourney/results.xml"
+    }
+  ],
+  "editModeTotal": 332,
+  "playModeTotal": 14,
+  "newSealCoreCases": 17,
+  "newSealRuntimeCases": 2,
+  "captures": "Verify03/Journey: three actual Unity renders at576x1280",
+  "scope": "Development sandbox only; no campaign activation",
+  "notRun": [
+    "Physical Android acceptance",
+    "IL2CPP build",
+    "Human difficulty playtest",
+    "Full-project test suite"
+  ],
+  "earlierRuns": {
+    "Verify01/Seal": "Wrong test line chosen first; corrected intended action coordinates.",
+    "Verify02/Seal": "Diagnostic GetMesh overload compile error; fixed.",
+    "Verify03/Seal": "Both final seal tests passed; captures inspected.",
+    "Verify04NativeJourney": "Runner wrapper exited143 while Unity continued. Final passing XML recovered after Unity finished; child exit code unavailable."
+  }
+}

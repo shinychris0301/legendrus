@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "EditMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.HomeEnvironmentPlayAuditEditModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidPackageFootprint/R12HomeEnvironmentPlayAudit/QA/EditorAudit/results.xml",
+    "-logFile",
+    "/tmp/lor-home-environment-play-audit-r12/EditorAudit/unity.log",
+    "-nographics"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 19.651660919189453,
+  "isolatedConfig": "/tmp/lor-home-environment-play-audit-r12/EditorAudit/config",
+  "graphics": false,
+  "result": {
+    "id": "2",
+    "testcasecount": "19",
+    "result": "Failed(Child)",
+    "total": "19",
+    "passed": "18",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 13:09:57Z",
+    "end-time": "2026-10-01 13:09:57Z",
+    "duration": "0.8603722"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.HomeEnvironmentPlayAuditEditModeTests.SpriteOnlyClearingPreservesControlsAndStaysClearedInInstalledBuilder(\"Home\")",
+      "result": "Failed",
+      "message": "System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number."
+    }
+  ]
+}

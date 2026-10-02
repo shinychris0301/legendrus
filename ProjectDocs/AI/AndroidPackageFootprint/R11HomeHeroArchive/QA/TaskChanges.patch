@@ -1,0 +1,73 @@
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -14,7 +14,8 @@
+             // Archived Home art retains its original import contract and GUIDs, outside Resources.
+             if (assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_fill.png" ||
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_frame.png" ||
+-                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_firebird_generated.png")
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_firebird_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_hero_firebird.png")
+             {
+                 ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+                 return;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -22,7 +22,7 @@
+         static readonly string[] TextureNames = {
+             "home_environment_generated", "nav_map_generated", "nav_shop_generated", "nav_events_generated",
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+-            "home_hero_firebird", "home_logo", "home_play_button", "avatar_portrait", "hud_frame", "avatar_ring",
++            "home_logo", "home_play_button", "avatar_portrait", "hud_frame", "avatar_ring",
+             "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+             "resource_plus", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
+             "home_map_foliage"
+@@ -52,7 +52,7 @@
+             // Retain the historical object names so full builds and in-place migrations agree.
+             view.Firebird = Art(content, "ApprovedFirebird", null, 495, 442, 550, 825);
+             view.Firebird.gameObject.SetActive(false);
+-            view.Ivan = Art(content, "ApprovedIvan", sprites["home_hero_firebird"], -20, 474, 967, 967);
++            view.Ivan = Art(content, "ApprovedIvan", null, -20, 474, 967, 967);
+             view.LowerShade = Rect(content, "LowerContrast", 0, 982, 941, 690).gameObject.AddComponent<ProductionHomeShade>();
+             view.LowerShade.color = Color.clear; view.LowerShade.raycastTarget = false;
+             view.Logo = Art(content, "ApprovedSplashLogo", sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
+@@ -116,7 +116,7 @@
+             RectTransform content = view.transform.Find(ContentName) as RectTransform;
+             SetArt(view.Environment, sprites["home_environment_generated"], 0, 0, 941, 1672);
+             SetArt(view.Logo, sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
+-            SetArt(view.Ivan, sprites["home_hero_firebird"], -20, 474, 967, 967);
++            SetArt(view.Ivan, null, -20, 474, 967, 967);
+             view.Environment.color = EnvironmentTone;
+             view.Ivan.color = HeroTone;
+             ProductionHomeArtFade oldFade = view.Ivan.GetComponent<ProductionHomeArtFade>();
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -135,27 +135,8 @@
+             HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
+             HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
+ 
+-        public bool HasReferenceForegroundBindings =>
+-            HasArtwork(Logo, "home_logo") && HasArtwork(Ivan, "home_hero_firebird") &&
+-            HasButtonArtwork(PlayButton, "home_play_button") &&
+-            HasReferencePortrait && Ivan.GetComponent<SplashTitleCharacterFade>() != null &&
+-            Ivan.GetComponent<SplashTitleCharacterFade>().enabled &&
+-            PlayText != null && PlayText.GetComponent<SplashTitleTextGeometry>() != null &&
+-            PlayText.GetComponent<ProductionHomeGoldText>() != null && PlayText.GetComponent<ProductionHomeGoldText>().enabled &&
+-            PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace &&
+-            PlayText.material != null && PlayText.material.shader.name == "LegendsOfRus/UI/HomePlayGold" &&
+-            ProfileProgressFrame != null && ProfileProgressFrame.sprite == null && ProfileProgressText != null &&
+-            QuestProgressFrame != null && QuestProgressFrame.sprite == null && QuestProgressFill != null && QuestProgressFill.sprite == null &&
+-            HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
+-            HasButtonArtwork(GoldPlusButton, "plus") && HasButtonArtwork(GemsPlusButton, "plus") &&
+-            HasButtonArtwork(EnergyPlusButton, "plus") && QuestProgressText != null &&
+-            QuestRewardText != null && DailyRewardBadge != null && DailyRewardBadgeText != null &&
+-            EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget &&
+-            EventsBadge.RaisedBadge && DailyRewardBadge.RaisedBadge && !DailyRewardBadge.raycastTarget;
+-
+-        bool HasReferencePortrait => ProfileButton != null &&
+-            ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait") != null &&
+-            HasArtwork(ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait").GetComponent<Image>(), "avatar_portrait");
++        // Keep the historical diagnostic aligned with the current source composition.
++        public bool HasReferenceForegroundBindings => HasRequiredBindings;
+ 
+         static bool HasArtwork(Image image, string expectedName) =>
+             image != null && image.sprite != null && image.sprite.name == expectedName;

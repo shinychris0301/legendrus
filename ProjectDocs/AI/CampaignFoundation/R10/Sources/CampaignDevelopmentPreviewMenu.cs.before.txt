@@ -1,0 +1,80 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using LegendsOfRus.ContentPipeline;
+using LegendsOfRus.SaveCore;
+using UnityEditor;
+using UnityEngine;
+namespace LegendsOfRus.Editor
+{
+    public static class CampaignDevelopmentPreviewMenu
+    {
+        // Preview-only store: survives reopening within this preview, discarded on leaving Play Mode.
+        sealed class PreviewStore : ISaveJournalStore
+        {
+            Dictionary<string,string> values=new Dictionary<string,string>(),durable=new Dictionary<string,string>();
+            public bool TryRead(string key,out string value)=>values.TryGetValue(key,out value);
+            public void Write(string key,string value)=>values[key]=value;
+            public void Delete(string key)=>values.Remove(key);
+            public void Flush(){durable=new Dictionary<string,string>(values);}
+            public void Reload(){values=new Dictionary<string,string>(durable);}
+        }
+        const string Menu="Legends of Rus/Development/Campaign UI Preview (In Memory)";
+        [MenuItem(Menu,true)] static bool Available()=>Application.isPlaying&&ScreenRouter.Instance!=null&&ScreenRouter.Instance.CurrentScreen==ScreenId.Home&&!ScreenRouter.Instance.HasActiveModalBlocker&&UnityEngine.Object.FindFirstObjectByType<CampaignDevelopmentUI>()==null&&UnityEngine.Object.FindFirstObjectByType<MechanicsSandbox>()==null;
+        const string CandidateMenu="Legends of Rus/Development/Campaign Sector 01 Candidate (Rounds 1-20)";
+        [MenuItem(CandidateMenu,true)] static bool CandidateAvailable()=>Available();
+        [MenuItem(CandidateMenu)] static void OpenCandidate()=>OpenPreview(true);
+        [MenuItem(Menu)] static void Open()=>OpenPreview(false);
+        const string SectorJumpMenu="Legends of Rus/Development/Campaign Sector Candidate - Start at 11 (Test Progress)";
+        [MenuItem(SectorJumpMenu,true)] static bool SectorJumpAvailable()=>Available();
+        [MenuItem(SectorJumpMenu)] static void OpenSectorJump()=>OpenPreview(true,true);
+        static void OpenPreview(bool candidate,bool testProgress=false)
+        {
+            if(!Available())return;
+            var definition=JsonUtility.FromJson<CampaignDefinition>(File.ReadAllText(Path.Combine(Application.dataPath,"../ProjectDocs/ContentPipeline/CampaignV2/campaign_definition.json")));
+            var catalog=new ValidatedCampaignCatalog(definition);
+            var input=new CampaignPackageInput{ChapterId=1,ContentRevision=definition.ContentRevision,LegacyChapterOne=true,
+                LevelsJson=Resources.Load<TextAsset>("Config/chapter01_levels").text,StoryJson=Resources.Load<TextAsset>("Config/chapter01_story").text,
+                RussianJson=Resources.Load<TextAsset>("Localization/story_ru").text,EnglishJson=Resources.Load<TextAsset>("Localization/story_en").text};
+            if(candidate)
+            {
+                // Explicit editor-only candidate. Never scanned or selected by production startup.
+                var folder=Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector01");
+                input=new CampaignPackageInput{ChapterId=1,ContentRevision=definition.ContentRevision,
+                    LevelsJson=File.ReadAllText(Path.Combine(folder,"levels.json")),StoryJson=File.ReadAllText(Path.Combine(folder,"story.json")),
+                    RussianJson=File.ReadAllText(Path.Combine(folder,"story_ru.json")),EnglishJson=File.ReadAllText(Path.Combine(folder,"story_en.json"))};
+            }
+            if(!catalog.TryAdd(input,out var errors))
+                throw new InvalidOperationException(string.Join(";",errors));
+            var store=new PreviewStore();Func<CampaignSaveSession> reopen=()=>{store.Reload();return new CampaignSaveSession(store,definition,catalog);};
+            var session=reopen();var initial=new PlayerSaveData{lastEnergyUtcTicks=DateTime.UtcNow.Ticks};
+            if(testProgress)
+            {
+                // Explicit disposable test fixture, not imported live-player achievements.
+                initial.selectedLevel=10;
+                initial.levelProgress=Enumerable.Range(1,10).Select(n=>new LevelProgressData{
+                    chapterId=1,levelId=n,completions=1,bestStars=1,rewardClaimed=true}).ToList();
+            }
+            var imported=session.ImportLegacyCopy(JsonUtility.ToJson(initial));
+            if(!imported.Committed)throw new InvalidOperationException(imported.Diagnostic);
+            if(testProgress)
+            {
+                var selected=session.SelectRound(1,11);if(!selected.Committed)throw new InvalidOperationException(selected.Diagnostic);
+                // The jump begins with the new hearth scene; earlier scenes are fixture acknowledgements.
+                for(int guard=0;guard<20;guard++)
+                {
+                    if(!session.TryGetPendingStory(out var pending,out var reason))throw new InvalidOperationException(reason);
+                    if(pending==null||pending.Scene.id=="campaign.chapter01.hearth_secured")break;
+                    var read=session.AcknowledgeStory(pending.Key);if(!read.Committed)throw new InvalidOperationException(read.Diagnostic);
+                }
+            }
+            var parent=ScreenRouter.Instance.SafeArea;
+            var previous=parent.Cast<Transform>().Where(t=>t.gameObject.activeSelf).Select(t=>t.gameObject).ToArray();
+            CampaignDevelopmentUI.Open(parent,session,reopen,()=>{foreach(var item in previous)if(item)item.SetActive(true);});
+            foreach(var item in previous)item.SetActive(false);
+        }
+    }
+}
+#endif

@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "unity": "6000.5.9f1",
+  "suites": [
+    {
+      "run": "Verify03",
+      "suite": "EditMode",
+      "total": "297",
+      "passed": "297",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/EditMode/results.xml"
+    },
+    {
+      "run": "Verify06",
+      "suite": "Mechanics",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify06/Mechanics/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "CampaignUI",
+      "total": "5",
+      "passed": "5",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/CampaignUI/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "CampaignBoard",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/CampaignBoard/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "NativeJourney",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/NativeJourney/results.xml"
+    }
+  ],
+  "editModeTotal": 297,
+  "playModeTotal": 11,
+  "newMechanicsCases": 12,
+  "captures": "Verify06/Journey: actual Unity render, sampled frames, not timing measurement",
+  "scope": "Development sandbox only; no production campaign activation",
+  "notRun": [
+    "Physical Android acceptance",
+    "IL2CPP build",
+    "Human difficulty test",
+    "Full-project test suite"
+  ],
+  "earlierRuns": {
+    "Verify01": "Old collapse test expected the wrong destination; fixed assertion only.",
+    "Verify02": "Final creation fixture swiped wrong coordinate direction; corrected.",
+    "Verify04": "Diagnostic GetMesh call used wrong overload; corrected test instrumentation.",
+    "Verify05": "Diagnostic exposed missing CanvasRenderer on new impact graphic; added required renderer.",
+    "Verify06": "Final sandbox rendering and all fixtures pass."
+  }
+}

@@ -66,7 +66,66 @@ namespace LegendsOfRus
             v.MovesValue.resizeTextForBestFit=true;v.MovesValue.resizeTextMinSize=104;v.MovesValue.resizeTextMaxSize=164;
             v.ScoreValue.resizeTextForBestFit=true;v.ScoreValue.resizeTextMinSize=48;v.ScoreValue.resizeTextMaxSize=70;
             foreach(var goal in v.Goals){goal.Count.resizeTextForBestFit=true;goal.Count.resizeTextMinSize=44;goal.Count.resizeTextMaxSize=56;}
+            ApplyReadability(v);
             v.SourceControls=true;
+        }
+        public static void ApplyReadability(ProductionGameplayView v)
+        {
+            ProductionControlTouchTarget.Ensure(v.PauseButton);
+            ApplyCaptionReadability(v);
+            foreach (var count in v.BoosterCounts)
+            {
+                count.horizontalOverflow = HorizontalWrapMode.Overflow;
+                count.resizeTextMinSize = 12;
+                var fit = count.GetComponent<ProductionGameplayNumberFit>() ?? count.gameObject.AddComponent<ProductionGameplayNumberFit>();
+                fit.enabled = true;
+                var badge = count.transform.parent.GetComponent<ProductionPreLevelBadge>();
+                var found = badge.transform.Find("WideStockBacking");
+                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
+                    : ProductionGameplayRuntime.Rect(badge.transform, "WideStockBacking", -114, 58, 174, 52)
+                        .gameObject.AddComponent<ProductionHomePanel>();
+                Place(backing.rectTransform, -114, 58, 174, 52);
+                backing.Radius = 26;
+                backing.Frame = true;
+                backing.LeftColor = new Color32(7, 46, 25, 255);
+                backing.RightColor = new Color32(3, 25, 15, 255);
+                backing.raycastTarget = false;
+                backing.transform.SetAsFirstSibling();
+                var stock = count.GetComponent<ProductionGameplayStockLayout>()
+                    ?? count.gameObject.AddComponent<ProductionGameplayStockLayout>();
+                stock.Badge = badge;
+                stock.WideBacking = backing;
+                stock.ApplyNow();
+            }
+        }
+        public static void ApplyCaptionReadability(ProductionGameplayView v)
+        {
+            for (int i = 0; i < v.BoosterButtons.Length; i++)
+            {
+                var card = v.Footer.Find("BoosterCard_" + i);
+                var found = card.Find("CaptionBacking");
+                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
+                    : ProductionGameplayRuntime.Rect(card, "CaptionBacking", 0, -84, 192, 82)
+                        .gameObject.AddComponent<ProductionHomePanel>();
+                Place(backing.rectTransform, 0, -84, 192, 82);
+                backing.Radius = 8;
+                backing.Frame = true;
+                backing.raycastTarget = true; // Existing parent card forwards native input to its retained Button.
+                var label = card.Find("BoosterLabel").GetComponent<Text>();
+                Place(label.rectTransform, 1, -81, 380, 152);
+                label.fontSize = 46;
+                label.resizeTextForBestFit = false;
+                label.lineSpacing = .95f;
+                label.horizontalOverflow = HorizontalWrapMode.Wrap;
+                label.verticalOverflow = VerticalWrapMode.Truncate;
+                label.raycastTarget = false;
+                var fit = label.GetComponent<ProductionGameplayCaptionFit>();
+                fit.ExpandedCaption = true;
+                fit.enabled = true;
+                backing.transform.SetAsLastSibling();
+                label.transform.SetAsLastSibling();
+                label.SetVerticesDirty();
+            }
         }
         static void Art(Transform t,string name,float x,float y,float w,float h)
         {

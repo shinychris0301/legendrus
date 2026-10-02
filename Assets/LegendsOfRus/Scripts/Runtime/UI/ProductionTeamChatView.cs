@@ -10,14 +10,16 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionTeamChatView:MonoBehaviour
     {
-        public const int CurrentRevision=1,MessageLimit=240,RetainedMessageLimit=20;
+        public const int CurrentRevision=6,MessageLimit=240,RetainedMessageLimit=20;
         public int Revision=CurrentRevision;
         public RectTransform Content,Body,Hud,Messages,ChatViewport;
-        public Image Environment,Title;
+        public Image Environment,Title,ChestFill;
+        public ProductionPlayerHeader Header;
+        public Text ChestLevel;
         public Font BodyFont,NamesFont,TitleFont;
         public Text Heading,HeroName,LevelText,GoldText,GemsText,EnergyText,PreviewLabel,ChestTitle,ChestProgress,SendLabel,InputPlaceholder,LocalStatus,InfoHeading,InfoDescription,CloseInfoLabel;
         public Text[] FooterLabels;
-        public Button ProfileButton,SettingsButton,BackButton,SendButton,ChestButton,EmojiButton,CloseInfoButton;
+        public Button ProfileButton,SettingsButton,BackButton,SendButton,ChestButton,ChestInfoButton,EmojiButton,CloseInfoButton;
         public Button[] PlusButtons,FooterButtons;
         public InputField Composer;
         public ScrollRect ChatScroll;
@@ -31,7 +33,7 @@ namespace LegendsOfRus
         static int lastDemoCount;
         public static void ResetLocalSession(){local.Clear();lastDemoCount=DemoFeatureState.TeamMessagesSent;}
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]static void ResetRuntime(){local.Clear();lastDemoCount=0;}
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Hud&&Messages&&ChatViewport&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&ChestTitle&&ChestProgress&&SendLabel&&InputPlaceholder&&LocalStatus&&InfoHeading&&InfoDescription&&CloseInfoLabel&&ProfileButton&&SettingsButton&&BackButton&&SendButton&&ChestButton&&EmojiButton&&CloseInfoButton&&Composer&&Composer.textComponent&&ChatScroll&&InfoPanel&&Valid(PlusButtons,3)&&Valid(FooterButtons,3)&&Valid(FooterLabels,3);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Header&&Header.HasBindings&&ChestFill&&ChestLevel&&Content&&Body&&Hud&&Messages&&ChatViewport&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&ChestTitle&&ChestProgress&&SendLabel&&InputPlaceholder&&LocalStatus&&InfoHeading&&InfoDescription&&CloseInfoLabel&&ProfileButton&&SettingsButton&&BackButton&&SendButton&&ChestButton&&ChestInfoButton&&EmojiButton&&CloseInfoButton&&Composer&&Composer.textComponent&&ChatScroll&&InfoPanel&&Valid(PlusButtons,3)&&Valid(FooterButtons,3)&&Valid(FooterLabels,3);
         static bool Valid<T>(T[] a,int n)where T:UnityEngine.Object=>a!=null&&a.Length==n&&Array.TrueForAll(a,x=>x!=null);
         readonly List<Button> buttons=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
         GameState observed;string language;bool committed;int infoKind;
@@ -46,7 +48,7 @@ namespace LegendsOfRus
         {
             Unbind();committed=false;Listen(ProfileButton,()=>show(ScreenId.Profile),true);Listen(SettingsButton,()=>show(ScreenId.Settings),true);Listen(BackButton,back,true);
             for(int i=0;i<3;i++){int j=i;Listen(PlusButtons[i],()=>show(j==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);Listen(FooterButtons[i],()=>ShowInfo(j+1));}
-            Listen(ChestButton,()=>ShowInfo(0));Listen(EmojiButton,()=>ShowInfo(3));Listen(SendButton,()=>TrySendLocal());Listen(CloseInfoButton,CloseInfo);
+            Listen(ChestButton,()=>ShowInfo(0));Listen(ChestInfoButton,()=>ShowInfo(0));Listen(EmojiButton,()=>ShowInfo(3));Listen(SendButton,()=>TrySendLocal());Listen(CloseInfoButton,CloseInfo);
             Composer.onValueChanged.AddListener(InputChanged);ActionsBound=true;RefreshContent();InputChanged(Composer.text);
         }
         void InputChanged(string value){if(SendButton)SendButton.interactable=!string.IsNullOrWhiteSpace(value);}
@@ -68,14 +70,14 @@ namespace LegendsOfRus
             if(DemoFeatureState.TeamMessagesSent<lastDemoCount){local.Clear();lastDemoCount=DemoFeatureState.TeamMessagesSent;}
             foreach(var t in GetComponentsInChildren<Text>(true)){t.font=BodyFont;t.fontStyle=FontStyle.Normal;}Heading.font=TitleFont;HeroName.font=NamesFont;foreach(var t in FooterLabels)t.font=TitleFont;
             Title.sprite=ProductionTeamChatRuntime.Load(en?"title_blank":"title_ru");Heading.enabled=en;Heading.text=en?"GUILD CHAT":"ЧАТ ГИЛЬДИИ";
-            HeroName.text=en?"Ivan":"Иван";PreviewLabel.text=en?"PREVIEW · SAMPLE CHAT · NO CONNECTION":"ПРЕДПРОСМОТР · ПРИМЕР ЧАТА · БЕЗ ПОДКЛЮЧЕНИЯ";
-            ChestTitle.text=en?"Guild chest · example":"Сундук гильдии · пример";ChestProgress.text=en?"Level 6     7 450 / 15 000":"Ур. 6     7 450 / 15 000";
-            SendLabel.text=en?"SEND":"ОТПРАВИТЬ";InputPlaceholder.text=en?"Write a local message…":"Напишите локальное сообщение…";
-            string[] labels=en?new[]{"GIFTS","HELP REQUESTS","STICKERS"}:new[]{"ПОДАРКИ","ЗАПРОСЫ ПОМОЩИ","СТИКЕРЫ"};for(int i=0;i<3;i++)FooterLabels[i].text=labels[i];
-            RefreshState();RefreshInfo();RefreshLocalStatus();ProductionTeamChatRuntime.RebuildMessages(this);
+            HeroName.text=en?"Ivan":"Иван";PreviewLabel.text=en?"SAMPLE CHAT":"ПРИМЕР ЧАТА";
+            ChestTitle.text=en?"Guild chest · example":"Сундук гильдии · пример";ChestProgress.text="7 450 / 15 000";ChestLevel.text=en?"Lv. 6":"Ур. 6";ChestFill.fillAmount=7450f/15000f;
+            SendButton.image.sprite=ProductionTeamChatRuntime.Load(en?"send_frame":"send_ru_rebuild");SendLabel.enabled=en;SendLabel.text=en?"SEND":"ОТПРАВИТЬ";InputPlaceholder.text=en?"Write a local message…":"Напишите локальное сообщение…";
+            string[] labels=en?new[]{"GIFTS","HELP REQUESTS","STICKERS"}:new[]{"ПОДАРКИ","ЗАПРОСЫ ПОМОЩИ","СТИКЕРЫ"};for(int i=0;i<3;i++){FooterLabels[i].text=labels[i];FooterLabels[i].enabled=en;FooterButtons[i].image.sprite=ProductionTeamChatRuntime.Load(new[]{"footer_gift","footer_help","footer_sticker"}[i]+(en?"":"_ru_rebuild"));}
+            Header.ApplyPresentation();RefreshState();RefreshInfo();RefreshLocalStatus();ProductionTeamChatRuntime.RebuildMessages(this);
         }
-        void RefreshLocalStatus(){bool en=DemoFeatureState.LanguageCode=="en";LocalStatus.text=en?"LOCAL ONLY · LAST "+RetainedMessageLimit+" MESSAGES · "+local.Count+" STORED":"ТОЛЬКО ЛОКАЛЬНО · ПОСЛЕДНИЕ "+RetainedMessageLimit+" СООБЩЕНИЙ · "+local.Count+" В СЕССИИ";}
-        public void RefreshState(){if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;}
+        void RefreshLocalStatus(){bool en=DemoFeatureState.LanguageCode=="en";LocalStatus.text=en?"LOCAL ONLY · "+local.Count+" MESSAGES":"ЛОКАЛЬНО · СООБЩЕНИЙ: "+local.Count;}
+        public void RefreshState(){if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;Header.RefreshValues();}
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
     }
 }

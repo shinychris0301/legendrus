@@ -146,7 +146,8 @@ namespace LegendsOfRus.Tests.SaveRecovery
         {
             DurablePendingFakeStore store = new DurablePendingFakeStore();
             store.SeedDurable(Keys.PrimaryKey, "CORRUPT");
-            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6));
+            // A committed history replacement writes the identical envelope to backup.
+            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
             store.SeedDurable(
                 Keys.StagingKey,
                 Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
@@ -154,6 +155,19 @@ namespace LegendsOfRus.Tests.SaveRecovery
             SaveJournalLoadResult result = Repository(store).Load();
 
             AssertSuccess(result, SaveJournalLoadStatus.RecoveredBackup, SaveJournalSlot.Backup, "reset", 6, 6);
+        }
+
+        [Test]
+        public void EqualRevisionReplacementStagingWithOrdinaryBackup_BlocksInconsistentIntent()
+        {
+            var store = new DurablePendingFakeStore();
+            store.SeedDurable(Keys.PrimaryKey, "CORRUPT");
+            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6));
+            store.SeedDurable(Keys.StagingKey, Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
+            var result = Repository(store).Load();
+            Assert.That(result.Status, Is.EqualTo(SaveJournalLoadStatus.Unrecoverable));
+            Assert.That(result.DiagnosticCode, Is.EqualTo("SAVE_HISTORY_REPLACEMENT_INTERRUPTED"));
+            Assert.That(store.MutationOperationCount, Is.Zero);
         }
 
         [Test]

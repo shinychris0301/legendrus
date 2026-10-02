@@ -622,7 +622,8 @@ namespace LegendsOfRus.AndroidBuild
                 SearchOption.AllDirectories))
             {
                 if (IsForbiddenAndroidArtifactExtension(
-                    Path.GetExtension(file)))
+                    Path.GetExtension(file)) &&
+                    !ReviewedAndroidCredentialPlugins.IsAllowed(root, file))
                     return false;
                 if (IsForbiddenAndroidArtifactFileName(Path.GetFileName(file)))
                     return false;

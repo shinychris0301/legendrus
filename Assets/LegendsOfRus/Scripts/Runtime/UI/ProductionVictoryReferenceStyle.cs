@@ -5,6 +5,7 @@ namespace LegendsOfRus
     /// <summary>Source-derived Victory composition; existing completion services own all values.</summary>
     public static class ProductionVictoryReferenceStyle
     {
+        const float CaptionHeight=128f, CompositionHeight=1672f+CaptionHeight;
         public const string Root="ProductionUI/VictoryReferenceR1/";
         public static readonly string[] ArtNames={"environment","title","firebird","star","star_empty","panel","card","resource_card","coin","gem","continue","video","footer","title_ru","continue_ru","panel_ru","video_ru","firebird_glow"};
         public static Sprite Load(string name)=>Resources.Load<Sprite>(Root+name);
@@ -41,21 +42,57 @@ namespace LegendsOfRus
             v.RewardsPanel.sprite=Load("panel");v.RewardsPanel.GetComponent<ProductionVictoryPanelFit>().enabled=false;
             v.RewardsPanel.type=Image.Type.Simple;
             Text(v.Score,235,47,471,80,82);GoldScore(v);Text(v.RewardsHeading,300,142,341,35,28);
-            Text(v.RewardStatus,141,285,660,20,14);
+
             var scoreHeading=Label(v,"ScoreHeading");Text(scoreHeading,310,22,321,32,27);
             var boosterHeading=Label(v,"BoosterHeading");Text(boosterHeading,270,306,401,28,26);
             var empty=Label(v,"BoosterEmpty");Text(empty,190,370,561,82,23);empty.horizontalOverflow=HorizontalWrapMode.Wrap;
             foreach(var card in v.RewardCards)
             {card.GetComponent<ProductionVictoryPanelFit>().enabled=false;card.GetComponent<Image>().type=Image.Type.Sliced;}
-            Place(v.MessageInset.rectTransform,132,285,677,21);v.MessageInset.color=Color.clear;
-            Text(v.Reaction,142,286,657,19,14);Text(v.Status,142,286,657,19,14);
-            v.Footer.sizeDelta=new Vector2(941,312);
+            // Reserve a separate writing area instead of shrinking text into the reward separator.
+            v.MessageInset.transform.SetParent(v.Footer,false);
+            Place(v.MessageInset.rectTransform,112,4,717,120);
+            v.MessageInset.color=new Color32(7,16,27,235);
+            v.MessageInset.transform.SetAsFirstSibling();
+            foreach(var caption in new[]{v.Reaction,v.Status,v.RewardStatus})
+            {
+                caption.transform.SetParent(v.Footer,false);
+                Text(caption,128,8,685,112,34);
+                caption.horizontalOverflow=HorizontalWrapMode.Wrap;
+                caption.verticalOverflow=VerticalWrapMode.Truncate;
+                caption.resizeTextForBestFit=false;
+                caption.color=new Color32(255,237,199,255);
+            }
+            v.Footer.sizeDelta=new Vector2(941,312+CaptionHeight);
             var button=v.ContinueButton.GetComponent<Image>();button.sprite=Load("continue");button.preserveAspect=true;
-            Place(button.rectTransform,157,0,629,121);Text(v.ContinueText,55,28,519,66,54);
+            Place(button.rectTransform,157,CaptionHeight,629,121);Text(v.ContinueText,55,28,519,66,54);
             v.ContinueText.fontStyle=FontStyle.Normal;
             var video=v.DoubleButton.GetComponent<Image>();video.sprite=Load("video");video.preserveAspect=true;
-            Place(video.rectTransform,94,121,752,142);Text(v.DoubleText,208,25,460,92,32);v.DoubleText.color=new Color32(255,226,166,255);
-            v.FooterOrnament.sprite=Load("footer");Place(v.FooterOrnament.rectTransform,317,252,308,60);
+            Place(video.rectTransform,94,125+CaptionHeight,752,142);Text(v.DoubleText,208,25,460,92,32);v.DoubleText.color=new Color32(255,226,166,255);
+            v.FooterOrnament.sprite=Load("footer");Place(v.FooterOrnament.rectTransform,317,252+CaptionHeight,308,60);
+            ApplyTouchTargets(v);
+            ApplyCaptionReadability(v);
+        }
+        public static void ApplyCaptionReadability(ProductionVictoryView v)
+        {
+            // Reuse the existing clean panel for both languages; these headings are live/localizable.
+            v.RewardsPanel.sprite = Load("panel");
+            Text(v.RewardsHeading, 300, 133, 341, 44, 36);
+            v.RewardsHeading.enabled = true;
+            var scoreHeading = v.RewardsArea.Find("ScoreHeading").GetComponent<Text>();
+            Text(scoreHeading, 310, 6, 321, 38, 36);
+            scoreHeading.enabled = true;
+            var boosterHeading = v.RewardsArea.Find("BoosterHeading").GetComponent<Text>();
+            Text(boosterHeading, 270, 294, 401, 44, 36);
+            boosterHeading.enabled = true;
+            Text(v.RewardsArea.Find("BoosterEmpty").GetComponent<Text>(), 190, 358, 561, 96, 34);
+            for (int i = 0; i < v.RewardValues.Length; i++)
+                if (i < 2) Text(v.RewardValues[i], 101, 20, 115, 64, 42);
+                else Text(v.RewardValues[i], 10, 118, 111, 40, 38);
+        }
+        public static void ApplyTouchTargets(ProductionVictoryView v)
+        {
+            ProductionControlTouchTarget.Ensure(v.ContinueButton);
+            ProductionControlTouchTarget.Ensure(v.DoubleButton);
         }
         static void GoldScore(ProductionVictoryView v)
         {
@@ -75,23 +112,21 @@ namespace LegendsOfRus
             bool en=DemoFeatureState.LanguageCode=="en";
             v.Body.Find("VictoryBanner").GetComponent<Image>().sprite=Load(en?"title":"title_ru");
             v.ContinueButton.GetComponent<Image>().sprite=Load(en?"continue":"continue_ru");
-            v.RewardsPanel.sprite=Load(en?"panel":"panel_ru");
-            v.Title.enabled=en;v.ContinueText.enabled=en;v.RewardsHeading.enabled=en;
-            v.RewardsArea.Find("ScoreHeading").GetComponent<Text>().enabled=en;
-            v.RewardsArea.Find("BoosterHeading").GetComponent<Text>().enabled=en;
+            v.Title.enabled=en;v.ContinueText.enabled=en;
             bool sourceVideo=!en&&v.DoubleButton.interactable;
             v.DoubleButton.GetComponent<Image>().sprite=Load(sourceVideo?"video_ru":"video");
             v.DoubleText.enabled=!sourceVideo;
             Text(v.DoubleText,208,25,460,92,32);
             var result=GameState.Instance!=null?GameState.Instance.LastCompletionResult:null;
-            v.Score.text=current?Mathf.Max(0,result.Score).ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," "):"—";
+            var campaign=v.CampaignSaveProvider?.Invoke();
+            v.Score.text=current?Mathf.Max(0,campaign!=null?campaign.run.score:result.Score).ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," "):"—";
             v.RewardsHeading.text=en?"REWARDS":"НАГРАДЫ";
             v.RewardsArea.Find("ScoreHeading").GetComponent<Text>().text=en?"SCORE":"СЧЁТ";
             v.RewardsArea.Find("BoosterHeading").GetComponent<Text>().text=en?"BOOSTERS":"БУСТЕРЫ";
             var empty=v.RewardsArea.Find("BoosterEmpty").GetComponent<Text>();empty.gameObject.SetActive(count==2);
             empty.text=en?"No boosters awarded this round":"В этом раунде бустеры не начислены";
             v.RewardIcons[0].sprite=Load("coin");v.RewardIcons[1].sprite=Load("gem");
-            // Share the narrow feedback line; never place the story over lower gold carving.
+            // Existing mutually exclusive messages share the larger footer writing area.
             bool explainBonus=v.DoubleButton.interactable&&string.IsNullOrEmpty(v.Status.text);
             v.RewardStatus.gameObject.SetActive(explainBonus||!v.MessageInset.enabled);
             if(explainBonus)
@@ -99,6 +134,9 @@ namespace LegendsOfRus
                 v.RewardStatus.text=en?"Video bonus doubles coins only":"Видеобонус удваивает только монеты";
                 v.Reaction.gameObject.SetActive(false);
             }
+            v.MessageInset.enabled=!string.IsNullOrEmpty(v.Status.text)
+                ||(v.Reaction.gameObject.activeSelf&&!string.IsNullOrEmpty(v.Reaction.text))
+                ||(v.RewardStatus.gameObject.activeSelf&&!string.IsNullOrEmpty(v.RewardStatus.text));
             int boosters=count-2;
             for(int i=0;i<count;i++)
             {
@@ -120,13 +158,14 @@ namespace LegendsOfRus
                 }
             }
             foreach(var star in v.Stars)star.SetMaterialDirty();
+            ApplyCaptionReadability(v);
         }
         public static void Layout(ProductionVictoryView v,float top,float bottom)
         {
-            float scale=Mathf.Min(1,(top-bottom)/1672f);
+            float scale=Mathf.Min(1,(top-bottom)/CompositionHeight);
             float x=941*(1-scale)*.5f;
             v.Body.localScale=v.Footer.localScale=Vector3.one*scale;
-            float extra=Mathf.Max(0,top-bottom-1672*scale);
+            float extra=Mathf.Max(0,top-bottom-CompositionHeight*scale);
             float groupTop=top-extra*.5f;
             v.Body.anchoredPosition=new Vector2(x,groupTop);
             v.Footer.anchoredPosition=new Vector2(x,groupTop-1360*scale);

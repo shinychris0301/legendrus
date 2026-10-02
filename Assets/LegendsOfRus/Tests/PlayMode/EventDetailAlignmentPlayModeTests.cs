@@ -68,6 +68,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("EventDetail_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en");yield return null;View().RefreshContent();
             Assert.That(View().EventName.text,Is.EqualTo("FIREBIRD FESTIVAL"));
+            Capture("EventDetail_1080x2400_safe_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             Capture("EventDetail_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             Capture("EventDetail_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Assert.That(StableSave(),Is.EqualTo(save));
@@ -110,6 +111,43 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().GoldText.text,Is.EqualTo("2 147 483 647"));Assert.That(View().GemsText.text,Is.EqualTo("2 147 483 647"));
             yield return WaitForNormalButtonColors();Capture("EventDetail_MaxBalances_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
         }
+        [UnityTest]public IEnumerator TallFooterLanguageChangesAndNativeReturnKeepPreviewState()
+        {
+            string save=StableSave();bool claimed=DemoFeatureState.EventRewardClaimed;
+            foreach(string language in new[]{"en","ru"})
+            {
+                router.Show(ScreenId.Events);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);
+                router.Viewport.GetComponentInChildren<ProductionEventsView>().DetailsButtons[0].onClick.Invoke();
+                Settle();yield return null;View().RefreshContent();yield return WaitForNormalButtonColors();
+                Capture("EventDetail_TallEntry_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+                int generation=router.RouteGeneration;
+                Capture("EventDetail_DisabledFooter_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    foreach(var button in new[]{View().ActionButton,View().Body.Find("PremiumPanel/UnavailablePass").GetComponent<Button>()})
+                    {
+                        var pointer=new PointerEventData(EventSystem.current){position=Bounds((RectTransform)button.transform,camera).center};
+                        ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                    }
+                    Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.EventDetail));Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+                });
+                // Re-localize the same installed view; its footer and fonts must survive without re-instantiation.
+                DemoFeatureState.SetLanguage(language=="en"?"ru":"en");View().RefreshContent();yield return WaitForNormalButtonColors();
+                Capture("EventDetail_FooterRelocalized_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    var back=View().BackButton;
+                    var pointer=new PointerEventData(EventSystem.current){position=Bounds((RectTransform)back.transform,camera).center};
+                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+                    Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(back));
+                    ExecuteEvents.Execute(back.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                });
+                Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Events));Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));
+                Assert.That(router.Viewport.GetComponentInChildren<ProductionEventsView>().ActionsBound,Is.True);
+            }
+            Assert.That(StableSave(),Is.EqualTo(save));Assert.That(DemoFeatureState.EventRewardClaimed,Is.EqualTo(claimed));
+        }
+
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -171,8 +209,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionEventDetailView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -184,6 +220,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionEventDetailView>(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -208,7 +246,7 @@ namespace LegendsOfRus.Tests.PlayMode
             var window=v.Body.Find("FestivalScene/SceneWindow");
             Assert.That(window.Find("CleanCity").gameObject.activeSelf,Is.False,"Free source Firebird must not carry a rectangular scenery crop");
             var subject=window.Find("SourceFirebird").GetComponent<Image>();
-            Assert.That(subject.sprite,Is.SameAs(ProductionEventDetailRuntime.DetailArt("firebird_r3")));
+            Assert.That(subject.sprite,Is.SameAs(ProductionEventDetailRuntime.DetailArt("firebird_r7")));
             foreach(string layer in new[]{"FirebirdHalo","FirebirdSparks"})
             {
                 var effect=window.Find(layer).GetComponent<Image>();
@@ -220,13 +258,27 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(window.Find("FirebirdSparks").GetSiblingIndex(),Is.GreaterThan(subject.transform.GetSiblingIndex()));
             Rect bg=Bounds(v.Environment.rectTransform,camera);Assert.That(bg.xMin,Is.LessThanOrEqualTo(1));Assert.That(bg.yMin,Is.LessThanOrEqualTo(1));Assert.That(bg.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(bg.yMax,Is.GreaterThanOrEqualTo(size.y-1));
             Assert.That(v.Environment.rectTransform.rect.width/v.Environment.rectTransform.rect.height,Is.EqualTo(v.Environment.sprite.rect.width/v.Environment.sprite.rect.height).Within(.0001f));
+            Assert.That(v.Body.Find("LeadersPanel/Row_0/Player").GetComponent<Text>().font,Is.SameAs(v.PlayerNamesFont));
+            Assert.That(v.Heading.font,Is.SameAs(v.SectionFont));
             Rect objectives=Bounds((RectTransform)v.Body.Find("ObjectivesFrame"),camera);
             Rect progress=Bounds((RectTransform)v.Body.Find("RewardsFrame"),camera);
-            Assert.That(objectives.yMin,Is.GreaterThan(progress.yMax-8),"Objective/progress surfaces must not substantially overlap");
+            Assert.That(objectives.yMin,Is.EqualTo(progress.yMax).Within(.5f),"Objective and progress faces must meet without overlapping");
             Assert.That(Bounds(v.Description.rectTransform,camera).yMin,Is.GreaterThan(Bounds(v.RewardHeading.rectTransform,camera).yMax));
+            var milestoneRoot=v.Body.Find("Milestones");
+            Assert.That(milestoneRoot.Find("EmptyTrack").gameObject.activeSelf,Is.False,"Old aspect-fitted plaque must not cover the rail");
+            var rail=milestoneRoot.Find("OriginalRail").GetComponent<Image>();
+            Assert.That(rail.sprite,Is.SameAs(ProductionEventDetailRuntime.DetailArt("progress_track_r6")));
+            Assert.That(rail.rectTransform.rect.width/rail.rectTransform.rect.height,Is.EqualTo(rail.sprite.rect.width/rail.sprite.rect.height).Within(.0001f),"Track must render at its native aspect ratio");
+            Assert.That(rail.raycastTarget,Is.False);
             for(int i=0;i<5;i++)
             {
                 var milestones=v.Body.Find("Milestones");
+                var diamond=milestones.Find("Diamond_"+i).GetComponent<Image>();
+                var marker=Bounds(diamond.rectTransform,camera);
+                Assert.That(diamond.sprite,Is.SameAs(ProductionEventDetailRuntime.DetailArt("diamond"+i+"_r6")));
+                Assert.That(marker.center.x,Is.EqualTo(Bounds((RectTransform)milestones.Find("Threshold_"+i),camera).center.x).Within(.5f));
+                Assert.That(marker.center.x,Is.EqualTo(Bounds((RectTransform)milestones.Find("RewardCard_"+i),camera).center.x).Within(.5f));
+                Assert.That(diamond.transform.GetSiblingIndex(),Is.GreaterThan(rail.transform.GetSiblingIndex()),"One complete milestone draws above the cleaned rail");
                 var chest=Bounds((RectTransform)milestones.Find("Chest_"+i),camera);
                 var reward=Bounds((RectTransform)milestones.Find("RewardCard_"+i),camera);
                 Assert.That(chest.yMin,Is.GreaterThan(reward.yMax));
@@ -234,6 +286,20 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(reward.yMin,Is.GreaterThan(progress.yMin));
                 Assert.That(milestones.Find("Threshold_"+i).GetComponent<Text>().text,Is.EqualTo("—"),"Unconfirmed milestones must not advertise source values");
                 Assert.That(milestones.Find("RewardCard_"+i+"/Quantity").GetComponent<Text>().text,Is.EqualTo("—"));
+            }
+            var expectedRewards=new[]{ProductionGameplayArt.Gem(1),ProductionGameplayArt.Gem(0),ProductionEventDetailRuntime.DetailArt("feather"),ProductionBoosterArt.Icon(3),ProductionBoosterArt.Icon(1)};
+            for(int i=0;i<expectedRewards.Length;i++)
+                Assert.That(v.Body.Find("Milestones/RewardCard_"+i+"/Reward").GetComponent<Image>().sprite,Is.SameAs(expectedRewards[i]),"Use approved shared gem/booster art");
+            Assert.That(v.Body.Find("PremiumPanel/Reward_1").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Gem(1)));
+            var rails=v.Body.Find("PanelRails").GetComponent<Image>();
+            Assert.That(rails.raycastTarget,Is.False);
+            Assert.That(rails.sprite,Is.SameAs(ProductionEventDetailRuntime.DetailArt("panel_rails_r6")));
+            Assert.That(rails.rectTransform.rect.width/rails.rectTransform.rect.height,Is.EqualTo(rails.sprite.rect.width/rails.sprite.rect.height).Within(.0001f),"Frame artwork must not stretch unevenly");
+            foreach(string sectionName in new[]{"LeadersPanel","PremiumPanel"})
+            {
+                var face=v.Body.Find(sectionName);
+                Assert.That(Bounds((RectTransform)face,camera).yMax,Is.EqualTo(progress.yMin).Within(.5f),"Lower faces must meet the rewards face without overlap");
+                Assert.That(rails.transform.GetSiblingIndex(),Is.GreaterThan(face.GetSiblingIndex()),"Shared rails remain above the section faces");
             }
             Assert.That(v.Body.Find("PremiumPanel/UnavailablePass").GetComponent<Button>().interactable,Is.False);
             // Restored ornaments must contain their live contents at every supported safe-area size.
@@ -271,6 +337,27 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(gift.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionHomeSourceComposition.ArtRoot+"source_gift")),"Reuse actual Home gift resource");
             Assert.That(Bounds(gift.rectTransform,camera).yMin,Is.EqualTo(safeArea.yMin).Within(.5f));
             Assert.That(v.Body.Find("RewardRim").gameObject.activeSelf,Is.False,"Home gift already includes its own rim");
+            float unit=Bounds(v.Body,camera).width/v.Body.rect.width;
+            Rect back=Bounds((RectTransform)v.BackButton.transform,camera),action=Bounds((RectTransform)v.ActionButton.transform,camera),giftBounds=Bounds(gift.rectTransform,camera);
+            Assert.That(back.yMin,Is.EqualTo(safeArea.yMin+5*unit).Within(.5f),"Back retains safe-bottom clearance");
+            Assert.That(action.yMin,Is.EqualTo(safeArea.yMin+4*unit).Within(.5f),"Main action retains safe-bottom clearance");
+            Assert.That(Mathf.Min(back.width,back.height),Is.GreaterThanOrEqualTo(44),"Back touch target at tested phone sizes");
+            Assert.That(action.xMax,Is.LessThan(giftBounds.xMin),"Main action clears gift medallion");
+            Assert.That(footer.yMax,Is.LessThanOrEqualTo(Bounds((RectTransform)v.Body.Find("LeadersPanel"),camera).yMin+.5f),"Footer meets leaders panel without overlap");
+            foreach(var image in new[]{v.BackButton.image,v.ActionButton.image,gift,carving})
+            {
+                Assert.That(image.type,Is.EqualTo(Image.Type.Simple));Assert.That(image.preserveAspect,Is.True);
+                Assert.That(image.sprite.rect.size,Is.EqualTo(new Vector2(image.sprite.texture.width,image.sprite.texture.height)),"Full footer sprites retained");
+            }
+            var arrow=v.BackButton.transform.Find("BackArrow").GetComponent<Image>();Rect arrowBounds=Bounds(arrow.rectTransform,camera);
+            Assert.That(back.Contains(arrowBounds.min)&&back.Contains(arrowBounds.max),Is.True,"Arrow stays inside its metal medallion");
+            Assert.That(arrow.raycastTarget||gift.raycastTarget,Is.False,"Footer artwork does not intercept controls");
+            foreach(var point in new[]{back.center,new Vector2(back.xMin+back.width*.3f,back.center.y),new Vector2(back.center.x,back.yMax-back.height*.3f)})
+            {
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(v.BackButton));
+            }
+
             var leaders=v.Body.Find("LeadersPanel");
             Rect section=Bounds((RectTransform)leaders,camera);
             float precedingBottom=section.yMax;

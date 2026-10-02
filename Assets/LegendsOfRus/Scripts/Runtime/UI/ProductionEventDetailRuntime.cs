@@ -10,8 +10,9 @@ namespace LegendsOfRus
         public static void BuildInto(RectTransform root)
         {
             var existing=root.GetComponent<ProductionEventDetailView>();
+            if(existing!=null)AssignFonts(existing);
             if(existing!=null){if(existing.Revision<ProductionEventDetailView.CurrentRevision)existing.Revision=ProductionEventDetailView.CurrentRevision;if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Event Detail outside Play Mode.");AlignTextBackings(existing);existing.RefreshContent();return;}
-            var v=root.gameObject.AddComponent<ProductionEventDetailView>();
+            var v=root.gameObject.AddComponent<ProductionEventDetailView>();AssignFonts(v);
             var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();
             if(shop==null||!shop.HasRequiredBindings)throw new InvalidOperationException("Event Detail requires the accepted shared header.");
             v.Typography=shop.Typography;
@@ -51,6 +52,11 @@ namespace LegendsOfRus
             var layout=root.gameObject.AddComponent<ProductionEventDetailLayout>();layout.View=v;AlignTextBackings(v);v.RefreshContent();layout.ApplyNow();
             if(!v.HasRequiredBindings)throw new InvalidOperationException("Event Detail native bindings incomplete.");
         }
+        static void AssignFonts(ProductionEventDetailView v)
+        {
+            v.PlayerNamesFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
+            v.SectionFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
+        }
         public const string DetailArtRoot="ProductionUI/EventDetailAligned/";
         public static Sprite DetailArt(string key)=>Resources.Load<Sprite>(DetailArtRoot+key);
         static void AlignTextBackings(ProductionEventDetailView v)
@@ -68,10 +74,10 @@ namespace LegendsOfRus
             if(window.GetComponent<ProductionHomePanel>())window.GetComponent<ProductionHomePanel>().enabled=false;
             hero.Find("Backing").gameObject.SetActive(false);hero.Find("ForegroundOrnaments").gameObject.SetActive(false);
             window.Find("CleanCity").gameObject.SetActive(false);
-            var subject=window.Find("SourceFirebird").GetComponent<Image>();subject.sprite=DetailArt("firebird_r3");Place(subject.rectTransform,108,0,710,343);
+            var subject=window.Find("SourceFirebird").GetComponent<Image>();subject.sprite=DetailArt("firebird_r7");Place(subject.rectTransform,108,0,710,343);
             foreach(string layer in new[]{"Halo","Sparks"})
             {
-                var effect=NeedArt(window,"Firebird"+layer,DetailArt(layer=="Halo"?"firebird_halo_r3":"firebird_sparks_r3"),108,0,710,343);
+                var effect=NeedArt(window,"Firebird"+layer,DetailArt(layer=="Halo"?"firebird_halo_r7":"firebird_sparks_r7"),108,0,710,343);
                 effect.raycastTarget=false;
             }
             window.Find("FirebirdHalo").SetAsFirstSibling();subject.transform.SetAsLastSibling();window.Find("FirebirdSparks").SetAsLastSibling();
@@ -79,35 +85,41 @@ namespace LegendsOfRus
             v.EventName.gameObject.SetActive(false);v.ObjectiveHeading.gameObject.SetActive(false);v.RewardExamples.gameObject.SetActive(false);v.RewardNote.gameObject.SetActive(false);
             var status=v.Body.Find("AvailabilityFrame").GetComponent<Image>();status.sprite=DetailArt("countdown_r3");status.type=Image.Type.Simple;status.preserveAspect=true;Place(status.rectTransform,218,681,490,63);
             var clock=v.Body.Find("Clock").GetComponent<Image>();clock.sprite=DetailArt("hourglass");Place(clock.rectTransform,262,690,33,45);
-            Caption(v.Availability,309,697,355,36,26);
-            var objective=v.Body.Find("ObjectivesFrame").GetComponent<Image>();objective.sprite=DetailArt("objectives");objective.type=Image.Type.Simple;objective.preserveAspect=true;Place(objective.rectTransform,17,739,908,102);
+            Caption(v.Availability,309,693,355,43,24);
+            var objective=v.Body.Find("ObjectivesFrame").GetComponent<Image>();objective.sprite=DetailArt("objectives_face_r6");objective.type=Image.Type.Simple;objective.preserveAspect=true;Place(objective.rectTransform,17,739,908,98);
             if(objective.transform.Find("SourceOrnaments"))objective.transform.Find("SourceOrnaments").gameObject.SetActive(false);
-            Caption(v.Description,78,757,551,64,24);v.Description.alignment=TextAnchor.MiddleLeft;
+            Caption(v.Description,78,755,551,69,23);v.Description.alignment=TextAnchor.MiddleLeft;
             var balance=NeedArt(v.Body,"FeatherBalanceFrame",DetailArt("balance_r3"),649,748,244,84);
             balance.transform.SetSiblingIndex(objective.transform.GetSiblingIndex()+1);
             NeedArt(v.Body,"FeatherBalanceIcon",DetailArt("feather"),674,751,60,77);
             NeedLabel(v,v.Body,"FeatherBalance",741,767,142,52,44).text="—";
-            var panel=v.Body.Find("RewardsFrame").GetComponent<Image>();panel.sprite=DetailArt("progress");panel.type=Image.Type.Simple;panel.preserveAspect=true;Place(panel.rectTransform,17,834,908,350);
+            var panel=v.Body.Find("RewardsFrame").GetComponent<Image>();panel.sprite=DetailArt("progress_face_r6");panel.type=Image.Type.Simple;panel.preserveAspect=true;Place(panel.rectTransform,17,837,908,343);
             if(panel.transform.Find("SourceOrnaments"))panel.transform.Find("SourceOrnaments").gameObject.SetActive(false);
-            Caption(v.RewardHeading,221,842,499,38,26);
+            Caption(v.RewardHeading,221,841,499,39,28);
             var milestones=v.Body.Find("Milestones") as RectTransform??Rect(v.Body,"Milestones",0,0,941,1672);
-            string[] rewards={"gem_blue","gem_red","feather","potion","medal"};
-            var track=NeedArt(milestones,"EmptyTrack",Load("status_r3"),47,1001,847,20);track.color=new Color32(86,96,108,255);
-            NeedArt(milestones,"OriginalRail",DetailArt("progress_rail"),35,995,871,32);
+            Sprite[] rewards={ProductionGameplayArt.Gem(1),ProductionGameplayArt.Gem(0),DetailArt("feather"),ProductionBoosterArt.Icon(3),ProductionBoosterArt.Icon(1)};
+            Rect[] chestBoxes={new Rect(48,875,155,124),new Rect(217,872,157,127),new Rect(381,861,169,138),new Rect(555,863,167,136),new Rect(723,848,177,151)};
+            // The source-derived track includes a continuous empty channel and intact end caps.
+            // Keep the legacy plaque inactive: preserveAspect compressed it into the centre.
+            NeedArt(milestones,"EmptyTrack",DetailArt("progress_track_r6"),33,993,877,37).gameObject.SetActive(false);
+            var track=NeedArt(milestones,"OriginalRail",DetailArt("progress_track_r6"),33,993,877,37);
+            track.type=Image.Type.Simple;track.preserveAspect=true;track.color=Color.white;
+            float[] markerX={131,291,462,632,805};
             for(int i=0;i<5;i++)
             {
-                float center=130+i*169;
-                float[] markerX={130,295,462,631,805};
-                NeedArt(milestones,"Diamond_"+i,DetailArt("diamond"+i),markerX[i]-21,988,42,44);
-                var chest=NeedArt(milestones,"Chest_"+i,DetailArt("chest"+i),center-75,872,150,119);
+                float center=markerX[i];
+                var diamond=NeedArt(milestones,"Diamond_"+i,DetailArt("diamond"+i+"_r6"),center-24,985,48,50);
+                diamond.transform.SetSiblingIndex(track.transform.GetSiblingIndex()+1+i);
+                var box=chestBoxes[i];
+                var chest=NeedArt(milestones,"Chest_"+i,DetailArt("chest"+i+"_r5"),box.x,box.y,box.width,box.height);
                 chest.preserveAspect=true;
                 NeedLabel(v,milestones,"Threshold_"+i,center-70,1027,140,33,27).text="—";
-                var card=NeedArt(milestones,"RewardCard_"+i,DetailArt("reward_card"),center-53,1060,105,107);card.preserveAspect=true;
-                NeedArt(card.transform,"Reward",DetailArt(rewards[i]),12,5,81,83);
-                NeedLabel(v,card.transform,"Quantity",58,77,36,25,23).text="—";
+                var card=NeedArt(milestones,"RewardCard_"+i,DetailArt("reward_card"),center-52.5f,1060,105,107);card.preserveAspect=true;
+                NeedArt(card.transform,"Reward",rewards[i],12,5,81,83);
+                NeedLabel(v,card.transform,"Quantity",58,74,36,30,23).text="—";
             }
-            var leaders=NeedArt(v.Body,"LeadersPanel",DetailArt("leaders"),17,1180,430,318);
-            NeedLabel(v,leaders.transform,"Heading",9,4,412,34,25);
+            var leaders=NeedArt(v.Body,"LeadersPanel",DetailArt("leaders_face_r6"),17,1180,430,318);
+            NeedLabel(v,leaders.transform,"Heading",9,1,412,37,25);
             NeedLabel(v,leaders.transform,"PreviewNote",15,38,400,24,18).gameObject.SetActive(false);
             for(int i=0;i<4;i++)
             {
@@ -116,21 +128,24 @@ namespace LegendsOfRus
                 if(i<3){var medal=NeedArt(row.transform,"RankMedal",DetailArt("rank"+i+"_r4"),3,0,53,63);medal.transform.SetAsFirstSibling();}
                 NeedLabel(v,row.transform,"Rank",8,i<3?6:13,43,37,27).text="—";
                 NeedArt(row.transform,"Portrait",i<3?DetailArt("portrait"+i+"_r4"):Shared("IndividualRankingAligned/portrait_ivan"),58,0,68,66);
-                NeedLabel(v,row.transform,"Player",150,7,141,49,24).alignment=TextAnchor.MiddleLeft;
+                NeedLabel(v,row.transform,"Player",132,5,159,51,22).alignment=TextAnchor.MiddleLeft;
                 NeedArt(row.transform,"Feather",DetailArt("feather"),296,10,31,42);
                 NeedLabel(v,row.transform,"Score",338,9,52,46,26).text="—";
             }
-            var premium=NeedArt(v.Body,"PremiumPanel",DetailArt("premium"),447,1180,478,318);
-            NeedLabel(v,premium.transform,"Heading",9,4,460,37,26);
-            NeedLabel(v,premium.transform,"PreviewNote",26,43,427,58,22);
+            var premium=NeedArt(v.Body,"PremiumPanel",DetailArt("premium_face_r6"),447,1180,478,318);
+            NeedLabel(v,premium.transform,"Heading",9,1,460,37,26);
+            NeedLabel(v,premium.transform,"PreviewNote",26,42,427,60,21);
             var inset=NeedArt(premium.transform,"RewardInset",DetailArt("premium_inset_r3"),8,104,455,131);
             inset.transform.SetAsFirstSibling();
-            string[] premiumIcons={"premium_chest","gem_blue","feather","pass"};
-            float[] px={13,168,257,346},pw={146,81,81,91};
-            for(int i=0;i<4;i++)NeedArt(premium.transform,"Reward_"+i,DetailArt(premiumIcons[i]),px[i],116,pw[i],105);
+            Sprite[] premiumIcons={DetailArt("premium_chest_r5"),ProductionGameplayArt.Gem(1),DetailArt("feather"),DetailArt("pass")};
+            float[] px={13,168,257,346},pw={154,81,81,91};
+            for(int i=0;i<4;i++)NeedArt(premium.transform,"Reward_"+i,premiumIcons[i],px[i],i==0?108:116,pw[i],i==0?123:105);
             var purchase=NeedArt(premium.transform,"UnavailablePass",DetailArt("activate"),29,230,420,74);
             var purchaseButton=purchase.GetComponent<Button>()??Button(purchase);purchaseButton.interactable=false;purchase.raycastTarget=true;
             NeedLabel(v,purchase.transform,"EnglishLabel",38,9,323,53,31);
+            // One source border layer owns the shared junctions; opaque section faces do not overlap.
+            var rails=NeedArt(v.Body,"PanelRails",DetailArt("panel_rails_r6"),8,730,925,774);
+            rails.transform.SetAsLastSibling();
             // Original lettering remains on Russian controls; English has repaired blank faces.
             v.ActionButton.image.sprite=DetailArt("play");Place((RectTransform)v.ActionButton.transform,211,1495,522,173);
             Caption(v.ActionLabel,71,57,379,74,56);v.ActionLabel.enabled=false;

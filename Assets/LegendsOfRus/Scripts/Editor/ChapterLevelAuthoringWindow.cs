@@ -10,7 +10,7 @@ namespace LegendsOfRus.Editor
     public sealed class ChapterLevelAuthoringWindow : EditorWindow
     {
         const string AssetPath =
-            "Assets/LegendsOfRus/Resources/Config/chapter01_levels.json";
+            "Assets/LegendsOfRus/Resources/CampaignActive/levels.json";
 
         ChapterLevelCatalogData catalog;
         LevelValidationReport report;
@@ -480,10 +480,16 @@ namespace LegendsOfRus.Editor
 
         void ValidateCatalog(bool logResult)
         {
-            report = LevelDataValidator.ValidateCatalog(catalog);
-            LevelValidationReport progression = Chapter01ProgressionValidator.Validate(catalog);
-            report.Errors.AddRange(progression.Errors);
-            report.Warnings.AddRange(progression.Warnings);
+            report = LevelDataValidator.ValidateCampaignCatalog(catalog);
+            var story = Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot + "story");
+            foreach (var language in new[] { "ru", "en" })
+            {
+                var locale = Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot + "story_" + language);
+                if (!story || !locale) { report.Errors.Add("Missing active story/localization: " + language); continue; }
+                report.Errors.AddRange(StoryCatalog.ValidateCampaign(
+                    JsonUtility.FromJson<ChapterStoryCatalogData>(story.text),
+                    JsonUtility.FromJson<StoryLocalizationData>(locale.text), catalog, false).Errors);
+            }
             if (!logResult) return;
 
             if (report.IsValid)

@@ -10,9 +10,10 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionIndividualRankingView:MonoBehaviour
     {
-        public const int CurrentRevision=6;
+        public const int CurrentRevision=8;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
+        public ProductionPlayerHeader Header;
         public Font PlayerNamesFont,HeadingFont,RankNumbersFont;
         public RectTransform Content,Body,Hud,PlayerRow;
         public Image Environment,Title;
@@ -33,7 +34,7 @@ namespace LegendsOfRus
         public Text[] PrizeTitles,PrizeGems,PrizeCards;
         public Image[] RowPortraits,RowRewards;
         public bool HasLiveLeaderboard=>false;
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography&&PlayerNamesFont&&HeadingFont&&RankNumbersFont&&Content&&Body&&Hud&&PlayerRow&&Environment&&Environment.sprite&&Title&&Title.sprite&&OriginalRussianTitle&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&Footer&&PreviewLabel&&SeasonHeading&&SeasonNote&&EmptyText&&PlayerRank&&PlayerName&&PlayerStatus&&PlayerScore&&ProfileButton&&SettingsButton&&BackButton&&EmptyPanel&&Valid(PlusButtons,3)&&Valid(Tabs,3)&&Valid(TabLabels,3)&&Valid(ColumnLabels,4)&&Valid(Rows,14)&&Valid(Ranks,14)&&Valid(Names,14)&&Valid(Scores,14)&&RewardsHeading&&RulesButton&&RulesButtonText&&RulesHeading&&RulesDescription&&CloseRulesText&&CloseRulesButton&&RulesPanel&&Valid(PrizeFrames,3)&&Valid(PrizeTitles,3)&&Valid(PrizeGems,3)&&Valid(PrizeCards,3)&&Valid(RowPortraits,14)&&Valid(RowRewards,14);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Header&&Header.HasBindings&&Typography&&PlayerNamesFont&&HeadingFont&&RankNumbersFont&&Content&&Body&&Hud&&PlayerRow&&Environment&&Environment.sprite&&Title&&Title.sprite&&OriginalRussianTitle&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&Footer&&PreviewLabel&&SeasonHeading&&SeasonNote&&EmptyText&&PlayerRank&&PlayerName&&PlayerStatus&&PlayerScore&&ProfileButton&&SettingsButton&&BackButton&&EmptyPanel&&Valid(PlusButtons,3)&&Valid(Tabs,3)&&Valid(TabLabels,3)&&Valid(ColumnLabels,4)&&Valid(Rows,14)&&Valid(Ranks,14)&&Valid(Names,14)&&Valid(Scores,14)&&RewardsHeading&&RulesButton&&RulesButtonText&&RulesHeading&&RulesDescription&&CloseRulesText&&CloseRulesButton&&RulesPanel&&Valid(PrizeFrames,3)&&Valid(PrizeTitles,3)&&Valid(PrizeGems,3)&&Valid(PrizeCards,3)&&Valid(RowPortraits,14)&&Valid(RowRewards,14);
         static bool Valid<T>(T[] items,int length)where T:UnityEngine.Object=>items!=null&&items.Length==length&&Array.TrueForAll(items,x=>x!=null);
         readonly List<Button> bound=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
         GameState observed;string language;bool committed;
@@ -90,12 +91,16 @@ namespace LegendsOfRus
             for(int i=0;i<14;i++){Rows[i].gameObject.SetActive(true);Ranks[i].text=ranks[i].ToString();Names[i].text=names[i];Scores[i].text=Balance(power[i]);}
             RulesButtonText.text=en?"RANKING RULES":"ПРАВИЛА РЕЙТИНГА";RulesHeading.text=RulesButtonText.text;
             RulesDescription.text=en?"This is a preview of the ranking screen.\n\nDay, Week and Season currently show the same sample standings. Positions, power and prizes are examples.\n\nScoring rules, season dates and actual rewards will be announced before launch.":"Это предварительный просмотр рейтинга.\n\nДень, неделя и сезон пока показывают один пример таблицы. Места, мощь и призы приведены для образца.\n\nПравила подсчёта, даты сезона и настоящие награды будут объявлены перед стартом.";
-            CloseRulesText.text=en?"CLOSE":"ЗАКРЫТЬ";EmptyPanel.SetActive(false);RefreshState();
+            CloseRulesText.text=en?"CLOSE":"ЗАКРЫТЬ";EmptyPanel.SetActive(false);
+            RulesButton.image.sprite=ProductionIndividualRankingReferenceLayout.Load(en?"rules":"rules_original_ru");
+            RulesButtonText.enabled=en;
+            Header.ApplyPresentation();RefreshState();
         }
         public void RefreshState()
         {
             if(!HasRequiredBindings)return;var save=GameState.Instance!=null?GameState.Instance.Save:null;
             GoldText.text=save==null?"—":Balance(save.gold);GemsText.text=save==null?"—":Balance(save.gems);EnergyText.text=save==null?"—":save.energy+"/"+save.energyMax;
+            Header.RefreshValues();
             LevelText.text=(DemoFeatureState.LanguageCode=="en"?"Level ":"Уровень ")+(save==null?"—":save.level.ToString());
         }
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");

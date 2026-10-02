@@ -1,0 +1,21 @@
+# One host / one worker for the current SQLite staging service.
+bind = "127.0.0.1:8097"
+workers = 1
+worker_class = "gthread"
+threads = 4
+timeout = 30
+graceful_timeout = 30
+keepalive = 2
+max_requests = 2000
+max_requests_jitter = 200
+limit_request_line = 2048
+limit_request_fields = 32
+limit_request_field_size = 4096
+forwarded_allow_ips = "127.0.0.1"
+secure_scheme_headers = {"X-FORWARDED-PROTO": "https"}
+accesslog = None
+errorlog = "-"
+loglevel = "warning"
+capture_output = False
+umask = 0o077
+preload_app = False

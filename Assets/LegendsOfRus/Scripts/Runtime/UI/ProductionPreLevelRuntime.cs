@@ -85,7 +85,10 @@ namespace LegendsOfRus
             view.FooterOrnament=Clone(source.FooterOrnament.rectTransform,view.Content,"FooterOrnament").GetComponent<Image>();
             view.Footer=Clone(source.Footer,view.Content,"Navigation");view.BackButton=view.Footer.Find("Back").GetComponent<Button>();view.PlayButton=view.Footer.Find("PlayButton").GetComponent<Button>();view.PlayText=view.PlayButton.transform.Find("PlayLabel").GetComponent<Text>();
             var layout=root.GetComponent<ProductionPreLevelLayout>()??root.gameObject.AddComponent<ProductionPreLevelLayout>();layout.View=view;
-            EnsureBoosterDetails(view);view.Revision=ProductionPreLevelView.CurrentRevision;AlignPresentation(view);view.RefreshContent();layout.ApplyNow();
+            EnsureBoosterDetails(view);AlignPresentation(view);
+            // Fresh construction must install the same current controls as the in-place path.
+            ProductionPreLevelSourceControls.Apply(view);
+            view.RefreshContent();layout.ApplyNow();
             if(!view.HasRequiredBindings)throw new InvalidOperationException("Pre-Level composition is incomplete.");
         }
         static void EnsureBoosterDetails(ProductionPreLevelView view)

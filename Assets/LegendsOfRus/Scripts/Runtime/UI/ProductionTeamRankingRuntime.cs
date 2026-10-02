@@ -9,15 +9,14 @@ namespace LegendsOfRus
         public static Sprite Shared(string key)=>Resources.Load<Sprite>("ProductionUI/IndividualRankingAligned/"+key);
         public static void BuildInto(RectTransform root)
         {
-            var existing=root.GetComponent<ProductionTeamRankingView>();if(existing!=null){if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Team Ranking outside Play Mode.");existing.RefreshContent();return;}
+            var existing=root.GetComponent<ProductionTeamRankingView>();if(existing!=null){ProductionTeamRankingReferenceLayout.Apply(existing);if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Team Ranking outside Play Mode.");existing.RefreshContent();return;}
             var v=root.gameObject.AddComponent<ProductionTeamRankingView>();
             var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();if(!shop||!shop.HasRequiredBindings)throw new InvalidOperationException("Team Ranking needs the approved navigation header.");
             v.BodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");v.NamesFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");v.TitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");v.RankFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/RankNumbers");
-            v.Content=Rect(root,"TEAM_RANKING_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("background"),0,0,941,1672);v.Environment.color=new Color(.3f,.3f,.34f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);v.Hud=Rect(v.Body,"NativeHud",0,0,941,235);
-            Clone(shop.Body.Find("NativeHudBacking"),v.Hud);v.ProfileButton=Clone(shop.ProfileButton.transform,v.Hud).GetComponent<Button>();v.SettingsButton=Clone(shop.SettingsButton.transform,v.Hud).GetComponent<Button>();v.HeroName=Clone(shop.HeroName.transform,v.Hud).GetComponent<Text>();v.LevelText=Clone(shop.LevelText.transform,v.Hud).GetComponent<Text>();
-            v.PlusButtons=new Button[3];Text[] sourceValues={shop.GoldText,shop.GemsText,shop.EnergyText},values=new Text[3];
-            for(int i=0;i<3;i++){Clone(shop.Body.Find("ResourceCapsule_"+i),v.Hud);Clone(shop.Body.Find("ResourceIcon_"+i),v.Hud);values[i]=Clone(sourceValues[i].transform,v.Hud).GetComponent<Text>();v.PlusButtons[i]=Clone(shop.PlusButtons[i].transform,v.Hud).GetComponent<Button>();}
-            v.GoldText=values[0];v.GemsText=values[1];v.EnergyText=values[2];
+            v.Content=Rect(root,"TEAM_RANKING_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("background"),0,0,941,1672);v.Environment.color=new Color(.3f,.3f,.34f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);var shared=UnityEngine.Object.Instantiate(shop.Header,v.Body,false);shared.name="NativeHud";
+            v.Hud=(RectTransform)shared.transform;v.Header=shared;
+            v.ProfileButton=shared.Profile;v.SettingsButton=shared.Settings;v.HeroName=shared.PlayerName;v.LevelText=shared.Level;
+            v.PlusButtons=shared.Plus;v.GoldText=shared.Balances[0];v.GemsText=shared.Balances[1];v.EnergyText=shared.Balances[2];
             v.Title=Art(v.Body,"TitlePlaque",Load("title_ru"),121,101,708,153);v.Heading=Label(v,v.Body,"Heading",185,160,572,82,54);Fit(v.Heading,38,54);
             v.PreviewLabel=Label(v,v.Body,"PreviewLabel",190,248,630,28,18);v.SeasonNote=Label(v,v.Body,"SeasonNote",210,271,550,28,22);
             v.Tabs=new Button[4];v.TabLabels=new Text[4];float[] tx={25,219,537,728};
@@ -50,7 +49,7 @@ namespace LegendsOfRus
             v.BackButton=Button(Art(v.Body,"Back",Resources.Load<Sprite>("ProductionUI/DailyRewardAligned/back_r2"),23,1539,106,101));
             v.DetailsButton=Button(Art(v.Body,"GuildDetails",Load("details"),181,1478,605,153));v.DetailsLabel=Label(v,v.DetailsButton.transform,"Label",45,45,515,66,39);Fit(v.DetailsLabel,27,39);
             Art(v.Body,"FooterOrnament",Resources.Load<Sprite>("ProductionUI/ShopAligned/footer_ornament"),139,1631,759,36);
-            BuildInfo(v);var layout=root.gameObject.AddComponent<ProductionTeamRankingLayout>();layout.View=v;v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings){
+            BuildInfo(v);var layout=root.gameObject.AddComponent<ProductionTeamRankingLayout>();layout.View=v;ProductionTeamRankingReferenceLayout.Apply(v);v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings){
                 foreach(var field in typeof(ProductionTeamRankingView).GetFields()){
                     var value=field.GetValue(v);if(typeof(UnityEngine.Object).IsAssignableFrom(field.FieldType)&&!(value as UnityEngine.Object))Debug.LogError("Team Ranking missing binding: "+field.Name);
                     if(value is Array array)for(int i=0;i<array.Length;i++)if(!(array.GetValue(i) as UnityEngine.Object))Debug.LogError("Team Ranking missing array binding: "+field.Name+"["+i+"]");

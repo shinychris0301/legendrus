@@ -45,9 +45,19 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         }
 
         [Test]
-        public void ExactlyTenSerializedPageFilesAreShipped()
+        public void AllTenCoreLoopPagesRemainInExpandedSerializedDelivery()
         {
-            Assert.That(Directory.GetFiles(PageRoot, "*.prefab", SearchOption.TopDirectoryOnly).Length, Is.EqualTo(10));
+            // Later native pages share this directory; retain the original ten-page contract.
+            int count = 0;
+            foreach (ScreenId id in Enum.GetValues(typeof(ScreenId)))
+            {
+                if (!ProductionCoreLoopPageRegistry.IsCutover(id)) continue;
+                var page = Resources.Load<GameObject>(ProductionCoreLoopPageRegistry.ResourceKey(id));
+                Assert.That(page, Is.Not.Null, id.ToString());
+                Assert.That(page.GetComponent<ProductionUiFix01PageBootstrap>().ScreenId, Is.EqualTo(id));
+                count++;
+            }
+            Assert.That(count, Is.EqualTo(ProductionCoreLoopPageRegistry.CutoverPageCount));
         }
 
         [TestCase("Loading", ScreenId.Loading)]
@@ -188,7 +198,11 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         public void GameplayLiveBoardBoundaryIsStillPresent()
         {
             string router = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
-            StringAssert.Contains("SetPixelRect(rt, 79, 357, 786, 942)", router);
+            StringAssert.Contains("boardGo.transform.SetParent(view.BoardMount, false)", router);
+            var view = Resources.Load<GameObject>("ProductionUI/Pages/Gameplay").GetComponent<ProductionGameplayView>();
+            Assert.That(view.HasRequiredBindings, Is.True);
+            Assert.That(view.BoardMount.rect.width, Is.GreaterThan(0));
+            Assert.That(view.BoardMount.rect.height, Is.GreaterThan(0));
         }
 
         [Test]

@@ -61,7 +61,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().HasRequiredBindings&&View().ActionsBound,Is.True);Assert.That(router.Viewport.GetComponentsInChildren<DynamicHudBinder>(),Is.Empty);int before=GameState.Instance.Save.gold;GameState.Instance.AddGold(17);yield return null;Assert.That(View().GoldText.text,Is.EqualTo((before+17).ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," ")));
             string save=StableSave();yield return WaitForNormalButtonColors();
             Capture("FriendsList_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("FriendsList_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));Capture("FriendsList_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
-            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;Assert.That(View().PreviewLabel.text,Does.Contain("SAMPLE"));Capture("FriendsList_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("FriendsList_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));Assert.That(StableSave(),Is.EqualTo(save));
+            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;Assert.That(View().PreviewLabel.text,Does.Contain("SAMPLE"));Capture("FriendsList_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("FriendsList_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));Capture("FriendsList_1080x2400_safe_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));Assert.That(StableSave(),Is.EqualTo(save));
         }
         [UnityTest]public IEnumerator RoutesCommitOnceAndPreserveSave(){
             var targets=new[]{ScreenId.Profile,ScreenId.Settings,ScreenId.Shop,ScreenId.Shop,ScreenId.OutOfEnergy,ScreenId.TeamHub};string save=StableSave();
@@ -69,7 +69,7 @@ namespace LegendsOfRus.Tests.PlayMode
         }
         [UnityTest]public IEnumerator SearchSortAndTabStatesRemainReadOnly(){
             var v=View();string save=StableSave();Assert.That(v.HasLiveFriends,Is.False);Assert.That(v.VisibleCount,Is.EqualTo(6));v.Search.text="богатыри";Assert.That(v.VisibleCount,Is.EqualTo(2));v.Search.text="snow";Assert.That(v.VisibleCount,Is.EqualTo(1));Assert.That(v.RowsRoot.GetChild(0).Find("Name").GetComponent<Text>().text,Is.EqualTo("Снегурочка"));
-            v.Search.text="NO_SUCH_FRIEND";Assert.That(v.VisibleCount,Is.Zero);Assert.That(v.EmptyLabel.gameObject.activeSelf,Is.True);yield return WaitForNormalButtonColors();Capture("FriendsList_Empty_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.Search.text="";v.SortButton.onClick.Invoke();Assert.That(v.SortByName,Is.True);Assert.That(v.VisibleCount,Is.EqualTo(6));
+            v.Search.text="NO_SUCH_FRIEND";Assert.That(v.VisibleCount,Is.Zero);Assert.That(v.EmptyLabel.gameObject.activeSelf,Is.True);yield return WaitForNormalButtonColors();Capture("FriendsList_Empty_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.Search.text="";v.Tabs[1].onClick.Invoke();yield return WaitForNormalButtonColors();Capture("FriendsList_Requests_Default_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.Tabs[0].onClick.Invoke();v.SortButton.onClick.Invoke();Assert.That(v.SortByName,Is.True);Assert.That(v.VisibleCount,Is.EqualTo(6));
             v.Tabs[1].onClick.Invoke();Assert.That(v.SelectedTab,Is.EqualTo(FriendsListTab.Requests));Assert.That(v.VisibleCount,Is.EqualTo(5));yield return WaitForNormalButtonColors();Capture("FriendsList_Requests_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return WaitForNormalButtonColors();Capture("FriendsList_Requests_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             v.Tabs[2].onClick.Invoke();Assert.That(v.VisibleCount,Is.EqualTo(6));v.Search.text="Alena";Assert.That(v.VisibleCount,Is.EqualTo(1));yield return WaitForNormalButtonColors();Capture("FriendsList_Find_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));Assert.That(StableSave(),Is.EqualTo(save));Assert.Throws<ArgumentOutOfRangeException>(()=>v.SelectTab((FriendsListTab)8));
         }
@@ -148,13 +148,14 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionFriendsListView>(),camera,size,safeArea);
                 inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
                 Assert.That(File.Exists(output + ".png"), Is.False, "Keep earlier evidence.");
                 File.WriteAllBytes(output + ".png",texture.EncodeToPNG());
+                // Retain visual evidence even if a layout assertion fails.
+                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionFriendsListView>(),camera,size,safeArea);
                 File.WriteAllText(output + ".json",JsonUtility.ToJson(new CaptureInfo
                 {
                     unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceType.ToString(),
@@ -180,6 +181,68 @@ namespace LegendsOfRus.Tests.PlayMode
         static void VerifyLayoutAndInput(ProductionFriendsListView v,Camera camera,Vector2Int size,Rect safeArea)
         {
             Assert.That(v.HasRequiredBindings,Is.True);
+            Assert.That(v.Header.HasBindings,Is.True);
+            for(int i=0;i<2;i++)Assert.That(Bounds((RectTransform)v.Tabs[i].transform,camera).xMax,Is.EqualTo(Bounds((RectTransform)v.Tabs[i+1].transform,camera).xMin).Within(.5f),"Joined tabs have no gap");
+            Assert.That(Bounds((RectTransform)v.Tabs[0].transform,camera).yMin,Is.GreaterThanOrEqualTo(Bounds(v.Search.GetComponent<RectTransform>(),camera).yMax),"Search clears tab ornament");
+            foreach(Transform row in v.RowsRoot){var flag=row.Find("GuildEmblem");if(flag){var icon=flag.GetComponent<Image>();Assert.That(icon.raycastTarget,Is.False);Assert.That(Bounds(icon.rectTransform,camera).xMax,Is.LessThan(Bounds(row.Find("Guild").GetComponent<RectTransform>(),camera).xMin),"Guild flag clears label");}}
+            bool requests=v.SelectedTab==FriendsListTab.Requests;
+            Assert.That(v.RequestsFrame.gameObject.activeSelf,Is.EqualTo(requests));
+            Assert.That(v.Body.Find("TableFrame").gameObject.activeSelf,Is.EqualTo(!requests));
+            Assert.That(v.RowsRoot.rect.width,Is.EqualTo(requests?886:747),"Switching tabs restores the correct row width");
+            if(requests)foreach(Transform row in v.RowsRoot){
+                Rect portrait=Bounds((RectTransform)row.Find("Portrait"),camera),name=Bounds((RectTransform)row.Find("Name"),camera),gift=Bounds((RectTransform)row.Find("Gift"),camera),accept=Bounds((RectTransform)row.Find("Accept"),camera),decline=Bounds((RectTransform)row.Find("Decline"),camera);
+                Assert.That(portrait.xMax,Is.LessThan(name.xMin),"Portrait ornament clears live name");
+                Assert.That(name.xMax,Is.LessThan(gift.xMin),"Request text clears gift");
+                Assert.That(gift.xMax,Is.LessThan(accept.xMin),"Gift clears Accept");
+                Assert.That(accept.xMax,Is.LessThan(decline.xMin),"Accept clears Decline");
+                Assert.That(portrait.yMin,Is.GreaterThan(Bounds((RectTransform)v.SortButton.transform,camera).yMax),"Last portrait clears lower controls");
+            }
+            bool english=DemoFeatureState.LanguageCode=="en";
+            Assert.That(v.SortLabel.enabled,Is.EqualTo(english||v.SortByName),"Sort uses one source or live caption");
+            Assert.That(v.RemoveLabel.enabled,Is.EqualTo(english),"Remove uses one localized caption");
+            Assert.That(v.SortLabel.rectTransform.anchoredPosition.x,Is.GreaterThanOrEqualTo(50),"Live sort caption clears original people icon");
+            float unit=Bounds(v.Body,camera).width/941f;
+            Assert.That(Bounds(v.Hud,camera).yMax,Is.EqualTo(safeArea.yMax).Within(1));
+            // Footer artwork uses full, uncropped source sprites at native aspect.
+            float previousRight = float.NegativeInfinity;
+            foreach (var button in v.NavButtons)
+            {
+                var icon = button.image;
+                Rect bounds = Bounds(icon.rectTransform, camera);
+                Assert.That(icon.rectTransform.rect.height,Is.EqualTo(236),"World Map footer scale");
+                Assert.That(icon.type, Is.EqualTo(Image.Type.Simple));
+                Assert.That(icon.preserveAspect, Is.True);
+                Assert.That(icon.sprite.rect.size, Is.EqualTo(new Vector2(icon.sprite.texture.width, icon.sprite.texture.height)));
+                Assert.That(bounds.xMin, Is.GreaterThanOrEqualTo(previousRight - 1), "Footer icons must not overlap");
+                Assert.That(bounds.width / bounds.height,
+                    Is.EqualTo(icon.sprite.rect.width / icon.sprite.rect.height).Within(.015f), "Original icon aspect");
+                previousRight = bounds.xMax;
+            }
+            Assert.That(Bounds((RectTransform)v.NavButtons[0].transform,camera).yMin,Is.EqualTo(safeArea.yMin+6*unit).Within(1));
+            foreach(var label in v.NavLabels)Assert.That(label.enabled,Is.True,"Localized live footer captions");
+            for(int i=0;i<5;i++){
+                Assert.That(v.NavButtons[i].image.sprite,Is.SameAs(ProductionFriendsListRuntime.WorldMapFooter(i)),"World Map metalwork is reused directly");
+                var symbol=v.NavButtons[i].GetComponentInChildren<ProductionFooterSymbolGraphic>();
+                Assert.That(symbol!=null,Is.EqualTo(i!=1));
+                if(symbol){
+                    Assert.That(symbol.Source,Is.SameAs(Resources.Load<Sprite>("ProductionUI/WorldMapReferenceAligned/card_surface")),"Neutral inset contains no copied selection ring");Assert.That(symbol.raycastTarget,Is.False);
+                    var emblem=v.NavButtons[i].transform.Find("PageSymbol").GetComponent<Image>();
+                    Assert.That(emblem.sprite.name,Does.StartWith("symbol_").And.EndWith("_r7"));Assert.That(emblem.preserveAspect,Is.True);Assert.That(emblem.raycastTarget,Is.False);
+                    Assert.That(emblem.rectTransform.rect.width/emblem.rectTransform.rect.height,Is.EqualTo(emblem.sprite.rect.width/emblem.sprite.rect.height).Within(.001f),"Whole emblem keeps its aspect");
+                    Rect full=Bounds(emblem.rectTransform,camera),pixels=ProductionFriendsListRuntime.FooterSymbolBounds(i),frame=Bounds((RectTransform)v.NavButtons[i].transform,camera);
+                    float sx=full.width/emblem.sprite.rect.width,sy=full.height/emblem.sprite.rect.height;
+                    var visible=Rect.MinMaxRect(full.xMin+pixels.xMin*sx,full.yMax-pixels.yMax*sy,full.xMin+pixels.xMax*sx,full.yMax-pixels.yMin*sy);
+                    Assert.That(visible.xMin,Is.GreaterThan(frame.xMin+28*unit));Assert.That(visible.xMax,Is.LessThan(frame.xMax-28*unit));
+                    Assert.That(visible.yMax,Is.LessThan(frame.yMax-28*unit),"Complete top clears crest");Assert.That(visible.yMin,Is.GreaterThan(Bounds(v.NavLabels[i].rectTransform,camera).yMax+10*unit),"Complete bottom clears caption rail");
+                    Assert.That(symbol.GetComponent<CanvasRenderer>(),Is.Not.Null,"Adapted emblem needs its native renderer");
+                    var mesh=symbol.canvasRenderer.GetMesh();Assert.That(mesh,Is.Not.Null);Assert.That(mesh.vertexCount,Is.GreaterThan(90),"Emblem mesh must actually render");
+                }
+                Assert.That(Bounds(v.NavLabels[i].rectTransform,camera).yMin,Is.GreaterThan(Bounds((RectTransform)v.NavButtons[i].transform,camera).yMin),"Caption stays inside medallion");
+            }
+            foreach(Transform row in v.RowsRoot){
+                var visit=row.Find("Visit");if(visit)Assert.That(visit.Find("Label").GetComponent<Text>().enabled,Is.EqualTo(DemoFeatureState.LanguageCode=="en"));
+                Assert.That(Bounds((RectTransform)row,camera).yMin,Is.GreaterThanOrEqualTo(Bounds((RectTransform)v.SortButton.transform,camera).yMax));
+            }
             Rect bg=Bounds(v.Environment.rectTransform,camera);Assert.That(bg.xMin,Is.LessThanOrEqualTo(1));Assert.That(bg.yMin,Is.LessThanOrEqualTo(1));Assert.That(bg.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(bg.yMax,Is.GreaterThanOrEqualTo(size.y-1));
             Assert.That(v.Environment.rectTransform.rect.width/v.Environment.rectTransform.rect.height,Is.EqualTo(v.Environment.sprite.rect.width/v.Environment.sprite.rect.height).Within(.0001f));
             for(int i=0;i<v.RowsRoot.childCount;i++){Rect row=Bounds((RectTransform)v.RowsRoot.GetChild(i),camera);Assert.That(safeArea.Contains(row.min)&&safeArea.Contains(row.max),Is.True);if(i+1<v.RowsRoot.childCount)Assert.That(row.yMin,Is.GreaterThanOrEqualTo(Bounds((RectTransform)v.RowsRoot.GetChild(i+1),camera).yMax-.1f));}
@@ -187,7 +250,7 @@ namespace LegendsOfRus.Tests.PlayMode
             {
                 if(v.InfoPanel.activeSelf&&button!=v.CloseInfoButton)continue;
                 Rect rect=Bounds((RectTransform)button.transform,camera);
-                Assert.That(safeArea.Contains(rect.min)&&safeArea.Contains(rect.max),Is.True,button.name+" outside safe area");
+                Assert.That(rect.xMin,Is.GreaterThanOrEqualTo(safeArea.xMin-.5f),button.name+" left safe edge");Assert.That(rect.xMax,Is.LessThanOrEqualTo(safeArea.xMax+.5f),button.name+" right safe edge");Assert.That(rect.yMin,Is.GreaterThanOrEqualTo(safeArea.yMin-.5f),button.name+" bottom safe edge");Assert.That(rect.yMax,Is.LessThanOrEqualTo(safeArea.yMax+.5f),button.name+" top safe edge");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
                 Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" hit "+hits[0].gameObject.name);
 

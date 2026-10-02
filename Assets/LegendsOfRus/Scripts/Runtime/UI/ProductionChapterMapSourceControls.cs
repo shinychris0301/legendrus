@@ -42,6 +42,7 @@ namespace LegendsOfRus
             Place(view.Footer,0,1440,941,232);
             view.SourceBack=Control(view.BackButton,"back",8,32,174,156);
             view.SourcePlay=Control(view.PlayButton,"play",232,20,481,203);
+            ProductionHomeRuntime.ClearDormantPlayArtwork(view.PlayButton);
             Label(view.PlayText,85,43,310,85,48,"Title");
             ProductionChapterMapScroller.Install(view);
             view.Notice=ProductionMapNotice.Install(view.Content);

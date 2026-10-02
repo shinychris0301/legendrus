@@ -55,6 +55,108 @@ namespace LegendsOfRus.Tests.PlayMode
             yield return null;
         }
 
+        [UnityTest] public IEnumerator SmallPortraitContinuePaddingUsesNativeStoryRouteWithoutRewardDuplication()
+        {
+            Win(1,int.MaxValue);yield return new WaitForSecondsRealtime(1);var v=View();int gold=GameState.Instance.Save.gold,gems=GameState.Instance.Save.gems;GameObject tap=null;
+            foreach(var lang in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);v.RefreshContent();yield return null;yield return null;
+                Assert.That(v.Score.text,Is.EqualTo("2 147 483 647"));
+                Capture("Victory_Touch_360_"+lang,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>tap=CoreOutcomeTouchAssertions.Check(v.ContinueButton,camera,new Rect(0,20,360,600),"Victory","360"));
+                Capture("Victory_Touch_1080_"+lang,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>CoreOutcomeTouchAssertions.Check(v.ContinueButton,camera,new Rect(45,100,990,2160),"Victory","1080"));
+            }
+            CoreOutcomeTouchAssertions.Click(tap);Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Dialogue).Or.EqualTo(ScreenId.ChapterMap));var destination=router.CurrentScreen;v.ContinueButton.onClick.Invoke();Assert.That(router.CurrentScreen,Is.EqualTo(destination));Assert.That(GameState.Instance.Save.gold,Is.EqualTo(gold));Assert.That(GameState.Instance.Save.gems,Is.EqualTo(gems));
+        }
+
+        [UnityTest] public IEnumerator OutcomeReactionSwitchesLanguageWithoutNewRewards()
+        {
+            var state=GameState.Instance;
+            state.Save.highestUnlockedLevel=51;
+            for(int n=1;n<51;n++) state.Save.levelProgress.Add(new LevelProgressData { chapterId=1,levelId=n,completions=1,rewardClaimed=true,bestStars=1 });
+            Win(51,3500); Win(51,3500); // Replay exposes the existing caption instead of the first-clear ad explanation.
+            yield return new WaitForSecondsRealtime(1);
+            var v=View(); string before=OutcomeStateWithoutClock(); int objects=Root().GetComponentsInChildren<Transform>(true).Length;
+            foreach(string lang in new[]{"en","ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+                var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(51,"victory"),StoryCatalog.LoadDialogueLanguage(lang));
+                Assert.That(v.Reaction.text,Is.EqualTo(expected.Speaker+": "+expected.Text));
+                Assert.That(v.Reaction.gameObject.activeInHierarchy,Is.True);
+                Assert.That(v.Reaction.preferredHeight,Is.LessThanOrEqualTo(v.Reaction.rectTransform.rect.height+1));
+                Assert.That(Root().GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(objects));
+                Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+                Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null);
+            }
+            Capture("Outcome51_EN_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Outcome51_EN_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            DemoFeatureState.SetLanguage("ru");yield return null;yield return null;
+            Capture("Outcome51_RU_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+        }
+        [UnityTest] public IEnumerator CaptionsRemainReadableAcrossLanguagesAndPhoneSizes()
+        {
+            var state=GameState.Instance;
+            state.Save.highestUnlockedLevel=51;
+            for(int n=1;n<51;n++) state.Save.levelProgress.Add(new LevelProgressData { chapterId=1,levelId=n,completions=1,rewardClaimed=true,bestStars=1 });
+            Win(51,3500);Win(51,3500);
+            yield return new WaitForSecondsRealtime(1);
+            var v=View();string before=OutcomeStateWithoutClock();
+            foreach(string lang in new[]{"en","ru"})
+            {
+                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+                foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
+                {
+                    var reaction=StoryService.GetLocalizedReaction(level,StoryReactionOutcomes.Victory,lang);
+                    if(reaction==null)continue;
+                    v.Reaction.text=reaction.Speaker+": "+reaction.Text;
+                    Canvas.ForceUpdateCanvases();
+                    Assert.That(v.Reaction.preferredHeight,Is.LessThanOrEqualTo(v.Reaction.rectTransform.rect.height),lang+" round "+level.levelId);
+                }
+                v.RefreshState();
+                Capture("Caption_"+lang+"_360",new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                {
+                    float pixels=Bounds(v.Reaction.rectTransform,camera).height/v.Reaction.rectTransform.rect.height*v.Reaction.fontSize;
+                    Assert.That(pixels,Is.GreaterThanOrEqualTo(11),"Caption must retain readable type at the smallest verified viewport.");
+                });
+                Capture("Caption_"+lang+"_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+                Capture("Caption_"+lang+"_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+                v.SetStatus("Видео с наградой недоступно");
+                Capture("Caption_Status_"+lang+"_360",new Vector2Int(360,640),new Rect(0,20,360,600));
+                Assert.That(v.Reaction.gameObject.activeSelf,Is.False);
+            }
+            Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+        }
+        static string OutcomeStateWithoutClock()
+        {
+            var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
+            save.lastEnergyUtcTicks=0;return JsonUtility.ToJson(save);
+        }
+        [UnityTest] public IEnumerator LegacyOutcomeOverlayUpdatesExistingTextOnLanguageChange()
+        {
+            // Explicit fallback composition fixture; does not install an overlay on the native page.
+            var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+            var field=typeof(ScreenRouter).GetField("activeOutcomeReaction",flags);var prior=field.GetValue(router);
+            var parent=new GameObject("LegacyOutcomeFixture",typeof(RectTransform));parent.transform.SetParent(router.SafeArea,false);
+            try
+            {
+                field.SetValue(router,StoryService.GetLocalizedReaction(ChapterLevelCatalog.Find(1,51),"victory"));
+                typeof(ScreenRouter).GetMethod("BuildOutcomeReactionOverlay",flags).Invoke(router,new object[]{(RectTransform)parent.transform,ScreenId.Victory});
+                int count=parent.GetComponentsInChildren<Transform>(true).Length;
+                string before=OutcomeStateWithoutClock();
+                foreach(string lang in new[]{"en","ru"})
+                {
+                    DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+                    var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(51,"victory"),StoryCatalog.LoadDialogueLanguage(lang));
+                    Assert.That(parent.transform.Find("OutcomeReaction/ReactionBody").GetComponent<Text>().text,Is.EqualTo(expected.Text));
+                    Assert.That(parent.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(count));
+                    Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+                }
+            }
+            finally { field.SetValue(router,prior);UnityEngine.Object.Destroy(parent); }
+            yield return null;
+        }
+
         ProductionVictoryView View()=>Root().GetComponentInChildren<ProductionVictoryView>();
         void Win(int level,int score){GameState.Instance.CompleteLevel(ChapterLevelCatalog.Find(1,level),score);router.Show(ScreenId.Victory);Settle();}
         [UnityTest]
@@ -84,8 +186,11 @@ namespace LegendsOfRus.Tests.PlayMode
                 if(level.levelId==2||level.levelId==10)
                 {yield return new WaitForSecondsRealtime(1);Capture("Victory_Level"+level.levelId+"_Rewards_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));}
             }
-            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;
-            Capture("Victory_Level10_Rewards_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            DemoFeatureState.SetLanguage("en");View().RefreshContent();
+            // The installed chapter now ends at 200, not 10. Wait for that page's reveal before capture.
+            float deadline=Time.realtimeSinceStartup+3f;
+            while(Array.Exists(View().StarGlows,g=>g.color.a<.63f)&&Time.realtimeSinceStartup<deadline)yield return null;
+            Capture("Victory_LastAuthoredRound_Rewards_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
         }
         [UnityTest]
         public IEnumerator ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards()
@@ -215,6 +320,41 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("Victory_EnergyCountdown_576_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             state.Save.energy=state.Save.energyMax;view.RefreshState();Assert.That(view.EnergyTimer.text,Is.EqualTo("ПОЛНАЯ"));
             DemoFeatureState.SetLanguage("en");view.RefreshContent();Assert.That(view.EnergyTimer.text,Is.EqualTo("FULL"));
+        }
+        [UnityTest] public IEnumerator LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics()
+        {
+            GameState.Instance.Save.highestUnlockedLevel=500;Win(500,int.MaxValue);yield return new WaitForSecondsRealtime(1);var view=View();
+            foreach(var state in new[]{"FirstClear","NoBoosters","Replay","Unavailable","NoResult"})
+            {
+                if(state=="NoBoosters"){Win(1,3500);view=View();}
+                if(state=="Replay"){Win(500,3500);view=View();}
+                if(state=="Unavailable")view.SetStatus("Видео с наградой недоступно");
+                if(state=="NoResult"){GameState.Instance.ResetProgress();view.RefreshContent();}
+                yield return null;string before=OutcomeStateWithoutClock();
+                foreach(var language in new[]{"ru","en"})
+                {
+                    DemoFeatureState.SetLanguage(language);view.RefreshContent();yield return null;yield return null;
+                    foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
+                    {
+                        Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
+                        Capture("LiveCaptions_"+state+"_"+language+"_"+size.x,size,safe,camera=>
+                        {
+                            var rows=new List<CoreCaptionAssertions.Row>();
+                            foreach(var text in new[]{view.RewardsHeading,view.RewardsArea.Find("ScoreHeading").GetComponent<Text>(),view.RewardsArea.Find("BoosterHeading").GetComponent<Text>()})rows.Add(CoreCaptionAssertions.Check(text,camera,11.9f));
+                            Assert.That(view.RewardsPanel.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("panel")));
+                            Assert.That(view.RewardsHeading.text,Is.EqualTo(language=="ru"?"НАГРАДЫ":"REWARDS"));
+                            for(int i=0;i<view.RewardValues.Length;i++)if(view.RewardCards[i].gameObject.activeSelf)rows.Add(CoreCaptionAssertions.Check(view.RewardValues[i],camera,i<2?13.9f:12.5f));
+                            var empty=view.RewardsArea.Find("BoosterEmpty").GetComponent<Text>();if(empty.gameObject.activeInHierarchy)rows.Add(CoreCaptionAssertions.Check(empty,camera,11.2f));
+                            if(state=="FirstClear")Assert.That(view.Score.text,Is.EqualTo("2 147 483 647"));
+                            if(state=="FirstClear")Assert.That(view.RewardCards[2].gameObject.activeSelf,Is.True,"Current round500 booster quantity must be covered.");
+                            if(state=="NoBoosters")Assert.That(empty.gameObject.activeInHierarchy,Is.True);
+                            if(state=="Replay"||state=="Unavailable"||state=="NoResult")Assert.That(view.DoubleButton.interactable,Is.False);
+                            CoreCaptionAssertions.Save("Victory_"+state+"_"+language+"_"+size.x,rows);
+                        });
+                    }
+                    Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+                }
+            }
         }
         static int TimerSeconds(string text)
         {
@@ -389,7 +529,7 @@ namespace LegendsOfRus.Tests.PlayMode
                     Assert.That(value.yMin-card.yMin,Is.GreaterThan(card.height*.075f),"Booster count must clear the lower carving.");
                 }
             }
-            foreach(Text text in new[]{view.Score,view.RewardsHeading,view.RewardStatus})
+            foreach(Text text in new[]{view.Score,view.RewardsHeading})
             {
                 Rect bounds=Bounds(text.rectTransform,camera);
                 Assert.That(panel.Contains(bounds.min)&&panel.Contains(bounds.max),Is.True,text.name+" must stay inside the reward board.");
@@ -411,7 +551,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(primary.Contains(label.min)&&primary.Contains(label.max),Is.True,"Continue lettering must fit the source button.");
             Assert.That(primary.Overlaps(panel),Is.False,"Actions must clear the reward frame.");
             Assert.That(primary.Overlaps(Bounds(view.DoubleButton.transform as RectTransform,camera)),Is.False);
-            foreach(Text message in new[]{view.Reaction,view.Status})
+            foreach(Text message in new[]{view.Reaction,view.Status,view.RewardStatus})
             {
                 if(!message.gameObject.activeSelf||string.IsNullOrEmpty(message.text))continue;
                 Rect bounds=Bounds(message.rectTransform,camera),inset=Bounds(view.MessageInset.rectTransform,camera);

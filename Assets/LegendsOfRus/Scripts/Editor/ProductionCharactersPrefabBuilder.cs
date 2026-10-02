@@ -26,8 +26,8 @@ namespace LegendsOfRus.Editor
                 ProductionCharactersRuntime.BuildInto(rect);var view=root.GetComponent<ProductionCharactersView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Characters bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/CharactersCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Characters\",\n  \"revision\": 12,\n  \"heroOwnershipService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
-            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionCharactersView>().HasRequiredBindings)throw new InvalidOperationException("Characters prefab readback failed.");Debug.Log("CHARACTERS_R12_REBUILD_PASS: native page and cutover readback.");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Characters\",\n  \"revision\": 16,\n  \"heroOwnershipService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionCharactersView>().HasRequiredBindings)throw new InvalidOperationException("Characters prefab readback failed.");Debug.Log("CHARACTERS_RESPONSIVE_R4_REBUILD_PASS: native page and cutover readback.");
         }
     }
 }

@@ -1,0 +1,164 @@
+[
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/Gameplay/ActiveCampaignContent.cs",
+    "sha256": "e79dd4084b8e98f9f57a75de48dc21ffa5e0be7342f63e2608afd1ac08eb6ce1",
+    "anchors": [
+      {
+        "text": "ResourceRoot = \"CampaignActive/\"",
+        "line": 11
+      },
+      {
+        "text": "FinaleReady = true",
+        "line": 21
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/Services/StoryData.cs",
+    "sha256": "e57659bb0851de2fe56fd5c1ad0c4f784d852e3da531e25b63ca4286599ec21b",
+    "anchors": [
+      {
+        "text": "ActiveCampaignContent.Load(forceReload).LoadStory(1)",
+        "line": 180
+      },
+      {
+        "text": "public sealed class StorySequenceRuntime",
+        "line": 851
+      },
+      {
+        "text": "public LocalizedStoryLine LocalizeCurrentLine",
+        "line": 880
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/Services/StoryService.cs",
+    "sha256": "dcaaefff063543c00dc19ef5887d1686af7593040213a19be07e7b638d94770e",
+    "anchors": [
+      {
+        "text": "if (state.HasCompletedStoryScene(scene.id)) return false;",
+        "line": 159
+      },
+      {
+        "text": "bool completedNow = state != null && state.CompleteStoryScene",
+        "line": 180
+      },
+      {
+        "text": "public static void ResetRuntime()",
+        "line": 23
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs",
+    "sha256": "a6374b4a289a1ae6cda76e53082b26d4f2e267d64fb7253a393758e533919718",
+    "anchors": [
+      {
+        "text": "public int selectedLevel = 1;",
+        "line": 109
+      },
+      {
+        "text": "public List<string> completedStoryScenes",
+        "line": 119
+      },
+      {
+        "text": "public bool CompleteStoryScene",
+        "line": 817
+      },
+      {
+        "text": "public void EnsureSelectedLevelIsUnlocked",
+        "line": 492
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs",
+    "sha256": "c83b95848437dee15f0bac3d8286840cbae36af786223f6c590732a6ca35e0a8",
+    "anchors": [
+      {
+        "text": "home.BindNavigation(target => Show(target), OpenChapterMap)",
+        "line": 684
+      },
+      {
+        "text": "void OpenSelectedLevel()",
+        "line": 1141
+      },
+      {
+        "text": "bool TryShowPendingChapterFlow()",
+        "line": 1166
+      },
+      {
+        "text": "void ContinueAfterDialogue()",
+        "line": 1210
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapScroller.cs",
+    "sha256": "76d21b5b24e93c5d5e815198b2893d1fed97afa3c8118716acb240bdd027a342",
+    "anchors": [
+      {
+        "text": "public void JumpToCurrent()=>JumpToLevel",
+        "line": 55
+      },
+      {
+        "text": "CurrentLabel.text=en?\"CURRENT\":\"\u041a \u0423\u0420\u041e\u0412\u041d\u042e\"",
+        "line": 84
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionProfileRuntime.cs",
+    "sha256": "baf281f307add16cbbca226a15a28ac4c41a12c1eff092104b04a7e7c3f3cccf",
+    "anchors": [
+      {
+        "text": "static void BuildHistory",
+        "line": 97
+      },
+      {
+        "text": "SAVED LEVEL PROGRESS",
+        "line": 98
+      },
+      {
+        "text": "No recorded attempts yet.",
+        "line": 99
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDialogueView.cs",
+    "sha256": "9b766898a69ccad06024aeee787ac2d50b02a91261d8501c817b8a659d282792",
+    "anchors": [
+      {
+        "text": "public Func<string, LocalizedStoryLine> LineProvider;",
+        "line": 20
+      },
+      {
+        "text": "public void Bind(Action onContinue)",
+        "line": 34
+      },
+      {
+        "text": "LineProvider != null ? LineProvider(language)",
+        "line": 62
+      }
+    ]
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/Services/CampaignStoryFlow.cs",
+    "sha256": "f57b13aab90e291a140b56ff10f66222ab4a966d42910935a6a4e060d4ff8520",
+    "anchors": [
+      {
+        "text": "catalog.StoryLedgerKey(chapter, scene.id)",
+        "line": 49
+      },
+      {
+        "text": "public CampaignSaveOperation AcknowledgeStory",
+        "line": 61
+      },
+      {
+        "text": "if (!catalog.IsLegacyStoryBridge(chapter)) return false;",
+        "line": 57
+      }
+    ]
+  }
+]

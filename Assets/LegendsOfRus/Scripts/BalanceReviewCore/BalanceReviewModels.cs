@@ -31,7 +31,7 @@ namespace LegendsOfRus.BalanceReview
             ? (float)TotalWinningMovesRemaining / Wins
             : 0f;
         public float AverageWinningMoveMargin => Wins > 0 && TotalWinningMoveLimit > 0
-            ? (float)TotalWinningMovesRemaining / (TotalWinningMoveLimit / (float)Wins)
+            ? (float)TotalWinningMovesRemaining / TotalWinningMoveLimit
             : 0f;
         public float AverageWinningScore => Wins > 0
             ? (float)TotalWinningScore / Wins

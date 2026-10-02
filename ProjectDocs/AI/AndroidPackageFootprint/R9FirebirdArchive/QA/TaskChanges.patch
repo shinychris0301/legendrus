@@ -1,0 +1,15 @@
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -11,9 +11,10 @@
+             if (!assetPath.StartsWith("Assets/LegendsOfRus/")) return;
+ 
+             var ti = (TextureImporter)assetImporter;
+-            // Archived controls retain their original import contract and GUIDs, outside Resources.
++            // Archived Home art retains its original import contract and GUIDs, outside Resources.
+             if (assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_fill.png" ||
+-                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_frame.png")
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_frame.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_firebird_generated.png")
+             {
+                 ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+                 return;

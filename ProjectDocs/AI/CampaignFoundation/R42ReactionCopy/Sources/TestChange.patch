@@ -1,0 +1,11 @@
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/ActiveCampaignIntegrationTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/ActiveCampaignIntegrationTests.cs
+@@ -19,7 +19,7 @@
+             var c=ActiveCampaignContent.Load(true);var levels=ChapterLevelCatalog.LoadChapter1(true);
+             Assert.That(levels.levels.Length,Is.EqualTo(200));
+             foreach(var name in new[]{"levels","story","story_ru","story_en"})
+-                Assert.That(Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot+name).text,Is.EqualTo(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01EditorialR41",name+".json"))));
++                Assert.That(Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot+name).text,Is.EqualTo(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01EditorialR42",name+".json"))));
+             var previous=JsonUtility.FromJson<ChapterLevelCatalogData>(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector04R32/levels.json")));
+             for(int i=0;i<190;i++)Assert.That(JsonUtility.ToJson(levels.levels[i]),Is.EqualTo(JsonUtility.ToJson(previous.levels[i])));
+             Assert.That(ChapterLevelCatalog.Next(Level(190)).levelId,Is.EqualTo(191));

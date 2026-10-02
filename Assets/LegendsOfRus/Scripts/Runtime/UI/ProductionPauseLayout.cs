@@ -18,7 +18,7 @@ namespace LegendsOfRus
             try
             {
                 var content=View.Content;safe.GetWorldCorners(corners);var low=content.InverseTransformPoint(corners[0]);var high=content.InverseTransformPoint(corners[2]);
-                float scale=Mathf.Min(1,(high.x-low.x-24)/621,(high.y-low.y-48)/1177);scale=Mathf.Max(.1f,scale);
+                float scale=Mathf.Min(1.3f,(high.x-low.x-24)/621,(high.y-low.y-48)/1177);scale=Mathf.Max(.1f,scale);
                 View.Body.localScale=Vector3.one*scale;
                 View.Body.anchoredPosition=new Vector2((low.x+high.x-621*scale)*.5f-content.rect.xMin,(low.y+high.y+1177*scale)*.5f-content.rect.yMax-5.5f);
                 whole.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);

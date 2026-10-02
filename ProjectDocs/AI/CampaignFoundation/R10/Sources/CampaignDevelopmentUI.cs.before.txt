@@ -1,0 +1,176 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace LegendsOfRus
+{
+    // Opt-in composition under an existing safe-area/Canvas. Clones approved prefabs;
+    // never modifies their assets, installs startup, imports live saves, or creates an EventSystem.
+    public sealed class CampaignDevelopmentUI : MonoBehaviour, ICampaignBoardHost, ICampaignGameplayRoutes, ICampaignStoryRoutes
+    {
+        CampaignSaveSession session; Func<CampaignSaveSession> reopen; Action leave;
+        CampaignGameplayCoordinator coordinator; CampaignPlayerSave cached;
+        CampaignMatch3BoardHost host; Transform staging; GameObject page, modal;
+        ProductionGameplayView gameplay;
+        float refreshAt; string language; bool needsReopen;
+        public CampaignGameplayCoordinator Coordinator => coordinator;
+        public Match3Board Board => host?.Current;
+        public string VisiblePage {get;private set;}
+        public string VisibleModal {get;private set;}
+        public static CampaignDevelopmentUI Open(RectTransform parent, CampaignSaveSession session, Func<CampaignSaveSession> reopenDurableStore, Action onExit)
+        {
+            if(!parent || session==null || onExit==null)throw new ArgumentException("Explicit parent, campaign session and exit route required.");
+            var go=new GameObject("DevelopmentCampaignUI",typeof(RectTransform));var rect=(RectTransform)go.transform;rect.SetParent(parent,false);
+            rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;
+            var ui=go.AddComponent<CampaignDevelopmentUI>();ui.session=session;ui.reopen=reopenDurableStore;ui.leave=onExit;
+            var stage=new GameObject("InactivePageStaging",typeof(RectTransform));stage.transform.SetParent(rect,false);stage.SetActive(false);ui.staging=stage.transform;
+            ui.coordinator=new CampaignGameplayCoordinator(session,ui,ui);ui.Run(()=>ui.coordinator.Recover());return ui;
+        }
+        void OnDestroy(){coordinator?.Dispose();}
+        void Update()
+        {
+            if(coordinator==null)return;
+            if(Board && Board.CampaignInventoryBlocked){coordinator.Interrupt();ShowError();return;}
+            if(coordinator.State==CampaignGameplayState.StorageBlocked && VisibleModal!="Error"){ShowError();return;}
+            if(Time.unscaledTime<refreshAt)return;refreshAt=Time.unscaledTime+.25f;
+            if(session.TryLoad(out var save,out _))cached=save;
+            if(gameplay && Board)gameplay.RefreshState();
+            if(language!=DemoFeatureState.LanguageCode)
+            {
+                language=DemoFeatureState.LanguageCode;
+                if(VisibleModal=="Recovery"&&cached!=null)ConfigureRecovery(cached.run);
+            }
+        }
+        bool Read(){return session.TryLoad(out cached,out _);}
+        void Run(Func<bool> action)
+        {
+            try { if(!action())ShowError(); }
+            catch { ShowError(); }
+        }
+        static void Remove(GameObject go){if(!go)return;go.SetActive(false);Destroy(go);}
+        void CloseModal(){Remove(modal);modal=null;VisibleModal=null;}
+        T Clone<T>(string key,bool overlay=false) where T:Component
+        {
+            var prefab=Resources.Load<GameObject>("ProductionUI/Pages/"+key);if(!prefab)throw new InvalidOperationException("Missing approved page: "+key);
+            var go=Instantiate(prefab,staging,false);go.SetActive(false);go.transform.SetParent(transform,false);
+            var rect=go.GetComponent<RectTransform>();rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;
+            foreach(var button in go.GetComponentsInChildren<Button>(true)){button.onClick.RemoveAllListeners();button.interactable=false;}
+            if(overlay){CloseModal();modal=go;}else{CloseModal();Remove(page);page=go;gameplay=null;VisiblePage=key;}
+            var view=go.GetComponentInChildren<T>(true);if(!view)throw new InvalidOperationException("Missing presenter: "+key);return view;
+        }
+        static void Click(Button button,Action action){button.interactable=true;button.onClick.AddListener(()=>{if(button && button.isActiveAndEnabled && button.IsInteractable())action();});}
+        int Count(BoosterType type)=>cached!=null?CampaignBoosterTransactions.Count(cached.player,type):0;
+        void Exit(){coordinator.Dispose();gameObject.SetActive(false);leave();Destroy(gameObject);}
+
+        // The caller owns the outer chapter map. Within this composition, returning
+        // presents the selected round's approved PreLevel page; Back exits to that owner.
+        public bool ShowMap()
+        {
+            if(!Read())return false;
+            var level=session.ResolveSelectedRound();if(level==null)return false;
+            var v=Clone<ProductionPreLevelView>("PreLevel");v.CampaignSaveProvider=()=>cached;v.CampaignLevelProvider=()=>level;
+            page.SetActive(true);v.RefreshContent();
+            Click(v.PlayButton,()=>Run(()=>coordinator.Start(cached.runSequence,DateTime.UtcNow.Ticks)));
+            Click(v.BackButton,Exit);return true;
+        }
+        public bool Start(LevelData level,int attempt,Action<CampaignBoardResult> completed)
+        {
+            if(!Read())return false;
+            var v=Clone<ProductionGameplayView>("Gameplay");page.SetActive(true);
+            gameplay=v;host=new CampaignMatch3BoardHost(v.BoardMount){InventoryFactory=()=>new CampaignBoardInventory(session,cached.runSequence)};
+            if(!host.Start(level,attempt,result=>{completed(result);if(coordinator.State==CampaignGameplayState.StorageBlocked)ShowError();}))return false;
+            v.BindCampaign(host.Current,ShowPause,Count);return true;
+        }
+        public void Stop(){host?.Stop();host=null;}
+        public bool ShowResult(CampaignRunReceipt receipt)
+        {
+            if(!Read())return false;
+            if(receipt.state==CampaignRunState.Won)
+            {
+                var v=Clone<ProductionVictoryView>("Victory");v.CampaignSaveProvider=()=>cached;page.SetActive(true);v.RefreshContent();
+                v.DoubleButton.interactable=false;
+                Click(v.ContinueButton,()=>Run(()=>coordinator.AcknowledgeAndReturn(receipt.sequence)));
+            }
+            else
+            {
+                var v=Clone<ProductionFailView>("Fail");v.CampaignSaveProvider=()=>cached;page.SetActive(true);v.RefreshContent();
+                v.ExitText.text=En?"BACK":"НАЗАД";v.ExitText.enabled=true;
+                Click(v.Retry,()=>Run(()=>coordinator.Start(receipt.sequence,DateTime.UtcNow.Ticks,true)));
+                Click(v.Exit,()=>Run(()=>coordinator.AcknowledgeAndReturn(receipt.sequence)));
+            }
+            return true;
+        }
+        public bool ShowStory(CampaignStoryScene story)
+        {
+            if (story?.Scene?.lines == null || story.Scene.lines.Length == 0) return false;
+            var sequence = new StorySequenceRuntime(story.Scene, story.Russian);
+            var view = Clone<ProductionDialogueView>("Dialogue");
+            view.LineProvider = locale => sequence.LocalizeCurrentLine(locale == "en" ? story.English : story.Russian);
+            view.SceneIdProvider = () => story.Scene.id;
+            view.SpeakerKeyProvider = () => sequence.CurrentSpeakerKey;
+            page.SetActive(true);
+            Action advance = null;
+            advance = () =>
+            {
+                if (sequence.LineIndex + 1 < story.Scene.lines.Length)
+                { sequence.Advance(); view.Bind(advance); }
+                else Run(() => coordinator.CompleteStory(story.Key));
+            };
+            view.Bind(advance);
+            return true;
+        }
+        bool En=>DemoFeatureState.LanguageCode=="en";
+        public bool ShowInterruptedRound(CampaignRunReceipt receipt)
+        {
+            if(!Read())return false;
+            if(!page)ShowMap();
+            var v=Clone<ProductionErrorDialogView>("EmptyErrorState",true);modal.SetActive(true);v.enabled=false;
+            VisibleModal="Recovery";ConfigureRecovery(receipt);
+            Click(v.Retry,()=>{CloseModal();Run(()=>coordinator.Start(receipt.sequence,DateTime.UtcNow.Ticks,true));});
+            Click(v.Close,()=>{CloseModal();Run(()=>coordinator.AbandonInterruptedRound(receipt.sequence));});return true;
+        }
+        void ConfigureRecovery(CampaignRunReceipt receipt)
+        {
+            var v=modal?modal.GetComponentInChildren<ProductionErrorDialogView>(true):null;if(!v)return;
+            CustomDialog(v,En?"ROUND INTERRUPTED":"РАУНД ПРЕРВАН",En?"The previous energy was used.\nRestart costs 1 energy, or end this attempt.":"Энергия за попытку уже потрачена.\nНачните заново за 1 энергию\nили завершите попытку.",En?"RESTART · 1 ENERGY":"ЗАНОВО · 1 ЭНЕРГИЯ",En?"END ATTEMPT":"ЗАВЕРШИТЬ");
+        }
+        void ShowPause()
+        {
+            if(!Board || !Board.TryPause())return;
+            var v=Clone<ProductionPauseView>("Pause",true);v.CampaignCountProvider=Count;modal.SetActive(true);VisibleModal="Pause";
+            v.Bind(Board,()=>{CloseModal();Board?.TryResume();},()=>{CloseModal();Run(()=>coordinator.Start(cached.runSequence,DateTime.UtcNow.Ticks,true));},null,
+                ()=>{CloseModal();Run(()=>coordinator.Interrupt());});v.Actions[2].interactable=false;
+        }
+        void ShowError()
+        {
+            if(!staging || !gameObject.activeInHierarchy)return;
+            Board?.TryPause();
+            var v=Clone<ProductionErrorDialogView>("EmptyErrorState",true);modal.SetActive(true);v.enabled=false;VisibleModal="Error";
+            bool storage=needsReopen || coordinator.State==CampaignGameplayState.StorageBlocked;
+            needsReopen=storage;
+            CustomDialog(v,En?"ACTION NOT COMPLETED":"ДЕЙСТВИЕ НЕ ВЫПОЛНЕНО",storage?
+                (En?"Your save needs to be reopened.\nRetry to check the saved round.":"Необходимо открыть сохранение заново.\nПовторите проверку состояния раунда."):
+                (En?"The action could not be completed.\nCheck your energy and try again.":"Не удалось выполнить действие.\nПроверьте энергию и повторите попытку."),En?"TRY AGAIN":"ПОВТОРИТЬ",En?"CLOSE":"ЗАКРЫТЬ");
+            if(!storage || reopen!=null)Click(v.Retry,()=>{
+                CloseModal();
+                if(storage){Run(()=>{coordinator.Dispose();session=reopen();coordinator=new CampaignGameplayCoordinator(session,this,this);needsReopen=false;return coordinator.Recover();});}
+                else if(Board){Board.TryResume();}
+                else Run(()=>coordinator.Recover());
+            });
+            Click(v.Close,()=>{CloseModal();if(storage)Exit();else if(Board)Board.TryResume();else Run(()=>coordinator.Recover());});
+        }
+        static void CustomDialog(ProductionErrorDialogView v,string title,string body,string retry,string close)
+        {
+            v.Panel.sprite=ProductionErrorDialogRuntime.Load("panel");((Image)v.Retry.targetGraphic).sprite=ProductionErrorDialogRuntime.Load("retry");((Image)v.Close.targetGraphic).sprite=ProductionErrorDialogRuntime.Load("close");
+            v.Heading.enabled=v.Description.enabled=v.RetryLabel.enabled=v.CloseLabel.enabled=true;
+            v.Heading.text=title;v.Description.text=body;v.RetryLabel.text=retry;v.CloseLabel.text=close;v.Support.gameObject.SetActive(false);
+            v.Retry.targetGraphic.color=v.Close.targetGraphic.color=Color.white;v.RetryLabel.color=v.CloseLabel.color=new Color32(241,204,128,255);
+            ProductionPreLevelSourceControls.Place(v.Description.rectTransform,94,403,508,105);
+            v.Description.resizeTextForBestFit=true;v.Description.resizeTextMinSize=23;v.Description.resizeTextMaxSize=27;
+            v.RetryLabel.resizeTextForBestFit=v.CloseLabel.resizeTextForBestFit=true;
+            v.RetryLabel.resizeTextMinSize=v.CloseLabel.resizeTextMinSize=22;
+            v.RetryLabel.resizeTextMaxSize=v.CloseLabel.resizeTextMaxSize=32;
+            v.Heading.resizeTextForBestFit=true;v.Heading.resizeTextMinSize=24;v.Heading.resizeTextMaxSize=42;
+        }
+    }
+}

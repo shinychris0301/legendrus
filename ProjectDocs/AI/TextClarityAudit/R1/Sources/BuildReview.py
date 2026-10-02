@@ -1,0 +1,24 @@
+from pathlib import Path
+import sys,json,hashlib,shutil,html
+import xml.etree.ElementTree as ET
+base=Path('ProjectDocs/AI/TextClarityAudit/R1');run_name=sys.argv[1]
+assert Path(run_name).name==run_name and run_name not in ('.','..')
+run=Path('/tmp/lor-text-clarity-r1')/run_name
+out=base/'UnityCaptures';out.mkdir(exist_ok=True)
+results={}
+for phase in ('Write','Read','Regression'):
+    result=ET.parse(run/phase/'results.xml').getroot().attrib
+    assert result['result']=='Passed' and result['skipped']=='0',result
+    results[phase]={k:int(result[k]) for k in ('total','passed','failed','skipped')}
+    for p in (run/phase/'Captures').glob('*.png'):shutil.copy2(p,out/(phase+'_'+p.name))
+    qa=base/'QA'/run_name/phase;qa.mkdir(parents=True,exist_ok=True)
+    for n in ('results.xml','command.json','unity.log','launcher.log'):shutil.copy2(run/phase/n,qa/n)
+shutil.copy2(run/'checkpoint.json.read.json',base/'QA/ColdProcessResult.json')
+before=json.loads((base/'Sources/AssetsBefore.json').read_text());after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('Assets').rglob('*') if p.is_file()}
+scope={'tests':results,'totalPassed':sum(r['passed'] for r in results.values()),'modified':[p for p,h in before.items() if p in after and after[p]!=h],'added':sorted(set(after)-set(before)),'deleted':sorted(set(before)-set(after)),'unchanged':sum(after.get(p)==h for p,h in before.items()),'nativeCaptures':len(list(out.glob('*.png'))),'coldProcess':json.loads((base/'QA/ColdProcessResult.json').read_text())}
+(base/'QA/ScopeAndVerification.json').write_text(json.dumps(scope,indent=2)+'\n')
+captures=sorted(out.glob('*.png'),key=lambda p:(p.stem!='Read_PersistRead_01_RestoredSettings',p.name))
+previous=Path('ProjectDocs/AI/PersistenceLifecycleAudit/R1/UnityCaptures')
+options=''.join('<option value="'+p.stem+'" data-before="'+str((previous/p.name).is_file()).lower()+'">'+html.escape(p.stem.replace('_',' '))+'</option>' for p in captures)
+page="""<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Text Clarity Audit R1</title><style>*{box-sizing:border-box}body{margin:0;background:#080e17;color:#e3d5b4;font:16px/1.5 system-ui}main{max-width:760px;margin:auto;padding:20px}h1{font:28px Georgia;color:#dabb79}a{color:#b5d1eb}select{width:100%;padding:12px;background:#122333;color:#eee;border:1px solid #7f693f;margin:8px 0 18px}img{display:block;width:100%;height:auto}.image-window{max-width:100%;overflow:auto}.native img{width:auto;max-width:none}button{padding:10px;margin:0 8px 12px 0;background:#19304a;color:#eee;border:1px solid #7f693f}button:disabled{opacity:.45}figure{margin:0 auto;max-width:576px}figcaption{font-size:13px;padding:12px 0;color:#c2bcae}</style><main><h1>Text Clarity · R1</h1><p>Live text now refreshes when the actual Canvas scale changes. The capture helper also refreshes glyphs after its camera and responsive layout settle. Existing fonts, lettering sprites and artwork are unchanged.</p><p><a href="ImplementationReport.md">Findings and limits</a> · <a href="QA/ScopeAndVerification.json">Verification</a></p><label for="view">Page and audit stage</label><select id="view">OPTIONS</select><button id="compare">Show earlier capture</button><button id="zoom">View at native pixels</button><figure><div class="image-window" id="window"><img id="page" alt="Actual Unity text clarity capture"></div><figcaption id="caption"></figcaption></figure><p>These are actual Unity captures at 576×1280, not a playable browser page. Use native pixels to judge glyph edges; fitting a larger image into a smaller browser window resamples it. In Unity, use a fixed phone resolution and inspect at 1×: an aspect-only Game view may render at a much smaller size.</p></main><script>const view=document.getElementById('view'),pic=document.getElementById('page'),compare=document.getElementById('compare');let before=false;function show(){const available=view.selectedOptions[0].dataset.before==='true';if(!available)before=false;compare.disabled=!available;compare.textContent=before?'Show corrected capture':'Show earlier capture';pic.src=(before?'../../PersistenceLifecycleAudit/R1/UnityCaptures/':'UnityCaptures/')+view.value+'.png';document.getElementById('caption').textContent=(before?'Earlier capture — stale text meshes':'Corrected capture — refreshed text meshes')+' · '+view.selectedOptions[0].textContent;}view.onchange=()=>{before=false;show();};compare.onclick=()=>{before=!before;show();};document.getElementById('zoom').onclick=()=>{const on=document.getElementById('window').classList.toggle('native');document.getElementById('zoom').textContent=on?'Fit to page':'View at native pixels';};show();</script></html>"""
+(base/'Text_Clarity_R1_Review.html').write_text(page.replace('OPTIONS',options));print(json.dumps(scope,indent=2))

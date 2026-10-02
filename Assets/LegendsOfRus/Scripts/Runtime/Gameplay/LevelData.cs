@@ -146,6 +146,21 @@ namespace LegendsOfRus
             ChapterLevelCatalogData catalog
         )
         {
+            return ValidateCatalogCore(catalog, true);
+        }
+
+        // Explicit campaign entry point; legacy callers retain the ten-level requirement.
+        public static LevelValidationReport ValidateCampaignCatalog(ChapterLevelCatalogData catalog)
+        {
+            var report = ValidateCatalogCore(catalog, false);
+            if (catalog != null && (catalog.chapterId < 1 || catalog.chapterId > 20 ||
+                catalog.schemaVersion != CurrentSchemaVersion || catalog.levels == null || catalog.levels.Length > 500))
+                report.Errors.Add("Campaign catalog must use schema 3, chapter 1–20 and at most 500 rounds.");
+            return report;
+        }
+
+        static LevelValidationReport ValidateCatalogCore(ChapterLevelCatalogData catalog, bool legacy)
+        {
             var report = new LevelValidationReport();
             if (catalog == null)
             {
@@ -196,7 +211,7 @@ namespace LegendsOfRus
                 previousLevelId = level.levelId;
             }
 
-            if (catalog.chapterId == 1 && catalog.levels.Length != 10)
+            if (legacy && catalog.chapterId == 1 && catalog.levels.Length != 10)
                 report.Errors.Add("Chapter 1 must contain exactly 10 curated levels.");
 
             for (int i = 0; i < catalog.levels.Length; i++)
@@ -432,7 +447,7 @@ namespace LegendsOfRus
                 if (!positions.Add(position))
                     report.Errors.Add($"{obstaclePrefix} duplicates another obstacle position.");
                 if (
-                    string.Equals(obstacle.type, LevelObstacleTypes.Crate, StringComparison.Ordinal) &&
+                    (string.Equals(obstacle.type, LevelObstacleTypes.Crate, StringComparison.Ordinal) || string.Equals(obstacle.type, LevelObstacleTypes.RunicSeal, StringComparison.Ordinal)) &&
                     fixedPositions.Contains(position)
                 )
                 {
@@ -533,7 +548,7 @@ namespace LegendsOfRus
                 LevelObstacleData obstacle = level.obstacles[i];
                 if (
                     obstacle != null &&
-                    string.Equals(obstacle.type, LevelObstacleTypes.Crate, StringComparison.Ordinal)
+                    (string.Equals(obstacle.type, LevelObstacleTypes.Crate, StringComparison.Ordinal) || string.Equals(obstacle.type, LevelObstacleTypes.RunicSeal, StringComparison.Ordinal))
                 )
                     positions.Add(PositionKey(obstacle.x, obstacle.y));
             }
@@ -667,6 +682,11 @@ namespace LegendsOfRus
         }
     }
 
+    public interface IChapterLevelSource
+    {
+        ChapterLevelCatalogData LoadChapter(int chapterId);
+    }
+
     public static class ChapterLevelCatalog
     {
         public const string ResourcePath = "Config/chapter01_levels";
@@ -677,43 +697,28 @@ namespace LegendsOfRus
             if (!forceReload && cached != null)
                 return cached;
 
-            TextAsset text = Resources.Load<TextAsset>(ResourcePath);
-            if (text == null)
-            {
-                Debug.LogError($"Missing level catalog at Resources/{ResourcePath}.json");
-                cached = CreateFallbackCatalog();
-                return cached;
-            }
-
             try
             {
-                ChapterLevelCatalogData parsed =
-                    JsonUtility.FromJson<ChapterLevelCatalogData>(text.text);
-                LevelValidationReport report = LevelDataValidator.ValidateCatalog(parsed);
-                LevelValidationReport progression = Chapter01ProgressionValidator.Validate(parsed);
-                if (!report.IsValid || !progression.IsValid)
-                {
-                    Debug.LogError(
-                        "Chapter 1 level catalog is invalid:\n" +
-                        string.Join("\n", report.Errors) +
-                        (progression.Errors.Count > 0
-                            ? "\n" + string.Join("\n", progression.Errors)
-                            : string.Empty)
-                    );
-                    cached = CreateFallbackCatalog();
-                }
-                else
-                {
-                    cached = parsed;
-                }
+                cached = ActiveCampaignContent.Load(forceReload).LoadChapter(1);
             }
             catch (Exception exception)
             {
-                Debug.LogError("Could not parse Chapter 1 level catalog: " + exception.Message);
+                Debug.LogError("Could not load active campaign: " + exception.Message);
                 cached = CreateFallbackCatalog();
             }
 
             return cached;
+        }
+
+        // Explicit source overload for campaign rehearsals and migration fixtures.
+        public static LevelData Find(IChapterLevelSource source, int chapterId, int levelId)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            var catalog = source.LoadChapter(chapterId);
+            if (catalog == null || catalog.chapterId != chapterId || catalog.levels == null) return null;
+            foreach (var level in catalog.levels)
+                if (level != null && level.chapterId == chapterId && level.levelId == levelId) return level;
+            return null;
         }
 
         public static LevelData Find(int chapterId, int levelId)
@@ -752,6 +757,7 @@ namespace LegendsOfRus
         public static void InvalidateCache()
         {
             cached = null;
+            ActiveCampaignContent.InvalidateCache();
         }
 
         static ChapterLevelCatalogData CreateFallbackCatalog()

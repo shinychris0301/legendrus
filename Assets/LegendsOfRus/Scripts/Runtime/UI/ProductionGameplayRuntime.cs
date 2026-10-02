@@ -27,10 +27,10 @@ namespace LegendsOfRus
             Art(v.Hud,"IvanCrest",ProductionGameplayArt.Load("shield"),82,173,62,82).preserveAspect=true;
             v.HeroName=Label(v,v.Hud,"HeroName","Иван",228,22,155,45,33);v.HeroName.alignment=TextAnchor.MiddleLeft;
             v.LevelText=Label(v,v.Hud,"SelectedLevel","Уровень 1",228,70,165,38,23);v.LevelText.alignment=TextAnchor.MiddleLeft;
-            Art(v.Hud,"GoalProgressFrame",Home("progress_frame"),228,111,175,22);
-            v.GoalProgress=Art(v.Hud,"GoalProgress",Home("progress_fill"),235,117,161,10);Fill(v.GoalProgress);
-            Art(v.Hud,"StarProgressFrame",Home("progress_frame"),405,47,179,24);
-            v.StarProgress=Art(v.Hud,"StarProgress",Home("progress_fill"),412,53,165,12);Fill(v.StarProgress);
+            Art(v.Hud,"GoalProgressFrame",null,228,111,175,22);
+            v.GoalProgress=Art(v.Hud,"GoalProgress",null,235,117,161,10);Fill(v.GoalProgress);
+            Art(v.Hud,"StarProgressFrame",null,405,47,179,24);
+            v.StarProgress=Art(v.Hud,"StarProgress",null,412,53,165,12);Fill(v.StarProgress);
             v.Stars=new ProductionWorldMapGraphic[3];
             for(int i=0;i<3;i++){v.Stars[i]=Rect(v.Hud,"Star_"+i,395+i*76,26,47,47).gameObject.AddComponent<ProductionWorldMapGraphic>();v.Stars[i].Kind=WorldMapGraphicKind.Star;v.Stars[i].raycastTarget=false;}
             Art(v.Hud,"MovesMedallion",Resources.Load<Sprite>(ProductionChapterMapRuntime.ArtRoot+"node"),371,72,240,220);

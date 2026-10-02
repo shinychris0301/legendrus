@@ -1,0 +1,574 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidBackendCredentialStore.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidBackendCredentialStore.cs
+@@ -80,6 +80,9 @@
+         {
+             store = null;
+ #if UNITY_ANDROID && !UNITY_EDITOR
++#if DEVELOPMENT_BUILD
++            if (AndroidCredentialDevelopmentProbe.BlocksAccounts) return false;
++#endif
+             store = new AndroidBackendCredentialStore(new AndroidIo());
+             return true;
+ #else
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/BackendAccountService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/BackendAccountService.cs
+@@ -15,6 +15,9 @@
+             if (Instance != null && Instance != this) { Destroy(this); return; }
+             Instance = this;
+         }
++#if UNITY_ANDROID && DEVELOPMENT_BUILD && !UNITY_EDITOR
++        IEnumerator Start() => AndroidCredentialDevelopmentProbe.RunRequested(this);
++#endif
+         void OnDestroy()
+         {
+             session?.Dispose(); session = null;
+@@ -39,6 +42,10 @@
+ 
+         internal void Configure(IBackendCredentialStore store, IBackendTransport transport)
+         {
++#if UNITY_ANDROID && DEVELOPMENT_BUILD && !UNITY_EDITOR
++            if (AndroidCredentialDevelopmentProbe.BlocksAccounts)
++                throw new InvalidOperationException("Development credential probe owns the empty test vault");
++#endif
+             if (IsConfigured) throw new InvalidOperationException("Backend already configured");
+             session = new BackendSessionClient(store, transport);
+         }
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialDevelopmentProbe.cs
+@@ -0,0 +1,86 @@
++#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
++using System.Collections;
++using System.IO;
++using System.Threading.Tasks;
++using UnityEngine;
++
++namespace LegendsOfRus
++{
++    internal static class AndroidCredentialDevelopmentProbe
++    {
++        const string Extra = "lor_credential_probe";
++        static bool running;
++        static AndroidCredentialProbeHost interruptedHost;
++        internal static bool BlocksAccounts
++        {
++            get
++            {
++#if UNITY_ANDROID && DEVELOPMENT_BUILD && !UNITY_EDITOR
++                if (running) return true;
++                try
++                {
++                    using (var context = Context())
++                    using (var file = context.Call<AndroidJavaObject>("getNoBackupFilesDir"))
++                        return Directory.Exists(Path.Combine(file.Call<string>("getAbsolutePath"), AndroidCredentialProbeHost.DirectoryName));
++                }
++                catch { return true; }
++#else
++                return false;
++#endif
++            }
++        }
++        static AndroidJavaObject Context()
++        {
++            using (var unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
++            using (var activity = unity.GetStatic<AndroidJavaObject>("currentActivity"))
++                return activity.Call<AndroidJavaObject>("getApplicationContext");
++        }
++        internal static IEnumerator RunRequested(BackendAccountService service)
++        {
++#if UNITY_ANDROID && DEVELOPMENT_BUILD && !UNITY_EDITOR
++            string command = null;
++            try
++            {
++                using (var unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
++                using (var activity = unity.GetStatic<AndroidJavaObject>("currentActivity"))
++                using (var intent = activity.Call<AndroidJavaObject>("getIntent"))
++                {
++                    command = intent.Call<string>("getStringExtra", Extra);
++                    intent.Call<AndroidJavaObject>("removeExtra", Extra)?.Dispose();
++                }
++            }
++            catch { yield break; }
++            if (!CredentialProbeProtocol.KnownCommand(command) || running) yield break;
++            bool configured = service == null || service.IsConfigured;
++            var context = Context();
++            running = true;
++            var task = Task.Run(() =>
++            {
++                AndroidJNI.AttachCurrentThread();
++                AndroidCredentialProbeHost host = null;
++                try
++                {
++                    host = new AndroidCredentialProbeHost(context, configured);
++                    var report = CredentialProbeProtocol.Run(command, host);
++                    host.WriteReport(report);
++                    if (report.status == "awaiting_force_stop") interruptedHost = host;
++                    return report.status;
++                }
++                catch { return "failed_retained"; }
++                finally
++                {
++                    if (host != interruptedHost) { if (host != null) host.Dispose(); else context.Dispose(); }
++                    AndroidJNI.DetachCurrentThread();
++                }
++            });
++            while (!task.IsCompleted) yield return null;
++            running = false;
++            // Fixed status only: no exception, fixture, account, ciphertext or token output.
++            Debug.Log("LOR_CREDENTIAL_PROBE " + (task.IsFaulted ? "failed_retained" : task.Result));
++#else
++            yield break;
++#endif
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialDevelopmentProbe.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 1850d9d6d4b44e9a9042eb6f838b12cf
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialProbeHost.cs
+@@ -0,0 +1,190 @@
++#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
++using System;
++using System.IO;
++using System.Security.Cryptography;
++using System.Text;
++using System.Threading;
++using UnityEngine;
++
++namespace LegendsOfRus
++{
++    // Called only on the attached JNI worker thread. The reviewed Java plugins are unchanged.
++    internal sealed class AndroidCredentialProbeHost : ICredentialProbeHost, IDisposable
++    {
++        internal const string DirectoryName = "lor-credential-development-probe";
++        internal const string ReportName = "lor-credential-probe-report.json";
++        const string Alias = "lor.backend.credentials.v1";
++        const string RecordName = "lor-backend-credentials-v1.bin";
++        static readonly byte[] Partial = Encoding.ASCII.GetBytes("LOR DISPOSABLE PARTIAL WRITE V1");
++        readonly AndroidJavaObject context;
++        readonly string directory, record, marker;
++        readonly bool configured;
++        AndroidJavaObject pendingAtomic, pendingOutput;
++        public bool Enabled { get; }
++        public bool AccountConfigured => configured;
++        public int ProcessId { get; }
++        public bool OwnershipDirectoryExists => Directory.Exists(directory);
++        public bool StoreEmpty => !File.Exists(record) && !File.Exists(record + ".new") && !File.Exists(record + ".bak") && !HasKey();
++
++        internal AndroidCredentialProbeHost(AndroidJavaObject context, bool accountConfigured)
++        {
++            this.context = context; configured = accountConfigured;
++            using (var info = context.Call<AndroidJavaObject>("getApplicationInfo"))
++                Enabled = context.Call<string>("getPackageName") == "com.example.legendsofrus.v117debug" && (info.Get<int>("flags") & 2) != 0;
++            using (var process = new AndroidJavaClass("android.os.Process")) ProcessId = process.CallStatic<int>("myPid");
++            using (var file = context.Call<AndroidJavaObject>("getNoBackupFilesDir"))
++            {
++                string root = file.Call<string>("getAbsolutePath");
++                directory = Path.Combine(root, DirectoryName); record = Path.Combine(root, RecordName);
++                marker = Path.Combine(directory, "state.json");
++            }
++        }
++        AndroidJavaObject KeyStore()
++        {
++            using (var type = new AndroidJavaClass("java.security.KeyStore"))
++            {
++                var store = type.CallStatic<AndroidJavaObject>("getInstance", "AndroidKeyStore");
++                try { store.Call("load", new object[] { null }); return store; }
++                catch { store.Dispose(); throw; }
++            }
++        }
++        bool HasKey() { using (var store = KeyStore()) return store.Call<bool>("containsAlias", Alias); }
++        public CredentialProbeState LoadState()
++        {
++            if (!File.Exists(marker) || new FileInfo(marker).Length > 2048) return null;
++            var state = JsonUtility.FromJson<CredentialProbeState>(File.ReadAllText(marker));
++            return state != null && state.Valid ? state : null;
++        }
++        public void SaveState(CredentialProbeState state, bool create)
++        {
++            Require(state != null && state.Valid);
++            if (create)
++            {
++                Require(!OwnershipDirectoryExists && StoreEmpty);
++                Directory.CreateDirectory(directory);
++            }
++            else Require(LoadState()?.runId == state.runId);
++            AtomicText(marker, JsonUtility.ToJson(state));
++        }
++        static void AtomicText(string path, string value)
++        {
++            byte[] bytes = Encoding.UTF8.GetBytes(value); string temporary = path + ".tmp";
++            using (var stream = new FileStream(temporary, FileMode.Create, FileAccess.Write, FileShare.None))
++            { stream.Write(bytes, 0, bytes.Length); stream.Flush(true); }
++            if (File.Exists(path)) File.Replace(temporary, path, null); else File.Move(temporary, path);
++        }
++        static string Hash(byte[] bytes)
++        {
++            using (var sha = SHA256.Create()) return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "").ToLowerInvariant();
++        }
++        static string FileHash(string path)
++        {
++            if (!File.Exists(path)) return null;
++            long length = new FileInfo(path).Length;
++            if (length <= 0 || length > 16416) return "invalid";
++            return Hash(File.ReadAllBytes(path));
++        }
++        bool Owns(CredentialProbeState state)
++        {
++            var saved = LoadState();
++            return state != null && state.Valid && saved != null && saved.runId == state.runId && saved.recordHash == state.recordHash;
++        }
++        public bool RecordMatches(CredentialProbeState state, bool allowAlternate = false)
++        {
++            if (!Owns(state) || File.Exists(record + ".new") || File.Exists(record + ".bak")) return false;
++            string hash = FileHash(record);
++            return hash == state.recordHash || (allowAlternate && CredentialProbeState.Hash(state.alternateHash) && LoadState().alternateHash == state.alternateHash && hash == state.alternateHash);
++        }
++        public string RecordHash()
++        {
++            Require(LoadState() != null && !File.Exists(record + ".new") && !File.Exists(record + ".bak"));
++            return FileHash(record);
++        }
++        bool Operation(string method, string payload, out string value)
++        {
++            value = null;
++            Require(Enabled && !configured && LoadState() != null);
++            using (var type = new AndroidJavaClass("com.legendsofrus.credentials.AndroidCredentialBridge"))
++            using (var operation = payload == null ? type.CallStatic<AndroidJavaObject>(method, context) : type.CallStatic<AndroidJavaObject>(method, context, payload))
++            {
++                var watch = System.Diagnostics.Stopwatch.StartNew();
++                while (!operation.Get<bool>("done"))
++                {
++                    if (watch.Elapsed.TotalSeconds > 30) throw new TimeoutException("probe_timeout");
++                    Thread.Sleep(20);
++                }
++                bool success = operation.Get<bool>("success");
++                if (success) value = operation.Get<string>("value");
++                return success;
++            }
++        }
++        public bool Read(out string value) => Operation("beginRead", null, out value);
++        public bool Write(string value) => Operation("beginWrite", value, out _);
++        public void BeginInterruptedWrite(CredentialProbeState state)
++        {
++            Require(RecordMatches(state) && HasKey());
++            using (var file = new AndroidJavaObject("java.io.File", record))
++                pendingAtomic = new AndroidJavaObject("android.util.AtomicFile", file);
++            pendingOutput = pendingAtomic.Call<AndroidJavaObject>("startWrite");
++            pendingOutput.Call("write", Partial);
++            using (var fd = pendingOutput.Call<AndroidJavaObject>("getFD")) fd.Call("sync");
++            // Deliberately leave the write open. The host runner force-stops this process.
++        }
++        public bool InterruptedFilesMatch(CredentialProbeState state)
++        {
++            if (!Owns(state)) return false;
++            string main = FileHash(record), next = FileHash(record + ".new"), backup = FileHash(record + ".bak");
++            string partialHash = Hash(Partial);
++            // AtomicFile uses .bak on older Android and .new on newer Android.
++            return (main == state.recordHash && next == partialHash && backup == null) ||
++                (main == partialHash && backup == state.recordHash && next == null);
++        }
++        public byte[] Corrupt(CredentialProbeState state)
++        {
++            Require(RecordMatches(state));
++            byte[] original = File.ReadAllBytes(record); byte[] corrupt = (byte[])original.Clone(); corrupt[corrupt.Length - 1] ^= 0x40;
++            state.alternateHash = Hash(corrupt); SaveState(state, false);
++            WriteBytes(record, corrupt); return original;
++        }
++        public void Restore(CredentialProbeState state, byte[] original)
++        {
++            Require(Owns(state) && Hash(original) == state.recordHash && FileHash(record) == state.alternateHash && RecordMatches(state, true));
++            WriteBytes(record, original); state.alternateHash = null; SaveState(state, false);
++        }
++        static void WriteBytes(string path, byte[] bytes)
++        {
++            using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
++            { stream.Write(bytes, 0, bytes.Length); stream.Flush(true); }
++        }
++        public void RemoveKey(CredentialProbeState state)
++        {
++            Require(RecordMatches(state));
++            using (var store = KeyStore()) store.Call("deleteEntry", Alias);
++            Require(!HasKey());
++        }
++        public void Cleanup(CredentialProbeState state)
++        {
++            Require(RecordMatches(state, true));
++            using (var store = KeyStore()) store.Call("deleteEntry", Alias);
++            Require(!HasKey() && RecordMatches(state, true));
++            File.Delete(record);
++            Require(StoreEmpty && Owns(state));
++            File.Delete(marker);
++            if (File.Exists(marker + ".tmp")) File.Delete(marker + ".tmp");
++            Directory.Delete(directory, false);
++        }
++        internal void WriteReport(CredentialProbeReport report)
++        {
++            Require(Enabled);
++            AtomicText(Path.Combine(Path.GetDirectoryName(directory), ReportName), JsonUtility.ToJson(report, true));
++        }
++        public void Dispose()
++        {
++            // Java global references stay retained while an interrupted write is awaiting force-stop.
++            if (pendingOutput != null) return;
++            pendingAtomic?.Dispose(); context.Dispose();
++        }
++        static void Require(bool condition) { if (!condition) throw new InvalidOperationException("probe_ownership_or_state"); }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialProbeHost.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 63edbd9265c640219fbb422f194b2b18
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/CredentialProbeProtocol.cs
+@@ -0,0 +1,117 @@
++#if UNITY_EDITOR || DEVELOPMENT_BUILD
++using System;
++using System.Collections.Generic;
++
++namespace LegendsOfRus
++{
++    [Serializable] public sealed class CredentialProbeState
++    {
++        public int version = 1;
++        public string runId, stage, recordHash, alternateHash;
++        public int processId;
++        public string Payload => "LegendsOfRus disposable credential probe v1 " + runId;
++        public bool Valid => version == 1 && Guid.TryParseExact(runId, "N", out _) && processId > 0 &&
++            (stage == "initializing" || stage == "restart" || stage == "interrupt" || stage == "corrupt" || stage == "keymissing") &&
++            (stage == "initializing" || Hash(recordHash)) && (string.IsNullOrEmpty(alternateHash) || Hash(alternateHash));
++        public static bool Hash(string text)
++        {
++            if (text == null || text.Length != 64) return false;
++            foreach (char c in text) if (!(c >= '0' && c <= '9' || c >= 'a' && c <= 'f')) return false;
++            return true;
++        }
++    }
++    [Serializable] public sealed class CredentialProbeReport
++    {
++        public int version = 1;
++        public string command, status;
++        public string[] checks;
++        public bool authenticatedSessionTested = false;
++    }
++    public interface ICredentialProbeHost
++    {
++        bool Enabled { get; }
++        bool AccountConfigured { get; }
++        int ProcessId { get; }
++        bool OwnershipDirectoryExists { get; }
++        bool StoreEmpty { get; } // Includes base, sidecars AND alias existence; no credential read.
++        CredentialProbeState LoadState();
++        void SaveState(CredentialProbeState state, bool create);
++        bool RecordMatches(CredentialProbeState state, bool allowAlternate = false);
++        string RecordHash();
++        bool Read(out string value);
++        bool Write(string value);
++        void BeginInterruptedWrite(CredentialProbeState state);
++        bool InterruptedFilesMatch(CredentialProbeState state);
++        byte[] Corrupt(CredentialProbeState state); // Records expected alternate hash BEFORE mutation.
++        void Restore(CredentialProbeState state, byte[] original);
++        void RemoveKey(CredentialProbeState state);
++        void Cleanup(CredentialProbeState state); // Must validate ownership before each destructive step.
++    }
++    public static class CredentialProbeProtocol
++    {
++        public static bool KnownCommand(string command) => command == "prepare" || command == "restart" || command == "verify" || command == "cleanup";
++        public static CredentialProbeReport Run(string command, ICredentialProbeHost host)
++        {
++            var checks = new List<string>();
++            var report = new CredentialProbeReport { command = KnownCommand(command) ? command : "invalid", status = "refused", checks = new string[0] };
++            if (!KnownCommand(command) || !host.Enabled || host.AccountConfigured) return report;
++            try
++            {
++                if (command == "prepare")
++                {
++                    // Never read or overwrite an existing vault, even if its content looks synthetic.
++                    if (host.OwnershipDirectoryExists || !host.StoreEmpty) return report;
++                    var state = new CredentialProbeState { runId = Guid.NewGuid().ToString("N"), stage = "initializing", processId = host.ProcessId };
++                    host.SaveState(state, true);
++                    Require(host.Read(out var empty) && empty == null); checks.Add("pristine_read");
++                    Require(host.Write(state.Payload)); checks.Add("write");
++                    Require(host.Read(out var value) && value == state.Payload); checks.Add("read_back");
++                    state.recordHash = host.RecordHash(); Require(CredentialProbeState.Hash(state.recordHash));
++                    state.stage = "restart"; host.SaveState(state, false);
++                    report.status = "awaiting_restart";
++                }
++                else
++                {
++                    if (!host.OwnershipDirectoryExists) return report;
++                    var state = host.LoadState();
++                    if (state == null || !state.Valid || state.stage == "initializing") return report;
++                    if (command == "cleanup")
++                    {
++                        if (state.stage == "interrupt" || !host.RecordMatches(state, true)) return report;
++                        host.Cleanup(state); report.status = "cleaned";
++                    }
++                    else if (command == "restart")
++                    {
++                        if (state.stage != "restart" || state.processId == host.ProcessId || !host.RecordMatches(state)) return report;
++                        Require(host.Read(out var value) && value == state.Payload); checks.Add("process_restart_read");
++                        state.stage = "interrupt"; state.processId = host.ProcessId; host.SaveState(state, false);
++                        host.BeginInterruptedWrite(state);
++                        Require(host.InterruptedFilesMatch(state));
++                        report.status = "awaiting_force_stop";
++                    }
++                    else
++                    {
++                        if (state.stage != "interrupt" || state.processId == host.ProcessId || !host.InterruptedFilesMatch(state)) return report;
++                        Require(host.Read(out var value) && value == state.Payload && host.RecordMatches(state)); checks.Add("interrupted_write_recovery");
++                        state.stage = "corrupt";
++                        byte[] original = host.Corrupt(state);
++                        Require(!host.Read(out _) && !host.Write(state.Payload) && host.RecordMatches(state, true)); checks.Add("corruption_rejected");
++                        host.Restore(state, original);
++                        Require(host.Read(out value) && value == state.Payload); checks.Add("owned_fixture_restored");
++                        state.stage = "keymissing"; state.alternateHash = null; host.SaveState(state, false);
++                        host.RemoveKey(state);
++                        Require(!host.Read(out _) && !host.Write(state.Payload) && host.RecordMatches(state)); checks.Add("missing_key_rejected");
++                        host.Cleanup(state); checks.Add("owned_fixture_cleanup");
++                        Require(host.StoreEmpty && !host.OwnershipDirectoryExists);
++                        report.status = "passed";
++                    }
++                }
++            }
++            catch { report.status = "failed_retained"; } // No exception/payload/record/key material in results.
++            report.checks = checks.ToArray();
++            return report;
++        }
++        static void Require(bool condition) { if (!condition) throw new InvalidOperationException("probe_check_failed"); }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/CredentialProbeProtocol.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 232dfce9587c493b87e9bdcad78cfef3
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/FunctionalGameFlowEditMode/CredentialProbeProtocolTests.cs
+@@ -0,0 +1,114 @@
++#if UNITY_EDITOR
++using System;
++using System.Text;
++using System.Security.Cryptography;
++using NUnit.Framework;
++
++namespace LegendsOfRus.Tests.FunctionalGameFlow
++{
++    public sealed class CredentialProbeProtocolTests
++    {
++        // Protocol fixture only. Actual AES/AtomicFile/JNI acceptance requires the Android runner.
++        sealed class Host : ICredentialProbeHost
++        {
++            public bool Enabled { get; set; } = true;
++            public bool AccountConfigured { get; set; }
++            public int ProcessId { get; set; } = 11;
++            public bool OwnershipDirectoryExists { get; set; }
++            internal bool Key, Partial, Corrupted, FailWrite, FailMarker, FailRead, AcceptCorrupt, AcceptMissingKey;
++            internal byte[] Record;
++            internal string Payload;
++            internal CredentialProbeState State;
++            internal int Reads, Writes, Faults, KeyDeletes, Cleanups;
++            public bool StoreEmpty => Record == null && !Key && !Partial;
++            static string Hash(byte[] bytes)
++            { if (bytes == null) return null; using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","").ToLowerInvariant(); }
++            public CredentialProbeState LoadState() => State == null ? null : new CredentialProbeState {
++                version=State.version, runId=State.runId, stage=State.stage, processId=State.processId, recordHash=State.recordHash, alternateHash=State.alternateHash
++            };
++            public void SaveState(CredentialProbeState state, bool create)
++            {
++                if(FailMarker)throw new InvalidOperationException("synthetic marker failure");
++                State=state;State=LoadState();OwnershipDirectoryExists=true;
++            }
++            public bool RecordMatches(CredentialProbeState s,bool allowAlternate=false) => !Partial && Record != null &&
++                (Hash(Record)==s.recordHash || (allowAlternate && Hash(Record)==s.alternateHash));
++            public string RecordHash()=>Hash(Record);
++            public bool Read(out string value)
++            {
++                Reads++;value=null;
++                if(FailRead || (Corrupted && !AcceptCorrupt) || (Record!=null && !Key && !AcceptMissingKey))return false;
++                if(Record==null)return !Key;
++                Partial=false;value=Payload;return true;
++            }
++            public bool Write(string value)
++            {
++                Writes++;
++                if(FailWrite || Corrupted || (Record!=null && !Key))return false;
++                Key=true;Payload=value;Record=Encoding.UTF8.GetBytes("synthetic encrypted fixture: "+value);return true;
++            }
++            public void BeginInterruptedWrite(CredentialProbeState state){Partial=true;}
++            public bool InterruptedFilesMatch(CredentialProbeState state)=>Partial && Hash(Record)==state.recordHash;
++            public byte[] Corrupt(CredentialProbeState state)
++            {
++                Faults++;var old=(byte[])Record.Clone();Record[Record.Length-1]^=64;Corrupted=true;
++                state.alternateHash=Hash(Record);SaveState(state,false);return old;
++            }
++            public void Restore(CredentialProbeState state,byte[] original){Record=original;Corrupted=false;state.alternateHash=null;SaveState(state,false);}
++            public void RemoveKey(CredentialProbeState state){KeyDeletes++;Key=false;}
++            public void Cleanup(CredentialProbeState state){Cleanups++;Key=false;Record=null;State=null;OwnershipDirectoryExists=false;}
++        }
++        static CredentialProbeReport Run(string command,Host host)=>CredentialProbeProtocol.Run(command,host);
++        static Host Prepared()
++        {
++            var h=new Host();Assert.AreEqual("awaiting_restart",Run("prepare",h).status);return h;
++        }
++        static Host Interrupted()
++        {
++            var h=Prepared();h.ProcessId++;Assert.AreEqual("awaiting_force_stop",Run("restart",h).status);h.ProcessId++;return h;
++        }
++        static void NoVaultAccess(Host h){Assert.AreEqual(0,h.Reads);Assert.AreEqual(0,h.Writes);Assert.AreEqual(0,h.Faults);Assert.AreEqual(0,h.KeyDeletes);Assert.AreEqual(0,h.Cleanups);}
++        [Test] public void ThreeProcessesCompleteAndRemoveOnlyOwnedFixture()
++        {
++            var h=Interrupted();var result=Run("verify",h);Assert.AreEqual("passed",result.status);
++            CollectionAssert.AreEqual(new[]{"interrupted_write_recovery","corruption_rejected","owned_fixture_restored","missing_key_rejected","owned_fixture_cleanup"},result.checks);
++            Assert.IsTrue(h.StoreEmpty);Assert.IsFalse(h.OwnershipDirectoryExists);Assert.IsFalse(result.authenticatedSessionTested);
++        }
++        [TestCase(null)] [TestCase("")] [TestCase("delete")] [TestCase("../prepare")]
++        public void InvalidCommandCannotTouchVault(string command){var h=new Host();Assert.AreEqual("refused",Run(command,h).status);NoVaultAccess(h);}
++        [Test] public void NonDevelopmentHostCannotTouchVault(){var h=new Host{Enabled=false};Assert.AreEqual("refused",Run("prepare",h).status);NoVaultAccess(h);}
++        [Test] public void ConfiguredAccountCannotTouchVault(){var h=new Host{AccountConfigured=true};Assert.AreEqual("refused",Run("prepare",h).status);NoVaultAccess(h);}
++        [TestCase(true,false,false)] [TestCase(false,true,false)] [TestCase(false,false,true)] [TestCase(true,true,true)]
++        public void ExistingRecordKeyOrSidecarCannotBeReadOrDeleted(bool record,bool key,bool sidecar)
++        {
++            var h=new Host{Record=record?new byte[]{1}:null,Key=key,Partial=sidecar};Assert.AreEqual("refused",Run("prepare",h).status);NoVaultAccess(h);
++        }
++        [Test] public void ExistingOwnershipDirectoryCannotBeOverwritten(){var h=new Host{OwnershipDirectoryExists=true};Assert.AreEqual("refused",Run("prepare",h).status);NoVaultAccess(h);}
++        [TestCase("restart")] [TestCase("verify")] [TestCase("cleanup")]
++        public void MissingOrMalformedOwnershipRefuses(string command)
++        {
++            var h=new Host{OwnershipDirectoryExists=true,State=new CredentialProbeState{runId="invalid"}};Assert.AreEqual("refused",Run(command,h).status);NoVaultAccess(h);
++        }
++        [Test] public void MarkerFailurePrecedesAnyCredentialAccess(){var h=new Host{FailMarker=true};Assert.AreEqual("failed_retained",Run("prepare",h).status);NoVaultAccess(h);}
++        [Test] public void FailedWriteRetainsOwnershipAndDoesNotClaimPass()
++        {
++            var h=new Host{FailWrite=true};Assert.AreEqual("failed_retained",Run("prepare",h).status);Assert.IsTrue(h.OwnershipDirectoryExists);Assert.AreEqual(0,h.Cleanups);
++            Assert.AreEqual("refused",Run("cleanup",h).status);
++        }
++        [Test] public void SameProcessCannotPretendToHaveRestarted(){var h=Prepared();int reads=h.Reads;Assert.AreEqual("refused",Run("restart",h).status);Assert.AreEqual(reads,h.Reads);Assert.IsFalse(h.Partial);}
++        [Test] public void SameProcessCannotPretendInterruptedRecovery(){var h=Interrupted();h.ProcessId--;Assert.AreEqual("refused",Run("verify",h).status);Assert.AreEqual(0,h.Faults);}
++        [TestCase("restart")] [TestCase("cleanup")]
++        public void ChangedCiphertextBlocksReadAndCleanup(string command)
++        {
++            var h=Prepared();h.ProcessId++;h.Record[0]^=1;int reads=h.Reads;Assert.AreEqual("refused",Run(command,h).status);Assert.AreEqual(reads,h.Reads);Assert.AreEqual(0,h.Cleanups);
++        }
++        [Test] public void WrongPhaseIsNotARecoveryPass(){var h=Prepared();h.ProcessId++;Assert.AreEqual("refused",Run("verify",h).status);Assert.AreEqual(0,h.Faults);}
++        [Test] public void MissingPartialWriteDoesNotCountAsInterruption(){var h=Interrupted();h.Partial=false;int reads=h.Reads;Assert.AreEqual("refused",Run("verify",h).status);Assert.AreEqual(reads,h.Reads);}
++        [Test] public void RecoveryFailureStopsBeforeFaultInjection(){var h=Interrupted();h.FailRead=true;Assert.AreEqual("failed_retained",Run("verify",h).status);Assert.AreEqual(0,h.Faults);Assert.AreEqual(0,h.KeyDeletes);}
++        [Test] public void IncorrectCorruptionAcceptanceIsFailure(){var h=Interrupted();h.AcceptCorrupt=true;Assert.AreEqual("failed_retained",Run("verify",h).status);Assert.AreEqual(0,h.KeyDeletes);Assert.AreEqual(0,h.Cleanups);}
++        [Test] public void IncorrectMissingKeyAcceptanceIsFailure(){var h=Interrupted();h.AcceptMissingKey=true;Assert.AreEqual("failed_retained",Run("verify",h).status);Assert.AreEqual(0,h.Cleanups);}
++        [Test] public void KnownFixtureCanBeCleanedWithoutResettingApp(){var h=Prepared();Assert.AreEqual("cleaned",Run("cleanup",h).status);Assert.IsTrue(h.StoreEmpty);}
++        [Test] public void PendingWriteCannotBeCleanedWhileUnfinished(){var h=Interrupted();Assert.AreEqual("refused",Run("cleanup",h).status);Assert.AreEqual(0,h.Cleanups);}
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/FunctionalGameFlowEditMode/CredentialProbeProtocolTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: df8be515224547238b02f47d79a91545

@@ -16,14 +16,12 @@ namespace LegendsOfRus
             if(shop==null||!shop.HasRequiredBindings)throw new InvalidOperationException("Individual Ranking requires the accepted shared header.");
             v.Typography=shop.Typography;
             v.Content=Rect(root,"INDIVIDUAL_RANKING_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("FrontEndHomeAligned/loading_environment_dusk"),0,0,941,1672);v.Environment.color=new Color(.46f,.46f,.52f,1);
-            v.Body=Rect(v.Content,"Composition",0,0,941,1672);v.Hud=Rect(v.Body,"NativeHud",0,0,941,235);
-            Clone(shop.Body.Find("NativeHudBacking"),v.Hud);
-            v.ProfileButton=Clone(shop.ProfileButton.transform,v.Hud).GetComponent<Button>();v.SettingsButton=Clone(shop.SettingsButton.transform,v.Hud).GetComponent<Button>();
-            v.HeroName=Clone(shop.HeroName.transform,v.Hud).GetComponent<Text>();v.LevelText=Clone(shop.LevelText.transform,v.Hud).GetComponent<Text>();
-            v.PlusButtons=new Button[3];Text[] sourceValues={shop.GoldText,shop.GemsText,shop.EnergyText},values=new Text[3];
-            for(int i=0;i<3;i++){Clone(shop.Body.Find("ResourceCapsule_"+i),v.Hud);Clone(shop.Body.Find("ResourceIcon_"+i),v.Hud);values[i]=Clone(sourceValues[i].transform,v.Hud).GetComponent<Text>();v.PlusButtons[i]=Clone(shop.PlusButtons[i].transform,v.Hud).GetComponent<Button>();}
-            v.GoldText=values[0];v.GemsText=values[1];v.EnergyText=values[2];
-
+            v.Body=Rect(v.Content,"Composition",0,0,941,1672);
+            var shared=UnityEngine.Object.Instantiate(shop.Header,v.Body,false);shared.name="NativeHud";
+            v.Hud=(RectTransform)shared.transform;v.Header=shared;
+            v.ProfileButton=shared.Profile;v.SettingsButton=shared.Settings;
+            v.HeroName=shared.PlayerName;v.LevelText=shared.Level;
+            v.PlusButtons=shared.Plus;v.GoldText=shared.Balances[0];v.GemsText=shared.Balances[1];v.EnergyText=shared.Balances[2];
 
             v.Title=Art(v.Body,"TitlePlaque",Load("title_r3"),211,117,535,184);
             v.Heading=Label(v,v.Body,"Heading",260,169,435,105,64);Gold(v.Heading,true);

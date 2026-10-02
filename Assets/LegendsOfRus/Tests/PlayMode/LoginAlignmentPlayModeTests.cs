@@ -53,6 +53,67 @@ namespace LegendsOfRus.Tests.PlayMode
             router.Viewport.GetComponentInChildren<SplashTitleView>().AccountButton.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Login));View().Back.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.SplashTitle));
             router.Show(ScreenId.Home);Settle();router.Show(ScreenId.Settings);Settle();yield return null;router.Viewport.GetComponentInChildren<ProductionSettingsView>().Rows[2].onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Login));router.Show(ScreenId.Login);Settle();router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Settings));router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));
         }
+        [UnityTest]public IEnumerator ButtonPressRestoresAndDoesNotSubmitCredentials()
+        {
+            yield return WaitForNormalButtonColors();var v=View();string save=StableSave();int generation=router.RouteGeneration;
+            foreach(var b in new[]{v.Login,v.Guest,v.Link,v.Eye,v.Providers[0],v.Back}){
+                var feedback=b.GetComponent<ProductionMapButtonFeedback>();Assert.That(feedback,Is.Not.Null);
+                var data=new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left,pointerId=17};
+                Color before=b.targetGraphic.canvasRenderer.GetColor();
+                ExecuteEvents.Execute(b.gameObject,data,ExecuteEvents.pointerDownHandler);
+                Assert.That(feedback.IsPressed,Is.True);Assert.That(b.targetGraphic.canvasRenderer.GetColor().r,Is.LessThan(before.r));
+                Assert.That(v.InfoPanel.activeSelf,Is.False);Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+                if(b==v.Guest)Capture("Login_GuestPressed_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+                ExecuteEvents.Execute(b.gameObject,data,ExecuteEvents.pointerExitHandler);
+                yield return WaitForNormalButtonColors();Assert.That(feedback.IsPressed,Is.False);
+            }
+            Assert.That(StableSave(),Is.EqualTo(save));Assert.That(DemoFeatureState.GuestSignedIn,Is.False);
+        }
+        [UnityTest]public IEnumerator NativeSmallControlsLegalPanelsAndReturn()
+        {
+            string save=StableSave();
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(ScreenId.Settings);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);router.Show(ScreenId.Login);Settle();yield return null;
+                yield return WaitForNormalButtonColors();var v=View();int generation=router.RouteGeneration;
+                Capture("Login_SmallTargets_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    Rect eye=Bounds(v.Eye.image.rectTransform,camera);
+                    Click(v.Eye,camera,new Vector2(eye.center.x,eye.yMax+2));Assert.That(v.PasswordVisible,Is.True);
+                    Click(v.Eye,camera,new Vector2(eye.center.x,eye.yMax+2));Assert.That(v.PasswordVisible,Is.False);
+                    Rect link=Bounds(v.Link.image.rectTransform,camera);
+                    Click(v.Link,camera,new Vector2(link.center.x,link.yMin-2));
+                });
+                yield return null;Assert.That(v.InfoPanel.activeSelf,Is.True);
+                Capture("Login_TallLink_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>Click(v.InfoClose,camera));
+                foreach(var button in new[]{v.Terms,v.Privacy})
+                {
+                    yield return null;
+                    Capture("Login_"+button.name+"Target_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>Click(button,camera));
+                    Assert.That(v.InfoPanel.activeSelf,Is.True);yield return null;
+                    Capture("Login_"+button.name+"Tall_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+                    DemoFeatureState.SetLanguage(language=="ru"?"en":"ru");v.RefreshContent();yield return null;
+                    Capture("Login_"+button.name+"Relocalized_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>Click(v.InfoClose,camera));
+                    DemoFeatureState.SetLanguage(language);v.RefreshContent();yield return null;
+                }
+                Capture("Login_ReturnSettings_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>Click(v.Back,camera));
+                Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Settings));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));Assert.That(StableSave(),Is.EqualTo(save));
+            }
+        }
+        static void Click(Button button,Camera camera,Vector2? point=null)
+        {
+            var pointer=new PointerEventData(EventSystem.current){position=point??Bounds(button.image.rectTransform,camera).center,button=PointerEventData.InputButton.Left};
+            var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+            Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
+            ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+        }
+        static Rect TouchBounds(Image image,Camera camera)
+        {
+            Rect art=Bounds(image.rectTransform,camera);float scale=art.width/image.rectTransform.rect.width;Vector4 p=image.raycastPadding;
+            return Rect.MinMaxRect(art.xMin+p.x*scale,art.yMin+p.y*scale,art.xMax-p.z*scale,art.yMax-p.w*scale);
+        }
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -63,7 +124,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 bool ready=true;
                 foreach(Button button in Root().GetComponentsInChildren<Button>())
                 {
-                    Color expected=(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
+                    Color expected=button.transition==Selectable.Transition.None?Color.white:(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
                     Color actual=button.targetGraphic.canvasRenderer.GetColor();
                     if(Mathf.Max(Mathf.Abs(actual.r-expected.r),Mathf.Abs(actual.g-expected.g),
                         Mathf.Abs(actual.b-expected.b),Mathf.Abs(actual.a-expected.a))>.0001f)ready=false;
@@ -116,8 +177,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionLoginView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -129,6 +188,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(View(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -151,11 +212,33 @@ namespace LegendsOfRus.Tests.PlayMode
             foreach(var button in v.GetComponentsInChildren<Button>()){
                 if(v.InfoPanel.activeSelf&&!button.transform.IsChildOf(v.InfoPanel.transform))continue;
                 Rect rect=Bounds((RectTransform)button.transform,camera);Assert.That(safeArea.Contains(rect.min)&&safeArea.Contains(rect.max),Is.True,button.name);
+                Rect target=TouchBounds(button.image,camera);
+                Assert.That(target.width,Is.GreaterThanOrEqualTo(44),button.name+" target width");Assert.That(target.height,Is.GreaterThanOrEqualTo(44),button.name+" target height");
+                Assert.That(safeArea.Contains(target.min)&&safeArea.Contains(target.max),Is.True,button.name+" safe target");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" input target");
             }
             if(!v.InfoPanel.activeSelf)foreach(var input in new[]{v.Identity,v.Password}){
                 Rect rect=Bounds((RectTransform)input.transform,camera);var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);Assert.That(hits[0].gameObject.GetComponentInParent<InputField>(),Is.SameAs(input));
             }
+            if(!v.InfoPanel.activeSelf)
+            {
+                var buttons=new List<Button>(v.GetComponentsInChildren<Button>());
+                for(int i=0;i<buttons.Count;i++)for(int j=i+1;j<buttons.Count;j++)Assert.That(TouchBounds(buttons[i].image,camera).Overlaps(TouchBounds(buttons[j].image,camera)),Is.False,buttons[i].name+" overlaps "+buttons[j].name);
+                foreach(var input in new[]{v.Identity,v.Password})
+                {
+                    Rect target=TouchBounds((Image)input.targetGraphic,camera);Assert.That(target.height,Is.GreaterThanOrEqualTo(44),input.name);
+                }
+            }
+            else
+            {
+                var shield=(RectTransform)v.InfoPanel.transform.Find("FullscreenShade");
+                foreach(var point in new[]{new Vector2(2,2),new Vector2(size.x-2,size.y-2),Bounds(v.Guest.image.rectTransform,camera).center,Bounds(v.Back.image.rectTransform,camera).center})
+                {
+                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                    Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject,Is.SameAs(shield.gameObject),"Modal shields underlying actions and screen edges");
+                }
+            }
+            Rect panel=Bounds(v.Panel.rectTransform,camera);Assert.That(safeArea.Contains(panel.min)&&safeArea.Contains(panel.max),Is.True,"Whole account panel within safe area");
             foreach(var text in v.GetComponentsInChildren<Text>())if(text.enabled&&text.gameObject.activeInHierarchy&&!string.IsNullOrEmpty(text.text))Assert.That(text.cachedTextGenerator.vertexCount,Is.GreaterThan(0),text.name);
         }
     }

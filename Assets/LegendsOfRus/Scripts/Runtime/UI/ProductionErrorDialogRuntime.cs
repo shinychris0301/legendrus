@@ -15,7 +15,7 @@ namespace LegendsOfRus
             v.Content=Rect(root,"ERROR_DIALOG_CONTENT",0,0,941,1672);
             v.Shade=Rect(v.Content,"ModalShade",0,0,941,1672).gameObject.AddComponent<Image>();v.Shade.color=new Color(0,0,0,.68f);v.Shade.raycastTarget=true;
             v.Body=Rect(v.Content,"Dialog",124,407,696,859);
-            Art(v.Body,"OriginalPanel",Load("panel"),0,0,696,859);
+            v.Panel=Art(v.Body,"OriginalPanel",Load("panel"),0,0,696,859);
             v.Heading=Label(v,v.Body,"Heading",75,87,547,63,43,true);var sh=v.Heading.gameObject.AddComponent<Shadow>();sh.effectColor=new Color(0,0,0,.8f);sh.effectDistance=new Vector2(2,-3);
             v.Emblem=Art(v.Body,"WarningEmblem",Load("emblem"),218,183,260,233);
             v.Description=Label(v,v.Body,"Description",94,416,508,78,29);v.Description.color=new Color32(45,29,13,255);
@@ -26,7 +26,7 @@ namespace LegendsOfRus
         }
         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
         static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){if(!s)throw new InvalidOperationException("Missing Error Dialog art "+n);var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.preserveAspect=true;a.raycastTarget=false;return a;}
-        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};var c=b.colors;c.disabledColor=new Color(.62f,.62f,.62f,1);b.colors=c;return b;}
+        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};b.transition=Selectable.Transition.None;b.gameObject.AddComponent<ProductionMapButtonFeedback>();return b;}
         static Text Label(ProductionErrorDialogView v,Transform p,string n,float x,float y,float w,float h,int size,bool title=false){var t=Rect(p,n,x,y,w,h).gameObject.AddComponent<Text>();t.font=title?v.TitleFont:v.BodyFont;t.fontSize=size;t.color=new Color32(241,204,128,255);t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;t.resizeTextForBestFit=true;t.resizeTextMinSize=size-6;t.resizeTextMaxSize=size;return t;}
     }
 }

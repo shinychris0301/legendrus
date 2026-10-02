@@ -62,6 +62,7 @@ namespace LegendsOfRus
         RectTransform viewport;
 
         GameObject contentRoot;
+        System.Collections.Generic.IReadOnlyList<StoryRecapEntry> recapEntries;
         GameObject modalRoot;
         GameObject modalVisualRoot;
         ScreenId? activeModalId;
@@ -80,12 +81,15 @@ namespace LegendsOfRus
         ScreenId current;
         bool settingsReturnToPause;
         ScreenId? settingsReturnPage;
+        bool friendsReturnToHome;
         ScreenId? languageReturnPage;
         ScreenId? loginReturnPage;
         Match3Board activeBoard;
         string activeAnalyticsLevelId = string.Empty;
         int activeAnalyticsAttemptNumber;
         LocalizedStoryReaction activeOutcomeReaction;
+        Text outcomeSpeaker, outcomeBody;
+        string outcomeLanguage;
         bool initialized;
         Coroutine loadingRoutine;
         HomeLoadingPreparation homePreparation;
@@ -119,6 +123,7 @@ namespace LegendsOfRus
 
         void Update()
         {
+            RefreshOutcomeReactionLanguage();
             if (!RuntimeInput.EscapePressedThisFrame()) return;
 
             if (modalMotionState == ModalMotionState.Opening ||
@@ -137,7 +142,7 @@ namespace LegendsOfRus
                 {
                     ResumeGameplayFromPause();
                 }
-                else if (activeModalId == ScreenId.Settings)
+                else if (activeModalId == ScreenId.Settings || activeModalId == ScreenId.TutorialOverlay)
                 {
                     NavigateBack();
                 }
@@ -186,8 +191,10 @@ namespace LegendsOfRus
 
         public void NavigateBack()
         {
+            if(activeModalId==ScreenId.Dialogue){if(!IsModalTransitioning)CloseModal();return;}
             if(activeModalId==ScreenId.EmptyErrorState){if(!IsModalTransitioning)CloseModal();return;}
-            if(current==ScreenId.TutorialOverlay){Show(tutorialReturnPage ?? ScreenId.SplashTitle);return;}
+            if(activeModalId==ScreenId.TutorialOverlay){if(IsModalTransitioning)return;var guide=modalVisualRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;RequestCloseModal(()=>activeBoard?.TryResume());return;}
+            if(current==ScreenId.TutorialOverlay){var guide=contentRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;Show(tutorialReturnPage ?? ScreenId.SplashTitle);return;}
             if (current == ScreenId.Login && contentRoot != null)
             {
                 var login = contentRoot.GetComponentInChildren<ProductionLoginView>();
@@ -232,6 +239,7 @@ namespace LegendsOfRus
             {
                 var friends=contentRoot.GetComponentInChildren<ProductionFriendsListView>();
                 if(friends!=null&&friends.InfoPanel.activeSelf){friends.CloseInfo();return;}
+                if(friendsReturnToHome){Show(ScreenId.Home);return;}
             }
             if(current==ScreenId.TeamChat&&contentRoot!=null)
             {
@@ -392,7 +400,26 @@ namespace LegendsOfRus
 
         public void Show(ScreenId id)
         {
+            if (GameState.Instance != null && GameState.Instance.TryGetRetainedRound(out _))
+            {
+                if (current == ScreenId.Fail && (id == ScreenId.Home || id == ScreenId.ChapterMap || id == ScreenId.WorldMap))
+                {
+                    if (!FinalizeRetainedRound()) return;
+                }
+                else if (id == ScreenId.Home || id == ScreenId.Gameplay || id == ScreenId.PreLevel)
+                {
+                    GameState.Instance.RestoreRetainedFailurePresentation();
+                    id = ScreenId.Fail;
+                }
+            }
+            if(id==ScreenId.TutorialOverlay && current==ScreenId.Gameplay){
+                if(activeModalId==ScreenId.TutorialOverlay||IsModalTransitioning||IsScreenTransitioning)return;
+                if(activeBoard==null)return;
+                if(activeBoard.Phase!=LegendsOfRus.GameplayCore.GameplayPhase.Paused&&!activeBoard.TryPause())return;
+                if(!ShowModal(ScreenId.TutorialOverlay))activeBoard.TryResume();return;
+            }
             if(id==ScreenId.EmptyErrorState){ShowErrorDialog();return;}
+            if(id!=current)friendsReturnToHome=id==ScreenId.FriendsList&&current==ScreenId.Home;
             if(id==ScreenId.TutorialOverlay&&current!=id)tutorialReturnPage=current;
             else if(id!=ScreenId.TutorialOverlay)tutorialReturnPage=null;
             if (id == ScreenId.Login && current != id) loginReturnPage = current;
@@ -749,7 +776,7 @@ namespace LegendsOfRus
                 case ScreenId.Profile:
                     var profilePage=parent.GetComponentInChildren<ProductionProfileView>();
                     if(profilePage==null||!profilePage.HasRequiredBindings)throw new InvalidOperationException("Profile native bindings are missing.");
-                    profilePage.Bind(target=>Show(target),NavigateBack);
+                    profilePage.Bind(target=>Show(target),NavigateBack,OpenStoryRecap);
                     return;
 
                 case ScreenId.Settings:
@@ -847,7 +874,7 @@ namespace LegendsOfRus
                 case ScreenId.TutorialOverlay:
                     var help=parent.GetComponentInChildren<ProductionTutorialView>();
                     if(help==null||!help.HasRequiredBindings)throw new InvalidOperationException("Tutorial native bindings are missing.");
-                    help.Bind(NavigateBack);
+                    help.Bind(NavigateBack,()=>{if(GameState.Instance.SelectLevel(1,1))Show(ScreenId.PreLevel);},target=>Show(target),openShop:category=>{Show(ScreenId.Shop);var shop=contentRoot.GetComponentInChildren<ProductionShopView>();if(shop)shop.SelectCategory(category);});
                     return;
 
                 case ScreenId.OfflineState:
@@ -1091,6 +1118,7 @@ namespace LegendsOfRus
 
         void StartLevel()
         {
+            if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
             GameState.Instance.EnsureSelectedLevelIsUnlocked();
             if (!GameState.Instance.SpendEnergy())
             {
@@ -1156,7 +1184,21 @@ namespace LegendsOfRus
 
         void RestartCurrentLevel()
         {
-            Show(ScreenId.Gameplay);
+            if (!FinalizeRetainedRound()) return;
+            Show(ScreenId.Gameplay); // Preserve the existing retry energy policy.
+        }
+
+        bool FinalizeRetainedRound()
+        {
+            var state = GameState.Instance;
+            if (!state.TryGetRetainedRound(out var retained)) return true;
+            if (state.TryFinalizeRetainedFailure(retained.attemptId)) return true;
+            // Rebuild resets the native button's one-shot navigation latch after a failed write.
+            Show(ScreenId.Fail);
+            Toast(DemoFeatureState.LanguageCode == "ru"
+                ? "Не удалось сохранить раунд. Повторите попытку."
+                : "Could not save the round. Please try again.");
+            return false;
         }
 
         void ContinueAfterVictory()
@@ -1245,9 +1287,19 @@ namespace LegendsOfRus
             return true;
         }
 
+        void OpenStoryRecap()
+        {
+            if(current!=ScreenId.Profile || HasActiveModalBlocker || IsScreenTransitioning)return;
+            var profile=contentRoot.GetComponentInChildren<ProductionProfileView>();
+            if(profile==null || !profile.CanAct() || profile.Section!=ProfileSection.History)return;
+            recapEntries=StoryRecap.Read(GameState.Instance!=null?GameState.Instance.Save:null);
+            if(recapEntries.Count==0){recapEntries=null;return;}
+            if(!ShowModal(ScreenId.Dialogue))recapEntries=null;
+        }
+
         bool ShowModal(ScreenId id)
         {
-            if (!IsSupportedModal(id))
+            if (!IsSupportedModal(id) || (id==ScreenId.Dialogue && (current!=ScreenId.Profile || recapEntries==null)))
             {
                 Debug.LogError($"Unsupported modal route rejected: {id}");
                 return false;
@@ -1331,6 +1383,17 @@ namespace LegendsOfRus
         {
             switch (id)
             {
+                case ScreenId.Dialogue:
+                    var dialogue=parent.GetComponentInChildren<ProductionDialogueView>();
+                    if(dialogue==null||!dialogue.HasRequiredBindings)throw new InvalidOperationException("Recap requires native Dialogue bindings.");
+                    dialogue.gameObject.AddComponent<ProductionStoryRecapView>().Bind(dialogue,recapEntries,
+                        ()=>activeModalId==ScreenId.Dialogue && !IsModalTransitioning && !IsScreenTransitioning,CloseModal);
+                    break;
+                case ScreenId.TutorialOverlay:
+                    var guide=parent.GetComponentInChildren<ProductionTutorialView>();
+                    if(guide==null||!guide.HasRequiredBindings)throw new InvalidOperationException("Tutorial modal native bindings missing.");
+                    guide.Bind(NavigateBack,()=>RequestCloseModal(()=>activeBoard?.TryResume()),null,true);
+                    break;
                 case ScreenId.EmptyErrorState:
                     var error=parent.GetComponentInChildren<ProductionErrorDialogView>();
                     if(error==null||!error.HasRequiredBindings)throw new InvalidOperationException("Error Dialog native bindings are missing.");
@@ -1451,6 +1514,7 @@ namespace LegendsOfRus
 
         void RetireModalRootImmediately()
         {
+            recapEntries=null;
             if (activeModalId == ScreenId.RewardClaim) { pendingRewardReceipt = null; pendingRewardDay = 0; }
             GameObject retiringRoot = modalRoot;
             modalRoot = null;
@@ -1471,7 +1535,7 @@ namespace LegendsOfRus
 
         static bool IsSupportedModal(ScreenId id)
         {
-            return id == ScreenId.Pause ||
+            return id == ScreenId.Dialogue || id == ScreenId.TutorialOverlay || id == ScreenId.Pause ||
                 id == ScreenId.Settings ||
                 id == ScreenId.OutOfEnergy ||
                 id == ScreenId.BoosterSelect ||
@@ -1558,25 +1622,16 @@ namespace LegendsOfRus
                 onFail: score =>
                 {
                     LevelData outcomeLevel = activeBoard.CurrentLevel;
-                    var failedProgress=new int[activeBoard.GoalCount];
-                    for(int i=0;i<failedProgress.Length;i++)failedProgress[i]=activeBoard.GetGoalSlot(i).Current;
-                    GameState.Instance.RecordLevelFailure(outcomeLevel, score, failedProgress);
-                    PrivacyAwareAnalytics.TryLevelFail(
-                        outcomeLevel.id,
-                        activeAnalyticsAttemptNumber,
-                        score
-                    );
-                    BalanceTelemetryReviewService.Instance?.TryRecordLevelFail(
-                        outcomeLevel,
-                        activeAnalyticsAttemptNumber,
-                        score
-                    );
+                    bool retained = GameState.Instance.TrySuspendRound(activeBoard.CaptureFailedRound());
                     ClearActiveGameplayAnalytics();
                     ShowOutcome(
                         ScreenId.Fail,
                         outcomeLevel,
                         StoryReactionOutcomes.Failure
                     );
+                    if (!retained) Toast(DemoFeatureState.LanguageCode == "ru"
+                        ? "Раунд не сохранён. Не закрывайте игру; повторите попытку или выйдите через меню."
+                        : "Round not saved. Keep the game open; retry or leave through the menu.");
                 }
             );
 
@@ -1728,8 +1783,22 @@ namespace LegendsOfRus
 
         void ShowOutcome(ScreenId id, LevelData level, string outcome)
         {
-            activeOutcomeReaction = StoryService.GetLocalizedReaction(level, outcome);
+            activeOutcomeReaction = StoryService.GetLocalizedReaction(level, outcome, DemoFeatureState.LanguageCode);
             Show(id);
+        }
+
+        void RefreshOutcomeReactionLanguage()
+        {
+            if (!outcomeSpeaker || !outcomeBody || activeOutcomeReaction == null ||
+                outcomeLanguage == DemoFeatureState.LanguageCode) return;
+            var localized = StoryCatalog.LocalizeReaction(
+                StoryCatalog.FindReaction(activeOutcomeReaction.LevelId, activeOutcomeReaction.Outcome),
+                StoryCatalog.LoadDialogueLanguage(DemoFeatureState.LanguageCode));
+            if (localized == null) return;
+            activeOutcomeReaction = localized;
+            outcomeSpeaker.text = localized.Speaker;
+            outcomeBody.text = localized.Text;
+            outcomeLanguage = DemoFeatureState.LanguageCode;
         }
 
         void BuildOutcomeReactionOverlay(RectTransform parent, ScreenId id)
@@ -1787,6 +1856,10 @@ namespace LegendsOfRus
             body.color = new Color32(244, 232, 203, 255);
             body.horizontalOverflow = HorizontalWrapMode.Wrap;
             body.verticalOverflow = VerticalWrapMode.Truncate;
+
+            outcomeSpeaker = speaker; outcomeBody = body;
+            outcomeLanguage = null;
+            RefreshOutcomeReactionLanguage();
 
             MetaUiTransition reactionTransition =
                 panel.AddComponent<MetaUiTransition>();

@@ -8,12 +8,15 @@ namespace LegendsOfRus
     public sealed class ProductionHomeLayout : MonoBehaviour
     {
         public RectTransform Content, Hud, HudBacking, Logo, Ivan, Firebird, Play, Navigation, Footer, FooterBase, FooterBacking;
+        public RectTransform[] SocialShortcuts;
         public Image Environment;
         public ProductionHomeShade Shade;
         readonly Vector3[] corners = new Vector3[4];
         bool applying;
         public bool SourceComposition;
-        public bool HasRequiredBindings => HasBaseBindings && HudBacking != null && FooterBase != null && FooterBacking != null;
+        public bool HasRequiredBindings => HasBaseBindings && HudBacking != null && FooterBase != null && FooterBacking != null &&
+            (!SourceComposition || (SocialShortcuts != null && SocialShortcuts.Length == 3 &&
+                System.Array.TrueForAll(SocialShortcuts, item => item != null)));
         // Older serialized revisions predate the backing and footer bindings. The Editor migration
         // uses this base contract so upgrading never destroys an otherwise complete page.
         public bool HasBaseBindings => Content != null && Hud != null && Logo != null && Ivan != null &&
@@ -37,8 +40,24 @@ namespace LegendsOfRus
             {
                 if (SourceComposition)
                 {
-                    // The whole source composition stays on the existing safe 941x1672 stage.
-                    // Extend only the clean environment, never separate overlapping extracted layers.
+                    // Preserve source sizes and all internal decoration registration. Only
+                    // translate the complete header/crest and lower control groups to safe edges.
+                    safeRect.GetWorldCorners(corners);
+                    Vector3 sourceLow = Content.InverseTransformPoint(corners[0]);
+                    Vector3 sourceHigh = Content.InverseTransformPoint(corners[2]);
+                    float sourceTop = sourceHigh.y - Content.rect.yMax;
+                    float sourceBottom = sourceLow.y - Content.rect.yMin;
+                    Position(Hud, 0, sourceTop);
+                    Position(Logo, 203, sourceTop - 107);
+                    Position(Play, 178, sourceBottom - 998);
+                    Position(Navigation, 0, sourceBottom - 1214);
+                    Position(Footer, 0, sourceBottom - 1454);
+                    // The hero extraction has a Play-shaped opening. Preserve its overlap
+                    // with that button and the lower cards rather than exposing the cutout.
+                    Position(Ivan, 0, sourceBottom - 466);
+                    for (int i = 0; i < SocialShortcuts.Length; i++)
+                        Position(SocialShortcuts[i], 34, sourceBottom - (490 + i * 170));
+                    // The clean environment alone covers the physical display.
                     canvasRect.GetWorldCorners(corners);
                     Vector3 low=Content.InverseTransformPoint(corners[0]), high=Content.InverseTransformPoint(corners[2]);
                     Vector2 nativeSize=Environment.sprite.rect.size;

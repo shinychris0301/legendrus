@@ -7,6 +7,10 @@ namespace LegendsOfRus
     {
         public static void Apply(ProductionGameplayView v)
         {
+            // Keep hidden Image components: RefreshState still uses their fillAmount values.
+            v.GoalProgress.sprite = null; v.StarProgress.sprite = null;
+            v.Hud.Find("GoalProgressFrame").GetComponent<Image>().sprite = null;
+            v.Hud.Find("StarProgressFrame").GetComponent<Image>().sprite = null;
             // Retain old objects and IDs; the new composition uses independent panel sprites.
             v.Hud.Find("HudPanel").gameObject.SetActive(false);
             Image oldScore=v.Footer.Find("ScorePanel").GetComponent<Image>();oldScore.enabled=false;

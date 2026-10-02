@@ -22,6 +22,10 @@ namespace LegendsOfRus
             v.BodyFont = Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
             v.TitleFont = Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
             v.Hall = Load("hall");
+            v.BlankPanel = Load("panel");
+            v.DobrynyaPanelRu = Load("panel_ru_r2");
+            v.ContinueRu = Load("continue_ru_r2");
+            v.ContinueLocalized = Load("continue");
             v.Forest = Resources.Load<Sprite>(ProductionLoadingRuntime.EnvironmentResource);
             v.Content = Rect(root,"DIALOGUE_ALIGNED_CONTENT",0,0,941,1672);
             v.Environment = Art(v.Content,"CleanEnvironment",v.Hall,0,0,941,1672);
@@ -29,7 +33,7 @@ namespace LegendsOfRus
             v.Ivan = Art(v.Body,"Ivan",Load("ivan"),0,254,490,870);
             v.Dobrynya = Art(v.Body,"Dobrynya",Load("dobrynya"),474,261,467,863);
             v.Firebird = Art(v.Body,"Firebird",Resources.Load<Sprite>("ProductionUI/LoadingAligned/firebird_journey"),211,300,650,760);
-            Art(v.Body,"SourceDialoguePanel",Load("panel"),45,1022,849,618);
+            v.Panel = Art(v.Body,"SourceDialoguePanel",v.BlankPanel,45,1022,849,618);
             v.Speaker = Label(v,v.Body,"Speaker",289,1086,365,71,49,true);
             var shadow=v.Speaker.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.9f);shadow.effectDistance=new Vector2(1,-2);
             v.Description = Label(v,v.Body,"Dialogue",124,1198,692,208,38);
@@ -41,9 +45,11 @@ namespace LegendsOfRus
             divider.color = new Color32(123,74,25,255);divider.raycastTarget=false;
             var diamond=Rect(v.Body,"DividerDiamond",463,1416,15,15).gameObject.AddComponent<Image>();
             diamond.rectTransform.localEulerAngles=new Vector3(0,0,45);diamond.color=divider.color;diamond.raycastTarget=false;
-            var face=Art(v.Body,"Continue",Load("continue"),195,1454,552,138);
+            var face=Art(v.Body,"Continue",v.ContinueLocalized,195,1454,552,138);
             face.raycastTarget=true;v.Continue=face.gameObject.AddComponent<Button>();v.Continue.targetGraphic=face;
             v.Continue.navigation=new Navigation{mode=Navigation.Mode.None};
+            v.Continue.transition=Selectable.Transition.None;
+            v.Continue.gameObject.AddComponent<ProductionMapButtonFeedback>();
             v.ContinueLabel=Label(v,face.transform,"Label",65,34,424,73,44,true);
             var layout=root.gameObject.AddComponent<ProductionDialogueLayout>();layout.View=v;v.Refresh();layout.ApplyNow();
         }

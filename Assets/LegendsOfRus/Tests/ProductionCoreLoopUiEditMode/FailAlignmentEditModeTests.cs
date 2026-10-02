@@ -11,7 +11,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
         {
             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(13));
+            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(ProductionFailView.CurrentRevision));
             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);

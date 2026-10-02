@@ -19,7 +19,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionWorldMapView : MonoBehaviour
     {
-        public const int CurrentRevision = 5;
+        public const int CurrentRevision = 6;
         public int Revision = CurrentRevision;
         public ProductionMapNotice Notice;
         public ProductionPlayerHeader Header;

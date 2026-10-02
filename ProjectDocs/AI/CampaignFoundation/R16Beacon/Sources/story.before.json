@@ -1,0 +1,802 @@
+{
+  "schemaVersion": 3,
+  "chapterId": 1,
+  "introSceneId": "chapter01.intro",
+  "scenes": [
+    {
+      "id": "chapter01.intro",
+      "trigger": "chapter01.first_launch",
+      "returnRoute": "PreLevel",
+      "lines": [
+        {
+          "speakerKey": "speaker.dobrynya",
+          "textKey": "story.chapter01.intro.01"
+        },
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.intro.02"
+        },
+        {
+          "speakerKey": "speaker.dobrynya",
+          "textKey": "story.chapter01.intro.03"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.firebird_found",
+      "trigger": "dialogue.firebird_found",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.firebird_found.01"
+        },
+        {
+          "speakerKey": "speaker.firebird",
+          "textKey": "story.chapter01.firebird_found.02"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.raven_watch",
+      "trigger": "dialogue.raven_watch",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.narrator",
+          "textKey": "story.chapter01.raven_watch.01"
+        },
+        {
+          "speakerKey": "speaker.raven",
+          "textKey": "story.chapter01.raven_watch.02"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.elder_request",
+      "trigger": "dialogue.elder_request",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.elder",
+          "textKey": "story.chapter01.elder_request.01"
+        },
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.elder_request.02"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.embers_fade",
+      "trigger": "dialogue.embers_fade",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.firebird",
+          "textKey": "story.chapter01.embers_fade.01"
+        },
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.embers_fade.02"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.river_shadow",
+      "trigger": "dialogue.river_shadow",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.narrator",
+          "textKey": "story.chapter01.river_shadow.01"
+        },
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.river_shadow.02"
+        }
+      ]
+    },
+    {
+      "id": "chapter01.living_flame",
+      "trigger": "dialogue.living_flame",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.firebird",
+          "textKey": "story.chapter01.living_flame.01"
+        },
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "story.chapter01.living_flame.02"
+        }
+      ]
+    },
+    {
+      "id": "campaign.chapter01.apple_blossom",
+      "trigger": "dialogue.campaign.chapter01.apple_blossom",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.narrator",
+          "textKey": "campaign.chapter01.apple_blossom.01"
+        }
+      ]
+    },
+    {
+      "id": "campaign.chapter01.hearth_secured",
+      "trigger": "dialogue.campaign.chapter01.hearth_secured",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.firebird",
+          "textKey": "campaign.chapter01.hearth_secured.01"
+        }
+      ]
+    },
+    {
+      "id": "campaign.chapter01.well_cleared",
+      "trigger": "dialogue.campaign.chapter01.well_cleared",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.elder",
+          "textKey": "campaign.chapter01.well_cleared.01"
+        }
+      ]
+    },
+    {
+      "id": "campaign.chapter01.granary_open",
+      "trigger": "dialogue.campaign.chapter01.granary_open",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.ivan",
+          "textKey": "campaign.chapter01.granary_open.01"
+        }
+      ]
+    },
+    {
+      "id": "campaign.chapter01.river_bank",
+      "trigger": "dialogue.campaign.chapter01.river_bank",
+      "returnRoute": "ChapterMap",
+      "lines": [
+        {
+          "speakerKey": "speaker.firebird",
+          "textKey": "campaign.chapter01.river_bank.01"
+        }
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone.firebird_found",
+      "afterLevelId": 1,
+      "sceneId": "chapter01.firebird_found",
+      "major": true
+    },
+    {
+      "id": "campaign.chapter01.apple_blossom.milestone",
+      "afterLevelId": 2,
+      "sceneId": "campaign.chapter01.apple_blossom",
+      "major": false
+    },
+    {
+      "id": "milestone.raven_watch",
+      "afterLevelId": 3,
+      "sceneId": "chapter01.raven_watch",
+      "major": true
+    },
+    {
+      "id": "milestone.elder_request",
+      "afterLevelId": 4,
+      "sceneId": "chapter01.elder_request",
+      "major": false
+    },
+    {
+      "id": "milestone.embers_fade",
+      "afterLevelId": 6,
+      "sceneId": "chapter01.embers_fade",
+      "major": true
+    },
+    {
+      "id": "milestone.river_shadow",
+      "afterLevelId": 8,
+      "sceneId": "chapter01.river_shadow",
+      "major": false
+    },
+    {
+      "id": "milestone.living_flame",
+      "afterLevelId": 9,
+      "sceneId": "chapter01.living_flame",
+      "major": false
+    },
+    {
+      "id": "campaign.chapter01.hearth_secured.milestone",
+      "afterLevelId": 10,
+      "sceneId": "campaign.chapter01.hearth_secured",
+      "major": true
+    },
+    {
+      "id": "campaign.chapter01.well_cleared.milestone",
+      "afterLevelId": 20,
+      "sceneId": "campaign.chapter01.well_cleared",
+      "major": true
+    },
+    {
+      "id": "campaign.chapter01.granary_open.milestone",
+      "afterLevelId": 30,
+      "sceneId": "campaign.chapter01.granary_open",
+      "major": true
+    },
+    {
+      "id": "campaign.chapter01.river_bank.milestone",
+      "afterLevelId": 40,
+      "sceneId": "campaign.chapter01.river_bank",
+      "major": true
+    }
+  ],
+  "reactions": [
+    {
+      "id": "reaction.level01.victory",
+      "levelId": 1,
+      "outcome": "victory",
+      "speakerKey": "speaker.narrator",
+      "textKey": "reaction.chapter01.level01.victory"
+    },
+    {
+      "id": "reaction.level01.failure",
+      "levelId": 1,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level01.failure"
+    },
+    {
+      "id": "reaction.level02.victory",
+      "levelId": 2,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level02.victory"
+    },
+    {
+      "id": "reaction.level02.failure",
+      "levelId": 2,
+      "outcome": "failure",
+      "speakerKey": "speaker.dobrynya",
+      "textKey": "reaction.chapter01.level02.failure"
+    },
+    {
+      "id": "reaction.level03.victory",
+      "levelId": 3,
+      "outcome": "victory",
+      "speakerKey": "speaker.dobrynya",
+      "textKey": "reaction.chapter01.level03.victory"
+    },
+    {
+      "id": "reaction.level03.failure",
+      "levelId": 3,
+      "outcome": "failure",
+      "speakerKey": "speaker.firebird",
+      "textKey": "reaction.chapter01.level03.failure"
+    },
+    {
+      "id": "reaction.level04.victory",
+      "levelId": 4,
+      "outcome": "victory",
+      "speakerKey": "speaker.elder",
+      "textKey": "reaction.chapter01.level04.victory"
+    },
+    {
+      "id": "reaction.level04.failure",
+      "levelId": 4,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level04.failure"
+    },
+    {
+      "id": "reaction.level05.victory",
+      "levelId": 5,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level05.victory"
+    },
+    {
+      "id": "reaction.level05.failure",
+      "levelId": 5,
+      "outcome": "failure",
+      "speakerKey": "speaker.dobrynya",
+      "textKey": "reaction.chapter01.level05.failure"
+    },
+    {
+      "id": "reaction.level06.victory",
+      "levelId": 6,
+      "outcome": "victory",
+      "speakerKey": "speaker.elder",
+      "textKey": "reaction.chapter01.level06.victory"
+    },
+    {
+      "id": "reaction.level06.failure",
+      "levelId": 6,
+      "outcome": "failure",
+      "speakerKey": "speaker.firebird",
+      "textKey": "reaction.chapter01.level06.failure"
+    },
+    {
+      "id": "reaction.level07.victory",
+      "levelId": 7,
+      "outcome": "victory",
+      "speakerKey": "speaker.firebird",
+      "textKey": "reaction.chapter01.level07.victory"
+    },
+    {
+      "id": "reaction.level07.failure",
+      "levelId": 7,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level07.failure"
+    },
+    {
+      "id": "reaction.level08.victory",
+      "levelId": 8,
+      "outcome": "victory",
+      "speakerKey": "speaker.firebird",
+      "textKey": "reaction.chapter01.level08.victory"
+    },
+    {
+      "id": "reaction.level08.failure",
+      "levelId": 8,
+      "outcome": "failure",
+      "speakerKey": "speaker.dobrynya",
+      "textKey": "reaction.chapter01.level08.failure"
+    },
+    {
+      "id": "reaction.level09.victory",
+      "levelId": 9,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.chapter01.level09.victory"
+    },
+    {
+      "id": "reaction.level09.failure",
+      "levelId": 9,
+      "outcome": "failure",
+      "speakerKey": "speaker.firebird",
+      "textKey": "reaction.chapter01.level09.failure"
+    },
+    {
+      "id": "reaction.level10.victory",
+      "levelId": 10,
+      "outcome": "victory",
+      "speakerKey": "speaker.dobrynya",
+      "textKey": "reaction.campaign.chapter01.hearth.victory"
+    },
+    {
+      "id": "reaction.level10.failure",
+      "levelId": 10,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.hearth.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round011.victory",
+      "levelId": 11,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round011.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round011.failure",
+      "levelId": 11,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round011.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round012.victory",
+      "levelId": 12,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round012.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round012.failure",
+      "levelId": 12,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round012.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round013.victory",
+      "levelId": 13,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round013.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round013.failure",
+      "levelId": 13,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round013.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round014.victory",
+      "levelId": 14,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round014.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round014.failure",
+      "levelId": 14,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round014.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round015.victory",
+      "levelId": 15,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round015.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round015.failure",
+      "levelId": 15,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round015.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round016.victory",
+      "levelId": 16,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round016.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round016.failure",
+      "levelId": 16,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round016.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round017.victory",
+      "levelId": 17,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round017.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round017.failure",
+      "levelId": 17,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round017.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round018.victory",
+      "levelId": 18,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round018.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round018.failure",
+      "levelId": 18,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round018.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round019.victory",
+      "levelId": 19,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round019.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round019.failure",
+      "levelId": 19,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round019.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round020.victory",
+      "levelId": 20,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round020.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round020.failure",
+      "levelId": 20,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round020.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round021.victory",
+      "levelId": 21,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round021.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round021.failure",
+      "levelId": 21,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round021.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round022.victory",
+      "levelId": 22,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round022.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round022.failure",
+      "levelId": 22,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round022.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round023.victory",
+      "levelId": 23,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round023.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round023.failure",
+      "levelId": 23,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round023.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round024.victory",
+      "levelId": 24,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round024.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round024.failure",
+      "levelId": 24,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round024.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round025.victory",
+      "levelId": 25,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round025.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round025.failure",
+      "levelId": 25,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round025.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round026.victory",
+      "levelId": 26,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round026.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round026.failure",
+      "levelId": 26,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round026.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round027.victory",
+      "levelId": 27,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round027.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round027.failure",
+      "levelId": 27,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round027.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round028.victory",
+      "levelId": 28,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round028.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round028.failure",
+      "levelId": 28,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round028.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round029.victory",
+      "levelId": 29,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round029.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round029.failure",
+      "levelId": 29,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round029.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round030.victory",
+      "levelId": 30,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round030.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round030.failure",
+      "levelId": 30,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round030.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round031.victory",
+      "levelId": 31,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round031.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round031.failure",
+      "levelId": 31,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round031.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round032.victory",
+      "levelId": 32,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round032.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round032.failure",
+      "levelId": 32,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round032.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round033.victory",
+      "levelId": 33,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round033.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round033.failure",
+      "levelId": 33,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round033.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round034.victory",
+      "levelId": 34,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round034.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round034.failure",
+      "levelId": 34,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round034.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round035.victory",
+      "levelId": 35,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round035.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round035.failure",
+      "levelId": 35,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round035.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round036.victory",
+      "levelId": 36,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round036.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round036.failure",
+      "levelId": 36,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round036.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round037.victory",
+      "levelId": 37,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round037.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round037.failure",
+      "levelId": 37,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round037.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round038.victory",
+      "levelId": 38,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round038.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round038.failure",
+      "levelId": 38,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round038.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round039.victory",
+      "levelId": 39,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round039.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round039.failure",
+      "levelId": 39,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round039.failure"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round040.victory",
+      "levelId": 40,
+      "outcome": "victory",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round040.victory"
+    },
+    {
+      "id": "reaction.campaign.chapter01.round040.failure",
+      "levelId": 40,
+      "outcome": "failure",
+      "speakerKey": "speaker.ivan",
+      "textKey": "reaction.campaign.chapter01.round040.failure"
+    }
+  ],
+  "completion": null
+}

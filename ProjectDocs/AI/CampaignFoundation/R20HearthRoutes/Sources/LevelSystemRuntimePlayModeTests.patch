@@ -1,0 +1,20 @@
+--- LevelSystemRuntimePlayModeTests.before
++++ Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -55,7 +55,7 @@
+         }
+ 
+         [Test]
+-        public void Chapter1Catalog_LoadsEightyValidatedRecords()
++        public void Chapter1Catalog_LoadsNinetyValidatedRecords()
+         {
+             ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1(
+                 forceReload: true
+@@ -63,7 +63,7 @@
+             LevelValidationReport report = LevelDataValidator.ValidateCampaignCatalog(catalog);
+ 
+             Assert.That(report.Errors, Is.Empty);
+-            Assert.That(catalog.levels, Has.Length.EqualTo(80));
++            Assert.That(catalog.levels, Has.Length.EqualTo(90));
+             Assert.That(catalog.levels[0].id, Is.EqualTo("chapter01.level01"));
+             Assert.That(catalog.levels[9].HasStoryTrigger("chapter.complete"), Is.False);
+             Assert.That(catalog.schemaVersion, Is.EqualTo(3));

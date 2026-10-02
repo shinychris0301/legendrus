@@ -1,0 +1,118 @@
+{
+  "note": "Overlay of R43 historical failures with current R1 Combined execution. Remaining cases are not fresh reproduced failures; no full-project sweep is claimed.",
+  "historicalFailureCount": 40,
+  "nowPassedCount": 23,
+  "remainingUnrerunCount": 17,
+  "nowPassed": [
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousDrag_WaitsForDominantAxisBeforeCommit",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousRelease_CancelsWithoutSwapOrTapSelection",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ApplicationPause_ReleasesOwnershipForNextGesture",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CancelledPointer_ReleasesOwnershipForNextGesture",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ForeignPointer_CannotStealBoardGestureOwnership",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FourGemMatch_EmitsSpecialCreationHook",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InputRemainsLockedForEveryResolvedMotionHook",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InvalidSwap_EmitsForwardAndReturnTimeline",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MultiWavePlan_EmitsCascadeHookWithIncreasingDepth",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SamePreset_ProducesSameSemanticMotionTrace",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SpecialCombination_EmitsOrderedActivationWaveAndFallHooks",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingLegacyBoardObserver_CannotStallResolvedSwap",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingMotionObserver_CannotStallRejectedSwap",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsDownCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsLeftCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsRightCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsUpCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.InvalidBoosterTarget_DoesNotConsumeInventory",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpecialCombination_VerifiesEveryRuntimeWaveHash",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ValidBoosterTarget_ConsumesExactlyOne"
+  ],
+  "remainingHistoricalFailures": {
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary": {
+      "result": "Failed",
+      "run": "PlayMode01",
+      "message": "  Expected: String containing \"31\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 21\u201330 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 30.\"\n"
+    },
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary": {
+      "result": "Failed",
+      "run": "PlayMode01",
+      "message": "  Expected: String containing \"41\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 31\u201340 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 40.\"\n"
+    },
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries": {
+      "result": "Failed",
+      "run": "PlayMode01",
+      "message": "  Expected: 10\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  String lengths are both 2233. Strings differ at index 97.\n  Expected: \"...lastEnergyUtcTicks\":639262905045947570,\"chapter\":1,\"level\"...\"\n  But was:  \"...lastEnergyUtcTicks\":639262905055006060,\"chapter\":1,\"level\"...\"\n  --------------------------------------------^\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.FixedPool_IsPrewarmedAndBoundedUnderBurstLoad": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: 33\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.NativeFacetsRingsAndTrails_RenderThenReturnToPool": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  MatchWaveStarted\n  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.PoolReuse_DoesNotCreateObjectsAfterRelease": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.Recovery_ClearsBoosterVfxSuppressesCompletionAndRefundsOnce": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.ResetPresetAndDisable_CleanEffectsAndRestoreSubscription": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: same as <special_ruby_r10 (UnityEngine.Sprite)>\n  But was:  <line (UnityEngine.Sprite)>\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: not null\n  But was:  null\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  String lengths are both 10. Strings differ at index 9.\n  Expected: \"\u0423\u0420\u041e\u0412\u0415\u041d\u042c 11\"\n  But was:  \"\u0423\u0420\u041e\u0412\u0415\u041d\u042c 10\"\n  --------------------^\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected string length 4 but was 5. Strings differ at index 2.\n  Expected: \"0/30\"\n  But was:  \"0/600\"\n  -------------^\n"
+    }
+  }
+}

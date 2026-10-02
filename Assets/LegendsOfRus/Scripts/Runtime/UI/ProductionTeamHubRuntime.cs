@@ -9,15 +9,15 @@ namespace LegendsOfRus
         static Sprite Ranking(string key)=>Resources.Load<Sprite>("ProductionUI/IndividualRankingAligned/"+key);
         public static void BuildInto(RectTransform root)
         {
-            var existing=root.GetComponent<ProductionTeamHubView>();if(existing!=null){if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Team Hub outside Play Mode.");existing.RefreshContent();return;}
+            var existing=root.GetComponent<ProductionTeamHubView>();if(existing!=null){ProductionTeamHubReferenceLayout.Apply(existing);if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Team Hub outside Play Mode.");existing.RefreshContent();return;}
             var v=root.gameObject.AddComponent<ProductionTeamHubView>();
             v.BodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");v.TitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
             var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();if(!shop||!shop.HasRequiredBindings)throw new InvalidOperationException("Team Hub needs the accepted navigation header.");
-            v.Content=Rect(root,"TEAM_HUB_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Load("background"),0,0,941,1672);v.Environment.color=new Color(.68f,.68f,.68f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);v.Hud=Rect(v.Body,"NativeHud",0,0,941,235);
-            Clone(shop.Body.Find("NativeHudBacking"),v.Hud);v.ProfileButton=Clone(shop.ProfileButton.transform,v.Hud).GetComponent<Button>();v.SettingsButton=Clone(shop.SettingsButton.transform,v.Hud).GetComponent<Button>();v.HeroName=Clone(shop.HeroName.transform,v.Hud).GetComponent<Text>();v.LevelText=Clone(shop.LevelText.transform,v.Hud).GetComponent<Text>();
-            v.PlusButtons=new Button[3];Text[] sourceValues={shop.GoldText,shop.GemsText,shop.EnergyText},values=new Text[3];
-            for(int i=0;i<3;i++){Clone(shop.Body.Find("ResourceCapsule_"+i),v.Hud);Clone(shop.Body.Find("ResourceIcon_"+i),v.Hud);values[i]=Clone(sourceValues[i].transform,v.Hud).GetComponent<Text>();v.PlusButtons[i]=Clone(shop.PlusButtons[i].transform,v.Hud).GetComponent<Button>();}
-            v.GoldText=values[0];v.GemsText=values[1];v.EnergyText=values[2];
+            v.Content=Rect(root,"TEAM_HUB_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Load("background"),0,0,941,1672);v.Environment.color=new Color(.68f,.68f,.68f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);
+            var shared=UnityEngine.Object.Instantiate(shop.Header,v.Body,false);shared.name="NativeHud";
+            v.Hud=(RectTransform)shared.transform;v.Header=shared;
+            v.ProfileButton=shared.Profile;v.SettingsButton=shared.Settings;v.HeroName=shared.PlayerName;v.LevelText=shared.Level;
+            v.PlusButtons=shared.Plus;v.GoldText=shared.Balances[0];v.GemsText=shared.Balances[1];v.EnergyText=shared.Balances[2];
             v.Title=Art(v.Body,"TitlePlaque",Load("title_ru"),178,96,585,171);v.Heading=Label(v,v.Body,"Heading",290,159,365,78,58);v.PreviewLabel=Label(v,v.Body,"PreviewLabel",240,270,661,29,20);
             Art(v.Body,"GuildBanner",Load("banner"),15,250,382,411);
             v.GuildName=Label(v,v.Body,"GuildName",414,314,481,64,53);Fit(v.GuildName,30,53);
@@ -54,7 +54,7 @@ namespace LegendsOfRus
             Panel(v.Body,"MottoFrame",Ranking("reward_panel"),132,1547,563,94);v.Motto=Label(v,v.Body,"Motto",151,1562,521,60,27);Fit(v.Motto,22,27);
             v.FriendsButton=Button(Panel(v.Body,"Friends",Ranking("rules"),715,1547,196,94));v.FriendsLabel=Label(v,v.FriendsButton.transform,"Label",14,25,168,42,26);Fit(v.FriendsLabel,21,26);
             Art(v.Body,"FooterOrnament",Resources.Load<Sprite>("ProductionUI/ShopAligned/footer_ornament"),132,1636,764,29);
-            BuildInfo(v);var layout=root.gameObject.AddComponent<ProductionTeamHubLayout>();layout.View=v;v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings)throw new InvalidOperationException("Team Hub native bindings incomplete.");
+            BuildInfo(v);var layout=root.gameObject.AddComponent<ProductionTeamHubLayout>();layout.View=v;ProductionTeamHubReferenceLayout.Apply(v);v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings)throw new InvalidOperationException("Team Hub native bindings incomplete.");
         }
         static void BuildInfo(ProductionTeamHubView v)
         {

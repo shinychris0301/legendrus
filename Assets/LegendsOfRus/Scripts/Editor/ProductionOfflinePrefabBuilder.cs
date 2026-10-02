@@ -24,8 +24,8 @@ namespace LegendsOfRus.Editor
                 ProductionOfflineRuntime.BuildInto(rect);var view=root.GetComponent<ProductionOfflineView>();view.Refresh();if(!view.HasRequiredBindings)throw new InvalidOperationException("Offline bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/OfflineStateCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:OfflineState\",\n  \"revision\": 2\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
-            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionOfflineView>().HasRequiredBindings)throw new InvalidOperationException("Offline prefab readback failed.");Debug.Log("OFFLINE_R2_REBUILD_PASS: native page and cutover readback.");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:OfflineState\",\n  \"revision\": 4\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionOfflineView>().HasRequiredBindings)throw new InvalidOperationException("Offline prefab readback failed.");Debug.Log("OFFLINE_RESPONSIVE_R2_REBUILD_PASS: native page and cutover readback.");
         }
     }
 }

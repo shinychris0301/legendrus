@@ -1,0 +1,161 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+using UnityEngine.UI;
+using LegendsOfRus.GameplayCore;
+namespace LegendsOfRus.Tests.CampaignPlayMode
+{
+    public class MechanicsImpactReadabilityTests
+    {
+        GameObject root;
+        [UnityTearDown] public IEnumerator Cleanup(){if(root)UnityEngine.Object.Destroy(root);yield return null;}
+        MechanicsSandbox Open(){root=new GameObject("ImpactReview",typeof(RectTransform),typeof(Canvas));return MechanicsSandbox.Open((RectTransform)root.transform,()=>{},true);}
+        [UnityTest] public IEnumerator SpecialActivationPrecedesFragmentsAndInputUnlocksAfterSettle()
+        {
+            var s=Open();yield return null;
+            foreach(int fixture in new[]{0,1,10})
+            {
+                s.Reset(fixture,GameplayRuleVersion.PrototypeR3);yield return null;
+                var order=new List<GameplayMotionKind>();s.Board.MotionEventPublished+=e=>order.Add(e.Kind);
+                string prefix=fixture==0?"LineR9":fixture==1?"BombR9":"SparkR9";
+                MechanicsSandboxPlayModeTests.Capture(root,prefix+"_Before",576,1280);
+                Assert.That(s.Board.TapCell(3,3),Is.True);Assert.That(s.Board.HasActiveCommand,Is.True);
+                for(int frame=0;frame<10;frame++)
+                {
+                    yield return new WaitForSecondsRealtime(.03f);
+                    MechanicsSandboxPlayModeTests.Capture(root,prefix+"_"+frame.ToString("D2"),576,1280);
+                }
+                float end=Time.realtimeSinceStartup+20;while(s.Board.HasActiveCommand&&Time.realtimeSinceStartup<end)yield return null;
+                Assert.That(order.IndexOf(GameplayMotionKind.SpecialActivationStarted),Is.GreaterThanOrEqualTo(0));
+                Assert.That(order.IndexOf(GameplayMotionKind.MatchWaveStarted),Is.GreaterThan(order.IndexOf(GameplayMotionKind.SpecialActivationStarted)));
+                Assert.That(s.Board.HasActiveCommand,Is.False);Assert.That(s.Board.CanAcceptPointerInput,Is.True);
+                Assert.That(s.Board.BoardStateHash,Is.EqualTo(s.Board.LastMechanicsCommand.Resolve().FinalSnapshot.StateHash));
+                yield return new WaitForSecondsRealtime(.7f);
+                Assert.That(s.Board.GetComponentInChildren<PrototypeImpactView>().ActiveCount,Is.Zero);
+            }
+        }
+        [UnityTest] public IEnumerator BoosterIllustrationsStayVisibleAndActivationsKeepInventorySemantics()
+        {
+            var s=Open();yield return null;
+            var view=root.GetComponentInChildren<ProductionGameplayView>();
+            Assert.That(view.BoosterButtons[0].interactable,Is.False,"round stock stays zero");
+            Assert.That(view.BoosterButtons[0].colors.disabledColor.r,Is.GreaterThanOrEqualTo(.75f));
+            foreach(var name in new[]{"bomb","line","spark","color"})Assert.That(Resources.Load<Sprite>(PrototypeBoardArt.Root+name),Is.Not.Null);
+            foreach(BoosterType type in Enum.GetValues(typeof(BoosterType)))
+            {
+                s.Reset(0,GameplayRuleVersion.PrototypeR3);yield return null;
+                s.Board.UseBooster(type);if(type!=BoosterType.SeaPearl)Assert.That(s.Board.TapCell(3,3),Is.True);
+                yield return null;
+                var art=s.Board.GetComponentInChildren<PrototypeBoosterView>();Assert.That(art.PresentationCount,Is.EqualTo(1));
+                MechanicsSandboxPlayModeTests.Capture(root,"InventoryR9_"+type,576,1280);
+                float end=Time.realtimeSinceStartup+20;while(s.Board.HasActiveCommand&&Time.realtimeSinceStartup<end)yield return null;
+                Assert.That(s.Board.HasActiveCommand,Is.False);Assert.That(s.Board.Moves,Is.EqualTo(type==BoosterType.SeaPearl?55:50));
+                yield return new WaitForSecondsRealtime(.6f);Assert.That(art.IsPresenting,Is.False);
+            }
+        }
+        [UnityTest] public IEnumerator ObstacleArtworkAndGoalsUseTheSameFamily()
+        {
+            var s=Open();yield return null;
+            foreach(var kind in new[]{BoardObstacleKind.Crate,BoardObstacleKind.Ice,BoardObstacleKind.Chain,BoardObstacleKind.RunicSeal})
+                Assert.That(PrototypeObstacleArt.Load(kind),Is.Not.Null,kind.ToString());
+            s.OpenRound(4);yield return null;
+            var view=root.GetComponentInChildren<ProductionGameplayView>();
+            for(int i=0;i<3;i++)Assert.That(view.Goals[i].Icon.sprite,Is.EqualTo(PrototypeObstacleArt.Load(s.Board.GetGoalSlot(i).ObstacleKind)));
+            MechanicsSandboxPlayModeTests.Capture(root,"ObstaclesR9_Mixed",576,1280);
+            s.Reset(6,GameplayRuleVersion.PrototypeR3);yield return null;
+            MechanicsSandboxPlayModeTests.Capture(root,"ObstaclesR9_Chains",576,1280);
+            var host=new GameObject("DamageState",typeof(RectTransform),typeof(Image));host.transform.SetParent(root.transform,false);
+            var art=host.GetComponent<Image>();PrototypeObstacleArt.Apply(art,BoardObstacleKind.RunicSeal,2,true);
+            Assert.That(host.GetComponentInChildren<PrototypeObstacleDamage>(),Is.Null);
+            PrototypeObstacleArt.Apply(art,BoardObstacleKind.RunicSeal,1,true);Assert.That(art.sprite,Is.EqualTo(PrototypeObstacleArt.Load(BoardObstacleKind.RunicSeal,1)));
+            Assert.That(art.sprite,Is.Not.EqualTo(PrototypeObstacleArt.Load(BoardObstacleKind.RunicSeal,2)));
+            PrototypeObstacleArt.Apply(art,BoardObstacleKind.None,0,true);Assert.That(art.enabled,Is.False);Assert.That(host.GetComponentInChildren<PrototypeObstacleDamage>(),Is.Null);
+        }
+        [UnityTest] public IEnumerator MaterialStagesReplaceNumeralsAndKeepResolvedLayerCounts()
+        {
+            var s=Open();yield return null;
+            foreach(int fixture in new[]{1,6,7})
+            {
+                s.Reset(fixture,GameplayRuleVersion.PrototypeR3);yield return null;
+                BoardObstacleKind kind=fixture==1?BoardObstacleKind.Ice:fixture==6?BoardObstacleKind.Chain:BoardObstacleKind.Crate;
+                int y=fixture==1?4:3;
+                var intact=PrototypeObstacleArt.Load(kind,2);var damaged=PrototypeObstacleArt.Load(kind,1);
+                Assert.That(intact,Is.Not.Null);Assert.That(damaged,Is.Not.Null.And.Not.EqualTo(intact));
+                Assert.That(s.Board.GetComponentsInChildren<Text>(true).Any(t=>t.name=="ObstacleLayers"&&t.enabled),Is.False);
+                MechanicsSandboxPlayModeTests.Capture(root,"StyleR10_"+kind+"_Intact",576,1280);
+                bool sawFirstLayer=false,sawDamagedArt=false;
+                s.Board.ObstacleInteracted+=o=>{if(o.Position.X==1&&o.Position.Y==y&&o.LayersBefore==2&&o.LayersAfter==1)sawFirstLayer=true;};
+                Assert.That(s.Board.TapCell(3,3),Is.True);
+                float end=Time.realtimeSinceStartup+20;
+                while(s.Board.HasActiveCommand&&Time.realtimeSinceStartup<end)
+                {
+                    if(!sawDamagedArt&&s.Board.GetComponentsInChildren<Image>().Any(i=>i.enabled&&i.sprite==damaged))
+                    {
+                        sawDamagedArt=true;
+                        MechanicsSandboxPlayModeTests.Capture(root,"StyleR10_"+kind+"_Damaged",576,1280);
+                    }
+                    yield return null;
+                }
+                Assert.That(s.Board.HasActiveCommand,Is.False);
+                Assert.That(sawFirstLayer,Is.True,"a resolved 2-to-1 hit must occur");
+                Assert.That(sawDamagedArt,Is.True,"the damaged sprite must actually render before any later cascade removes it");
+                var snap=BoardReplayCodec.Decode(s.Board.BoardReplayToken);
+                if(snap.ObstacleLayers[y*snap.Width+1]>0)
+                {
+                    s.Board.UseBooster(BoosterType.BogatyrMace);Assert.That(s.Board.TapCell(0,y),Is.True);
+                    Assert.That(s.Board.HasActiveCommand,Is.True,"mace targets a filled cell in the blocker row");
+                    end=Time.realtimeSinceStartup+20;while(s.Board.HasActiveCommand&&Time.realtimeSinceStartup<end)yield return null;
+                }
+                Assert.That(s.Board.HasActiveCommand,Is.False);
+                snap=BoardReplayCodec.Decode(s.Board.BoardReplayToken);
+                Assert.That(snap.ObstacleLayers[y*snap.Width+1],Is.Zero);
+                Assert.That(s.Board.BoardStateHash,Is.EqualTo(s.Board.LastPlanFinalStateHash));
+                Assert.That(s.Board.Moves,Is.EqualTo(49));
+                MechanicsSandboxPlayModeTests.Capture(root,"StyleR10_"+kind+"_Cleared",576,1280);
+            }
+            s.Reset(2,GameplayRuleVersion.PrototypeR3);yield return null;
+            MechanicsSandboxPlayModeTests.Capture(root,"StyleR10_Color",576,1280);
+            s.OpenRound(4);yield return null;
+            MechanicsSandboxPlayModeTests.Capture(root,"StyleR10_Mixed",576,1280);
+            foreach(var goal in root.GetComponentInChildren<ProductionGameplayView>().Goals)
+                Assert.That(goal.Icon,Is.Not.Null);
+        }
+        [UnityTest] public IEnumerator GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking()
+        {
+            var s=Open();yield return null;
+            var views=s.Board.GetComponentsInChildren<GemShatterView>();Assert.That(views.Length,Is.EqualTo(6));
+            var cells=new List<BoardClearedCellInstruction>();
+            for(int i=0;i<60;i++)cells.Add(new BoardClearedCellInstruction(new BoardPosition(i%8,i/8),new BoardCellData(i%6)));
+            var cue=new GameplayMotionEvent(1,GameplayMotionKind.MatchWaveStarted,new BoardPosition(3,3),new BoardPosition(3,3),1,cells.Count,SpecialGemKind.None,"",clearedCells:cells);
+            foreach(var view in views)view.SendMessage("Motion",cue);
+            yield return new WaitForSecondsRealtime(.08f);Canvas.ForceUpdateCanvases();
+            for(int i=0;i<views.Length;i++)
+            {
+                Assert.That(views[i].mainTexture,Is.SameAs(ProductionGameplayArt.Gem(i).texture));
+                Assert.That(views[i].ActivePieces,Is.GreaterThan(0).And.LessThanOrEqualTo(128));
+                Assert.That(views[i].canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0).And.LessThanOrEqualTo(384));
+                Assert.That(views[i].raycastTarget,Is.False);
+            }
+            var recover=new GameplayMotionEvent(2,GameplayMotionKind.CommandRecovered,new BoardPosition(0,0),new BoardPosition(0,0),0,0,SpecialGemKind.None,"");
+            foreach(var view in views){view.SendMessage("Motion",recover);Assert.That(view.ActivePieces,Is.Zero);view.SendMessage("Motion",cue);}
+            yield return new WaitForSecondsRealtime(.6f);
+            foreach(var view in views)Assert.That(view.ActivePieces,Is.Zero);
+        }
+        [UnityTest] public IEnumerator ImpactMeshIsBoundedAndDisableClearsPresentation()
+        {
+            var s=Open();yield return null;var effects=s.Board.GetComponentInChildren<PrototypeImpactView>();
+            var cue=new GameplayMotionEvent(1,GameplayMotionKind.SpecialActivationStarted,new BoardPosition(3,3),new BoardPosition(3,3),1,1,SpecialGemKind.Burst,"");
+            for(int i=0;i<240;i++)effects.SendMessage("Motion",cue);
+            Assert.That(effects.ActiveCount,Is.LessThanOrEqualTo(192));
+            yield return new WaitForSecondsRealtime(.14f);
+            Canvas.ForceUpdateCanvases();var mesh=effects.canvasRenderer.GetMesh();Assert.That(mesh,Is.Not.Null);Assert.That(mesh.vertexCount,Is.LessThan(65535));Assert.That(effects.raycastTarget,Is.False);
+            effects.gameObject.SetActive(false);Assert.That(effects.ActiveCount,Is.Zero);
+            effects.gameObject.SetActive(true);yield return null;Assert.That(effects.ActiveCount,Is.Zero);
+        }
+    }
+}

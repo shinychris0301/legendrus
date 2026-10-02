@@ -1,0 +1,9 @@
+# R32 implementation
+
+Four existing CampaignActive JSONs match Chapter01Sector04R32 byte-for-byte. Ten boards, ten bilingual names, twenty outcome reactions and the field_home_paths scene/milestone are appended. First180 records and all prior story/locales are preserved. Definition/revision, existing metas/GUIDs, runtime services, routing, matching rules, UI/art and project settings are unchanged.
+
+Four existing test files are updated: ActiveCampaignIntegrationTests adds181–190 replay cases and180-save migration, checks candidate parity/prior180 preservation, and plays180/181/185/188/190 with actual board/control APIs. CampaignBoardIntegrationTests and LevelSystemRuntimePlayModeTests expect190 records. CampaignCheckpointLifecycleTests adds190 unread/failure-retry coverage,26 pending milestones and unavailable191 bounds while retaining earlier cases. Prior progress and failed outcomes are explicit fixtures, not full manual-play evidence.
+
+Sources holds task-start SHA/content/test/linker snapshots and TestChanges.patch. PrepareBriefs generates the reviewed geometry. PrepareImplementation is a one-time transformation of pre-task scripts/tests; do not reapply it to edited files. AuthorAndInstall builds from saved pre-task JSONs and RoundBriefs. CheckContent/AuditContent validate preservation/parity, geometry/objective counts, story/localization, economy and default manual exports. Verify runs serial Unity suites with isolated stores and prior authorized process-only Vulkan/descriptor4096. Summaries use actual XML/replays; CleanAndAudit restores the linker snapshot and removes only new temporary test scenes before comparing project hashes.
+
+No live save edits, new service, package/backend change, commit, Android build or effects work. Tests do not resolve human difficulty, device/visual acceptance, optional recap or older reaction-copy gaps. See TestResults.md for evidence and limits.

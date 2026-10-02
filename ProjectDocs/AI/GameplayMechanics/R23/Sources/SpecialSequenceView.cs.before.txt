@@ -1,0 +1,109 @@
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    /// <summary>Bounded artwork layers driven by real R4 contacts. No rule changes, timers as progress, or per-particle objects.</summary>
+    [RequireComponent(typeof(CanvasRenderer))]
+    public sealed class SpecialSequenceView:MaskableGraphic
+    {
+        enum Action { Gather,Create,Line,Bomb,Wood,Ice,Chain,Shell }
+        struct Cue { public BoardPosition Cell;public Action Action;public SpecialGemKind Kind;public float Born,Life,Radius;public bool Final; }
+        public const int Capacity=128;
+        readonly List<Cue> cues=new List<Cue>(Capacity);
+        Match3Board board;bool materialLayer;
+        public int ActiveCount=>cues.Count;
+        public int PresentedCount {get;private set;}
+        public int DroppedCount {get;private set;}
+        public bool MaterialLayer=>materialLayer;
+        public override Texture mainTexture=>materialLayer?MechanicsSequenceArt.Materials:MechanicsSequenceArt.Effects;
+        public static bool Supports(SpecialGemKind k)=>k==SpecialGemKind.Row||k==SpecialGemKind.Column||k==SpecialGemKind.Burst;
+        public static void Attach(Match3Board board)
+        {
+            if(!MechanicsSequenceArt.Available)return;
+            var root=new GameObject("SpecialSequenceArtClip",typeof(RectTransform),typeof(RectMask2D));root.transform.SetParent(board.transform,false);Stretch((RectTransform)root.transform);
+            for(int i=0;i<2;i++){var go=new GameObject(i==0?"SpecialSequenceEffects":"SpecialSequenceMaterials",typeof(RectTransform));go.transform.SetParent(root.transform,false);Stretch((RectTransform)go.transform);var v=go.AddComponent<SpecialSequenceView>();v.board=board;v.materialLayer=i==1;v.raycastTarget=false;board.MotionEventPublished+=v.Motion;board.ObstacleInteracted+=v.Obstacle;}
+        }
+        static void Stretch(RectTransform r){r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;}
+        void Add(BoardPosition p,Action action,SpecialGemKind kind,float life,float delay=0,float radius=1,bool final=false)
+        {
+            if(cues.Count==Capacity){cues.RemoveAt(0);DroppedCount++;}
+            cues.Add(new Cue{Cell=p,Action=action,Kind=kind,Born=Time.unscaledTime+delay,Life=life,Radius=radius,Final=final});PresentedCount++;SetVerticesDirty();
+        }
+        void Activate(BoardPosition p,SpecialGemKind kind,float delay,float radius=2)
+        {
+            if(kind==SpecialGemKind.Burst){Add(p,materialLayer?Action.Shell:Action.Bomb,kind,.62f,delay,radius);}
+            else if(!materialLayer&&(kind==SpecialGemKind.Row||kind==SpecialGemKind.Column))Add(p,Action.Line,kind,.43f,delay);
+        }
+        void Motion(GameplayMotionEvent e)
+        {
+            if(e.Kind==GameplayMotionKind.CommandRecovered){Clear();return;}if(!isActiveAndEnabled)return;
+            if(e.Kind==GameplayMotionKind.SpecialGatherStarted||e.Kind==GameplayMotionKind.SpecialCreationStarted)return; // R21 assembles the exact idle artwork.
+            if(e.Kind==GameplayMotionKind.SpecialConversionStarted&&Supports(e.SpecialKind))
+            {
+                if(materialLayer==(e.SpecialKind==SpecialGemKind.Burst))
+                    Add(e.Secondary,Action.Create,e.SpecialKind,CoreLoopMotionProfile.SpecialCreationSeconds);
+                return;
+            }
+            if(e.Kind==GameplayMotionKind.SpecialActivationStarted||e.Kind==GameplayMotionKind.SpecialPayloadImpact)
+            {
+                if(e.SpecialKind==SpecialGemKind.Spark&&e.Payload==SpecialGemKind.None)Activate(e.Secondary,SpecialGemKind.Burst,SparkFlightView.Duration,.65f);
+                else Activate(e.Primary,e.SpecialKind,BoardPresentationTimeline.Charge,e.CombinationKind==SpecialCombinationKind.BurstWithBurst?4:2);
+            }
+            if(e.Kind==GameplayMotionKind.BoosterActivated)
+            {
+                if(e.BoosterKind==GameplayBoosterKind.BogatyrMaceRow||e.BoosterKind==GameplayBoosterKind.BogatyrMaceColumn)
+                {Activate(e.Primary,e.BoosterKind==GameplayBoosterKind.BogatyrMaceRow?SpecialGemKind.Row:SpecialGemKind.Column,.18f);Activate(e.Primary,SpecialGemKind.Burst,.18f,.85f);}
+            }
+        }
+        void Obstacle(BoardObstacleInteractionInstruction o)
+        {
+            if(!isActiveAndEnabled||!materialLayer||o.LayersAfter>=o.LayersBefore)return;
+            if(o.Kind!=BoardObstacleKind.Crate&&o.Kind!=BoardObstacleKind.Ice&&o.Kind!=BoardObstacleKind.Chain)return;
+            Add(o.Position,o.Kind==BoardObstacleKind.Crate?Action.Wood:o.Kind==BoardObstacleKind.Ice?Action.Ice:Action.Chain,SpecialGemKind.None,o.LayersAfter==0?.62f:.36f,0,1,o.LayersAfter==0);
+        }
+        void Clear(){cues.Clear();SetVerticesDirty();}
+        void Update(){if(cues.RemoveAll(e=>Time.unscaledTime-e.Born>=e.Life)>0||cues.Count>0)SetVerticesDirty();}
+        protected override void OnDisable(){Clear();base.OnDisable();}
+        protected override void OnDestroy(){if(board){board.MotionEventPublished-=Motion;board.ObstacleInteracted-=Obstacle;}base.OnDestroy();}
+        protected override void OnPopulateMesh(VertexHelper h)
+        {
+            h.Clear();if(!board||!MechanicsSequenceArt.Available)return;var r=rectTransform.rect;float cw=r.width/board.ColumnCount,ch=r.height/board.RowCount,u=Mathf.Min(cw,ch);
+            foreach(var e in cues)
+            {
+                float age=Time.unscaledTime-e.Born;if(age<0)continue;float t=Mathf.Clamp01(age/e.Life),fade=1-Mathf.SmoothStep(0,1,Mathf.Clamp01((t-.55f)/.45f));
+                Vector2 p=new Vector2(r.xMin+(e.Cell.X+.5f)*cw,r.yMax-(e.Cell.Y+.5f)*ch);
+                if(e.Action==Action.Gather||e.Action==Action.Create)
+                {
+                    float phase=e.Action==Action.Gather?Mathf.Clamp01(age/.24f)*.4f:.4f+t*.6f;
+                    MechanicsSequenceArt.Blend(h,materialLayer,materialLayer?8:0,4,phase,p,u*(materialLayer?1.38f:1.65f),e.Kind==SpecialGemKind.Column?Mathf.PI*.5f:0,fade);continue;
+                }
+                if(e.Action==Action.Line)
+                {
+                    bool vertical=e.Kind==SpecialGemKind.Column;float span=Mathf.Max(board.ColumnCount,board.RowCount);
+                    float distance=age/BoardPresentationTimeline.Sweep*span*(vertical?ch:cw);
+                    for(int sign=-1;sign<=1;sign+=2)
+                    {
+                        Vector2 axis=vertical?Vector2.up:Vector2.right;
+                        Vector2 head=p+axis*sign*distance,body=head-axis*sign*u*.55f;
+                        if(head.x<r.xMin-u||head.x>r.xMax+u||head.y<r.yMin-u||head.y>r.yMax+u)continue;
+                        MechanicsSequenceArt.Quad(h,false,8+Mathf.FloorToInt(age*30)%4,body,u*2.2f,vertical?sign*Mathf.PI*.5f:0,fade,!vertical&&sign<0);
+                    }
+                    continue;
+                }
+                if(e.Action==Action.Bomb)
+                {MechanicsSequenceArt.Blend(h,false,4,4,t,p,u*(1+e.Radius*1.4f*Mathf.Clamp01(age/BoardPresentationTimeline.Sweep)),0,fade);continue;}
+                int count=e.Action==Action.Shell?9:e.Final?(e.Action==Action.Chain?4:8):3;
+                int index=e.Action==Action.Wood?6:e.Action==Action.Ice?12:e.Action==Action.Chain?7:14;
+                for(int i=0;i<count;i++)
+                {
+                    float angle=i*2.39996f+e.Cell.X*.7f,reach=e.Action==Action.Shell?1.4f:e.Final?1.2f:.32f;
+                    Vector2 q=p+new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*(1-Mathf.Pow(1-t,3))*u*reach+Vector2.down*u*t*t*.65f;
+                    float size=u*(e.Final||e.Action==Action.Shell?.25f:.15f)*(1+(i%3)*.18f);
+                    MechanicsSequenceArt.Quad(h,true,index+(e.Action==Action.Shell||e.Action==Action.Ice?i%2:0),q,size,angle+t*(i%2==0?3:-4),fade,i%2==0);
+                }
+            }
+        }
+    }
+}

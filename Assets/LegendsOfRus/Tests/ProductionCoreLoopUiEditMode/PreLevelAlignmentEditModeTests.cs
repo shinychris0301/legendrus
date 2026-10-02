@@ -17,6 +17,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             GameObject prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Path);
             var view=prefab.GetComponent<ProductionPreLevelView>();
             Assert.That(view,Is.Not.Null);Assert.That(view.HasRequiredBindings,Is.True);
+            Assert.That(view.Revision,Is.EqualTo(ProductionPreLevelView.CurrentRevision));
             Assert.That(prefab.GetComponent<ProductionPreLevelLayout>().View,Is.SameAs(view));
             Assert.That(prefab.GetComponentsInChildren<ProductionHomeView>(true),Is.Empty);
             Assert.That(prefab.GetComponentsInChildren<Canvas>(true),Is.Empty);

@@ -17,8 +17,12 @@ namespace LegendsOfRus
             "source_settings", "source_plus", "source_mail", "source_quest_ru", "source_quest_blank",
             "source_gift", "source_footer_carving", "source_daily_badge", "source_events_badge"
         };
+        public static readonly string[] ShortcutResources = {
+            ArtRoot + "shortcut_ranking_r6", ArtRoot + "shortcut_team_r6", ArtRoot + "shortcut_friends_r6"
+        };
         public static void Apply(ProductionHomeView v)
         {
+            ProductionHomeRuntime.ClearDormantProgress(v);
             var layout = v.GetComponent<ProductionHomeLayout>();
             var content = layout.Content;
             // Retain serialized objects and native action ownership while retiring the old approximation.
@@ -36,6 +40,7 @@ namespace LegendsOfRus
             // Russian button lettering belongs to the source face; English uses the repaired blank variant.
             Rect(v.PlayButton.transform as RectTransform, content, 178, 998, 584, 216);
             v.SourcePlay = ControlArt(v.PlayButton, "source_play_ru", 0, 0, 584, 242);
+            ProductionHomeRuntime.ClearDormantPlayArtwork(v.PlayButton);
             Text(v.PlayText, v.PlayButton.transform, 100, 84, 384, 98, 66);
             Rect(layout.Navigation, content, 0, 1214, 941, 236);
             Button[] buttons={v.WorldMapButton,v.ShopButton,v.EventsButton,v.CharactersButton};
@@ -70,6 +75,12 @@ namespace LegendsOfRus
             v.SourceRussianQuest=Load("source_quest_ru");v.SourceBlankQuest=Load("source_quest_blank");
             v.ReferenceBodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
             v.ReferenceTitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
+            v.RankingButton=Shortcut(content,"RankingShortcut",ShortcutResources[0],490,out v.RankingText);
+            v.TeamButton=Shortcut(content,"TeamShortcut",ShortcutResources[1],660,out v.TeamText);
+            v.FriendsButton=Shortcut(content,"FriendsShortcut",ShortcutResources[2],830,out v.FriendsText);
+            layout.SocialShortcuts = new[] { (RectTransform)v.RankingButton.transform,
+                (RectTransform)v.TeamButton.transform, (RectTransform)v.FriendsButton.transform };
+            ProductionHomeRuntime.ClearDormantArtwork(v);
             layout.SourceComposition=true;
             v.Revision=ProductionHomeView.CurrentRevision;
             Refresh(v);
@@ -88,6 +99,8 @@ namespace LegendsOfRus
             bool en=DemoFeatureState.LanguageCode=="en";
             v.SourcePlay.sprite=en?v.SourceBlankPlay:v.SourceRussianPlay;
             v.PlayText.enabled=en;v.PlayText.font=v.ReferenceTitleFont;
+            if(v.RankingText!=null&&v.TeamText!=null&&v.FriendsText!=null){v.RankingText.text=en?"RANKING":"РЕЙТИНГ";v.TeamText.text=en?"TEAM":"КОМАНДА";v.FriendsText.text=en?"FRIENDS":"ДРУЗЬЯ";
+            foreach(var caption in new[]{v.RankingText,v.TeamText,v.FriendsText})caption.font=v.ReferenceBodyFont;}
             Text[] captions={v.WorldMapText,v.ShopText,v.EventsText,v.CharactersText};
             for(int i=0;i<4;i++){v.SourceNavigation[i].sprite=en?v.SourceBlankCards[i]:v.SourceRussianCards[i];captions[i].enabled=en;captions[i].font=v.ReferenceBodyFont;}
             v.QuestFrame.sprite=en?v.SourceBlankQuest:v.SourceRussianQuest;v.QuestText.enabled=en;
@@ -98,6 +111,45 @@ namespace LegendsOfRus
         {
             if(v.SourcePlay==null)return;
             if(v.Header!=null)v.Header.RefreshValues();
+        }
+        static Button Shortcut(Transform parent, string name, string artKey, float y, out Text caption)
+        {
+            var found = parent.Find(name);
+            var image = found != null ? found.GetComponent<Image>() :
+                new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
+            Rect(image.rectTransform, parent, 34, y, 138, 165);
+            image.gameObject.layer = 5;
+            image.sprite = Resources.Load<Sprite>(artKey);
+            image.type = Image.Type.Simple;
+            image.preserveAspect = true;
+            // Match the more restrained bronze/gold of Home Map and Shop without changing source pixels.
+            image.color = new Color32(198, 190, 180, 255);
+            image.enabled = image.raycastTarget = true;
+            var button = image.GetComponent<Button>() ?? image.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            button.navigation = new Navigation { mode = Navigation.Mode.None };
+            if (!image.GetComponent<ProductionHomeButtonFeedback>())
+                image.gameObject.AddComponent<ProductionHomeButtonFeedback>();
+            // R5 used a separate pictogram over a shared frame. The reviewed R6 art owns
+            // both surfaces, so retire that layer while preserving the Button identity.
+            var oldIcon = image.transform.Find("Icon");
+            if (oldIcon != null)
+            {
+                oldIcon.GetComponent<Image>().sprite = null;
+                oldIcon.gameObject.SetActive(false);
+            }
+            var label = image.transform.Find("Label");
+            caption = label != null ? label.GetComponent<Text>() :
+                new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text)).GetComponent<Text>();
+            Text(caption, image.transform, 17, 123, 104, 24, 18);
+            // Small captions should rasterize at their final size, not be halved after
+            // rasterization. Use the same approved body face as the Home navigation.
+            caption.rectTransform.sizeDelta = new Vector2(104, 24);
+            caption.rectTransform.localScale = Vector3.one;
+            caption.fontSize = 18;
+            caption.horizontalOverflow = HorizontalWrapMode.Overflow;
+            caption.gameObject.layer = 5;
+            return button;
         }
         static Sprite Load(string name) => Resources.Load<Sprite>(ArtRoot+name) ?? throw new InvalidOperationException("Missing Home original source sprite: "+name);
         static void Control(Button button,Transform parent,string name,float x,float y,float w,float h)

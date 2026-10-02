@@ -8,7 +8,8 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionFailView:MonoBehaviour
     {
-        public const int CurrentRevision=13;
+        public Func<CampaignPlayerSave> CampaignSaveProvider;
+        public const int CurrentRevision=14;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
         public ProductionPlayerHeader Header;
@@ -32,8 +33,8 @@ namespace LegendsOfRus
         readonly List<UnityAction> listeners=new List<UnityAction>();
         void OnEnable(){committed=false;inspected=-1;BindState();RefreshContent();}
         void OnDisable(){Unbind();if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=null;}
-        void Update(){if(subscribed!=GameState.Instance){BindState();RefreshContent();}if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
-        void BindState(){if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=GameState.Instance;if(subscribed!=null)subscribed.Changed+=RefreshState;}
+        void Update(){if(CampaignSaveProvider==null&&subscribed!=GameState.Instance){BindState();RefreshContent();}if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
+        void BindState(){if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=CampaignSaveProvider==null?GameState.Instance:null;if(subscribed!=null)subscribed.Changed+=RefreshState;}
         public void RefreshContent()
         {
             if(!HasRequiredBindings)return;
@@ -55,11 +56,11 @@ namespace LegendsOfRus
         public void RefreshState()
         {
             if(!HasRequiredBindings)return;
-            var state=GameState.Instance;var save=state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
+            var campaign=CampaignSaveProvider?.Invoke();var state=CampaignSaveProvider==null?GameState.Instance:null;var save=campaign!=null?campaign.player:state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
             Resources[0].text=save!=null?Number(save.gold):"—";Resources[1].text=save!=null?Number(save.gems):"—";Resources[2].text=save!=null?save.energy+"/"+save.energyMax:"—";
-            if(Header!=null)Header.RefreshValues();
+            if(Header!=null){if(campaign!=null)Header.RefreshValues(save);else Header.RefreshValues();}
             Level.text=(en?"Level ":"Уровень ")+(save!=null?save.level.ToString():"—");
-            var result=state!=null?state.LastFailureResult:null;
+            var result=campaign!=null&&campaign.run.state==CampaignRunState.Failed?new LevelFailureResult(JsonUtility.FromJson<LevelData>(campaign.run.levelJson),campaign.run.score,campaign.run.goalProgress):state!=null?state.LastFailureResult:null;
             Subtitle.text=result!=null?(en?"OUT OF MOVES":"ХОДЫ ЗАКОНЧИЛИСЬ"):(en?"NO FAILED ROUND":"НЕТ ЗАВЕРШЁННОЙ ПОПЫТКИ");
             Score.text=result!=null?(en?"LEVEL ":"УРОВЕНЬ ")+result.Level.levelId+"  •  "+(en?"SCORE ":"СЧЁТ ")+Number(result.Score):"";
             GoalsHeading.text=result!=null&&result.HasGoalProgress?(en?"UNFINISHED GOALS":"НЕ ВЫПОЛНЕНЫ ЦЕЛИ"):(en?"GOAL PROGRESS UNAVAILABLE":"ПРОГРЕСС ЦЕЛЕЙ НЕДОСТУПЕН");
@@ -79,8 +80,8 @@ namespace LegendsOfRus
             }
             ProductionFailRuntime.ApplyLocalizedArtwork(this,DemoFeatureState.LanguageCode=="ru",result!=null);
             Retry.interactable=result!=null;
-            for(int i=0;i<4;i++)BoosterCounts[i].text=state!=null?Number(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
-            var story=result!=null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure):null;
+            for(int i=0;i<4;i++)BoosterCounts[i].text=campaign!=null?Number(CampaignBoosterTransactions.Count(save,ProductionPreLevelRuntime.Boosters[i])):state!=null?Number(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
+            var story=result!=null&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure,DemoFeatureState.LanguageCode):null;
             Reaction.text=story!=null?story.Speaker+": "+story.Text:"";
             Reaction.gameObject.SetActive(inspected>=0);
             BoostersHeading.gameObject.SetActive(inspected<0);

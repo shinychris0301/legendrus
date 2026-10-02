@@ -1,0 +1,232 @@
+[
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/SplashTitleBuildWiringEditModeTests.cs",
+    "line": 102,
+    "text": "string assetPath = \"Assets/LegendsOfRus/Resources/ProductionUI/FrontEndHomeAligned/\" + name + \".png\";"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredProgressArtworkEditModeTests.cs",
+    "line": 60,
+    "text": "Assert.That(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+name),Is.Null);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs",
+    "line": 38,
+    "text": "var keys=ProductionHomeRuntime.GetTextureResourceKeys();Assert.That(keys.Distinct().Count(),Is.EqualTo(keys.Count));"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/HomeAlignmentDeliveryEditModeTests.cs",
+    "line": 46,
+    "text": "foreach(var key in ProductionHomeRuntime.GetTextureResourceKeys()){"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeFirebirdEditModeTests.cs",
+    "line": 17,
+    "text": "const string Key=\"ProductionUI/HomeAligned/home_firebird_generated\";"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeFirebirdEditModeTests.cs",
+    "line": 71,
+    "text": "Assert.That(ProductionHomeRuntime.GetTextureResourceKeys(),Does.Not.Contain(Key));"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs",
+    "line": 98,
+    "text": "CollectionAssert.AreEquivalent(ProductionHomeRuntime.GetTextureResourceKeys(), keys);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/Step20SplashTitleR3PrefabRebuilder.cs",
+    "line": 354,
+    "text": "path.StartsWith(\"Assets/LegendsOfRus/Resources/ProductionUI/FrontEndHomeAligned/\", StringComparison.Ordinal) ||"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs",
+    "line": 373,
+    "text": "foreach (string key in ProductionHomeRuntime.GetTextureResourceKeys())"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs",
+    "line": 784,
+    "text": "marker.Configure(ScreenId.Home, HomeAlignmentReferenceSha256, ProductionHomeRuntime.GetTextureResourceKeys().Count);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs",
+    "line": 839,
+    "text": "foreach (string key in ProductionHomeRuntime.GetTextureResourceKeys())"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/ProductionNavigationPrefabBuilder.cs",
+    "line": 31,
+    "text": "marker.Configure(ScreenId.Home, marker.ReferenceSha256, ProductionHomeRuntime.GetTextureResourceKeys().Count);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs",
+    "line": 115,
+    "text": "if (assetPath.StartsWith(\"Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/\"))"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs",
+    "line": 38,
+    "text": "number.material = Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+\"home_play_gold\");"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs",
+    "line": 90,
+    "text": "title.material=Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+\"home_play_gold\");"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionEventDetailRuntime.cs",
+    "line": 19,
+    "text": "v.Content=Rect(root,\"EVENT_DETAIL_ALIGNED_CONTENT\",0,0,941,1672);v.Environment=Art(v.Content,\"CleanEnvironment\",Shared(\"FrontEndHomeAligned/loading_environment_dusk\"),0,0,941,1672);v.Environment.color=new Color(.65f,.65f,.70f,1);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionEventsRuntime.cs",
+    "line": 16,
+    "text": "v.Content=Rect(root,\"EVENTS_ALIGNED_CONTENT\",0,0,941,1672);v.Environment=Art(v.Content,\"CleanEnvironment\",Shared(\"FrontEndHomeAligned/loading_environment_dusk\"),0,0,941,1672);v.Environment.color=new Color(.65f,.65f,.70f,1);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSpecialOfferRuntime.cs",
+    "line": 101,
+    "text": "static Sprite Home(string n)=>Resources.Load<Sprite>(\"ProductionUI/HomeAligned/\"+n);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs",
+    "line": 138,
+    "text": "public bool HasReferenceForegroundBindings =>"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionNavigationStyle.cs",
+    "line": 11,
+    "text": "static Sprite Home(string key) => Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot + key);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs",
+    "line": 195,
+    "text": "var lightning=EnsureArt(paid.transform,\"MovesSymbol\",Load(ProductionHomeRuntime.ArtRoot+\"energy_icon\"),256,12,40,40);lightning.preserveAspect=true;lightning.enabled=false;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionShopRuntime.cs",
+    "line": 136,
+    "text": "static Sprite Home(string n)=>Resources.Load<Sprite>(\"ProductionUI/HomeAligned/\"+n);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionIndividualRankingRuntime.cs",
+    "line": 18,
+    "text": "v.Content=Rect(root,\"INDIVIDUAL_RANKING_ALIGNED_CONTENT\",0,0,941,1672);v.Environment=Art(v.Content,\"CleanEnvironment\",Shared(\"FrontEndHomeAligned/loading_environment_dusk\"),0,0,941,1672);v.Environment.color=new Color(.46f,.46f,.52f,1);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionIndividualRankingRuntime.cs",
+    "line": 77,
+    "text": "var sprite=Shared(female?\"FrontEndHomeAligned/masha_dusk\":\"HomeAligned/avatar_portrait\");"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 17,
+    "text": "v.ProfileButton=Button(v.Body,\"Profile\",Shared(\"HomeAligned/avatar_ring\"),4,6,156,193);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 19,
+    "text": "Art(clip,\"Ivan\",Shared(\"HomeAligned/avatar_portrait\"),0,0,108,108);clip.SetAsFirstSibling();"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 24,
+    "text": "float x=342+i*171;Art(v.Body,\"ResourceCapsule_\"+i,Shared(\"HomeAligned/resource_capsule\"),x,44,164,52);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 25,
+    "text": "Art(v.Body,\"ResourceIcon_\"+i,Shared(\"HomeAligned/\"+resource[i]),x-7,33,53,66);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 27,
+    "text": "v.PlusButtons[i]=Button(v.Body,\"Plus_\"+i,Shared(\"HomeAligned/resource_plus\"),x+121,48,42,42);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 29,
+    "text": "v.GoldText=balances[0];v.GemsText=balances[1];v.EnergyText=balances[2];v.SettingsButton=Button(v.Body,\"Settings\",Shared(\"HomeAligned/settings_medallion\"),866,30,68,74);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 33,
+    "text": "string[] iconKeys={\"HomeAligned/coin_icon\",\"HomeAligned/gems_icon\",\"HomeAligned/energy_icon\",\"GameplayAligned/booster_livinglight_r9\",\"GameplayAligned/booster_seapearl_r9\",\"GameplayAligned/booster_mace_r9\"};"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 46,
+    "text": "var rail=Art(month.transform,\"Rail\",Shared(\"HomeAligned/resource_capsule\"),239,106,600,20);rail.preserveAspect=false;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionDailyRewardRuntime.cs",
+    "line": 47,
+    "text": "v.MonthFill=Art(month.transform,\"Progress\",Shared(\"HomeAligned/resource_capsule\"),239,106,600,20);v.MonthFill.preserveAspect=false;v.MonthFill.type=Image.Type.Filled;v.MonthFill.fillMethod=Image.FillMethod.Horizontal;v.MonthFill.color=new Color32(110,177,129,255);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs",
+    "line": 13,
+    "text": "public const string ArtRoot = \"ProductionUI/HomeAligned/\";"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs",
+    "line": 32,
+    "text": "public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryRuntime.cs",
+    "line": 10,
+    "text": "public static Sprite Home(string name)=>Load(ProductionHomeRuntime.ArtRoot+name);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs",
+    "line": 34,
+    "text": "view.Ruby = Load(\"ruby\"); view.Sapphire = Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+\"gems_icon\");"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs",
+    "line": 68,
+    "text": "Art(view.RewardsArea,\"Coin\",Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+\"coin_icon\"),350,93,58,58).preserveAspect=true;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs",
+    "line": 212,
+    "text": "text.gameObject.AddComponent<ProductionHomeGoldText>().BeveledFace=true;text.material=Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+\"home_play_gold\");return text;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs",
+    "line": 39,
+    "text": "foreach(var entry in Resources.LoadAll<Sprite>(Root+region.Sheet))cache[entry.name]=entry;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionUiFix01Runtime.cs",
+    "line": 115,
+    "text": "return ProductionHomeRuntime.GetTextureResourceKeys();"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs",
+    "line": 85,
+    "text": "view.TitleText.material = Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+\"home_play_gold\");"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs",
+    "line": 133,
+    "text": "static Sprite Home(string n)=>Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+n);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs",
+    "line": 146,
+    "text": "t.gameObject.AddComponent<SplashTitleTextGeometry>().SnapToScreenPixels=false;t.gameObject.AddComponent<ProductionHomeGoldText>().BeveledFace=true;t.material=Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+\"home_play_gold\");return t;"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoginRuntime.cs",
+    "line": 14,
+    "text": "v.Environment=Art(v.Content,\"CleanEnvironment\",Resources.Load<Sprite>(\"ProductionUI/FrontEndHomeAligned/loading_environment_dusk\"),0,0,941,1672);"
+  },
+  {
+    "path": "Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLoginRuntime.cs",
+    "line": 21,
+    "text": "Art(v.Body,\"ApprovedLogo\",Resources.Load<Sprite>(\"ProductionUI/HomeAligned/home_logo\"),213,46,503,352);"
+  }
+]

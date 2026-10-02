@@ -38,7 +38,8 @@ namespace LegendsOfRus.GameplayCore
         Row = 1,
         Column = 2,
         Burst = 3,
-        Color = 4
+        Color = 4,
+        Spark = 5
     }
 
     public readonly struct BoardCellData : IEquatable<BoardCellData>
@@ -81,6 +82,7 @@ namespace LegendsOfRus.GameplayCore
     public sealed class BoardMatchRun
     {
         public bool Horizontal;
+        public bool Square;
         public int Type;
         public readonly List<BoardPosition> Cells = new List<BoardPosition>();
 

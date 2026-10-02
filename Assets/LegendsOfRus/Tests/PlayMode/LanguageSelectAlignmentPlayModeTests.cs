@@ -41,6 +41,7 @@ namespace LegendsOfRus.Tests.PlayMode
             string save=StableSave(); int generation=router.RouteGeneration;
             yield return WaitForNormalButtonColors();
             Capture("LanguageSelect_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("LanguageSelect_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("LanguageSelect_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Capture("LanguageSelect_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             ExecuteEvents.Execute(v.English.gameObject,new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left},ExecuteEvents.pointerClickHandler);
@@ -49,6 +50,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(v.Russian.image.sprite.name,Is.EqualTo("language_unselected"));
             yield return null;yield return WaitForNormalButtonColors();
             Capture("LanguageSelect_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("LanguageSelect_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("LanguageSelect_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Assert.That(StableSave(),Is.EqualTo(save));Assert.That(router.RouteGeneration,Is.EqualTo(generation));
         }
@@ -78,6 +80,67 @@ namespace LegendsOfRus.Tests.PlayMode
             DemoFeatureState.ResetSession();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));Assert.That(LanguagePreference.Load(),Is.EqualTo("ru"));
             Assert.That(StableSave(),Is.EqualTo(save));
         }
+        [UnityTest] public IEnumerator CurrentBackdropAndModalPressFeedbackStayIsolated()
+        {
+            var v=View();string save=StableSave();string language=DemoFeatureState.LanguageCode;
+            var source=Resources.Load<GameObject>("ProductionUI/Pages/SplashTitle").GetComponent<SplashTitleView>();
+            Assert.That(v.BackdropView.HasRequiredBindings,Is.True);Assert.That(v.BackdropView.ActionsBound,Is.False);
+            Assert.That(v.BackdropView.ReferenceStartRussian,Is.SameAs(source.ReferenceStartRussian));
+            foreach(string name in new[]{"Logo","BackgroundEnvironment","Ivan","SourceOuterFrame"})
+                Assert.That(v.Backdrop.transform.Find(name).GetComponent<Image>().sprite,Is.SameAs(source.transform.Find(name).GetComponent<Image>().sprite));
+            var settings=Resources.Load<GameObject>("ProductionUI/Pages/Settings").GetComponent<ProductionSettingsView>();
+            Assert.That(v.Panel.sprite,Is.SameAs(settings.LanguagePanel.sprite));
+            foreach(var button in new[]{v.Russian,v.English,v.Close})Assert.That(button.GetComponent<ProductionMapButtonFeedback>(),Is.Not.Null);
+            yield return WaitForNormalButtonColors();
+            var pointer=new PointerEventData(EventSystem.current){pointerId=42,button=PointerEventData.InputButton.Left};
+            var rect=(RectTransform)v.English.transform;var position=rect.anchoredPosition;
+            ExecuteEvents.Execute(v.English.gameObject,pointer,ExecuteEvents.pointerDownHandler);
+            Assert.That(v.English.GetComponent<ProductionMapButtonFeedback>().IsPressed,Is.True);
+            Capture("LanguageSelect_PressedEnglish_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            ExecuteEvents.Execute(v.English.gameObject,pointer,ExecuteEvents.pointerUpHandler);
+            Assert.That(v.English.GetComponent<ProductionMapButtonFeedback>().IsPressed,Is.False);
+            Assert.That(rect.anchoredPosition,Is.EqualTo(position));Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo(language));Assert.That(StableSave(),Is.EqualTo(save));
+        }
+
+        [UnityTest] public IEnumerator NativeSelectionExpandedCloseAndOriginsPreserveSave()
+        {
+            string save=StableSave();
+            foreach(var origin in new[]{ScreenId.SplashTitle,ScreenId.Home,ScreenId.Settings})
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(origin);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);
+                router.Show(ScreenId.LanguageSelect);Settle();yield return null;
+                yield return WaitForNormalButtonColors();
+                var v=View();int generation=router.RouteGeneration;
+                Capture("LanguageSelect_SmallOrigin_"+origin+"_"+language,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                    Click(language=="ru"?v.English:v.Russian,camera));
+                string selected=language=="ru"?"en":"ru";
+                Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo(selected));
+                Assert.That(LanguagePreference.Load(),Is.EqualTo(selected));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+                Assert.That((selected=="en"?v.English:v.Russian).image.sprite.name,Is.EqualTo("language_selected"));
+                yield return null;yield return WaitForNormalButtonColors();
+                Capture("LanguageSelect_CloseEdge_"+origin+"_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    Rect art=Bounds(v.Close.image.rectTransform,camera);
+                    Click(v.Close,camera,new Vector2(art.xMax+1,art.center.y));
+                    v.Close.onClick.Invoke();
+                });
+                Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(origin));
+                Assert.That(router.RouteGeneration,Is.EqualTo(generation+1),"Close returns only once.");
+                Assert.That(StableSave(),Is.EqualTo(save));
+            }
+        }
+        static void Click(Button button,Camera camera,Vector2? point=null)
+        {
+            var pointer=new PointerEventData(EventSystem.current){position=point??Bounds(button.image.rectTransform,camera).center,button=PointerEventData.InputButton.Left};
+            var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+            Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
+            ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+        }
+
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -88,7 +151,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 bool ready=true;
                 foreach(Button button in Root().GetComponentsInChildren<Button>())
                 {
-                    Color expected=(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
+                    Color expected=button.transition==Selectable.Transition.None?Color.white:(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
                     Color actual=button.targetGraphic.canvasRenderer.GetColor();
                     if(Mathf.Max(Mathf.Abs(actual.r-expected.r),Mathf.Abs(actual.g-expected.g),
                         Mathf.Abs(actual.b-expected.b),Mathf.Abs(actual.a-expected.a))>.0001f)ready=false;
@@ -141,8 +204,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionLanguageSelectView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -154,6 +215,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(View(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -177,11 +240,27 @@ namespace LegendsOfRus.Tests.PlayMode
             foreach(var b in new[]{v.Russian,v.English,v.Close})
             {
                 Rect r=Bounds((RectTransform)b.transform,camera);Assert.That(safeArea.Contains(r.min)&&safeArea.Contains(r.max),Is.True,b.name);
+                Assert.That(b.image.type,Is.EqualTo(Image.Type.Simple),b.name);
+                Assert.That(b.image.preserveAspect,Is.True,b.name);
+                float scale=r.width/b.image.rectTransform.rect.width;
+                Vector4 padding=b.image.raycastPadding;
+                Rect target=Rect.MinMaxRect(r.xMin+padding.x*scale,r.yMin+padding.y*scale,r.xMax-padding.z*scale,r.yMax-padding.w*scale);
+                Assert.That(target.width,Is.GreaterThanOrEqualTo(44),b.name+" target width");
+                Assert.That(target.height,Is.GreaterThanOrEqualTo(44),b.name+" target height");
+                Assert.That(safeArea.Contains(target.min)&&safeArea.Contains(target.max),Is.True,b.name+" target safe edges");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=r.center},hits);
                 Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(b));
             }
             var blocked=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=new Vector2(size.x*.5f,size.y*.85f)},blocked);
             Assert.That(blocked[0].gameObject,Is.EqualTo(v.Shield.gameObject));
+            foreach(Vector2 point in new[]{new Vector2(2,2),new Vector2(size.x-2,2),new Vector2(2,size.y-2),new Vector2(size.x-2,size.y-2)})
+            {
+                var edgeHits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},edgeHits);
+                Assert.That(edgeHits.Count,Is.GreaterThan(0));Assert.That(edgeHits[0].gameObject,Is.SameAs(v.Shield.gameObject),"Full-screen modal shield");
+            }
+            Rect panel=Bounds(v.Panel.rectTransform,camera);Assert.That(safeArea.Contains(panel.min)&&safeArea.Contains(panel.max),Is.True,"Whole panel within safe area");
+            Assert.That(v.Panel.type,Is.EqualTo(Image.Type.Simple));Assert.That(v.Panel.preserveAspect,Is.True);
+            Assert.That(Bounds(v.Russian.image.rectTransform,camera).Overlaps(Bounds(v.English.image.rectTransform,camera)),Is.False);
             foreach(var b in v.Backdrop.GetComponentsInChildren<Button>())Assert.That(b.IsInteractable(),Is.False);
             foreach(var label in v.Body.GetComponentsInChildren<Text>())if(label.enabled){Assert.That(label.cachedTextGenerator.vertexCount,Is.GreaterThan(0));}
         }

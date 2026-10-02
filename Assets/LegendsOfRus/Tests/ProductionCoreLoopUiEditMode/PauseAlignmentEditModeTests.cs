@@ -11,7 +11,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         [Test] public void CanonicalPauseUsesIsolatedArtNativeControlsAndNoCapturedScreen()
         {
             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=root.GetComponent<ProductionPauseView>();
-            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(2));
+            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(ProductionPauseView.CurrentRevision));
             Assert.That(view.Body.Find("MainPanel").GetComponent<Image>().sprite.name,Is.EqualTo("panel_r2"));
             Assert.That(view.Body.Find("GoalsPanel").GetComponent<Image>().sprite.name,Is.EqualTo("goals_r2"));Assert.That(root.GetComponent<ProductionPauseLayout>().View,Is.SameAs(view));
             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Pause),Is.EqualTo("ProductionUI/Pages/Pause"));

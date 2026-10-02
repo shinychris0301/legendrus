@@ -1,0 +1,84 @@
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -17,7 +17,9 @@
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_firebird_generated.png" ||
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_hero_firebird.png" ||
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_environment_generated.png" ||
+-                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_play_button.png")
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_play_button.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/hud_frame.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_panel.png")
+             {
+                 ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+                 return;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -22,8 +22,8 @@
+         static readonly string[] TextureNames = {
+             "nav_map_generated", "nav_shop_generated", "nav_events_generated",
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+-            "home_logo", "avatar_portrait", "hud_frame", "avatar_ring",
+-            "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
++            "home_logo", "avatar_portrait", "avatar_ring",
++            "resource_capsule", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+             "resource_plus", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
+             "home_map_foliage"
+         };
+@@ -56,7 +56,7 @@
+             view.LowerShade = Rect(content, "LowerContrast", 0, 982, 941, 690).gameObject.AddComponent<ProductionHomeShade>();
+             view.LowerShade.color = Color.clear; view.LowerShade.raycastTarget = false;
+             view.Logo = Art(content, "ApprovedSplashLogo", sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
+-            view.HudFrame = Frame(content, "HomeHud", sprites["hud_frame"], 0, 0, 941, 130);
++            view.HudFrame = Frame(content, "HomeHud", null, 0, 0, 941, 130);
+             RectTransform h = view.HudFrame.rectTransform;
+             ProductionHomePanel profile = Panel(h, "ProfileButton", 8, 0, 320, 233, 0);
+             profile.Frame = false; profile.LeftColor = profile.RightColor = Color.clear;
+@@ -82,7 +82,7 @@
+             view.CharactersButton = Nav(nav, "Characters", sprites["nav_characters_generated"], "ПЕРСОНАЖИ", typography, out view.CharactersText);
+             RectTransform footer = Rect(content, "Footer", 0, 1450, 941, 222);
+             view.MailButton = Medallion(footer, "MailButton", sprites["mail_medallion_generated"]);
+-            view.QuestFrame = Frame(footer, "QuestPanel", sprites["quest_panel"], 177, 0, 587, 210);
++            view.QuestFrame = Frame(footer, "QuestPanel", null, 177, 0, 587, 210);
+             view.QuestText = Label(view.QuestFrame.rectTransform, "QuestCopy", "Соберите синие самоцветы", 38, 31, 398, 43, 31, typography);
+             view.DailyRewardButton = Medallion(footer, "DailyRewardButton", sprites["reward_medallion_generated"]);
+             ProductionHomeLayout layout = oldLayout != null ? oldLayout : root.gameObject.AddComponent<ProductionHomeLayout>();
+@@ -136,7 +136,7 @@
+             // The complete source contains a narrow bar inside real transparent padding.
+             // Preserve the existing header container and all live child coordinates.
+             float hudScale = 941f / 2132;
+-            view.HudFrame = EnsureArt(hud, "ReferenceArtwork", sprites["hud_frame"],
++            view.HudFrame = EnsureArt(hud, "ReferenceArtwork", null,
+                 -22 * hudScale, 8 - 198 * hudScale, 2176 * hudScale, 723 * hudScale);
+             view.HudFrame.transform.SetAsFirstSibling();
+             RectTransform profile = view.ProfileButton.transform as RectTransform;
+@@ -218,7 +218,7 @@
+             layout.FooterBase = view.FooterBase.rectTransform;
+             AlignMedallion(view.MailButton, sprites["mail_medallion_generated"], 0, 12, 181);
+             AlignMedallion(view.DailyRewardButton, sprites["reward_medallion_generated"], 758, 12, 181);
+-            view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, sprites["quest_panel"]);
++            view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, null);
+             // Place the complete final source around its measured(21,56)-(2187,657)
+             // wood frame. The separate live children use reference page coordinates.
+             float questX = 182 - 21f / 2166 * 572, questY = 8 - 56f / 601 * 182;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -123,17 +123,8 @@
+             MapFoliage.transform.parent.GetSiblingIndex() > Ivan.transform.GetSiblingIndex() &&
+             MapFoliage.transform.GetSiblingIndex() == 0;
+ 
+-        public bool HasGeneratedControlBindings =>
+-            HasArtwork(HudFrame, "header") && HasArtwork(AvatarFrame, "avatar_ring") &&
+-            ProfileButton != null && ProfileButton.targetGraphic == AvatarFrame &&
+-            HasArtwork(GoldCapsule, "capsule") && HasArtwork(GemsCapsule, "capsule") &&
+-            HasArtwork(EnergyCapsule, "capsule") && HasArtwork(GoldIcon, "coin") &&
+-            HasArtwork(GemsIcon, "gem") && HasArtwork(EnergyIcon, "energy") &&
+-            HasArtwork(QuestFrame, "quest_panel") && HasArtwork(FooterBase, "footer_base_generated") &&
+-            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings") &&
+-            HasButtonArtwork(WorldMapButton, "nav_map_generated") && HasButtonArtwork(ShopButton, "nav_shop_generated") &&
+-            HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
+-            HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
++        // The historical control diagnostic now validates the installed source composition.
++        public bool HasGeneratedControlBindings => HasRequiredBindings;
+ 
+         // Keep the historical diagnostic aligned with the current source composition.
+         public bool HasReferenceForegroundBindings => HasRequiredBindings;

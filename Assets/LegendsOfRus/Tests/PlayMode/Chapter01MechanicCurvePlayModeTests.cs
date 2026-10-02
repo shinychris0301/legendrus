@@ -8,14 +8,17 @@ using UnityEngine.TestTools;
 
 namespace LegendsOfRus.Tests.PlayMode
 {
+    [Category("LegacyTenRoundFixture")]
     public sealed class Chapter01MechanicCurvePlayModeTests
     {
+        LegacyChapterTestFixture legacyFixture;
+        [SetUp] public void InstallLegacyFixture() { legacyFixture = new LegacyChapterTestFixture(); }
+        [TearDown] public void RestoreActiveContent() { legacyFixture?.Dispose(); }
+
         [Test]
-        public void ReleasedCatalog_UsesSchema3AndPassesProgressionContract()
+        public void LegacyCatalog_UsesSchema3AndPassesProgressionContract()
         {
-            ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1(
-                forceReload: true
-            );
+            ChapterLevelCatalogData catalog = LegacyChapterTestFixture.Levels();
             LevelValidationReport data = LevelDataValidator.ValidateCatalog(catalog);
             LevelValidationReport progression = Chapter01ProgressionValidator.Validate(catalog);
 
@@ -28,9 +31,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void MechanicRollout_IntroducesOneMechanicAtATimeInTeachingOrder()
         {
-            ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1(
-                forceReload: true
-            );
+            ChapterLevelCatalogData catalog = LegacyChapterTestFixture.Levels();
             var seen = new HashSet<string>();
             var introductions = new Dictionary<string, int>();
 
@@ -66,9 +67,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void EveryIntroducedMechanic_HasAnExplicitStartTutorial()
         {
-            ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1(
-                forceReload: true
-            );
+            ChapterLevelCatalogData catalog = LegacyChapterTestFixture.Levels();
             var tutorialMechanics = new HashSet<string>();
             for (int i = 0; i < catalog.levels.Length; i++)
             {
@@ -89,7 +88,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void DifficultyCurve_UsesTwoRecoveryLevelsAndHighestFinale()
         {
-            LevelData[] levels = ChapterLevelCatalog.LoadChapter1(true).levels;
+            LevelData[] levels = LegacyChapterTestFixture.Levels().levels;
             Assert.That(levels[3].difficulty, Is.EqualTo("recovery"));
             Assert.That(levels[6].difficulty, Is.EqualTo("recovery"));
             Assert.That(
@@ -108,9 +107,9 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [Test]
-        public void EveryReleasedLevel_GeneratesAPlayableMechanicBoard()
+        public void EveryLegacyLevel_GeneratesAPlayableMechanicBoard()
         {
-            LevelData[] levels = ChapterLevelCatalog.LoadChapter1(true).levels;
+            LevelData[] levels = LegacyChapterTestFixture.Levels().levels;
             for (int i = 0; i < levels.Length; i++)
             {
                 LevelData level = levels[i];

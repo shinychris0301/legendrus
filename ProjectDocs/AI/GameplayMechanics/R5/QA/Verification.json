@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "unity": "6000.5.9f1",
+  "suites": [
+    {
+      "run": "Verify02",
+      "suite": "Recording",
+      "total": "5",
+      "passed": "5",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify02/Recording/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "Rounds",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/Rounds/results.xml"
+    },
+    {
+      "run": "Verify04",
+      "suite": "Mechanics",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04/Mechanics/results.xml"
+    }
+  ],
+  "playModeTotal": 9,
+  "captures": "Verify02/Journey: two actual Unity renders at576x1280",
+  "scope": "Local development sandbox recording only; no human feedback collected",
+  "notRun": [
+    "New EditMode suite run (no GameplayCore changes)",
+    "Physical Android acceptance",
+    "IL2CPP build",
+    "Human difficulty playtest",
+    "Full-project test suite"
+  ],
+  "earlierRuns": {
+    "Verify01": "Five tests passed; inspection found JsonUtility null activeAttempt serialized as a placeholder. Changed to activeAttempts array and added assertion; final Verify02 passes."
+  }
+}

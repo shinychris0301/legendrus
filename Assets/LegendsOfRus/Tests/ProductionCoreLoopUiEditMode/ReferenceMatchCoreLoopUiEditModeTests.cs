@@ -155,15 +155,14 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             Assert.That(ProductionCoreLoopPageRegistry.IsCutover(ScreenId.ChapterMap), Is.True);
         }
 
-        [TestCase(ScreenId.Home, 6)]
-        [TestCase(ScreenId.WorldMap, 4)]
-        [TestCase(ScreenId.ChapterMap, 4)]
-        public void GeneratedReferenceMatchPrefabIsProductionOnlyWhenBuildHasRun(ScreenId id, int expectedComponents)
+        [TestCase(ScreenId.Home, 30)]
+        [TestCase(ScreenId.WorldMap, 5)]
+        [TestCase(ScreenId.ChapterMap, 5)]
+        public void CurrentNativePrefabRetainsProductionOnlyDependencies(ScreenId id, int expectedComponents)
         {
             string path = PageRoot + "/" + id + ".prefab";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (prefab == null)
-                Assert.Ignore("Step 3.3R.2 deterministic prefab build has not run yet in this editor session.");
+            Assert.That(prefab, Is.Not.Null, path);
 
             ProductionReferenceMatchPageMarker marker = prefab.GetComponent<ProductionReferenceMatchPageMarker>();
             Assert.That(marker, Is.Not.Null);

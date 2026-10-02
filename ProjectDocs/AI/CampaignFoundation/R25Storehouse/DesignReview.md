@@ -1,0 +1,9 @@
+# R25 storehouse approach design review
+
+Bounded121–130 follows R22's sector outline and the R24 mill-yard checkpoint. Use existing gems, items, crate/chain/ice mechanics and feather delivery. No new artwork, animations or gameplay rules.
+
+Recovery121/126 surrounds peaks125/130.122 scatters single-layer ice;123 pairs layered lower crate gates with scattered ice;124 separates locks;125 uses three asymmetrically spaced delivery routes with stronger lower locks.127 offers open six-color special-making space;128 groups layered crates in four short lower stacks;129 strengthens the bottom of two offset ice routes;130 combines lower crate gates and scattered surface targets. All layouts are explicit in Sources/PrepareBriefs.py. Starts and bottom exits are free, positions unique, goal counts refer to destroyed cells rather than hits. Seeds13121–13130;5/6colors;28–34moves. Difficulty budgets remain provisional and comparable to preceding blocks.
+
+First-clear total1840gold/6gems/1Mace. No scene/replay/sector bonus. After130 Ivan confirms access to the storehouse and introduces clearing paths to village homes, without claiming supplies have already been distributed. No mill production, new resource, timer, full Firebird restoration or Chapter1 finale. Feathers retain their actual identity.131–150 remain outline content.
+
+Before installation, all ten authored layouts passed geometry, target-count and delivery-exit checks. First120 and previous RU/EN copy must stay unchanged. Verify three starts/replays per installed round,120→121 migration,130 rewards/reload/story acknowledgement, map input and131/Chapter2 boundaries. See TestResults.md for actual Unity outcomes. Human31–130 pacing and Android remain outstanding; do not tighten budgets based only on solver evidence. Animation/effect work remains last.

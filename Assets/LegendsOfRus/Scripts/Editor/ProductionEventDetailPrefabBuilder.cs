@@ -29,10 +29,10 @@ namespace LegendsOfRus.Editor
             }
             finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/EventDetailCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:EventDetail\",\n  \"revision\": 5,\n  \"eventSchedule\": \"unavailable\"\n}\n");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:EventDetail\",\n  \"revision\": 8,\n  \"eventSchedule\": \"unavailable\"\n}\n");
             AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
             var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(saved==null||!saved.GetComponent<ProductionEventDetailView>().HasRequiredBindings)throw new InvalidOperationException("EventDetail prefab readback failed.");
-            Debug.Log("EVENT_DETAIL_R5_REBUILD_PASS: serialized native page, source sprites, revision and cutover readback.");
+            Debug.Log("EVENT_DETAIL_R8_REBUILD_PASS: serialized native page, source sprites, revision and cutover readback.");
         }
     }
 }

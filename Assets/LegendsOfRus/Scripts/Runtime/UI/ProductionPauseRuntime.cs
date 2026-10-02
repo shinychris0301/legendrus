@@ -65,6 +65,11 @@ namespace LegendsOfRus
         }
         static void ApplyPresentation(ProductionPauseView v)
         {
+            foreach(var goal in v.Goals)
+            {
+                goal.Icon.rectTransform.anchoredPosition=new Vector2(31,0);goal.Icon.rectTransform.sizeDelta=new Vector2(78,78);
+                goal.Count.rectTransform.anchoredPosition=new Vector2(0,-80);goal.Count.rectTransform.sizeDelta=new Vector2(140,34);goal.Count.fontSize=28;
+            }
             v.Body.Find("MainPanel").GetComponent<Image>().sprite=Load("panel_r2");
             v.Body.Find("GoalsPanel").GetComponent<Image>().sprite=Load("goals_r2");
             EnsureArt(v.Body,"GoalsCaption", "goals_heading_ru_r2",145,215,330,46);

@@ -1,0 +1,55 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "EditMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.ProgressDependencyAuditEditModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidPackageFootprint/R5ProgressDependencies/QA/EditorFinal/results.xml",
+    "-logFile",
+    "/tmp/lor-progress-dependencies-r5/EditorFinal/unity.log",
+    "-nographics"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 14.927652835845947,
+  "isolatedConfig": "/tmp/lor-progress-dependencies-r5/EditorFinal/config",
+  "graphics": false,
+  "result": {
+    "id": "2",
+    "testcasecount": "16",
+    "result": "Failed(Child)",
+    "total": "16",
+    "passed": "13",
+    "failed": "3",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 10:40:33Z",
+    "end-time": "2026-10-01 10:40:34Z",
+    "duration": "1.3261485"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.ProgressDependencyAuditEditModeTests.FreshBuildersReintroduceDormantTextures(\"WorldMap\",1)",
+      "result": "Failed",
+      "message": "System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\n  ----> System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.ProgressDependencyAuditEditModeTests.FreshBuildersReintroduceDormantTextures(\"ChapterMap\",1)",
+      "result": "Failed",
+      "message": "System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\n  ----> System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.ProgressDependencyAuditEditModeTests.FreshBuildersReintroduceDormantTextures(\"PreLevel\",1)",
+      "result": "Failed",
+      "message": "System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\n  ----> System.InvalidOperationException : Pre-Level composition is incomplete."
+    }
+  ]
+}

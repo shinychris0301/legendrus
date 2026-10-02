@@ -8,6 +8,7 @@ namespace LegendsOfRus
         void OnEnable(){Canvas.preWillRenderCanvases+=ApplyNow;ApplyNow();}
         void OnDisable(){Canvas.preWillRenderCanvases-=ApplyNow;}
         void OnRectTransformDimensionsChange(){ApplyNow();}
+        static void Place(Transform t,float x,float y){((RectTransform)t).anchoredPosition=new Vector2(x,-y);}
         public void ApplyNow()
         {
             if(applying||View==null||!View.HasRequiredBindings)return;var canvas=GetComponentInParent<Canvas>();if(canvas==null)return;
@@ -15,7 +16,27 @@ namespace LegendsOfRus
             try{
                 var content=View.Content;safe.GetWorldCorners(corners);var low=content.InverseTransformPoint(corners[0]);var high=content.InverseTransformPoint(corners[2]);
                 float scale=Mathf.Max(.1f,Mathf.Min((high.x-low.x)/941,(high.y-low.y)/1672));View.Body.localScale=Vector3.one*scale;
-                View.Body.anchoredPosition=new Vector2((low.x+high.x-941*scale)*.5f-content.rect.xMin,(low.y+high.y+1672*scale)*.5f-content.rect.yMax);
+                View.Body.anchoredPosition=new Vector2((low.x+high.x-941*scale)*.5f-content.rect.xMin,high.y-content.rect.yMax);
+                // Keep the source-width composition. Additional phone height belongs to the collection.
+                float safeHeight=(high.y-low.y)/scale;
+                float extra=Mathf.Max(0,safeHeight-1672);
+                // Reserve the expanded info target above the footer; scrolling stops one pixel before it.
+                View.CollectionViewport.sizeDelta=new Vector2(905,579+extra);
+                View.UpdateCollectionExtent();
+                Place(View.Body.Find("CarvedFooter"),0,1468+extra);
+                Place(View.InfoButton.transform,259,1470+extra);
+                Place(View.BackButton.transform,16,1521+extra);
+                for(int i=0;i<4;i++)Place(View.NavButtons[i].transform,174+i*187,1502+extra);
+                Place(View.OuterFrame.Find("LowerLeft"),0,1408+extra);
+                Place(View.OuterFrame.Find("LowerRight"),891,1408+extra);
+                foreach(string edge in new[]{"LeftTrim","RightTrim"}){
+                    var trim=(RectTransform)View.OuterFrame.Find(edge);trim.sizeDelta=new Vector2(8,1098+extra);
+                    // The narrow source trim is stretched vertically; corner ornaments retain their proportions.
+                    trim.GetComponent<UnityEngine.UI.Image>().preserveAspect=false;
+                }
+                Place(View.InfoPanel.transform,0,extra*.5f);
+                var shield=(RectTransform)View.InfoPanel.transform.Find("InputShield");
+                shield.anchoredPosition=new Vector2(0,extra*.5f);shield.sizeDelta=new Vector2(941,safeHeight);
                 whole.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);Vector2 dimensions=View.Environment.sprite.rect.size;
                 float cover=Mathf.Max((high.x-low.x)/dimensions.x,(high.y-low.y)/dimensions.y);var background=View.Environment.rectTransform;
                 background.sizeDelta=dimensions*cover;background.anchoredPosition=new Vector2((low.x+high.x-background.sizeDelta.x)*.5f-content.rect.xMin,(low.y+high.y+background.sizeDelta.y)*.5f-content.rect.yMax);

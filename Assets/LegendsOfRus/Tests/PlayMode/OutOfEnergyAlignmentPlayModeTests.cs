@@ -83,12 +83,14 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().HeadingLettering.gameObject.activeSelf,Is.True);Assert.That(View().Title.enabled,Is.False);
             Assert.That(View().Actions[1].image.sprite.name,Is.EqualTo("ask_ru_r2"));Assert.That(View().ActionLabels[1].enabled,Is.False);
             Capture("OutOfEnergy_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("OutOfEnergy_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("OutOfEnergy_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Capture("OutOfEnergy_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en");yield return null;View().RefreshContent();
             Assert.That(View().HeadingLettering.gameObject.activeSelf,Is.False);Assert.That(View().Title.enabled,Is.True);
             Assert.That(View().ActionLabels[1].enabled,Is.True);Assert.That(View().Actions[1].image.sprite.name,Is.EqualTo("ask_blank_r2"));
             Capture("OutOfEnergy_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("OutOfEnergy_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("OutOfEnergy_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Assert.That(StableSave(),Is.EqualTo(before));
         }
@@ -102,6 +104,11 @@ namespace LegendsOfRus.Tests.PlayMode
             yield return WaitForNormalButtonColors();Capture("OutOfEnergy_Regenerated_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             state.Save.energy=state.Save.energyMax;state.Persist();View().RefreshState();Assert.That(View().Countdown.text,Is.EqualTo("—"));
             Capture("OutOfEnergy_Full_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            foreach(string lang in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);View().RefreshContent();yield return null;
+                Capture("OutOfEnergy_Full_360_"+lang,new Vector2Int(360,640),new Rect(0,20,360,600));
+            }
             View().Close.onClick.Invoke();Settle();yield return null;Assert.That(state.Save.energy,Is.EqualTo(state.Save.energyMax));Assert.That(Preparation().PlayButton.IsInteractable(),Is.True);
         }
         [UnityTest]public IEnumerator UnavailableOffersAndRepeatedBindingCannotGrantOrCallServices()
@@ -236,6 +243,33 @@ namespace LegendsOfRus.Tests.PlayMode
                     if(text.horizontalOverflow!=HorizontalWrapMode.Wrap)Assert.That(text.preferredWidth,Is.LessThanOrEqualTo(text.rectTransform.rect.width+2),text.transform.parent.name+"/"+text.name+" text width");
                     Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+2),text.transform.parent.name+"/"+text.name+" text height");
                 }
+            Rect closeBounds=Bounds((RectTransform)v.Close.transform,camera);
+            Assert.That(Mathf.Min(closeBounds.width,closeBounds.height),Is.GreaterThanOrEqualTo(44),"Close touch target at phone size");
+            for(int i=0;i<3;i++)
+            {
+                var title=Bounds(v.ActionTitles[i].rectTransform,camera);
+                var detail=Bounds(v.ActionDetails[i].rectTransform,camera);
+                var action=Bounds((RectTransform)v.Actions[i].transform,camera);
+                var icon=Bounds((RectTransform)v.Body.Find("ActionIcon_"+i),camera);
+                Assert.That(v.ActionTitles[i].enabled,Is.True,"Action heading stays live in both languages");
+                if(v.ActionLabels[i].enabled)
+                {
+                    var face=v.Actions[i].image;
+                    float drawnWidth=Mathf.Min(face.rectTransform.rect.width,face.rectTransform.rect.height*face.sprite.rect.width/face.sprite.rect.height);
+                    Assert.That(v.ActionLabels[i].rectTransform.rect.width,Is.LessThanOrEqualTo(drawnWidth-10),"Action label must fit inside the aspect-preserved face");
+                    float scale=action.width/face.rectTransform.rect.width;
+                    Rect label=Bounds(v.ActionLabels[i].rectTransform,camera);
+                    Assert.That(label.xMin,Is.GreaterThanOrEqualTo(action.xMin+5*scale),"Label clears left painted edge");
+                    Assert.That(label.xMax,Is.LessThanOrEqualTo(action.xMin+(drawnWidth-5)*scale),"Label clears right painted edge");
+                }
+                Assert.That(title.Overlaps(detail)||detail.Overlaps(action)||detail.Overlaps(icon),Is.False,"Offer details need their own line");
+                Assert.That(v.ActionDetails[i].fontSize*detail.height/v.ActionDetails[i].rectTransform.rect.height,Is.GreaterThanOrEqualTo(11.8f),"Offer detail effective font pixels");
+                Assert.That(detail.xMin,Is.GreaterThan(Bounds(v.Panel.rectTransform,camera).xMin));
+                Assert.That(detail.xMax,Is.LessThan(Bounds(v.Panel.rectTransform,camera).xMax));
+                float[] rowBottom={784,917,1050};
+                float detailBottom=-v.ActionDetails[i].rectTransform.anchoredPosition.y+v.ActionDetails[i].rectTransform.rect.height;
+                Assert.That(detailBottom,Is.LessThanOrEqualTo(rowBottom[i]-10),"Description must clear painted row border");
+            }
             var outsideHits=new List<RaycastResult>();
             EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=new Vector2(size.x*.5f,size.y-10)},outsideHits);
             Assert.That(outsideHits.Count,Is.GreaterThan(0));

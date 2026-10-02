@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using LegendsOfRus.ContentPipeline;
+
+namespace LegendsOfRus
+{
+    // Explicitly supplied local assets. No automatic Resources scan, fallback or activation.
+    public sealed class CampaignPackageInput
+    {
+        public int ChapterId, ContentRevision;
+        public bool LegacyChapterOne, FinaleReady;
+        public string LevelsJson, StoryJson, RussianJson, EnglishJson;
+    }
+
+    public sealed class ValidatedCampaignCatalog : IChapterLevelSource
+    {
+        sealed class Entry
+        {
+            public string Levels, Story, Russian, English;
+            public bool LegacyStoryBridge;
+            public CampaignChapterPackage Metadata;
+        }
+        readonly Dictionary<int, Entry> entries = new Dictionary<int, Entry>();
+        readonly string definitionJson;
+        public int ContentRevision { get; private set; }
+        public ValidatedCampaignCatalog(CampaignDefinition definition)
+        {
+            if (CampaignContract.Validate(definition).Count != 0) throw new ArgumentException("Invalid campaign definition.");
+            definitionJson = JsonUtility.ToJson(definition);
+            ContentRevision = definition.ContentRevision;
+        }
+        public bool TryAdd(CampaignPackageInput input, out string[] errors)
+        {
+            var failures = new List<string>(); errors = Array.Empty<string>();
+            if (input == null) { errors = new[]{"package_missing"}; return false; }
+            var definition = JsonUtility.FromJson<CampaignDefinition>(definitionJson);
+            if (input.ChapterId < 1 || input.ChapterId > 20 || input.ContentRevision != definition.ContentRevision || entries.ContainsKey(input.ChapterId))
+            { errors = new[]{"package_identity_or_revision_invalid"}; return false; }
+            try
+            {
+                var levels = Parse<ChapterLevelCatalogData>(input.LevelsJson);
+                var story = Parse<ChapterStoryCatalogData>(input.StoryJson);
+                var ru = Parse<StoryLocalizationData>(input.RussianJson);
+                var en = Parse<StoryLocalizationData>(input.EnglishJson);
+                if (levels.chapterId != input.ChapterId || story.chapterId != input.ChapterId || ru.locale != "ru" || en.locale != "en")
+                    failures.Add("package_catalog_identity_mismatch");
+                if (input.LegacyChapterOne)
+                {
+                    if (input.ChapterId != 1 || input.FinaleReady) failures.Add("legacy_package_cannot_publish_campaign_finale");
+                    failures.AddRange(LevelDataValidator.ValidateCatalog(levels).Errors);
+                    failures.AddRange(Chapter01ProgressionValidator.Validate(levels).Errors);
+                    failures.AddRange(StoryCatalog.Validate(story, ru, levels).Errors);
+                    // Accepted legacy EN only covers dialogue. Future campaign packages require every key.
+                    var keys = LocaleKeys(en, failures);
+                    foreach (var scene in story.scenes ?? Array.Empty<StorySceneData>())
+                        foreach (var line in scene?.lines ?? Array.Empty<StoryLineData>())
+                            if (line == null || !keys.Contains(line.speakerKey) || !keys.Contains(line.textKey))
+                                failures.Add("legacy_english_dialogue_missing");
+                }
+                else
+                {
+                    failures.AddRange(LevelDataValidator.ValidateCampaignCatalog(levels).Errors);
+                    failures.AddRange(StoryCatalog.ValidateCampaign(story, ru, levels, input.FinaleReady).Errors);
+                    failures.AddRange(StoryCatalog.ValidateCampaign(story, en, levels, input.FinaleReady).Errors);
+                    if (levels.chapterName != definition.Chapters[input.ChapterId - 1].RussianName)
+                        failures.Add("campaign_chapter_name_mismatch");
+                }
+                if (failures.Count != 0) { errors = failures.ToArray(); return false; }
+                var metadata = new CampaignChapterPackage { ChapterId = input.ChapterId, ContentRevision = input.ContentRevision,
+                    ValidatedRoundIds = levels.levels.Select(l => l.levelId).ToArray(), FinaleReady = input.FinaleReady };
+                // Also enforce contiguous package identity and release bounds through the foundation core.
+                new CampaignProgression(definition, new[]{metadata}, Array.Empty<CampaignProgressRecord>(), Array.Empty<int>());
+                entries.Add(input.ChapterId, new Entry { LegacyStoryBridge = input.LegacyChapterOne, Levels = JsonUtility.ToJson(levels), Story = JsonUtility.ToJson(story), Russian = JsonUtility.ToJson(ru), English = JsonUtility.ToJson(en), Metadata = metadata });
+                return true;
+            }
+            catch (Exception e) when (e is ArgumentException || e is NullReferenceException)
+            { errors = new[]{"package_parse_or_structure_invalid"}; return false; }
+        }
+        static T Parse<T>(string json) where T : class
+        {
+            if (string.IsNullOrWhiteSpace(json) || json.Length > 4 * 1024 * 1024) throw new ArgumentException("Missing/oversized package data.");
+            return JsonUtility.FromJson<T>(json) ?? throw new ArgumentException("Null package data.");
+        }
+        static HashSet<string> LocaleKeys(StoryLocalizationData locale, List<string> errors)
+        {
+            var keys = new HashSet<string>(StringComparer.Ordinal);
+            if (locale.schemaVersion != 1 || locale.entries == null) { errors.Add("locale_invalid"); return keys; }
+            foreach (var entry in locale.entries)
+                if (entry == null || string.IsNullOrWhiteSpace(entry.key) || string.IsNullOrWhiteSpace(entry.value) || !keys.Add(entry.key))
+                    errors.Add("locale_entry_invalid");
+            return keys;
+        }
+        public ChapterLevelCatalogData LoadChapter(int chapterId) => entries.TryGetValue(chapterId, out var entry)
+            ? JsonUtility.FromJson<ChapterLevelCatalogData>(entry.Levels) : null;
+        public bool IsLegacyStoryBridge(int chapter) => entries.TryGetValue(chapter, out var entry) && entry.LegacyStoryBridge;
+        public string StoryLedgerKey(int chapter, string scene) =>
+            (IsLegacyStoryBridge(chapter) ? "bridge-story:" : "campaign-story:") + chapter + ":" + scene;
+        public ChapterStoryCatalogData LoadStory(int chapterId) => entries.TryGetValue(chapterId, out var entry)
+            ? JsonUtility.FromJson<ChapterStoryCatalogData>(entry.Story) : null;
+        public StoryLocalizationData LoadLocalization(int chapterId, string language)
+        {
+            if (!entries.TryGetValue(chapterId, out var entry) || (language != "ru" && language != "en")) return null;
+            return JsonUtility.FromJson<StoryLocalizationData>(language == "en" ? entry.English : entry.Russian);
+        }
+        public CampaignProgression Progression(IEnumerable<CampaignProgressRecord> records, IEnumerable<int> acknowledgedFinales) =>
+            new CampaignProgression(JsonUtility.FromJson<CampaignDefinition>(definitionJson), entries.Values.Select(e => e.Metadata), records, acknowledgedFinales);
+    }
+}

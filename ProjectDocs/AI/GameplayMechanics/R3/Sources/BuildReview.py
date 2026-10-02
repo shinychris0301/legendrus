@@ -1,0 +1,16 @@
+from pathlib import Path
+import shutil,sys
+base=Path(__file__).resolve().parent.parent
+out=base/'Captures';out.mkdir(exist_ok=True)
+for p in Path(sys.argv[1]).glob('Mechanics_Seal_*.png'):shutil.copy2(p,out/p.name)
+(base/'Gameplay_Mechanics_R3_Review.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gameplay Mechanics R3 · Runic Seal</title>
+<style>body{margin:0;background:#0b121c;color:#ecdcb9;font:17px/1.55 system-ui}main{max-width:960px;margin:auto;padding:24px}h1{font-size:28px;color:#e1bd74}a{color:#9dd1f0}select{background:#172638;color:#f6e7c3;border:1px solid #9a7741;border-radius:6px;padding:10px;font:inherit;max-width:100%}#capture{display:block;width:min(100%,576px);height:auto;margin:20px auto;border:1px solid #8b703e}.note{color:#afbed0;font-size:14px}details{border-top:1px solid #415068;margin-top:24px;padding-top:16px}</style>
+<main><h1>Gameplay Mechanics R3 · Runic Seal</h1><p>A stationary, two-layer obstacle that needs direct special or line/area booster hits. Ordinary adjacent matches leave it intact. Its goal completes only when the final layer breaks.</p>
+<label>Unity capture <select id="view"><option value="Mechanics_Seal_Intact.png">Intact · two layers</option><option value="Mechanics_Seal_Cracked.png">First hit · one layer, goal unchanged</option><option value="Mechanics_Seal_Cleared.png">Second hit · removed, goal complete</option></select></label>
+<img id="capture" src="Captures/Mechanics_Seal_Intact.png" alt="Actual Unity gameplay sandbox capture showing the Runic Seal">
+<p class="note">Actual Unity renders at 576×1280. Synthetic test board, 50 starting moves. The navy, antique-gold and sapphire seal is a code-drawn prototype. It is not extracted reference artwork or a balanced campaign round.</p>
+<details open><summary>Try it in Unity</summary><p>Enter Play Mode, reach Home, close any modal, then choose <b>Legends of Rus → Development → Gameplay Mechanics Sandbox</b>. The sandbox opens with R3 and the adjacent-match fixture. Use Next for two line hits, two Spark hits, and direct booster hits. Inventory is temporary. Rules cycles Legacy/R1/R2/R3; Exit returns Home.</p></details>
+<details><summary>Behavior verified</summary><p>The seal occupies its cell, blocks swaps and splits gravity like a crate. Each resolution wave removes at most one layer, including overlapping blasts. The next wave may remove another. Color-only clearing and reshuffle do not damage it. R3 supports the earlier Spark and bomb rules. Older rule profiles reject seal boards.</p></details>
+<details><summary>Next review</summary><p>Playtest a small set of representative rounds combining ice, crates, seals, Sparks and bombs. Tune objective clarity, move budgets and effect intensity before authoring the first 50 rounds. Campaign rule activation, migration and device performance remain separate work.</p></details>
+<p><a href="ImplementationReport.md">Implementation report</a> · <a href="QA/Verification.json">Test evidence</a> · <a href="QA/Scope.json">Changed files</a></p></main>
+<script>document.querySelector('#view').onchange=e=>{document.querySelector('#capture').src='Captures/'+e.target.value};</script></html>''')

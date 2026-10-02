@@ -1,0 +1,60 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 135.57655358314514,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R5LargeStock/QA/Play/unity.log",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R5LargeStock/QA/Play/results.xml",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-gameplay-large-stock-r5/Play/config",
+  "mode": "PlayMode",
+  "result": {
+    "id": "2",
+    "testcasecount": "21",
+    "result": "Failed(Child)",
+    "total": "21",
+    "passed": "17",
+    "failed": "4",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-02 00:28:14Z",
+    "end-time": "2026-10-02 00:29:56Z",
+    "duration": "101.1445357"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.EmptyStockCanBeInspectedButNeverEquippedOrConsumed",
+      "result": "Failed",
+      "message": "  Expected: not null and not <empty>\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.LiveInventoryRussianEnglishAndPortraitSafeAreas",
+      "result": "Failed",
+      "message": "  Expected: not null and not <empty>\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.StandaloneRouteHasNativeBackgroundAndBack",
+      "result": "Failed",
+      "message": "  Expected: not null and not <empty>\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.StockCrossingOneThousandUsesNativeInputAndExistingConsumption",
+      "result": "Failed",
+      "message": "  Expected: SeaPearl\n  But was:  null\n"
+    }
+  ]
+}

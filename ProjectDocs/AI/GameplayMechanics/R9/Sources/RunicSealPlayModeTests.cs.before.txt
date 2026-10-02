@@ -1,0 +1,42 @@
+using System.Collections;
+using System.Linq;
+using NUnit.Framework;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.TestTools;
+namespace LegendsOfRus.Tests.CampaignPlayMode
+{
+    public class RunicSealPlayModeTests
+    {
+        GameObject root;
+        [UnityTearDown] public IEnumerator Cleanup(){if(root)Object.Destroy(root);yield return null;}
+        static IEnumerator Settle(Match3Board b){float end=Time.realtimeSinceStartup+25;while(b.HasActiveCommand&&Time.realtimeSinceStartup<end)yield return null;Assert.That(b.HasActiveCommand,Is.False);Assert.That(b.BoardStateHash,Is.EqualTo(b.LastPlanFinalStateHash));}
+        [Test] public void AuthoredSealsRequireR3AndGenerateLegalBoards()
+        {
+            var level=new LevelData{obstacles=new[]{new LevelObstacleData{x=5,y=3,type=LevelObstacleTypes.RunicSeal,layers=2}}};
+            foreach(var rules in new[]{GameplayRuleVersion.Legacy,GameplayRuleVersion.PrototypeR1,GameplayRuleVersion.PrototypeR2}) Assert.Throws<System.ArgumentException>(()=>LevelBoardFactory.Create(level,1,rules:rules));
+            for(int seed=1;seed<=8;seed++){var board=LevelBoardFactory.Create(level,seed,rules:GameplayRuleVersion.PrototypeR3);Assert.That(board.HasLegalMove(),Is.True);Assert.That(board.HasAnyMatches(),Is.False);Assert.That(board.GetObstacle(new BoardPosition(5,3)).Layers,Is.EqualTo(2));}
+            level.obstacles[0].layers=3;Assert.Throws<System.ArgumentOutOfRangeException>(()=>LevelBoardFactory.Create(level,1,rules:GameplayRuleVersion.PrototypeR3));
+            level.obstacles=Enumerable.Range(0,56).Select(i=>new LevelObstacleData{x=i%8,y=i/8,type=LevelObstacleTypes.RunicSeal,layers=2}).ToArray();Assert.Throws<System.InvalidOperationException>(()=>LevelBoardFactory.Create(level,1,2,GameplayRuleVersion.PrototypeR3));
+        }
+        [UnityTest] public IEnumerator SealDamageGoalsAndVisualsFollowResolvedState()
+        {
+            root=new GameObject("SealCapture",typeof(RectTransform),typeof(Canvas));var s=MechanicsSandbox.Open((RectTransform)root.transform,()=>{},true);yield return null;
+            s.Reset(16,GameplayRuleVersion.PrototypeR3);yield return null;Assert.That(s.Board.SwipeCell(3,3,Vector2Int.down),Is.True);yield return Settle(s.Board);Assert.That(BoardReplayCodec.Decode(s.Board.BoardReplayToken).ObstacleLayers[20],Is.EqualTo(2));Assert.That(s.Board.GoalSlot1Remaining,Is.EqualTo(1));
+            foreach(int fixture in new[]{17,18,19})
+            {
+                s.Reset(fixture,GameplayRuleVersion.PrototypeR3);yield return null;
+                if(fixture==17)MechanicsSandboxPlayModeTests.Capture(root,"Seal_Intact",576,1280);
+                for(int hit=0;hit<2;hit++)
+                {
+                    if(fixture==19){s.Board.UseBooster(BoosterType.BogatyrMace);Assert.That(s.Board.TapCell(5,3),Is.True);}
+                    else {var snap=BoardReplayCodec.Decode(s.Board.BoardReplayToken);var kind=fixture==17?SpecialGemKind.Row:SpecialGemKind.Spark;int index=hit==0?27:System.Array.FindIndex(snap.Specials.ToArray(),x=>x==kind);Assert.That(index,Is.GreaterThanOrEqualTo(0));Assert.That(s.Board.TapCell(index%snap.Width,index/snap.Width),Is.True);}
+                    yield return Settle(s.Board);
+                    var after=BoardReplayCodec.Decode(s.Board.BoardReplayToken);Assert.That(after.ObstacleLayers[29],Is.EqualTo(hit==0?1:0),"fixture "+fixture);Assert.That(s.Board.GoalSlot1Remaining,Is.EqualTo(hit==0?1:0));Assert.That(s.Board.Moves,Is.EqualTo(fixture==19?50:49-hit));
+                    if(fixture==17){var glyphs=root.GetComponentsInChildren<RunicSealGraphic>();Assert.That(glyphs.Count(g=>g.Layers==1),Is.EqualTo(hit==0?1:0));Canvas.ForceUpdateCanvases();foreach(var g in glyphs){var mesh=g.canvasRenderer.GetMesh();Assert.That(mesh.vertexCount,Is.GreaterThan(0));Object.Destroy(mesh);}}
+                    if(fixture==17)MechanicsSandboxPlayModeTests.Capture(root,hit==0?"Seal_Cracked":"Seal_Cleared",576,1280);
+                }
+            }
+        }
+    }
+}

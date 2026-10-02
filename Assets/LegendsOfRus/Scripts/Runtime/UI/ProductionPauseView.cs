@@ -8,7 +8,8 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionPauseView : MonoBehaviour
     {
-        public const int CurrentRevision = 2;
+        public Func<BoosterType,int> CampaignCountProvider;
+        public const int CurrentRevision = 3;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public RectTransform Content, Body;
@@ -70,7 +71,7 @@ namespace LegendsOfRus
             {
                 ActionLabels[i].text=labels[i];ActionLabels[i].enabled=en;
                 Actions[i].GetComponent<Image>().sprite=ProductionPauseRuntime.Load(ProductionPauseRuntime.ActionNames[i]+(en?"_blank":"_ru"));
-                BoosterCounts[i].text=GameState.Instance!=null?GameState.Instance.BoosterCount(ProductionPreLevelRuntime.Boosters[i]).ToString():"—";
+                BoosterCounts[i].text=CampaignCountProvider!=null?CampaignCountProvider(ProductionPreLevelRuntime.Boosters[i]).ToString():GameState.Instance!=null?GameState.Instance.BoosterCount(ProductionPreLevelRuntime.Boosters[i]).ToString():"—";
                 Actions[i].interactable=Board!=null;
             }
             int count=Board!=null?Mathf.Min(3,Board.GoalCount):0;

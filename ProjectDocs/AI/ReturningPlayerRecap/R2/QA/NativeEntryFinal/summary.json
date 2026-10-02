@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 37.707751989364624,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.NativeReaderBrowsesAndReturnsWithoutChangingStoryOrJournal",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/ReturningPlayerRecap/R2/QA/NativeEntryFinal/results.xml",
+    "-logFile",
+    "/tmp/lor-returning-player-recap-r2/NativeEntryFinal/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-returning-player-recap-r2/NativeEntryFinal/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-returning-player-recap-r2/NativeEntryFinal",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "1",
+    "result": "Failed(Child)",
+    "total": "1",
+    "passed": "0",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-02 06:13:16Z",
+    "end-time": "2026-10-02 06:13:17Z",
+    "duration": "0.8401726"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.NativeReaderBrowsesAndReturnsWithoutChangingStoryOrJournal",
+      "result": "Failed",
+      "message": "  Expected: same as <StoryRecap (UnityEngine.UI.Button)>\n  But was:  null\n"
+    }
+  ]
+}

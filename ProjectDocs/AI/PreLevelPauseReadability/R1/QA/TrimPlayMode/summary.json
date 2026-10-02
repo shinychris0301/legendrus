@@ -1,0 +1,46 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.PauseAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/PreLevelPauseReadability/R1/QA/TrimPlayMode/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/PreLevelPauseReadability/R1/QA/TrimPlayMode/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 24.72060489654541,
+  "isolatedConfig": "/tmp/lor-prelevel-pause-r1/TrimPlayMode/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "9",
+    "result": "Failed(Child)",
+    "total": "9",
+    "passed": "8",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 17:21:51Z",
+    "end-time": "2026-09-30 17:21:57Z",
+    "duration": "5.8478729"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.BoosterGuideExplainsEachToolInBothLanguagesAndDoesNotSpendInventory",
+      "result": "Failed",
+      "message": "  Label lettering must clear the upper and lower trim.\n  Expected: in range (554.9999,608.9999)\n  But was:  609.999939f\n"
+    }
+  ]
+}

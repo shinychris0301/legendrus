@@ -1,6 +1,12 @@
 # FAIL-CONT-01 — Paid +5 moves and rewarded continuation
 
-Status: **Behavior scheduled, not implemented. Offer UI designs added in Failure R4.** User explicitly requested this feature on 2026-09-15 and placed implementation after UI design completion. This supersedes treating paid/ad continuation as permanently out of scope. Existing retry/chapter-map actions remain functional in the current visual build.
+Status: **CONT-01 recovery and CONT-02A local reservation/refund foundation implemented; playable paid/ad continuation remains pending.** See [FailedRoundRecovery/R1](../FailedRoundRecovery/R1/TestResults.md). Existing disabled offer artwork is reused unchanged. Offer UI designs were added in Failure R4. User explicitly requested this feature on 2026-09-15 and placed implementation after UI design completion. This supersedes treating paid/ad continuation as permanently out of scope. Existing retry/chapter-map actions remain functional in the current visual build.
+
+## 2026-09-29 RuStore and transaction update
+
+User selected RuStore and requested our own backend. [CONT-02A results](../ContinuationTransactions/R1/TestResults.md) cover atomic local gem reservation plus unused entitlement, duplicate/stale rejection, decline/refund and separate-process recovery. The internal reservation API is unbound; no offer was enabled. A local RuStore server module verifies invoice contracts and journals wallet credits in tests; Unity is not connected and no real provider purchase was run. This is not a completed playable continuation feature.
+
+Next establish stable backend identity/Unity transport and server round authority, then consume entitlements on the same attempt and integrate real Pay acknowledgement/refund handling. Prices, ad provider and ad reward policy remain unspecified. Existing art and free-retry behavior remain unchanged. The historical “backend changes not part of current header refinement” below applied to that old visual task, not the user's new explicit backend authorization.
 
 ## R4 design handoff
 
@@ -12,7 +18,13 @@ When this task begins, bind these existing fields and replace their unavailable 
 
 First gameplay/monetization milestone after the agreed UI design pass, before release acceptance. See [development schedule](../DevelopmentSchedule.md). Do not request the same implementation authorization again. Balance choices and provider configuration may still need clarification based on what exists at that stage.
 
-## Verified starting points
+## 2026-09-29 foundation update
+
+Normal zero-move failures now persist the settled board, identity, rules/content contract and goal/score state in the existing save journal. Relaunch recovers Failure. Retry or explicit exit finalizes the local loss once; retry creates a new attempt with the existing free-retry policy. Failed writes keep the in-memory decision and usable retry/exit controls. `InitializeRetained` reconstructs an input-locked board without another attempt/energy spend. It does not grant moves or enable offers. Separate-process verification and exact limits are recorded in the linked results.
+
+Step 1 below has a provider-independent implementation. Steps 2–4, playable same-attempt continuation, atomic economic fulfillment, provider callbacks and Android interruption acceptance remain pending. No price or provider activation is inferred.
+
+## Historical starting points before CONT-01
 
 - `ScreenRouter` gameplay failure callback records `GameState.LastFailureResult` then routes to the outcome; current Failure does not retain a resumable board. `LevelFailureResult` copies goal progress/score, not the complete board.
 - `ProductionFailView` has existing native retry and chapter-map actions; retry creates a new attempt and does not resume the lost board.

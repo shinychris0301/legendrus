@@ -1,0 +1,84 @@
+--- R2/ProductionMailRuntime.cs
++++ R3/ProductionMailRuntime.cs
+@@ -70,8 +70,9 @@
+             BuildLetter(v,v.SelectedMessage,false);
+         }
+         static void BuildLetter(ProductionMailView v,int index,bool full){
++            if(full){BuildOpenedLetter(v,index);return;}
+             bool en=DemoFeatureState.LanguageCode=="en";var p=v.DynamicRoot;float top=full?316:1030,height=full?1164:447;
+-            Panel(p,"LetterParchment",Load(full?"letter_frame":"preview_paper_r2"),46,top,850,height);
++            Panel(p,"LetterParchment",Load(full?"letter_surface_r3":"preview_surface_r3"),46,top,850,height);
+             Art(p,"LetterSender",Load("sender_"+index),full?102:79,top+(full?45:22),full?156:196,full?156:184);
+             if(!full){
+                 var original=p.Find("LetterSender").gameObject;original.SetActive(index!=0);
+@@ -93,6 +94,50 @@
+             for(int k=0;k<Rewards[index].Length;k++)Reward(v,attachments,Rewards[index][k],Amounts[index][k],full?470-Rewards[index].Length*91+k*182:297+k*80,top+(full?800:317),full?160:Rewards[index].Length==1?102:72,full?169:106,true);
+             if(Rewards[index].Length>0){var claim=Button(Art(attachments,"Claim",Load(en?"claim_frame":"claim_ru_rebuild"),full?209:532,top+(full?990:321),full?526:315,full?147:94));claim.onClick.AddListener(v.ShowInfo);var l=Label(v,claim.transform,"Label",full?73:42,full?40:24,full?380:231,full?64:44,full?42:29);l.font=v.TitleFont;l.text=en?"CLAIM":"ЗАБРАТЬ";l.enabled=en;Fit(l,22,full?42:27);}
+         }
++        // The opened letter has its own source hierarchy; the compact Inbox preview stays independent.
++        static void BuildOpenedLetter(ProductionMailView v,int index)
++        {
++            bool en=DemoFeatureState.LanguageCode=="en";
++            var p=v.DynamicRoot;
++            Panel(p,"LetterParchment",Load("letter_surface_r3"),46,316,850,1164);
++            Art(p,"LetterSender",Load(index==2?"guild_emblem_r3":"sender_"+index),92,344,146,148);
++            var sender=LetterText(v,p,"SenderName",250,370,587,57,43);
++            sender.text=index==2?(en?"GUILD":"ГИЛЬДИЯ"):(en?NamesEn[index]:NamesRu[index]);
++            var role=LetterText(v,p,"SenderRole",250,431,587,41,29);
++            role.text=index==2?(en?"Guild leaders":"Лидеры Гильдии"):(en?"Sample message":"Пример письма");
++            Art(p,"SenderDivider",Load("letter_rule_r3"),105,492,731,12);
++            var subject=LetterText(v,p,"LetterSubject",105,506,731,48,31);
++            subject.text=(en?"Subject: ":"Тема: ")+(index==2?(en?"Reward for your contribution!":"Награда за активность!"):(en?SubjectsEn[index]:SubjectsRu[index]));
++            Art(p,"SubjectDivider",Load("letter_divider_r3"),103,559,735,32);
++            var greeting=LetterText(v,p,"LetterGreeting",112,602,722,49,34);
++            greeting.text=en?"Good day, Ivan!":"Добрый день, Иван!";
++            var body=LetterText(v,p,"LetterBody",112,664,722,300,31);
++            body.alignment=TextAnchor.UpperLeft;body.lineSpacing=1.2f;
++            body.text=index==2?(en?"Thank you for helping our guild grow! Your courage and loyalty make us stronger every day. As a token of our appreciation for your efforts, we have prepared a reward for you.\nKeep up the good work!\nTogether we are invincible!":"Благодарим тебя за вклад в развитие нашей Гильдии! Твоя активность и преданность помогают нам становиться сильнее каждый день. В знак признательности за твою работу мы подготовили для тебя награду.\nПродолжай в том же духе!\nВместе мы непобедимы!"):(en?SummaryEn[index]+"\n\nThis letter and its attachments are design examples. No rewards can be claimed yet.":SummaryRu[index]+"\n\nЭто пример письма и вложений для дизайна. Получение наград пока недоступно.");
++            var closing=LetterText(v,p,"LetterClosing",112,977,722,82,31);
++            closing.alignment=TextAnchor.UpperLeft;
++            closing.text=(en?"With respect,\n":"С уважением,\n")+(en?NamesEn[index]:NamesRu[index]);
++            var attachments=Rect(p,"AttachmentGroup",0,0,941,1672);
++            Art(attachments,"BodyDivider",Load("letter_rule_r3"),105,1068,731,12);
++            Art(attachments,"RewardDividerLeft",Load("preview_divider_r2"),199,1097,137,18);
++            var right=Art(attachments,"RewardDividerRight",Load("preview_divider_r2"),609,1097,137,18);
++            right.rectTransform.localScale=new Vector3(-1,1,1);right.rectTransform.anchoredPosition=new Vector2(746,-1097);
++            var title=LetterText(v,attachments,"AttachmentsLabel",342,1084,261,42,27);
++            title.alignment=TextAnchor.MiddleCenter;
++            title.text=Rewards[index].Length>0?(en?"ATTACHMENTS":"ПРИЛОЖЕНИЯ"):(en?"NO ATTACHMENTS":"БЕЗ ВЛОЖЕНИЙ");
++            for(int k=0;k<Rewards[index].Length;k++)Reward(v,attachments,Rewards[index][k],Amounts[index][k],470-Rewards[index].Length*95+12+k*190,1124,166,169,true);
++            if(Rewards[index].Length>0){
++                var claim=Button(Art(attachments,"Claim",Load(en?"claim_frame":"claim_ru_rebuild"),209,1306,526,147));
++                claim.onClick.AddListener(v.ShowInfo);
++                var caption=Label(v,claim.transform,"Label",73,40,380,64,42);caption.font=v.TitleFont;
++                caption.text=en?"CLAIM":"ЗАБРАТЬ";caption.enabled=en;Fit(caption,28,43);
++            }
++        }
++        static Text LetterText(ProductionMailView v,Transform parent,string name,float x,float y,float w,float h,int size)
++        {
++            var text=Label(v,parent,name,x,y,w,h,size);text.font=v.TitleFont;text.color=Ink;
++            text.alignment=TextAnchor.MiddleLeft;Fit(text,Mathf.Max(22,size-5),size);return text;
++        }
+         static void Badge(Transform p,string name,float x,float y,float size){var a=Rect(p,name,x,y,size,size).gameObject.AddComponent<ProductionHomePanel>();a.Frame=true;a.RaisedBadge=true;a.Radius=size*.5f;a.BorderColor=new Color32(184,132,53,255);a.LeftColor=a.RightColor=new Color32(130,22,8,255);a.raycastTarget=false;}
+         static Color Ink=>new Color32(44,29,15,255);
+         static void Reward(ProductionMailView v,Transform p,string icon,string amount,float x,float y,float w,float h,bool frame){if(frame)Panel(p,"AttachmentFrame",Shared("reward_frame"),x,y,w,h);Art(p,"Attachment_"+icon,Load(icon),x+8,y+5,w-16,h*.68f);var t=Label(v,p,"Amount",x+3,y+h*.7f,w-6,h*.29f,frame&&w>100?28:19);t.text=amount;Fit(t,14,frame&&w>100?28:19);}
+@@ -100,7 +145,7 @@
+         static Transform Clone(Transform t,Transform p){var c=UnityEngine.Object.Instantiate(t,p,false);c.name=t.name;return c;}
+         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
+         static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.preserveAspect=true;a.raycastTarget=false;return a;}
+-        static Image Panel(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Art(p,n,s,x,y,w,h);a.type=s&&(s.name=="letter_frame"||s.name=="preview_frame"||s.name=="preview_paper_r2")?Image.Type.Simple:Image.Type.Sliced;a.preserveAspect=false;a.pixelsPerUnitMultiplier=s&&(s.name=="letter_frame"||s.name=="preview_frame"||s.name=="preview_paper_r2")?1:s&&s.name=="reward_frame"?6:2;return a;}
++        static Image Panel(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Art(p,n,s,x,y,w,h);a.type=s&&(s.name=="letter_frame"||s.name=="preview_frame"||s.name=="preview_paper_r2"||s.name=="letter_surface_r3"||s.name=="preview_surface_r3")?Image.Type.Simple:Image.Type.Sliced;a.preserveAspect=false;a.pixelsPerUnitMultiplier=s&&(s.name=="letter_frame"||s.name=="preview_frame"||s.name=="preview_paper_r2"||s.name=="letter_surface_r3"||s.name=="preview_surface_r3")?1:s&&s.name=="reward_frame"?6:2;return a;}
+         static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};return b;}
+         static Text Label(ProductionMailView v,Transform p,string n,float x,float y,float w,float h,int size){var t=Rect(p,n,x,y,w,h).gameObject.AddComponent<Text>();t.font=v.BodyFont;t.fontSize=size;t.alignment=TextAnchor.MiddleCenter;t.color=new Color32(243,206,137,255);t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;return t;}
+     }
+--- R2/ProductionMailView.cs
++++ R3/ProductionMailView.cs
+@@ -10,7 +10,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionMailView : MonoBehaviour
+     {
+-        public const int CurrentRevision=3;
++        public const int CurrentRevision=4;
+         public int Revision=CurrentRevision;
+         public RectTransform Content,Body,Hud,DynamicRoot,TabStrip;
+         public Image Environment,Title;

@@ -1,0 +1,841 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterComplete.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: 4c563f4dbab9f9b53907f8996b74ab5a, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionChapterCompleteView
+-  Revision: 8
++  Revision: 9
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 4936721769926267994}
+   Body: {fileID: 1995216073061714865}
+@@ -246,8 +246,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 29, y: -392}
+-  m_SizeDelta: {x: 883, y: 695}
++  m_AnchoredPosition: {x: 196.5, y: -392}
++  m_SizeDelta: {x: 548, y: 431.33}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2010344248615614296
+ CanvasRenderer:
+@@ -323,7 +323,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 616.5, y: -1126}
++  m_AnchoredPosition: {x: 616.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3164164540391833526
+@@ -398,8 +398,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 370, y: -1084}
+-  m_SizeDelta: {x: 201, y: 41}
++  m_AnchoredPosition: {x: 200, y: -828}
++  m_SizeDelta: {x: 541, y: 52}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2167824571780768037
+ CanvasRenderer:
+@@ -416,7 +416,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 1027512148691120699}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -431,7 +431,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 36
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -477,8 +477,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8466646424847580960
+ CanvasRenderer:
+@@ -510,7 +510,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -593,8 +593,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7090556441449819610
+ CanvasRenderer:
+@@ -668,8 +668,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &789319233796708957
+ CanvasRenderer:
+@@ -701,7 +701,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -767,6 +767,7 @@
+   - {fileID: 703587286832949820}
+   - {fileID: 3865219606954883171}
+   - {fileID: 5371156946571759352}
++  - {fileID: 826090580092597349}
+   m_Father: {fileID: 4936721769926267994}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -808,8 +809,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8109232697028629713
+ CanvasRenderer:
+@@ -841,7 +842,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -889,7 +890,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 48.5, y: -1126}
++  m_AnchoredPosition: {x: 48.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8927712053834793198
+@@ -964,8 +965,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 87, y: -20}
+-  m_SizeDelta: {x: 420, y: 28}
++  m_AnchoredPosition: {x: 65, y: -20}
++  m_SizeDelta: {x: 425, y: 43}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3576409020283319706
+ CanvasRenderer:
+@@ -982,7 +983,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 2441406047711351522}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -997,7 +998,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 22
++    m_FontSize: 34
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -1008,7 +1009,7 @@
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: CHAPTER 2
++  m_Text: "\u0413\u041B\u0410\u0412\u0410 2"
+ --- !u!1 &2611477164995215807
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1043,8 +1044,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4374788258823186670
+ CanvasRenderer:
+@@ -1114,12 +1115,12 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 3865219606954883171}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 87, y: -132}
+-  m_SizeDelta: {x: 420, y: 57}
++  m_Father: {fileID: 1995216073061714865}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 60, y: -1495}
++  m_SizeDelta: {x: 821, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5515424893734492716
+ CanvasRenderer:
+@@ -1136,13 +1137,13 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 3081474804288202757}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.1882353, g: 0.11372549, b: 0.047058824, a: 1}
++  m_Color: {r: 0.9607843, g: 0.8235294, b: 0.5647059, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -1151,21 +1152,21 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 22
++    m_FontSize: 38
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+     m_MaxSize: 40
+-    m_Alignment: 0
++    m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: 'Dark forces awaken in the forest.
+-
+-    Explore its depths to uncover the
+-    truth.'
++  m_Text: "\u0422\u0451\u043C\u043D\u044B\u0435 \u0441\u0438\u043B\u044B \u043F\u0440\u043E\u0431\u0443\u0434\u0438\u043B\u0438\u0441\u044C
++    \u0432 \u0447\u0430\u0449\u043E\u0431\u0435.\n\u041E\u0442\u043F\u0440\u0430\u0432\u044C\u0441\u044F
++    \u0432\u0433\u043B\u0443\u0431\u044C \u043B\u0435\u0441\u0430 \u0438 \u0443\u0437\u043D\u0430\u0439
++    \u043F\u0440\u0430\u0432\u0434\u0443."
+ --- !u!1 &3148965501818190092
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1200,8 +1201,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 5, y: -1037}
+-  m_SizeDelta: {x: 931, y: 635}
++  m_AnchoredPosition: {x: 5, y: -807}
++  m_SizeDelta: {x: 931, y: 865}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9089083997928530476
+ CanvasRenderer:
+@@ -1232,8 +1233,8 @@
+     m_PersistentCalls:
+       m_Calls: []
+   m_Sprite: {fileID: 21300000, guid: 0d550ba16c725bf7e975fa4a4e32a458, type: 3}
+-  m_Type: 0
+-  m_PreserveAspect: 1
++  m_Type: 1
++  m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -1258,7 +1259,7 @@
+   m_Icon: {fileID: 0}
+   m_NavMeshLayer: 0
+   m_StaticEditorFlags: 0
+-  m_IsActive: 1
++  m_IsActive: 0
+ --- !u!224 &5371156946571759352
+ RectTransform:
+   m_ObjectHideFlags: 0
+@@ -1350,8 +1351,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6193323210064296096
+ CanvasRenderer:
+@@ -1383,7 +1384,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -1429,8 +1430,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2193081679266613442
+ CanvasRenderer:
+@@ -1579,8 +1580,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3876774233091658077
+ CanvasRenderer:
+@@ -1612,7 +1613,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -1735,7 +1736,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 758.5, y: -1126}
++  m_AnchoredPosition: {x: 758.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6458371009739210402
+@@ -1810,7 +1811,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 150, y: -1082}
++  m_AnchoredPosition: {x: 150, y: -832}
+   m_SizeDelta: {x: 642, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8280315158902013477
+@@ -1841,7 +1842,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 84474f32dad29241fbc185e57518fb57, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 97b6407dc27d359af90ffb5b9729f57d, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -1887,7 +1888,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 79, y: -1269}
++  m_AnchoredPosition: {x: 79, y: -1028}
+   m_SizeDelta: {x: 390, y: 94}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4367419611507381730
+@@ -2006,8 +2007,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 75, y: -1364}
+-  m_SizeDelta: {x: 791, y: 31}
++  m_AnchoredPosition: {x: 60, y: -1128}
++  m_SizeDelta: {x: 821, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7923835049693514546
+ CanvasRenderer:
+@@ -2039,7 +2040,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 25
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -2050,9 +2051,8 @@
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: "\u041D\u0430\u0433\u0440\u0430\u0434\u044B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u044B
+-    \xB7 \u041D\u0435\u0442 \u043F\u0440\u043E\u0433\u0440\u0435\u0441\u0441\u0430
+-    \u0433\u043B\u0430\u0432\u044B"
++  m_Text: "\u041D\u0430\u0433\u0440\u0430\u0434\u044B \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u044B\n\u041D\u0435\u0442
++    \u043F\u0440\u043E\u0433\u0440\u0435\u0441\u0441\u0430 \u0433\u043B\u0430\u0432\u044B"
+ --- !u!1 &4599944090680399842
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2089,7 +2089,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 190.5, y: -1126}
++  m_AnchoredPosition: {x: 190.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7507165147301106317
+@@ -2237,12 +2237,11 @@
+   m_Children:
+   - {fileID: 608555677585214518}
+   - {fileID: 2916344395943503182}
+-  - {fileID: 826090580092597349}
+   m_Father: {fileID: 1995216073061714865}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 72, y: -1426}
++  m_AnchoredPosition: {x: 72, y: -1290}
+   m_SizeDelta: {x: 790, y: 201}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7421053962193146585
+@@ -2273,7 +2272,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: b5b7cd9273b8b20cea2bacaece6ad601, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2be815a10007997be913cc01a7dfcacb, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -2319,7 +2318,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 474.5, y: -1126}
++  m_AnchoredPosition: {x: 474.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7632594946295421814
+@@ -2469,8 +2468,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3418265064750642844
+ CanvasRenderer:
+@@ -2546,7 +2545,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 475, y: -1269}
++  m_AnchoredPosition: {x: 475, y: -1028}
+   m_SizeDelta: {x: 382, y: 94}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1443597171914635094
+@@ -2665,8 +2664,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 357, y: -1030}
+-  m_SizeDelta: {x: 225, y: 55}
++  m_AnchoredPosition: {x: 388, y: -782}
++  m_SizeDelta: {x: 164, y: 40}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3276084691658778457
+ CanvasRenderer:
+@@ -2698,7 +2697,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 36
++    m_FontSize: 26
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -2744,8 +2743,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 704, y: -1398}
+-  m_SizeDelta: {x: 135, y: 29}
++  m_AnchoredPosition: {x: 60, y: -1240}
++  m_SizeDelta: {x: 821, y: 47}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3289117583517173052
+ CanvasRenderer:
+@@ -2777,7 +2776,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 20
++    m_FontSize: 38
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -2788,7 +2787,8 @@
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: "\u0421\u041A\u041E\u0420\u041E"
++  m_Text: "\u0421\u041B\u0415\u0414\u0423\u042E\u0429\u0410\u042F \u0413\u041B\u0410\u0412\u0410
++    \xB7 \u0421\u041A\u041E\u0420\u041E"
+ --- !u!1 &5737421440461233324
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2823,8 +2823,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 87, y: -51}
+-  m_SizeDelta: {x: 420, y: 77}
++  m_AnchoredPosition: {x: 65, y: -65}
++  m_SizeDelta: {x: 425, y: 111}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7354775317950581501
+ CanvasRenderer:
+@@ -2841,7 +2841,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 5737421440461233324}
+-  m_Enabled: 0
++  m_Enabled: 1
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -2856,20 +2856,18 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 33
++    m_FontSize: 42
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 42
+     m_Alignment: 0
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: 'MYSTERY OF
+-
+-    THE FOREST'
++  m_Text: "\u0422\u0410\u0419\u041D\u0410 \u041B\u0415\u0421\u0410"
+ --- !u!1 &5868845931194166541
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2906,7 +2904,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 332.5, y: -1126}
++  m_AnchoredPosition: {x: 332.5, y: -881}
+   m_SizeDelta: {x: 134, y: 139}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5361892270203286425
+@@ -2981,8 +2979,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 9, y: -95}
+-  m_SizeDelta: {x: 116, y: 37}
++  m_AnchoredPosition: {x: 5, y: -80}
++  m_SizeDelta: {x: 124, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4664911613522669890
+ CanvasRenderer:
+@@ -3014,7 +3012,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 30
++    m_FontSize: 40
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -3374,7 +3372,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 71, y: -1390}
++  m_AnchoredPosition: {x: 71, y: -1225}
+   m_SizeDelta: {x: 802, y: 14}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4074566729094474473
+@@ -3449,8 +3447,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6400687624700944581
+ CanvasRenderer:
+@@ -3684,8 +3682,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -10}
+-  m_SizeDelta: {x: 80, y: 80}
++  m_AnchoredPosition: {x: 33, y: -8}
++  m_SizeDelta: {x: 68, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4841355853216774774
+ CanvasRenderer:
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -27,7 +27,7 @@
+             }
+ 
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned/"))
+-            { ConfigureFailTexture(ti);return; }
++            { ConfigureChapterCompleteTexture(ti);return; }
+             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ShopAligned/") ||
+                 assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/SpecialOfferAligned/") ||
+                 assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/DailyRewardAligned/"))
+@@ -162,6 +162,15 @@
+         internal static void ConfigureShopTexture(TextureImporter ti)
+         {
+             ConfigureFailTexture(ti);ti.mipmapEnabled=false;ti.filterMode=FilterMode.Bilinear;
++        }
++
++        internal static void ConfigureChapterCompleteTexture(TextureImporter ti)
++        {
++            ConfigureFailTexture(ti);
++            if(System.IO.Path.GetFileNameWithoutExtension(ti.assetPath)=="footer")
++            {
++                ti.spriteBorder=new Vector4(80,80,80,80);
++            }
+         }
+ 
+         internal static void ConfigureFailTexture(TextureImporter ti)
+--- a/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -608,12 +608,12 @@
+         }
+         static void BuildChapterCompletePage()
+         {
+-            // R8 preserves source scenery/lettering and imports repaired localized faces.
++            // Preserve approved artwork; configure the footer border for larger live captions.
+             foreach(string name in ProductionChapterCompleteRuntime.ArtNames)
+             {
+                 var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionChapterCompleteRuntime.ArtRoot+name+".png") as TextureImporter;
+                 if(importer==null)throw new InvalidOperationException("Missing ChapterComplete sprite: "+name);
+-                LockedDesignImporter.ConfigureFailTexture(importer);importer.SaveAndReimport();
++                LockedDesignImporter.ConfigureChapterCompleteTexture(importer);importer.SaveAndReimport();
+             }
+             string path=PageRoot+"/ChapterComplete.prefab";var root=PrefabUtility.LoadPrefabContents(path);
+             try
+@@ -626,8 +626,8 @@
+                 if(!view.HasRequiredBindings||view.SceneRailLeft.raycastTarget||view.SceneRailRight.raycastTarget)
+                     throw new InvalidOperationException("ChapterComplete scene rails must be bound and non-interactive.");
+                 var footer=view.Body.Find("CarvedWoodFooter").GetComponent<UnityEngine.UI.Image>();
+-                if(!footer.preserveAspect||footer.raycastTarget||footer.sprite==null||footer.rectTransform.sizeDelta!=footer.sprite.rect.size)
+-                    throw new InvalidOperationException("ChapterComplete reward frame must retain its native aspect and remain non-interactive.");
++                if(footer.type!=UnityEngine.UI.Image.Type.Sliced||footer.raycastTarget||footer.sprite==null||footer.sprite.border!=new Vector4(80,80,80,80))
++                    throw new InvalidOperationException("ChapterComplete reward frame must preserve sliced corners and remain non-interactive.");
+                 var scene=view.Body.Find("VillageScene").GetComponent<UnityEngine.UI.Image>();
+                 if(scene.sprite==null||scene.sprite!=view.Environment.sprite||scene.raycastTarget)
+                     throw new InvalidOperationException("ChapterComplete must use the same clean scenery plate in both background layers.");
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteRuntime.cs
+@@ -99,6 +99,30 @@
+             {
+                 text.alignment=TextAnchor.UpperLeft;text.color=new Color32(48,29,12,255);
+             }
++            // Larger live captions share one bilingual layout; the original frame's
++            // corners stay at native size through nine-slicing.
++            var frame=footer.GetComponent<Image>();frame.type=Image.Type.Sliced;frame.preserveAspect=false;
++            SetRect(frame.rectTransform,5,807,931,865);
++            SetRect(v.Foreground.rectTransform,196.5f,392,548,431.33f);
++            SetRect(v.VictoryText.rectTransform,388,782,164,40);v.VictoryText.fontSize=26;
++            SetRect(v.RewardsHeaderArt.rectTransform,150,832,642,44);
++            SetRect(v.RewardsHeading.rectTransform,200,828,541,52);v.RewardsHeading.fontSize=40;
++            for(int i=0;i<6;i++)
++            {
++                SetRect((RectTransform)v.RewardIcons[i].transform.parent,48.5f+i*142,881,134,139);
++                SetRect(v.RewardIcons[i].rectTransform,33,8,68,68);
++                SetRect(v.RewardCounts[i].rectTransform,5,80,124,48);v.RewardCounts[i].fontSize=40;
++            }
++            for(int i=0;i<2;i++)v.Actions[i].GetComponent<RectTransform>().anchoredPosition=new Vector2(i==0?79:475,-1028);
++            SetRect(v.Summary.rectTransform,60,1128,821,96);v.Summary.fontSize=40;
++            SetRect(v.RewardsDivider.rectTransform,71,1225,802,14);
++            SetRect(v.NextHeading.rectTransform,60,1240,821,47);v.NextHeading.fontSize=38;
++            SetRect(v.Teaser.rectTransform,72,1290,790,201);
++            SetRect(v.TeaserText.rectTransform,65,20,425,43);v.TeaserText.fontSize=34;
++            SetRect(v.TeaserTitle.rectTransform,65,65,425,111);v.TeaserTitle.fontSize=42;
++            v.TeaserDescription.transform.SetParent(v.Body,false);
++            SetRect(v.TeaserDescription.rectTransform,60,1495,821,96);v.TeaserDescription.fontSize=38;
++            v.TeaserDescription.alignment=TextAnchor.MiddleCenter;v.TeaserDescription.color=new Color32(245,210,144,255);
+             v.Revision=ProductionChapterCompleteView.CurrentRevision;
+         }
+         static void SetRect(RectTransform r,float x,float y,float w,float h)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterCompleteView.cs
+@@ -7,7 +7,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionChapterCompleteView:MonoBehaviour
+     {
+-        public const int CurrentRevision=8;
++        public const int CurrentRevision=9;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body;
+@@ -54,24 +54,22 @@
+             foreach(var t in GetComponentsInChildren<Text>(true))t.font=font;
+             var s=GameState.Instance!=null?GameState.Instance.GetChapterCompletionSummary(1):null;
+             bool completed=s!=null&&(s.Phase==ChapterCompletionPhase.PresentationPending||s.Phase==ChapterCompletionPhase.Acknowledged);
+-            string variant=en?"blank":"ru";
+             Header.sprite=ProductionChapterCompleteRuntime.Load("header_"+(en||!completed?"blank":"ru"));
+-            Banner.sprite=ProductionChapterCompleteRuntime.Load("banner_"+(en?"blank_r8":"ru"));Foreground.sprite=ProductionChapterCompleteRuntime.Load("foreground_"+(en?"blank_r8":"ru"));Teaser.sprite=ProductionChapterCompleteRuntime.Load("teaser_"+(en?"blank_r8":"ru"));
+-            Foreground.gameObject.SetActive(completed);VictoryText.enabled=en&&completed;HeaderText.enabled=en||!completed;BannerText.enabled=en;TeaserText.enabled=en;TeaserTitle.enabled=en;TeaserDescription.enabled=en;
++            Banner.sprite=ProductionChapterCompleteRuntime.Load("banner_"+(en?"blank_r8":"ru"));Foreground.sprite=ProductionChapterCompleteRuntime.Load("foreground_"+(en?"blank_r8":"ru"));Teaser.sprite=ProductionChapterCompleteRuntime.Load("teaser_blank_r8");
++            Foreground.gameObject.SetActive(completed);VictoryText.enabled=en&&completed;HeaderText.enabled=en||!completed;BannerText.enabled=en;TeaserText.enabled=true;TeaserTitle.enabled=true;TeaserDescription.enabled=true;
+             HeaderText.text=completed?(en?"CHAPTER COMPLETE":"ГЛАВА ЗАВЕРШЕНА"):(en?"CHAPTER IN PROGRESS":"ГЛАВА НЕ ЗАВЕРШЕНА");
+             BannerText.text="CHAPTER 1\nHOME VILLAGE";VictoryText.text="VICTORY!";
+             Summary.text=s==null?(en?"No chapter progress":"Нет прогресса главы"):$"{s.CompletedLevels}/{s.TotalLevels} "+(en?"LEVELS":"УРОВНЕЙ")+$"  •  {s.EarnedStars}/{s.MaximumStars} "+(en?"STARS":"ЗВЁЗД");
+-            RewardsHeaderArt.sprite=ProductionChapterCompleteRuntime.Load("rewards_heading_"+variant);
+-            RewardsHeading.enabled=en;RewardsHeading.text=en?"REWARDS":"НАГРАДЫ";
+-            Summary.text=(en?"Rewards received · ":"Награды получены · ")+Summary.text;
++            RewardsHeaderArt.sprite=ProductionChapterCompleteRuntime.Load("rewards_heading_blank");
++            RewardsHeading.enabled=true;RewardsHeading.text=en?"REWARDS":"НАГРАДЫ";
++            Summary.text=(en?"Rewards received\n":"Награды получены\n")+Summary.text;
+             RewardNote.enabled=false;
+             RewardNote.text=en?"Already received · no additional chapter bonus":"Уже получены · дополнительного бонуса нет";
+-            NextHeading.text=en?"NEXT CHAPTER · COMING SOON":"СКОРО";
+-            var originalNext=Body.Find("NextHeadingOriginal");if(originalNext!=null)originalNext.gameObject.SetActive(!en);
+-            NextHeading.rectTransform.anchoredPosition=new Vector2(en?100:704,en?-1397:-1398);
+-            NextHeading.rectTransform.sizeDelta=new Vector2(en?741:135,29);NextHeading.fontSize=en?26:20;
+-            TeaserText.text="CHAPTER 2";TeaserTitle.text="MYSTERY OF\nTHE FOREST";
+-            TeaserDescription.text="Dark forces awaken in the forest.\nExplore its depths to uncover the truth.";
++            NextHeading.text=en?"NEXT CHAPTER · COMING SOON":"СЛЕДУЮЩАЯ ГЛАВА · СКОРО";
++            var originalNext=Body.Find("NextHeadingOriginal");if(originalNext!=null)originalNext.gameObject.SetActive(false);
++            TeaserText.text=en?"CHAPTER 2":"ГЛАВА 2";
++            TeaserTitle.text=en?"MYSTERY OF\nTHE FOREST":"ТАЙНА ЛЕСА";
++            TeaserDescription.text=en?"Dark forces awaken in the forest.\nExplore its depths to uncover the truth.":"Тёмные силы пробудились в чащобе.\nОтправься вглубь леса и узнай правду.";
+             var values=ReceivedRewards(GameState.Instance);for(int i=0;i<6;i++)RewardCounts[i].text=values[i].ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," ");
+             for(int i=0;i<2;i++){Actions[i].GetComponent<Image>().sprite=ProductionChapterCompleteRuntime.Load((i==0?"next_":"map_")+(en?"blank_r8":"ru"));ActionLabels[i].enabled=en;ActionLabels[i].text=i==0?"CONTINUE":"WORLD MAP";Actions[i].interactable=ActionsBound&&(i==1||completed);}
+         }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs
+@@ -75,8 +75,8 @@
+             Assert.That(View().Summary.text,Does.Contain("10/10").And.Contain("30/30"));
+             CollectionAssert.AreEqual(new[]{1850,40,2,2,2,2},ProductionChapterCompleteView.ReceivedRewards(GameState.Instance));
+             Assert.That(View().RewardCounts[0].text,Is.EqualTo("1 850"));
+-            Assert.That(View().Body.Find("NextHeadingOriginal").gameObject.activeSelf,Is.True);
+-            Assert.That(View().NextHeading.text,Is.EqualTo("СКОРО"));
++            Assert.That(View().Body.Find("NextHeadingOriginal").gameObject.activeSelf,Is.False);
++            Assert.That(View().NextHeading.text,Does.Contain("СКОРО"));
+             Capture("ChapterComplete_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             Capture("ChapterComplete_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Capture("ChapterComplete_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+@@ -90,6 +90,29 @@
+             AssertUnchangedSummarySave(save);
+             router.Show(ScreenId.ChapterComplete);Settle();yield return null;
+             AssertUnchangedSummarySave(save);
++        }
++        [UnityTest]public IEnumerator CurrentFinaleCaptionsFitSmallAndTallPortraits()
++        {
++            legacyFixture.Dispose();legacyFixture=null;
++            var state=GameState.Instance;state.Save.highestUnlockedLevel=500;
++            state.Save.levelProgress.Clear();
++            foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
++                state.Save.levelProgress.Add(new LevelProgressData{chapterId=1,levelId=level.levelId,completions=1,bestStars=3,rewardClaimed=true});
++            var story=StoryCatalog.LoadChapter1();state.CompleteStoryScene(story.introSceneId);
++            foreach(var milestone in story.milestones)state.CompleteStoryScene(milestone.sceneId);
++            StoryService.ResetRuntime();router.Show(ScreenId.ChapterComplete);Settle();yield return null;
++            string save=JsonUtility.ToJson(state.Save);
++            foreach(var language in new[]{"ru","en"})
++            {
++                DemoFeatureState.SetLanguage(language);View().RefreshContent();yield return WaitForNormalButtonColors();
++                Assert.That(View().Summary.text,Does.Contain("500/500").And.Contain("1500/1500"));
++                Assert.That(View().TeaserTitle.enabled&&View().TeaserDescription.enabled,Is.True);
++                Assert.That(View().Teaser.sprite.name,Is.EqualTo("teaser_blank_r8"));
++                Capture("ChapterComplete_Current_360_"+language,new Vector2Int(360,640),new Rect(0,20,360,600));
++                Capture("ChapterComplete_Current_576_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172));
++                Capture("ChapterComplete_Current_1080_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
++                AssertUnchangedSummarySave(save);
++            }
+         }
+         [UnityTest]public IEnumerator NativeActionsAcknowledgeExactlyOnceWithoutRewardDuplication()
+         {
+@@ -241,6 +264,27 @@
+                 Assert.That(Bounds(icon.rectTransform,camera).Overlaps(Bounds(icon.transform.parent.Find("Received").GetComponent<RectTransform>(),camera)),Is.False,"Reward amount overlaps icon");
+             }
+             Assert.That(Bounds(v.Summary.rectTransform,camera).Overlaps(Bounds((RectTransform)v.Actions[0].transform,camera)),Is.False,"Summary overlaps actions");
++            foreach(var text in new[]{v.Summary,v.NextHeading,v.TeaserDescription,v.RewardCounts[0],v.RewardCounts[1]})
++            {
++                Rect bounds=Bounds(text.rectTransform,camera);
++                float pixelsPerUnit=bounds.height/text.rectTransform.rect.height;
++                Assert.That(text.fontSize*pixelsPerUnit,Is.GreaterThanOrEqualTo(13.5f),text.name+" effective font pixels");
++                Assert.That(safeArea.Contains(bounds.min)&&safeArea.Contains(bounds.max),Is.True,text.name+" outside safe area");
++            }
++            Assert.That(Bounds(v.Summary.rectTransform,camera).Overlaps(Bounds(v.NextHeading.rectTransform,camera)),Is.False);
++            Assert.That(Bounds(v.NextHeading.rectTransform,camera).Overlaps(Bounds(v.Teaser.rectTransform,camera)),Is.False);
++            Assert.That(Bounds(v.TeaserDescription.rectTransform,camera).Overlaps(Bounds(v.Teaser.rectTransform,camera)),Is.False);
++            // Safe-area containment alone misses text touching decorative borders.
++            foreach(var count in v.RewardCounts)
++            {
++                var parent=(RectTransform)count.transform.parent;
++                Rect card=Bounds(parent,camera), label=Bounds(count.rectTransform,camera);
++                Assert.That(label.yMin-card.yMin,Is.GreaterThanOrEqualTo(10f*card.height/parent.rect.height),"Reward amount touches lower gold frame");
++            }
++            var footer=(RectTransform)v.Body.Find("CarvedWoodFooter");
++            Rect footerBounds=Bounds(footer,camera);
++            Assert.That(Bounds(v.TeaserDescription.rectTransform,camera).yMin-footerBounds.yMin,
++                Is.GreaterThanOrEqualTo(80f*footerBounds.height/footer.rect.height),"Description touches footer ornament");
+             Assert.That(v.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+         }
+     }
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ChapterCompleteAlignmentEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ChapterCompleteAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test] public void CanonicalChapterCompleteUsesIsolatedArtNativeControlsAndNoCapturedScreen()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=root.GetComponent<ProductionChapterCompleteView>();
+-            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(8));
++            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(ProductionChapterCompleteView.CurrentRevision));
+             Assert.That(view.Environment.sprite.name,Is.EqualTo("environment_source_r8"));
+             Assert.That(view.Body.Find("NextHeadingOriginal").GetComponent<Image>().raycastTarget,Is.False);Assert.That(root.GetComponent<ProductionChapterCompleteLayout>().View,Is.SameAs(view));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.ChapterComplete),Is.EqualTo("ProductionUI/Pages/ChapterComplete"));

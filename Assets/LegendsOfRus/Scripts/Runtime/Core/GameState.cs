@@ -133,9 +133,12 @@ namespace LegendsOfRus
         public bool sfx = true;
         public bool vibration = true;
         public bool notifications = true;
+        // Optional v6 extension with its own schema; legacy saves simply have no retained attempt.
+        public RetainedRoundData retainedRound;
+        public List<ContinuationTransactionData> continuationTransactions = new List<ContinuationTransactionData>();
     }
 
-    public sealed class GameState : MonoBehaviour
+    public sealed partial class GameState : MonoBehaviour
     {
         public static GameState Instance { get; private set; }
 
@@ -217,6 +220,9 @@ namespace LegendsOfRus
                 return;
             }
             Save = migration.Data;
+            // Migration clones through Unity JSON, which may materialize an empty optional object.
+            if (Save.retainedRound != null && string.IsNullOrEmpty(Save.retainedRound.attemptId))
+                Save.retainedRound = null;
 
             NormalizeLevelProgress();
             NormalizeTutorialProgress();
@@ -472,6 +478,8 @@ namespace LegendsOfRus
 
         public bool SelectLevel(int chapterId, int levelId)
         {
+            if (ContinuationBlocksNewAttempt()) return false;
+            if (TryGetRetainedRound(out var retained) && (retained.chapter != chapterId || retained.level != levelId)) return false;
             if (!IsLevelUnlocked(chapterId, levelId)) return false;
             if (ChapterLevelCatalog.Find(chapterId, levelId) == null) return false;
 
@@ -523,6 +531,10 @@ namespace LegendsOfRus
         public int RegisterLevelAttempt(LevelData levelData)
         {
             if (levelData == null) return 0;
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Resolve or recover the continuation reservation before starting another round.");
+            if (TryGetRetainedRound(out _)) throw new InvalidOperationException("Resolve the retained attempt before starting another round.");
+            Save.retainedRound = null; // Reject stale/incompatible optional checkpoints without resetting progress.
+            unsavedRetainedRound = null;
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
                 return 0;
 
@@ -543,6 +555,7 @@ namespace LegendsOfRus
 
         public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
         {
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Finalize the retained continuation transaction first.");
             if (levelData == null) return;
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
                 return;
@@ -562,6 +575,7 @@ namespace LegendsOfRus
 
         public LevelCompletionResult CompleteLevel(LevelData levelData, int score)
         {
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Continuation consumption is not integrated yet.");
             if (levelData == null)
                 throw new ArgumentNullException(nameof(levelData));
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
@@ -938,6 +952,7 @@ namespace LegendsOfRus
             StoryService.ResetRuntime();
             LastCompletionResult = null;
             LastFailureResult = null;
+            unsavedRetainedRound = null;
             Save = reset;
             canPersist = writeCompleted;
             if (!writeCompleted)

@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "unity": "6000.5.9f1",
+  "suites": [
+    {
+      "run": "Verify04",
+      "suite": "Rounds",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04/Rounds/results.xml"
+    },
+    {
+      "run": "Verify05",
+      "suite": "Seal",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify05/Seal/results.xml"
+    },
+    {
+      "run": "Verify06",
+      "suite": "Mechanics",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify06/Mechanics/results.xml"
+    },
+    {
+      "run": "Verify07",
+      "suite": "Spark",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify07/Spark/results.xml"
+    },
+    {
+      "run": "Verify08",
+      "suite": "CampaignBoard",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify08/CampaignBoard/results.xml"
+    }
+  ],
+  "playModeTotal": 9,
+  "captures": "Verify04/Journey: eleven actual Unity renders at576x1280",
+  "scope": "Development sandbox only; no campaign activation",
+  "notRun": [
+    "New EditMode suite run (no GameplayCore changes)",
+    "Physical Android acceptance",
+    "IL2CPP build",
+    "Human difficulty playtest",
+    "Full-project test suite"
+  ],
+  "earlierRuns": {
+    "Verify01": "Incorrect empty-stock arming assertion; losing-path heuristic unable to find next action.",
+    "Verify02": "All five wins passed. Losing-path heuristic still insufficient.",
+    "Verify03": "Both tests passed for original slice; replaced by final tuned slice in Verify04."
+  }
+}

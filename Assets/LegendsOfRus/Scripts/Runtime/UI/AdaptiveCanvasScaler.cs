@@ -16,6 +16,8 @@ namespace LegendsOfRus
         public float DesignHeight = 1672f;
 
         CanvasScaler scaler;
+        Canvas targetCanvas;
+        float lastTextScale = -1f;
         int lastWidth = -1;
         int lastHeight = -1;
         Rect lastSafeArea;
@@ -28,7 +30,23 @@ namespace LegendsOfRus
         void Awake()
         {
             scaler = GetComponent<CanvasScaler>();
+            targetCanvas = GetComponent<Canvas>();
             ApplyNow();
+        }
+
+        void LateUpdate()
+        {
+            if (targetCanvas == null) targetCanvas = GetComponent<Canvas>();
+            if (targetCanvas == null || Mathf.Approximately(lastTextScale, targetCanvas.scaleFactor))
+                return;
+
+            // CanvasScaler applies its requested scale in Update. Fixed-size child
+            // RectTransforms need not resize with it, so their cached Text meshes
+            // can still sample glyphs rasterized for the previous display size.
+            // Refresh only when the actual Canvas scale changes, not every frame.
+            lastTextScale = targetCanvas.scaleFactor;
+            foreach (Text label in GetComponentsInChildren<Text>(true))
+                label.SetVerticesDirty();
         }
 
         void Update()

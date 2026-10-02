@@ -6,20 +6,21 @@ namespace LegendsOfRus
 {
     public sealed class ProductionLanguageSelectView : MonoBehaviour
     {
-        public const int CurrentRevision = 1;
+        public const int CurrentRevision = 4;
         public int Revision = CurrentRevision;
         public RectTransform Body, Shield;
         public Image Panel;
         public Text Heading;
         public Button Russian, English, Close;
         public CanvasGroup Backdrop;
+        public SplashTitleView BackdropView;
         public Font TitleFont;
         public bool ActionsBound { get; private set; }
         string language;
         Action back;
         bool closed;
         public bool HasRequiredBindings => Revision == CurrentRevision && Body && Shield && Panel &&
-            Heading && Russian && English && Close && Backdrop && TitleFont;
+            Heading && Russian && English && Close && Backdrop && BackdropView && BackdropView.HasRequiredBindings && TitleFont;
         void OnEnable() { Refresh(); }
         void OnDisable() { Unbind(); }
         void Update() { if (language != DemoFeatureState.LanguageCode) Refresh(); }

@@ -1,0 +1,51 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadDeclinedRoundAfterSecondRestart",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/RestartCleared/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/RestartCleared/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 22.190641403198242,
+  "isolatedConfig": "/tmp/lor-retained-round-r1/Restart/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {
+    "XDG_CONFIG_HOME": "/tmp/lor-retained-round-r1/Restart/config",
+    "LOR_LOADING_TEST_CONFIG_ROOT": "/tmp/lor-retained-round-r1/Restart/config",
+    "LOR_PERSISTENCE_PHASE": "retained-cleared",
+    "LOR_PERSISTENCE_CHECKPOINT": "/tmp/lor-retained-round-r1/Restart/expected.json"
+  },
+  "result": {
+    "id": "2",
+    "testcasecount": "1",
+    "result": "Failed(Child)",
+    "total": "1",
+    "passed": "0",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 20:06:27Z",
+    "end-time": "2026-09-29 20:06:28Z",
+    "duration": "0.1678694"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadDeclinedRoundAfterSecondRestart",
+      "result": "Failed",
+      "message": "  Expected: null\n  But was:  <LegendsOfRus.RetainedRoundData>\n"
+    }
+  ]
+}

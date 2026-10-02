@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fail and Out of Energy — phone readability</title>
+<style>body{margin:0;background:#111720;color:#f0e3cd;font:16px/1.5 system-ui,sans-serif}main{max-width:920px;margin:auto;padding:24px}h1{font-size:24px}a{color:#e9c986}label{display:inline-block;margin:0 16px 12px 0}select{font:inherit;color:inherit;background:#202b3b;padding:5px}figure{margin:14px 0}img{display:block;width:360px;max-width:100%;height:auto;margin:auto}figcaption{text-align:center;margin:12px}.native{overflow:auto}.native img{max-width:none}</style>
+<main><h1>Fail and Out of Energy — phone readability</h1>
+<p>Actual Unity Play Mode captures from the installed prefabs, using isolated test saves and simulated display sizes/safe areas. These are not physical-phone captures. One portrait is shown at a time.</p>
+<label>Page <select id="page"><option value="Fail">Fail</option><option value="OutOfEnergy">Out of Energy</option></select></label>
+<label>Language <select id="lang"><option value="RU">Russian</option><option value="EN">English</option></select></label>
+<label>Version <select id="version"><option value="FaceFitPlayMode">Implemented</option><option value="Baseline">Before</option></select></label>
+<label>Size <select id="size"><option value="360">360 × 640</option><option value="576">576 × 1280</option></select></label>
+<label><input id="native" type="checkbox"> Native capture pixels</label>
+<figure id="frame"><img id="capture" src="QA/FaceFitPlayMode/Captures/LOR_FAIL_CAPTURE_DIR/Fail_360_RU.png" alt="Implemented Fail screen in Russian"><figcaption id="caption">Implemented · Fail · Russian · 360 × 640</figcaption></figure>
+<p>Fail: larger goal counts, availability notes and booster-help text; the larger map control sits beside Retry. Existing Russian extracted lettering and shared booster artwork remain in use.</p>
+<p>Out of Energy: larger message and timer captions, live bilingual offer headings, full-width explanatory lines, and a larger close target. Disabled action labels fit inside their painted button faces; purchase, friend and ad offers remain unavailable.</p>
+<p><a href="TestResults.md">Verification results and remaining limits</a>. Native lettering and small decorative captions are not all subject to a universal minimum size. Device readability and touch acceptance remain deferred.</p></main>
+<script>
+const page=document.getElementById('page'),lang=document.getElementById('lang'),version=document.getElementById('version'),size=document.getElementById('size'),native=document.getElementById('native'),capture=document.getElementById('capture'),frame=document.getElementById('frame');
+function update(){const before=version.value==='Baseline';size.disabled=before;if(before)size.value='360';const p=page.value,l=lang.value,w=size.value;let file=p+'_'+w+'_'+l;if(w==='576')file=p==='Fail'&&l==='EN'?'Fail_576_EN':p+'_576x1280_safe_'+l;const dir=p==='Fail'?'LOR_FAIL_CAPTURE_DIR':'LOR_OUT_OF_ENERGY_CAPTURE_DIR';capture.src='QA/'+version.value+'/Captures/'+dir+'/'+file+'.png';capture.alt=(before?'Before':'Implemented')+' '+p+' in '+l;capture.style.width=native.checked?w+'px':'360px';frame.classList.toggle('native',native.checked);document.getElementById('caption').textContent=(before?'Before':'Implemented')+' · '+page.selectedOptions[0].text+' · '+lang.selectedOptions[0].text+' · '+size.selectedOptions[0].text;}
+[page,lang,version,size,native].forEach(x=>x.addEventListener('change',update));
+</script></html>

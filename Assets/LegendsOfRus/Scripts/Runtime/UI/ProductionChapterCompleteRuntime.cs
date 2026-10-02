@@ -11,7 +11,7 @@ namespace LegendsOfRus
         public static void BuildInto(RectTransform root)
         {
             var old=root.GetComponent<ProductionChapterCompleteView>();
-            if(old!=null){if(!old.HasRequiredBindings)throw new InvalidOperationException("Repair Chapter Complete bindings outside Play Mode.");old.RefreshContent();return;}
+            if(old!=null){if(!old.HasRequiredBindings)throw new InvalidOperationException("Repair Chapter Complete bindings outside Play Mode.");ApplyTouchTargets(old);old.RefreshContent();return;}
             if(root.Find(ContentName)!=null||root.Find("FIX01_CONTENT")!=null)throw new InvalidOperationException("Repair legacy Chapter Complete outside Play Mode.");
             var v=root.gameObject.AddComponent<ProductionChapterCompleteView>();
             v.Typography=Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>().Typography;
@@ -60,6 +60,10 @@ namespace LegendsOfRus
             var view=root.GetComponent<ProductionChapterCompleteView>();if(view!=null)ApplyRefinement(view);
         }
 #endif
+        public static void ApplyTouchTargets(ProductionChapterCompleteView v)
+        {
+            foreach (var button in v.Actions) ProductionControlTouchTarget.Ensure(button);
+        }
         static void ApplyRefinement(ProductionChapterCompleteView v)
         {
             v.Environment.sprite=Load("environment_source_r8");
@@ -99,6 +103,31 @@ namespace LegendsOfRus
             {
                 text.alignment=TextAnchor.UpperLeft;text.color=new Color32(48,29,12,255);
             }
+            // Larger live captions share one bilingual layout; the original frame's
+            // corners stay at native size through nine-slicing.
+            var frame=footer.GetComponent<Image>();frame.type=Image.Type.Sliced;frame.preserveAspect=false;
+            SetRect(frame.rectTransform,5,807,931,865);
+            SetRect(v.Foreground.rectTransform,196.5f,392,548,431.33f);
+            SetRect(v.VictoryText.rectTransform,388,782,164,40);v.VictoryText.fontSize=26;
+            SetRect(v.RewardsHeaderArt.rectTransform,150,832,642,44);
+            SetRect(v.RewardsHeading.rectTransform,200,828,541,52);v.RewardsHeading.fontSize=40;
+            for(int i=0;i<6;i++)
+            {
+                SetRect((RectTransform)v.RewardIcons[i].transform.parent,48.5f+i*142,881,134,139);
+                SetRect(v.RewardIcons[i].rectTransform,33,8,68,68);
+                SetRect(v.RewardCounts[i].rectTransform,5,80,124,48);v.RewardCounts[i].fontSize=40;
+            }
+            for(int i=0;i<2;i++)v.Actions[i].GetComponent<RectTransform>().anchoredPosition=new Vector2(i==0?79:475,-1028);
+            SetRect(v.Summary.rectTransform,60,1128,821,96);v.Summary.fontSize=40;
+            SetRect(v.RewardsDivider.rectTransform,71,1225,802,14);
+            SetRect(v.NextHeading.rectTransform,60,1240,821,47);v.NextHeading.fontSize=38;
+            SetRect(v.Teaser.rectTransform,72,1290,790,201);
+            SetRect(v.TeaserText.rectTransform,65,20,425,43);v.TeaserText.fontSize=34;
+            SetRect(v.TeaserTitle.rectTransform,65,65,425,111);v.TeaserTitle.fontSize=42;
+            v.TeaserDescription.transform.SetParent(v.Body,false);
+            SetRect(v.TeaserDescription.rectTransform,60,1495,821,96);v.TeaserDescription.fontSize=38;
+            v.TeaserDescription.alignment=TextAnchor.MiddleCenter;v.TeaserDescription.color=new Color32(245,210,144,255);
+            ApplyTouchTargets(v);
             v.Revision=ProductionChapterCompleteView.CurrentRevision;
         }
         static void SetRect(RectTransform r,float x,float y,float w,float h)

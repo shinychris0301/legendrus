@@ -7,7 +7,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionChapterCompleteView:MonoBehaviour
     {
-        public const int CurrentRevision=8;
+        public const int CurrentRevision=9;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
         public RectTransform Content,Body;
@@ -54,24 +54,22 @@ namespace LegendsOfRus
             foreach(var t in GetComponentsInChildren<Text>(true))t.font=font;
             var s=GameState.Instance!=null?GameState.Instance.GetChapterCompletionSummary(1):null;
             bool completed=s!=null&&(s.Phase==ChapterCompletionPhase.PresentationPending||s.Phase==ChapterCompletionPhase.Acknowledged);
-            string variant=en?"blank":"ru";
             Header.sprite=ProductionChapterCompleteRuntime.Load("header_"+(en||!completed?"blank":"ru"));
-            Banner.sprite=ProductionChapterCompleteRuntime.Load("banner_"+(en?"blank_r8":"ru"));Foreground.sprite=ProductionChapterCompleteRuntime.Load("foreground_"+(en?"blank_r8":"ru"));Teaser.sprite=ProductionChapterCompleteRuntime.Load("teaser_"+(en?"blank_r8":"ru"));
-            Foreground.gameObject.SetActive(completed);VictoryText.enabled=en&&completed;HeaderText.enabled=en||!completed;BannerText.enabled=en;TeaserText.enabled=en;TeaserTitle.enabled=en;TeaserDescription.enabled=en;
+            Banner.sprite=ProductionChapterCompleteRuntime.Load("banner_"+(en?"blank_r8":"ru"));Foreground.sprite=ProductionChapterCompleteRuntime.Load("foreground_"+(en?"blank_r8":"ru"));Teaser.sprite=ProductionChapterCompleteRuntime.Load("teaser_blank_r8");
+            Foreground.gameObject.SetActive(completed);VictoryText.enabled=en&&completed;HeaderText.enabled=en||!completed;BannerText.enabled=en;TeaserText.enabled=true;TeaserTitle.enabled=true;TeaserDescription.enabled=true;
             HeaderText.text=completed?(en?"CHAPTER COMPLETE":"ГЛАВА ЗАВЕРШЕНА"):(en?"CHAPTER IN PROGRESS":"ГЛАВА НЕ ЗАВЕРШЕНА");
             BannerText.text="CHAPTER 1\nHOME VILLAGE";VictoryText.text="VICTORY!";
             Summary.text=s==null?(en?"No chapter progress":"Нет прогресса главы"):$"{s.CompletedLevels}/{s.TotalLevels} "+(en?"LEVELS":"УРОВНЕЙ")+$"  •  {s.EarnedStars}/{s.MaximumStars} "+(en?"STARS":"ЗВЁЗД");
-            RewardsHeaderArt.sprite=ProductionChapterCompleteRuntime.Load("rewards_heading_"+variant);
-            RewardsHeading.enabled=en;RewardsHeading.text=en?"REWARDS":"НАГРАДЫ";
-            Summary.text=(en?"Rewards received · ":"Награды получены · ")+Summary.text;
+            RewardsHeaderArt.sprite=ProductionChapterCompleteRuntime.Load("rewards_heading_blank");
+            RewardsHeading.enabled=true;RewardsHeading.text=en?"REWARDS":"НАГРАДЫ";
+            Summary.text=(en?"Rewards received\n":"Награды получены\n")+Summary.text;
             RewardNote.enabled=false;
             RewardNote.text=en?"Already received · no additional chapter bonus":"Уже получены · дополнительного бонуса нет";
-            NextHeading.text=en?"NEXT CHAPTER · COMING SOON":"СКОРО";
-            var originalNext=Body.Find("NextHeadingOriginal");if(originalNext!=null)originalNext.gameObject.SetActive(!en);
-            NextHeading.rectTransform.anchoredPosition=new Vector2(en?100:704,en?-1397:-1398);
-            NextHeading.rectTransform.sizeDelta=new Vector2(en?741:135,29);NextHeading.fontSize=en?26:20;
-            TeaserText.text="CHAPTER 2";TeaserTitle.text="MYSTERY OF\nTHE FOREST";
-            TeaserDescription.text="Dark forces awaken in the forest.\nExplore its depths to uncover the truth.";
+            NextHeading.text=en?"NEXT CHAPTER · COMING SOON":"СЛЕДУЮЩАЯ ГЛАВА · СКОРО";
+            var originalNext=Body.Find("NextHeadingOriginal");if(originalNext!=null)originalNext.gameObject.SetActive(false);
+            TeaserText.text=en?"CHAPTER 2":"ГЛАВА 2";
+            TeaserTitle.text=en?"MYSTERY OF\nTHE FOREST":"ТАЙНА ЛЕСА";
+            TeaserDescription.text=en?"Dark forces awaken in the forest.\nExplore its depths to uncover the truth.":"Тёмные силы пробудились в чащобе.\nОтправься вглубь леса и узнай правду.";
             var values=ReceivedRewards(GameState.Instance);for(int i=0;i<6;i++)RewardCounts[i].text=values[i].ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," ");
             for(int i=0;i<2;i++){Actions[i].GetComponent<Image>().sprite=ProductionChapterCompleteRuntime.Load((i==0?"next_":"map_")+(en?"blank_r8":"ru"));ActionLabels[i].enabled=en;ActionLabels[i].text=i==0?"CONTINUE":"WORLD MAP";Actions[i].interactable=ActionsBound&&(i==1||completed);}
         }

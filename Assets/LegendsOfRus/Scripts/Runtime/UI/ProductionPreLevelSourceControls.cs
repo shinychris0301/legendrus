@@ -28,7 +28,7 @@ namespace LegendsOfRus
             Label(v.ChapterText,250,75,455,38,28,"Title");Label(v.TitleText,194,112,557,65,42,"Title");
             Place(v.Body,0,382,941,1078);
             Place(v.GoalsArea,208,0,529,353);Art(v.GoalsArea.Find("GoalsPanel").GetComponent<Image>(),Load("goals"),0,0,529,353);
-            Label(v.GoalsHeading,180,68,170,45,31);Label(v.SelectedLevel,155,108,220,25,18);
+            Label(v.GoalsHeading,180,57,170,42,31);Label(v.SelectedLevel,115,100,300,34,28);
             foreach(var goal in v.Goals){Label(goal.Count,0,112,136,49,39,"RankNumbers");goal.Description.enabled=false;}
             Place(v.MovesArea,365,293,214,206);Art(v.MovesArea.Find("MovesMedallion").GetComponent<Image>(),Load("moves"),0,0,214,206);
             Label(v.MovesHeading,40,39,134,39,27);Label(v.MovesValue,36,73,142,92,72,"RankNumbers");
@@ -44,13 +44,13 @@ namespace LegendsOfRus
                 ProductionPreLevelBadge.AlignCount(v.BoosterCounts[i],badge);
             }
             Place(v.BoosterDetailsRoot,30,114,643,193);
-            Art(v.BoosterDetailIcon,Load("mace"),0,0,130,130);
-            Label(v.BoosterDetailText,155,0,460,90,20);v.BoosterDetailText.alignment=TextAnchor.MiddleLeft;
-            Control(v.BoosterDetailsBack,Chapter("play_blank"),160,106,210,78);
-            Control(v.BoosterCatalog,Chapter("play_blank"),405,106,210,78);
-            Label(v.BoosterDetailsBackText,25,20,160,34,21);Label(v.BoosterCatalogText,20,20,170,34,19);
+            Art(v.BoosterDetailIcon,Load("mace"),0,5,86,86);
+            Label(v.BoosterDetailText,96,0,535,108,28);v.BoosterDetailText.alignment=TextAnchor.MiddleLeft;
+            Control(v.BoosterDetailsBack,Chapter("play_blank"),108,112,240,90);
+            Control(v.BoosterCatalog,Chapter("play_blank"),373,112,240,90);
+            Label(v.BoosterDetailsBackText,42,23,130,42,26);Label(v.BoosterCatalogText,17,14,180,56,22);
             Place(v.RewardsArea,122,758,698,320);Art(v.RewardsArea.Find("RewardsPanel").GetComponent<Image>(),Load("rewards"),0,0,698,320);
-            Label(v.RewardsHeading,144,23,410,42,29);Label(v.RewardStatus,335,67,327,23,16);
+            Label(v.RewardsHeading,144,18,410,38,29);Label(v.RewardStatus,335,59,327,33,26);
             Art(v.RewardsArea.Find("Chest").GetComponent<Image>(),Load("chest"),110,78,218,208);
             var coin=v.RewardsArea.Find("Coin").GetComponent<Image>();Art(coin,coin.sprite,382,94,70,70);
             var gem=v.RewardsArea.Find("Gem").GetComponent<Image>();Art(gem,gem.sprite,382,164,70,70);
@@ -60,6 +60,7 @@ namespace LegendsOfRus
             Place(v.Footer,0,1440,941,232);
             Control(v.BackButton,Chapter("back"),8,32,174,156);
             v.SourcePlay=Control(v.PlayButton,Chapter("play"),232,20,481,203);
+            ProductionHomeRuntime.ClearDormantPlayArtwork(v.PlayButton);
             Label(v.PlayText,85,43,310,85,48,"Title");
             Art(v.FooterOrnament,Chapter("footer"),0,1590,941,82);
             ProductionMapButtonFeedback.Install(v.transform);
@@ -73,7 +74,7 @@ namespace LegendsOfRus
         }
         public static void RefreshState(ProductionPreLevelView v,int count)
         {
-            v.Header.RefreshValues();
+            if(v.CampaignSaveProvider!=null)v.Header.RefreshValues(v.CampaignSaveProvider()?.player);else v.Header.RefreshValues();
             float stride=count==3?146:188;
             for(int i=0;i<count&&i<v.Goals.Length;i++)
             {

@@ -11,6 +11,30 @@ namespace LegendsOfRus.Editor
             if (!assetPath.StartsWith("Assets/LegendsOfRus/")) return;
 
             var ti = (TextureImporter)assetImporter;
+            // Archived Home art retains its original import contract and GUIDs, outside Resources.
+            if (assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_fill.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_frame.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_firebird_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_hero_firebird.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_environment_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_play_button.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/hud_frame.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_panel.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/footer_base_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_map_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_shop_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_events_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_characters_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/mail_medallion_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/reward_medallion_generated.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_reward_frame.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_reward_gem.png" ||
+                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_map_foliage.png")
+            {
+                ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+                return;
+            }
+
             ti.textureType = TextureImporterType.Sprite;
             ti.spriteImportMode = SpriteImportMode.Single;
             ti.alphaIsTransparency = true;
@@ -27,7 +51,7 @@ namespace LegendsOfRus.Editor
             }
 
             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ChapterCompleteAligned/"))
-            { ConfigureFailTexture(ti);return; }
+            { ConfigureChapterCompleteTexture(ti);return; }
             if (assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/ShopAligned/") ||
                 assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/SpecialOfferAligned/") ||
                 assetPath.StartsWith("Assets/LegendsOfRus/Resources/ProductionUI/DailyRewardAligned/"))
@@ -162,6 +186,15 @@ namespace LegendsOfRus.Editor
         internal static void ConfigureShopTexture(TextureImporter ti)
         {
             ConfigureFailTexture(ti);ti.mipmapEnabled=false;ti.filterMode=FilterMode.Bilinear;
+        }
+
+        internal static void ConfigureChapterCompleteTexture(TextureImporter ti)
+        {
+            ConfigureFailTexture(ti);
+            if(System.IO.Path.GetFileNameWithoutExtension(ti.assetPath)=="footer")
+            {
+                ti.spriteBorder=new Vector4(80,80,80,80);
+            }
         }
 
         internal static void ConfigureFailTexture(TextureImporter ti)

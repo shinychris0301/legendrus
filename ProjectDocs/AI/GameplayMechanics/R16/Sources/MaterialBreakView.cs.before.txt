@@ -1,0 +1,183 @@
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace LegendsOfRus
+{
+    /// <summary>Bounded, board-clipped material geometry. No objects or gameplay RNG per hit.</summary>
+    [RequireComponent(typeof(CanvasRenderer))]
+    public sealed class MaterialBreakView : MaskableGraphic
+    {
+        struct Hit
+        {
+            public BoardPosition Cell;
+            public BoardObstacleKind Material;
+            public Color Tint;
+            public bool Final;
+            public float Born, Life;
+        }
+        public const int Capacity = 96;
+        readonly List<Hit> hits = new List<Hit>(Capacity);
+        Match3Board board;
+        static readonly Color Wood = new Color(.55f,.29f,.10f);
+        static readonly Color Ice = new Color(.45f,.80f,1f);
+        static readonly Color AntiqueMetal = new Color(.48f,.34f,.18f);
+        static readonly Color Gold = new Color(.82f,.58f,.20f);
+        static readonly Color[] Gems = {new Color(1,.2f,.1f),new Color(.2f,.65f,1),new Color(.35f,.85f,.15f),new Color(1,.74f,.17f),new Color(.7f,.25f,1),new Color(1,.45f,.12f)};
+        public int ActiveCount => hits.Count;
+        public int HitCount { get; private set; }
+        public int FinalBreakCount { get; private set; }
+        public int DroppedCount { get; private set; }
+        public BoardObstacleKind LastMaterial { get; private set; }
+        public bool LastWasFinal { get; private set; }
+
+        public static MaterialBreakView Attach(Match3Board source)
+        {
+            var root = new GameObject("MaterialBreakClip",typeof(RectTransform),typeof(RectMask2D));
+            root.transform.SetParent(source.transform,false);Stretch((RectTransform)root.transform);
+            var go = new GameObject("MaterialBreaks",typeof(RectTransform));
+            go.transform.SetParent(root.transform,false);Stretch((RectTransform)go.transform);
+            var view=go.AddComponent<MaterialBreakView>();view.board=source;view.raycastTarget=false;
+            source.ObstacleInteracted+=view.OnObstacle;source.MotionEventPublished+=view.OnMotion;
+            return view;
+        }
+        static void Stretch(RectTransform r){r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;}
+        void OnMotion(GameplayMotionEvent e)
+        {
+            if(e.Kind==GameplayMotionKind.CommandRecovered){Clear();return;}
+            if(!isActiveAndEnabled||e.Kind!=GameplayMotionKind.CellsImpacted)return;
+            foreach(var c in e.ClearedCells)
+            {
+                if(c.Cell.Special!=SpecialGemKind.None || c.Cell.TileType<0)continue;
+                Add(c.Position,BoardObstacleKind.None,Gems[Mathf.Clamp(c.Cell.TileType,0,5)],false,.24f);
+            }
+        }
+        void OnObstacle(BoardObstacleInteractionInstruction o)
+        {
+            if(!isActiveAndEnabled||o.LayersAfter>=o.LayersBefore||o.Kind==BoardObstacleKind.None)return;
+            bool final=o.LayersAfter==0;HitCount++;if(final)FinalBreakCount++;
+            LastMaterial=o.Kind;LastWasFinal=final;
+            Color tint=o.Kind==BoardObstacleKind.Crate?Wood:o.Kind==BoardObstacleKind.Ice?Ice:o.Kind==BoardObstacleKind.Chain?AntiqueMetal:Gold;
+            Add(o.Position,o.Kind,tint,final,final?.64f:.38f);
+        }
+        void Add(BoardPosition p,BoardObstacleKind material,Color tint,bool final,float life)
+        {
+            if(hits.Count==Capacity){hits.RemoveAt(0);DroppedCount++;}
+            hits.Add(new Hit{Cell=p,Material=material,Tint=tint,Final=final,Born=Time.unscaledTime,Life=life});SetVerticesDirty();
+        }
+        void Update(){if(hits.RemoveAll(h=>Time.unscaledTime-h.Born>=h.Life)>0||hits.Count>0)SetVerticesDirty();}
+        void Clear(){hits.Clear();SetVerticesDirty();}
+        protected override void OnDisable(){Clear();base.OnDisable();}
+        protected override void OnDestroy(){if(board){board.ObstacleInteracted-=OnObstacle;board.MotionEventPublished-=OnMotion;}base.OnDestroy();}
+
+        protected override void OnPopulateMesh(VertexHelper vh)
+        {
+            vh.Clear();if(!board)return;
+            var r=rectTransform.rect;float cw=r.width/board.ColumnCount,ch=r.height/board.RowCount,u=Mathf.Min(cw,ch);
+            foreach(var hit in hits)
+            {
+                float t=Mathf.Clamp01((Time.unscaledTime-hit.Born)/hit.Life);
+                var center=new Vector2(r.xMin+(hit.Cell.X+.5f)*cw,r.yMax-(hit.Cell.Y+.5f)*ch);
+                switch(hit.Material)
+                {
+                    case BoardObstacleKind.Crate:WoodBreak(vh,center,u,t,hit.Final);break;
+                    case BoardObstacleKind.Ice:IceBreak(vh,center,u,t,hit.Final);break;
+                    case BoardObstacleKind.Chain:ChainBreak(vh,center,u,t,hit.Final);break;
+                    case BoardObstacleKind.RunicSeal:SealBreak(vh,center,u,t,hit.Final);break;
+                    default:Glint(vh,center,u*.25f*(1-t),Alpha(Color.Lerp(hit.Tint,Color.white,.7f),.8f*(1-t)));break;
+                }
+            }
+        }
+        static Vector2 Direction(int i,int count,float offset)
+        {float a=i*Mathf.PI*2/count+offset;return new Vector2(Mathf.Cos(a),Mathf.Sin(a));}
+        static Vector2 Travel(Vector2 c,Vector2 d,float u,float t,float reach,float gravity)
+        {return c+d*(1-Mathf.Pow(1-t,2))*u*reach+Vector2.down*(t*t*u*gravity);}
+        static void WoodBreak(VertexHelper h,Vector2 c,float u,float t,bool final)
+        {
+            int count=final?7:3;float reach=final?.72f:.27f;
+            for(int i=0;i<count;i++)
+            {
+                var d=Direction(i,count,.3f);var p=Travel(c,d,u,t,reach,.55f);
+                float a=.3f+i*.9f+t*(i%2==0?2.2f:-1.8f);
+                Vector2 axis=new Vector2(Mathf.Cos(a),Mathf.Sin(a))*u*(final?.19f:.11f)*(1-.55f*t);
+                Vector2 side=new Vector2(-axis.y,axis.x)*(.16f+(i%3)*.03f);
+                var tint=Alpha(Color.Lerp(Wood,new Color(.8f,.55f,.24f),(i%3)*.16f),1-t);
+                // Long grain-aligned splinters with jagged ends and a lit cut edge.
+                Quad(h,p-axis-side,p-axis*.7f+side,p+axis+side*.45f,p+axis*.75f-side,tint);
+                Line(h,p-axis*.6f,p+axis*.75f,u*.009f,Alpha(new Color(.86f,.66f,.37f),.65f*(1-t)));
+                if(final)Glint(h,Travel(c,d,u,t,.4f,.24f),u*.045f*(1-t),Alpha(new Color(.56f,.34f,.16f),.5f*(1-t)));
+            }
+        }
+        static void IceBreak(VertexHelper h,Vector2 c,float u,float t,bool final)
+        {
+            int count=final?8:3;
+            for(int i=0;i<count;i++)
+            {
+                var d=Direction(i,count,.18f);var p=Travel(c,d,u,t,final?.7f:.25f,.23f);
+                float a=i*1.1f+t*(i%2==0?1.7f:-2.1f);Vector2 axis=new Vector2(Mathf.Cos(a),Mathf.Sin(a))*u*(final?.15f:.085f)*(1-.3f*t);
+                Vector2 side=new Vector2(-axis.y,axis.x)*.5f;
+                Quad(h,p+axis,p+side,p-axis*.65f,p-side,Alpha(Ice,.65f*(1-t)));
+                Triangle(h,p+axis,p,p-side,Alpha(new Color(.9f,.98f,1),.92f*(1-t)));
+                if(i%2==0)Glint(h,p+axis,u*.045f*(1-t),Alpha(Color.white,1-t));
+            }
+            if(!final)
+                for(int i=0;i<3;i++){var d=Direction(i,3,.5f);Line(h,c,c+d*u*.29f,u*.014f,Alpha(new Color(.75f,.94f,1),.6f*(1-t)));}
+        }
+        static void ChainBreak(VertexHelper h,Vector2 c,float u,float t,bool final)
+        {
+            int count=final?4:1;
+            for(int i=0;i<count;i++)
+            {
+                var p=final?Travel(c,Direction(i,count,.7f),u,t,.67f,.75f):c+Vector2.right*Mathf.Sin(t*32)*u*.026f*(1-t);
+                float angle=(i%2==0?.7f:-.7f)+(final?t*(i%2==0?3:-3):0);
+                // Open metal links on the last hit; a tight vibrating link on the first.
+                Link(h,p,u*(final?.115f:.18f),angle,final,Alpha(AntiqueMetal,1-t));
+            }
+            int sparks=final?6:3;
+            for(int i=0;i<sparks;i++)
+            {
+                var d=Direction(i,sparks,.12f);var p=Travel(c,d,u,t,final?.8f:.37f,.25f);
+                Line(h,p,p-d*u*.10f*(1-t),u*.013f*(1-t),Alpha(new Color(.98f,.84f,.5f),(1-t)*(1-t)));
+            }
+        }
+        static void SealBreak(VertexHelper h,Vector2 c,float u,float t,bool final)
+        {
+            int count=final?6:3;
+            for(int i=0;i<count;i++)
+            {
+                float a=i*Mathf.PI*2/count+t*(final?1.1f:.2f);
+                var d=new Vector2(Mathf.Cos(a),Mathf.Sin(a));
+                var p=c+d*u*(.12f+t*(final?.6f:.14f))+Vector2.up*u*t*t*.22f;
+                Vector2 axis=d*u*(final?.10f:.055f)*(1-t),side=new Vector2(-axis.y,axis.x)*.58f;
+                Quad(h,p+axis,p+side,p-axis,p-side,Alpha(i%2==0?Gold:Ice,1-t));
+                Triangle(h,p+axis,p,p-side,Alpha(i%2==0?new Color(1,.85f,.5f):new Color(.8f,.94f,1),1-t));
+                // Separated rune strokes lift away rather than falling like stone or wood.
+                var tip=p+d*u*.08f;Line(h,p,tip,u*.015f,Alpha(Ice,.75f*(1-t)));
+                Line(h,tip,tip+new Vector2(-d.y,d.x)*u*.05f,u*.015f,Alpha(Ice,.75f*(1-t)));
+            }
+            Glint(h,c,u*.25f*(1-t),Alpha(new Color(.35f,.7f,1),.55f*(1-t)));
+        }
+        static void Link(VertexHelper h,Vector2 p,float radius,float rotation,bool open,Color color)
+        {
+            const int segments=16;float start=open?.5f:0,end=open?Mathf.PI*1.8f:Mathf.PI*2;
+            for(int i=0;i<segments;i++)
+            {
+                float a=Mathf.Lerp(start,end,(float)i/segments),b=Mathf.Lerp(start,end,(float)(i+1)/segments);
+                Vector2 x=new Vector2(Mathf.Cos(a)*1.4f,Mathf.Sin(a)),y=new Vector2(Mathf.Cos(b)*1.4f,Mathf.Sin(b));
+                x=Rotate(x,rotation);y=Rotate(y,rotation);
+                Quad(h,p+x*radius,p+y*radius,p+y*radius*.64f,p+x*radius*.64f,Color.Lerp(color,Alpha(new Color(.98f,.78f,.39f),color.a),i<7?.45f:0));
+            }
+        }
+        static Vector2 Rotate(Vector2 v,float a)=>new Vector2(v.x*Mathf.Cos(a)-v.y*Mathf.Sin(a),v.x*Mathf.Sin(a)+v.y*Mathf.Cos(a));
+        static Color Alpha(Color c,float a){c.a=a;return c;}
+        static void Glint(VertexHelper h,Vector2 p,float size,Color c)
+        {Quad(h,p+Vector2.up*size,p+Vector2.right*size*.19f,p-Vector2.up*size,p-Vector2.right*size*.19f,c);Quad(h,p+Vector2.right*size*.7f,p+Vector2.up*size*.13f,p-Vector2.right*size*.7f,p-Vector2.up*size*.13f,c);}
+        static void Line(VertexHelper h,Vector2 a,Vector2 b,float width,Color c)
+        {var delta=(b-a).normalized;var side=new Vector2(-delta.y,delta.x)*width;Quad(h,a-side,a+side,b+side,b-side,c);}
+        static void Triangle(VertexHelper h,Vector2 a,Vector2 b,Vector2 c,Color color)
+        {int n=h.currentVertCount;h.AddVert(a,color,Vector2.zero);h.AddVert(b,color,Vector2.zero);h.AddVert(c,color,Vector2.zero);h.AddTriangle(n,n+1,n+2);}
+        static void Quad(VertexHelper h,Vector2 a,Vector2 b,Vector2 c,Vector2 d,Color color)
+        {int n=h.currentVertCount;h.AddVert(a,color,Vector2.zero);h.AddVert(b,color,Vector2.zero);h.AddVert(c,color,Vector2.zero);h.AddVert(d,color,Vector2.zero);h.AddTriangle(n,n+1,n+2);h.AddTriangle(n,n+2,n+3);}
+    }
+}

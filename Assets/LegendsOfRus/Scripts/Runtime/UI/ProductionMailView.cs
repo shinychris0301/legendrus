@@ -10,10 +10,11 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionMailView : MonoBehaviour
     {
-        public const int CurrentRevision=1;
+        public const int CurrentRevision=6;
         public int Revision=CurrentRevision;
-        public RectTransform Content,Body,Hud,DynamicRoot;
+        public RectTransform Content,Body,Hud,DynamicRoot,TabStrip;
         public Image Environment,Title;
+        public ProductionPlayerHeader Header;
         public Font BodyFont,NamesFont,TitleFont;
         public Text Heading,HeroName,LevelText,GoldText,GemsText,EnergyText,PreviewLabel,Counter,ClaimAllLabel,InfoHeading,InfoDescription,CloseInfoLabel;
         public Button ProfileButton,SettingsButton,BackButton,ClaimAllButton,ComposeButton,EnvelopeButton,DeleteButton,CloseInfoButton;
@@ -29,7 +30,7 @@ namespace LegendsOfRus
         public bool IsUnread(int index)=>index>=0&&index<5&&(index==0||index==1||index==3)&&!readExamples[index];
         public int UnreadCount {get {int n=0;for(int i=0;i<5;i++)if(IsUnread(i))n++;return n;}}
         public int VisibleCount {get;internal set;}
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Hud&&DynamicRoot&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&Counter&&ClaimAllLabel&&InfoHeading&&InfoDescription&&CloseInfoLabel&&ProfileButton&&SettingsButton&&BackButton&&ClaimAllButton&&ComposeButton&&EnvelopeButton&&DeleteButton&&CloseInfoButton&&InfoPanel&&Valid(PlusButtons,3)&&Valid(Tabs,3)&&Valid(TabLabels,3);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Header&&Header.HasBindings&&Content&&Body&&Hud&&TabStrip&&DynamicRoot&&Environment&&Environment.sprite&&Title&&Title.sprite&&BodyFont&&NamesFont&&TitleFont&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&PreviewLabel&&Counter&&ClaimAllLabel&&InfoHeading&&InfoDescription&&CloseInfoLabel&&ProfileButton&&SettingsButton&&BackButton&&ClaimAllButton&&ComposeButton&&EnvelopeButton&&DeleteButton&&CloseInfoButton&&InfoPanel&&Body.Find("LetterTitleBacking")&&Valid(PlusButtons,3)&&Valid(Tabs,3)&&Valid(TabLabels,3);
         static bool Valid<T>(T[] a,int n)where T:UnityEngine.Object=>a!=null&&a.Length==n&&Array.TrueForAll(a,x=>x!=null);
         readonly List<Button> buttons=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
         GameState observed;string language;bool committed;
@@ -56,10 +57,10 @@ namespace LegendsOfRus
         public void RefreshContent(){
             if(!HasRequiredBindings)return;language=DemoFeatureState.LanguageCode;bool en=language=="en";foreach(var t in GetComponentsInChildren<Text>(true)){t.font=BodyFont;t.fontStyle=FontStyle.Normal;}Heading.font=TitleFont;HeroName.font=NamesFont;ClaimAllLabel.font=TitleFont;
             Title.sprite=ProductionMailRuntime.Load(en?"title_blank":"title_ru");Heading.enabled=en;Heading.text=en?"MAIL":"ПОЧТА";HeroName.text=en?"Ivan":"Иван";PreviewLabel.text=en?"PREVIEW · SAMPLE MAIL · CLAIMS UNAVAILABLE":"ПРИМЕРЫ ПИСЕМ · ПОЛУЧЕНИЕ НАГРАД НЕДОСТУПНО";
-            string[] tabs=en?new[]{"INBOX","SENT","SYSTEM"}:new[]{"ВХОДЯЩИЕ","ОТПРАВЛЕННЫЕ","СИСТЕМА"};for(int i=0;i<3;i++){Tabs[i].gameObject.SetActive(!DetailOpen);TabLabels[i].text=tabs[i];Tabs[i].image.sprite=ProductionMailRuntime.Shared(i==(int)SelectedTab?"tab_active":"tab");}
-            ClaimAllLabel.text=en?"CLAIM ALL":"ЗАБРАТЬ ВСЁ";RefreshInfo();RefreshState();ProductionMailRuntime.RebuildContent(this);
+            TabStrip.gameObject.SetActive(!DetailOpen);string[] tabs=en?new[]{"INBOX","SENT","SYSTEM"}:new[]{"ВХОДЯЩИЕ","ОТПРАВЛЕННЫЕ","СИСТЕМА"};for(int i=0;i<3;i++){Tabs[i].gameObject.SetActive(!DetailOpen);TabLabels[i].text=tabs[i];TabLabels[i].font=TitleFont;Tabs[i].image.sprite=ProductionMailRuntime.Load(i==(int)SelectedTab?"tab_face_active_r2":"tab_face_r2");}
+            ClaimAllButton.image.sprite=ProductionMailRuntime.Load(en?"claim_all_blank_rebuild":"claim_all_ru_rebuild");ClaimAllLabel.enabled=en;ClaimAllLabel.text=en?"CLAIM ALL":"ЗАБРАТЬ ВСЁ";RefreshInfo();RefreshState();ProductionMailRuntime.RebuildContent(this);
         }
-        public void RefreshState(){if(!HasRequiredBindings)return;var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;}
+        public void RefreshState(){if(!HasRequiredBindings)return;Header.RefreshValues();var s=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";LevelText.text=(en?"Level ":"Уровень ")+(s==null?"—":s.level.ToString());GoldText.text=s==null?"—":Balance(s.gold);GemsText.text=s==null?"—":Balance(s.gems);EnergyText.text=s==null?"—":s.energy+"/"+s.energyMax;}
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
     }
 }

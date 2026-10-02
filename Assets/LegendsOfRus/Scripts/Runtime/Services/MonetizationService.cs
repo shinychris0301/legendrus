@@ -144,7 +144,7 @@ namespace LegendsOfRus
 
         internal bool TryBindRuntimePort(IRuntimeMonetizationPort port)
         {
-            if (port == null)
+            if (DevelopmentGameplayProfile.Active || port == null)
                 return false;
 
             lock (syncRoot)
@@ -218,6 +218,8 @@ namespace LegendsOfRus
             Func<IRuntimeMonetizationPort, RuntimeMonetizationActionResult> action
         )
         {
+            if (DevelopmentGameplayProfile.Active)
+                return RuntimeMonetizationActionResult.Unavailable("GAMEPLAY_QA_OFFLINE");
             IRuntimeMonetizationPort port;
             lock (syncRoot)
                 port = runtimePort ?? DisabledPort;

@@ -9,9 +9,10 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionEventDetailView:MonoBehaviour
     {
-        public const int CurrentRevision=5;
+        public const int CurrentRevision=8;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
+        public Font PlayerNamesFont,SectionFont;
         public ProductionPlayerHeader Header;
         public RectTransform Content,Body,Hud;
         public Image Environment,Title,RewardExamples;
@@ -22,7 +23,7 @@ namespace LegendsOfRus
         public bool ActionsBound{get;private set;}
         // A preview has no authoritative schedule, progress or claimable recipe.
         public bool CanParticipate=>false;
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography&&Content&&Body&&Hud&&Environment&&Environment.sprite&&Title&&Title.sprite&&RewardExamples&&RewardExamples.sprite&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&Footer&&EventName&&Availability&&ObjectiveHeading&&Description&&RewardHeading&&RewardNote&&ActionLabel&&ProfileButton&&SettingsButton&&BackButton&&ActionButton&&PlusButtons!=null&&PlusButtons.Length==3&&Array.TrueForAll(PlusButtons,x=>x!=null);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography&&PlayerNamesFont&&SectionFont&&Content&&Body&&Hud&&Environment&&Environment.sprite&&Title&&Title.sprite&&RewardExamples&&RewardExamples.sprite&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&Footer&&EventName&&Availability&&ObjectiveHeading&&Description&&RewardHeading&&RewardNote&&ActionLabel&&ProfileButton&&SettingsButton&&BackButton&&ActionButton&&PlusButtons!=null&&PlusButtons.Length==3&&Array.TrueForAll(PlusButtons,x=>x!=null);
         readonly List<Button> bound=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
         GameState observed;string language;bool committed;
         void OnEnable(){Observe();RefreshContent();}
@@ -71,6 +72,15 @@ namespace LegendsOfRus
             pass.image.sprite=ProductionEventDetailRuntime.DetailArt(en?"blank_activate":"activate");
             var passLabel=pass.transform.Find("EnglishLabel").GetComponent<Text>();passLabel.enabled=en;passLabel.text="ACTIVATE";
             Body.Find("RewardPreviewLabel").GetComponent<Text>().text=en?"EXAMPLE":"ПРИМЕР";
+            // Reuse the approved name/title roles. Explanatory copy keeps its lighter face.
+            // The exact source typeface is still unverified.
+            for(int i=0;i<4;i++)
+            {
+                var name=leaders.Find("Row_"+i+"/Player").GetComponent<Text>();
+                name.font=PlayerNamesFont;name.fontStyle=FontStyle.Normal;
+            }
+            foreach(var text in new[]{Heading,logo,ActionLabel,passLabel})
+            {text.font=SectionFont;text.fontStyle=FontStyle.Normal;}
             if(Header!=null)Header.ApplyPresentation();
             RefreshState();
         }

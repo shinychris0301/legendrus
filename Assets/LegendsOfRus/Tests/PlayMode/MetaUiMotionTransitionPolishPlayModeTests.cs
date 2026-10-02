@@ -694,27 +694,16 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameObject worldMap = GameObject.Find("Screen_WorldMap");
             Assert.That(worldMap, Is.Not.Null);
-            AnimatedHotspot chapter = FindHotspot(
-                worldMap,
-                "Hotspot_Chapter1"
-            );
-            Assert.That(chapter, Is.Not.Null);
-            Assert.That(chapter.Role, Is.EqualTo(MetaUiControlRole.MapNode));
-            MetaUiMapNodeFeedback mapFeedback =
-                chapter.GetComponent<MetaUiMapNodeFeedback>();
-            Assert.That(mapFeedback, Is.Not.Null);
-
-            Activate(chapter, Pointer(39));
-            Assert.That(mapFeedback.PulseCount, Is.EqualTo(1));
-            Assert.That(mapFeedback.IsRaycastSafe, Is.True);
-            Tick(routerClock, 2);
-            Assert.That(
-                router.CurrentScreen,
-                Is.EqualTo(ScreenId.WorldMap),
-                "The map pulse must become visible before navigation dispatch."
-            );
-            Tick(routerClock, 2);
-            Assert.That(router.CurrentScreen, Is.EqualTo(ScreenId.ChapterMap));
+            var mapView=worldMap.GetComponentInChildren<ProductionWorldMapView>();
+            Assert.That(mapView,Is.Not.Null);
+            Assert.That(worldMap.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+            var chapter=mapView.Cards[0].Button;
+            Assert.That(chapter.interactable,Is.True);
+            int generation=router.RouteGeneration;
+            chapter.onClick.Invoke();chapter.onClick.Invoke();
+            Tick(routerClock,12);
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
+            Assert.That(router.RouteGeneration,Is.EqualTo(generation+1),"Native chapter button dispatches once.");
 
             router.Show(ScreenId.PreLevel);
             Tick(routerClock, 12);
@@ -725,10 +714,10 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(screenGroup.alpha, Is.EqualTo(1f));
             Assert.That(screenGroup.blocksRaycasts, Is.True);
 
-            AnimatedHotspot boosters = FindHotspot(preLevel, "Hotspot_Boosters");
-            Assert.That(boosters, Is.Not.Null);
-            Activate(boosters, Pointer(41));
-            boosters.TickForTesting(0.05f);
+            var preView=preLevel.GetComponentInChildren<ProductionPreLevelView>();
+            Assert.That(preView,Is.Not.Null);
+            Assert.That(preLevel.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+            preView.BoosterCatalog.onClick.Invoke();
 
             GameObject modal = GameObject.Find("Modal_BoosterSelect");
             Assert.That(modal, Is.Not.Null);
@@ -747,13 +736,10 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(visualGroup.blocksRaycasts, Is.True);
             Assert.That(router.IsModalTransitioning, Is.False);
 
-            AnimatedHotspot close = FindHotspot(
-                visual.gameObject,
-                "Hotspot_Close"
-            );
-            Assert.That(close, Is.Not.Null);
-            Activate(close, Pointer(43));
-            close.TickForTesting(0.05f);
+            var boosterView=visual.GetComponentInChildren<ProductionBoosterSelectionView>();
+            Assert.That(boosterView,Is.Not.Null);
+            Assert.That(visual.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+            boosterView.Close.onClick.Invoke();
 
             Assert.That(modal.activeSelf, Is.True);
             Assert.That(blocker.raycastTarget, Is.True);

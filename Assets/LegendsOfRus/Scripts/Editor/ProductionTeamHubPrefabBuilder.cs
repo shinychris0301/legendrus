@@ -21,13 +21,11 @@ namespace LegendsOfRus.Editor
             try{
                 var rect=(RectTransform)root.transform;rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;root.layer=5;
                 var marker=root.GetComponent<ProductionCoreLoopPageMarker>()??root.AddComponent<ProductionCoreLoopPageMarker>();marker.Configure(ScreenId.TeamHub);
-                var oldView=root.GetComponent<ProductionTeamHubView>();
-                if(oldView){var oldLayout=root.GetComponent<ProductionTeamHubLayout>();if(oldLayout)UnityEngine.Object.DestroyImmediate(oldLayout);if(oldView.Content)UnityEngine.Object.DestroyImmediate(oldView.Content.gameObject);UnityEngine.Object.DestroyImmediate(oldView);}
                 ProductionTeamHubRuntime.BuildInto(rect);var view=root.GetComponent<ProductionTeamHubView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Team Hub bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/TeamHubCutoverState.txt";
-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:TeamHub\",\n  \"revision\": 1,\n  \"teamService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
-            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionTeamHubView>().HasRequiredBindings)throw new InvalidOperationException("Team Hub prefab readback failed.");Debug.Log("TEAM_HUB_R1_REBUILD_PASS: native page and cutover readback.");
+            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:TeamHub\",\n  \"revision\": 7,\n  \"teamService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+            var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionTeamHubView>().HasRequiredBindings)throw new InvalidOperationException("Team Hub prefab readback failed.");Debug.Log("TEAM_HUB_TYPOGRAPHY_PROGRESS_R5_REBUILD_PASS: native page and cutover readback.");
         }
     }
 }

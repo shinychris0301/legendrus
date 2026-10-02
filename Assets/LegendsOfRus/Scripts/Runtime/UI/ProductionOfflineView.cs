@@ -7,10 +7,11 @@ namespace LegendsOfRus
 {
     public sealed class ProductionOfflineView : MonoBehaviour
     {
-        public const int CurrentRevision=2;
+        public const int CurrentRevision=4;
         public int Revision=CurrentRevision;
         public RectTransform Content,Body,Hud;
-        public Image Environment;
+        public Image Environment,Panel;
+        public ProductionPlayerHeader Header;
         public Font BodyFont,TitleFont;
         public Text Heading,Description,LocalDescription,OnlineDescription,RetryLabel,BackLabel,CheckNote,SupportLabel;
         public Text HeroName,LevelText,GoldText,GemsText,EnergyText;
@@ -24,7 +25,7 @@ namespace LegendsOfRus
         readonly List<Button> buttons=new List<Button>();
         readonly List<UnityAction> listeners=new List<UnityAction>();
         string language;bool leaving;GameState observed;
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Hud&&Environment&&BodyFont&&TitleFont&&Heading&&Description&&LocalDescription&&OnlineDescription&&RetryLabel&&BackLabel&&CheckNote&&SupportLabel&&Retry&&Back&&Emblem&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&ProfileButton&&SettingsButton&&PlusButtons!=null&&PlusButtons.Length==3&&Array.TrueForAll(PlusButtons,b=>b!=null);
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Hud&&Header&&Header.HasBindings&&Panel&&Environment&&BodyFont&&TitleFont&&Heading&&Description&&LocalDescription&&OnlineDescription&&RetryLabel&&BackLabel&&CheckNote&&SupportLabel&&Retry&&Back&&Emblem&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&ProfileButton&&SettingsButton&&PlusButtons!=null&&PlusButtons.Length==3&&Array.TrueForAll(PlusButtons,b=>b!=null);
         void OnEnable(){Observe();Refresh();}
         void OnDisable(){if(observed!=null)observed.Changed-=RefreshBalances;observed=null;Unbind();}
         void Update(){if(observed!=GameState.Instance){Observe();RefreshBalances();}if(language!=DemoFeatureState.LanguageCode)Refresh();}
@@ -46,13 +47,18 @@ namespace LegendsOfRus
         void ReadNetwork(){NetworkAvailable=(reachability??(()=>Application.internetReachability))()!=NetworkReachability.NotReachable;}
         void CheckNetwork(){ReadNetwork();CheckCount++;Refresh();}
         void OnApplicationFocus(bool focused){if(focused&&ActionsBound){ReadNetwork();Refresh();}}
-        public void RefreshBalances(){if(!HasRequiredBindings)return;var save=GameState.Instance!=null?GameState.Instance.Save:null;bool en=DemoFeatureState.LanguageCode=="en";HeroName.text=en?"Ivan":"Иван";LevelText.text=(en?"Level ":"Уровень ")+(save==null?"—":save.level.ToString());GoldText.text=save==null?"—":ProductionInventoryView.Number(save.gold);GemsText.text=save==null?"—":ProductionInventoryView.Number(save.gems);EnergyText.text=save==null?"—":save.energy+"/"+save.energyMax;}
+        public void RefreshBalances(){if(!HasRequiredBindings)return;Header.RefreshValues();}
         public void Refresh()
         {
             if(!HasRequiredBindings)return;
             language=DemoFeatureState.LanguageCode;bool en=language=="en";
+            Panel.sprite=ProductionOfflineRuntime.Load(!en&&!NetworkAvailable?"panel_ru_r3":"panel");
+            Heading.enabled=en||NetworkAvailable;
+            ((Image)Retry.targetGraphic).sprite=ProductionOfflineRuntime.Load(en?"retry":"retry_ru_r3");
+            ((Image)Back.targetGraphic).sprite=ProductionOfflineRuntime.Load(en?"home":"home_ru_r3");
+            RetryLabel.enabled=BackLabel.enabled=en;
             Heading.text=NetworkAvailable?(en?"CHECK CONNECTION":"ПРОВЕРЬТЕ СЕТЬ"):(en?"NO CONNECTION":"НЕТ СОЕДИНЕНИЯ");
-            Description.text=NetworkAvailable?(en?"Your device has a network connection.\nAccess to game services is not confirmed.":"На устройстве есть сетевое подключение.\nДоступ к игровым сервисам не подтверждён."):(en?"Check your internet connection\nand try again.":"Проверьте подключение к интернету\nи попробуйте снова.");
+            Description.text=NetworkAvailable?(en?"Your device has a network connection.\nAccess to game services is not confirmed.":"На устройстве доступна сеть.\nДоступ к игровым сервисам\nне подтверждён."):(en?"Check your internet connection\nand try again.":"Проверьте подключение к интернету\nи попробуйте снова.");
             LocalDescription.text=en?"Offline levels and local saving remain available.":"Офлайн-уровни и локальное сохранение доступны.";
             SupportLabel.text=en?"SUPPORT: UNAVAILABLE":"ПОДДЕРЖКА: НЕДОСТУПНА";
             OnlineDescription.text=en?"SERVER STATUS: UNKNOWN":"СТАТУС СЕРВЕРОВ: НЕИЗВЕСТЕН";

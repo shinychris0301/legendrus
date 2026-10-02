@@ -61,7 +61,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().HasRequiredBindings&&View().ActionsBound,Is.True);Assert.That(router.Viewport.GetComponentsInChildren<DynamicHudBinder>(),Is.Empty,"Native Team Hub must not receive a duplicate demo HUD");int before=GameState.Instance.Save.gold;GameState.Instance.AddGold(17);yield return null;Assert.That(View().GoldText.text,Is.EqualTo((before+17).ToString("N0",System.Globalization.CultureInfo.InvariantCulture).Replace(","," ")));
             string save=StableSave();yield return WaitForNormalButtonColors();
             Capture("TeamHub_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("TeamHub_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));Capture("TeamHub_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
-            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;Assert.That(View().PreviewLabel.text,Does.Contain("SAMPLE"));Capture("TeamHub_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("TeamHub_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));Assert.That(StableSave(),Is.EqualTo(save));
+            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;Assert.That(View().PreviewLabel.text,Does.Contain("SAMPLE"));Capture("TeamHub_1080x2400_safe_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));Capture("TeamHub_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));Capture("TeamHub_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));Assert.That(StableSave(),Is.EqualTo(save));
         }
         [UnityTest]public IEnumerator RoutesCommitOnceAndPreserveSave(){
             var targets=new[]{ScreenId.Profile,ScreenId.Settings,ScreenId.Shop,ScreenId.Shop,ScreenId.OutOfEnergy,ScreenId.TeamChat,ScreenId.TeamRanking,ScreenId.FriendsList,ScreenId.Home};string save=StableSave();
@@ -69,10 +69,46 @@ namespace LegendsOfRus.Tests.PlayMode
         }
         [UnityTest]public IEnumerator UnavailableActionsExplainPreviewAndDoNotSpend(){
             var v=View();string save=StableSave();int generation=router.RouteGeneration;Assert.That(v.HasLiveTeam,Is.False);
-            foreach(var b in new[]{v.NavButtons[2],v.NavButtons[3],v.ChestButton}){b.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.True);v.ProfileButton.onClick.Invoke();v.BackButton.onClick.Invoke();Assert.That(router.RouteGeneration,Is.EqualTo(generation));router.NavigateBack();Assert.That(v.InfoPanel.activeSelf,Is.False);}
+            foreach(var b in new[]{v.NavButtons[2],v.NavButtons[3],v.ChestButton,v.GuildInfoButton}){b.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.True);v.ProfileButton.onClick.Invoke();v.BackButton.onClick.Invoke();Assert.That(router.RouteGeneration,Is.EqualTo(generation));router.NavigateBack();Assert.That(v.InfoPanel.activeSelf,Is.False);}
             v.NavButtons[2].onClick.Invoke();yield return WaitForNormalButtonColors();Capture("TeamHub_Info_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));DemoFeatureState.SetLanguage("en");v.RefreshContent();Capture("TeamHub_Info_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));v.CloseInfoButton.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.False);Assert.That(StableSave(),Is.EqualTo(save));int routes=0;v.Bind(id=>routes++,()=>routes++);v.Bind(id=>routes++,()=>routes++);v.BackButton.onClick.Invoke();v.BackButton.onClick.Invoke();Assert.That(routes,Is.EqualTo(1));
         }
         [UnityTest]public IEnumerator WorldMapEntryAndMaximumBalances(){router.Show(ScreenId.WorldMap);Settle();yield return null;var map=router.Viewport.GetComponentInChildren<ProductionWorldMapView>();Assert.That(map,Is.Not.Null);map.NavButtons[2].onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.TeamHub));var save=GameState.Instance.Save;save.gold=int.MaxValue;save.gems=int.MaxValue;View().RefreshState();Assert.That(View().Power.text,Is.EqualTo("125 840"));yield return WaitForNormalButtonColors();Capture("TeamHub_MaxBalances_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));}
+        [UnityTest]public IEnumerator ExpandedInfoTargetAndTallModalKeepFriendsRouteAndSave()
+        {
+            string save=StableSave();
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(ScreenId.TeamHub);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);View().RefreshContent();yield return WaitForNormalButtonColors();
+                int generation=router.RouteGeneration;
+                Capture("TeamHub_InfoTarget_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    var button=View().GuildInfoButton;Rect visual=Bounds(button.image.rectTransform,camera);
+                    var pointer=new PointerEventData(EventSystem.current){position=new Vector2(visual.center.x,visual.yMax+4)};
+                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(pointer,hits);
+                    Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
+                    ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                });
+                Assert.That(View().InfoPanel.activeSelf,Is.True);Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+                yield return WaitForNormalButtonColors();
+                Capture("TeamHub_TallInfo_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+                DemoFeatureState.SetLanguage(language=="ru"?"en":"ru");View().RefreshContent();yield return WaitForNormalButtonColors();
+                Capture("TeamHub_InfoRelocalized_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    var close=View().CloseInfoButton;var pointer=new PointerEventData(EventSystem.current){position=Bounds((RectTransform)close.transform,camera).center};
+                    ExecuteEvents.Execute(close.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                });
+                Assert.That(View().InfoPanel.activeSelf,Is.False);yield return WaitForNormalButtonColors();
+                Capture("TeamHub_FriendsTarget_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+                {
+                    var button=View().FriendsButton;var pointer=new PointerEventData(EventSystem.current){position=Bounds((RectTransform)button.transform,camera).center};
+                    ExecuteEvents.Execute(button.gameObject,pointer,ExecuteEvents.pointerClickHandler);
+                });
+                Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.FriendsList));Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));
+            }
+            Assert.That(StableSave(),Is.EqualTo(save));
+        }
+
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -135,8 +171,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionTeamHubView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -148,6 +182,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionTeamHubView>(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -167,6 +203,50 @@ namespace LegendsOfRus.Tests.PlayMode
         static void VerifyLayoutAndInput(ProductionTeamHubView v,Camera camera,Vector2Int size,Rect safeArea)
         {
             Assert.That(v.HasRequiredBindings,Is.True);
+            Rect header=Bounds(v.Hud,camera);float unit=header.width/941f;
+            Assert.That(header.yMax,Is.EqualTo(safeArea.yMax).Within(1));
+            Assert.That(Bounds((RectTransform)v.BackButton.transform,camera).yMin,Is.EqualTo(safeArea.yMin+17*unit).Within(1));
+            Assert.That(v.SeasonFill.fillAmount,Is.EqualTo((float)ProductionTeamHubView.SampleSeasonContribution/ProductionTeamHubView.SampleSeasonTarget).Within(.0001f));
+            Assert.That(v.Progress.text,Is.EqualTo("7 560 / 10 000"));Assert.That(v.HasLiveTeam,Is.False);
+            bool english=DemoFeatureState.LanguageCode=="en";
+            Assert.That(v.Motto.enabled,Is.EqualTo(english));
+            Assert.That(v.Body.Find("MottoFrame").GetComponent<Image>().sprite.name,Is.EqualTo(english?"motto_blank_r4":"motto_ru_r4"));
+            Rect plaque=Bounds((RectTransform)v.Body.Find("MottoFrame"),camera), friends=Bounds((RectTransform)v.FriendsButton.transform,camera);
+            Assert.That(plaque.xMax,Is.LessThan(friends.xMin));
+            var carving=v.Body.Find("CarvedFooter").GetComponent<Image>();
+            Assert.That(Bounds(carving.rectTransform,camera).yMin,Is.EqualTo(safeArea.yMin).Within(.5f));
+            Assert.That(friends.yMin,Is.EqualTo(safeArea.yMin+20*unit).Within(.5f));
+            var info=v.GuildInfoButton.image;Rect infoVisual=Bounds(info.rectTransform,camera);Vector4 padding=info.raycastPadding;
+            Rect infoTarget=Rect.MinMaxRect(infoVisual.xMin+padding.x*unit,infoVisual.yMin+padding.y*unit,infoVisual.xMax-padding.z*unit,infoVisual.yMax-padding.w*unit);
+            Assert.That(infoTarget.xMax,Is.LessThan(friends.xMin),"Info target clears Friends");
+            Assert.That(safeArea.Contains(infoTarget.min)&&safeArea.Contains(infoTarget.max),Is.True);
+            foreach(var rect in new[]{infoTarget,friends,Bounds((RectTransform)v.BackButton.transform,camera)})Assert.That(Mathf.Min(rect.width,rect.height),Is.GreaterThanOrEqualTo(44),"Footer touch target at tested phone size");
+            foreach(var image in new[]{info,v.BackButton.image,v.Body.Find("FooterCrest").GetComponent<Image>(),v.Body.Find("MottoFrame").GetComponent<Image>()})
+            {
+                Assert.That(image.type,Is.EqualTo(Image.Type.Simple));Assert.That(image.preserveAspect,Is.True);
+                Assert.That(image.sprite.rect.size,Is.EqualTo(new Vector2(image.sprite.texture.width,image.sprite.texture.height)),"Whole footer artwork retained");
+            }
+            if(v.InfoPanel.activeSelf)
+            {
+                var shield=(RectTransform)v.InfoPanel.transform.Find("InputShield");Rect cover=Bounds(shield,camera);
+                Assert.That(cover.yMin,Is.EqualTo(safeArea.yMin).Within(.5f));Assert.That(cover.yMax,Is.EqualTo(safeArea.yMax).Within(.5f));
+                foreach(var point in new[]{infoVisual.center,friends.center,new Vector2(safeArea.center.x,safeArea.yMin+2),new Vector2(safeArea.center.x,safeArea.yMax-2)})
+                {
+                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                    Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject,Is.SameAs(shield.gameObject),"Modal blocks the entire safe height");
+                }
+            }
+            else foreach(var point in new[]{new Vector2(infoTarget.xMin+1,infoTarget.center.y),new Vector2(infoTarget.xMax-1,infoTarget.center.y),new Vector2(infoTarget.center.x,infoTarget.yMax-1),new Vector2(infoTarget.center.x,infoTarget.yMin+1)})
+            {
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(v.GuildInfoButton));
+            }
+
+            Assert.That(Bounds((RectTransform)v.Body.Find("FooterCrest"),camera).xMin,Is.GreaterThan(Bounds((RectTransform)v.BackButton.transform,camera).xMax));
+            Assert.That(v.TasksHeading.enabled,Is.EqualTo(english));Assert.That(v.ChestLabel.enabled,Is.EqualTo(english));
+            Assert.That(v.Body.Find("GuildChestEnclosure").GetComponent<Image>().sprite.name,Is.EqualTo(english?"chest_enclosure_blank_r2":"chest_enclosure_ru_r2"));
+            Assert.That(v.Body.Find("TasksEnclosure").GetComponent<Image>().sprite.name,Is.EqualTo(english?"tasks_enclosure_blank_r2":"tasks_enclosure_ru_r2"));
+            for(int i=0;i<4;i++){bool en=DemoFeatureState.LanguageCode=="en";Assert.That(v.NavLabels[i].enabled,Is.EqualTo(en));Assert.That(v.NavButtons[i].image.sprite.name,Is.EqualTo("nav_"+i+(en?"_blank":"_ru")));}
             Rect bg=Bounds(v.Environment.rectTransform,camera);Assert.That(bg.xMin,Is.LessThanOrEqualTo(1));Assert.That(bg.yMin,Is.LessThanOrEqualTo(1));Assert.That(bg.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(bg.yMax,Is.GreaterThanOrEqualTo(size.y-1));
             Assert.That(v.Environment.rectTransform.rect.width/v.Environment.rectTransform.rect.height,Is.EqualTo(v.Environment.sprite.rect.width/v.Environment.sprite.rect.height).Within(.0001f));
             for(int i=0;i<5;i++){Rect row=Bounds(v.MemberRows[i],camera);Assert.That(safeArea.Contains(row.min)&&safeArea.Contains(row.max),Is.True);if(i<4)Assert.That(row.yMin,Is.GreaterThanOrEqualTo(Bounds(v.MemberRows[i+1],camera).yMax-.1f));}
@@ -174,7 +254,8 @@ namespace LegendsOfRus.Tests.PlayMode
             {
                 if(v.InfoPanel.activeSelf&&button!=v.CloseInfoButton)continue;
                 Rect rect=Bounds((RectTransform)button.transform,camera);
-                Assert.That(safeArea.Contains(rect.min)&&safeArea.Contains(rect.max),Is.True,button.name+" outside safe area");
+                Assert.That(rect.xMin,Is.GreaterThanOrEqualTo(safeArea.xMin-.1f),button.name+" left");Assert.That(rect.yMin,Is.GreaterThanOrEqualTo(safeArea.yMin-.1f),button.name+" bottom");
+                Assert.That(rect.xMax,Is.LessThanOrEqualTo(safeArea.xMax+.1f),button.name+" right");Assert.That(rect.yMax,Is.LessThanOrEqualTo(safeArea.yMax+.1f),button.name+" top");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
                 Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
 

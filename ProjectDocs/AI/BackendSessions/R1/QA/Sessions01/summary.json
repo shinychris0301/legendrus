@@ -1,0 +1,58 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/BackendSessions/R1/QA/Sessions01/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/BackendSessions/R1/QA/Sessions01/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 32.39209842681885,
+  "isolatedConfig": "/tmp/lor-backend-sessions-r1/Sessions01/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {
+    "LOR_BACKEND_TEST_ORIGIN": "http://127.0.0.1:35717"
+  },
+  "result": {
+    "id": "2",
+    "testcasecount": "20",
+    "result": "Failed(Child)",
+    "total": "20",
+    "passed": "17",
+    "failed": "3",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 23:56:11Z",
+    "end-time": "2026-09-29 23:56:13Z",
+    "duration": "1.3806622"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.BootstrapPersistsBeforeRequestAndKeepsWalletSeparate",
+      "result": "Failed",
+      "message": "  Expected: null\n  But was:  <string.Empty>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.FailedBootstrapCommitRecoversSameIdentity",
+      "result": "Failed",
+      "message": "  Expected: null\n  But was:  <string.Empty>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.LostRefreshAndFailedCommitKeepDurablePendingRotation",
+      "result": "Failed",
+      "message": "  Expected: null\n  But was:  <string.Empty>\n"
+    }
+  ]
+}

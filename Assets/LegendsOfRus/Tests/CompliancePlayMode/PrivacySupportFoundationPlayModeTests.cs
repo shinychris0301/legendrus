@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using LegendsOfRus.Compliance;
 using NUnit.Framework;
 using UnityEngine;
@@ -10,20 +12,45 @@ namespace LegendsOfRus.Tests.CompliancePlayMode
     {
         const string StoreKey = "LegendsOfRus_Compliance_v1";
 
+        static readonly PropertyInfo Singleton = typeof(PrivacySupportService).GetProperty("Instance");
+        readonly List<GameObject> ownedHosts = new List<GameObject>();
+        PrivacySupportService previousService;
+        ComplianceStateSnapshot previousState;
+        bool captured, hadStore;
+        string previousStore;
+
         [SetUp]
         public void SetUp()
         {
+            string isolated = System.Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
+            Assert.That(isolated, Does.StartWith("/tmp/"));
+            Assert.That(Application.persistentDataPath, Does.StartWith(isolated + "/"));
+            previousService = PrivacySupportService.Instance;
+            previousState = previousService != null ? previousService.State : null;
+            hadStore = PlayerPrefs.HasKey(StoreKey);
+            previousStore = PlayerPrefs.GetString(StoreKey);
+            captured = true;
+            // Temporarily bind the singleton to owned fixture services. Preserve the
+            // original component and state on the shared runtime root exactly.
+            Singleton.SetValue(null, null);
             PlayerPrefs.DeleteKey(StoreKey);
             PlayerPrefs.Save();
-            DestroyExisting();
         }
 
         [TearDown]
         public void TearDown()
         {
-            DestroyExisting();
-            PlayerPrefs.DeleteKey(StoreKey);
+            if (!captured) return;
+            foreach (var host in ownedHosts)
+                if (host != null) Object.DestroyImmediate(host);
+            ownedHosts.Clear();
+            Singleton.SetValue(null, previousService);
+            if (hadStore) PlayerPrefs.SetString(StoreKey, previousStore);
+            else PlayerPrefs.DeleteKey(StoreKey);
             PlayerPrefs.Save();
+            captured = false;
+            Assert.That(PrivacySupportService.Instance, Is.SameAs(previousService));
+            if (previousService != null) Assert.That(previousService.State, Is.SameAs(previousState));
         }
 
         [UnityTest]
@@ -150,29 +177,11 @@ namespace LegendsOfRus.Tests.CompliancePlayMode
                 Is.EqualTo(ComplianceActionStatus.UiNotApproved));
         }
 
-        static PrivacySupportService CreateService()
+        PrivacySupportService CreateService()
         {
             GameObject host = new GameObject("PrivacySupportService_Test");
+            ownedHosts.Add(host);
             return host.AddComponent<PrivacySupportService>();
-        }
-
-        static void DestroyExisting()
-        {
-            // Never destroy the shared persistent runtime root just because the
-            // service is attached to it; other PlayMode fixtures may share that
-            // root in the same Test Runner session.
-            for (int i = 0; i < 8; i++)
-            {
-                PrivacySupportService existing =
-                    Object.FindAnyObjectByType<PrivacySupportService>();
-                if (existing == null)
-                    return;
-
-                if (existing.gameObject.name == "PrivacySupportService_Test")
-                    Object.DestroyImmediate(existing.gameObject);
-                else
-                    Object.DestroyImmediate(existing);
-            }
         }
     }
 }

@@ -10,7 +10,8 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionVictoryView : MonoBehaviour
     {
-        public const int CurrentRevision=10;
+        public Func<CampaignPlayerSave> CampaignSaveProvider;
+        public const int CurrentRevision=12;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
         public RectTransform Content,Hud,Body,Footer,RewardsArea;
@@ -40,7 +41,7 @@ namespace LegendsOfRus
         void OnDisable(){Unbind();if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=null;}
         void Update()
         {
-            if(subscribed!=GameState.Instance){BindState();RefreshContent();}
+            if(CampaignSaveProvider==null&&subscribed!=GameState.Instance){BindState();RefreshContent();}
             if(language!=DemoFeatureState.LanguageCode)RefreshContent();
             elapsed+=Time.unscaledDeltaTime;
             if(HasRequiredBindings&&Time.unscaledTime>=nextEnergyIndicatorRefresh)RefreshEnergyIndicator();
@@ -53,7 +54,7 @@ namespace LegendsOfRus
                     Color glow=StarGlows[i].color;glow.a=Stars[i].Dimmed?0:.64f*t;StarGlows[i].color=glow;
                 }
         }
-        void BindState(){if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=GameState.Instance;if(subscribed!=null)subscribed.Changed+=RefreshState;}
+        void BindState(){if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=CampaignSaveProvider==null?GameState.Instance:null;if(subscribed!=null)subscribed.Changed+=RefreshState;}
         public void RefreshContent()
         {
             if(!HasRequiredBindings)return;
@@ -68,15 +69,15 @@ namespace LegendsOfRus
         public void RefreshState()
         {
             if(!HasRequiredBindings)return;
-            var state=GameState.Instance;var save=state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
+            var campaign=CampaignSaveProvider?.Invoke();var state=CampaignSaveProvider==null?GameState.Instance:null;var save=campaign!=null?campaign.player:state!=null?state.Save:null;bool en=DemoFeatureState.LanguageCode=="en";
             ResourceValues[0].text=save!=null?Number(save.gold):"—";ResourceValues[1].text=save!=null?Number(save.gems):"—";ResourceValues[2].text=save!=null?save.energy+"/"+save.energyMax:"—";
             RefreshEnergyIndicator();
-            var result=state!=null?state.LastCompletionResult:null;
+            var result=campaign!=null&&campaign.run.state==CampaignRunState.Won?new LevelCompletionResult(JsonUtility.FromJson<LevelData>(campaign.run.levelJson),campaign.run.stars,campaign.run.granted.gold,campaign.run.granted.gems,!CampaignRoundLifecycle.ZeroReward(campaign.run.granted),campaign.run.score):state!=null?state.LastCompletionResult:null;
             bool current=result!=null&&save!=null&&result.Level.chapterId==save.lastCompletedChapter&&result.Level.levelId==save.lastCompletedLevel;
             int stars=current?result.Stars:0;
             for(int i=0;i<3;i++){Stars[i].Dimmed=i>=stars;Stars[i].SetVerticesDirty();StarGlows[i].gameObject.SetActive(i<stars);}
             Score.text=current?(en?"LEVEL ":"УРОВЕНЬ ")+result.Level.levelId+"  •  "+(en?"SCORE ":"СЧЁТ ")+Number(result.Score):(en?"No completed round":"Нет завершённого раунда");
-            var reaction=current?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Victory):null;
+            var reaction=current&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Victory,DemoFeatureState.LanguageCode):null;
             Reaction.text=reaction!=null?reaction.Speaker+": "+reaction.Text:"";
             Reaction.gameObject.SetActive(string.IsNullOrEmpty(Status.text));
             MessageInset.enabled=!string.IsNullOrEmpty(Status.text)||!string.IsNullOrEmpty(Reaction.text);
@@ -116,11 +117,11 @@ namespace LegendsOfRus
         void RefreshEnergyIndicator()
         {
             nextEnergyIndicatorRefresh=Time.unscaledTime+1f;
-            var state=GameState.Instance;var save=state!=null?state.Save:null;
+            var campaign=CampaignSaveProvider?.Invoke();var state=CampaignSaveProvider==null?GameState.Instance:null;var save=campaign!=null?campaign.player:state!=null?state.Save:null;
             if(save==null){EnergyTimer.text="—";return;}
             if(save.energy>=save.energyMax){EnergyTimer.text=DemoFeatureState.LanguageCode=="en"?"FULL":"ПОЛНАЯ";return;}
             // Read the existing service clock; rendering never grants or spends energy.
-            int seconds=Mathf.Max(0,(int)Math.Ceiling(state.EnergyRemaining().TotalSeconds));
+            int seconds=Mathf.Max(0,(int)Math.Ceiling((campaign==null?state.EnergyRemaining().TotalSeconds:Math.Max(0,TimeSpan.FromMinutes(GameState.EnergyRefillMinutes).TotalSeconds-Math.Max(0,(DateTime.UtcNow.Ticks-save.lastEnergyUtcTicks)/(double)TimeSpan.TicksPerSecond)%TimeSpan.FromMinutes(GameState.EnergyRefillMinutes).TotalSeconds))));
             EnergyTimer.text=(seconds/60).ToString("00",CultureInfo.InvariantCulture)+":"+(seconds%60).ToString("00",CultureInfo.InvariantCulture);
         }
         void FillReward(int index,Sprite sprite,int count,string label){RewardIcons[index].sprite=sprite;RewardValues[index].text=Number(count);RewardLabels[index].text=label;}

@@ -23,7 +23,25 @@ namespace LegendsOfRus
                 RectTransform content=View.Content;
                 if(View.SourceComposition)
                 {
-                    // All foreground layers retain the approved safe 941x1672 registration.
+                    // Source-sized controls follow safe edges; only the masked viewport
+                    // grows. Keep the same scroll progress when the display changes.
+                    safeRect.GetWorldCorners(corners);
+                    Vector3 safeLow = content.InverseTransformPoint(corners[0]);
+                    Vector3 safeHigh = content.InverseTransformPoint(corners[2]);
+                    float sourceTop = safeHigh.y - content.rect.yMax;
+                    float sourceBottom = safeLow.y - content.rect.yMin;
+                    Position(View.Hud, 0, sourceTop);
+                    Position(View.HudBacking, 0, sourceTop);
+                    Position(View.TitleArea, 154, sourceTop - 102);
+                    Position(View.Footer, 0, sourceBottom - 1436);
+                    Position((RectTransform)View.BackButton.transform, 0, sourceBottom - 1334);
+                    Position((RectTransform)View.ChapterAction.transform, 220, sourceBottom - 1318);
+                    float height = 1006 + sourceTop - sourceBottom;
+                    bool resized = Mathf.Abs(View.MapArea.sizeDelta.y - height) > .01f;
+                    float progress = resized ? View.ChapterScroll.verticalNormalizedPosition : 0;
+                    Position(View.MapArea, 92, sourceTop - 313);
+                    Size(View.MapArea, new Vector2(758, height));
+                    if (resized) View.ChapterScroll.verticalNormalizedPosition = progress;
                     canvasRect.GetWorldCorners(corners);
                     Vector3 lo=content.InverseTransformPoint(corners[0]),hi=content.InverseTransformPoint(corners[2]);
                     Vector2 sourceNative=View.Environment.sprite.rect.size;

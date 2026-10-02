@@ -94,7 +94,7 @@ namespace LegendsOfRus
             ProductionVictoryView.PlaceText(view.RewardStatus,120,135,701,24,19);
             view.Reaction.transform.SetParent(view.RewardsArea,false);
             view.Status.transform.SetParent(view.RewardsArea,false);
-            var inset=view.RewardsArea.Find("MessageInset");
+            var inset=view.MessageInset!=null?view.MessageInset.transform:view.RewardsArea.Find("MessageInset");
             view.MessageInset=inset!=null?inset.GetComponent<Image>():Rect(view.RewardsArea,"MessageInset",102,389,737,52).gameObject.AddComponent<Image>();
             ProductionVictoryView.Place(view.MessageInset.rectTransform,102,389,737,52);
             view.MessageInset.color=new Color32(20,13,8,245);view.MessageInset.raycastTarget=false;

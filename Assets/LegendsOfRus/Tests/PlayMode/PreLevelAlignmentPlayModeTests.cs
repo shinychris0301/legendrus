@@ -59,10 +59,11 @@ namespace LegendsOfRus.Tests.PlayMode
         public IEnumerator AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave()
         {
             var state=GameState.Instance;var view=Root().GetComponentInChildren<ProductionPreLevelView>();
-            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.ActionsBound,Is.True);
+            Assert.That(view.HasRequiredBindings,Is.True);
+Assert.That(view.ActionsBound,Is.True);
             Assert.That(Root().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
             Assert.That(Root().transform.Find("DynamicHUD"),Is.Null);
-            state.Save.highestUnlockedLevel=10;
+            state.Save.highestUnlockedLevel=ChapterLevelCatalog.LoadChapter1().levels.Length;
             foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
             {
                 state.SelectLevel(1,level.levelId);string before=JsonUtility.ToJson(state.Save);view.RefreshContent();
@@ -87,6 +88,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 }
                 Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before),"Rendering must not persist or grant rewards.");
             }
+            Capture("PreLevel_Level500_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             state.SelectLevel(1,8);Capture("PreLevel_Level08_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             state.SelectLevel(1,10);Capture("PreLevel_Level10_Rewards_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             DemoFeatureState.SetLanguage("en");view.RefreshContent();
@@ -97,6 +99,9 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(view.RewardStatus.text,Is.EqualTo("НАГРАДА ПОЛУЧЕНА"));
             Assert.That(view.RewardGold.text,Is.EqualTo("0"));Assert.That(view.RewardGems.text,Is.EqualTo("0"));
             Capture("PreLevel_RewardClaimed_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("PreLevel_RewardClaimed_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
+            DemoFeatureState.SetLanguage("en");view.RefreshContent();
+            Capture("PreLevel_RewardClaimed_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             for(int i=0;i<4;i++)
             {
                 var booster=ProductionPreLevelRuntime.Boosters[i];int count=state.BoosterCount(booster);
@@ -130,7 +135,15 @@ namespace LegendsOfRus.Tests.PlayMode
                 view.BoosterButtons[i].onClick.Invoke();Settle();yield return null;yield return null;
                 Assert.That(router.ActiveModal,Is.Null);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
                 Assert.That(view.InspectedBoosterIndex,Is.EqualTo(i));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.True);
-                Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(before));
+                // At full energy the existing service refreshes only its clock timestamp.
+                var expected=JsonUtility.FromJson<PlayerSaveData>(before);
+                var actual=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
+                if(expected.energy==expected.energyMax)
+                {
+                    Assert.That(actual.lastEnergyUtcTicks,Is.GreaterThanOrEqualTo(expected.lastEnergyUtcTicks));
+                    actual.lastEnergyUtcTicks=expected.lastEnergyUtcTicks;
+                }
+                Assert.That(JsonUtility.ToJson(actual),Is.EqualTo(before));
                 view.BoosterDetailsBack.onClick.Invoke();Settle();yield return null;yield return null;
                 Assert.That(view.InspectedBoosterIndex,Is.EqualTo(-1));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
             }
@@ -169,6 +182,7 @@ namespace LegendsOfRus.Tests.PlayMode
                     actual.lastEnergyUtcTicks=JsonUtility.FromJson<PlayerSaveData>(before).lastEnergyUtcTicks;
                     Assert.That(JsonUtility.ToJson(actual),Is.EqualTo(before));
                     Capture("PreLevel_Booster_"+i+"_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672),camera=>VerifyBoosterGuideText(view,camera));
+                    Capture("PreLevel_Booster_"+i+"_360_"+language,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>VerifyBoosterGuideText(view,camera));
                     view.BoosterDetailsBack.onClick.Invoke();yield return null;
                 }
             }
@@ -196,7 +210,7 @@ namespace LegendsOfRus.Tests.PlayMode
         static void VerifyBoosterGuideText(ProductionPreLevelView view,Camera camera)
         {
             Rect panel=Bounds(view.BoostersArea,camera);
-            foreach(Text text in new[]{view.BoostersHeading,view.BoosterDetailText,view.BoosterDetailsBackText})
+            foreach(Text text in new[]{view.BoostersHeading,view.BoosterDetailText,view.BoosterDetailsBackText,view.BoosterCatalogText})
             {
                 Assert.That(text.cachedTextGenerator.characterCountVisible,Is.GreaterThan(0),text.name);
                 Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+1),text.name+" vertical overflow");
@@ -207,11 +221,18 @@ namespace LegendsOfRus.Tests.PlayMode
                     Assert.That(panel.Contains(point),Is.True,text.name+" outside booster panel");
                 }
             }
-            Rect back=Bounds(view.BoosterDetailsBack.transform as RectTransform,camera);
-            foreach(Vector3 vertex in view.BoosterDetailsBackText.canvasRenderer.GetMesh().vertices)
+            // Aspect-preserved faces are narrower than their Button rects and use top-left pivots.
+            foreach(var pair in new[]{(view.BoosterDetailsBack,view.BoosterDetailsBackText),(view.BoosterCatalog,view.BoosterCatalogText)})
             {
-                Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,view.BoosterDetailsBackText.transform.TransformPoint(vertex));
-                Assert.That(Mathf.Abs(point.x-back.center.x),Is.LessThan(back.width*.25f),"Back lettering must clear the ornamental ends.");
+                var face=pair.Item1.GetComponent<Image>();
+                Rect buttonBounds=Bounds(face.rectTransform,camera);
+                float paintedWidth=Mathf.Min(buttonBounds.width,buttonBounds.height*face.sprite.rect.width/face.sprite.rect.height);
+                foreach(Vector3 vertex in pair.Item2.canvasRenderer.GetMesh().vertices)
+                {
+                    Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,pair.Item2.transform.TransformPoint(vertex));
+                    Assert.That(point.x,Is.InRange(buttonBounds.xMin+paintedWidth*.15f,buttonBounds.xMin+paintedWidth*.85f),pair.Item2.name+" lettering must clear the painted ornamental ends.");
+                    Assert.That(point.y,Is.InRange(buttonBounds.yMin+buttonBounds.height*.2f,buttonBounds.yMax-buttonBounds.height*.2f),pair.Item2.name+" lettering must clear the upper and lower trim.");
+                }
             }
             Assert.That(view.BoosterDetailText.cachedTextGenerator.lineCount,Is.EqualTo(3));
             Assert.That(Bounds(view.BoosterDetailText.rectTransform,camera).Overlaps(Bounds(view.BoosterDetailsBack.transform as RectTransform,camera)),Is.False);
@@ -246,10 +267,12 @@ namespace LegendsOfRus.Tests.PlayMode
         public IEnumerator CaptureReferenceAndPhonePortraits()
         {
             Capture("PreLevel_941x1672_RU", new Vector2Int(941,1672), new Rect(0,0,941,1672));
+            Capture("PreLevel_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("PreLevel_576x1280_safearea_RU", new Vector2Int(576,1280), new Rect(0,48,576,1172));
             Capture("PreLevel_1080x2400_safearea_RU", new Vector2Int(1080,2400), new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en"); yield return null; yield return null;
             Capture("PreLevel_941x1672_EN", new Vector2Int(941,1672), new Rect(0,0,941,1672));
+            Capture("PreLevel_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             DemoFeatureState.SetLanguage("ru"); yield return null; yield return null;
             Capture("PreLevel_941x1672_RU_roundtrip", new Vector2Int(941,1672), new Rect(0,0,941,1672));
 
@@ -370,6 +393,15 @@ namespace LegendsOfRus.Tests.PlayMode
         void VerifyLayoutAndInput(ProductionPreLevelView view,Camera camera,Vector2Int size,Rect safe)
         {
             Assert.That(view.HasRequiredBindings,Is.True);
+            foreach(var text in new[]{view.SelectedLevel,view.RewardStatus,view.BoosterDetailText})
+                if(text.gameObject.activeInHierarchy && text.enabled && !string.IsNullOrEmpty(text.text))
+                {
+                    Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+1),text.name+" vertical overflow");
+                    float pixelsPerUnit=Bounds(text.rectTransform,camera).height/text.rectTransform.rect.height;
+                    Assert.That(text.fontSize*pixelsPerUnit,Is.GreaterThanOrEqualTo(9.2f),text.name+" rendered font at small portrait size");
+                }
+            foreach(var goal in view.Goals)if(goal.Root.gameObject.activeSelf)
+                Assert.That(Bounds(view.SelectedLevel.rectTransform,camera).Overlaps(Bounds(goal.Icon.rectTransform,camera)),Is.False,"Round caption must clear goal artwork.");
             foreach(var graphic in view.GetComponentsInChildren<ProductionWorldMapGraphic>())
             {
                 Assert.That(graphic.GetComponent<CanvasRenderer>(),Is.Not.Null,graphic.name);

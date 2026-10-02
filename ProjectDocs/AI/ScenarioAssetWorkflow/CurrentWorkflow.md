@@ -1,3 +1,100 @@
+## Mail / Inbox reference rebuild R1 — 2026-09-24
+
+## Mail Joined Tabs and Preview R2 — 2026-09-24
+
+**1 Scenario alpha sheet job /3CU /no resubmission or RGB generation.** Original joined trim and larger portrait/name plaque isolated with local contour cleanup after the returned mask retained staging rectangles. Caption/badge occlusions use approved lacquer/same-tab rail repair. Approved Individual Ranking selected-blue material, gems and shared boosters reused. Source ink dividers extracted; bounded old parchment reward-edge repair preserves alpha and all outside-mask pixels. Eight new PNG/meta pairs, five existing production files updated; prior art untouched. Final29Unitychecks/19reviewviews passed; nativeRU/tallEN/System and black/white/magenta inspected. [Review](../MailReferenceRebuild/TabsAndPreviewR2/Mail_TabsAndPreview_R2_Review.html). Fine contours, hidden faces and live fonts remain approximate.
+
+
+**1 Scenario alpha-isolation request /3 CU /no resubmissions.** Prepared original row/Claim All sheet; source RGB retained under bounded alpha. Reused accepted original Claim mask. Row uses approved navy donor and neighboring source rail repair; English footer face uses approved Home green donor after inpaint patches were rejected. Four new sprites; all earlier artwork preserved. Shared Home header/environment/footer and approved sapphire/boosters reused. Alpha black/white/pink, final RU/tallEN inspected;29Unitychecks/19browserviews passed. [Review](../MailReferenceRebuild/R1/Mail_ReferenceRebuild_R1_Review.html). Hidden faces/fine alpha/fonts remain approximate.
+
+## Home shortcut tone and label clarity R7 — 2026-09-24
+
+**0 Scenario jobs /0 CU.** Native Unity RGB tint darkens only the three new shortcut sprites; original PNG/alpha/font files unchanged. Live text uses Home navigation face/native scale. Corrected stale-glyph capture fixture, verified actual RU/tall EN.34Unitychecks/8browserviews passed. [Review](../HomeReferenceRebuild/ToneAndLabelsR7/Home_ToneAndLabels_R7_Review.html).
+
+## Home styled social shortcuts R6 — 2026-09-24
+
+**1 Scenario generation request /48 CU /no resubmissions.** User requested Home-matching Ranking/Team/Friends icons after navigation wiring. Approved Shop/Characters controls guided one coordinated three-control sheet; returned RGBA split with documented trim/alpha normalization, RGB retained. Three new sprites with live native RU/EN captions. Existing approved artwork untouched; no extraction needed because these Home-specific controls did not exist. Alpha black/white/pink and final native RU/tall EN inspected; 34 Unity checks and six browser views passed. [Review](../HomeReferenceRebuild/StyledShortcutsR6/Home_StyledShortcuts_R6_Review.html). Generated interpretation, not an exact original extraction.
+
+## Friends List Requests Cards and Portraits R4 — 2026-09-24
+
+**1 Scenario background-removal request / 3 CU / no resubmissions.** Source-derived empty request card and carved enclosure isolated as one sheet. Hidden face uses original navy donor; occluded trim/rails use mirrored/source donors. Bottom sapphire restored from source after preparation overlap, alpha refined locally. Two new sprites; ten approved portraits/gifts/actions reused unchanged. Final 26 Unity checks / 16 browser views passed. Native default Requests RU/narrowEN and black/white/pink alpha inspected; three roster captures pixel-identical to R3. Exact hidden surfaces/contours/fonts remain unclaimed. [Review](../FriendsListReferenceRebuild/RequestCardsR4/FriendsList_RequestCards_R4_Review.html).
+
+## Friends List Controls and Typography R3 — 2026-09-24
+
+**1 Scenario background-removal request / 3 CU / no resubmissions.** Original Sort/Remove controls extracted as a sheet, retaining Russian lettering and Sort people pictogram. Original RGB under Scenario alpha, bounded corner cleanup and opaque face restoration; English/active-sort faces use local source-strip interpolation. Four new sprites; existing art/fonts unchanged. Zero source-RGB mismatches across 217,258 visible RU control pixels. Black/white/pink alpha and final native RU/narrowEN/Requests inspected. Final 26 Unity checks and 15 browser review views passed. Fine contours/hidden face and exact source fonts remain approximate. [Review](../FriendsListReferenceRebuild/ControlsAndTypographyR3/FriendsList_ControlsAndTypography_R3_Review.html).
+
+## Friends List Joined Tabs, Guild Flags and Outer Frame R2 — 2026-09-24
+
+**3 Scenario alpha requests /9CU /no resubmissions.** Five original flags staged in one sheet; joined tabs and empty outer enclosure submitted separately. Original flag RGB retained; local silhouette replaces ineffective backing matte, including recovered winter finial. Original rails/curls/sapphires retained with donor navy faces, approved selected-blue material, badge/neighbor cleanup and bounded panel alpha restoration. Twelve new sprites; approved prior artwork unchanged. Final26Unitychecks/15reviewviews passed; nativeRU/narrowEN/Requests and black/white/magenta alpha inspected. Hidden faces and tiny contours remain approximate. [Review](../FriendsListReferenceRebuild/TabsFlagsAndFrameR2/FriendsList_TabsFlagsAndFrame_R2_Review.html).
+
+## Friends List Reference Rebuild R1 — 2026-09-24
+
+**1 new Scenario alpha job /3CU /no resubmission; 7 accepted masks reused.** Restored original Russian Energy/Visit/footer RGB and lettering using existing Scenario-derived alpha. New row uses original rails and clean navy donor reconstruction; Scenario over-removal of thin rails repaired with a local silhouette. Eight new sprites, existing art preserved. Shared Home header/environment and approved carved footer reused. Final26Unitychecks/15reviewviews passed; nativeRU/narrowEN/Requests and alpha backgrounds inspected. Hidden rails/material/contours and font/scenery differences documented. [Review](../FriendsListReferenceRebuild/R1/FriendsList_ReferenceRebuild_R1_Review.html).
+
+## Team Chat Help Buttons and Footer R4 — 2026-09-24
+
+**2 successful Scenario alpha-isolation jobs /6CU /no resubmissions.** Original green Help button/Russian lettering and bottom sapphire/carving retain source RGB. Neighbor plaque excluded before footer isolation; dark backing removed by alpha refinement. English blank face repairs only the lettering footprint from source green side-face colors; live localization retained. Three new sprites, existing approved assets unchanged. Final28Unitychecks/12reviewviews passed; nativeRU/narrowEN and black/white/magenta alpha inspected. Source-enlargement/alpha/hidden-face limitations documented. [Review](../TeamChatReferenceRebuild/HelpAndFooterR4/TeamChat_HelpAndFooter_R4_Review.html).
+
+## Team Chat message icons and parchment R3 — 2026-09-23
+
+**3 successful Scenario alpha-isolation jobs /9CU /no generation retries.** Original blue energy medallion, plain swords and strength illustration retained original RGB; returned alpha received disconnected-fragment cleanup. Approved Navigation gold lightning reused unchanged. Parchment uses original clean donor grain only within the existing text-removal mask; alpha/outside-mask pixels unchanged. Four new sprites, no approved artwork overwritten. Final28Unity checks/12reviewviews passed; nativeRU/narrowEN, donor and alpha backgrounds inspected. [Review](../TeamChatReferenceRebuild/MessageIconsAndParchmentR3/TeamChat_MessageIconsAndParchment_R3_Review.html). Grain/finealpha/fonts remain approximate; no new RGB generation.
+
+## Team Chat chest and message frames R2 — 2026-09-23
+
+**3 successful Scenario alpha-isolation jobs /9CU /no generation retries.** Original guild crest, system crest and info-medallion RGB retained under returned alpha with bounded neighbor cleanup. Three empty panel sprites use source rails and clean navy donor reconstruction; hidden pixels/contours remain approximate. Existing portraits/chest/fonts/parchment/shared header/footer controls preserved. Six new sprites inspected black/white/magenta and native RU/narrowEN. Final28Unity checks passed; [review](../TeamChatReferenceRebuild/ChestAndMessageFramesR2/TeamChat_ChestAndMessageFrames_R2_Review.html) records limitations and provenance.
+
+## Team Chat reference rebuild R1 — 2026-09-23
+
+**0 new Scenario jobs / 0 CU.** Original Send and three footer-button RGB/lettering restored under unchanged accepted TeamChatStyleAlignment/R1 Scenario alpha. Four new RU sprites; EN uses existing blank faces/native labels. Shared Home header, Loading fill, Team Hub rail and approved carved footer reused. Black/white/magenta and final native RU/narrow EN inspected; 28 targeted Unity checks and 12 review views passed. Repaired parchment, alpha, fonts and reused ornament remain approximate; no new character/scenery generation needed. [Review](../TeamChatReferenceRebuild/R1/TeamChat_ReferenceRebuild_R1_Review.html).
+
+## Team Ranking footer ornaments R8 — 2026-09-23
+
+**3 Scenario background-removal jobs / 9 CU / no generation retries.** Isolated original large banners, candles and central carving; retained source RGB and locally refined alpha to clear neighboring rails/scenery. Black/white/magenta and native RU/narrow EN inspected. User selected Back above footer with larger banners; table compacted to fit. All 28 targeted Unity tests and 11 browser views passed. Fine alpha remains approximate. [Review](../TeamRankingReferenceRebuild/FooterOrnamentsR8/TeamRanking_FooterOrnaments_R8_Review.html).
+
+## Team Ranking footer button R7 — 2026-09-23
+
+**0newScenariojobs/0CU.** Reused accepted source-registered English button isolation to replace the faulty smaller Russian threshold mask. Complete original RU lettering/RGB retained afteruniform3×upsampling; ENblankfile unchanged. Shared593×150 native geometry and corrected caption alignment. SourceRGB/alpha equality, black/white/magenta inspection,28Unitychecks and11browserviews passed. Contour exactness remains unclaimed; no full-page/background redesign. [Review](../TeamRankingReferenceRebuild/FooterButtonR7/TeamRanking_FooterButton_R7_Review.html).
+
+## Team Ranking tabs and season status R6 — 2026-09-23
+
+**0newScenariojobs/0CU.** Source tab contours/rails extracted; eight normal/selected variants reuse approved IndividualRanking navy/sapphire face material, bounded lettering cleanup and warm scope tint. Live localized captions and truthful unconfirmed-season status retained. Existing PNG/meta/fonts/rewards/podiums unchanged. Alpha black/white/magenta and native RU/narrowEN inspected; final28Unitychecks/11browserviews passed. Traced contours and reconstructed faces remain approximate. [Review](../TeamRankingReferenceRebuild/TabsAndSeasonR6/TeamRanking_TabsAndSeason_R6_Review.html).
+
+## Team Ranking podium stats/surfaces R5 — 2026-09-23
+
+**0newScenariojobs/0CU.** Restored source material and pictograms inside three accepted isolated podium sprites; removed only original numeral/shadow footprints using local bounded interpolation. Navy and bronze surfaces retain their own reference colors. Existing alpha and all pixels outside stat regions preserved; original PNGs/metas/approved rewards unchanged. Actual native live numbers repositioned/fitted and glyph clearance verified. Final28Unitychecks/11browserviews passed. Hidden faces/live font remain approximate. [Review](../TeamRankingReferenceRebuild/PodiumStatsAndSurfacesR5/TeamRanking_PodiumStatsAndSurfaces_R5_Review.html).
+
+## 2026-09-23 — Team Ranking R4 Table Surface and Guild-Name Fit
+
+**0 new Scenario jobs / 0 CU.** Original outer table frame, thin divider and gold highlight extracted; opaque clean navy source donor replaces baked content. Neighboring source rails clear old-highlight/candle/footer overlap. Existing fonts/gems/crests/chests/R3 ribbons and rewards unchanged. Three new sprites, alpha checked over black/white/magenta and finalRU/narrowEN; hidden material/rail continuation remains reconstructed. Final28Unitychecks/11reviewviews passed. [Review](../TeamRankingReferenceRebuild/TableAndNamesR4/TeamRanking_TableAndNames_R4_Review.html).
+
+## 2026-09-23 — Team Ranking R3 Ribbons and Reward Proportions
+
+**0 new Scenario jobs / 0 CU.** Original ribbon trim/material and reward-enclosure rails reused with bounded source-material repairs for live content. Existing approved sapphire/rainbow/chest art unchanged. Podium alpha and pixels outside ribbons verified identical. Four new source-derived sprites; alpha inspected on black/white/magenta and final nativeRU/narrowEN. Final27Unitychecks/11browserviews passed. Hidden faces and reused frame scaling remain approximate. [Review](../TeamRankingReferenceRebuild/RibbonsAndRewardsR3/TeamRanking_RibbonsAndRewards_R3_Review.html).
+
+## 2026-09-23 — Team Ranking Reference Rebuild R1
+
+**0 new Scenario jobs / 0 CU.** Reused actual Home header, approved gameplay sapphire and accepted title/crests/rainbow/chests/fonts/footer. Original Details button/Russian lettering source RGB retained under traced alpha; English uses existing blank face. New sprite inspected over black/white/magenta and native RU/narrowEN. Twenty-six Unity checks and eleven review views passed. Approximate alpha, table frames, typography and lower scenery remain documented. [Review](../TeamRankingReferenceRebuild/R1/TeamRanking_ReferenceRebuild_R1_Review.html).
+
+## Team Hub reference rebuild R1 — 2026-09-23
+
+**0newScenariojobs/0CU**. Original nav-card pixels/lettering with traced alpha; English labels/power surface use accepted lacquer. Source rail continuation/mirrored cap clear chest/scenery residue; progress channel uses native fill/text and bounded background. Existing source title/banner/portraits/chest preserved; approved sapphire/potion and shared Home header/footer resources reused directly. Final14Unitytests/10browserviews passed, nativeRU/narrowEN and black/white/magenta alpha inspected. SourceRGB equality verified for RU cards; hidden surfaces/alpha/fineframe/type remain approximations. [Review](../TeamHubReferenceRebuild/R1/TeamHub_ReferenceRebuild_R1_Review.html).
+
+## Individual Ranking reference rebuild R1 — 2026-09-23
+
+**0newScenariojobs/0CU**. Reused original title/medals, selected embedded fonts, shared Home header, approved Gameplay sapphire and Event Detail carved-footer material. Added only original Russian Rules-button RGB/lettering under the accepted alpha. Source RGB equality and black/white/magenta alpha inspection passed. Existing PNG/font/meta hashes preserved; no regeneration needed. Final8Unitytests/12browserviews passed; actualRU/narrowEN captures inspected. Shared/adapted materials and live type remain documented differences, not exact source reproduction. [Review](../IndividualRankingReferenceRebuild/R1/IndividualRanking_ReferenceRebuild_R1_Review.html).
+
+## Event Detail typography/Firebird R7 — 2026-09-23
+
+**0newScenariojobs/0CU**. Reused prior accepted Scenario/source alpha and original Firebird RGB for narrow edge refinement; retained blue eyes/red shading, removed tiny mask defects/skyline residue, recomputed matching light/halo. Reused licensed embedded project fonts in approved name/title roles; no new font files or OS copies. Shared gems/boosters/chests/Home gift and R6 frames/progress unchanged. Final14Unitychecks/9browserviews passed; actualRU/narrowEN and alpha backgrounds inspected. Exact source font/fine alpha remain unverified. [Review](../EventDetailReferenceRebuild/TypographyAndFirebirdR7/EventDetail_TypographyAndFirebird_R7_Review.html).
+
+## Event Detail progress/frame R6 — 2026-09-23
+
+Original-pixel mask/registration repair plus reuse of existing navy/rail material; **0newScenariojobs/0CU**. No shared gem/booster/gift or R5 chest changes. Source frame curves/bevels extracted with neighbour exclusions; rounded backing alpha, continuous empty progress channel, cleaned independent diamonds. Final14Unitychecks/9browserviews passed; nativeRU/narrowEN/close-ups and alpha backgrounds inspected. No event progress fabricated. [Review](../EventDetailReferenceRebuild/ProgressAndFramesR6/EventDetail_ProgressAndFrames_R6_Review.html).
+
+## Event Detail shared assets / panel fit R5 — 2026-09-23
+
+Directly reuse approved GameplayReferenceAligned sapphire/ruby and SharedBoosters potion/Firebird, plus exact Home gift/environment. R4's retained page-local reward sprites did not satisfy shared-family reuse; R5 fixes those bindings. Six chest alpha masks repaired from original RGB; native padding and source-relative geometry restored. One source rail/junction sprite replaces overlapping panel borders; opaque faces reuse accepted Scenario lacquer. **0 new Scenario jobs / 0 CU**. Existing sprites/metas and other page prefabs unchanged. Final14Unitychecks/9browserviews passed; nativeRU/narrowEN and alpha backgrounds inspected. Full-page exactness unclaimed; details in [R5 review](../EventDetailReferenceRebuild/SharedAssetsAndPanelFitR5/EventDetail_SharedAssetsAndPanelFit_R5_Review.html).
+
 ## Asset reuse priority — user instruction, 2026-09-23
 
 Reuse existing approved resources before creating new ones, including Home's gift, gems, boosters and mail artwork. Inspect actual active page/component references first; prefer direct resource reuse over copied or regenerated alternatives. Generate only where the needed asset or repair is absent. Preserve truthful interaction/data states when reusing art.
@@ -435,3 +532,147 @@ Two alpha-only repairs reuse Scenario-derived header/portrait artwork. Removed u
 ## 2026-09-21 — Victory R2 surfaces and original lettering
 
 One bounded Scenario surface repair,12CU; reuse original Scenario alpha for complete Russian title/Continue/ad RGB. Original section flourishes/dividers recovered locally. Firebird glow derived from existing isolated alpha; native earned-star halo rays expanded. No new lettering/glow generation. [Report](../VictoryReferenceRebuild/RewardsAndTypographyR2/ImplementationReport.md). Final20Unitychecks and13browserviews passed; exact reconstructed surfaces/particles remain approximate.
+
+### 2026-09-23 — Team Hub R2 summary and task frames
+Approved reference refinement used direct source member icon/chest enclosure/task shell/lettering and existing lacquer for hidden faces. Seven new sprites; approved chest/gem/potion unchanged. Source/blank variants retain RU source text and live EN. No Scenario calls or credits; no missing character/scenery generation was needed. Native revision3 and 15passing Unity tests; actual captures and alpha inspection in `../TeamHubReferenceRebuild/SummaryAndTasksR2/`. Roster/footer and material/type differences remain documented.
+
+### 2026-09-23 — Team Hub R3 roster ornaments
+Source guild medals preserve original RGB/numerals with refined alpha; source row carving retains intentionally opaque faces reconstructed only under original content. Five new PNGs; approved portraits and contribution-shield resource reused unchanged. No Scenario requests/credits, because the required visible source details were available. Native revision4,16passing Unity checks; alpha and actual RU/EN captures inspected. Remaining source differences documented in TeamHubReferenceRebuild/RosterOrnamentsR3.
+
+### 2026-09-23 — Team Hub R4 footer
+Original crest, red plaque/Russian motto and information icon extracted independently. Hidden red faces repaired from clean source lacquer; first donor's border-line repetition rejected before final Verify02. Live English/semantic text preserved; native info action uses existing preview modal. Four new sprites with black/white/magenta inspection; approved resources unchanged. No Scenario calls/credits because visible source elements suffice. Internalrevision5,17passing Unity checks, actual RU/EN captures and reference adaptations documented in TeamHubReferenceRebuild/FooterCrestR4.
+
+### 2026-09-23 — Team Hub R5 typography/progress
+No generation or extraction needed. Existing approved Loading source_progress_fill reused directly for sample season progress; SHA recorded, original file unchanged. Fixed original lettering/selected fonts/shared assets retained. Native revision6,18passing Unity checks, actual RU/EN captures and three-background texture inspection. Font identity/facets remain approximate; no live guild progress introduced. Evidence: TeamHubReferenceRebuild/TypographyAndProgressR5.
+
+
+### 2026-09-24 — Mail R3 opened letter and panel surfaces
+One Scenario background-removal request (3 CU, no retry) isolates the original circular guild emblem; original enlarged RGB and returned alpha verified unchanged. Original ink dividers isolated locally. User-reported frame occlusion traced to old rectangular parchment replacement masks. Two new paper surfaces restore original scrollwork with bounded contour-shaped collars; alpha and outside-mask pixels are identical to the previous assets. Lower full-letter corners mirror original upper corners because the reference footer obscures them; no claim of exact recovery. No extra Scenario call for these visible-source repairs. Five new PNG/meta pairs, native revision 4, final Verify04 29 passing Unity tests and 19 passing browser views. Black/white/magenta and final native captures inspected. See [report](../MailReferenceRebuild/OpenedLetterR3/ImplementationReport.md).
+
+
+### 2026-09-24 — Mail R4 parchment and corner continuity
+No Scenario request or credits. Approved clean parchment grain is blended to original border illumination with a contour mask that includes all four inner corner patches and excludes carving. Five-pixel smooth boundary; all alpha and outside-mask RGB preserved. Two new sprites retain the R3 originals; provenance and masks in MailReferenceRebuild/ParchmentBlendR4/Sources. Native revision5, final8MailUnitytests/20browserviews passed. All corners, alpha backgrounds and native RU/EN inspected. Hidden lower corners and donor texture remain reconstructed. [Report](../MailReferenceRebuild/ParchmentBlendR4/ImplementationReport.md).
+
+
+### 2026-09-24 — Mail R5 opened-letter title and footer
+One Scenario alpha sheet request,3CU,no resubmissions. Sheet retained surrounding backing; refined alpha through bounded material/contour masks. Original Russian title and circular Back/Inbox RGB unchanged under visible alpha. English face and avatar-occluded backing use source navy/right-carving donors; reconstructed portions are labelled. Five new assets; R4 paper and other approved assets preserved. Final Verify03 8Unitychecks/20browserviews passed. Alpha backgrounds, native RU/tallEN, source RGB and Inbox comparisons recorded in [report](../MailReferenceRebuild/LetterFrameAndFooterR5/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile Reference Rebuild R1
+One Scenario background-removal sheet request,3CU,no retries/RGB generation. Original profile crest and frames retained; source navy/wood donors clear old content. Independent prepared RGB avoids a sheet overlap; wider local footer crop restores the omitted rail with a bounded silhouette. Collection mask repair and alpha opaque-interior restoration recorded. Nine new textures, existing art/fonts unchanged. Actual shared header, real saved stats and labelled previews preserved. Final Verify05 9Unitytests/17browserviews passed;15nativecaptures and three-background alpha checks. Exact hidden surfaces/fonts and relic/footer ornament geometry remain approximate. [Report](../ProfileReferenceRebuild/R1/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R2 relic enclosure and captions
+One Scenario alpha sheet job,3CU,no retry/RGB generation. Original carved lower enclosure uses clean source navy donor beneath removed content; returned alpha bounded outside the frame and opaque inside. Gold heading flourishes keep source RGB with local navy segmentation. Three new sprites; old artwork/fonts/metadata/other-page prefabs unchanged. Final Verify03 9Unitychecks/17browserviews,15nativecaptures. Caption fit measured after phone scaling; earlier failures preserved. Source RGB/composite checks, black/white/pink and final native views inspected. Header/footer pixels and two secondary-view captures unchanged. Hidden material/font identity remains approximate. [Report](../ProfileReferenceRebuild/RelicFramesAndCaptionsR2/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R3 footer and selected-relic detail
+One Scenario alpha sheet request,3CU,no retries/RGB generation. Original footer rim/dividers and badge border use source donor clearing; aligned native action faces preserve continuous grain and selection edges. Sword detail crop expanded locally to recover omitted corner curls; visible RGB equals source. Ten sprites include six footer states and an unchanged approved frame with nine-slice metadata. Prior artwork/fonts unchanged. Final Verify01 9Unitychecks/17browserviews,15nativecaptures; source/alpha/face/scene integrity recorded. Type, reconstructed textures and tiny contours remain approximate. [Report](../ProfileReferenceRebuild/FooterAndDetailR3/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R4 typography and stats
+No image editing, extraction or Scenario calls were needed (0 requests,0CU). Reused approved Roboto Serif, Bitter and FreeSerif assets unchanged; exact source identity remains unverified. Native revision5 adjusts text hierarchy and stat geometry only. Six existing Assets files modified;5,575 protected art/font/meta/other-page files unchanged. Final9Unitytests/17browserviews passed,15nativecaptures. [Report](../ProfileReferenceRebuild/TypographyAndStatsR4/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R5 relic caption readability
+No Scenario request or image editing needed (0 calls,0CU). Reused approved source artwork and fonts unchanged; only native caption layout/line breaks/minimum font size adjusted. Original fine single-line names are adapted to larger two-line names without fictitious levels. Final9Unitytests/17browserviews passed; native RU/EN and expanded Relics inspected. Standard-page changes are confined to captions;5,575 protected files unchanged. [Report](../ProfileReferenceRebuild/RelicReadabilityR5/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R6 selection and detail captions
+0 Scenario calls/0CU; no image edits or generation. Existing approved framed relics reused; sapphire live-text selection and native detail captions added, with approved title font. Pivot-alignment defect found in Verify01 captures corrected in Verify02. Final10Unitytests/31browserviews,29nativecaptures. All5,575 protected files unchanged; alternate states are labelled preview adaptations. [Report](../ProfileReferenceRebuild/RelicSelectionR6/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R7 identity/progress
+0Scenario calls/0CU; no art edits or generation. Reused approved navy/gold frames and sapphire fill, separated native chapter/count labels and retained real saved Chapter1 completions. Original XP layout is adapted without fabricating XP. Final11Unitychecks/37browserviews,35nativecaptures. Four comparisons differ only in progress area;5,575 protected assets unchanged. [Report](../ProfileReferenceRebuild/IdentityProgressR7/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R8 native press feedback
+0Scenario calls/0CU; no image or font edits. Reused existing map visual feedback on Profile controls and preserved source art at rest. Final Verify03 12Unitychecks/41browserviews,39nativecaptures. Four resting comparisons identical toR7;5,575 protected assets unchanged. Pressed captures document a native interaction adaptation to the static reference. [Report](../ProfileReferenceRebuild/PressFeedbackR8/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R9 history boundary states
+0Scenario calls/0CU. Approved navy/gold controls are reused unchanged; native disabled color and pagination guards refined. No art/font changes. Final13Unitychecks/44browserviews,42nativecaptures;5,575 protected assets unchanged. MainRU/EN and ItemsRU matchR8 pixel-for-pixel; History changes confined to pager. [Report](../ProfileReferenceRebuild/HistoryNavigationR9/ImplementationReport.md).
+
+
+### 2026-09-24 — Profile R10 History row hierarchy
+0Scenario calls/0CU. No image or font edits: existing navy/gold rows and approved fonts reused. Native localized labels and stat columns refined. Final14Unitychecks/46browserviews,44nativecaptures;5,575 protected assets unchanged. MainRU/EN and ItemsRU identical toR9; History differences confined to rows. No separate original History reference is claimed. [Report](../ProfileReferenceRebuild/HistoryRowsR10/ImplementationReport.md).
+
+
+### 2026-09-24 — Inventory reference rebuild R1
+0Scenario calls/0CU. Approved existing Inventory extractions, shared Home header/environment, Profile wood, corrected Shop footer, carved footer and shared framed boosters reused. No production image/font edits; native selection/typography/layout/feedback only. Final9Unitychecks/17browserviews,15nativecaptures;5,575 protected files unchanged. Exact Inventory enclosure/scenery/fonts remain approximate. [Report](../InventoryReferenceRebuild/R1/ImplementationReport.md).
+
+
+### 2026-09-24 — Inventory R2 original grid/quantity frames
+1Scenario Pixa alpha sheet /3CU /no retries or RGB generation. Source carving and plaque edging retained; covered grid interior uses approved navy after narrow-gap donor showed repeated gold residue. Bounded source-rail continuation, plaque-face repair and alpha cleanup documented. Two new sprites; all5,575 existing protected resources unchanged. Alpha black/white/magenta and nativeRU/maxcounts/tallEN inspected. Final9Unitychecks/17browserviews,15nativecaptures; changes confined to grid/quantity areas. [Report](../InventoryReferenceRebuild/GridAndQuantityR2/ImplementationReport.md).
+
+
+### 2026-09-24 — Inventory R3 tabs and original Details lettering
+1Scenario Pixa alpha sheet /3CU /no retries or new RGB generation. Original tab RGB restored under refined alpha; opaque faces preserved. Source-state lettering and gold strokes retained; alternate colors and English blank-face repairs explicitly documented as adaptations. Details restores complete source lettering under accepted alpha.18new sprites;5,579 existing protected resources unchanged. Black/white/magenta and nativeRU/tallEN/Materials states inspected. Final10Unitychecks/19browserviews,17nativecaptures. Three comparisons confined to tabs/Details. [Report](../InventoryReferenceRebuild/TabsAndLetteringR3/ImplementationReport.md).
+
+
+### 2026-09-24 — Inventory R4 detail hierarchy
+0Scenario calls/0CU, no art/font edits. Reused approved Mail parchment divider and existing Inventory surfaces. Divider is an adaptation, not an exact Inventory extraction. Live localized description/usage regions refined; native revision5. Final10Unitychecks/20browserviews,18nativecaptures;5,615 protected files unchanged. Three comparisons confined to detail-text area. [Report](../InventoryReferenceRebuild/DetailHierarchyR4/ImplementationReport.md).
+
+
+### 2026-09-24 — Settings reference rebuild R1
+0Scenario calls/0CU. Reused existing Scenario-isolated Settings controls/title/frames and approved Home header/environment/Mail dividers. No PNG/font edits. Frame spriteBorder metadata enables nine-slicing; source pixels/GUID retained. Final13Unitychecks/17browserviews,15Settingscaptures plus standalone LanguageSelect regression evidence.5,614 protected files unchanged; only the documented frame border metadata exception. [Report](../SettingsReferenceRebuild/R1/ImplementationReport.md).
+
+
+### 2026-09-24 — Language Select reference rebuild R1
+0Scenario calls/0CU. Existing Settings modal extractions/current approved Splash resources reused without art/font edits. Only selector-local hierarchy refreshed; original Splash/Settings prefabs unchanged.14Unitychecks/10browserviews,6 standalone+2 Settings modal captures.5,615 protected resources unchanged. [Report](../LanguageSelectReferenceRebuild/R1/ImplementationReport.md).
+
+## Login / Account reference rebuild R1 — 2026-09-25
+
+**0 Scenario jobs /0 CU.** Reused accepted Login extractions and PanelEdgesR2 repairs unchanged. This pass changes native text/layout/press presentation, not sprites; no new RGB or alpha generation. Seven existing Assets files modified. Final15targetedUnitychecks,8nativeLogin captures and10browserviews passed;RU/tallEN inspected,5,615protected files unchanged. [Review](../LoginReferenceRebuild/R1/Login_ReferenceRebuild_R1_Review.html). Scenery composition, logo variant, reconstructed surfaces and live type remain approximate; online account services remain unavailable.
+
+## Tutorial / Help reference rebuild R1 — 2026-09-25
+
+**0 Scenario jobs /0 CU.** Reused approved DesignR2/NativeDesignR3 panel, Gameplay source grid/wood/gems and shared framed booster art. Native read-only diagrams and press presentation updated; no new RGB/alpha/font work. Seven existing Assets files modified. Final15targetedUnitychecks,10nativeHelp captures and12browserviews passed;RUbasics/tallENboosters inspected,5,615protected files unchanged. [Review](../TutorialReferenceRebuild/R1/Tutorial_ReferenceRebuild_R1_Review.html). Reference is the approved generated Help concept; title/tab/card ornaments and live lettering remain approximate.
+
+## 2026-09-25 — Tutorial original native R3
+
+User authorized native implementation using Gameplay gems and explicitly requested whole-panel extraction, separate title/buttons. Source `Downloads/1/Fantasy Match-3 Tutorial Screen.png`. Three recorded Scenario jobs: panel isolation3CU, controls isolation3CU, clean environment13CU; total19CU. Outputs and billing in `TutorialReferenceRebuild/NativeOriginalR3/Sources/Scenario`. Local source-RGB repairs/alpha cleanup preserve panel decoration; no new gem/booster assets generated. Whole panel uses RU/EN variants, Gameplay sprites remain native overlays, shared header and controls remain interactive. Final Verify04:18 targeted checks passed; actual captures and remaining surface/font/scenery limitations linked from new review.
+
+## 2026-09-25 — Tutorial panel ornaments R4
+
+0Scenario jobs/0CU. Confirmed old rectangular patches erased visible source trim. Source-protection masks restore reward enclosure/title decoration, medallion and card edges; adjacent source-frame donor repairs two hidden spans. Two new localized panel sprites, old art retained. Native revision5 rebuilt;18 targeted Unity checks passed. See TutorialReferenceRebuild/PanelOrnamentsR4 for actual captures, mask provenance and remaining limitations.
+
+## 2026-09-25 — Tutorial gift/footer R5
+
+0Scenario jobs/0CU. Direct source RGB and contour alpha isolate existing Home gift and full original Tutorial buttons. Five new sprites, prior art preserved. RU lettering retained, EN interior bounded repair. Final18Unitychecks passed; see TutorialReferenceRebuild/GiftAndButtonsR5 for original-RGB/opaque-rail checks and native captures.
+
+
+## 2026-09-25 — Offline reference rebuild R1
+
+0 Scenario jobs/0 credits. Reused the earlier Offline panel/emblem extraction; new Russian title/button variants retain original source RGB and accepted alpha. Original file identified in prior ReferenceAlignmentR2 provenance; copied to OfflineReferenceRebuild/R1/Sources/Reference.png. No new header/scenery art: actual shared header and clean Home environment reused. Native revision 3 rebuilt, final 19 targeted Unity checks passed. See OfflineReferenceRebuild/R1 for provenance, exact-pixel assertions, safe-area captures and remaining differences.
+
+
+## 2026-09-25 — Maintenance reference rebuild R1
+
+0 Scenario jobs/0 credits. Reused prior Maintenance extraction alpha; restored exact source RGB for Russian title, completion caption and button. New panel_ru_r2, timer_ru_r2 and button_ru_r2 sprites preserve previous assets. Clean Home environment and approved logo/gift reused. Production revision 2 rebuilt; 14 targeted Unity tests passed. Source copies, provenance, alpha sheets, integrity checks and native captures: MaintenanceReferenceRebuild/R1.
+
+
+## 2026-09-25 — Maintenance parchment R2 repair
+
+Two built-in imagegen edits, no Scenario calls. Continuous paper repair replaces old mirrored donor tiles; source color samples calibrate the fill. Original divider/title/frame outline and alpha remain protected in bounded integration. Generated raw outputs and exact prompts stored in MaintenanceReferenceRebuild/ParchmentSurfaceR2/Sources; production uses two versioned panel sprites. Final 14 Unity checks passed; original art/meta files preserved. No generation cost supplied by built-in tool.
+
+
+## 2026-09-25 — Error Dialog reference rebuild R1
+
+Zero new generation/Scenario calls. Original title and Retry/Close source RGB restored with prior extraction alpha, three versioned sprites. Accepted parchment-tone repair remains unchanged below title row174. Source and integrity provenance in ErrorDialogReferenceRebuild/R1. Active modal revision2 rebuilt; final14 targeted Unity checks passed. Shared underlying page/header retained.
+
+## 2026-09-25 — Dialogue reference rebuild R1
+
+Reused accepted Dialogue source/alpha; deterministically restored original Russian Continue and conditional Dobrynya nameplate RGB. No generated art, Scenario jobs or credits. Existing environment/portrait/parchment assets preserved. Review and extraction provenance: `ProjectDocs/AI/DialogueReferenceRebuild/R1/`. Native revision2,8Unitychecks/8captures/10browserviews passed; remaining scenery/font/divider approximations documented.
+
+## 2026-09-25 — Characters reference rebuild R1
+
+Reused shared Home header through Shop's component; preserved Characters R1–R12 art.0generation/extraction/Scenario calls,0CU,no PNG/meta edits. Native revision13;10Unitytests,9captures,11browserviews passed. Report: `ProjectDocs/AI/CharactersReferenceRebuild/R1/ImplementationReport.md`.
+
+## 2026-09-25 — Characters original lettering R2
+
+User explicitly requested title/button extraction with text. Deterministic original RGB/accepted-alpha extraction for title/actions; traced tabs and derived state tints; source footer text with shared accepted caption frames.13PNGvariants,0generation/Scenario calls,0CU. Existing art preserved; alpha sheets/source-pixel checks passed. Native revision14,11Unitytests and9captures. Provenance in `CharactersReferenceRebuild/OriginalLetteringR2/Sources/AssetProvenance.json`.
+
+## 2026-09-25 — Characters safe edges R3
+
+Layout-only refinement using accepted art and original-lettering R2.0generation/Scenario calls,0CU,no PNG/meta edits. Header/footer at safe edges, flexible collection and expanded modal shield. Native revision15;12Unitytests,12captures,14browserviews passed. See `CharactersReferenceRebuild/SafeEdgesR3/ImplementationReport.md`.

@@ -81,12 +81,14 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().Title.enabled,Is.False);foreach(var text in View().ActionLabels)Assert.That(text.enabled,Is.False);
             VerifyCaptionLayers(View(),false);
             Capture("Pause_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Pause_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             Capture("Pause_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Capture("Pause_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en");yield return null;View().RefreshContent();
             Assert.That(View().Title.enabled,Is.True);foreach(var text in View().ActionLabels)Assert.That(text.enabled,Is.True);
             VerifyCaptionLayers(View(),true);
             Capture("Pause_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Pause_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             DemoFeatureState.SetLanguage("ru");yield return null;Assert.That(View().Title.enabled,Is.False);
             Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(board.Moves,Is.EqualTo(moves));Assert.That(board.Score,Is.EqualTo(score));
             View().Actions[0].onClick.Invoke();Settle();yield return null;
@@ -99,8 +101,10 @@ namespace LegendsOfRus.Tests.PlayMode
             var board=Gameplay().Board;string hash=board.BoardStateHash;OpenPause();yield return WaitForNormalButtonColors();
             Assert.That(board.GoalCount,Is.EqualTo(3));
             Capture("Pause_ThreeGoals_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Pause_ThreeGoals_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
             DemoFeatureState.SetLanguage("en");yield return null;
             Capture("Pause_ThreeGoals_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+            Capture("Pause_ThreeGoals_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
             View().Actions[2].onClick.Invoke();Settle();yield return null;
             Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.Settings));Assert.That(board.CanAcceptPointerInput,Is.False);
             var settings=router.Viewport.GetComponentInChildren<ProductionSettingsView>();
@@ -229,6 +233,7 @@ namespace LegendsOfRus.Tests.PlayMode
             foreach(var button in v.Actions)
             {
                 Rect rect=Bounds((RectTransform)button.transform,camera);
+                Assert.That(rect.height,Is.GreaterThanOrEqualTo(44),button.name+" touch height at small portrait size");
                 Assert.That(safeArea.Contains(rect.min)&&safeArea.Contains(rect.max),Is.True,button.name+" outside safe area");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
                 Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));
@@ -248,6 +253,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 if(label.enabled)
                 {
                     var rect=Bounds(label.rectTransform,camera);
+                    Assert.That(label.fontSize*rect.height/label.rectTransform.rect.height,Is.GreaterThanOrEqualTo(11.8f),label.name+" rendered font at small portrait size");
                     Assert.That(panel.Contains(rect.min)&&panel.Contains(rect.max),Is.True,label.name+" must stay inside the panel at its actual transform scale.");
                     foreach(var goal in v.Goals)if(goal.Root.gameObject.activeSelf)
                         Assert.That(rect.Overlaps(Bounds(goal.Icon.rectTransform,camera))||rect.Overlaps(Bounds(goal.Count.rectTransform,camera)),Is.False,label.name+" must clear the live goals.");

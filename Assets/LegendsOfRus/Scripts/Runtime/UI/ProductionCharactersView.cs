@@ -10,13 +10,17 @@ namespace LegendsOfRus
 
     public sealed class ProductionCharactersView : MonoBehaviour
     {
-        public const int CurrentRevision = 12;
+        public const int CurrentRevision = 16;
         public int Revision = CurrentRevision;
         public RectTransform Content, Body, Hud, OuterFrame;
         public RectTransform CollectionViewport, CollectionContent;
         public ScrollRect CollectionScroll;
         public Image Environment, Title, DetailArt;
         public Font BodyFont, TitleFont;
+        public ProductionPlayerHeader Header;
+        public Sprite TitleRu, UpgradeRu, SelectRu;
+        public Sprite[] TabSourceRu, TabAlternateRu, NavRu;
+        public Image[] NavCaptions;
         public Text Heading, HeroName, LevelText, GoldText, GemsText, EnergyText;
         public Text CharacterName, Availability, Rarity, Description, SkillHeading, BonusNote;
         public Text UpgradeLabel, SelectLabel, CollectionLabel, InfoHeading, InfoDescription, CloseInfoLabel;
@@ -39,7 +43,7 @@ namespace LegendsOfRus
         public static readonly string[] NamesEn = { "Ivan", "Masha", "Firebird", "Vasilisa", "Dobrynya", "Baba Yaga", "Ilya Muromets", "Koschei" };
         // Visual rarity groups from the source concept, not ownership or upgrade levels.
         public static bool IsLegendary(int id) => id == 0 || id >= 4;
-        public bool HasRequiredBindings => Revision == CurrentRevision && Content && Body && Hud && OuterFrame && CollectionViewport && CollectionContent && CollectionScroll &&
+        public bool HasRequiredBindings => Revision == CurrentRevision && TitleRu && UpgradeRu && SelectRu && Valid(TabSourceRu,3) && Valid(TabAlternateRu,3) && Valid(NavRu,4) && Valid(NavCaptions,4) && Header && Header.HasBindings && Content && Body && Hud && OuterFrame && CollectionViewport && CollectionContent && CollectionScroll &&
             Environment && Environment.sprite && Title && DetailArt && BodyFont && TitleFont && Heading &&
             HeroName && LevelText && GoldText && GemsText && EnergyText && CharacterName && Availability &&
             Rarity && Description && SkillHeading && BonusNote && UpgradeLabel && SelectLabel && CollectionLabel &&
@@ -111,7 +115,11 @@ namespace LegendsOfRus
         {
             if(!HasRequiredBindings) return;
             language=DemoFeatureState.LanguageCode;bool en=language=="en";
-            foreach(var text in GetComponentsInChildren<Text>(true)){text.font=BodyFont;text.fontStyle=FontStyle.Normal;}Heading.font=TitleFont;
+            foreach(var text in GetComponentsInChildren<Text>(true)){if(text.transform.IsChildOf(Hud))continue;text.font=BodyFont;text.fontStyle=FontStyle.Normal;}Heading.font=TitleFont;
+            Title.sprite=en?ProductionCharactersRuntime.Load("title_r4"):TitleRu;Heading.enabled=en;
+            UpgradeButton.image.sprite=en?ProductionCharactersRuntime.Load("upgrade_r4"):UpgradeRu;
+            SelectButton.image.sprite=en?ProductionCharactersRuntime.Load("select_r4"):SelectRu;
+            UpgradeLabel.enabled=SelectLabel.enabled=en;
             Heading.text=en?"CHARACTERS":"ПЕРСОНАЖИ";HeroName.text=en?"Ivan":"Иван";
             CharacterName.text=en?NamesEn[SelectedHero]:NamesRu[SelectedHero];
             Availability.text=en?"PREVIEW":"ПРИМЕР";
@@ -123,9 +131,13 @@ namespace LegendsOfRus
             for(int i=0;i<4;i++) { StatLabels[i].text=stats[i];StatValues[i].text="—"; }
             SkillHeading.text=en?"ABILITIES · PREVIEW":"УМЕНИЯ · ПРИМЕР";BonusHeading.text=en?"TEAM BONUS":"БОНУС КОМАНДЫ";BonusNote.text=en?"Not available yet":"Пока недоступно";
             UpgradeLabel.text=en?"UPGRADE":"УЛУЧШИТЬ";SelectLabel.text=SelectedHero==0?(en?"CURRENT":"ТЕКУЩИЙ"):(en?"UNAVAILABLE":"НЕДОСТУПНО");UpgradeButton.interactable=SelectButton.interactable=false;
+            UpgradeButton.targetGraphic.color=SelectButton.targetGraphic.color=new Color(.62f,.62f,.62f,1);
+            UpgradeLabel.color=SelectLabel.color=new Color32(151,128,85,255);
             CollectionLabel.text=en?"COLLECTION PREVIEW · INFO":"ПРИМЕРЫ ГЕРОЕВ · ПОДРОБНЕЕ";
             string[] tabs=en?new[]{"ALL","RARE","LEGENDARY"}:new[]{"ВСЕ","РЕДКИЕ","ЛЕГЕНДАРНЫЕ"};
-            for(int i=0;i<3;i++) { TabLabels[i].text=tabs[i];Tabs[i].image.sprite=ProductionCharactersRuntime.Shared(i==(int)Filter?"tab_active":"tab"); }
+            for(int i=0;i<3;i++) { TabLabels[i].text=tabs[i];bool sourceState=(i==0)==(i==(int)Filter);TabLabels[i].enabled=en;
+                Tabs[i].image.type=en?Image.Type.Sliced:Image.Type.Simple;
+                Tabs[i].image.sprite=en?ProductionCharactersRuntime.Shared(i==(int)Filter?"tab_active":"tab"):(sourceState?TabSourceRu[i]:TabAlternateRu[i]); }
             int slot=0;
             for(int i=0;i<8;i++) {
                 bool visible=Includes(i);Cards[i].gameObject.SetActive(visible);if(!visible)continue;
@@ -138,12 +150,7 @@ namespace LegendsOfRus
                 for(int j=0;j<5;j++)CardStars[i*5+j].gameObject.SetActive(j<(IsLegendary(i)?5:4));
             }
             for(int i=0;i<4;i++) { FutureCards[i].SetActive(Filter==HeroPreviewFilter.All);FutureLabels[i].text=en?"COMING LATER":"СКОРО"; }
-            int rows=Mathf.CeilToInt(slot/4f)+(Filter==HeroPreviewFilter.All?1:0);
-            float contentHeight=Mathf.Max(CollectionViewport.rect.height,10+rows*244);
-            CollectionContent.sizeDelta=new Vector2(905,contentHeight);
-            var scrollPosition=CollectionContent.anchoredPosition;
-            scrollPosition.y=Mathf.Clamp(scrollPosition.y,0,contentHeight-CollectionViewport.rect.height);
-            CollectionContent.anchoredPosition=scrollPosition;
+            UpdateCollectionExtent();
             DetailArt.sprite=SelectedHero==0?ProductionCharactersRuntime.Load("hero_firebird_r7"):ProductionCharactersRuntime.Load("portrait_"+SelectedHero);
             float viewportHeight=((RectTransform)DetailArt.transform.parent).rect.height;
             if(SelectedHero==0) {
@@ -159,14 +166,23 @@ namespace LegendsOfRus
                 float drawnHeight=spriteSize.y*Mathf.Min(299/spriteSize.x,290/spriteSize.y);
                 DetailArt.rectTransform.anchoredPosition=new Vector2(56,-(viewportHeight+22-(290+drawnHeight)*.5f));
             }
-            string[] nav=en?new[]{"WORLD MAP","SHOP","EVENTS","TEAM"}:new[]{"КАРТА МИРА","МАГАЗИН","СОБЫТИЯ","ГИЛЬДИЯ"};for(int i=0;i<4;i++)NavLabels[i].text=nav[i];
+            string[] nav=en?new[]{"WORLD MAP","SHOP","EVENTS","TEAM"}:new[]{"КАРТА МИРА","МАГАЗИН","СОБЫТИЯ","ГИЛЬДИЯ"};for(int i=0;i<4;i++){NavLabels[i].text=nav[i];NavLabels[i].enabled=en;NavCaptions[i].sprite=en?ProductionCharactersRuntime.Load("nav_caption_r8"):NavRu[i];}
             RefreshInfo();RefreshState();
+        }
+        public void UpdateCollectionExtent()
+        {
+            if(!CollectionViewport||!CollectionContent||Cards==null)return;
+            int visible=0;foreach(var card in Cards)if(card&&card.gameObject.activeSelf)visible++;
+            int rows=Mathf.CeilToInt(visible/4f)+(Filter==HeroPreviewFilter.All?1:0);
+            float height=Mathf.Max(CollectionViewport.rect.height,10+rows*244);
+            CollectionContent.sizeDelta=new Vector2(905,height);
+            var position=CollectionContent.anchoredPosition;
+            position.y=Mathf.Clamp(position.y,0,height-CollectionViewport.rect.height);
+            CollectionContent.anchoredPosition=position;
         }
         public void RefreshState()
         {
-            if(!HasRequiredBindings)return;var save=GameState.Instance!=null?GameState.Instance.Save:null;
-            LevelText.text=(DemoFeatureState.LanguageCode=="en"?"Level ":"Уровень ")+(save==null?"—":save.level.ToString());
-            GoldText.text=save==null?"—":ProductionProfileView.Number(save.gold);GemsText.text=save==null?"—":ProductionProfileView.Number(save.gems);EnergyText.text=save==null?"—":save.energy+"/"+save.energyMax;
+            if(!HasRequiredBindings)return;Header.RefreshValues();
         }
     }
 }

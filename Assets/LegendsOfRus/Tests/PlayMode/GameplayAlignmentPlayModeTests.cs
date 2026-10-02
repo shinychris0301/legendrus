@@ -72,6 +72,126 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator ExactLargeStocksFitTheirOwnCardWellInBothLanguages()
+        {
+            var view=Root().GetComponentInChildren<ProductionGameplayView>();
+            string board=view.Board.BoardStateHash;
+            var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;
+            foreach(string language in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(language);yield return null;yield return null;
+                foreach(string quantity in new[]{"0","999","1 000","9 999","999 999","2 147 483 647"})
+                {
+                    foreach(var count in view.BoosterCounts){count.text=quantity;count.GetComponent<ProductionGameplayStockLayout>().ApplyNow();}
+                    if(language=="ru"&&(quantity=="9 999"||quantity=="2 147 483 647"))
+                    {
+                        try
+                        {
+                            foreach(var count in view.BoosterCounts)
+                            {
+                                var stock=count.GetComponent<ProductionGameplayStockLayout>();stock.enabled=false;
+                                stock.Badge.enabled=true;stock.WideBacking.enabled=false;
+                                ProductionPreLevelBadge.AlignCount(count,stock.Badge.rectTransform);
+                                count.horizontalOverflow=HorizontalWrapMode.Overflow;count.resizeTextMinSize=12;
+                                count.GetComponent<ProductionGameplayNumberFit>().enabled=true;
+                            }
+                            string control="Stock_PreviousCircular_"+quantity.Replace(" ","");
+                            Capture(control,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                            {
+                                var rows=new List<CoreCaptionAssertions.Row>();foreach(var count in view.BoosterCounts)rows.Add(CoreCaptionAssertions.Check(count,camera,0));
+                                CoreCaptionAssertions.Save(control,rows);
+                            });
+                        }
+                        finally
+                        {
+                            foreach(var count in view.BoosterCounts){var stock=count.GetComponent<ProductionGameplayStockLayout>();stock.enabled=true;stock.ApplyNow();}
+                        }
+                    }
+                    foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
+                    {
+                        Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
+                        string name="Stock_"+quantity.Replace(" ","")+"_"+language+"_"+size.x;
+                        Capture(name,size,safe,camera=>
+                        {
+                            var rows=new List<CoreCaptionAssertions.Row>();
+                            for(int i=0;i<4;i++)
+                            {
+                                var count=view.BoosterCounts[i];var stock=count.GetComponent<ProductionGameplayStockLayout>();
+                                Assert.That(count.text,Is.EqualTo(quantity));
+                                var row=CoreCaptionAssertions.Check(count,camera,quantity.Length>3?8f:4f);
+                                Assert.That(row.lines,Is.EqualTo(1));rows.Add(row);
+                                if(quantity.Length>3)
+                                {
+                                    Assert.That(row.glyphBounds.height,Is.GreaterThanOrEqualTo(7.5f),"Measure actual ink after numeric mesh fitting, not only nominal font size");
+                                    Rect face=Bounds(stock.WideBacking.rectTransform,camera);
+                                    Rect card=Bounds(stock.Badge.transform.parent.GetComponent<RectTransform>(),camera);
+                                    CoreCaptionAssertions.Inside(face,card,"Full stock stays on its own wooden card");
+                                    CoreCaptionAssertions.Inside(row.glyphBounds,face,"All exact stock ink stays on its face");
+                                    Assert.That(face.Overlaps(Bounds(view.BoosterButtons[i].GetComponent<RectTransform>(),camera)),Is.False,"Full stock must not cover its booster icon");
+                                    Assert.That(face.Overlaps(Bounds(view.Footer.Find("BoosterCard_"+i+"/CaptionBacking").GetComponent<RectTransform>(),camera)),Is.False);
+                                }
+                            }
+                            CoreCaptionAssertions.Save(name,rows);
+                        });
+                    }
+                }
+            }
+            Assert.That(view.Board.BoardStateHash,Is.EqualTo(board));
+            var after=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));after.lastEnergyUtcTicks=0;
+            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(save)));
+        }
+
+        [UnityTest]
+        public IEnumerator StockCrossingOneThousandUsesNativeInputAndExistingConsumption()
+        {
+            var view=Root().GetComponentInChildren<ProductionGameplayView>();var state=GameState.Instance;
+            state.Save.boosterSeaPearl=1000;view.RefreshContent();yield return null;
+            var stock=view.BoosterCounts[3].GetComponent<ProductionGameplayStockLayout>();
+            Assert.That(view.BoosterCounts[3].text,Is.EqualTo("1 000"));Assert.That(stock.WideBacking.enabled,Is.True);
+            GameObject target=null;string board=view.Board.BoardStateHash;int moves=view.Board.Moves;
+            Capture("Stock_NativeInput_1000",new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+            {
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=Bounds(stock.WideBacking.rectTransform,camera).center},hits);
+                Assert.That(hits,Is.Not.Empty);Assert.That(hits[0].gameObject.GetComponent<ProductionGameplayBoosterCard>().Target,Is.SameAs(view.BoosterButtons[3]));target=hits[0].gameObject;
+            });
+            CoreOutcomeTouchAssertions.Click(target);
+            Assert.That(view.Board.HasActiveCommand,Is.True,"Sea Pearl starts immediately without target arming");
+            CoreOutcomeTouchAssertions.Click(target);
+            float until=Time.realtimeSinceStartup+12;while(view.Board.HasActiveCommand&&Time.realtimeSinceStartup<until)yield return null;
+            Assert.That(view.Board.HasActiveCommand,Is.False);Assert.That(view.Board.Moves,Is.EqualTo(moves+5));
+            Assert.That(state.Save.boosterSeaPearl,Is.EqualTo(999));Assert.That(view.BoosterCounts[3].text,Is.EqualTo("999"));
+            Assert.That(view.Board.BoardStateHash,Is.EqualTo(board),"Sea Pearl adds moves without changing gem contents");
+            Assert.That(stock.Badge.enabled,Is.True);Assert.That(stock.WideBacking.enabled,Is.False);
+            Capture("Stock_NativeInput_999",new Vector2Int(360,640),new Rect(0,20,360,600));
+        }
+
+        [UnityTest]
+        public IEnumerator SmallPortraitPausePaddingAndFourDigitStockPreserveTheRound()
+        {
+            var v=Root().GetComponentInChildren<ProductionGameplayView>();string board=v.Board.BoardStateHash;
+            var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;
+            GameObject tap=null;
+            foreach(var lang in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+                foreach(var count in v.BoosterCounts){count.text="9 999";count.GetComponent<ProductionGameplayStockLayout>().ApplyNow();}
+                Capture("Gameplay_TouchAndStock_360_"+lang,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                {
+                    tap=CoreOutcomeTouchAssertions.Check(v.PauseButton,camera,new Rect(0,20,360,600),"Gameplay","360");
+                    foreach(var count in v.BoosterCounts)
+                    {
+                        Assert.That(count.cachedTextGenerator.lineCount,Is.EqualTo(1));Assert.That(count.cachedTextGenerator.characterCountVisible,Is.GreaterThanOrEqualTo(count.text.Length));
+                        var mesh=count.canvasRenderer.GetMesh();foreach(var vertex in mesh.vertices){Assert.That(vertex.x,Is.InRange(count.rectTransform.rect.xMin-.1f,count.rectTransform.rect.xMax+.1f));Assert.That(vertex.y,Is.InRange(count.rectTransform.rect.yMin-.1f,count.rectTransform.rect.yMax+.1f));}
+                    }
+                });
+                Capture("Gameplay_TouchAndStock_1080_"+lang,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>CoreOutcomeTouchAssertions.Check(v.PauseButton,camera,new Rect(45,100,990,2160),"Gameplay","1080"));
+            }
+            CoreOutcomeTouchAssertions.Click(tap);Settle();yield return null;yield return null;
+            Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.Pause));Assert.That(v.Board.Phase,Is.EqualTo(GameplayPhase.Paused));Assert.That(v.Board.BoardStateHash,Is.EqualTo(board));
+            var after=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));after.lastEnergyUtcTicks=0;Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(save)));
+        }
+
+        [UnityTest]
         public IEnumerator PortraitLowerBandDoesNotDarkenExposedScenery()
         {
             var header=Root().GetComponentInChildren<ProductionGameplayView>().Hud.Find("JoinedHeaderBacking").GetComponent<Image>();
@@ -208,20 +328,20 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Idle));Assert.That(view.Board,Is.SameAs(board));Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(view.ActionsBound,Is.True);
         }
 
-        [UnityTest]
+        [UnityTest,Timeout(600000)]
         public IEnumerator AuthoredGoalsObstaclesAndFeathersUseTheirActualState()
         {
-            GameState.Instance.Save.highestUnlockedLevel=10;
+            GameState.Instance.Save.highestUnlockedLevel=ChapterLevelCatalog.LoadChapter1().levels.Length;
             foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
             {
-                GameState.Instance.SelectLevel(1,level.levelId);router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;yield return WaitForNormalButtonColors();
+                GameState.Instance.SelectLevel(1,level.levelId);Assert.That(GameState.Instance.Save.selectedLevel,Is.EqualTo(level.levelId));router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;yield return WaitForNormalButtonColors();
                 var view=Root().GetComponentInChildren<ProductionGameplayView>();var board=view.Board;
                 Assert.That(Array.TrueForAll(view.Stars,star=>star.Dimmed),Is.True,"No score stars are lit before earning points.");
                 Assert.That(board.Score,Is.Zero,"Every authored round starts at zero earned points.");
                 Assert.That(view.ScoreValue.text.Replace(" ",""),Is.EqualTo("0"));
                 Assert.That(view.HeroName.gameObject.activeSelf,Is.False);
                 Assert.That(board.ColumnCount,Is.EqualTo(8));Assert.That(board.RowCount,Is.EqualTo(7));
-                Assert.That(board.GoalCount,Is.EqualTo(level.levelId<6?2:3));
+                Assert.That(board.GoalCount,Is.EqualTo(level.goals.Length));
                 Assert.That(board.CurrentLevel.levelId,Is.EqualTo(level.levelId));Assert.That(view.LevelText.text,Is.EqualTo("УРОВЕНЬ "+level.levelId));
                 for(int i=0;i<level.goals.Length;i++)
                 {
@@ -238,9 +358,9 @@ namespace LegendsOfRus.Tests.PlayMode
                 {
                     var pos=new BoardPosition(x,y);var cell=board.GetCellInputForTesting(x,y);var obstacle=model.GetObstacle(pos);
                     var graphic=cell.transform.Find("CellContent/Obstacle").GetComponent<Image>();
-                    Assert.That(graphic.enabled,Is.EqualTo(!obstacle.IsEmpty));if(!obstacle.IsEmpty)Assert.That(graphic.sprite,Is.SameAs(ProductionGameplayArt.Obstacle(obstacle.Kind,obstacle.Layers)));
-                    var count=cell.transform.Find("CellContent/ObstacleLayers").GetComponent<Text>();Assert.That(count.enabled,Is.EqualTo(!obstacle.IsEmpty&&obstacle.Layers>1));
-                    if(count.enabled)Assert.That(count.text,Is.EqualTo(obstacle.Layers.ToString()));
+                    Assert.That(graphic.enabled,Is.EqualTo(!obstacle.IsEmpty));if(!obstacle.IsEmpty)Assert.That(graphic.sprite,Is.SameAs(PrototypeObstacleArt.Load(obstacle.Kind,obstacle.Layers)));
+                    Assert.That(cell.transform.Find("CellContent/ObstacleLayers"),Is.Null,"Approved obstacle stages use damaged artwork, not numbers.");
+                    if(obstacle.Layers>1)Assert.That(PrototypeObstacleArt.Load(obstacle.Kind,1),Is.Not.SameAs(graphic.sprite),"Final-stage art must differ from intact art.");
                     var gem=cell.transform.Find("CellContent/GemVisual/Gem").GetComponent<Image>();
                     Assert.That(cell.transform.Find("CellContent/GemVisual/SpecialMatchColor"),Is.Null);
                     if(model.GetObjectiveItem(pos)!=BoardObjectiveItemKind.None){Assert.That(gem.enabled,Is.True);Assert.That(gem.sprite,Is.SameAs(ProductionGameplayArt.Load("feather")));}
@@ -249,7 +369,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 if(level.levelId==4||level.levelId==6||level.levelId==8||level.levelId==9||level.levelId==10)Capture("Gameplay_Level"+level.levelId.ToString("00")+"_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             }
             var finalView=Root().GetComponentInChildren<ProductionGameplayView>();DemoFeatureState.SetLanguage("en");yield return null;yield return null;
-            Capture("Gameplay_Level10_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            Capture("Gameplay_LastInstalledLevel_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
         }
 
         [UnityTest]
@@ -270,7 +390,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 var root=board.GetCellInputForTesting(x,y).transform.Find("CellContent/GemVisual");
                 Assert.That(root.Find("SpecialMatchColor"),Is.Null);
                 var special=root.Find("Special").GetComponent<Image>();
-                Assert.That(special.enabled,Is.True);Assert.That(special.sprite,Is.SameAs(ProductionGameplayArt.LineSpecial(x)));
+                Assert.That(special.enabled,Is.True);Assert.That(special.sprite,Is.SameAs(PrototypeBoardArt.Load("line")));
                 Assert.That(Mathf.DeltaAngle(special.rectTransform.localEulerAngles.z,y==1?0:90),Is.EqualTo(0).Within(.001));
                 Assert.That(root.Find("Gem").GetComponent<Image>().enabled,Is.False);
             }
@@ -533,6 +653,34 @@ namespace LegendsOfRus.Tests.PlayMode
             ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerUpHandler);
             ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerClickHandler);
         }
+        [UnityTest] public IEnumerator LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput()
+        {
+            GameState.Instance.SelectLevel(1,8);router.Show(ScreenId.Gameplay);Settle();yield return null;
+            var view=Root().GetComponentInChildren<ProductionGameplayView>();var originalButtons=(Button[])view.BoosterButtons.Clone();
+            string board=view.Board.BoardStateHash;var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;string before=JsonUtility.ToJson(save);GameObject target=null;
+            foreach(var language in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(language);view.RefreshContent();yield return null;yield return null;
+                foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
+                {
+                    Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
+                    Capture("CaptionNames_"+language+"_"+size.x,size,safe,camera=>
+                    {
+                        var rows=new List<CoreCaptionAssertions.Row>();
+                        for(int i=0;i<4;i++)rows.Add(CoreCaptionAssertions.Check(view.Footer.Find("BoosterCard_"+i+"/BoosterLabel").GetComponent<Text>(),camera,8.1f));
+                        var caption=view.Footer.Find("BoosterCard_2/CaptionBacking").GetComponent<ProductionHomePanel>();
+                        Rect rect=CoreCaptionAssertions.Bounds(caption.rectTransform,camera);
+                        var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
+                        Assert.That(hits,Is.Not.Empty);Assert.That(hits[0].gameObject.GetComponentInParent<ProductionGameplayBoosterCard>().Target,Is.SameAs(originalButtons[2]));target=hits[0].gameObject;
+                        CoreCaptionAssertions.Save("Gameplay_"+language+"_"+size.x,rows);
+                    });
+                }
+            }
+            CoreOutcomeTouchAssertions.Click(target);yield return null;
+            Assert.That(view.Board.ArmedBooster,Is.EqualTo(BoosterType.LivingLight));view.Board.CancelArmedBooster(showToast:false);
+            Assert.That(view.BoosterButtons,Is.EqualTo(originalButtons));Assert.That(view.Board.BoardStateHash,Is.EqualTo(board));
+            save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;Assert.That(JsonUtility.ToJson(save),Is.EqualTo(before));
+        }
         static void VerifyBoosterCards(ProductionGameplayView view,Camera camera,Rect safe)
         {
             for(int i=0;i<view.BoosterButtons.Length;i++)
@@ -543,26 +691,24 @@ namespace LegendsOfRus.Tests.PlayMode
                 AssertInside(cardBounds,safe,card.name+" must fit the safe area.");
                 var label=card.transform.Find("BoosterLabel").GetComponent<Text>();
                 Rect labelBounds=Bounds(label.rectTransform,camera);
-                AssertInside(labelBounds,cardBounds,label.text+" label must remain inside its card.");
+                var caption=card.transform.Find("CaptionBacking").GetComponent<ProductionHomePanel>();
+                Rect captionBounds=Bounds(caption.rectTransform,camera);
+                AssertInside(captionBounds,safe,label.text+" caption must fit the safe area.");
+                AssertInside(labelBounds,captionBounds,label.text+" label must remain inside its native caption face.");
+                Assert.That(captionBounds.Overlaps(cardBounds),Is.False,"Names occupy the existing gap above the unchanged cards.");
+                Assert.That(captionBounds.Overlaps(Bounds(view.BoardArea.Find("BoardFrame").GetComponent<RectTransform>(),camera)),Is.False,"Names must clear the board frame.");
                 Assert.That(label.text,Is.Not.Empty);
-                Assert.That(label.cachedTextGenerator.lineCount,Is.InRange(1,2),label.text);
-                Assert.That(label.preferredWidth,Is.LessThanOrEqualTo(label.rectTransform.rect.width+1),label.text+" must fit without horizontal clipping.");
+                Assert.That(label.cachedTextGenerator.lineCount,Is.InRange(1,3),label.text);
+                Assert.That(label.cachedTextGenerator.characterCountVisible,Is.GreaterThanOrEqualTo(label.text.Replace("\n","").Length),"All name characters must survive wrapping.");
                 Assert.That(label.preferredHeight,Is.LessThanOrEqualTo(label.rectTransform.rect.height+1),label.text+" must fit without vertical truncation.");
+                Assert.That(label.GetComponent<ProductionGameplayCaptionFit>().LastScale,Is.GreaterThanOrEqualTo(.98f),"Larger names must not silently shrink back into the old well.");
                 var textMesh=label.canvasRenderer.GetMesh();
                 Assert.That(textMesh.vertexCount,Is.GreaterThan(0),label.text);
                 var glyphBounds=textMesh.bounds;
                 var a=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.min));
                 var b=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.max));
                 AssertInside(Rect.MinMaxRect(a.x,a.y,b.x,b.y),labelBounds,label.text+" rendered lettering must stay inside its label well.");
-                // Restored inward curls narrow the clear aperture to x40..148, y219..248. Check ink,
-                // against the wooden caption face rather than merely the full card rectangle.
-                var cardRect=card.GetComponent<RectTransform>();
-                Vector3 inkMin=cardRect.InverseTransformPoint(label.rectTransform.TransformPoint(glyphBounds.min));
-                Vector3 inkMax=cardRect.InverseTransformPoint(label.rectTransform.TransformPoint(glyphBounds.max));
-                Assert.That(inkMin.y,Is.GreaterThanOrEqualTo(-248.01f),label.text+" must clear lower gold scrollwork.");
-                Assert.That(inkMax.y,Is.LessThanOrEqualTo(-218.99f),label.text+" must clear upper caption rail.");
-                Assert.That(inkMin.x,Is.GreaterThanOrEqualTo(39.99f),label.text+" must clear left carving.");
-                Assert.That(inkMax.x,Is.LessThanOrEqualTo(148.01f),label.text+" must clear right carving.");
+                AssertInside(Rect.MinMaxRect(a.x,a.y,b.x,b.y),captionBounds,"Actual name ink must remain on its lacquer face.");
                 Rect badge=Bounds(view.BoosterCounts[i].transform.parent.GetComponent<RectTransform>(),camera);
                 AssertInside(badge,cardBounds,card.name+" stock badge must remain inside its card.");
                 Assert.That(badge.Overlaps(labelBounds),Is.False,card.name+" stock badge must not cover the live label.");
@@ -631,6 +777,17 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(board.width/board.height,Is.EqualTo(808f/748).Within(.001f),"The 8×7 board uses slightly taller cells to match the reference proportions.");
             Assert.That(board.xMin,Is.GreaterThanOrEqualTo(safe.xMin-1));Assert.That(board.xMax,Is.LessThanOrEqualTo(safe.xMax+1));
             Assert.That(board.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1));Assert.That(board.yMax,Is.LessThanOrEqualTo(safe.yMax+1));
+            Assert.That(view.GoalProgress.sprite,Is.Null);Assert.That(view.StarProgress.sprite,Is.Null);
+            Assert.That(view.GoalProgress.gameObject.activeSelf,Is.False);Assert.That(view.StarProgress.gameObject.activeSelf,Is.False);
+            float expectedGoalProgress=0;
+            for(int i=0;i<view.Board.GoalCount;i++)
+            {
+                var goal=view.Board.GetGoalSlot(i);
+                expectedGoalProgress+=1-Mathf.Clamp01(goal.Remaining/(float)goal.Target);
+            }
+            Assert.That(view.GoalProgress.fillAmount,Is.EqualTo(expectedGoalProgress/view.Board.GoalCount).Within(.0001f));
+            var targetScore=view.Board.CurrentLevel.starScoreThresholds[2];
+            Assert.That(view.StarProgress.fillAmount,Is.EqualTo(Mathf.Clamp01(view.Board.Score/(float)targetScore)).Within(.0001f));
             Assert.That(view.ScoreMeter.Fraction,Is.EqualTo(view.StarProgress.fillAmount).Within(.0001f));
             Assert.That(view.ScoreMeter.canvasRenderer.GetMesh().vertexCount,Is.GreaterThanOrEqualTo(18));
             VerifyBoosterCards(view,camera,safe);
@@ -692,7 +849,15 @@ namespace LegendsOfRus.Tests.PlayMode
             }
             Assert.That(cellInputs.Count,Is.EqualTo(56));
             foreach(var star in view.Stars)Assert.That(star.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
-            foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())Assert.That(badge.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(100));
+            foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())
+            {
+                if(badge.enabled)Assert.That(badge.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(100));
+                else
+                {
+                    var stock=badge.GetComponentInChildren<ProductionGameplayStockLayout>();Assert.That(stock,Is.Not.Null);
+                    Assert.That(stock.WideBacking.enabled,Is.True);Assert.That(stock.WideBacking.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
+                }
+            }
             var layout=view.GetComponent<ProductionGameplayLayout>();Vector2 old=view.BoardArea.anchoredPosition;layout.ApplyNow();Canvas.ForceUpdateCanvases();Assert.That(Vector2.Distance(old,view.BoardArea.anchoredPosition),Is.LessThan(.01f));
         }
     }

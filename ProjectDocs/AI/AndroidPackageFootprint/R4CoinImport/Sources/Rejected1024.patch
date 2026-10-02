@@ -1,0 +1,23 @@
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -247,7 +247,8 @@
+             ti.SetTextureSettings(settings);
+             var android = ti.GetPlatformTextureSettings("Android");
+             android.overridden = true;
+-            android.maxTextureSize = maxSize;
++            // Keep the source/default import; limit only the shared coin on Android.
++            android.maxTextureSize = name == "coin_icon" ? 1024 : maxSize;
+             android.format = hasAlpha ? TextureImporterFormat.RGBA32 : TextureImporterFormat.RGB24;
+             android.textureCompression = TextureImporterCompression.Uncompressed;
+             ti.SetPlatformTextureSettings(android);
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/coin_icon.png.meta
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/HomeAligned/coin_icon.png.meta
+@@ -95,7 +95,7 @@
+     forceMaximumCompressionQuality_BC6H_BC7: 0
+   - serializedVersion: 4
+     buildTarget: Android
+-    maxTextureSize: 4096
++    maxTextureSize: 1024
+     resizeAlgorithm: 0
+     textureFormat: 4
+     textureCompression: 0

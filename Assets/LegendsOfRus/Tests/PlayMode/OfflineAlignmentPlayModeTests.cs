@@ -50,6 +50,56 @@ namespace LegendsOfRus.Tests.PlayMode
  router.Show(ScreenId.OfflineState);Settle();yield return null;View().SettingsButton.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Settings));
  for(int i=0;i<3;i++){router.Show(ScreenId.OfflineState);Settle();yield return null;View().PlusButtons[i].onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(i==2?ScreenId.OutOfEnergy:ScreenId.Shop));}
  }
+ [UnityTest] public IEnumerator SharedHeaderLetteringAndPressFeedbackFollowState(){
+ var v=View();v.Bind(router.NavigateBack,()=>NetworkReachability.NotReachable);yield return WaitForNormalButtonColors();
+ var home=Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>();
+ Assert.That(v.Header.Backing.sprite,Is.SameAs(home.Header.Backing.sprite));Assert.That(v.Header.Avatar.sprite,Is.SameAs(home.Header.Avatar.sprite));
+ Assert.That(v.Panel.sprite,Is.SameAs(ProductionOfflineRuntime.Load("panel_ru_r3")));Assert.That(v.Heading.enabled,Is.False);Assert.That(v.RetryLabel.enabled,Is.False);
+ foreach(var button in new[]{v.Retry,v.Back}){
+ var feedback=button.GetComponent<ProductionMapButtonFeedback>();Assert.That(feedback,Is.Not.Null);
+ var data=new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left,pointerId=23};
+ Color original=button.targetGraphic.canvasRenderer.GetColor();ExecuteEvents.Execute(button.gameObject,data,ExecuteEvents.pointerDownHandler);
+ Assert.That(feedback.IsPressed,Is.True);Assert.That(button.targetGraphic.canvasRenderer.GetColor().r,Is.LessThan(original.r));Assert.That(v.CheckCount,Is.Zero);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.OfflineState));
+ ExecuteEvents.Execute(button.gameObject,data,ExecuteEvents.pointerExitHandler);yield return WaitForNormalButtonColors();Assert.That(feedback.IsPressed,Is.False);
+ }
+ DemoFeatureState.SetLanguage("en");v.Refresh();Assert.That(v.Heading.enabled,Is.True);Assert.That(v.RetryLabel.enabled,Is.True);Assert.That(((Image)v.Retry.targetGraphic).sprite,Is.SameAs(ProductionOfflineRuntime.Load("retry")));
+ DemoFeatureState.SetLanguage("ru");v.Bind(router.NavigateBack,()=>NetworkReachability.ReachableViaLocalAreaNetwork);Assert.That(v.Heading.enabled,Is.True);Assert.That(v.Panel.sprite,Is.SameAs(ProductionOfflineRuntime.Load("panel")));Assert.That(v.Heading.text,Is.EqualTo("ПРОВЕРЬТЕ СЕТЬ"));
+ }
+ [UnityTest] public IEnumerator NativeRetryRelocalizationAndHomePreserveSave(){
+ string save=StableSave();
+ foreach(string language in new[]{"ru","en"}){
+ router.Show(ScreenId.Home);Settle();DemoFeatureState.SetLanguage(language);router.Show(ScreenId.OfflineState);Settle();yield return null;
+ var v=View();var reach=NetworkReachability.NotReachable;int probes=0;
+ v.Bind(router.NavigateBack,()=>{probes++;return reach;});int generation=router.RouteGeneration;
+ yield return WaitForNormalButtonColors();
+ Capture("Offline_NativeRetry_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>Click(v.Retry,camera));
+ Assert.That(v.CheckCount,Is.EqualTo(1));Assert.That(probes,Is.EqualTo(2));Assert.That(v.NetworkAvailable,Is.False);
+ reach=NetworkReachability.ReachableViaLocalAreaNetwork;yield return null;
+ Capture("Offline_TallDisconnected_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>Click(v.Retry,camera));
+ Assert.That(v.NetworkAvailable,Is.True);Assert.That(v.CheckCount,Is.EqualTo(2));Assert.That(probes,Is.EqualTo(3));
+ Assert.That(v.Description.text,Does.Contain(language=="ru"?"не подтверждён":"not confirmed"));
+ Assert.That(router.RouteGeneration,Is.EqualTo(generation));reach=NetworkReachability.NotReachable;yield return null;
+ Capture("Offline_NativeConnected_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>Click(v.Retry,camera));
+ Assert.That(v.NetworkAvailable,Is.False);Assert.That(v.CheckCount,Is.EqualTo(3));Assert.That(probes,Is.EqualTo(4));
+ DemoFeatureState.SetLanguage(language=="ru"?"en":"ru");v.Refresh();yield return null;
+ Capture("Offline_RelocalizedReturn_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>{Click(v.Back,camera);v.Back.onClick.Invoke();});
+ Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));Assert.That(StableSave(),Is.EqualTo(save));
+ }
+ }
+ [UnityTest] public IEnumerator NativeHeaderTargetsRouteToCorrectDestinations(){
+ string save=StableSave();
+ for(int i=0;i<5;i++){
+ router.Show(ScreenId.OfflineState);Settle();yield return null;yield return WaitForNormalButtonColors();var v=View();
+ Capture("Offline_HeaderTarget_"+i,new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>{
+ var b=i<3?v.PlusButtons[i]:(i==3?v.ProfileButton:v.SettingsButton);Rect art=Bounds(b.image.rectTransform,camera);Click(b,camera,i<3?new Vector2(art.xMin-2,art.center.y):art.center);});
+ Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(i<2?ScreenId.Shop:i==2?ScreenId.OutOfEnergy:i==3?ScreenId.Profile:ScreenId.Settings));
+ if(i<2)Assert.That(router.Viewport.GetComponentInChildren<ProductionShopView>().SelectedCategory,Is.EqualTo(i==0?"coins":"gems"));
+ Assert.That(StableSave(),Is.EqualTo(save));
+ }
+ }
+ static void Click(Button button,Camera camera){Click(button,camera,Bounds(button.image.rectTransform,camera).center);}
+ static void Click(Button button,Camera camera,Vector2 point){var data=new PointerEventData(EventSystem.current){position=point,button=PointerEventData.InputButton.Left};var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(data,hits);Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button));ExecuteEvents.Execute(button.gameObject,data,ExecuteEvents.pointerClickHandler);}
+ static Rect Target(Button button,Camera camera){Rect art=Bounds(button.image.rectTransform,camera);float scale=art.width/button.image.rectTransform.rect.width;Vector4 p=button.image.raycastPadding;return Rect.MinMaxRect(art.xMin+p.x*scale,art.yMin+p.y*scale,art.xMax-p.z*scale,art.yMax-p.w*scale);}
         IEnumerator WaitForNormalButtonColors()
         {
             float deadline=Time.realtimeSinceStartup+2f;
@@ -60,7 +110,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 bool ready=true;
                 foreach(Button button in Root().GetComponentsInChildren<Button>())
                 {
-                    Color expected=(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
+                    Color expected=button.transition==Selectable.Transition.None?Color.white:(button.IsInteractable()?button.colors.normalColor:button.colors.disabledColor)*button.colors.colorMultiplier;
                     Color actual=button.targetGraphic.canvasRenderer.GetColor();
                     if(Mathf.Max(Mathf.Abs(actual.r-expected.r),Mathf.Abs(actual.g-expected.g),
                         Mathf.Abs(actual.b-expected.b),Mathf.Abs(actual.a-expected.a))>.0001f)ready=false;
@@ -112,8 +162,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 // Rebuild glyph snapping after the capture camera's responsive layout has settled.
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionOfflineView>(),camera,size,safeArea);
-                inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
                 string output = Path.Combine(directory,name);
@@ -125,6 +173,8 @@ namespace LegendsOfRus.Tests.PlayMode
                     language = DemoFeatureState.LanguageCode, width = size.x, height = size.y, safeArea = safeArea,
                     buttonCount = Root().GetComponentsInChildren<Button>(true).Length
                 },true) + "\n");
+                VerifyLayoutAndInput(View(),camera,size,safeArea);
+                inspect?.Invoke(camera);
             }
             finally
             {
@@ -144,10 +194,20 @@ namespace LegendsOfRus.Tests.PlayMode
         static void VerifyLayoutAndInput(ProductionOfflineView v,Camera camera,Vector2Int size,Rect safeArea)
         {
             Assert.That(v.HasRequiredBindings,Is.True);Rect bg=Bounds(v.Environment.rectTransform,camera);Assert.That(bg.xMin,Is.LessThanOrEqualTo(1));Assert.That(bg.yMin,Is.LessThanOrEqualTo(1));Assert.That(bg.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(bg.yMax,Is.GreaterThanOrEqualTo(size.y-1));
+            Assert.That(Bounds(v.Hud,camera).yMax,Is.EqualTo(safeArea.yMax).Within(1),"Header follows safe top edge");
             foreach(var button in v.GetComponentsInChildren<Button>()){
-                Rect rect=Bounds((RectTransform)button.transform,camera);Assert.That(safeArea.Contains(rect.min)&&safeArea.Contains(rect.max),Is.True,button.name);
+                Rect rect=Bounds((RectTransform)button.transform,camera);Assert.That(rect.xMin>=safeArea.xMin-1&&rect.yMin>=safeArea.yMin-1&&rect.xMax<=safeArea.xMax+1&&rect.yMax<=safeArea.yMax+1,Is.True,button.name);
+                Rect target=Target(button,camera);Assert.That(target.width,Is.GreaterThanOrEqualTo(44),button.name+" target width");Assert.That(target.height,Is.GreaterThanOrEqualTo(44),button.name+" target height");
+                Assert.That(target.xMin>=safeArea.xMin-1&&target.yMin>=safeArea.yMin-1&&target.xMax<=safeArea.xMax+1&&target.yMax<=safeArea.yMax+1,Is.True,button.name+" safe target");
                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);Assert.That(hits.Count,Is.GreaterThan(0));Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" input target");
             }
+            var buttons=v.GetComponentsInChildren<Button>();
+            for(int i=0;i<buttons.Length;i++)for(int j=i+1;j<buttons.Length;j++)Assert.That(Target(buttons[i],camera).Overlaps(Target(buttons[j],camera)),Is.False,buttons[i].name+" overlaps "+buttons[j].name);
+            foreach(var art in new[]{v.Panel,v.Emblem,v.Retry.image,v.Back.image}){
+                Assert.That(art.type,Is.EqualTo(Image.Type.Simple));Assert.That(art.preserveAspect,Is.True);
+                Rect bounds=Bounds(art.rectTransform,camera);Assert.That(bounds.xMin>=safeArea.xMin-1&&bounds.yMin>=safeArea.yMin-1&&bounds.xMax<=safeArea.xMax+1&&bounds.yMax<=safeArea.yMax+1,Is.True,art.name+" complete artwork inside safe area");
+            }
+            Assert.That(v.Description.cachedTextGenerator.characterCountVisible,Is.GreaterThanOrEqualTo(v.Description.text.Replace("\n","").Length),"Full connectivity message must remain visible");
             foreach(var text in v.GetComponentsInChildren<Text>())if(text.enabled&&text.gameObject.activeInHierarchy&&!string.IsNullOrEmpty(text.text))Assert.That(text.cachedTextGenerator.vertexCount,Is.GreaterThan(0),text.name);
         }
     }

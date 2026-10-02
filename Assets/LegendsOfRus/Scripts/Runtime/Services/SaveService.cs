@@ -285,6 +285,11 @@ namespace LegendsOfRus
                 );
             }
 
+            // Unity inline serialization can materialize a null optional class as an
+            // empty object. An absent identity is the explicit cleared-checkpoint sentinel.
+            if (data.retainedRound != null && string.IsNullOrEmpty(data.retainedRound.attemptId))
+                data.retainedRound = null;
+
             bool recovered = journal.Status == SaveJournalLoadStatus.RecoveredBackup;
             return new PlayerSaveLoadResult(
                 recovered

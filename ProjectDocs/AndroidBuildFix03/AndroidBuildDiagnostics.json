@@ -17,7 +17,7 @@
         "milestone": "v1.17-step01",
         "status": "DEVELOPMENT_APK_PREFLIGHT_BLOCKED",
         "intent": "ReleaseApk",
-        "reasonCode": "ANDROID_PRODUCTION_SWITCH_DISABLED",
+        "reasonCode": "ANDROID_COMMERCIAL_BOUNDARY_CHANGED",
         "expectedPolicySourceSha256": "95eec67ffb9ef8e45ad657524cbfcaa3c852258f4de2c7a54dc53ad18f96751c",
         "policyValid": true,
         "exactUnityVersion": true,
@@ -45,7 +45,7 @@
         "scriptingDefinesSafe": true,
         "outputPathValidated": false,
         "outputPathValidationDeferred": true,
-        "commercialBoundaryIntact": true,
+        "commercialBoundaryIntact": false,
         "productionAndroidBuildCompiled": false,
         "productionBuildAuthorized": false
     },
@@ -232,11 +232,12 @@
         }
     ],
     "observations": [
+        "One or more protected-file fingerprints or artifact checks differ from the inherited policy. Export Build Diagnostics; do not update hashes blindly.",
         "Build And Run is outside the existing allowed option set. This export does not reconstruct the previous failed build's flags.",
         "No Addressables content build, Player build, font approval, package approval, signing operation, or settings change was performed."
     ],
-    "lastScheduledOptionsPresent": true,
-    "lastScheduledOptions": "RequestedBits=0x00240001; ActiveFlags=Development, CompressWithLz4, StrictMode; Development=True; AutoRunPlayer=False; DisallowedBits=0x00000000; DisallowedFlags=None.",
+    "lastScheduledOptionsPresent": false,
+    "lastScheduledOptions": "No Android scheduled-options callback observed in this Editor session since Fix04.",
     "installedBuildOptions": [
         {
             "name": "AcceptExternalModificationsToPlayer",

@@ -167,8 +167,6 @@ namespace LegendsOfRus
 
     public static class StoryCatalog
     {
-        const string CatalogResource = "Config/chapter01_story";
-        const string RussianResource = "Localization/story_ru";
 
         static ChapterStoryCatalogData cachedCatalog;
         static StoryLocalizationData cachedRussian;
@@ -177,12 +175,9 @@ namespace LegendsOfRus
         {
             if (forceReload || cachedCatalog == null)
             {
-                TextAsset asset = Resources.Load<TextAsset>(CatalogResource);
                 try
                 {
-                    cachedCatalog = asset != null
-                        ? JsonUtility.FromJson<ChapterStoryCatalogData>(asset.text)
-                        : null;
+                    cachedCatalog = ActiveCampaignContent.Load(forceReload).LoadStory(1);
                 }
                 catch (Exception exception)
                 {
@@ -198,12 +193,9 @@ namespace LegendsOfRus
         {
             if (forceReload || cachedRussian == null)
             {
-                TextAsset asset = Resources.Load<TextAsset>(RussianResource);
                 try
                 {
-                    cachedRussian = asset != null
-                        ? JsonUtility.FromJson<StoryLocalizationData>(asset.text)
-                        : null;
+                    cachedRussian = ActiveCampaignContent.Load(forceReload).LoadLocalization(1, "ru");
                 }
                 catch (Exception exception)
                 {
@@ -221,8 +213,7 @@ namespace LegendsOfRus
             if (language != "en") return LoadRussian();
             if (cachedEnglish == null)
             {
-                var asset = Resources.Load<TextAsset>("Localization/story_en");
-                if (asset != null) cachedEnglish = JsonUtility.FromJson<StoryLocalizationData>(asset.text);
+                cachedEnglish = ActiveCampaignContent.Load().LoadLocalization(1, "en");
             }
             return cachedEnglish ?? LoadRussian();
         }
@@ -370,6 +361,35 @@ namespace LegendsOfRus
             ChapterLevelCatalogData levels = null
         )
         {
+            return ValidateCore(catalog, localization, levels, true, true);
+        }
+
+        public static StoryValidationReport ValidateCampaign(ChapterStoryCatalogData catalog,
+            StoryLocalizationData localization, ChapterLevelCatalogData levels, bool finaleReady)
+        {
+            var report = ValidateCore(catalog, localization, levels, false, finaleReady);
+            if (catalog != null && (catalog.chapterId < 1 || catalog.chapterId > 20))
+                report.Errors.Add("Campaign story chapter must be 1–20.");
+            if (levels == null) report.Errors.Add("Campaign story requires its level catalog.");
+            if (finaleReady && (levels?.levels == null || levels.levels.Length != 500 || catalog?.completion?.finalLevelId != 500))
+                report.Errors.Add("Campaign finale requires round 500.");
+            if (!finaleReady && catalog != null)
+            {
+                if (catalog.completion != null && catalog.completion.finalLevelId != 0)
+                    report.Errors.Add("Partial campaign cannot declare chapter completion.");
+                foreach (var scene in catalog.scenes ?? Array.Empty<StorySceneData>())
+                    if (scene != null && scene.returnRoute == StoryReturnRoutes.ChapterComplete)
+                        report.Errors.Add("Partial campaign cannot route to ChapterComplete.");
+                foreach (var level in levels?.levels ?? Array.Empty<LevelData>())
+                    if (level != null && level.HasStoryTrigger("chapter.complete"))
+                        report.Errors.Add("Partial campaign cannot contain a chapter.complete trigger.");
+            }
+            return report;
+        }
+
+        static StoryValidationReport ValidateCore(ChapterStoryCatalogData catalog,
+            StoryLocalizationData localization, ChapterLevelCatalogData levels, bool legacy, bool finaleReady)
+        {
             var report = new StoryValidationReport();
             if (catalog == null)
             {
@@ -383,13 +403,13 @@ namespace LegendsOfRus
             }
             if (catalog.schemaVersion != 3)
                 report.Errors.Add("Story catalog schemaVersion must be 3.");
-            if (catalog.chapterId != 1)
+            if (legacy && catalog.chapterId != 1)
                 report.Errors.Add("Story catalog chapterId must be 1.");
             if (levels != null && levels.chapterId != catalog.chapterId)
                 report.Errors.Add("Story and level catalogs must use the same chapterId.");
             if (localization.schemaVersion != 1)
                 report.Errors.Add("Story localization schemaVersion must be 1.");
-            if (!string.Equals(localization.locale, "ru", StringComparison.Ordinal))
+            if (legacy ? localization.locale != "ru" : (localization.locale != "ru" && localization.locale != "en"))
                 report.Errors.Add("Story localization locale must be 'ru'.");
 
             var localizedKeys = new HashSet<string>(StringComparer.Ordinal);
@@ -466,10 +486,11 @@ namespace LegendsOfRus
                 report,
                 catalog,
                 scenesById,
-                levels
+                levels,
+                legacy
             );
             ValidateReactions(report, catalog, localizedKeys, levels);
-            ValidateCompletion(
+            if (finaleReady) ValidateCompletion(
                 report,
                 catalog,
                 localization,
@@ -525,7 +546,8 @@ namespace LegendsOfRus
             StoryValidationReport report,
             ChapterStoryCatalogData catalog,
             Dictionary<string, StorySceneData> scenesById,
-            ChapterLevelCatalogData levels
+            ChapterLevelCatalogData levels,
+            bool legacy
         )
         {
             var byLevel = new Dictionary<int, StoryMilestoneData>();
@@ -591,7 +613,7 @@ namespace LegendsOfRus
                     majorLevels.Add(milestone.afterLevelId);
             }
 
-            if (string.Join(",", majorLevels) != "1,3,6,10")
+            if (legacy && string.Join(",", majorLevels) != "1,3,6,10")
                 report.Errors.Add("Major Chapter 1 story milestones must be levels 1, 3, 6, and 10.");
 
             foreach (KeyValuePair<string, StorySceneData> pair in scenesById)

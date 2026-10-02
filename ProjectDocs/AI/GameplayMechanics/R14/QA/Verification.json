@@ -1,0 +1,36 @@
+{
+  "unity": "6000.5.9f1",
+  "backend": "Vulkan, verification process only; previously authorized",
+  "playModePassed": 69,
+  "playModeFailed": 0,
+  "playModeSkipped": 0,
+  "editModeRunThisPass": false,
+  "editModeReason": "No gameplay core or timeline changes; final combined PlayMode suite exercises rule regressions. R13 EditMode results are historical, not counted here.",
+  "attempts": [
+    {
+      "run": "Verify01/Materials",
+      "result": "Compilation failed: CS0819 multiple var declarators; fixed with explicit Vector2."
+    },
+    {
+      "run": "Verify02/Materials",
+      "passed": 6,
+      "failed": 1,
+      "reason": "Gem test attempted an invalid grid-direction swap; corrected fixture."
+    },
+    {
+      "run": "Verify03/Materials",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "run": "Verify04/All",
+      "passed": 69,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "limitations": [
+    "No physical-device performance or human motion acceptance",
+    "Applies to PrototypeR4 development sandbox; production Legacy unchanged"
+  ]
+}

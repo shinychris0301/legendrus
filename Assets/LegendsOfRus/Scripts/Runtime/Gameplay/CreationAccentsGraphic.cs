@@ -1,0 +1,50 @@
+using UnityEngine;
+using UnityEngine.UI;
+using LegendsOfRus.GameplayCore;
+namespace LegendsOfRus
+{
+    // Reused Canvas-compatible texture layers, clipped by the same board mask as the body.
+    [RequireComponent(typeof(CanvasRenderer))]
+    public sealed class CreationAccentsGraphic : MaskableGraphic
+    {
+        static Texture2D atlas;SpecialCreationGraphic owner;
+        public static Texture2D Atlas=>atlas?atlas:(atlas=Resources.Load<Texture2D>("ProductionUI/MechanicsEffectsR22/CreationAccents"));
+        public override Texture mainTexture=>Atlas?Atlas:base.mainTexture;
+        public void Bind(SpecialCreationGraphic body){owner=body;raycastTarget=false;SetMaterialDirty();}
+        public void Clear(){canvasRenderer.Clear();SetVerticesDirty();}
+        void Update(){if(owner&&owner.Active)SetVerticesDirty();}
+        protected override void OnPopulateMesh(VertexHelper h)
+        {
+            h.Clear();if(!owner||!owner.Active||!owner.Anchor||!Atlas)return;
+            float t=owner.Progress,age=owner.Age;
+            float alpha=owner.Settling?Mathf.SmoothStep(0,1,owner.SettleEntryProgress/.35f)*.5f*(1-Mathf.SmoothStep(0,1,age/SpecialCreationGraphic.SettleSeconds)):Mathf.SmoothStep(0,1,t/.35f)*.5f;
+            float release=owner.Settling?Mathf.SmoothStep(0,1,age/.20f):0;
+            int region=owner.Kind==SpecialGemKind.Burst?1:owner.Kind==SpecialGemKind.Color?0:owner.Kind==SpecialGemKind.Spark?3:0;
+            float unit=Mathf.Min(owner.Anchor.rect.width,owner.Anchor.rect.height);
+            Vector2 center=rectTransform.InverseTransformPoint(owner.Anchor.TransformPoint(Vector3.zero));
+            for(int i=0;i<(owner.Kind==SpecialGemKind.Burst?1:2);i++)
+            {
+                float sign=i==0?-1:1,angle,span;Vector2 offset;
+                if(region==0&&owner.Kind!=SpecialGemKind.Color)
+                {span=1.05f+.45f*release;offset=new Vector2(sign*(.64f*(1-t)+.38f*release),-.18f);angle=0;if(owner.Kind==SpecialGemKind.Column){offset=new Vector2(-offset.y,offset.x);angle+=Mathf.PI*.5f;}}
+                else if(region==1)
+                {span=.95f+.65f*release;offset=new Vector2(sign*(.16f+.22f*release),.16f*release);angle=sign*(.35f+release*.65f);}
+                else if(owner.Kind==SpecialGemKind.Color)
+                {angle=Mathf.PI*.5f;span=.72f+.28f*release;offset=new Vector2(sign*(.42f+.22f*release),.18f*release);}
+                else
+                {span=1.0f+.50f*release;offset=new Vector2(sign*(.25f+.3f*release),.14f+release*.12f);angle=sign*(-.35f+release*.4f);}
+                Quad(h,region,center+offset*unit,span*unit,angle,alpha*(region==2?.85f:1),i==0&&region!=2);
+            }
+        }
+        static void Quad(VertexHelper h,int index,Vector2 center,float size,float angle,float alpha,bool flip)
+        {
+            // Measured regions of the unchanged 1254px generated atlas; gutters are intentionally unequal.
+            Rect r=index==0?new Rect(0,0,670,630):index==1?new Rect(670,0,584,630):index==2?new Rect(0,630,640,624):new Rect(640,630,614,624);
+            float u0=r.xMin/1254f,u1=r.xMax/1254f,v0=1-r.yMax/1254f,v1=1-r.yMin/1254f;
+            if(flip){float tmp=u0;u0=u1;u1=tmp;}
+            float c=Mathf.Cos(angle),s=Mathf.Sin(angle),w=size*.5f,z=w*r.height/r.width;int n=h.currentVertCount;var tint=new Color(1,1,1,Mathf.Clamp01(alpha));
+            h.AddVert(center+Rotate(-w,-z,c,s),tint,new Vector2(u0,v0));h.AddVert(center+Rotate(-w,z,c,s),tint,new Vector2(u0,v1));h.AddVert(center+Rotate(w,z,c,s),tint,new Vector2(u1,v1));h.AddVert(center+Rotate(w,-z,c,s),tint,new Vector2(u1,v0));h.AddTriangle(n,n+1,n+2);h.AddTriangle(n,n+2,n+3);
+        }
+        static Vector2 Rotate(float x,float y,float c,float s)=>new Vector2(x*c-y*s,x*s+y*c);
+    }
+}

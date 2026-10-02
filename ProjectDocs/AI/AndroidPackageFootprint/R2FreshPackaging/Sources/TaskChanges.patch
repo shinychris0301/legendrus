@@ -1,0 +1,565 @@
+--- a/ProjectDocs/AI/CurrentTask.md
++++ b/ProjectDocs/AI/CurrentTask.md
+@@ -1,3 +1,15 @@
++# 2026-10-01 — Project recovery review and fresh Android packaging R2
++
++User requested reviewing the current project and continuing the development schedule after chat deletion. Reviewed current instructions, handoff, task/schedule/session evidence, working tree and owning guarded build path. Unity 6000.5.9f1 confirmed. Retained the core-first priority, installed 500-round Chapter 1, historical R5 baseline (1,334 distinct runtime passes, 3 deferred backend cases), approved Splash and all existing local edits. Phone execution and hosting remain deferred; effects last.
++
++Completed the schedule's next packaging task. Preserved the audited APK in `Builds/Verification/v1_17_step01/BeforeFreshPackagingR2/`; isolated three generated launcher packaging directories with restorable Library backups. Existing guarded development build succeeded in 39.58 seconds. **APK reduced from 1,388,384,859 to 838,219,234 bytes: 550,165,625 bytes saved (39.63%).** All 8,407 unused ZIP records removed without changing texture imports or source assets.
++
++**130/130 Edit Mode policy/content-delivery tests passed, 0 failed/skipped.** All 403 APK entries SHA256-compared:398 unchanged at their paths, two build-metadata entries updated, three byte-identical DEX files renumbered. Unity asset payload, native libraries, manifest and IL2CPP metadata unchanged. Signature/certificate, permissions/identity, both ZIP CRC inventories, 16 KiB ZIP and six ELF alignments, runtime markers and nine credential classes passed. Initial inspector assumptions about dynamic boot IDs were corrected; final verification passed without a second build.
++
++[Results](AndroidPackageFootprint/R2FreshPackaging/TestResults.md) · [Payload comparison](AndroidPackageFootprint/R2FreshPackaging/QA/ArtifactComparison.json) · [Scope](AndroidPackageFootprint/R2FreshPackaging/QA/Scope.json). All 7,774 baseline Assets/Packages/ProjectSettings files unchanged, 0 changed/added/deleted after removing only two new generated linker files. Inherited stale APK checksum sidecar archived and replaced with the verified current checksum. New APK SHA256 `480cb80ddeea115741fb25b779fed855da0b740cf3c55d88721c5b1dfd12057c`. Added task scripts/evidence/report and updated CurrentTask, SessionLog, DevelopmentSchedule and handoff orientation. Raw logs in /tmp; cache backups remain outside authored patch. No source/settings/guard/art change, new Play Mode run, phone test, release build, deployment or commit. Existing font-provenance warning remains.
++
++**Next:** read-only complete-use/largest-size audit of shared UI texture candidates (Home coin/progress fill), establishing a bounded candidate and native visual acceptance checks before any import change. No blanket compression or duplicate deletion. Human 31–500 pacing, font provenance and physical Android lifecycle/performance/readability remain pending; hosting deferred, effects last.
++
+ # 2026-10-01 — Android package footprint R1 audit
+ 
+ User approved auditing the large APK before modifying art. Read-only inspection accounts for every byte: 1,388,384,859 total; 838,143,791 indexed compressed payload; 550,165,625 unindexed local-record bytes (39.63%), represented by 8,407 unnamed zero-payload headers. All403 ZIP CRC checks passed. Current Unity data payload SHA256 matches the archived full build; archive provenance hash verified. Historical full report has2,365 asset rows and textures99.1%;426 reported PNGs have explicit Android RGBA32 overrides. These deliberate fidelity settings and approved Splash are preserved.
+--- a/ProjectDocs/AI/SessionLog.md
++++ b/ProjectDocs/AI/SessionLog.md
+@@ -5673,3 +5673,17 @@
+ 
+ **Next:** fresh packaging through the existing guarded Unity build after archiving/isolation of generated launcher packaging outputs; compare size, all payload entries, signing/permissions and alignment. Approximate838MB is a projection if unused-record overhead is avoided, not a delivered build. Prioritize this over texture changes. Phone work and hosting remain deferred; final effects last. Human31–500 pacing, font provenance and physical-device acceptance remain open.
+ 
++
++
++# 2026-10-01 — Project recovery review and fresh Android packaging R2
++
++User requested reviewing the current project and continuing the development schedule after chat deletion. Reviewed current instructions, handoff, task/schedule/session evidence, working tree and owning guarded build path. Unity 6000.5.9f1 confirmed. Retained the core-first priority, installed 500-round Chapter 1, historical R5 baseline (1,334 distinct runtime passes, 3 deferred backend cases), approved Splash and all existing local edits. Phone execution and hosting remain deferred; effects last.
++
++Completed the schedule's next packaging task. Preserved the audited APK in `Builds/Verification/v1_17_step01/BeforeFreshPackagingR2/`; isolated three generated launcher packaging directories with restorable Library backups. Existing guarded development build succeeded in 39.58 seconds. **APK reduced from 1,388,384,859 to 838,219,234 bytes: 550,165,625 bytes saved (39.63%).** All 8,407 unused ZIP records removed without changing texture imports or source assets.
++
++**130/130 Edit Mode policy/content-delivery tests passed, 0 failed/skipped.** All 403 APK entries SHA256-compared:398 unchanged at their paths, two build-metadata entries updated, three byte-identical DEX files renumbered. Unity asset payload, native libraries, manifest and IL2CPP metadata unchanged. Signature/certificate, permissions/identity, both ZIP CRC inventories, 16 KiB ZIP and six ELF alignments, runtime markers and nine credential classes passed. Initial inspector assumptions about dynamic boot IDs were corrected; final verification passed without a second build.
++
++[Results](AndroidPackageFootprint/R2FreshPackaging/TestResults.md) · [Payload comparison](AndroidPackageFootprint/R2FreshPackaging/QA/ArtifactComparison.json) · [Scope](AndroidPackageFootprint/R2FreshPackaging/QA/Scope.json). All 7,774 baseline Assets/Packages/ProjectSettings files unchanged, 0 changed/added/deleted after removing only two new generated linker files. Inherited stale APK checksum sidecar archived and replaced with the verified current checksum. New APK SHA256 `480cb80ddeea115741fb25b779fed855da0b740cf3c55d88721c5b1dfd12057c`. Added task scripts/evidence/report and updated CurrentTask, SessionLog, DevelopmentSchedule and handoff orientation. Raw logs in /tmp; cache backups remain outside authored patch. No source/settings/guard/art change, new Play Mode run, phone test, release build, deployment or commit. Existing font-provenance warning remains.
++
++**Next:** read-only complete-use/largest-size audit of shared UI texture candidates (Home coin/progress fill), establishing a bounded candidate and native visual acceptance checks before any import change. No blanket compression or duplicate deletion. Human 31–500 pacing, font provenance and physical Android lifecycle/performance/readability remain pending; hosting deferred, effects last.
++
+--- a/ProjectDocs/AI/DevelopmentSchedule.md
++++ b/ProjectDocs/AI/DevelopmentSchedule.md
+@@ -31,7 +31,9 @@
+ 
+ **2026-10-01 package audit:** [R1](AndroidPackageFootprint/R1/TestResults.md) found550.17MB of unindexed ZIP local records within the1,388.38MB APK (39.63%). Indexed compressed payload838.14MB; Unity asset payload byte-identical to prior full build. Asset data is99.1% textures with deliberate fidelity imports. Read-only audit;7,774project files and APK unchanged, no new Unity build/device tests.
+ 
+-**Immediate next action:** create a fresh archive through the guarded Unity packaging path after preserving the current APK and isolating generated launcher packaging outputs. Verify measured size reduction, byte-identical asset payload, runtime entries, identity/signing/permissions and ZIP/ELF alignment. Do this before changing textures. The approximate838MB target is an estimate, not a delivered result. Phone work, hosting/live services deferred; final effects last. Human Chapter1 pacing, optional recap, font provenance and Android lifecycle/performance/readability remain open.
++**2026-10-01 fresh packaging completed:** [R2 results](AndroidPackageFootprint/R2FreshPackaging/TestResults.md): guarded development APK now838,219,234bytes, down550,165,625bytes (39.63%). Unused ZIP records removed; Unity asset payload and compiled runtime content preserved (three identical DEX files renumbered).130policy/content-delivery Edit Mode tests passed; signing/permissions/identity/CRC/ZIP/ELF alignment passed. All7,774 source/config files unchanged. Old APK archived BeforeFreshPackagingR2; no phone testing or new Play Mode run.
++
++**Immediate next action:** audit complete usage and largest rendered size of high-resolution shared UI controls, beginning with Home coin/progress fill. Select a bounded candidate and define native visual/alpha/readability checks before changing its importer. Preserve Splash and approved art; no blanket compression or duplicate-resource deletion. Phone work, hosting/live services deferred; final effects last. Human Chapter1 pacing, optional recap, font provenance and Android lifecycle/performance/readability remain open.
+ 
+ Evidence reviewed for this reprioritization: [R43 regression audit](CampaignFoundation/R43RegressionAudit/TestResults.md), [R44 Chapter 1 implementation](CampaignFoundation/R44ChapterOneCompletion/TestResults.md), [failed-round recovery](FailedRoundRecovery/R1/TestResults.md), [continuation transaction foundation](ContinuationTransactions/R1/TestResults.md), [Android storage verification](AndroidCredentialStorage/R5DeviceExecution/TestResults.md), [local HTTPS staging verification](BackendHttpsStaging/R1/TestResults.md). No tests were rerun during this planning update; prior counts remain historical.
+ 
+--- a/ProjectDocs/AI/ConversationHandoff.md
++++ b/ProjectDocs/AI/ConversationHandoff.md
+@@ -1,4 +1,11 @@
+ # Conversation handoff — Legends of Rus
++
++## Current orientation after chat loss — 2026-10-01
++
++The original handoff below is historical. Resume from the newest entries in [CurrentTask](CurrentTask.md), [DevelopmentSchedule](DevelopmentSchedule.md) and [SessionLog](SessionLog.md), verified against local files. Core-first work supersedes the old Loading-only and backend-first next steps. Chapter1 rounds1–500 and finale are installed; R5 recorded1,334 distinct runtime passes with3 deferred backend cases. These are prior results, not a new runtime acceptance claim.
++
++Latest completed task: [fresh Android packaging R2](AndroidPackageFootprint/R2FreshPackaging/TestResults.md),838,219,234-byte development APK,39.63% smaller through archive cleanup alone.130 current build-policy/content-delivery tests passed; all7,774 project source/config files unchanged. Approved Splash/art remain intact. Next: complete-use/largest-rendered-size audit of shared texture candidates before any importer change. Physical-phone execution and hosting remain deferred; final gameplay effects last. Preserve historical acceptance decisions below.
++
+ Prepared 2026-09-12. Source: the current user/assistant conversation and supplied project artifacts. This is a focused decision summary, not a verbatim transcript or an independently verified local Unity audit.
+ 
+ ## Current user intent
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/Build.py
+@@ -0,0 +1,138 @@
++"""Fresh launcher packaging through the existing guarded Unity command; no device work."""
++from pathlib import Path
++import hashlib
++import json
++import os
++import resource
++import shutil
++import subprocess
++import time
++import xml.etree.ElementTree as ET
++
++ROOT = Path(__file__).resolve().parents[5]
++BASE = Path(__file__).resolve().parent.parent
++QA = BASE / 'QA'
++UNITY = Path('/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity')
++LOGS = Path('/tmp/lor-package-footprint-r2')
++GENERATED = [
++    'Assets/AddressableAssetsData/Android/addressables_content_state.bin',
++    'Assets/AddressableAssetsData/Android/addressables_content_state.bin.meta',
++    'Assets/AddressableAssetsData/link.xml',
++    'Assets/AddressableAssetsData/link.xml.meta',
++]
++
++
++def sha(path):
++    with path.open('rb') as stream:
++        return hashlib.file_digest(stream, 'sha256').hexdigest()
++
++
++def hashes():
++    # Never inspect signing files, private keys or player storage.
++    return {str(p.relative_to(ROOT)): sha(p)
++            for folder in ('Assets', 'Packages', 'ProjectSettings')
++            for p in (ROOT / folder).rglob('*')
++            if p.is_file() and p.suffix.lower() not in
++            ('.keystore', '.jks', '.p12', '.pem', '.key')
++            and not p.name.startswith('.env')}
++
++
++def save(name, value):
++    (QA / name).write_text(json.dumps(value, indent=2) + '\n')
++
++
++def require_idle():
++    names = subprocess.check_output(['ps', '-eo', 'comm='], text=True).splitlines()
++    assert not any(n.strip() in ('Unity', 'Unity Main Thre') for n in names), 'Unity is open'
++
++
++def limits():
++    resource.setrlimit(resource.RLIMIT_NOFILE, (4096, resource.getrlimit(resource.RLIMIT_NOFILE)[1]))
++
++
++def run(name, args):
++    out = QA / name
++    out.mkdir(exist_ok=False)
++    cmd = [str(UNITY), '-batchmode', '-nographics', '-projectPath', str(ROOT),
++           '-logFile', str(LOGS / (name + '.unity.log'))] + args
++    env = {k: v for k, v in os.environ.items()
++           if k not in ('XDG_CONFIG_HOME', 'LOR_GAMEPLAY_QA', 'LOR_GAMEPLAY_QA_PHASE')}
++    start = time.time()
++    print('Running ' + name, flush=True)
++    with (LOGS / (name + '.launcher.log')).open('w') as log:
++        code = subprocess.call(cmd, env=env, stdout=log, stderr=subprocess.STDOUT, preexec_fn=limits)
++    record = {'command': cmd, 'exitCode': code, 'durationSeconds': time.time() - start}
++    if (out / 'results.xml').exists():
++        record['result'] = ET.parse(out / 'results.xml').getroot().attrib
++    (out / 'summary.json').write_text(json.dumps(record, indent=2) + '\n')
++    print(json.dumps(record), flush=True)
++    assert code == 0, name + ' failed; inspect local logs'
++    return record
++
++
++def main():
++    require_idle()
++    QA.mkdir(parents=True, exist_ok=False)
++    LOGS.mkdir(exist_ok=False)
++    assert UNITY.is_file()
++    assert shutil.disk_usage(ROOT).free > 8 * 1024**3
++    before = hashes()
++    save('BeforeHashes.json', before)
++    with (QA / 'WorkingTreeBefore.txt').open('w') as out:
++        subprocess.run(['git', 'status', '--short'], cwd=ROOT, stdout=out, check=True)
++    for relative in GENERATED:
++        source = ROOT / relative
++        if source.exists():
++            target = LOGS / 'Before' / relative
++            target.parent.mkdir(parents=True, exist_ok=True)
++            shutil.copy2(source, target)
++
++    record = run('PolicyTests', ['-runTests', '-testPlatform', 'EditMode',
++        '-testFilter', 'LegendsOfRus.Tests.AndroidBuild;LegendsOfRus.Tests.ContentDelivery',
++        '-testResults', str(QA / 'PolicyTests/results.xml')])
++    result = record['result']
++    assert result['result'] == 'Passed' and int(result['passed']) > 0 and result['skipped'] == '0'
++    require_idle()
++    policy = json.loads((ROOT / 'Assets/LegendsOfRus/Editor/AndroidBuild/Config/android_build_foundation_policy.json').read_text())
++    apk = ROOT / policy['developmentOutputRelativePath']
++    prior = json.loads((BASE.parent / 'R1/QA/Summary.json').read_text())
++    digest = sha(apk)
++    assert digest == prior['sha256'], 'Artifact differs from the audited baseline'
++    archive = apk.parent / 'BeforeFreshPackagingR2'
++    archive.mkdir(exist_ok=False)
++    old = archive / apk.name
++    apk.rename(old)
++    save('PreviousArtifact.json', {'path': str(old.relative_to(ROOT)), 'bytes': old.stat().st_size, 'sha256': digest})
++    sidecar = apk.with_suffix('.apk.sha256')
++    if sidecar.exists():
++        # Preserve inherited sidecars as historical data, not proof of the prior APK hash.
++        sidecar.rename(archive / (sidecar.name + '.inherited'))
++
++    # Isolate only package-task incremental state and final launcher outputs.
++    # Do not clean player assets, IL2CPP, Gradle project/configuration or signing state.
++    launcher = ROOT / 'Library/Bee/Android/Prj/IL2CPP/Gradle/launcher/build'
++    isolation = ROOT / 'Library/LegendsOfRusPackagingBackups/BeforeFreshPackagingR2'
++    isolation.mkdir(parents=True, exist_ok=False)
++    moved = []
++    for relative in ('outputs/apk/debug', 'intermediates/incremental/packageDebug',
++                     'intermediates/apk_ide_redirect_file/debug'):
++        source = launcher / relative
++        assert source.is_dir(), 'Expected packaging directory missing: ' + relative
++        target = isolation / relative
++        target.parent.mkdir(parents=True, exist_ok=True)
++        inventory = [{'path': str(p.relative_to(source)), 'bytes': p.stat().st_size, 'sha256': sha(p)}
++                     for p in source.rglob('*') if p.is_file()]
++        source.rename(target)
++        moved.append({'source': str(source.relative_to(ROOT)), 'backup': str(target.relative_to(ROOT)), 'files': inventory})
++    save('PackagingIsolation.json', moved)
++    run('Build', ['-executeMethod', 'LegendsOfRus.AndroidBuild.AndroidDevelopmentBuildCommand.BuildDevelopmentApk', '-quit'])
++    assert apk.is_file()
++    artifact_hash = sha(apk)
++    save('Artifact.json', {'path': str(apk.relative_to(ROOT)), 'bytes': apk.stat().st_size,
++         'sha256': artifact_hash, 'installed': False, 'deviceTested': False})
++    sidecar.write_text(artifact_hash + '  ' + apk.name + '\n')
++    print('Guarded APK built; payload/signature/scope verification pending.', flush=True)
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/Compare.py
+@@ -0,0 +1,92 @@
++"""Compare every indexed APK payload and account for archive overhead exactly."""
++from pathlib import Path
++import hashlib
++import json
++import struct
++import subprocess
++import zipfile
++
++ROOT = Path(__file__).resolve().parents[5]
++BASE = Path(__file__).resolve().parent.parent
++QA = BASE / 'QA'
++FOLDER = ROOT / 'Builds/Verification/v1_17_step01'
++NEW = FOLDER / 'LegendsOfRus-v1.17-step01-development.apk'
++OLD = FOLDER / 'BeforeFreshPackagingR2' / NEW.name
++
++
++def digest(stream):
++    return hashlib.file_digest(stream, 'sha256').hexdigest()
++
++
++def inspect(path):
++    entries = {}
++    gaps = []
++    previous = 0
++    header_bytes = 0
++    with zipfile.ZipFile(path) as archive, path.open('rb') as raw:
++        assert archive.testzip() is None
++        for info in sorted(archive.infolist(), key=lambda i: i.header_offset):
++            assert not info.flag_bits & 8, 'Data descriptor needs separate accounting'
++            assert info.filename not in entries, 'Duplicate archive entry'
++            if info.header_offset > previous:
++                pos = previous
++                records = 0
++                while pos < info.header_offset:
++                    raw.seek(pos)
++                    header = raw.read(30)
++                    assert header[:4] == b'PK\x03\x04', 'Unrecognized inter-entry gap'
++                    compressed, expanded, name_length, extra_length = struct.unpack_from('<IIHH', header, 18)
++                    assert not (compressed or expanded or name_length)
++                    pos += 30 + extra_length
++                    records += 1
++                assert pos == info.header_offset
++                gaps.append({'offset': previous, 'bytes': pos - previous, 'unnamedRecords': records})
++            raw.seek(info.header_offset)
++            header = raw.read(30)
++            assert header[:4] == b'PK\x03\x04'
++            name_length, extra_length = struct.unpack_from('<HH', header, 26)
++            header_bytes += 30 + name_length + extra_length
++            previous = info.header_offset + 30 + name_length + extra_length + info.compress_size
++            with archive.open(info) as stream:
++                content_hash = digest(stream)
++            entries[info.filename] = {'bytes': info.file_size, 'compressedBytes': info.compress_size,
++                'sha256': content_hash, 'compressionMethod': info.compress_type}
++        payload = sum(e['compressedBytes'] for e in entries.values())
++        gap_bytes = sum(g['bytes'] for g in gaps)
++        tail = path.stat().st_size - previous
++        assert payload + header_bytes + gap_bytes + tail == path.stat().st_size
++        raw.seek(0)
++        sha = digest(raw)
++    return {'path': str(path.relative_to(ROOT)), 'sha256': sha, 'bytes': path.stat().st_size,
++        'payloadBytes': payload, 'headerBytes': header_bytes, 'unindexedBytes': gap_bytes,
++        'unnamedRecords': sum(g['unnamedRecords'] for g in gaps), 'tailBytes': tail,
++        'zipCrcPassed': True, 'exactAccounting': True, 'gaps': gaps, 'entries': entries}
++
++
++def main():
++    old = inspect(OLD)
++    new = inspect(NEW)
++    before = old['entries']
++    after = new['entries']
++    added = sorted(set(after) - set(before))
++    removed = sorted(set(before) - set(after))
++    changed = [{'path': name, 'before': before[name], 'after': after[name]}
++               for name in sorted(set(before) & set(after))
++               if before[name]['sha256'] != after[name]['sha256']]
++    aapt = '/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/build-tools/36.0.0/aapt'
++    permissions = [subprocess.check_output([aapt, 'dump', 'permissions', str(p)], text=True) for p in (OLD, NEW)]
++    result = {'old': old, 'new': new, 'addedEntries': added, 'removedEntries': removed,
++        'changedPayloads': changed, 'identicalPayloadCount': sum(before[n]['sha256'] == after[n]['sha256'] for n in set(before) & set(after)),
++        'savedBytes': old['bytes'] - new['bytes'], 'savedPercent': 100 * (old['bytes'] - new['bytes']) / old['bytes'],
++        'permissionsUnchanged': permissions[0] == permissions[1], 'permissions': permissions[1].splitlines(),
++        'unityPayloadUnchanged': before['assets/bin/Data/data.unity3d']['sha256'] == after['assets/bin/Data/data.unity3d']['sha256']}
++    (QA / 'ArtifactComparison.json').write_text(json.dumps(result, indent=2) + '\n')
++    print(json.dumps({k: v for k, v in result.items() if k not in ('old', 'new')}, indent=2))
++    assert not added and not removed, 'Entry inventory changed'
++    assert result['permissionsUnchanged'] and result['unityPayloadUnchanged']
++    assert result['savedBytes'] > 0, 'No measured packaging reduction'
++    # Build metadata changes must be reviewed individually, not silently accepted.
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/InspectCredentialDex.py
+@@ -0,0 +1,60 @@
++"""Read compiled DEX class definitions and JNI members without extracting application data."""
++from pathlib import Path
++import struct, zipfile, json
++root=Path(__file__).resolve().parents[5];base=Path(__file__).resolve().parent.parent
++apk=root/'Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk'
++prefix='Lcom/legendsofrus/credentials/'
++def inspect(data):
++    assert data[:4]==b'dex\n'
++    def uint(offset):return struct.unpack_from('<I',data,offset)[0]
++    def uleb(offset):
++        value=0;shift=0
++        while True:
++            byte=data[offset];offset+=1;value|=(byte&127)<<shift
++            if byte<128:return value,offset
++            shift+=7
++    def string(offset):
++        _,offset=uleb(offset);end=data.index(0,offset)
++        return data[offset:end].decode('utf-8',errors='replace')
++    strings=[string(uint(uint(60)+i*4)) for i in range(uint(56))]
++    types=[strings[uint(uint(68)+i*4)] for i in range(uint(64))]
++    fields=[struct.unpack_from('<HHI',data,uint(84)+i*8) for i in range(uint(80))]
++    methods=[struct.unpack_from('<HHI',data,uint(92)+i*8) for i in range(uint(88))]
++    def signature(index):
++        _,proto,name=methods[index];offset=uint(76)+proto*12
++        ret=types[uint(offset+4)];parameters=uint(offset+8)
++        args=[] if parameters==0 else [types[struct.unpack_from('<H',data,parameters+4+2*i)[0]] for i in range(uint(parameters))]
++        return strings[name]+'('+''.join(args)+')'+ret
++    classes={}
++    for i in range(uint(96)):
++        offset=uint(100)+i*32;name=types[uint(offset)]
++        if not name.startswith(prefix):continue
++        c=uint(offset+24);counts=[]
++        if not c:classes[name]={'fields':[],'methods':[]};continue
++        for _ in range(4):count,c=uleb(c);counts.append(count)
++        field_defs=[];method_defs=[]
++        for group,count in enumerate(counts):
++            index=0
++            for _ in range(count):
++                delta,c=uleb(c);index+=delta;access,c=uleb(c)
++                if group<2:
++                    _,type_index,name_index=fields[index]
++                    field_defs.append({'name':strings[name_index], 'type':types[type_index], 'accessFlags':access})
++                else:
++                    code,c=uleb(c);method_defs.append({'signature':signature(index),'accessFlags':access,'hasCode':code!=0})
++        classes[name]={'fields':field_defs,'methods':method_defs}
++    return classes
++classes={}
++with zipfile.ZipFile(apk) as archive:
++    for name in archive.namelist():
++        if name.startswith('classes') and name.endswith('.dex'):classes.update(inspect(archive.read(name)))
++bridge=classes[prefix+'AndroidCredentialBridge;'];operation=classes[prefix+'AndroidCredentialBridge$Operation;']
++expected=['beginRead(Landroid/content/Context;)Lcom/legendsofrus/credentials/AndroidCredentialBridge$Operation;', 'beginWrite(Landroid/content/Context;Ljava/lang/String;)Lcom/legendsofrus/credentials/AndroidCredentialBridge$Operation;']
++for signature in expected:
++    assert any(m['signature']==signature and m['hasCode'] and m['accessFlags']&9==9 for m in bridge['methods']),signature
++for name,t in [('done','Z'),('success','Z'),('value','Ljava/lang/String;')]:
++    assert any(f['name']==name and f['type']==t and f['accessFlags']&0x41==0x41 for f in operation['fields']),name
++for name in ['CredentialVault;','CredentialVault$Keys;','CredentialVault$Journal;']:assert prefix+name in classes
++result={'compiledCredentialClasses':classes,'jniEntryDefinitionsVerified':True,'operationFieldDefinitionsVerified':True,'deviceExecutionVerified':False}
++(base/'QA/CredentialDex.json').write_text(json.dumps(result,indent=2)+'\n')
++print(f'{len(classes)} credential DEX classes present; JNI methods and operation fields verified.')
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/RecordScope.py
+@@ -0,0 +1,36 @@
++"""Remove only this run's generated metadata, then compare all source/config hashes."""
++import json
++import shutil
++from Build import ROOT, QA, LOGS, GENERATED, hashes, require_idle, save, sha
++
++require_idle()
++before = json.loads((QA / 'BeforeHashes.json').read_text())
++cleaned = []
++for relative in GENERATED:
++    path = ROOT / relative
++    saved = LOGS / 'Before' / relative
++    if path.exists() and sha(path) == before.get(relative):
++        continue
++    if relative in before:
++        assert saved.exists() and sha(saved) == before[relative]
++        shutil.copy2(saved, path)
++        cleaned.append({'path': relative, 'action': 'restored task-start generated metadata'})
++    elif path.exists():
++        path.unlink()
++        cleaned.append({'path': relative, 'action': 'removed newly generated metadata'})
++for path in (ROOT / 'Assets').glob('InitTestScene*'):
++    relative = str(path.relative_to(ROOT))
++    if relative not in before and path.name.endswith(('.unity', '.unity.meta')):
++        path.unlink()
++        cleaned.append({'path': relative, 'action': 'removed new temporary test scene'})
++after = hashes()
++scope = {'roots': ['Assets', 'Packages', 'ProjectSettings'],
++    'changed': sorted(p for p in before if p in after and before[p] != after[p]),
++    'added': sorted(set(after) - set(before)), 'deleted': sorted(set(before) - set(after)),
++    'unchanged': sum(after.get(p) == value for p, value in before.items()),
++    'unityBuild': True, 'editModeTests': True, 'playModeTests': False,
++    'deviceRun': False, 'backendActivation': False}
++save('Scope.json', scope)
++save('GeneratedFileCleanup.json', cleaned)
++print(json.dumps(scope, indent=2))
++assert not (scope['changed'] or scope['added'] or scope['deleted']), 'Unexpected project changes; inspect without resetting user edits'
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/ReviewDelta.py
+@@ -0,0 +1,50 @@
++"""Fail closed unless all APK differences are build IDs or byte-identical DEX renaming."""
++from collections import Counter
++import json
++import re
++import uuid
++import zipfile
++from Compare import ROOT, QA, OLD, NEW
++from Build import sha
++
++comparison = json.loads((QA / 'ArtifactComparison.json').read_text())
++old = comparison['old']['entries']
++new = comparison['new']['entries']
++dex = re.compile(r'classes\d*\.dex')
++old_dex = {n: v['sha256'] for n, v in old.items() if dex.fullmatch(n)}
++new_dex = {n: v['sha256'] for n, v in new.items() if dex.fullmatch(n)}
++assert Counter(old_dex.values()) == Counter(new_dex.values()), 'DEX bytes changed'
++renames = [{'before': n, 'after': [k for k, h in new_dex.items() if h == digest]}
++           for n, digest in old_dex.items() if new_dex.get(n) != digest]
++with zipfile.ZipFile(OLD) as before, zipfile.ZipFile(NEW) as after:
++    def boot(archive):
++        lines = archive.read('assets/bin/Data/boot.config').decode().splitlines()
++        values = {}
++        for line in lines:
++            key, value = line.split('=', 1)
++            values.setdefault(key, []).append(value)
++        return values
++    a, b = boot(before), boot(after)
++    changed_keys = sorted(k for k in set(a) | set(b) if Counter(a.get(k, [])) != Counter(b.get(k, [])))
++    assert changed_keys == ['build-guid', 'player-connection-guid'], 'Unexpected boot configuration difference'
++    assert Counter(a['player-connection-ip']) == Counter(b['player-connection-ip'])
++    for archive, config in ((before, a), (after, b)):
++        app_guid = archive.read('assets/bin/Data/unity_app_guid').decode().strip()
++        assert uuid.UUID(app_guid).int and uuid.UUID(config['build-guid'][0]).int
++        assert len(config['player-connection-guid']) == 1 and config['player-connection-guid'][0].isdigit()
++allowed = {'assets/bin/Data/boot.config', 'assets/bin/Data/unity_app_guid'} | set(old_dex)
++assert all(row['path'] in allowed for row in comparison['changedPayloads'])
++assert comparison['new']['unindexedBytes'] == 0
++assert comparison['savedBytes'] == comparison['old']['unindexedBytes']
++pins = json.loads((ROOT / 'ProjectDocs/AI/AndroidCredentialStorage/R2DeviceBuild/QA/PinnedPluginInventory.json').read_text())
++assert all(sha(ROOT / name) == digest for name, digest in pins.items())
++result = {'allDifferencesExplained': True, 'dexPayloadMultisetIdentical': True,
++    'dexFiles': len(old_dex), 'dexRenames': renames, 'bootChangedKeys': changed_keys,
++    'buildAndAppGuidsValid': True, 'connectionAddressMultisetUnchanged': True,
++    'connectionAddressOrderChanged': a['player-connection-ip'] != b['player-connection-ip'],
++    'otherPayloadsByteIdentical': True,
++    'approvedJavaPinsUnchanged': True, 'newUnindexedBytes': 0,
++    'savedBytesEqualPriorUnindexedBytes': True,
++    'physicalDeviceTested': False}
++(QA / 'ReviewedDelta.json').write_text(json.dumps(result, indent=2) + '\n')
++print(json.dumps(result, indent=2))
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/Sources/VerifyApk.py
+@@ -0,0 +1,43 @@
++from pathlib import Path
++import subprocess,json,hashlib,zipfile,struct,re,sys
++root=Path.cwd();base=root/'ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging';qa=base/'QA';qa.mkdir(exist_ok=True)
++apk=root/'Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk'
++assert apk.is_file(), 'Current audit APK missing'
++tools=Path('/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/build-tools/36.0.0')
++def command(name,args):
++    r=subprocess.run([str(a) for a in args],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
++    (qa/(name+'.txt')).write_text(r.stdout)
++    assert r.returncode==0, name+' failed; see QA evidence'
++    return r.stdout
++signature=command('ApkSignature',[tools/'apksigner','verify','--print-certs',apk])
++certificate=re.search(r'certificate SHA-256 digest: ([a-f0-9]+)',signature).group(1)
++previous=root/'Builds/Verification/v1_17_step01/BeforeFreshPackagingR2/LegendsOfRus-v1.17-step01-development.apk'
++previous_signature=command('PreviousApkSignature',[tools/'apksigner','verify','--print-certs',previous])
++previous_certificate=re.search(r'certificate SHA-256 digest: ([a-f0-9]+)',previous_signature).group(1)
++assert certificate == previous_certificate, 'Development certificate changed'
++badging=command('ApkManifest',[tools/'aapt','dump','badging',apk])
++assert "package: name='com.example.legendsofrus.v117debug'" in badging
++assert "versionCode='1'" in badging and "versionName='0.0.0'" in badging
++assert "native-code: 'arm64-v8a'" in badging and 'application-debuggable' in badging
++assert "sdkVersion:'26'" in badging and "targetSdkVersion:'36'" in badging
++manifest=command('ApkManifestXml',[tools/'aapt','dump','xmltree',apk,'AndroidManifest.xml'])
++assert re.search(r'android:screenOrientation.*0x1\b',manifest), 'Portrait orientation missing'
++command('ZipAlignment',[tools/'zipalign','-c','-P','16','4',apk])
++libraries=[]
++with zipfile.ZipFile(apk) as z:
++    assert z.testzip() is None, 'APK ZIP CRC failure'
++    for n in z.namelist():
++        if n.startswith('lib/') and n.endswith('.so'):
++            data=z.read(n);assert data[:4]==b'\x7fELF' and data[4]==2 and data[5]==1
++            offset=struct.unpack_from('<Q',data,32)[0];stride,count=struct.unpack_from('<HH',data,54)
++            alignments=[struct.unpack_from('<Q',data,offset+i*stride+48)[0] for i in range(count) if struct.unpack_from('<I',data,offset+i*stride)[0]==1]
++            assert alignments and min(alignments)>=16384, n+' load segment alignment'
++            libraries.append({'path':n,'loadSegmentAlignments':alignments})
++    metadata=[n for n in z.namelist() if n.endswith('global-metadata.dat')]
++    assert metadata, 'IL2CPP metadata missing'
++    data=z.read(metadata[0]);markers={key:key.encode() in data for key in ('AndroidBackendCredentialStore','BackendAccountService','CredentialProbeProtocol','AndroidCredentialProbeHost','AndroidCredentialDevelopmentProbe','DevelopmentGameplayProfile','DevelopmentGameplayProfileBadge','lor_gameplay_qa','LegendsOfRus_GameplayQA_v1_')}
++    assert all(markers.values()), 'Expected profile/runtime metadata missing'
++    entries=len(z.infolist())
++result={'apk':str(apk.relative_to(root)),'bytes':apk.stat().st_size,'sha256':hashlib.file_digest(apk.open('rb'),'sha256').hexdigest(),'package':'com.example.legendsofrus.v117debug','versionName':'0.0.0','versionCode':1,'debuggable':True,'abi':'arm64-v8a','minimumApi':26,'targetApi':36,'portrait':True,'signatureVerified':True,'certificateSha256':certificate,'sameCertificateAsPriorLocalApk':certificate==previous_certificate,'zipCrcPassed':True,'zipEntries':entries,'zip16KiBAlignmentPassed':True,'elfLibraries':libraries,'runtimeMetadataMarkers':markers,'installedAppCertificateCompared':False,'physicalDeviceTested':False}
++(qa/'ApkVerification.json').write_text(json.dumps(result,indent=2)+'\n')
++print('APK signature, manifest, ZIP, ELF and runtime metadata inspection saved.')
+--- /dev/null
++++ b/ProjectDocs/AI/AndroidPackageFootprint/R2FreshPackaging/TestResults.md
+@@ -0,0 +1,60 @@
++# Android fresh packaging R2 — 2026-10-01
++
++**Completed the schedule's next task: the guarded development APK is now 838,219,234 bytes, down from 1,388,384,859 bytes.** The saving is **550,165,625 bytes (39.63%)**, with no artwork, importer, gameplay, package, settings or build-guard change.
++
++## Project review and authorization
++
++The user requested review of the current project and continuation according to the development schedule after chat deletion. Reviewed AGENTS.md (only project instruction file found), ConversationHandoff, current task entries, session log, DevelopmentSchedule, current working-tree changes, owning build command and recent verification scripts/artifacts. The project version and installed Editor are Unity **6000.5.9f1**. Large existing tracked/untracked changes are retained, not reset or treated as this task's patch.
++
++Current records establish the core-first order: Chapter 1 rounds 1–500 and finale are installed; R5 recorded 1,334 distinct passing runtime cases and three deferred backend cases; recent core UI fixes, disposable gameplay profile, input configuration and Addressables repairs are present. Those counts are historical evidence reviewed here, not tests rerun in this task. The current artifact hash matched the latest package audit before rebuilding. The older Splash/Loading handoff is historical context; its early next-step recommendations do not supersede the current schedule. Approved Splash artwork remains protected.
++
++The selected bounded task was the schedule's explicit immediate action: fresh guarded packaging, followed by exact payload and signature checks. Phone execution, hosted services and final effects retain their recorded deferral. No new visual approval is inferred.
++
++## Build and artifact
++
++- Existing entry point: `LegendsOfRus.AndroidBuild.AndroidDevelopmentBuildCommand.BuildDevelopmentApk`, batch mode, no installation or launch. The existing preflight and normal build guards remained active.
++- Prior APK preserved at `Builds/Verification/v1_17_step01/BeforeFreshPackagingR2/LegendsOfRus-v1.17-step01-development.apk`; its SHA256 remains `456c9d9475461f4bb7bad8d155cbf629cac34ac25a27ff4a0b5a20b8986a1f19`.
++- Three generated launcher directories were moved, not deleted: `outputs/apk/debug`, `intermediates/incremental/packageDebug`, and `intermediates/apk_ide_redirect_file/debug`. Restorable originals are under `Library/LegendsOfRusPackagingBackups/BeforeFreshPackagingR2/`. Player data, IL2CPP output, imported textures, Gradle configuration and signing configuration were retained. [Exact isolation inventory](QA/PackagingIsolation.json).
++- Unity guarded build exited **0 in 39.58 seconds**. It reused unchanged player content; this is not a clean compilation/rebuild of every source file. [Command and outcome](QA/Build/summary.json).
++- Current APK: [LegendsOfRus-v1.17-step01-development.apk](../../../../Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk), **838,219,234 bytes** (838.22 decimal MB / 799.39 MiB).
++- SHA256: `480cb80ddeea115741fb25b779fed855da0b740cf3c55d88721c5b1dfd12057c`. [Artifact record](QA/Artifact.json).
++- Replaced an inherited stale `.apk.sha256` sidecar with the verified current hash. The inherited text is preserved beside the archived APK with an `.inherited` suffix; it did not match the prior APK and must not be used to verify it. [Checksum repair record](QA/ChecksumSidecar.json).
++
++## Exact comparison
++
++| Archive component | Prior bytes | New bytes |
++|---|---:|---:|
++| Indexed compressed payload | 838,143,791 | 838,143,790 |
++| Indexed local headers/extra fields | 32,733 | 32,734 |
++| Unindexed local records | 550,165,625 | **0** |
++| Trailing signing block/central directory | 42,710 | 42,710 |
++| Total | 1,388,384,859 | **838,219,234** |
++
++All **403 indexed entries** remain present, with no additions/deletions; **398 retain identical contents at the same paths**. All entries were SHA256-compared, not only CRC-compared. The other five paths are fully accounted for:
++
++- `boot.config`: fresh build/connection identifiers and reordered existing connection addresses. All other values and the complete multiset of addresses are unchanged.
++- `unity_app_guid`: a fresh, valid build-specific app identifier.
++- `classes3.dex`, `classes4.dex`, `classes5.dex`: renumbered to classes4, classes5, classes3 respectively. The complete multiset of all five DEX files is byte-identical, including multiplicities. No compiled Java payload was added or removed.
++
++Unity `data.unity3d`, native libraries, IL2CPP metadata, Android manifest and all remaining entries retain identical bytes. Unity asset payload SHA256: `4045f968b83e3f96d779c83acb8e96012ae059555be8cc509da6a384a7622827`. The 8,407 unnamed zero-payload local records are gone; the size reduction exactly equals their previous space. The one-byte compression change in boot metadata is offset by header/alignment overhead. [Full comparison](QA/ArtifactComparison.json) · [Reviewed differences](QA/ReviewedDelta.json).
++
++An initial inspection assertion assumed boot metadata changed only its build GUID and conflated two independent GUIDs. Reading the actual entries showed connection-ID/address-order changes and distinct valid GUIDs. Corrected the inspector to preserve duplicate keys, compare address multisets, and validate each GUID independently; the final review passed. No production correction or second build was required.
++
++## Checks run
++
++- **130/130 Unity Edit Mode build-policy/content-delivery tests passed; zero failures/skips.** [Results](QA/PolicyTests/results.xml) · [Summary](QA/PolicyTests/summary.json).
++- Existing guarded development APK build succeeded, including its Addressables/Player build callbacks.
++- APK signing verification passed; development certificate matches the archived prior APK. Package `com.example.legendsofrus.v117debug`, version 0.0.0/code1, ARM64, API26 minimum/API36 target, portrait and debuggable verified. Permissions unchanged.
++- Both APKs passed all indexed ZIP CRC checks. Fresh APK passed 16 KiB ZIP alignment and all six ELF libraries' load-segment alignment checks.
++- Runtime metadata markers, all nine credential DEX classes/JNI members and approved Java source/metadata pins verified. [APK verification](QA/ApkVerification.json) · [DEX inspection](QA/CredentialDex.json).
++- **All 7,774 baseline Assets/Packages/ProjectSettings files unchanged, zero changed/added/deleted**, after removing only this run's newly generated `Assets/AddressableAssetsData/link.xml` and `.meta`. Existing generated metadata was preserved. [Scope](QA/Scope.json) · [Cleanup](QA/GeneratedFileCleanup.json).
++
++Raw Unity/launcher logs remain local under `/tmp/lor-package-footprint-r2/`; raw logs and generated caches are not part of the authored patch. The build emitted the existing unverified Splash typography warning. Licensing logged an unavailable access token update but completed the build successfully; no licensing or guard workaround was made.
++
++Not run: new Play Mode suite, new rendered captures, physical-device installation/input/gameplay/lifecycle/performance tests, release/custom-signing build or backend deployment. Unity's own Android tooling ran as part of the build; no device commands were issued by the task scripts. No device acceptance is implied by package equivalence.
++
++## Changed files and next action
++
++Authored changes are the six scripts in `Sources/` (`Build.py`, `Compare.py`, `VerifyApk.py`, `InspectCredentialDex.py`, `ReviewDelta.py`, `RecordScope.py`), this report, QA evidence and task/schedule/session/handoff documentation. VerifyApk and InspectCredentialDex adapt the existing Addressables verification scripts. No Assets/Packages/ProjectSettings source patch, commit, installation or deployment. The old APK and generated packaging backups remain available locally.
++
++**Next scheduled local task:** audit the largest shared UI controls' complete Resources/serialized usage and largest rendered size, starting with the Home coin and progress fill. Establish a bounded optimization candidate and native before/after acceptance requirements before changing imports. The remaining ~838 MB is largely real texture payload, so further savings cannot be inferred from ZIP cleanup or source-image duplication. Preserve Splash and approved art; do not apply blanket compression or delete duplicate-looking resources. Physical Android gameplay/lifecycle/performance/readability, human rounds31–500 pacing and font provenance remain open. Hosting stays deferred and final effects remain last.

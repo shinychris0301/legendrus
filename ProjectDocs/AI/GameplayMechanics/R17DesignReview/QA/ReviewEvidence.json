@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-27",
+  "type": "Design review; no Unity implementation",
+  "research": "Five official Royal Kingdom help GIFs inspected as temporal samples; qualitative observations only",
+  "browser": "430/1440 widths; three motion studies and three existing Unity baselines at both sizes; scrub pauses, replay advances, no JS errors or horizontal overflow",
+  "sourceCheck": "node --check Sources/MotionStudy.js passed",
+  "visualInspection": [
+    "Gem, line and bomb concept screenshots",
+    "R16 effect captures and official reference temporal sheets"
+  ],
+  "playbackFinding": "Two test suites share Gems_Frames.tsv; R17 reassembles only final ten-frame segment from original R16 PNGs",
+  "scope": "7421 files in Assets/Packages/ProjectSettings unchanged",
+  "notRun": [
+    "Unity compilation",
+    "Unity runtime tests",
+    "Android performance",
+    "Audio/haptics review"
+  ],
+  "approval": "User requested design review before implementation; implementation remains pending design review"
+}

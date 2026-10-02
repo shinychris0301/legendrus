@@ -1,0 +1,46 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidInputCompatibility/R1/QA/NativeInputFocused/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidInputCompatibility/R1/QA/NativeInputFocused/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 26.08697509765625,
+  "isolatedConfig": "/tmp/lor-android-input-r1/NativeInputFocused/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "2",
+    "result": "Failed(Child)",
+    "total": "2",
+    "passed": "1",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 23:03:35Z",
+    "end-time": "2026-09-30 23:03:39Z",
+    "duration": "4.0747604"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests.QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput",
+      "result": "Failed",
+      "message": "System.ArgumentNullException : Value cannot be null.\nParameter name: value"
+    }
+  ]
+}

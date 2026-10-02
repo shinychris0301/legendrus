@@ -1,0 +1,50 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput;LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R3CaptionReadability/QA/Initial/results.xml",
+    "-logFile",
+    "/tmp/lor-core-caption-readability-r3/Initial/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 30.719882011413574,
+  "isolatedConfig": "/tmp/lor-core-caption-readability-r3/Initial/config",
+  "graphics": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "2",
+    "result": "Failed(Child)",
+    "total": "2",
+    "passed": "0",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 20:11:32Z",
+    "end-time": "2026-10-01 20:11:35Z",
+    "duration": "3.4860196"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics",
+      "result": "Failed",
+      "message": "UnityEngine.MissingReferenceException : The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignCheckpointLifecycleTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignCheckpointLifecycleTests.cs
+@@ -233,6 +233,29 @@
+             Assert.That(JsonUtility.ToJson(State.Save), Is.EqualTo(before));
+         }
+ 
++        [TestCase(51)][TestCase(55)][TestCase(60)]
++        public void ExplicitOutcomeLanguagesPreserveLegacyDefaultAndPlayerState(int round)
++        {
++            PrepareCompletedFixture(round, true);
++            string before = JsonUtility.ToJson(State.Save);
++            var level = ChapterLevelCatalog.Find(1, round);
++            foreach (string outcome in new[] { StoryReactionOutcomes.Victory, StoryReactionOutcomes.Failure })
++            {
++                var data = StoryCatalog.FindReaction(round, outcome);
++                var ru = StoryService.GetLocalizedReaction(level, outcome, "ru");
++                var en = StoryService.GetLocalizedReaction(level, outcome, "en");
++                Assert.That(en.Text, Is.EqualTo(StoryCatalog.LocalizeReaction(data, StoryCatalog.LoadDialogueLanguage("en")).Text));
++                Assert.That(en.Text, Is.Not.EqualTo(ru.Text));
++                Assert.That(en.Speaker, Is.Not.EqualTo(ru.Speaker));
++                Assert.That(StoryService.GetLocalizedReaction(level, outcome).Text, Is.EqualTo(ru.Text));
++                Assert.That(StoryService.GetLocalizedReaction(level, outcome, "unknown").Text, Is.EqualTo(ru.Text));
++                Assert.That(StoryService.GetLocalizedReaction(level, outcome, "ru").Text, Is.EqualTo(ru.Text));
++            }
++            Assert.That(StoryService.GetLocalizedReaction(null, "victory", "en"), Is.Null);
++            Assert.That(StoryService.GetLocalizedReaction(level, "unsupported", "en"), Is.Null);
++            Assert.That(JsonUtility.ToJson(State.Save), Is.EqualTo(before));
++        }
++
+         [Test] public void UnavailableRoundAndChapterCannotChangeCompletedTwoHundredSave()
+         {
+             PrepareCompletedFixture(200, true);
+--- a/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -53,6 +53,31 @@
+                 PlayerPrefs.Save();
+             }
+             yield return null;
++        }
++
++        [UnityTest] public IEnumerator LocalizedReactionDoesNotReplaceBoosterHelp()
++        {
++            GameState.Instance.Save.highestUnlockedLevel=55;
++            Fail(55,120,new[]{1,1,0});yield return null;
++            var v=View();var snapshot=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));snapshot.lastEnergyUtcTicks=0;
++            string before=JsonUtility.ToJson(snapshot);
++            foreach(string lang in new[]{"en","ru"})
++            {
++                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
++                var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(55,"failure"),StoryCatalog.LoadDialogueLanguage(lang));
++                Assert.That(v.Reaction.text,Is.EqualTo(expected.Speaker+": "+expected.Text));
++                Assert.That(v.Reaction.gameObject.activeSelf,Is.False,"Keep accepted Fail caption visibility");
++            }
++            v.BoosterButtons[0].onClick.Invoke();Assert.That(v.Reaction.gameObject.activeSelf,Is.True);
++            DemoFeatureState.SetLanguage("en");yield return null;yield return null;
++            Assert.That(v.Reaction.text,Does.Contain("Thunder hammer"));
++            Capture("Outcome55_FailHelp_EN_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
++            v.BoosterButtons[0].onClick.Invoke();Assert.That(v.Reaction.gameObject.activeSelf,Is.False);
++            var en=StoryService.GetLocalizedReaction(ChapterLevelCatalog.Find(1,55),"failure","en");
++            Assert.That(v.Reaction.text,Is.EqualTo(en.Speaker+": "+en.Text));
++            snapshot=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));snapshot.lastEnergyUtcTicks=0;
++            Assert.That(JsonUtility.ToJson(snapshot),Is.EqualTo(before));
++            Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null);
+         }
+ 
+         ProductionFailView View()=>Root().GetComponentInChildren<ProductionFailView>();
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -87,6 +87,8 @@
+         string activeAnalyticsLevelId = string.Empty;
+         int activeAnalyticsAttemptNumber;
+         LocalizedStoryReaction activeOutcomeReaction;
++        Text outcomeSpeaker, outcomeBody;
++        string outcomeLanguage;
+         bool initialized;
+         Coroutine loadingRoutine;
+         HomeLoadingPreparation homePreparation;
+@@ -120,6 +122,7 @@
+ 
+         void Update()
+         {
++            RefreshOutcomeReactionLanguage();
+             if (!RuntimeInput.EscapePressedThisFrame()) return;
+ 
+             if (modalMotionState == ModalMotionState.Opening ||
+@@ -1743,8 +1746,22 @@
+ 
+         void ShowOutcome(ScreenId id, LevelData level, string outcome)
+         {
+-            activeOutcomeReaction = StoryService.GetLocalizedReaction(level, outcome);
++            activeOutcomeReaction = StoryService.GetLocalizedReaction(level, outcome, DemoFeatureState.LanguageCode);
+             Show(id);
++        }
++
++        void RefreshOutcomeReactionLanguage()
++        {
++            if (!outcomeSpeaker || !outcomeBody || activeOutcomeReaction == null ||
++                outcomeLanguage == DemoFeatureState.LanguageCode) return;
++            var localized = StoryCatalog.LocalizeReaction(
++                StoryCatalog.FindReaction(activeOutcomeReaction.LevelId, activeOutcomeReaction.Outcome),
++                StoryCatalog.LoadDialogueLanguage(DemoFeatureState.LanguageCode));
++            if (localized == null) return;
++            activeOutcomeReaction = localized;
++            outcomeSpeaker.text = localized.Speaker;
++            outcomeBody.text = localized.Text;
++            outcomeLanguage = DemoFeatureState.LanguageCode;
+         }
+ 
+         void BuildOutcomeReactionOverlay(RectTransform parent, ScreenId id)
+@@ -1802,6 +1819,10 @@
+             body.color = new Color32(244, 232, 203, 255);
+             body.horizontalOverflow = HorizontalWrapMode.Wrap;
+             body.verticalOverflow = VerticalWrapMode.Truncate;
++
++            outcomeSpeaker = speaker; outcomeBody = body;
++            outcomeLanguage = null;
++            RefreshOutcomeReactionLanguage();
+ 
+             MetaUiTransition reactionTransition =
+                 panel.AddComponent<MetaUiTransition>();
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/StoryService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/StoryService.cs
+@@ -68,6 +68,12 @@
+         public static LocalizedStoryReaction GetLocalizedReaction(
+             LevelData level,
+             string outcome
++        ) => GetLocalizedReaction(level, outcome, "ru");
++
++        public static LocalizedStoryReaction GetLocalizedReaction(
++            LevelData level,
++            string outcome,
++            string language
+         )
+         {
+             if (level == null || !StoryReactionOutcomes.IsValid(outcome))
+@@ -78,7 +84,7 @@
+                 return null;
+ 
+             StoryReactionData reaction = StoryCatalog.FindReaction(level.levelId, outcome);
+-            return StoryCatalog.LocalizeReaction(reaction, StoryCatalog.LoadRussian());
++            return StoryCatalog.LocalizeReaction(reaction, StoryCatalog.LoadDialogueLanguage(language));
+         }
+ 
+         public static LocalizedChapterCompletion GetLocalizedChapterCompletion()
+--- a/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
+@@ -52,6 +52,61 @@
+                 for (int i = 0; i < keys.Length; i++) { PlayerPrefs.DeleteKey(keys[i]); if (existed[i]) PlayerPrefs.SetString(keys[i], values[i]); }
+                 PlayerPrefs.Save();
+             }
++            yield return null;
++        }
++
++        [UnityTest] public IEnumerator OutcomeReactionSwitchesLanguageWithoutNewRewards()
++        {
++            var state=GameState.Instance;
++            state.Save.highestUnlockedLevel=51;
++            for(int n=1;n<51;n++) state.Save.levelProgress.Add(new LevelProgressData { chapterId=1,levelId=n,completions=1,rewardClaimed=true,bestStars=1 });
++            Win(51,3500); Win(51,3500); // Replay exposes the existing caption instead of the first-clear ad explanation.
++            yield return new WaitForSecondsRealtime(1);
++            var v=View(); string before=OutcomeStateWithoutClock(); int objects=Root().GetComponentsInChildren<Transform>(true).Length;
++            foreach(string lang in new[]{"en","ru","en"})
++            {
++                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
++                var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(51,"victory"),StoryCatalog.LoadDialogueLanguage(lang));
++                Assert.That(v.Reaction.text,Is.EqualTo(expected.Speaker+": "+expected.Text));
++                Assert.That(v.Reaction.gameObject.activeInHierarchy,Is.True);
++                Assert.That(v.Reaction.preferredHeight,Is.LessThanOrEqualTo(v.Reaction.rectTransform.rect.height+1));
++                Assert.That(Root().GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(objects));
++                Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
++                Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null);
++            }
++            Capture("Outcome51_EN_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Outcome51_EN_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
++            DemoFeatureState.SetLanguage("ru");yield return null;yield return null;
++            Capture("Outcome51_RU_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
++        }
++        static string OutcomeStateWithoutClock()
++        {
++            var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
++            save.lastEnergyUtcTicks=0;return JsonUtility.ToJson(save);
++        }
++        [UnityTest] public IEnumerator LegacyOutcomeOverlayUpdatesExistingTextOnLanguageChange()
++        {
++            // Explicit fallback composition fixture; does not install an overlay on the native page.
++            var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
++            var field=typeof(ScreenRouter).GetField("activeOutcomeReaction",flags);var prior=field.GetValue(router);
++            var parent=new GameObject("LegacyOutcomeFixture",typeof(RectTransform));parent.transform.SetParent(router.SafeArea,false);
++            try
++            {
++                field.SetValue(router,StoryService.GetLocalizedReaction(ChapterLevelCatalog.Find(1,51),"victory"));
++                typeof(ScreenRouter).GetMethod("BuildOutcomeReactionOverlay",flags).Invoke(router,new object[]{(RectTransform)parent.transform,ScreenId.Victory});
++                int count=parent.GetComponentsInChildren<Transform>(true).Length;
++                string before=OutcomeStateWithoutClock();
++                foreach(string lang in new[]{"en","ru"})
++                {
++                    DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
++                    var expected=StoryCatalog.LocalizeReaction(StoryCatalog.FindReaction(51,"victory"),StoryCatalog.LoadDialogueLanguage(lang));
++                    Assert.That(parent.transform.Find("OutcomeReaction/ReactionBody").GetComponent<Text>().text,Is.EqualTo(expected.Text));
++                    Assert.That(parent.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(count));
++                    Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
++                }
++            }
++            finally { field.SetValue(router,prior);UnityEngine.Object.Destroy(parent); }
+             yield return null;
+         }
+ 
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -81,7 +81,7 @@
+             ProductionFailRuntime.ApplyLocalizedArtwork(this,DemoFeatureState.LanguageCode=="ru",result!=null);
+             Retry.interactable=result!=null;
+             for(int i=0;i<4;i++)BoosterCounts[i].text=campaign!=null?Number(CampaignBoosterTransactions.Count(save,ProductionPreLevelRuntime.Boosters[i])):state!=null?Number(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i])):"—";
+-            var story=result!=null&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure):null;
++            var story=result!=null&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Failure,DemoFeatureState.LanguageCode):null;
+             Reaction.text=story!=null?story.Speaker+": "+story.Text:"";
+             Reaction.gameObject.SetActive(inspected>=0);
+             BoostersHeading.gameObject.SetActive(inspected<0);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
+@@ -77,7 +77,7 @@
+             int stars=current?result.Stars:0;
+             for(int i=0;i<3;i++){Stars[i].Dimmed=i>=stars;Stars[i].SetVerticesDirty();StarGlows[i].gameObject.SetActive(i<stars);}
+             Score.text=current?(en?"LEVEL ":"УРОВЕНЬ ")+result.Level.levelId+"  •  "+(en?"SCORE ":"СЧЁТ ")+Number(result.Score):(en?"No completed round":"Нет завершённого раунда");
+-            var reaction=current&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Victory):null;
++            var reaction=current&&campaign==null?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Victory,DemoFeatureState.LanguageCode):null;
+             Reaction.text=reaction!=null?reaction.Speaker+": "+reaction.Text:"";
+             Reaction.gameObject.SetActive(string.IsNullOrEmpty(Status.text));
+             MessageInset.enabled=!string.IsNullOrEmpty(Status.text)||!string.IsNullOrEmpty(Reaction.text);

@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib, json, shutil, html
+import xml.etree.ElementTree as ET
+root=Path.cwd()
+base=root/'ProjectDocs/AI/MailReferenceRebuild/ResponsiveAuditR6'
+run=Path('/tmp/lor-mail-responsive-r6/Verify01')
+(base/'UnityCaptures').mkdir(exist_ok=True)
+(base/'QA').mkdir(exist_ok=True)
+for p in (run/'Mail').iterdir():
+    if p.suffix in ('.png','.json'): shutil.copy2(p,base/'UnityCaptures'/p.name)
+results={}
+for mode in ('EditMode','PlayMode'):
+    dest=base/'QA/Verify01'/mode;dest.mkdir(parents=True,exist_ok=True)
+    for name in ('results.xml','command.json','unity.log','launcher.log'): shutil.copy2(run/mode/name,dest/name)
+    a=ET.parse(dest/'results.xml').getroot().attrib
+    results[mode]={k:a[k] for k in ('total','passed','failed','skipped')}
+before=json.loads((base/'Sources/AssetsBefore.json').read_text())
+after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('Assets').rglob('*') if p.is_file()}
+scope={'modified':[p for p in before if p in after and before[p]!=after[p]],'added':sorted(set(after)-set(before)),'deleted':sorted(set(before)-set(after)),'unchanged':sum(after.get(p)==h for p,h in before.items()),'tests':results,'nativeCaptureCount':len(list((base/'UnityCaptures').glob('*.png')))}
+(base/'QA/ScopeAndVerification.json').write_text(json.dumps(scope,indent=2)+'\n')
+views=[('Mail_941x1672_RU','Inbox · Russian · reference size'),('Mail_941x1672_EN','Inbox · English · reference size'),('Mail_1080x2400_safe_RU','Inbox · Russian · tall safe area'),('Mail_1080x2400_safe_EN','Inbox · English · tall safe area'),('Mail_576x1280_safe_EN','Inbox · English · small tall phone'),('Mail_TallLetter_ru','Opened letter · Russian · tall safe area'),('Mail_TallLetter_en','Opened letter · English · tall safe area'),('Mail_TallReturnedInbox_ru','Returned Inbox · Russian'),('Mail_TallReturnedInbox_en','Returned Inbox · English'),('Mail_NoAttachments_en','Letter without attachments · English'),('Mail_NoAttachments_ru','Letter without attachments · Russian'),('Mail_Unavailable_safe_EN','Unavailable action notice · English')]
+options=''.join(f'<option value="{key}">{html.escape(label)}</option>' for key,label in views)
+page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mail — Responsive Audit R6</title><style>*{box-sizing:border-box}body{margin:0;background:#080e17;color:#e3d5b4;font:16px/1.5 system-ui}main{max-width:680px;margin:auto;padding:20px}h1{font:28px Georgia;color:#dabb79}a{color:#b5d1eb}select{width:100%;padding:12px;background:#122333;color:#eee;border:1px solid #7f693f;margin:8px 0 18px}img{display:block;width:100%;height:auto}figure{margin:0 auto;max-width:470px}figcaption{font-size:13px;padding:12px 0;color:#c2bcae}</style><main><h1>Mail · Responsive Audit R6</h1><p>Actual Unity Play Mode captures of the installed page. Header, footer, touch targets and Inbox/letter transitions passed all 9 checks. No production artwork or layout changes were needed.</p><p><a href="ImplementationReport.md">Report</a> · <a href="QA/ReferenceFidelityReview.md">Visual findings</a> · <a href="QA/ScopeAndVerification.json">Verification</a></p><label for="view">Capture</label><select id="view">OPTIONS</select><figure><img id="page" alt="Mail page captured in Unity"><figcaption id="caption"></figcaption></figure><p>This viewer displays screenshots, not an interactive game. Safe areas are simulated; Android device testing was not performed. Existing tall-letter whitespace and reference typography differences remain.</p></main><script>const view=document.getElementById('view'),pic=document.getElementById('page');function show(){pic.src='UnityCaptures/'+view.value+'.png';document.getElementById('caption').textContent=view.selectedOptions[0].textContent+' — actual Unity capture';}view.addEventListener('change',show);show();</script></html>'''
+(base/'Mail_ResponsiveAudit_R6_Review.html').write_text(page.replace('OPTIONS',options))
+print(json.dumps(scope,indent=2))

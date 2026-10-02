@@ -105,20 +105,20 @@ namespace LegendsOfRus
             // this space to the failed-goal icons. It is not a decorative sample score.
             v.Score.gameObject.SetActive(false);
             foreach(var goal in v.Goals)
-                ProductionVictoryView.PlaceText(goal.Count,0,100,190,40,31);
+                ProductionVictoryView.PlaceText(goal.Count,0,95,190,44,36);
             var retrySprite=Load(ArtRoot+"retry_r11");v.Retry.GetComponent<Image>().sprite=retrySprite;
-            float retryWidth=625,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
-            ProductionVictoryView.Place((RectTransform)v.Retry.transform,(941-retryWidth)*.5f,877,retryWidth,retryHeight);
-            ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,36);Gold(v.RetryText,.8f);
+            float retryWidth=480,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
+            ProductionVictoryView.Place((RectTransform)v.Retry.transform,85,864,retryWidth,retryHeight);
+            ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,40);Gold(v.RetryText,.8f);
             var exit=v.Exit.GetComponent<Image>();exit.sprite=Load(ArtRoot+"goals_r10");
-            ProductionVictoryView.Place((RectTransform)v.Exit.transform,642,1158,200,56);
-            ProductionVictoryView.PlaceText(v.ExitText,10,5,180,46,19);
+            ProductionVictoryView.Place((RectTransform)v.Exit.transform,610,864,250,124);
+            ProductionVictoryView.PlaceText(v.ExitText,14,13,222,98,32);
             v.ExitText.horizontalOverflow=HorizontalWrapMode.Wrap;
-            ProductionVictoryView.PlaceText(v.Reaction,104,1158,518,49,18);
+            ProductionVictoryView.PlaceText(v.Reaction,104,1145,733,70,28);
             v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
             v.Reaction.gameObject.SetActive(false);
             SetPanel(v,"BoostersPanel","goals_r11",72,1145,797,300,true);
-            ProductionVictoryView.PlaceText(v.BoostersHeading,104,1160,518,40,26);
+            ProductionVictoryView.PlaceText(v.BoostersHeading,104,1153,733,58,32);
             for(int i=0;i<4;i++)
             {
                 var group=v.Body.Find("Booster_"+i) as RectTransform;
@@ -142,7 +142,7 @@ namespace LegendsOfRus
                 var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit!=null)fit.enabled=false;
                 plate.preserveAspect=true;plate.color=Color.white;
                 plate.transform.SetSiblingIndex(1);
-                ProductionVictoryView.PlaceText(v.BoosterLabels[i],10,182,174,48,20);
+                ProductionVictoryView.PlaceText(v.BoosterLabels[i],5,180,184,52,23);
                 ClearLabel(v.BoosterLabels[i],false);
                 v.BoosterLabels[i].transform.SetAsLastSibling();
             }
@@ -186,14 +186,14 @@ namespace LegendsOfRus
                 var colors=b.colors;colors.disabledColor=new Color(.82f,.82f,.82f,1);b.colors=colors;
                 b.GetComponent<Image>().preserveAspect=true;b.GetComponent<Image>().raycastTarget=true;
             }
-            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",42,16,215,33,28);
-            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",35,12,254,43,21);
+            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",30,6,250,44,32);
+            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",22,4,280,48,22);
             v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
-            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,53,240,22,18);
+            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",24,54,276,34,30);
             var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),110,90,43,43);gem.preserveAspect=true;gem.enabled=false;
             EnsureLabel(v,paid.transform,"Price",161,92,48,36,28).text="—";
             var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;lightning.enabled=false;
-            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,56,240,22,18);
+            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",24,54,276,34,30);
             ClearLabel(v.PaidOfferStatus,true);ClearLabel(v.AdOfferStatus,true);
             var play=EnsureLabel(v,ad.transform,"PlaySymbol",138,91,43,36,32);play.text="";play.enabled=false;
             v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);

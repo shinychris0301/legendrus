@@ -21,6 +21,12 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             foreach(var image in root.GetComponentsInChildren<Image>(true))Assert.That(image.sprite,Is.Not.Null,image.name);
             foreach(var image in v.RowPortraits)Assert.That(image.sprite.name,Does.StartWith("portrait_"));
             Assert.That(v.PrizeFrames.Length,Is.EqualTo(3));Assert.That(v.RulesPanel.activeSelf,Is.False);
+            Assert.That(v.Header,Is.Not.Null);Assert.That(v.Header.HasBindings,Is.True);
+            Assert.That(v.Header.Backing.sprite,Is.SameAs(Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>().GetComponentInChildren<ProductionPlayerHeader>(true).Backing.sprite));
+            Assert.That(v.Header.Balances[2],Is.SameAs(v.EnergyText));
+            Assert.That(v.RulesButton.image.sprite.name,Is.EqualTo("rules_original_ru"));
+            Assert.That(v.RulesButtonText.enabled,Is.False,"Original Russian lettering must not be overprinted");
+            foreach(var card in v.PrizeFrames)Assert.That(card.Find("Gem").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Gem(1)));
             AssertSelectedFonts(v);
             foreach(var font in new[]{v.PlayerNamesFont,v.HeadingFont,v.RankNumbersFont}){
                 Assert.That(AssetDatabase.GetAssetPath(font),Does.StartWith("Assets/LegendsOfRus/Resources/ProductionUI/IndividualRankingFonts/"));
@@ -44,6 +50,8 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
                 ProductionIndividualRankingRuntime.BuildInto((RectTransform)root.transform);ProductionIndividualRankingRuntime.BuildInto((RectTransform)root.transform);
                 Assert.That(root.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(count));
                 var v=root.GetComponent<ProductionIndividualRankingView>();Assert.That(v.HasLiveLeaderboard,Is.False);
+                Assert.That(v.Body.Find("CarvedFooter").GetSiblingIndex(),Is.LessThan(v.BackButton.transform.GetSiblingIndex()),"Repeated rebuild must not cover Back with the carving");
+                Assert.That(v.Body.Find("CarvedFooter").GetSiblingIndex(),Is.LessThan(v.RulesButton.transform.GetSiblingIndex()));
                 Assert.That(v.Rows.Length,Is.EqualTo(14));Assert.That(v.Period,Is.EqualTo(IndividualRankingPeriod.Season));
                 v.SelectPeriod(IndividualRankingPeriod.Day);v.RefreshContent();AssertSelectedFonts(v);
                 Assert.Throws<System.ArgumentOutOfRangeException>(()=>v.SelectPeriod((IndividualRankingPeriod)42));

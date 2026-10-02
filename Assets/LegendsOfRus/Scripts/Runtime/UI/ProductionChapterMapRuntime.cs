@@ -67,15 +67,19 @@ namespace LegendsOfRus
             for(int i=0;i<view.Nodes.Length;i++)view.Nodes[i]=CreateNode(view,i);
             view.HudBacking = Clone(home.GetComponent<ProductionHomeLayout>().HudBacking,content,"HudOpaqueNavyBacking");
             view.Hud = Clone(home.GetComponent<ProductionHomeLayout>().Hud,content,"ChapterMapHud");
-            view.ProfileButton = view.Hud.Find("ProfileButton").GetComponent<Button>();
-            view.SettingsButton = view.Hud.Find("SettingsButton").GetComponent<Button>();
-            view.HeroName = view.ProfileButton.transform.Find("HeroName").GetComponent<Text>();
-            view.LevelText = view.ProfileButton.transform.Find("SavedLevel").GetComponent<Text>();
-            view.GoldText = view.Hud.Find("GoldResource/GoldValue").GetComponent<Text>();
-            view.GemsText = view.Hud.Find("GemsResource/GemsValue").GetComponent<Text>();
-            view.EnergyText = view.Hud.Find("EnergyResource/EnergyValue").GetComponent<Text>();
-            view.PlusButtons = new[] { view.Hud.Find("GoldResource/ResourcePlus").GetComponent<Button>(),
-                view.Hud.Find("GemsResource/ResourcePlus").GetComponent<Button>(),view.Hud.Find("EnergyResource/ResourcePlus").GetComponent<Button>() };
+            // Instantiate remaps the shared header's serialized references to this clone.
+            // Home's current capsules no longer live at the historical GoldResource paths.
+            var header = view.Hud.GetComponent<ProductionPlayerHeader>();
+            if (header == null || !header.HasBindings)
+                throw new InvalidOperationException("Cloned Home HUD requires complete shared header bindings.");
+            view.ProfileButton = header.Profile;
+            view.SettingsButton = header.Settings;
+            view.HeroName = header.PlayerName;
+            view.LevelText = header.Level;
+            view.GoldText = header.Balances[0];
+            view.GemsText = header.Balances[1];
+            view.EnergyText = header.Balances[2];
+            view.PlusButtons = (Button[])header.Plus.Clone();
             view.TitleArea=Rect(content,"TitleArea",0,130,941,280);
             view.TitlePlaque=Art(view.TitleArea,"ChapterBanner",Load("banner"),55,0,831,277);
             view.ChapterText=Label(view.TitleArea,"Chapter","ГЛАВА 1",240,68,461,47,32,view.Typography);

@@ -101,12 +101,14 @@ namespace LegendsOfRus.GameplayCore
                 BoardObstacleKind obstacle = (BoardObstacleKind)obstacleValue;
                 if (
                     (obstacle == BoardObstacleKind.None && layerValue != 0) ||
-                    (obstacle != BoardObstacleKind.None && (layerValue < 1 || layerValue > 3))
+                    (obstacle != BoardObstacleKind.None && (layerValue < 1 || layerValue > (obstacle == BoardObstacleKind.RunicSeal ? 2 : 3)))
                 )
                     throw new FormatException($"Cell {i} obstacle layers are outside the valid range.");
                 if (itemValue != 0 && tile >= 0)
                     throw new FormatException($"Cell {i} contains both a gem and an objective item.");
 
+                if (obstacle == BoardObstacleKind.RunicSeal && (tile >= 0 || itemValue != 0 || specials[i] != SpecialGemKind.None))
+                    throw new FormatException($"Cell {i} contains an occupied runic seal.");
                 obstacles[i] = obstacle;
                 obstacleLayers[i] = (byte)layerValue;
                 objectiveItems[i] = (BoardObjectiveItemKind)itemValue;

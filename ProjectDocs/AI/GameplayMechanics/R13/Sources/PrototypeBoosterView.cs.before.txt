@@ -1,0 +1,50 @@
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    // Inventory activation illustration only; inventory consumption and targets stay in Match3Board.
+    public sealed class PrototypeBoosterView : MonoBehaviour
+    {
+        Match3Board board; RectTransform root,icon; Image art;
+        GameplayMotionEvent cue; float started; bool active;
+        public bool IsPresenting=>active;
+        public int PresentationCount {get;private set;}
+        public static void Attach(Match3Board board)
+        {
+            var go=new GameObject("PrototypeBoosterAnimation",typeof(RectTransform),typeof(RectMask2D));go.transform.SetParent(board.transform,false);
+            var r=(RectTransform)go.transform;r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;
+            var v=go.AddComponent<PrototypeBoosterView>();v.board=board;v.root=r;
+            var child=new GameObject("BoosterIllustration",typeof(RectTransform),typeof(Image));child.transform.SetParent(r,false);v.icon=(RectTransform)child.transform;v.art=child.GetComponent<Image>();v.art.preserveAspect=true;v.art.raycastTarget=false;child.SetActive(false);
+            board.MotionEventPublished+=v.Motion;
+        }
+        void Motion(GameplayMotionEvent e)
+        {
+            if(e.Kind==GameplayMotionKind.CommandRecovered){Clear();return;}
+            if(e.Kind!=GameplayMotionKind.BoosterActivated)return;
+            cue=e;started=Time.unscaledTime;active=true;PresentationCount++;
+            int index=e.BoosterKind==GameplayBoosterKind.Firebird?1:e.BoosterKind==GameplayBoosterKind.LivingLight?2:e.BoosterKind==GameplayBoosterKind.SeaPearl?3:0;
+            art.sprite=ProductionBoosterArt.Icon(index);icon.gameObject.SetActive(true);LateUpdate();
+        }
+        void LateUpdate()
+        {
+            if(!active)return;float t=(Time.unscaledTime-started)/.46f;if(t>=1){Clear();return;}
+            var r=root.rect;float size=Mathf.Min(r.width/board.ColumnCount,r.height/board.RowCount);
+            Vector2 target=new Vector2(r.xMin+(cue.Primary.X+.5f)*r.width/board.ColumnCount,r.yMax-(cue.Primary.Y+.5f)*r.height/board.RowCount);
+            if(cue.Primary.X<0||cue.Primary.Y<0)target=r.center;
+            bool mace=cue.BoosterKind==GameplayBoosterKind.BogatyrMaceRow||cue.BoosterKind==GameplayBoosterKind.BogatyrMaceColumn;
+            float approach=Mathf.Clamp01(t/.38f),fade=1-Mathf.Clamp01((t-.55f)/.45f);
+            Vector2 offset=mace?new Vector2(-.5f,.9f):Vector2.up*1.8f;
+            icon.anchoredPosition=target+offset*size*(1-approach)*(1-approach);
+            if(cue.BoosterKind==GameplayBoosterKind.SeaPearl)
+                icon.anchoredPosition=target+Vector2.up*size*t*1.5f;
+            else if(cue.BoosterKind==GameplayBoosterKind.LivingLight)
+                icon.anchoredPosition=target;
+            icon.sizeDelta=Vector2.one*size*(mace?1.7f:1.9f)*(cue.BoosterKind==GameplayBoosterKind.LivingLight?.65f+.4f*Mathf.Sin(t*Mathf.PI):1);
+            icon.localRotation=Quaternion.Euler(0,0,mace?Mathf.Lerp(-55,15,approach):Mathf.Sin(t*Mathf.PI)*-15);
+            art.color=new Color(1,1,1,fade);
+        }
+        void Clear(){active=false;if(icon)icon.gameObject.SetActive(false);}
+        void OnDisable()=>Clear();
+        void OnDestroy(){if(board)board.MotionEventPublished-=Motion;}
+    }
+}

@@ -124,14 +124,18 @@ namespace LegendsOfRus
                     float rw=icon.sprite.rect.width*factor,rh=icon.sprite.rect.height*factor;
                     Place(icon.rectTransform,positions[j]+(widths[j]-rw)*.5f,72-rh,rw,rh);
                 }
-                Dense(heading);
+                NativeText(heading);
                 v.Rewards[i].gameObject.SetActive(false);
                 Place(v.Rewards[i].rectTransform,427,rewardY+38,202,37);v.Rewards[i].fontSize=20;v.Rewards[i].alignment=TextAnchor.MiddleCenter;v.Rewards[i].transform.SetAsLastSibling();
+                var availability=card.Find("ActionAvailability")?.GetComponent<Text>()??Label(v,card,"ActionAvailability",650,h-112,230,22,17);
+                Place(availability.rectTransform,650,h-112,230,22);availability.fontSize=17;availability.color=new Color32(239,214,163,255);NativeText(availability);
                 v.DetailsButtons[i].image.sprite=Load("action_r3");
                 Place((RectTransform)v.DetailsButtons[i].transform,650,h-86,230,76);
                 Place(v.ActionLabels[i].rectTransform,18,15,194,41);v.ActionLabels[i].fontSize=i==0?19:21;Gold(v.ActionLabels[i],false);
             }
             Place((RectTransform)v.BackButton.transform,18,1605,66,64);
+            // Expand input into the clear margin, preserving the original icon and safe-bottom gap.
+            v.BackButton.image.raycastPadding=new Vector4(-6,0,-6,-12);
             // Preserve the complete source footer silhouette and jewel at uniform scale.
             // Back has its own clear area; the live schedule note sits between the source flourishes.
             var footer=v.Body.Find("FooterOrnament").GetComponent<Image>();
@@ -141,7 +145,7 @@ namespace LegendsOfRus
             v.Footer.transform.SetAsLastSibling();v.BackButton.transform.SetAsLastSibling();
             Place(v.Footer.rectTransform,296,1617,432,28);v.Footer.fontSize=22;
             v.Footer.resizeTextForBestFit=true;v.Footer.resizeTextMinSize=18;v.Footer.resizeTextMaxSize=22;
-            Dense(v.Footer);
+            NativeText(v.Footer);
             for(int i=0;i<3;i++)
             {
                 Place((RectTransform)v.Tabs[i].transform,40+i*292,306,283,74);
@@ -151,18 +155,16 @@ namespace LegendsOfRus
                 var oldFace=v.Tabs[i].transform.Find("ActiveFace");if(oldFace!=null)oldFace.gameObject.SetActive(false);
                 Gold(v.TabLabels[i],false);
             }
-            // Render native, localized captions at twice the raster density.
-            foreach(var text in v.Names)Dense(text);
-            foreach(var text in v.Descriptions)Dense(text);
-            foreach(var text in v.Statuses)Dense(text);
-            foreach(var text in v.ActionLabels)Dense(text);
-            foreach(var text in v.TabLabels)Dense(text);
+            // Native glyph sizing avoids resampling scaled-down dynamic text; Russian controls use source lettering.
+            foreach(var text in v.Names)NativeText(text);
+            foreach(var text in v.Descriptions)NativeText(text);
+            foreach(var text in v.Statuses)NativeText(text);
+            foreach(var text in v.ActionLabels)NativeText(text);
+            foreach(var text in v.TabLabels)NativeText(text);
         }
-        static void Dense(Text text)
+        static void NativeText(Text text)
         {
-            text.rectTransform.sizeDelta*=2;text.rectTransform.localScale=new Vector3(.5f,.5f,1);
-            text.fontSize*=2;
-            if(text.resizeTextForBestFit){text.resizeTextMinSize*=2;text.resizeTextMaxSize*=2;}
+            text.rectTransform.localScale=Vector3.one;
         }
         static void Place(RectTransform r,float x,float y,float w,float h)
         {r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);}

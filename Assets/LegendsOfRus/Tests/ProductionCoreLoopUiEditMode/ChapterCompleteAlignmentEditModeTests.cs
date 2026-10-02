@@ -11,7 +11,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         [Test] public void CanonicalChapterCompleteUsesIsolatedArtNativeControlsAndNoCapturedScreen()
         {
             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=root.GetComponent<ProductionChapterCompleteView>();
-            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(8));
+            Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(ProductionChapterCompleteView.CurrentRevision));
             Assert.That(view.Environment.sprite.name,Is.EqualTo("environment_source_r8"));
             Assert.That(view.Body.Find("NextHeadingOriginal").GetComponent<Image>().raycastTarget,Is.False);Assert.That(root.GetComponent<ProductionChapterCompleteLayout>().View,Is.SameAs(view));
             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.ChapterComplete),Is.EqualTo("ProductionUI/Pages/ChapterComplete"));

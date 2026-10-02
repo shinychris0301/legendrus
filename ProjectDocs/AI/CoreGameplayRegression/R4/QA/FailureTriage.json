@@ -1,0 +1,26 @@
+[
+  {
+    "category": "harness configuration",
+    "cases": 30,
+    "cause": "Continuation fixture requires /tmp/lor-continuation-r1/; broad runner used a generic isolated root.",
+    "resolution": "Reran unchanged continuation fixture in its required isolated root: all 30 passed in both focused runs."
+  },
+  {
+    "category": "obsolete test contract",
+    "cases": 1,
+    "cause": "ChapterMap expected round 500 to be unpublished; Chapter 1 now includes it.",
+    "resolution": "Assert published-but-progression-locked wording, unchanged save and no navigation."
+  },
+  {
+    "category": "cross-fixture contamination",
+    "cases": 1,
+    "cause": "Compliance fixture destroyed shared PrivacySupportService, leaving later Settings without the singleton. Reproduced as 6 compliance passes followed by a Settings failure.",
+    "resolution": "Preserve shared component/state and stored key, bind only owned fixture services, restore original singleton and preferences. Combined 52-case run passed."
+  },
+  {
+    "category": "frame-sampling sensitivity",
+    "cases": 1,
+    "cause": "Captured conversion frame arrived late; observed gap 0.0681152344 seconds failed the fixed 0.07 threshold although the scheduled lead-in is 0.12 seconds. Isolated original test passed.",
+    "resolution": "Assert scheduled minimum, a strictly later release frame, and measured gap accounting for the conversion frame duration. Current board-result and visible-converted-cell checks preserved; no runtime timing change."
+  }
+]

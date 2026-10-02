@@ -74,12 +74,14 @@ namespace LegendsOfRus
 
     public static class LevelObstacleTypes
     {
+        public const string RunicSeal = "runic_seal";
         public const string Ice = "ice";
         public const string Chain = "chain";
         public const string Crate = "crate";
 
         public static bool TryToBoardKind(string type, out BoardObstacleKind kind)
         {
+            if (string.Equals(type, RunicSeal, StringComparison.Ordinal)) { kind = BoardObstacleKind.RunicSeal; return true; }
             if (string.Equals(type, Ice, StringComparison.Ordinal))
             {
                 kind = BoardObstacleKind.Ice;
@@ -102,6 +104,7 @@ namespace LegendsOfRus
 
         public static int MaximumLayers(string type)
         {
+            if (string.Equals(type, RunicSeal, StringComparison.Ordinal)) return 2;
             if (string.Equals(type, Ice, StringComparison.Ordinal)) return 2;
             if (string.Equals(type, Chain, StringComparison.Ordinal)) return 2;
             if (string.Equals(type, Crate, StringComparison.Ordinal)) return 3;

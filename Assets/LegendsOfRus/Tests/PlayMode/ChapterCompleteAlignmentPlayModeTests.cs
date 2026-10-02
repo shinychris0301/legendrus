@@ -11,8 +11,12 @@ using UnityEngine.EventSystems;
 
 namespace LegendsOfRus.Tests.PlayMode
 {
+    [Category("LegacyTenRoundFixture")]
     public sealed class ChapterCompleteAlignmentPlayModeTests
     {
+        LegacyChapterTestFixture legacyFixture;
+        [TearDown] public void RestoreActiveContent() { legacyFixture?.Dispose(); }
+
         ScreenRouter router;
         string previousSave, previousLanguage;
         readonly string[] keys = { "LegendsOfRus_Save_v1", "LegendsOfRus_Save_v1_Backup", "LegendsOfRus_Save_v1_Staging" };
@@ -22,6 +26,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [UnitySetUp]
         public IEnumerator SetUp()
         {
+            legacyFixture = new LegacyChapterTestFixture();
             string isolated = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
             if (string.IsNullOrEmpty(isolated)) Assert.Ignore("Requires isolated test storage.");
             Assert.That(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), Is.EqualTo(isolated));
@@ -57,8 +62,8 @@ namespace LegendsOfRus.Tests.PlayMode
         GameObject Root()=>View().gameObject;
         void CompleteChapter()
         {
-            foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)GameState.Instance.CompleteLevel(level,level.starScoreThresholds[2]);
-            foreach(var m in StoryCatalog.LoadChapter1().milestones)GameState.Instance.CompleteStoryScene(m.sceneId);
+            foreach(var level in LegacyChapterTestFixture.Levels().levels)GameState.Instance.CompleteLevel(level,level.starScoreThresholds[2]);
+            foreach(var m in LegacyChapterTestFixture.Story().milestones)GameState.Instance.CompleteStoryScene(m.sceneId);
             StoryService.ResetRuntime();router.Show(ScreenId.ChapterComplete);Settle();
         }
         void Settle(){for(int i=0;i<24;i++)router.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds);Canvas.ForceUpdateCanvases();}
@@ -70,8 +75,8 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().Summary.text,Does.Contain("10/10").And.Contain("30/30"));
             CollectionAssert.AreEqual(new[]{1850,40,2,2,2,2},ProductionChapterCompleteView.ReceivedRewards(GameState.Instance));
             Assert.That(View().RewardCounts[0].text,Is.EqualTo("1 850"));
-            Assert.That(View().Body.Find("NextHeadingOriginal").gameObject.activeSelf,Is.True);
-            Assert.That(View().NextHeading.text,Is.EqualTo("СКОРО"));
+            Assert.That(View().Body.Find("NextHeadingOriginal").gameObject.activeSelf,Is.False);
+            Assert.That(View().NextHeading.text,Does.Contain("СКОРО"));
             Capture("ChapterComplete_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             Capture("ChapterComplete_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
             Capture("ChapterComplete_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
@@ -82,10 +87,47 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().Teaser.sprite.name,Is.EqualTo("teaser_blank_r8"));
             Capture("ChapterComplete_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
             Capture("ChapterComplete_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
-            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save),"Showing/localizing the summary cannot award rewards or acknowledge completion.");
+            AssertUnchangedSummarySave(save);
             router.Show(ScreenId.ChapterComplete);Settle();yield return null;
-            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save));
+            AssertUnchangedSummarySave(save);
         }
+        [UnityTest]public IEnumerator CurrentFinaleCaptionsFitSmallAndTallPortraits()
+        {
+            legacyFixture.Dispose();legacyFixture=null;
+            var state=GameState.Instance;state.Save.highestUnlockedLevel=500;
+            state.Save.levelProgress.Clear();
+            foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
+                state.Save.levelProgress.Add(new LevelProgressData{chapterId=1,levelId=level.levelId,completions=1,bestStars=3,rewardClaimed=true});
+            var story=StoryCatalog.LoadChapter1();state.CompleteStoryScene(story.introSceneId);
+            foreach(var milestone in story.milestones)state.CompleteStoryScene(milestone.sceneId);
+            StoryService.ResetRuntime();router.Show(ScreenId.ChapterComplete);Settle();yield return null;
+            string save=JsonUtility.ToJson(state.Save);
+            foreach(var language in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(language);View().RefreshContent();yield return WaitForNormalButtonColors();
+                Assert.That(View().Summary.text,Does.Contain("500/500").And.Contain("1500/1500"));
+                Assert.That(View().TeaserTitle.enabled&&View().TeaserDescription.enabled,Is.True);
+                Assert.That(View().Teaser.sprite.name,Is.EqualTo("teaser_blank_r8"));
+                Capture("ChapterComplete_Current_360_"+language,new Vector2Int(360,640),new Rect(0,20,360,600));
+                Capture("ChapterComplete_Current_576_"+language,new Vector2Int(576,1280),new Rect(0,48,576,1172));
+                Capture("ChapterComplete_Current_1080_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+                AssertUnchangedSummarySave(save);
+            }
+        }
+        [UnityTest]public IEnumerator SmallPortraitChapterActionsAcknowledgeThroughPaddedNativeInput()
+        {
+            legacyFixture.Dispose();legacyFixture=null;var state=GameState.Instance;state.Save.highestUnlockedLevel=500;state.Save.levelProgress.Clear();
+            foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)state.Save.levelProgress.Add(new LevelProgressData{chapterId=1,levelId=level.levelId,completions=1,bestStars=3,rewardClaimed=true});var story=StoryCatalog.LoadChapter1();state.CompleteStoryScene(story.introSceneId);foreach(var m in story.milestones)state.CompleteStoryScene(m.sceneId);StoryService.ResetRuntime();router.Show(ScreenId.ChapterComplete);Settle();yield return null;yield return WaitForNormalButtonColors();
+            var v=View();int gold=state.Save.gold,gems=state.Save.gems,generation=router.RouteGeneration;GameObject tap=null;
+            foreach(var lang in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(lang);v.RefreshContent();yield return null;yield return null;
+                Capture("ChapterComplete_Touch_360_"+lang,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>{tap=CoreOutcomeTouchAssertions.Check(v.Actions[1],camera,new Rect(0,20,360,600),"ChapterMapAction","360");CoreOutcomeTouchAssertions.Check(v.Actions[0],camera,new Rect(0,20,360,600),"ChapterContinue","360");});
+                Capture("ChapterComplete_Touch_1080_"+lang,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>CoreOutcomeTouchAssertions.Check(v.Actions[1],camera,new Rect(45,100,990,2160),"ChapterMapAction","1080"));
+            }
+            CoreOutcomeTouchAssertions.Click(tap);Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));v.Actions[1].onClick.Invoke();Assert.That(router.RouteGeneration,Is.EqualTo(generation+1));Assert.That(state.GetChapterCompletionPhase(1),Is.EqualTo(ChapterCompletionPhase.Acknowledged));Assert.That(state.Save.gold,Is.EqualTo(gold));Assert.That(state.Save.gems,Is.EqualTo(gems));
+        }
+
         [UnityTest]public IEnumerator NativeActionsAcknowledgeExactlyOnceWithoutRewardDuplication()
         {
             for(int i=0;i<2;i++){
@@ -104,10 +146,21 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(View().Summary.text,Does.Contain("0/10").And.Contain("0/30"));
             foreach(var t in View().RewardCounts)Assert.That(t.text,Is.EqualTo("0"));
             yield return WaitForNormalButtonColors();Capture("ChapterComplete_InProgress_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
-            var level=ChapterLevelCatalog.LoadChapter1().levels[0];GameState.Instance.CompleteLevel(level,level.starScoreThresholds[0]);yield return null;
+            var level=LegacyChapterTestFixture.Levels().levels[0];GameState.Instance.CompleteLevel(level,level.starScoreThresholds[0]);yield return null;
             Assert.That(View().Summary.text,Does.Contain("1/10").And.Contain("1/30"));Assert.That(View().RewardCounts[0].text,Is.EqualTo("120"));
             View().Actions[1].onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
             Assert.That(GameState.Instance.GetChapterCompletionPhase(1),Is.EqualTo(ChapterCompletionPhase.InProgress));
+        }
+        static void AssertUnchangedSummarySave(string beforeJson)
+        {
+            var before=JsonUtility.FromJson<PlayerSaveData>(beforeJson);
+            var after=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
+            if(before.energy>=before.energyMax)
+            {
+                Assert.That(after.lastEnergyUtcTicks,Is.GreaterThanOrEqualTo(before.lastEnergyUtcTicks));
+                after.lastEnergyUtcTicks=before.lastEnergyUtcTicks;
+            }
+            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(beforeJson),"Summary rendering must preserve energy, rewards, progress and acknowledgement.");
         }
         IEnumerator WaitForNormalButtonColors()
         {
@@ -225,6 +278,27 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(Bounds(icon.rectTransform,camera).Overlaps(Bounds(icon.transform.parent.Find("Received").GetComponent<RectTransform>(),camera)),Is.False,"Reward amount overlaps icon");
             }
             Assert.That(Bounds(v.Summary.rectTransform,camera).Overlaps(Bounds((RectTransform)v.Actions[0].transform,camera)),Is.False,"Summary overlaps actions");
+            foreach(var text in new[]{v.Summary,v.NextHeading,v.TeaserDescription,v.RewardCounts[0],v.RewardCounts[1]})
+            {
+                Rect bounds=Bounds(text.rectTransform,camera);
+                float pixelsPerUnit=bounds.height/text.rectTransform.rect.height;
+                Assert.That(text.fontSize*pixelsPerUnit,Is.GreaterThanOrEqualTo(13.5f),text.name+" effective font pixels");
+                Assert.That(safeArea.Contains(bounds.min)&&safeArea.Contains(bounds.max),Is.True,text.name+" outside safe area");
+            }
+            Assert.That(Bounds(v.Summary.rectTransform,camera).Overlaps(Bounds(v.NextHeading.rectTransform,camera)),Is.False);
+            Assert.That(Bounds(v.NextHeading.rectTransform,camera).Overlaps(Bounds(v.Teaser.rectTransform,camera)),Is.False);
+            Assert.That(Bounds(v.TeaserDescription.rectTransform,camera).Overlaps(Bounds(v.Teaser.rectTransform,camera)),Is.False);
+            // Safe-area containment alone misses text touching decorative borders.
+            foreach(var count in v.RewardCounts)
+            {
+                var parent=(RectTransform)count.transform.parent;
+                Rect card=Bounds(parent,camera), label=Bounds(count.rectTransform,camera);
+                Assert.That(label.yMin-card.yMin,Is.GreaterThanOrEqualTo(10f*card.height/parent.rect.height),"Reward amount touches lower gold frame");
+            }
+            var footer=(RectTransform)v.Body.Find("CarvedWoodFooter");
+            Rect footerBounds=Bounds(footer,camera);
+            Assert.That(Bounds(v.TeaserDescription.rectTransform,camera).yMin-footerBounds.yMin,
+                Is.GreaterThanOrEqualTo(80f*footerBounds.height/footer.rect.height),"Description touches footer ornament");
             Assert.That(v.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
         }
     }

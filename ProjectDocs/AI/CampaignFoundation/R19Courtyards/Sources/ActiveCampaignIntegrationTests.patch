@@ -1,0 +1,102 @@
+--- ActiveCampaignIntegrationTests.before
++++ Assets/LegendsOfRus/Tests/CampaignPlayMode/ActiveCampaignIntegrationTests.cs
+@@ -17,18 +17,18 @@
+         [Test] public void RuntimeResourcesMatchCandidateAndBothLanguagesValidate()
+         {
+             var c=ActiveCampaignContent.Load(true);var levels=ChapterLevelCatalog.LoadChapter1(true);
+-            Assert.That(levels.levels.Length,Is.EqualTo(70));
++            Assert.That(levels.levels.Length,Is.EqualTo(80));
+             foreach(var name in new[]{"levels","story","story_ru","story_en"})
+-                Assert.That(Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot+name).text,Is.EqualTo(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector02R18",name+".json"))));
+-            var previous=JsonUtility.FromJson<ChapterLevelCatalogData>(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector02R17/levels.json")));
+-            for(int i=0;i<60;i++)Assert.That(JsonUtility.ToJson(levels.levels[i]),Is.EqualTo(JsonUtility.ToJson(previous.levels[i])));
+-            Assert.That(ChapterLevelCatalog.Next(Level(60)).levelId,Is.EqualTo(61));
+-            Assert.That(c.LoadStory(1).milestones.Single(m=>m.afterLevelId==70).sceneId,Is.EqualTo("campaign.chapter01.far_street"));
+-            Assert.That(levels.levels.Skip(60).Sum(l=>l.rewards.gold),Is.EqualTo(1840));
++                Assert.That(Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot+name).text,Is.EqualTo(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector02R19",name+".json"))));
++            var previous=JsonUtility.FromJson<ChapterLevelCatalogData>(File.ReadAllText(Path.Combine(Application.dataPath,"LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector02R18/levels.json")));
++            for(int i=0;i<70;i++)Assert.That(JsonUtility.ToJson(levels.levels[i]),Is.EqualTo(JsonUtility.ToJson(previous.levels[i])));
++            Assert.That(ChapterLevelCatalog.Next(Level(70)).levelId,Is.EqualTo(71));
++            Assert.That(c.LoadStory(1).milestones.Single(m=>m.afterLevelId==80).sceneId,Is.EqualTo("campaign.chapter01.courtyard_paths"));
++            Assert.That(levels.levels.Skip(70).Sum(l=>l.rewards.gold),Is.EqualTo(1840));
+             foreach(var language in new[]{"ru","en"})Assert.That(StoryCatalog.ValidateCampaign(c.LoadStory(1),c.LoadLocalization(1,language),levels,false).Errors,Is.Empty);
+             Assert.That(StoryCatalog.LoadChapter1(true).completion?.finalLevelId??0,Is.Zero);
+             Assert.That(ChapterLevelCatalog.Next(Level(10)).levelId,Is.EqualTo(11));
+-            Assert.That(ChapterLevelCatalog.Next(Level(70)),Is.Null);Assert.That(ChapterLevelCatalog.Find(2,1),Is.Null);
++            Assert.That(ChapterLevelCatalog.Next(Level(80)),Is.Null);Assert.That(ChapterLevelCatalog.Find(2,1),Is.Null);
+             foreach(var l in levels.levels)for(int a=1;a<=3;a++){var m=Start(l,a);Assert.That(m.HasAnyMatches(),Is.False,l.id);Assert.That(m.HasLegalMove(),Is.True,l.id);Assert.That(m.ComputeStateHash(),Is.EqualTo(Start(l,a).ComputeStateHash()));}
+         }
+         sealed class Node {public BoardSnapshot Board;public LevelGoalRuntimeSnapshot Goals;public int Score;public float Cost;public List<MechanicsReplayCommand> Path=new List<MechanicsReplayCommand>();}
+@@ -64,7 +64,7 @@
+             Assert.Fail("No inventory-free witness: "+l.id+" attempt "+attempt);return null;
+         }
+         static string Output {get{string p=Environment.GetEnvironmentVariable("LOR_JOURNEY_CAPTURE_DIR")??Path.Combine(Application.temporaryCachePath,"CampaignSectorCandidate");Directory.CreateDirectory(p);return p;}}
+-        [TestCase(1)][TestCase(2)][TestCase(3)][TestCase(4)][TestCase(5)][TestCase(6)][TestCase(7)][TestCase(8)][TestCase(9)][TestCase(10)][TestCase(11)][TestCase(12)][TestCase(13)][TestCase(14)][TestCase(15)][TestCase(16)][TestCase(17)][TestCase(18)][TestCase(19)][TestCase(20)][TestCase(21)][TestCase(22)][TestCase(23)][TestCase(24)][TestCase(25)][TestCase(26)][TestCase(27)][TestCase(28)][TestCase(29)][TestCase(30)][TestCase(31)][TestCase(32)][TestCase(33)][TestCase(34)][TestCase(35)][TestCase(36)][TestCase(37)][TestCase(38)][TestCase(39)][TestCase(40)][TestCase(41)][TestCase(42)][TestCase(43)][TestCase(44)][TestCase(45)][TestCase(46)][TestCase(47)][TestCase(48)][TestCase(49)][TestCase(50)][TestCase(51)][TestCase(52)][TestCase(53)][TestCase(54)][TestCase(55)][TestCase(56)][TestCase(57)][TestCase(58)][TestCase(59)][TestCase(60)][TestCase(61)][TestCase(62)][TestCase(63)][TestCase(64)][TestCase(65)][TestCase(66)][TestCase(67)][TestCase(68)][TestCase(69)][TestCase(70)]
++        [TestCase(1)][TestCase(2)][TestCase(3)][TestCase(4)][TestCase(5)][TestCase(6)][TestCase(7)][TestCase(8)][TestCase(9)][TestCase(10)][TestCase(11)][TestCase(12)][TestCase(13)][TestCase(14)][TestCase(15)][TestCase(16)][TestCase(17)][TestCase(18)][TestCase(19)][TestCase(20)][TestCase(21)][TestCase(22)][TestCase(23)][TestCase(24)][TestCase(25)][TestCase(26)][TestCase(27)][TestCase(28)][TestCase(29)][TestCase(30)][TestCase(31)][TestCase(32)][TestCase(33)][TestCase(34)][TestCase(35)][TestCase(36)][TestCase(37)][TestCase(38)][TestCase(39)][TestCase(40)][TestCase(41)][TestCase(42)][TestCase(43)][TestCase(44)][TestCase(45)][TestCase(46)][TestCase(47)][TestCase(48)][TestCase(49)][TestCase(50)][TestCase(51)][TestCase(52)][TestCase(53)][TestCase(54)][TestCase(55)][TestCase(56)][TestCase(57)][TestCase(58)][TestCase(59)][TestCase(60)][TestCase(61)][TestCase(62)][TestCase(63)][TestCase(64)][TestCase(65)][TestCase(66)][TestCase(67)][TestCase(68)][TestCase(69)][TestCase(70)][TestCase(71)][TestCase(72)][TestCase(73)][TestCase(74)][TestCase(75)][TestCase(76)][TestCase(77)][TestCase(78)][TestCase(79)][TestCase(80)]
+         public void ThreeAttemptSeedsHaveInventoryFreeReplayWitnesses(int round)
+         {
+             var l=Level(round);for(int attempt=1;attempt<=3;attempt++){
+@@ -85,6 +85,7 @@
+         [UnityTest] public IEnumerator ExistingFortyRoundSaveKeepsBalancesAndUnlocksFortyOne() { yield return SaveMigration(40); }
+         [UnityTest] public IEnumerator ExistingFiftyRoundSaveKeepsBalancesAndUnlocksFiftyOne() { yield return SaveMigration(50); }
+         [UnityTest] public IEnumerator ExistingSixtyRoundSaveKeepsBalancesAndUnlocksSixtyOne() { yield return SaveMigration(60); }
++        [UnityTest] public IEnumerator ExistingSeventyRoundSaveKeepsBalancesAndUnlocksSeventyOne() { yield return SaveMigration(70); }
+         IEnumerator SaveMigration(int completed)
+         {
+             Isolation();var obj=GameState.Instance==null?new GameObject("ActiveCampaignMigrationTest",typeof(GameState)):null;var state=GameState.Instance;var previous=JsonUtility.ToJson(state.Save);
+@@ -98,33 +99,33 @@
+                 Assert.That(state.SelectLevel(1,completed+1),Is.True);Assert.That(state.SelectLevel(1,completed+2),Is.False);
+                 var replay=state.CompleteLevel(Level(completed),3000);Assert.That(state.Save.gold,Is.EqualTo(777));
+                 int gold=state.Save.gold,gems=state.Save.gems,mace=state.Save.boosterMace,pearl=state.Save.boosterSeaPearl;int firebird=state.Save.boosterFirebird,light=state.Save.boosterLivingLight;
+-                for(int n=completed+1;n<=70;n++){Assert.That(state.SelectLevel(1,n),Is.True);state.CompleteLevel(Level(n),3000);}
+-                Assert.That(state.Save.gold-gold,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.gold)));
+-                Assert.That(state.Save.gems-gems,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.gems)));
+-                Assert.That(state.Save.boosterMace-mace,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.boosterMace)));
+-                Assert.That(state.Save.boosterSeaPearl-pearl,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.boosterSeaPearl)));
+-                Assert.That(state.Save.boosterFirebird-firebird,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.boosterFirebird)));
+-                Assert.That(state.Save.boosterLivingLight-light,Is.EqualTo(Enumerable.Range(completed+1,70-completed).Sum(n=>Level(n).rewards.boosterLivingLight)));
++                for(int n=completed+1;n<=80;n++){Assert.That(state.SelectLevel(1,n),Is.True);state.CompleteLevel(Level(n),3000);}
++                Assert.That(state.Save.gold-gold,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.gold)));
++                Assert.That(state.Save.gems-gems,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.gems)));
++                Assert.That(state.Save.boosterMace-mace,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.boosterMace)));
++                Assert.That(state.Save.boosterSeaPearl-pearl,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.boosterSeaPearl)));
++                Assert.That(state.Save.boosterFirebird-firebird,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.boosterFirebird)));
++                Assert.That(state.Save.boosterLivingLight-light,Is.EqualTo(Enumerable.Range(completed+1,80-completed).Sum(n=>Level(n).rewards.boosterLivingLight)));
+                 light=state.Save.boosterLivingLight;
+                 mace=state.Save.boosterMace;pearl=state.Save.boosterSeaPearl;firebird=state.Save.boosterFirebird;
+-                Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(70));Assert.That(state.SelectLevel(1,71),Is.False);Assert.That(state.SelectLevel(2,1),Is.False);Assert.That(StoryService.ShouldShowChapterComplete(),Is.False);
+-                gold=state.Save.gold;gems=state.Save.gems;state.CompleteLevel(Level(70),4000);Assert.That(state.Save.gold,Is.EqualTo(gold));Assert.That(state.Save.gems,Is.EqualTo(gems));
++                Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(80));Assert.That(state.SelectLevel(1,81),Is.False);Assert.That(state.SelectLevel(2,1),Is.False);Assert.That(StoryService.ShouldShowChapterComplete(),Is.False);
++                gold=state.Save.gold;gems=state.Save.gems;state.CompleteLevel(Level(80),4000);Assert.That(state.Save.gold,Is.EqualTo(gold));Assert.That(state.Save.gems,Is.EqualTo(gems));
+                 Assert.That(state.Save.boosterMace,Is.EqualTo(mace));Assert.That(state.Save.boosterSeaPearl,Is.EqualTo(pearl));Assert.That(state.Save.boosterFirebird,Is.EqualTo(firebird));Assert.That(state.Save.boosterLivingLight,Is.EqualTo(light));
+-                state.Persist();state.Save=SaveService.LoadWithResult().Data;Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(70));Assert.That(state.GetLevelProgress(1,70).completions,Is.EqualTo(2));
++                state.Persist();state.Save=SaveService.LoadWithResult().Data;Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(80));Assert.That(state.GetLevelProgress(1,80).completions,Is.EqualTo(2));
+             } finally { state.Save=JsonUtility.FromJson<PlayerSaveData>(previous);if(obj)UnityEngine.Object.Destroy(obj);StoryService.ResetRuntime(); }
+             yield return null;
+         }
+-        [UnityTest,Timeout(300000)] public IEnumerator NormalRouterPlaysWellRecoveryLayeredGatesAndFarStreetWithNativeRewardsAndStory()
++        [UnityTest,Timeout(300000)] public IEnumerator NormalRouterPlaysFarStreetLayeredIceMixedGatesAndCourtyardsWithNativeRewardsAndStory()
+         {
+             Isolation();var stateObject=GameState.Instance==null?new GameObject("ActiveCampaignRuntimeState",typeof(GameState)):null;var obj=ScreenRouter.Instance==null?new GameObject("ActiveCampaignRouterTest",typeof(ScreenRouter)):null;var router=obj?obj.GetComponent<ScreenRouter>():ScreenRouter.Instance;router.Initialize();yield return null;
+             try {
+-                foreach(int n in new[]{60,61,65,67,70}){
++                foreach(int n in new[]{70,71,73,75,78,80}){
+                     var state=GameState.Instance;Assert.That(state,Is.Not.Null);
+                     state.Save=new PlayerSaveData{highestUnlockedLevel=n,selectedLevel=n,energy=30,energyMax=30,lastEnergyUtcTicks=DateTime.UtcNow.Ticks,gold=0,gems=0};
+                     state.Save.levelProgress=Enumerable.Range(1,n-1).Select(i=>new LevelProgressData{chapterId=1,levelId=i,completions=1,rewardClaimed=true}).ToList();
+-                    state.Save.completedStoryScenes=StoryCatalog.LoadChapter1().scenes.Where(s=>s.id!=(n==70?"campaign.chapter01.far_street":n==60?"campaign.chapter01.well_path":n==50?"campaign.chapter01.beacon_lit":n==40?"campaign.chapter01.river_bank":string.Empty)).Select(s=>s.id).ToList();
++                    state.Save.completedStoryScenes=StoryCatalog.LoadChapter1().scenes.Where(s=>s.id!=(n==80?"campaign.chapter01.courtyard_paths":n==70?"campaign.chapter01.far_street":n==60?"campaign.chapter01.well_path":n==50?"campaign.chapter01.beacon_lit":n==40?"campaign.chapter01.river_bank":string.Empty)).Select(s=>s.id).ToList();
+                     StoryService.ResetRuntime();router.Show(ScreenId.ChapterMap);yield return Settle(router);
+-                    var map=router.GameCanvas.GetComponentInChildren<ProductionChapterMapView>();Assert.That(map.LevelAvailable(n),Is.True);Assert.That(map.LevelAvailable(71),Is.False);
++                    var map=router.GameCanvas.GetComponentInChildren<ProductionChapterMapView>();Assert.That(map.LevelAvailable(n),Is.True);Assert.That(map.LevelAvailable(81),Is.False);
+                     map.PlayButton.onClick.Invoke();yield return Settle(router);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+                     router.GameCanvas.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();yield return Settle(router);
+                     Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));var board=router.GameCanvas.GetComponentInChildren<ProductionGameplayView>().Board;
+@@ -144,6 +145,7 @@
+                     if(n==50)Assert.That(state.HasCompletedStoryScene("campaign.chapter01.beacon_lit"),Is.True);
+                     if(n==60)Assert.That(state.HasCompletedStoryScene("campaign.chapter01.well_path"),Is.True);
+                     if(n==70)Assert.That(state.HasCompletedStoryScene("campaign.chapter01.far_street"),Is.True);
++                    if(n==80)Assert.That(state.HasCompletedStoryScene("campaign.chapter01.courtyard_paths"),Is.True);
+                     Assert.That(StoryService.ShouldShowChapterComplete(),Is.False);router.Show(ScreenId.Home);yield return Settle(router);
+                 }
+             } finally {router.Show(ScreenId.Home);if(obj)UnityEngine.Object.Destroy(obj);if(stateObject)UnityEngine.Object.Destroy(stateObject);StoryService.ResetRuntime();}

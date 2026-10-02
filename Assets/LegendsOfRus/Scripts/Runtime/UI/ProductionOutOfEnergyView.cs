@@ -7,7 +7,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionOutOfEnergyView:MonoBehaviour
     {
-        public const int CurrentRevision=2;
+        public const int CurrentRevision=3;
         public int Revision=CurrentRevision;
         public SplashTitleTypography Typography;
         public RectTransform Content,Body;

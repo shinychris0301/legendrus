@@ -6,8 +6,12 @@ using UnityEngine.TestTools;
 
 namespace LegendsOfRus.Tests.PlayMode
 {
+    [Category("LegacyTenRoundFixture")]
     public sealed class StoryDataRuntimePlayModeTests
     {
+        LegacyChapterTestFixture legacyFixture;
+        [TearDown] public void RestoreActiveContent() { legacyFixture?.Dispose(); }
+
         static readonly string[] PersistedSaveKeys =
         {
             "LegendsOfRus_Save_v1",
@@ -25,6 +29,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [UnitySetUp]
         public IEnumerator SetUp()
         {
+            legacyFixture = new LegacyChapterTestFixture();
             SnapshotAndClearSaveJournal();
             yield return null;
             if (GameState.Instance == null)
@@ -59,9 +64,9 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void Chapter01StoryCatalog_ValidatesAgainstEveryDialogueTrigger()
         {
-            ChapterStoryCatalogData story = StoryCatalog.LoadChapter1(forceReload: true);
-            StoryLocalizationData russian = StoryCatalog.LoadRussian(forceReload: true);
-            ChapterLevelCatalogData levels = ChapterLevelCatalog.LoadChapter1(forceReload: true);
+            ChapterStoryCatalogData story = LegacyChapterTestFixture.Story();
+            StoryLocalizationData russian = LegacyChapterTestFixture.Russian();
+            ChapterLevelCatalogData levels = LegacyChapterTestFixture.Levels();
 
             StoryValidationReport report = StoryCatalog.Validate(story, russian, levels);
 
@@ -77,7 +82,7 @@ namespace LegendsOfRus.Tests.PlayMode
         public void IntroSequence_ResolvesLocalizedLinesInStableOrder()
         {
             StorySceneData intro = StoryCatalog.FindScene("chapter01.intro");
-            var sequence = new StorySequenceRuntime(intro, StoryCatalog.LoadRussian());
+            var sequence = new StorySequenceRuntime(intro, LegacyChapterTestFixture.Russian());
 
             Assert.That(sequence.CurrentLine.Speaker, Is.EqualTo("ДОБРЫНЯ"));
             Assert.That(sequence.CurrentLine.Text, Does.Contain("Родной Деревней"));
@@ -126,7 +131,7 @@ namespace LegendsOfRus.Tests.PlayMode
         public void FinaleDialogue_ReturnsToChapterComplete()
         {
             StorySceneData finale = StoryCatalog.FindByTrigger("dialogue.chapter_finale");
-            StoryChapterCompletionData completion = StoryCatalog.LoadChapter1().completion;
+            StoryChapterCompletionData completion = LegacyChapterTestFixture.Story().completion;
 
             Assert.That(finale, Is.Not.Null);
             Assert.That(finale.returnRoute, Is.EqualTo(StoryReturnRoutes.ChapterComplete));

@@ -7,7 +7,7 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi {
  public sealed class ProfileAlignmentEditModeTests {
  const string Path="Assets/LegendsOfRus/Resources/ProductionUI/Pages/Profile.prefab";
  [Test] public void NativePageHasCompleteBindingsAndNoScreenshotDependencies(){
- var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);Assert.That(root,Is.Not.Null);var v=root.GetComponent<ProductionProfileView>();Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.HasOnlineProfile,Is.False);
+ var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);Assert.That(root,Is.Not.Null);var v=root.GetComponent<ProductionProfileView>();Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.HasOnlineProfile,Is.False);Assert.That(v.Header,Is.Not.Null);Assert.That(root.GetComponentsInChildren<ProductionPlayerHeader>(true).Length,Is.EqualTo(1));
  Assert.That(root.GetComponent<ProductionCoreLoopPageMarker>().ScreenshotFree,Is.True);Assert.That(root.GetComponentsInChildren<Button>(true).Length,Is.GreaterThanOrEqualTo(17));Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
  foreach(var dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
  foreach(var image in root.GetComponentsInChildren<Image>(true))Assert.That(image.sprite,Is.Not.Null,image.name);Assert.That(v.InfoPanel.activeSelf,Is.False);

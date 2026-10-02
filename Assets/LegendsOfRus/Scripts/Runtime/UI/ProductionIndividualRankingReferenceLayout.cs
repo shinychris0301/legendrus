@@ -14,6 +14,7 @@ namespace LegendsOfRus
         public static void Apply(ProductionIndividualRankingView v)
         {
             v.Revision=ProductionIndividualRankingView.CurrentRevision;
+            ProductionPlayerHeader.Attach(v);
             v.PlayerNamesFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
             v.HeadingFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
             v.RankNumbersFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/RankNumbers");
@@ -28,11 +29,12 @@ namespace LegendsOfRus
             for(int i=0;i<3;i++)
             {
                 if(v.Tabs[i]==null)v.Tabs[i]=Button(Art(v.Body,"Tab_"+i,Load("tab"),0,0,1,1));
-                Place((RectTransform)v.Tabs[i].transform,120+i*244,310,223,69);
-                v.Tabs[i].image.type=Image.Type.Simple;v.Tabs[i].image.preserveAspect=true;
+                float tabWidth=i==1?248:223;
+                Place((RectTransform)v.Tabs[i].transform,new[]{120f,347f,606f}[i],310,tabWidth,69);
+                v.Tabs[i].image.type=Image.Type.Simple;v.Tabs[i].image.preserveAspect=false;
                 Hide(v.Tabs[i].transform,"SelectedFace");
                 if(v.TabLabels[i]==null)v.TabLabels[i]=Label(v,v.Tabs[i].transform,"Label",0,0,1,1,30);
-                Place(v.TabLabels[i].rectTransform,18,15,187,40);v.TabLabels[i].fontSize=30;
+                Place(v.TabLabels[i].rectTransform,18,11,tabWidth-36,44);v.TabLabels[i].fontSize=28;
             }
             var rewardPanel=Art(v.Body,"SourceRewardPanel",Load("reward_panel"),16,379,909,199,true);rewardPanel.type=Image.Type.Simple;rewardPanel.preserveAspect=false;rewardPanel.transform.SetSiblingIndex(v.Title.transform.GetSiblingIndex());
             v.RewardsHeading=Label(v,v.Body,"PlaceRewardsHeading",120,389,701,34,28);
@@ -44,7 +46,7 @@ namespace LegendsOfRus
                 Art(card,"Frame",Load("reward_frame"),0,0,width,127,true);
                 Art(card,"Chest",Load("chest_"+new[]{"gold","silver","bronze"}[i]),new[]{7f,14f,6f}[i],new[]{5f,17f,22f}[i],new[]{145f,132f,134f}[i],new[]{119f,107f,95f}[i]);
                 v.PrizeTitles[i]=Label(v,card,"Place",new[]{132f,112f,63f}[i],0,new[]{143f,143f,170f}[i],38,27);v.PrizeTitles[i].resizeTextForBestFit=true;v.PrizeTitles[i].resizeTextMinSize=20;v.PrizeTitles[i].resizeTextMaxSize=27;
-                Art(card,"Gem",Load("gem"),gemX,53,27,31);v.PrizeGems[i]=Label(v,card,"GemCount",gemX+27,51,width-gemX-31,34,23);
+                Art(card,"Gem",ProductionGameplayArt.Gem(1),gemX,53,27,31);v.PrizeGems[i]=Label(v,card,"GemCount",gemX+27,51,width-gemX-31,34,23);
                 Art(card,"Card",Load("card"),gemX,85,33,34);v.PrizeCards[i]=Label(v,card,"CardCount",gemX+40,85,40,33,23);
             }
             var table=Art(v.Body,"SourceTableFrame",Load("table_frame"),17,575,907,971,true);table.type=Image.Type.Simple;table.preserveAspect=false;table.transform.SetSiblingIndex(rewardPanel.transform.GetSiblingIndex()+1);
@@ -79,17 +81,24 @@ namespace LegendsOfRus
                 if(v.Scores[i]==null)v.Scores[i]=Label(v,row,"Power",0,0,1,1,30);
                 Place(v.Scores[i].rectTransform,533,(Heights[i]-42)*.5f,128,42);v.Scores[i].fontSize=30;v.Scores[i].alignment=TextAnchor.MiddleRight;v.Scores[i].resizeTextForBestFit=true;v.Scores[i].resizeTextMinSize=25;v.Scores[i].resizeTextMaxSize=30;
                 v.Scores[i].color=i==10?new Color32(106,207,255,255):new Color32(240,203,135,255);
-                var reward=Load(i<3?"row_chest_"+new[]{"gold","silver","bronze"}[i]:"chest_purple");Vector2 rewardSize=reward.rect.size/3f;
-                v.RowRewards[i]=Art(artwork,"Reward_"+i,reward,744,Tops[i]+(Heights[i]-rewardSize.y)*.5f,rewardSize.x,rewardSize.y);
+                var reward=Load(i<3?"row_chest_"+new[]{"gold","silver","bronze"}[i]:"chest_purple");// Fit the complete approved sprite inside the row, leaving both gold rails clear.
+                float rewardScale=Mathf.Min(1f/3f,(Heights[i]-8)/reward.rect.height,143/reward.rect.width);
+                Vector2 rewardSize=reward.rect.size*rewardScale;
+                v.RowRewards[i]=Art(artwork,"Reward_"+i,reward,816.5f-rewardSize.x*.5f,Tops[i]+(Heights[i]-rewardSize.y)*.5f,rewardSize.x,rewardSize.y);
             }
             Label(v,v.Body,"MoreAbovePlayer",440,1231,60,32,24).text=". . .";
             Label(v,v.Body,"MoreBelowPlayer",440,1438,60,28,24).text=". . .";
             v.EmptyPanel.SetActive(false);Hide(v.Body,"FooterBacking");v.Footer.gameObject.SetActive(false);
             v.BackButton.image.sprite=Load("back");Place((RectTransform)v.BackButton.transform,20,1533,110,119);
-            Place((RectTransform)v.Body.Find("FooterOrnament"),130,1627,774,32);
+            Hide(v.Body,"FooterOrnament");
+            var footer=Art(v.Body,"CarvedFooter",Resources.Load<Sprite>("ProductionUI/EventDetailAligned/footer_r4"),0,1537,941,135);
+            footer.preserveAspect=false;footer.color=new Color(.55f,.55f,.55f,1);
+            footer.transform.SetAsLastSibling();v.BackButton.transform.SetAsLastSibling();
             v.RulesButton=Button(Art(v.Body,"RulesButton",Load("rules"),247,1548,450,81));
-            v.RulesButtonText=Label(v,v.RulesButton.transform,"Label",45,21,360,39,29);
+            v.RulesButtonText=Label(v,v.RulesButton.transform,"Label",45,15,360,45,29);
+            v.RulesButton.transform.SetAsLastSibling();
             BuildRules(v);
+            ProductionMapButtonFeedback.Install(v.transform);
         }
         static void BuildRules(ProductionIndividualRankingView v)
         {

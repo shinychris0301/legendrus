@@ -148,7 +148,10 @@ namespace LegendsOfRus
             warnedObserverFailure = false;
         }
 
-        public static void Publish(GameplayMotionEvent motion)
+        public static void Publish(GameplayMotionEvent motion) => Publish(motion, false);
+
+        // Board-local presentation may own SFX while retaining the shared haptic path.
+        public static void Publish(GameplayMotionEvent motion, bool sfxHandled)
         {
             CoreLoopFeedbackService service = Instance;
             if (
@@ -159,7 +162,7 @@ namespace LegendsOfRus
                 return;
             }
 
-            service.Emit(signal, haptic);
+            service.Emit(signal, haptic, sfxHandled);
         }
 
         public static bool TryCreateSignal(
@@ -256,13 +259,13 @@ namespace LegendsOfRus
             return true;
         }
 
-        void Emit(CoreLoopFeedbackSignal signal, bool requestHaptic)
+        void Emit(CoreLoopFeedbackSignal signal, bool requestHaptic, bool sfxHandled)
         {
             LastSignal = signal;
             SignalCount++;
             SafePublish(signal);
 
-            if (SfxEnabled)
+            if (SfxEnabled && !sfxHandled)
             {
                 try
                 {

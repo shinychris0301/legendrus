@@ -1,0 +1,9 @@
+# R31 implementation
+
+The four existing CampaignActive content JSONs match Chapter01Sector04R31 exactly. Ten boards, ten bilingual names, twenty distinct outcome reactions and the field_approach scene/milestone are appended. Existing1–170, prior story/locales, definition/content revision, resource metas/GUIDs, runtime services, routing, prefabs, art, settings and rules remain unchanged.
+
+Four existing test files are updated: ActiveCampaignIntegrationTests adds171–180 replay cases and170-save migration, checks the new candidate/180 bound, and plays170/171/175/178/180 through normal board/map APIs. CampaignBoardIntegrationTests and LevelSystemRuntimePlayModeTests expect180 records. CampaignCheckpointLifecycleTests adds180 unread/failure-retry coverage,25-milestone backlog and unavailable181 checks while retaining earlier cases. Earlier progress/failure setup is a fixture, not human or whole-campaign native-play evidence.
+
+Sources preserves task-start SHA/content/test/linker snapshots and TestChanges.patch. PrepareBriefs contains the reviewed geometry. PrepareImplementation transforms pre-task scripts/tests once; do not apply it again to edited files. AuthorAndInstall builds from saved pre-task content and RoundBriefs. CheckContent/AuditContent check preservation, parity, objective counts, localization/story, economy and default manual exports. Verify uses isolated stores and the previously authorized process-only Vulkan/descriptor4096 workaround. Summaries derive from XML/replays; CleanAndAudit restores generated linker content and removes only new temporary test scenes before hashing the project.
+
+No live save edits, new services, graphics/package changes, commit, Android build or effects work. Human pacing, recap/editorial, device and visual gaps are separate from these structural/automated checks; see TestResults.md.

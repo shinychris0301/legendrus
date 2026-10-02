@@ -7,8 +7,12 @@ using UnityEngine.TestTools;
 
 namespace LegendsOfRus.Tests.PlayMode
 {
+    [Category("LegacyTenRoundFixture")]
     public sealed class ChapterFinaleCompletionPlayModeTests
     {
+        LegacyChapterTestFixture legacyFixture;
+        [TearDown] public void RestoreActiveContent() { legacyFixture?.Dispose(); }
+
         static readonly string[] PersistedSaveKeys =
         {
             "LegendsOfRus_Save_v1",
@@ -26,6 +30,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [UnitySetUp]
         public IEnumerator SetUp()
         {
+            legacyFixture = new LegacyChapterTestFixture();
             SnapshotAndClearSaveJournal();
             yield return null;
             if (GameState.Instance == null)
@@ -42,9 +47,9 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameState.Instance.ResetProgress();
             StoryService.ResetRuntime();
-            StoryCatalog.LoadChapter1(forceReload: true);
-            StoryCatalog.LoadRussian(forceReload: true);
-            ChapterLevelCatalog.LoadChapter1(forceReload: true);
+            LegacyChapterTestFixture.Story();
+            LegacyChapterTestFixture.Russian();
+            LegacyChapterTestFixture.Levels();
         }
 
         [UnityTearDown]
@@ -63,11 +68,11 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void CatalogV3_DefinesUniqueFinaleCompletionContract()
         {
-            ChapterStoryCatalogData story = StoryCatalog.LoadChapter1();
-            ChapterLevelCatalogData levels = ChapterLevelCatalog.LoadChapter1();
+            ChapterStoryCatalogData story = LegacyChapterTestFixture.Story();
+            ChapterLevelCatalogData levels = LegacyChapterTestFixture.Levels();
             StoryValidationReport report = StoryCatalog.Validate(
                 story,
-                StoryCatalog.LoadRussian(),
+                LegacyChapterTestFixture.Russian(),
                 levels
             );
 
@@ -87,7 +92,7 @@ namespace LegendsOfRus.Tests.PlayMode
         public void FinalePresentation_LocalizesFiveLinesInStableOrder()
         {
             StorySceneData finale = StoryCatalog.FindScene("chapter01.finale");
-            var sequence = new StorySequenceRuntime(finale, StoryCatalog.LoadRussian());
+            var sequence = new StorySequenceRuntime(finale, LegacyChapterTestFixture.Russian());
             var speakers = new List<string>();
 
             while (!sequence.IsComplete)
@@ -266,7 +271,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void Validator_RejectsMalformedCompletionContractWithoutThrowing()
         {
-            ChapterStoryCatalogData source = StoryCatalog.LoadChapter1();
+            ChapterStoryCatalogData source = LegacyChapterTestFixture.Story();
             ChapterStoryCatalogData malformed = JsonUtility.FromJson<ChapterStoryCatalogData>(
                 JsonUtility.ToJson(source)
             );
@@ -277,8 +282,8 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.DoesNotThrow(() =>
                 report = StoryCatalog.Validate(
                     malformed,
-                    StoryCatalog.LoadRussian(),
-                    ChapterLevelCatalog.LoadChapter1()
+                    LegacyChapterTestFixture.Russian(),
+                    LegacyChapterTestFixture.Levels()
                 )
             );
             Assert.That(report.IsValid, Is.False);

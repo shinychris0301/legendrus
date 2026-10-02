@@ -1,0 +1,252 @@
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
+@@ -2,7 +2,7 @@
+ 
+ Status: **prepared; physical execution postponed by the user on 2026-09-30.** Editor evidence is in [TestResults.md](TestResults.md). All device rows below remain pending.
+ 
+-Current preparation: [offline handoff R2](../R2OfflineHandoff/TestResults.md) pins the [verified stock-refresh R6 APK](../../CoreOutcomeReadability/R6StockAndroidRefresh/TestResults.md), **765,764,694 bytes**, SHA256 `42b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5`. Gameplay revision 24 / four stock layouts and the disposable profile are packaged. [Profile commands and scenarios](../../AndroidGameplayProfile/R1/Usage.md). Android activation, isolation and lifecycle still require device evidence. Earlier R1 results and its device-preflight JSON remain historical.
++Current preparation: [recap Android refresh R3](../../ReturningPlayerRecap/R3AndroidRefresh/TestResults.md) pins the verified APK, **766,017,314 bytes**, SHA256 `2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e`. Profile13/native recap, Dialogue2, Gameplay24/four stock layouts, Victory12 and the disposable profile are packaged. [Profile commands and scenarios](../../AndroidGameplayProfile/R1/Usage.md). Android activation, isolation, recap touch/readability and lifecycle still require device evidence. Earlier R1/R2 results and device-preflight JSON remain historical.
+ 
+ ## Entry conditions
+ 
+@@ -12,7 +12,7 @@
+    PYTHONDONTWRITEBYTECODE=1 python3 ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
+    ```
+ 
+-   Default status `offline_prepared_device_deferred` verifies the pinned local hash, size, sidecar and linked R6 build/inspection evidence. It performs no ADB call. Exit 2 means a prerequisite needs review. It writes current offline evidence under R2OfflineHandoff/QA, leaving historical R1 evidence intact. The existing R1 `Sources/DevicePreflight.py` delegates to this same implementation.
++   Default status `offline_prepared_device_deferred` verifies the pinned local hash, size, sidecar and linked R3 build/inspection evidence. It performs no ADB call. Exit 2 means a prerequisite needs review. It writes current offline evidence under ReturningPlayerRecap/R3AndroidRefresh/QA, leaving historical R1/R2 evidence intact. The existing R1 `Sources/DevicePreflight.py` delegates to this same implementation.
+ 2. Only after phone work resumes, connect exactly one authorized phone and add `--device` to the command above. This mode reads device count/model/API, package path and installed APK hash. It does not install, launch, stop, clear/uninstall, read player data or export credentials. Zero, multiple, unauthorized or mixed attachments, split packages and build mismatches require review. `device_identity_verified_qa_activation_pending` confirms the installed APK identity only; the QA indicator and save boundary are still unverified. Offline exit 0 does not authorize device execution.
+ 3. The existing disposable save profile is implemented; use `fresh`, `resume` or `empty-energy` at a **cold process launch** as documented in Usage. Verify the yellow `QA · DISPOSABLE SAVE` indicator before controlled actions. A launcher-icon start without the extra uses normal player data. Never deliver a reset command into a running process. Invalid/missing ownership remains blocked; do not use normal saves as a fallback. Keep the credential probe separate. Do not clear/uninstall or read normal save/credential records to create a fixture.
+ 4. Record APK hash, Unity/build version, phone model/API, native resolution/insets, language and QA ownership. Verify offline mode before starting; real purchases, ads, accounts and social services are outside this run. Record visible baseline balances, stock, selected round, first-clear state and settings. Evidence must stay within the disposable profile. Exact Editor move counts are automated fixture evidence, not a phone pass criterion or human difficulty target.
+@@ -30,6 +30,9 @@
+ | STOCK-01 | With a separately established disposable stock fixture, inspect 999, 1 000, 9 999 and 2 147 483 647 on all four cards in RU/EN at native phone scale. | Exact full grouped live numbers; 999 uses the circular badge, ≥1 000 uses the wider emerald/gold face; captions and safe areas intact. Record text, crop and physical legibility separately; maximum ten-digit values remain a known small-text risk. Pending fixture and phone evidence. |
+ | STOCK-02 | With exactly 1 000 Sea Pearls in disposable state, touch its visible count/card during a playable round; duplicate the tap while the board is busy. | One accepted consumption, exact 1 000→999 presentation change and +5 moves; a busy duplicate does not consume again. Sea Pearl acts immediately without a targeting step. Verify the board remains otherwise consistent. Pending fixture and phone evidence. |
+ | STOCK-03 | With a large-stock fixture, use targeted boosters through the visible count face, cancel targeting, and reopen Pause/Settings in both languages. | Count decoration forwards touches to the existing card; cancellation does not consume, no hidden blocker, stale count or duplicated charge. Pending fixture and phone evidence. |
++| RECAP-01 | Before acknowledging any story in disposable state, open Profile → History in RU/EN. Then read the normal intro and revisit History. | Empty eligibility is disabled with localized no-read-scenes text; intro becomes eligible only after normal acknowledgement. Reader opens existing native Dialogue; no energy spend or extra reward. Physical evidence pending. |
++| RECAP-02 | In disposable state with at least three normally acknowledged scenes, open Story from History page2, browse Earlier/Later, rapidly repeat Continue, change language and use visible/Android Back. | Latest acknowledged in narrative order opens; unread scenes stay hidden, each accepted tap advances once, native top controls fit/are legible, same History page restores. Record balances, selection and persistence after relaunch. Android Back remains separately unverified. |
++| RECAP-03 | With a separately reviewed disposable state that has earned/acknowledged the actual round500 finale, replay it to completion twice; also leave recap for another screen and reopen. | Finish returns to Profile History without ChapterComplete routing or duplicate acknowledgement/grant; stale controls do not navigate after retirement. Pending eligible finale fixture and phone evidence; do not invent an intent seeding command or use normal saves. |
+ | PAUSE-01 | Pause → Settings → Back → Resume; change language and settings. Try Android Back from these states. | Visible controls preserve the same round, moves and board. Android Back must not strand input or accidentally spend resources; record its actual route separately, since Editor visible-Back tests do not establish platform Back behavior. |
+ | LIFE-01 | Background/foreground while idle, dragging and resolving a cascade; test brief screen lock. | On same-process return, no duplicate action/reward or stuck input; board finishes consistently and settings persist. Record whether Android retained or killed the process; do not conflate these cases. |
+ | SAVE-01 | Change settings/language, complete a round and consume a booster; close and relaunch the disposable app process. | Durable progress, balances, inventory and preferences restore. No duplicate grant or stale transient Victory result. Do not expect arbitrary unfinished mid-round board recovery. |
+@@ -39,7 +42,9 @@
+ 
+ Large-stock fixture dependency: the packaged Android profile accepts only `fresh`, `resume` and `empty-energy`; it cannot seed arbitrary booster quantities. R5's large-stock setup is an Editor test fixture, not an Android intent command. `fresh` alone cannot execute STOCK-01/02/03. Keep these rows blocked on a separately reviewed disposable fixture and physical execution; do not edit normal preferences, claim solver/test captures as phone evidence, or invent a stock extra. Ordinary navigation/energy/available-booster rows can proceed after verified QA activation.
+ 
+-For each row record: pending/pass/fail, APK hash, baseline/actual result, evidence path, reproduction steps and any open issue. Keep performance and visual judgment separate from functional assertions. Prior credential/title success and R6 package inspection are not device gameplay evidence for these rows.
++Recap fixture dependency: fresh/resume/empty-energy do not seed arbitrary acknowledged scenes or a round500 finale. RECAP-02 needs earned acknowledgements; RECAP-03 needs a separately reviewed eligible disposable fixture or normal completion within that disposable profile. R2 synthetic Editor ledgers are not Android fixtures. All recap rows remain pending.
++
++For each row record: pending/pass/fail, APK hash, baseline/actual result, evidence path, reproduction steps and any open issue. Keep performance and visual judgment separate from functional assertions. Prior credential/title success and R3 package inspection are not device gameplay evidence for these rows.
+ 
+ ## Reproducing the prepared Editor checks
+ 
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/CheckPreflight.py
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/CheckPreflight.py
+@@ -37,14 +37,15 @@
+             'Artifact.json': {**pin, 'path': str(tool.APK)},
+             'ApkVerification.json': {**pin, 'package': tool.PACKAGE, 'versionName': '0.0.0',
+                 'versionCode': 1, 'abi': 'arm64-v8a', 'minimumApi': 26, 'targetApi': 36,
++                'recapRuntimeTypes': {key: True for key in ('ProductionStoryRecapView', 'StoryRecap', 'StoryRecapEntry')},
+                 **{key: True for key in ('signatureVerified', 'sameCertificateAsPriorLocalApk',
+                     'zipCrcPassed', 'zip16KiBAlignmentPassed', 'debuggable', 'portrait')},
+                 'runtimeMetadataMarkers': {key: True for key in ('DevelopmentGameplayProfile',
+                     'DevelopmentGameplayProfileBadge', 'lor_gameplay_qa',
+                     'LegendsOfRus_GameplayQA_v1_', 'ProductionGameplayStockLayout')}},
+-            'FinalValidation.json': {'result': 'Passed', 'artifactSha256': pin['sha256'], 'artifactBytes': pin['bytes']},
++            'BuildValidation.json': {'result': 'Passed', 'artifactSha256': pin['sha256'], 'artifactBytes': pin['bytes']},
+             'PackedAssets.json': {'result': 'Succeeded', 'gameplayRevision': 24,
+-                'stockLayouts': 4, 'unityVersion': '6000.5.9f1'}}
++                'stockLayouts': 4, 'unityVersion': '6000.5.9f1', 'profileRevision': 13, 'dialogueRevision': 2}}
+         for name, value in data.items():
+             (qa / name).write_text(json.dumps(value))
+         return data
+@@ -63,7 +64,7 @@
+     passed('wrong checksum blocks readiness', inspect()['status'] == 'local_checksum_mismatch')
+     seed(); apk.with_suffix('.apk.sha256').unlink()
+     passed('missing checksum blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
+-    seed(); (qa / 'FinalValidation.json').write_text('{')
++    seed(); (qa / 'BuildValidation.json').write_text('{')
+     passed('malformed evidence blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
+     seed(); (qa / 'ApkVerification.json').write_text('[]')
+     passed('wrong evidence structure blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
+@@ -73,10 +74,16 @@
+         ('wrong recorded artifact size', 'Artifact.json', 'bytes', 1),
+         ('release evidence', 'ApkVerification.json', 'debuggable', False),
+         ('unsigned evidence', 'ApkVerification.json', 'signatureVerified', False),
+-        ('failed final reconciliation', 'FinalValidation.json', 'result', 'Failed'),
++        ('failed final reconciliation', 'BuildValidation.json', 'result', 'Failed'),
+         ('stale Gameplay revision', 'PackedAssets.json', 'gameplayRevision', 23),
+         ('missing stock reference', 'PackedAssets.json', 'stockLayouts', 3),
+-        ('failed build report', 'PackedAssets.json', 'result', 'Failed')]
++        ('failed build report', 'PackedAssets.json', 'result', 'Failed'),
++        ('stale Profile revision', 'PackedAssets.json', 'profileRevision', 12),
++        ('stale Dialogue revision', 'PackedAssets.json', 'dialogueRevision', 1),
++        ('missing recap reader', 'ApkVerification.json', 'recapRuntimeTypes',
++         {'StoryRecap': True, 'StoryRecapEntry': True}),
++        ('missing recap projection', 'ApkVerification.json', 'recapRuntimeTypes',
++         {'ProductionStoryRecapView': True, 'StoryRecapEntry': True})]
+     for name, file, key, value in mutations:
+         data = seed(); data[file][key] = value
+         (qa / file).write_text(json.dumps(data[file]))
+@@ -151,5 +158,5 @@
+ 
+ summary = {'result': 'Passed', 'passed': len(cases), 'failed': 0, 'cases': cases,
+            'realAdbInvocations': 0, 'realDeviceExecution': False, 'syntheticFilesOnly': True}
+-(BASE / 'QA/PreflightBoundaryChecks.json').write_text(json.dumps(summary, indent=2) + '\n')
++(tool.ROOT / tool.BUILD / 'PreflightBoundaryChecks.json').write_text(json.dumps(summary, indent=2) + '\n')
+ print(json.dumps({key: value for key, value in summary.items() if key != 'cases'}, indent=2))
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
+@@ -9,10 +9,10 @@
+ 
+ ROOT = Path(__file__).resolve().parents[5]
+ BASE = Path(__file__).resolve().parent.parent
+-BUILD = Path('ProjectDocs/AI/CoreOutcomeReadability/R6StockAndroidRefresh/QA')
++BUILD = Path('ProjectDocs/AI/ReturningPlayerRecap/R3AndroidRefresh/QA')
+ APK = Path('Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk')
+-PIN = {'bytes': 765764694,
+-       'sha256': '42b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5'}
++PIN = {'bytes': 766017314,
++       'sha256': '2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e'}
+ PACKAGE = 'com.example.legendsofrus.v117debug'
+ ACTIVITY = 'com.unity3d.player.UnityPlayerGameActivity'
+ ADB = Path('/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb')
+@@ -28,6 +28,7 @@
+               'launchActivity': ACTIVITY, 'buildEvidence': str(BUILD),
+               'expectedApkSha256': pin['sha256'], 'expectedApkBytes': pin['bytes'],
+               'gameplayRevision': 24, 'stockLayouts': 4, 'victoryRevision': 12,
++              'profileRevision': 13, 'dialogueRevision': 2, 'expectedRecapIncluded': True,
+               'signatureRecheckedThisRun': False, 'compiledMarkersAreNotDeviceAcceptance': True}
+     try:
+         if not result['localApkExists']:
+@@ -43,7 +44,7 @@
+             return result
+         read = lambda name: json.loads((root / BUILD / name).read_text())
+         artifact, verification, final, packed = [read(name) for name in
+-            ('Artifact.json', 'ApkVerification.json', 'FinalValidation.json', 'PackedAssets.json')]
++            ('Artifact.json', 'ApkVerification.json', 'BuildValidation.json', 'PackedAssets.json')]
+         required = ('signatureVerified', 'sameCertificateAsPriorLocalApk', 'zipCrcPassed',
+                     'zip16KiBAlignmentPassed', 'debuggable', 'portrait')
+         markers = ('DevelopmentGameplayProfile', 'DevelopmentGameplayProfileBadge',
+@@ -61,8 +62,11 @@
+             and final.get('artifactBytes') == pin['bytes']
+             and packed.get('result') == 'Succeeded' and packed.get('gameplayRevision') == 24
+             and packed.get('stockLayouts') == 4 and packed.get('unityVersion') == '6000.5.9f1'
++            and packed.get('profileRevision') == 13 and packed.get('dialogueRevision') == 2
++            and all(verification.get('recapRuntimeTypes', {}).get(key) is True
++                    for key in ('ProductionStoryRecapView', 'StoryRecap', 'StoryRecapEntry'))
+         )
+-        result.update(matchesVerifiedR6Apk=bool(matches), checksumSidecarMatches=True,
++        result.update(matchesVerifiedRecapApk=bool(matches), recapPackaged=bool(matches), checksumSidecarMatches=True,
+                       recordedSignatureAndCompiledInclusionVerified=bool(matches))
+         result['status'] = 'offline_prepared_device_deferred' if matches else 'build_evidence_requires_review'
+     except (OSError, ValueError, TypeError, KeyError, AttributeError):
+@@ -145,7 +149,7 @@
+                   qaActivationVerified=False, checkedAtUtc=datetime.datetime.now(datetime.timezone.utc).isoformat())
+     if args.device:
+         result = inspect_device(result)
+-    output = args.output or BASE / 'QA' / ('DevicePreflight.json' if args.device else 'OfflinePreflight.json')
++    output = args.output or ROOT / BUILD / ('DevicePreflight.json' if args.device else 'OfflinePreflight.json')
+     output.parent.mkdir(parents=True, exist_ok=True)
+     output.write_text(json.dumps(result, indent=2) + '\n')
+     print(json.dumps(result, indent=2))
+--- a/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
++++ b/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
+@@ -25,7 +25,7 @@
+ 
+ The Android entry reads the intent string extra `lor_gameplay_qa` on cold launch. It is compiled for Android development builds only and additionally requires the current approved development application ID `com.example.legendsofrus.v117debug` and Android's debuggable flag. Non-development players have no activation path. No manifest, package ID, Java plugin or build-approval flags were changed.
+ 
+-The current [verified stock-refresh R6 APK](../../CoreOutcomeReadability/R6StockAndroidRefresh/TestResults.md) includes this profile and Gameplay revision 24: 765,764,694 bytes, SHA256 `42b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5`. Its launch activity is `com.unity3d.player.UnityPlayerGameActivity`, verified from the local APK manifest. Packaging inclusion is established; Android cold-launch activation and isolation remain untested. The earlier credential-test installed artifact is historical, and no current installed build identity is assumed.
++The current [verified recap-refresh R3 APK](../../ReturningPlayerRecap/R3AndroidRefresh/TestResults.md) includes this profile, Profile revision13/story recap and Gameplay revision24: 766,017,314 bytes, SHA256 `2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e`. Its launch activity is `com.unity3d.player.UnityPlayerGameActivity`, verified from the local APK manifest. Packaging inclusion is established; Android cold-launch activation and isolation remain untested. The earlier credential-test installed artifact is historical, and no current installed build identity is assumed.
+ 
+ Run the [current preflight](../../AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py) without arguments for an offline artifact check. After phone execution resumes, use `--device` for read-only installed-identity queries. Neither mode launches the game. Verify the yellow QA indicator after a separately performed cold launch before any controlled action. Do not clear app data, uninstall, read credential records or reuse the credential probe as a gameplay fixture.
+ 
+@@ -49,3 +49,6 @@
+ ## Storage boundary
+ 
+ Only `LegendsOfRus_GameplayQA_v1_` keys are reset: the primary/backup/staging save journal, language and compliance keys, plus the profile's own ownership marker. No preference enumeration or `DeleteAll` is used. Normal progress/preferences and Android credentials are not imported or reset. Account configuration and the credential probe are blocked in QA; optional analytics and monetization calls are blocked too. Current content delivery remains locally configured. This is gameplay-state isolation, not a separate Android OS user, install or security boundary; ordinary debug capture/export files retain their existing destinations.
++
++
++Optional recap is reached through Profile → History → Story. Eligible scenes must already be acknowledged through the normal story flow; milestone scenes also need their completed round. These Android commands do not seed arbitrary story acknowledgements or the finale. Existing [pending device rows](../../AndroidGameplayJourney/R1/DeviceChecklist.md) separate naturally earned intro/early scenes from a reviewed disposable finale fixture. Packaging and preceding Editor tests do not establish phone input, readability or lifecycle acceptance.
+--- a/ProjectDocs/AI/ConversationHandoff.md
++++ b/ProjectDocs/AI/ConversationHandoff.md
+@@ -4,7 +4,9 @@
+ 
+ The original handoff below is historical. Resume from the newest entries in [CurrentTask](CurrentTask.md), [DevelopmentSchedule](DevelopmentSchedule.md) and [SessionLog](SessionLog.md), verified against local files. Core-first work supersedes the old Loading-only and backend-first next steps. Chapter 1 rounds1–500 and finale are installed; R5 recorded1,334 distinct runtime passes with3 deferred backend cases. These are prior results, not a new runtime acceptance claim.
+ 
+-Latest completed task: [Optional story recap R2](ReturningPlayerRecap/R2/TestResults.md), 2026-10-02. Profile History now opens a read-only native reader with latest acknowledged scene, Earlier/Later, RU/EN, Continue/Back and preserved origin paging. Installed Dialogue prefab reused through explicit providers/local sequence in existing modal host; normal story/save/economy/selection and finale routing remain independent. Profile owner/view/active prefab/cutover13, only prefab revision changes. Six existing project inputs changed/eight added/7,819 unchanged/none deleted; original art/fonts/metas, approved Splash and other prefabs/settings/guards/services preserved. Latest27Edit+22Play=49distinct passed, zero remaining failed/skipped. Final27-case Edit XML/Unity success marker survived launcher143 at shutdown, explicitly recovered; three final Play invocations exit0. Initial compile/touch/clock/capture fixture outcomes reconciled and retained.77final Unity PNGs/six inspected portraits; [standalone native review](ReturningPlayerRecap/R2/StoryRecap_R2_Review.html). No human/phone/visual acceptance inferred. R6 APK/sidecar and five manual exports unchanged; recap not packaged. Isolated journals only. No build/device/hosting/commit. [Final validation](ReturningPlayerRecap/R2/QA/FinalValidation.json).
++Latest completed task: [Recap Android refresh R3](ReturningPlayerRecap/R3AndroidRefresh/TestResults.md), 2026-10-02. Guarded development APK now includes Profile13/recap, Dialogue2, Gameplay24/four stock layouts, Victory12.130current policy/content Edit Mode cases passed; Unityexit0/buildReportSucceeded160.37s. APK766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e; sidecar agrees, verified R6/sidecar archivedBeforeStoryRecapRefreshR3. Signing/identity/permissions/ZIP/ELF/JNI pass. Exactly two known recap MonoScripts added29384→29386; existing membership/page objects unchanged.398/403payloads identical/five reviewed; nativeengine/boot stable settings unchanged. Compiled reader/projection/entry checked, temporary Editor/test helpers excluded. Initial one-script expectation corrected against exact two native report/source GUIDs; no project change. All7,833project inputs/five manual exports unchanged, helper/newlinkers removed.40offline boundary checks and actual no-device preflight pass; current checklist/profile/tools pin R3, three recap rows added/all18physical rows pending. HistoricalR1/R2evidence preserved. No Play Mode/device/normaljournal/hosting/commit. Prior R2's49UI/story checks remain historical; phone readability/activation/lifecycle/fixtures still open. [Final validation](ReturningPlayerRecap/R3AndroidRefresh/QA/FinalValidation.json).
++
++Previous completed task: [Optional story recap R2](ReturningPlayerRecap/R2/TestResults.md), 2026-10-02. Profile History now opens a read-only native reader with latest acknowledged scene, Earlier/Later, RU/EN, Continue/Back and preserved origin paging. Installed Dialogue prefab reused through explicit providers/local sequence in existing modal host; normal story/save/economy/selection and finale routing remain independent. Profile owner/view/active prefab/cutover13, only prefab revision changes. Six existing project inputs changed/eight added/7,819 unchanged/none deleted; original art/fonts/metas, approved Splash and other prefabs/settings/guards/services preserved. Latest27Edit+22Play=49distinct passed, zero remaining failed/skipped. Final27-case Edit XML/Unity success marker survived launcher143 at shutdown, explicitly recovered; three final Play invocations exit0. Initial compile/touch/clock/capture fixture outcomes reconciled and retained.77final Unity PNGs/six inspected portraits; [standalone native review](ReturningPlayerRecap/R2/StoryRecap_R2_Review.html). No human/phone/visual acceptance inferred. R6 APK/sidecar and five manual exports unchanged; recap not packaged. Isolated journals only. No build/device/hosting/commit. [Final validation](ReturningPlayerRecap/R2/QA/FinalValidation.json).
+ 
+ Previous completed task: [Returning-player flow review R1](ReturningPlayerReview/R1/TestResults.md), 2026-10-02. Saved selection/pending scenes already work; completed scenes cannot be reread and Profile History is level statistics only. Recommend [bounded optional recap](ReturningPlayerReview/R1/ImplementationScope.md), preserving normal story guards and using existing Dialogue providers/RU/EN lines; no recap is implemented yet and human usefulness is unmeasured. All 18 Edit + 15 Play Unity checks pass, zero failed/skipped; current native all-milestone case renders 57 milestones/current finale, three Play checks use explicit legacy fixtures. Active inventory: 58 scenes / 70 lines / 500 rounds, complete RU/EN keys. 28 actual Unity captures; existing small Profile History/finale inspected. All 7,825 project inputs, APK/sidecar and five manual recordings unchanged. Isolated test storage; no runtime/test source edits, new APK, phone/hosting/commit. [Final validation](ReturningPlayerReview/R1/QA/FinalValidation.json).
+ 
+@@ -26,7 +28,7 @@
+ 
+ Only MechanicsSpectacleTests.cs and AndroidInputCompatibilityPlayModeTests.cs changed;7,819 other Assets/Packages/ProjectSettings/Backend inputs unchanged, zero added/deleted. Production runtime/services/rules/art/fonts/prefabs/GUIDs/metadata/approved Splash/settings/packages/backend/guards and prior user changes preserved. Current R4 APK remains765,772,146bytes/SHA256 `924ecabcdbdb58f30512e6e2b134db4246be22c8f9ecc6b6086551e4ad937eff`, sidecar matches, includes R3 captions (revisions23/12). No new Edit suite, APK, phone test, hosting, deployment or commit.
+ 
+-Next independent scheduled action: package verified recap/Profile13 through the existing guarded development APK path. First preserve R6 APK/sidecar, rerun current Android policy/content checks and compare signing/identity/permissions, ZIP/ELF/JNI and expected packed membership changes. Phone execution and hosting remain deferred. Human201–210 recording remains the parallel Chapter1 acceptance action; retain losses/retries and ratings, then follow the gap queue before tuning. Stock fixtures/physical readability, font provenance and Android lifecycle/performance remain open. Final gameplay effects stay last. Preserve historical decisions below.
++Next independent scheduled action: run current core regression after recap integration, including affected native UI/story/save behavior and existing isolated restart/profile phases. Keep QA-only recap under an explicit disposable fresh profile. Human201–210 collection remains the parallel Chapter1 acceptance action; retain losses/retries/ratings, follow the gap queue before tuning. Phone execution/hosting remain deferred; physical readability/font provenance, Android lifecycle/performance and special stock/finale fixtures remain open. Final gameplay effects stay last. Preserve historical decisions below.
+ 
+ Prepared 2026-09-12. Source: the current user/assistant conversation and supplied project artifacts. This is a focused decision summary, not a verbatim transcript or an independently verified local Unity audit.
+ 
+--- a/ProjectDocs/AI/CurrentTask.md
++++ b/ProjectDocs/AI/CurrentTask.md
+@@ -1,3 +1,15 @@
++# 2026-10-02 — Story recap Android refresh R3 complete
++
++Packaged approved R2 recap through the existing guarded development command: Profile **13**, Dialogue2, Gameplay24/four stock layouts, Victory12. **130 current Android policy/content Edit Mode cases passed**, zero failed/skipped. Unity6000.5.9f1 exited0 for policy/build and actual BuildReport Succeeded; build160.37s. Prior R2's49 Unity checks/77 native captures are historical; no new Play Mode, phone input or Android lifecycle acceptance.
++
++**APK766,017,314bytes**, SHA256 `2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e`; sidecar matches. R6 APK/sidecar preserved in BeforeStoryRecapRefreshR3 at765,764,694bytes/SHA256 `42b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5`. Growth252,620bytes/0.033%. Signing, identity/permissions, ZIP/exact accounting/16KiB, six ELF alignments and nine credential DEX/JNI definitions/four Java/meta pins pass. Recap reader/projection/entry types compiled; Editor/test helpers excluded. Exactly two recap MonoScripts added to29384→29386 packed rows; all existing membership/page object counts unchanged.398/403 ZIP payloads identical/five expected reviewed; libunity.so and stable boot configuration unchanged. Initial audit expected one script; reconciled exact two known GUIDs, no project fix.
++
++[Results](ReturningPlayerRecap/R3AndroidRefresh/TestResults.md) · [APK](../../Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk) · [Build validation](ReturningPlayerRecap/R3AndroidRefresh/QA/BuildValidation.json) · [Final validation](ReturningPlayerRecap/R3AndroidRefresh/QA/FinalValidation.json). Current checklist/profile/canonical preflight pin R3.40synthetic/mocked offline boundary checks pass; actual R1 compatibility preflight exits0 with no ADB. R3 current output preserves R1/R2 historical QA. Three recap device rows added, all18physical rows pending. No arbitrary story/finale stock seeding command exists; fixtures remain separate.
++
++All7,833project inputs byte-identical, including installed recap, original art/fonts/GUIDs/metas, approved Splash/prefabs, settings/packages/backend/guards/services and inherited edits. Five normal recorder exports unchanged. Temporary helper/meta and two new generated linker files removed. Eight existing documentation/tool files updated plus new task/evidence and verified/archived artifacts; no normal save journal or credential contents accessed. Existing development-only unverified Splash typography warning retained. No device/ADB/install/launch, hosting/deployment or commit.
++
++**Next:** Current core regression after recap integration, affected native UI/story/save behavior and existing isolated restart/profile phases; select QA-only recap under an explicit disposable fresh profile. Human201–210 collection remains parallel before tuning. Phone execution/hosting deferred; stock/finale fixtures, physical readability/font provenance and Android lifecycle remain open, gameplay effects last.
++
+ # 2026-10-02 — Optional story recap R2 complete
+ 
+ Implemented the approved bounded recap in **Profile → History → СЮЖЕТ / STORY**. Known acknowledged scenes only; milestone eligibility also requires its completed round. Latest in catalogue order opens first, Earlier/Later browse existing RU/EN lines, native Continue advances, Back/finish restore the same History page. Empty eligibility is disabled and truthful. The actual Dialogue prefab is reused in the existing modal host with a separate local sequence; finale replay never dispatches ChapterComplete.
+--- a/ProjectDocs/AI/DevelopmentSchedule.md
++++ b/ProjectDocs/AI/DevelopmentSchedule.md
+@@ -6,7 +6,7 @@
+ |---|---|---|
+ | 1 | Gameplay regression and round lifecycle | Historical R5 clean run retained. Current R6 covers all eight assemblies: 1,342 latest distinct passes, zero remaining failures, three deferred backend cases after two fixture corrections and seventeen restart/profile processes. This is an aggregate, not a single clean post-correction sweep. Preserve affected runtime checks; Android and human pacing acceptance remain separate. |
+ | 2 | Complete offline player journey on Android | Verify Home → map → PreLevel → playable round → win/reward/story/next round, plus fail/free retry/quit and pause/settings/return. Check touch input, first-clear versus replay grants, energy/booster consumption, background/foreground and process restart using disposable QA saves. R5 title/storage checks are not gameplay acceptance. |
+-| 3 | Chapter 1 acceptance and scenario omissions | Preserve installed rounds 1–500 and finale. R1 evidence audit confirms no current manual31–500 outcomes in the searched scopes;470-round/47-block collection matrix is ready. Begin201–210, continue201–250 and491–500, then close remaining gaps. Validate locked Chapter 2, interrupted dialogue reoffer and chapter completion without duplicate grants. Tune from outcomes and feedback rather than solver success alone. R2 implements optional acknowledged-scene recap from Profile History with existing native Dialogue/RUEN;49 targeted distinct Unity checks pass. Human usefulness and physical acceptance remain separate from normal pending-story recovery. |
++| 3 | Chapter 1 acceptance and scenario omissions | Preserve installed rounds 1–500 and finale. R1 evidence audit confirms no current manual31–500 outcomes in the searched scopes;470-round/47-block collection matrix is ready. Begin201–210, continue201–250 and491–500, then close remaining gaps. Validate locked Chapter 2, interrupted dialogue reoffer and chapter completion without duplicate grants. Tune from outcomes and feedback rather than solver success alone. R2 implements optional acknowledged-scene recap from Profile History with existing native Dialogue/RUEN;49 targeted distinct Unity checks pass. R3 guarded APK now packages it,130current policy/content cases pass and40offline preflight boundaries pass; phone rows remain pending. Human usefulness and physical acceptance remain separate from normal pending-story recovery. |
+ | 4 | Core UI, saves and phone performance | Correct demonstrated readability, clipping, navigation and recovery defects; inspect Chapter Complete captions at phone size. R5 improves exact large Gameplay stock values with 36 targeted Unity passes; R6 now packages revision 24. R2 offline handoff updates current preflight/checklist; physical readability remains pending. Measure frame time, memory and loading during actual gameplay. Preserve approved art, Russian/English text and existing save semantics; failed-round snapshots do not imply arbitrary mid-round resume or paid continuation. |
+ | 5 | Final gameplay presentation | After core behavior/content acceptance, finish the deferred item creation, activation, combinations, gem-shatter, obstacle-stage and booster effects. Preserve the user's effects-last order and avoid rejected circular overlays. |
+ | Deferred | Hosted backend, linked accounts/cloud saves, server-authoritative economic operations, RuStore commerce/ads and social features | Resume as a separate explicitly selected milestone. Backend foundation is partial, not release-complete; do not enable prices, ads or sample social data as real services. |
+@@ -75,7 +75,9 @@
+ 
+ **2026-10-02 optional story recap completed:** [R2](ReturningPlayerRecap/R2/TestResults.md) implements Profile History entry/latest/earlier/later/local reader and preserved origin paging. Profile revision13, actual Dialogue/providers reused; full save/journal/normal pending-story/repeated finale preservation pass. Latest27Edit+22Play=49distinct passed, zero remaining failed/skipped; improved pointer case rerun counted once. Final Edit XML/success marker recovered after launcher143; initial failures retained/reconciled.77final actual Unity PNGs and [one-portrait review](ReturningPlayerRecap/R2/StoryRecap_R2_Review.html). Six existing inputs changed/eight added, other7,819 preserved; art/fonts/otherprefabs/services/guards unchanged. R6 APK/sidecar/five manual exports unchanged; recap not packaged. No phone/hosting/commit work or visual acceptance inferred.
+ 
+-**Immediate next action:** Refresh the existing guarded development APK with verified recap/Profile13, preserving R6 APK/sidecar first. Rerun current Android policy/content guards and review signing/identity/permissions, ZIP/ELF/JNI and expected packed membership changes. Update current evidence pins after a successful build. Phone execution and hosting remain deferred. Human201–210 recording remains the parallel acceptance action; follow the prepared gap matrix before tuning. Physical readability/font provenance/Android lifecycle/stock fixtures remain open; final gameplay effects stay last.
++**2026-10-02 recap APK refresh completed:** [R3](ReturningPlayerRecap/R3AndroidRefresh/TestResults.md) packages Profile13/recap with unchanged Dialogue2/Gameplay24/Victory12.130policy/content Edit Mode cases pass; Unityexit0/BuildReportSucceeded160.37s. APK766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e; R6/sidecar archived. Identity/signing/ZIP/ELF/JNI checks pass, exactly two recap MonoScripts added and all existing packed membership retained.40offline boundaries/current preflight pass without device calls. Current checklist/profile/tools pinR3; three new recap rows/all18phone rows pending. All7,833project inputs/five recordings preserved. Prior49native/model checks are historical; no Play Mode/device/hosting/commit.
++
++**Immediate next action:** Run current core regression after recap integration, including affected native UI/story/save behavior and existing isolated restart/profile phases. Keep the QA-only recap case under an explicit disposable fresh profile. Reconcile demonstrated fixture/runtime failures without weakening state guards or changing accepted art/balance. Human201–210 collection remains parallel, then prepared gap matrix before tuning. Phone execution/hosting remain deferred; physical readability/font provenance/Android lifecycle and stock/finale fixtures remain open, final gameplay effects stay last.
+ 
+ Evidence reviewed for this reprioritization: [R43 regression audit](CampaignFoundation/R43RegressionAudit/TestResults.md), [R44 Chapter 1 implementation](CampaignFoundation/R44ChapterOneCompletion/TestResults.md), [failed-round recovery](FailedRoundRecovery/R1/TestResults.md), [continuation transaction foundation](ContinuationTransactions/R1/TestResults.md), [Android storage verification](AndroidCredentialStorage/R5DeviceExecution/TestResults.md), [local HTTPS staging verification](BackendHttpsStaging/R1/TestResults.md). No tests were rerun during this planning update; prior counts remain historical.
+ 
+--- a/ProjectDocs/AI/SessionLog.md
++++ b/ProjectDocs/AI/SessionLog.md
+@@ -6016,3 +6016,18 @@
+ R6 APK/sidecar unchanged765,764,694bytes/SHA25642b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5; recap is not packaged. Five normal manual recorder exports unchanged. Tests use disposable isolated product storage; no normal save journal read. Temporary scenes absent. No APK build, phone/ADB/install, hosting/deployment or commit. [Results](ReturningPlayerRecap/R2/TestResults.md), [review](ReturningPlayerRecap/R2/StoryRecap_R2_Review.html), [final validation](ReturningPlayerRecap/R2/QA/FinalValidation.json).
+ 
+ Next: guarded development APK refresh for verified recap/Profile13, retaining R6 and current policy/signing/ZIP/ELF/JNI/membership checks. Human201–210 recording/gap collection remains parallel; phone/hosting deferred, effects last. No new visual acceptance inferred from approval to proceed.
++
++
++## 2026-10-02 — Recap Android refresh R3
++
++User: “I approve , go to next.” Completed the scheduled guarded APK refresh after inspecting handoff/current task/local source/tree/revisions. Unity6000.5.9f1. Preserved R6 APK/sidecar under BeforeStoryRecapRefreshR3, isolated only package-task/launcher output cache directories with inventoried backups, used existing AndroidDevelopmentBuildCommand unchanged with all approvals/guards/settings retained. Temporary Editor audit checks Profile13/Dialogue2/Gameplay24/four stocks/Victory12 and58scenes/57milestones, then exports actual successful BuildReport/packed inventory. No gameplay/normal save journal is opened during the build.
++
++130current Android policy/content Edit Mode cases passed, zero failed/skipped, Unityexit0/20.32s. BuildUnityexit0/actualSucceeded160.37s. NewAPK766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e; sidecar exact. ArchivedR6765,764,694bytes/SHA25642b29fca2c6941ed2ac96e5c7dd00f9e6c79aab70dfd5b0892a64d7faa815ce5 and inherited sidecar verified. Growth252,620bytes/0.033%, no saving claim. Signing/certificate/package/version/permissions/portrait/ABI/API levels unchanged; ZIP CRC/exact accounting/16KiB and six ELF load alignments pass. Nine credentialDEX/JNImembers/four Java-meta pins pass. Compiledrecap reader/projection/entry and priorQA/stock markers present; Editor audit/test helpers absent.
++
++Packed29384→29386rows: exact StoryRecap.cs and ProductionStoryRecapView.cs MonoScripts/source GUIDs, zero removed paths, all prior path/GUID/type membership preserved. Active Profile619/Dialogue56/Gameplay449/Victory370 objects unchanged in count/types/packed bytes. Initial comparator expected reader-only; actual report also packs projection script, reconciled exact two known GUIDs with no project/build fix. All403ZIP paths retained,398identicalpayloads/five reviewed code/data/build-ID changes. libunity.so binary/symbols/bindings and stable boot settings unchanged.
++
++40synthetic/mocked preflight boundary checks pass (four recap readiness boundaries added); actual R1compatibility entry delegates to updated canonical owner, exits0 offline with current hash/size/sidecar/build proof and no ADB. New build proof exported before preflight validation; final task reconciliation includes current preflight. Current QA outputs moved to R3 to preserve historical R1/R2 evidence. DeviceChecklist/Usage pinR3; RECAP-01/02/03 pending empty/earned scenes, pointer/browse/back/locale/origin and repeated round500 finale. Fresh/resume/empty-energy cannot seed arbitrary story/finale/stock; reviewed fixtures or earned disposable progression remain prerequisites. All18physical rows pending; identity not assumed installed.
++
++Eight existing files changed: four continuity docs; AndroidGameplayJourney/R1/DeviceChecklist.md; AndroidGameplayProfile/R1/Usage.md; AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py and CheckPreflight.py. New tools/evidence/report/before snapshots/patch under ReturningPlayerRecap/R3AndroidRefresh and verified/archived APKs. All7,833Assets/Packages/ProjectSettings/Backend inputs byte-identical, originalart/fonts/metas/GUIDs/acceptedSplash/nativeprefabs/settings/guards/services and inherited edits retained. Helper/meta removed; only two task-new linker files removed; no new test scenes. Five normal manual exports unchanged. Existing development-only unverified Splash typography warning retained. PriorR2's49Editor checks/77nativePNG remain historical; no newPlayMode/phone/ADB/install/launch/normaljournal/credentialcontents/hosting/deployment/commit.
++
++[Results](ReturningPlayerRecap/R3AndroidRefresh/TestResults.md), [build proof](ReturningPlayerRecap/R3AndroidRefresh/QA/BuildValidation.json), [final validation](ReturningPlayerRecap/R3AndroidRefresh/QA/FinalValidation.json). Next: current core regression after recap integration and existing isolated restart/profile checks, selecting QA-only recap with explicit fresh disposable profile. Human201–210 remains parallel before tuning; phone/hosting deferred, stock/finale fixtures/physicalreadability/fontprovenance/lifecycle open, effects last.

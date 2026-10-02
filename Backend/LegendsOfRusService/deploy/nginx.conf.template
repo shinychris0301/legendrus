@@ -1,0 +1,53 @@
+# Included inside nginx's http {}. Replace API_HOST and CERT_DIRECTORY after DNS/TLS setup.
+# Dedicated staging host directly behind nginx; do not enable real_ip trust indiscriminately.
+limit_req_zone $binary_remote_addr zone=lor_auth:10m rate=10r/m;
+limit_req_zone $binary_remote_addr zone=lor_api:10m rate=5r/s;
+limit_conn_zone $binary_remote_addr zone=lor_connections:10m;
+
+server {
+    listen 80 default_server;
+    server_name _;
+    access_log off;
+    return 404;
+}
+server {
+    listen 443 ssl default_server;
+    ssl_reject_handshake on;
+    server_name _;
+    access_log off;
+}
+server {
+    listen 443 ssl;
+    server_name API_HOST;
+    ssl_certificate CERT_DIRECTORY/fullchain.pem;
+    ssl_certificate_key CERT_DIRECTORY/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    server_tokens off;
+    access_log off;
+    # No debug/request/header/body logs. Restrict operational log retention.
+    error_log /var/log/nginx/lor-staging-error.log crit;
+    client_max_body_size 16k;
+    client_body_buffer_size 32k;
+    client_header_timeout 10s;
+    client_body_timeout 10s;
+    send_timeout 10s;
+    keepalive_timeout 10s;
+    limit_conn lor_connections 8;
+    limit_req_status 429;
+    limit_conn_status 429;
+    add_header Cache-Control no-store always;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Strict-Transport-Security "max-age=86400" always;
+
+    # Never forward query credentials or arbitrary routes; auth gets a tighter bucket.
+    if ($args != "") { return 400; }
+    location ~ ^/v1/auth/(bootstrap|refresh)$ {
+        limit_req zone=lor_auth burst=10 nodelay;
+        include /etc/nginx/snippets/lor-staging-proxy.conf;
+    }
+    location ~ ^/(health|ready|v1/player|v1/session)$ {
+        limit_req zone=lor_api burst=20 nodelay;
+        include /etc/nginx/snippets/lor-staging-proxy.conf;
+    }
+    location / { return 404; }
+}

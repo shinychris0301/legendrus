@@ -1,0 +1,561 @@
+{
+  "countsAreLatestDistinctCasesNotOneCombinedRun": true,
+  "latestCounts": {
+    "Passed": 1342,
+    "Skipped": 3
+  },
+  "runs": [
+    {
+      "name": "Broad",
+      "exitCode": 2,
+      "result": {
+        "id": "2",
+        "testcasecount": "1345",
+        "result": "Failed(Child)",
+        "total": "1345",
+        "passed": "1330",
+        "failed": "2",
+        "inconclusive": "0",
+        "skipped": "13",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:07:41Z",
+        "end-time": "2026-10-01 23:41:54Z",
+        "duration": "2053.4729019"
+      },
+      "nonPassing": [
+        {
+          "name": "LegendsOfRus.Tests.CampaignPlayMode.MechanicsSpectacleTests.EveryInventoryBoosterHasAVisibleReleaseAndKeepsMoveCost",
+          "result": "Failed",
+          "run": "Broad",
+          "message": "  actual clears must shatter approved gems\n  Expected: True\n  But was:  False\n"
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests.QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput",
+          "result": "Failed",
+          "run": "Broad",
+          "message": "  Expected: String starting with \"/tmp/lor-android-input-r1/\"\n  But was:  \"/tmp/lor-continuation-r1/core-regression-r6/Broad/config\"\n"
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires isolated loopback backend verification runner"
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.ReadAndRecoverCommittedRotationAfterRestart",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Separate-process reader only"
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.WriteCommittedRotationWithLostResponse",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Separate-process writer only"
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.ReadRefundAndRejectReplay",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires isolated continuation restart phase."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.ReadReservationAndRefund",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires isolated continuation restart phase."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.WriteReservation",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires isolated continuation restart phase."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.DevelopmentGameplayProfilePlayModeTests.ColdProcessProfileIsolationAndPersistence",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires the isolated gameplay-profile phase runner."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceReaderRestoresWithoutDuplicateReward",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Run the isolated persistence audit writer/reader phases separately."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceWriterCompletesAndSaves",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Run the isolated persistence audit writer/reader phases separately."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.LanguagePreferenceRestartPlayModeTests.DevicePreferenceSurvivesFreshUnityProcess",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires dedicated isolated two-process check."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadDeclinedRoundAfterSecondRestart",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires the named isolated restart phase."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadFailureAfterRestartAndDecline",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires the named isolated restart phase."
+        },
+        {
+          "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.WriteFailedRound",
+          "result": "Skipped",
+          "run": "Broad",
+          "message": "Requires the named isolated restart phase."
+        }
+      ]
+    },
+    {
+      "name": "SpectacleBaseline",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "4",
+        "result": "Passed",
+        "total": "4",
+        "passed": "4",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:43:28Z",
+        "end-time": "2026-10-01 23:43:45Z",
+        "duration": "17.2616823"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "SpectacleVerified",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "14",
+        "result": "Passed",
+        "total": "14",
+        "passed": "14",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:45:38Z",
+        "end-time": "2026-10-01 23:46:17Z",
+        "duration": "39.2914018"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "InputVerified",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "2",
+        "result": "Passed",
+        "total": "2",
+        "passed": "2",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:47:03Z",
+        "end-time": "2026-10-01 23:47:07Z",
+        "duration": "3.9888592"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Retained1",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:48:15Z",
+        "end-time": "2026-10-01 23:48:16Z",
+        "duration": "0.7013457"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Retained2",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:48:36Z",
+        "end-time": "2026-10-01 23:48:36Z",
+        "duration": "0.454854"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Retained3",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:48:57Z",
+        "end-time": "2026-10-01 23:48:57Z",
+        "duration": "0.4090046"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Continuation1",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:49:18Z",
+        "end-time": "2026-10-01 23:49:18Z",
+        "duration": "0.1497341"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Continuation2",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:49:37Z",
+        "end-time": "2026-10-01 23:49:37Z",
+        "duration": "0.1345213"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Continuation3",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:49:58Z",
+        "end-time": "2026-10-01 23:49:58Z",
+        "duration": "0.1275978"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Language1",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:50:20Z",
+        "end-time": "2026-10-01 23:50:20Z",
+        "duration": "0.1681471"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Language2",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:50:41Z",
+        "end-time": "2026-10-01 23:50:41Z",
+        "duration": "0.1869348"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Save1",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:51:02Z",
+        "end-time": "2026-10-01 23:51:18Z",
+        "duration": "15.9028985"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "Save2",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:51:39Z",
+        "end-time": "2026-10-01 23:51:40Z",
+        "duration": "0.8840233"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileNormalWrite",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:52:00Z",
+        "end-time": "2026-10-01 23:52:00Z",
+        "duration": "0.1568964"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileProfileWrite",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:52:21Z",
+        "end-time": "2026-10-01 23:52:21Z",
+        "duration": "0.165778"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileProfileResume",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:52:42Z",
+        "end-time": "2026-10-01 23:52:42Z",
+        "duration": "0.1436635"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileCorrupt",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:53:04Z",
+        "end-time": "2026-10-01 23:53:04Z",
+        "duration": "0.1594609"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileProfileReset",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:53:23Z",
+        "end-time": "2026-10-01 23:53:23Z",
+        "duration": "0.1646719"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileEmptyEnergy",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:53:43Z",
+        "end-time": "2026-10-01 23:53:43Z",
+        "duration": "0.137331"
+      },
+      "nonPassing": []
+    },
+    {
+      "name": "ProfileNormalRead",
+      "exitCode": 0,
+      "result": {
+        "id": "2",
+        "testcasecount": "1",
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "inconclusive": "0",
+        "skipped": "0",
+        "asserts": "0",
+        "engine-version": "3.5.0.0",
+        "clr-version": "4.0.30319.42000",
+        "start-time": "2026-10-01 23:54:03Z",
+        "end-time": "2026-10-01 23:54:03Z",
+        "duration": "0.1369874"
+      },
+      "nonPassing": []
+    }
+  ],
+  "latestNonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation",
+      "result": "Skipped",
+      "run": "Broad",
+      "message": "Requires isolated loopback backend verification runner"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.ReadAndRecoverCommittedRotationAfterRestart",
+      "result": "Skipped",
+      "run": "Broad",
+      "message": "Separate-process reader only"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.WriteCommittedRotationWithLostResponse",
+      "result": "Skipped",
+      "run": "Broad",
+      "message": "Separate-process writer only"
+    }
+  ]
+}

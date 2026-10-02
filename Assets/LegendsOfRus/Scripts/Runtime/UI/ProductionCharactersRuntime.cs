@@ -11,20 +11,24 @@ namespace LegendsOfRus
         {
             var existing=root.GetComponent<ProductionCharactersView>();if(existing!=null){if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Characters outside Play Mode.");existing.RefreshContent();return;}
             var v=root.gameObject.AddComponent<ProductionCharactersView>();
+            v.TitleRu=Load("title_ru_r14");v.UpgradeRu=Load("upgrade_ru_r14");v.SelectRu=Load("select_ru_r14");
+            v.TabSourceRu=new Sprite[3];v.TabAlternateRu=new Sprite[3];
+            for(int i=0;i<3;i++){v.TabSourceRu[i]=Load("tab_"+i+"_source_ru_r14");v.TabAlternateRu[i]=Load("tab_"+i+"_alternate_ru_r14");}
             var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();if(!shop||!shop.HasRequiredBindings)throw new InvalidOperationException("Characters needs the approved navigation header.");
             v.BodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");v.TitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
-            v.Content=Rect(root,"CHARACTERS_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("background"),0,0,941,1672);v.Environment.color=new Color(.3f,.3f,.34f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);v.Hud=Rect(v.Body,"NativeHud",0,0,941,235);
+            v.Content=Rect(root,"CHARACTERS_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("background"),0,0,941,1672);v.Environment.color=new Color(.3f,.3f,.34f,1);v.Body=Rect(v.Content,"Composition",0,0,941,1672);
             BuildOuterFrame(v);
-            Clone(shop.Body.Find("NativeHudBacking"),v.Hud);v.ProfileButton=Clone(shop.ProfileButton.transform,v.Hud).GetComponent<Button>();v.SettingsButton=Clone(shop.SettingsButton.transform,v.Hud).GetComponent<Button>();v.HeroName=Clone(shop.HeroName.transform,v.Hud).GetComponent<Text>();v.LevelText=Clone(shop.LevelText.transform,v.Hud).GetComponent<Text>();
-            v.PlusButtons=new Button[3];Text[] sourceValues={shop.GoldText,shop.GemsText,shop.EnergyText},values=new Text[3];
-            for(int i=0;i<3;i++){Clone(shop.Body.Find("ResourceCapsule_"+i),v.Hud);Clone(shop.Body.Find("ResourceIcon_"+i),v.Hud);values[i]=Clone(sourceValues[i].transform,v.Hud).GetComponent<Text>();v.PlusButtons[i]=Clone(shop.PlusButtons[i].transform,v.Hud).GetComponent<Button>();}
-            v.GoldText=values[0];v.GemsText=values[1];v.EnergyText=values[2];
-            // These adjustments affect only the Characters clone of the shared header.
-            HeaderText(v.HeroName,178,26,148,43,30);HeaderText(v.LevelText,178,67,148,32,22);
-            foreach(var value in values){value.fontSize=44;value.resizeTextMaxSize=44;value.color=new Color32(245,222,175,255);}
+            if(!shop.Header||!shop.Header.HasBindings)throw new InvalidOperationException("Characters requires the shared player header.");
+            v.Header=UnityEngine.Object.Instantiate(shop.Header,v.Body,false);v.Header.name="NativeHud";v.Hud=(RectTransform)v.Header.transform;
+            foreach(var button in v.Header.GetComponentsInChildren<Button>(true))AddPressFeedback(button);
+            // Enlarge native hit targets without scaling the approved header artwork.
+            foreach(var button in v.Header.Plus)button.image.raycastPadding=new Vector4(-16,-14.5f,-16,-14.5f);
+            v.Header.Plus[2].image.raycastPadding=new Vector4(-32,-14.5f,0,-14.5f);
+            v.ProfileButton=v.Header.Profile;v.SettingsButton=v.Header.Settings;v.HeroName=v.Header.PlayerName;v.LevelText=v.Header.Level;v.PlusButtons=v.Header.Plus;
+            v.GoldText=v.Header.Balances[0];v.GemsText=v.Header.Balances[1];v.EnergyText=v.Header.Balances[2];
             v.Title=Art(v.Body,"TitlePlaque",Load("title_r4"),170,102,585,145);
             v.Heading=Label(v,v.Body,"Heading",244,143,454,78,60);v.Heading.font=v.TitleFont;Fit(v.Heading,48,60);DenseText(v.Heading);GoldLettering(v.Heading,true);
-            v.Tabs=new Button[3];v.TabLabels=new Text[3];for(int i=0;i<3;i++){v.Tabs[i]=Button(Panel(v.Body,"Tab_"+i,Shared("tab"),82+i*260,246,254,58));v.TabLabels[i]=Label(v,v.Tabs[i].transform,"Label",14,8,226,42,25);Fit(v.TabLabels[i],19,25);DenseText(v.TabLabels[i]);GoldLettering(v.TabLabels[i],false);}
+            v.Tabs=new Button[3];v.TabLabels=new Text[3];for(int i=0;i<3;i++){v.Tabs[i]=Button(Panel(v.Body,"Tab_"+i,Shared("tab"),82+i*260,246,254,58));v.Tabs[i].image.raycastPadding=new Vector4(0,-9,0,-9);v.TabLabels[i]=Label(v,v.Tabs[i].transform,"Label",14,8,226,42,25);Fit(v.TabLabels[i],19,25);DenseText(v.TabLabels[i]);GoldLettering(v.TabLabels[i],false);}
             var portrait=Rect(v.Body,"PortraitWindow",22,320,411,512);portrait.gameObject.AddComponent<RectMask2D>();
             var backdrop=Art(portrait,"PortraitBackdrop",Load("sunset_r7"),-6,-8,423,528);
             v.DetailArt=Art(portrait,"SelectedHero",Load("hero_firebird_r7"),-5.6f,-7,422.2f,527);
@@ -90,12 +94,13 @@ namespace LegendsOfRus
                 Panel(frame.transform,"FrameEdge",Load("card_normal_r6"),0,0,218,240);v.FutureLabels[i].transform.SetAsLastSibling();
             }
             Art(v.Body,"CarvedFooter",Load("footer_backing_r8"),0,1468,941,204);
-            v.InfoButton=Button(Panel(v.Body,"CollectionInfo",Shared("rules"),259,1470,461,35));v.CollectionLabel=Label(v,v.InfoButton.transform,"CollectionPreview",22,2,417,30,19);Fit(v.CollectionLabel,15,19);
+            v.InfoButton=Button(Panel(v.Body,"CollectionInfo",Shared("rules"),259,1470,461,35));v.InfoButton.image.raycastPadding=new Vector4(0,4,0,-45);v.CollectionLabel=Label(v,v.InfoButton.transform,"CollectionPreview",22,2,417,30,19);Fit(v.CollectionLabel,15,19);
             v.BackButton=Button(Art(v.Body,"Back",Resources.Load<Sprite>("ProductionUI/DailyRewardAligned/back_r2"),16,1521,134,134));
-            v.NavButtons=new Button[4];v.NavLabels=new Text[4];string[] nav={"map","shop","events","team"};
+            v.NavButtons=new Button[4];v.NavLabels=new Text[4];v.NavCaptions=new Image[4];v.NavRu=new Sprite[4];string[] nav={"map","shop","events","team"};
             for(int i=0;i<4;i++){
                 v.NavButtons[i]=Button(Art(v.Body,"Navigation_"+i,Load("nav_"+nav[i]+"_r8"),174+i*187,1502,171,157));
-                Art(v.NavButtons[i].transform,"Plaque",Load("nav_caption_r8"),0,122,171,46);
+                v.NavRu[i]=Load("nav_"+nav[i]+"_ru_r14");
+                v.NavCaptions[i]=Art(v.NavButtons[i].transform,"Plaque",Load("nav_caption_r8"),0,122,171,46);
                 v.NavLabels[i]=Label(v,v.NavButtons[i].transform,"Label",14,131,143,26,20);Fit(v.NavLabels[i],16,20);
             }
             BuildInfo(v);var layout=root.gameObject.AddComponent<ProductionCharactersLayout>();layout.View=v;v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings)throw new InvalidOperationException("Characters bindings incomplete.");
@@ -137,12 +142,6 @@ namespace LegendsOfRus
             text.rectTransform.sizeDelta*=2;text.rectTransform.localScale=Vector3.one*.5f;
             text.fontSize*=2;text.resizeTextMinSize*=2;text.resizeTextMaxSize*=2;
         }
-        static void HeaderText(Text text,float x,float y,float w,float h,int size)
-        {
-            text.rectTransform.anchoredPosition=new Vector2(x,-y);text.rectTransform.sizeDelta=new Vector2(w*2,h*2);
-            text.rectTransform.localScale=Vector3.one*.5f;text.fontSize=size*2;
-            Fit(text,size*2-8,size*2);text.color=new Color32(245,222,175,255);
-        }
         static void GoldLettering(Text text,bool beveled)
         {
             var shadow=text.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color32(32,17,5,230);shadow.effectDistance=new Vector2(2,-2);
@@ -151,11 +150,15 @@ namespace LegendsOfRus
             if(beveled)text.material=Resources.Load<Material>(ProductionHomeRuntime.PlayGoldMaterialResource);
         }
         static void Fit(Text t,int min,int max){t.resizeTextForBestFit=true;t.resizeTextMinSize=min;t.resizeTextMaxSize=max;}
-        static Transform Clone(Transform t,Transform p){var c=UnityEngine.Object.Instantiate(t,p,false);c.name=t.name;return c;}
         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
         static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.preserveAspect=true;a.raycastTarget=false;return a;}
         static Image Panel(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Art(p,n,s,x,y,w,h);a.type=Image.Type.Sliced;a.preserveAspect=false;a.pixelsPerUnitMultiplier=1;return a;}
-        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};return b;}
+        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};AddPressFeedback(b);return b;}
+        static void AddPressFeedback(Button button)
+        {
+            button.transition=Selectable.Transition.None;
+            if(!button.GetComponent<ProductionMapButtonFeedback>())button.gameObject.AddComponent<ProductionMapButtonFeedback>();
+        }
         static Text Label(ProductionCharactersView v,Transform p,string n,float x,float y,float w,float h,int size){var t=Rect(p,n,x,y,w,h).gameObject.AddComponent<Text>();t.font=v.BodyFont;t.fontSize=size;t.alignment=TextAnchor.MiddleCenter;t.color=new Color32(243,206,137,255);t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;return t;}
     }
 }

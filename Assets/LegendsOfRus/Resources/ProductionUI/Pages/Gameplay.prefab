@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
-  Revision: 22
+  Revision: 24
   SourceControls: 1
   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
   Content: {fileID: 9173441830046244190}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 50ba28375a9a4edb1be246997041faea, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -458,6 +458,78 @@ RectTransform:
   m_AnchoredPosition: {x: 68, y: -486}
   m_SizeDelta: {x: 808, y: 748}
   m_Pivot: {x: 0, y: 1}
+--- !u!1 &302533157655765949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6222439772279917575}
+  - component: {fileID: 6171000293392550288}
+  - component: {fileID: 5676293213773542065}
+  m_Layer: 5
+  m_Name: WideStockBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6222439772279917575
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302533157655765949}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6728665183223279658}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -114, y: -58}
+  m_SizeDelta: {x: 174, y: 52}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &6171000293392550288
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302533157655765949}
+  m_CullTransparentMesh: 1
+--- !u!114 &5676293213773542065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302533157655765949}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 26
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
+  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &492414717815005089
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +605,150 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 4
+--- !u!1 &549804474068002223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8654809379399415672}
+  - component: {fileID: 908777453427109734}
+  - component: {fileID: 8292951495074114463}
+  m_Layer: 5
+  m_Name: WideStockBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8654809379399415672
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549804474068002223}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5241344649840255527}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -114, y: -58}
+  m_SizeDelta: {x: 174, y: 52}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &908777453427109734
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549804474068002223}
+  m_CullTransparentMesh: 1
+--- !u!114 &8292951495074114463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549804474068002223}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 26
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
+  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+--- !u!1 &802148701495139601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349927321796055584}
+  - component: {fileID: 1517981321579570270}
+  - component: {fileID: 8458775160850566447}
+  m_Layer: 5
+  m_Name: WideStockBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &349927321796055584
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802148701495139601}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9168653241091263462}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -114, y: -58}
+  m_SizeDelta: {x: 174, y: 52}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &1517981321579570270
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802148701495139601}
+  m_CullTransparentMesh: 1
+--- !u!114 &8458775160850566447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802148701495139601}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 26
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
+  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &866661266614901959
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +780,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4835228181570760596}
   m_Father: {fileID: 5101551253853299248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -807,7 +1024,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1233,8 +1450,9 @@ RectTransform:
   m_Children:
   - {fileID: 2458129824362471231}
   - {fileID: 3724315308523035358}
-  - {fileID: 3354784920745706049}
   - {fileID: 9168653241091263462}
+  - {fileID: 2197802995288142465}
+  - {fileID: 3354784920745706049}
   m_Father: {fileID: 5101551253853299248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -1307,6 +1525,8 @@ GameObject:
   - component: {fileID: 2891589712929026123}
   - component: {fileID: 4393046011490916118}
   - component: {fileID: 2572310240496527333}
+  - component: {fileID: 673020983486301163}
+  - component: {fileID: 5505154675267870487}
   m_Layer: 5
   m_Name: Count
   m_TagString: Untagged
@@ -1366,12 +1586,12 @@ MonoBehaviour:
     m_FontSize: 73
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 33
+    m_MinSize: 12
     m_MaxSize: 73
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u2014"
@@ -1425,6 +1645,32 @@ MonoBehaviour:
   m_EffectColor: {r: 0.039215688, g: 0.02745098, b: 0.011764706, a: 0.9019608}
   m_EffectDistance: {x: 0.8, y: -1.2}
   m_UseGraphicAlpha: 1
+--- !u!114 &673020983486301163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853616936855418490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
+--- !u!114 &5505154675267870487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853616936855418490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
+  Badge: {fileID: 5102696969158774155}
+  WideBacking: {fileID: 5676293213773542065}
 --- !u!1 &2203545207524067242
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,6 +1833,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 349927321796055584}
   - {fileID: 2319858930439044965}
   m_Father: {fileID: 4701323611185058877}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1637,6 +1884,8 @@ GameObject:
   - component: {fileID: 871907562549064186}
   - component: {fileID: 440774437338950415}
   - component: {fileID: 6279542873079479353}
+  - component: {fileID: 3626210904602896867}
+  - component: {fileID: 3132524883690584237}
   m_Layer: 5
   m_Name: Count
   m_TagString: Untagged
@@ -1696,12 +1945,12 @@ MonoBehaviour:
     m_FontSize: 73
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 33
+    m_MinSize: 12
     m_MaxSize: 73
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u2014"
@@ -1755,6 +2004,32 @@ MonoBehaviour:
   m_EffectColor: {r: 0.039215688, g: 0.02745098, b: 0.011764706, a: 0.9019608}
   m_EffectDistance: {x: 0.8, y: -1.2}
   m_UseGraphicAlpha: 1
+--- !u!114 &3626210904602896867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470634682538560117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
+--- !u!114 &3132524883690584237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470634682538560117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
+  Badge: {fileID: 675255309419209302}
+  WideBacking: {fileID: 8458775160850566447}
 --- !u!1 &2492076895419065837
 GameObject:
   m_ObjectHideFlags: 0
@@ -2612,6 +2887,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8654809379399415672}
   - {fileID: 4296078980593445230}
   m_Father: {fileID: 1448291901246882471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2681,8 +2957,9 @@ RectTransform:
   m_Children:
   - {fileID: 2271072849010180116}
   - {fileID: 622922741575247284}
-  - {fileID: 4403881780174026728}
   - {fileID: 6728665183223279658}
+  - {fileID: 4718543339439978310}
+  - {fileID: 4403881780174026728}
   m_Father: {fileID: 5101551253853299248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -3575,6 +3852,78 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3943817032349022729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2197802995288142465}
+  - component: {fileID: 7539619980971982658}
+  - component: {fileID: 903875929920022836}
+  m_Layer: 5
+  m_Name: CaptionBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2197802995288142465
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943817032349022729}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4701323611185058877}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 84}
+  m_SizeDelta: {x: 192, y: 82}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &7539619980971982658
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943817032349022729}
+  m_CullTransparentMesh: 1
+--- !u!114 &903875929920022836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943817032349022729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 8
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
+  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &4434765733803639987
 GameObject:
   m_ObjectHideFlags: 0
@@ -3589,6 +3938,8 @@ GameObject:
   - component: {fileID: 8887498359221015838}
   - component: {fileID: 5392787233640194332}
   - component: {fileID: 4396179250278559514}
+  - component: {fileID: 4838768814734474686}
+  - component: {fileID: 4528186998498552013}
   m_Layer: 5
   m_Name: Count
   m_TagString: Untagged
@@ -3648,12 +3999,12 @@ MonoBehaviour:
     m_FontSize: 73
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 33
+    m_MinSize: 12
     m_MaxSize: 73
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u2014"
@@ -3707,6 +4058,32 @@ MonoBehaviour:
   m_EffectColor: {r: 0.039215688, g: 0.02745098, b: 0.011764706, a: 0.9019608}
   m_EffectDistance: {x: 0.8, y: -1.2}
   m_UseGraphicAlpha: 1
+--- !u!114 &4838768814734474686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4434765733803639987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
+--- !u!114 &4528186998498552013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4434765733803639987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
+  Badge: {fileID: 103913310117980662}
+  WideBacking: {fileID: 1944858769599913576}
 --- !u!1 &4535446675957033144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3910,6 +4287,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7828930970097788638}
   - {fileID: 5326955694407331561}
   m_Father: {fileID: 9211076187924112702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3946,6 +4324,72 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &4672472842246662470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4835228181570760596}
+  - component: {fileID: 5006147075097454157}
+  - component: {fileID: 3058083043224875910}
+  m_Layer: 5
+  m_Name: TouchTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4835228181570760596
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4672472842246662470}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1625340881803658204}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5006147075097454157
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4672472842246662470}
+  m_CullTransparentMesh: 0
+--- !u!114 &3058083043224875910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4672472842246662470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e0dd22260ca458f98d63a5ac09681d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionControlTouchTarget
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Owner: {fileID: 316611331344704638}
 --- !u!1 &4713076180670532042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3983,8 +4427,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 17, y: -215}
-  m_SizeDelta: {x: 316, y: 76}
+  m_AnchoredPosition: {x: 1, y: 81}
+  m_SizeDelta: {x: 380, y: 152}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7648515659779284591
 CanvasRenderer:
@@ -4016,17 +4460,17 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 0}
-    m_FontSize: 32
+    m_FontSize: 46
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 0.85
+    m_LineSpacing: 0.95
   m_Text: "\u0416\u0418\u0412\u041E\u0419 \u0421\u0412\u0415\u0422"
 --- !u!114 &8737215682775310718
 MonoBehaviour:
@@ -4074,6 +4518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
+  ExpandedCaption: 1
 --- !u!1 &4761893612207056134
 GameObject:
   m_ObjectHideFlags: 0
@@ -4149,6 +4594,78 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4832215636254648934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7828930970097788638}
+  - component: {fileID: 6582076239190860448}
+  - component: {fileID: 1944858769599913576}
+  m_Layer: 5
+  m_Name: WideStockBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7828930970097788638
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4832215636254648934}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5440304680423997586}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -114, y: -58}
+  m_SizeDelta: {x: 174, y: 52}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &6582076239190860448
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4832215636254648934}
+  m_CullTransparentMesh: 1
+--- !u!114 &1944858769599913576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4832215636254648934}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 26
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
+  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &4894203515461639103
 GameObject:
   m_ObjectHideFlags: 0
@@ -4308,6 +4825,8 @@ GameObject:
   - component: {fileID: 758563602855383689}
   - component: {fileID: 500789203954675208}
   - component: {fileID: 5425935848808318827}
+  - component: {fileID: 4615879530700962955}
+  - component: {fileID: 727578925896694807}
   m_Layer: 5
   m_Name: Count
   m_TagString: Untagged
@@ -4367,12 +4886,12 @@ MonoBehaviour:
     m_FontSize: 73
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 33
+    m_MinSize: 12
     m_MaxSize: 73
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u2014"
@@ -4426,6 +4945,32 @@ MonoBehaviour:
   m_EffectColor: {r: 0.039215688, g: 0.02745098, b: 0.011764706, a: 0.9019608}
   m_EffectDistance: {x: 0.8, y: -1.2}
   m_UseGraphicAlpha: 1
+--- !u!114 &4615879530700962955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4998615616993476611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
+--- !u!114 &727578925896694807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4998615616993476611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
+  Badge: {fileID: 2994095314511030431}
+  WideBacking: {fileID: 8292951495074114463}
 --- !u!1 &5077722709790342179
 GameObject:
   m_ObjectHideFlags: 0
@@ -5186,6 +5731,78 @@ MonoBehaviour:
   Dimmed: 0
   StarFilledArt: {fileID: 0}
   StarEmptyArt: {fileID: 0}
+--- !u!1 &5432336099724866659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5331993099753239815}
+  - component: {fileID: 636030839011413368}
+  - component: {fileID: 1219770633928010234}
+  m_Layer: 5
+  m_Name: CaptionBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5331993099753239815
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5432336099724866659}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9211076187924112702}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 84}
+  m_SizeDelta: {x: 192, y: 82}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &636030839011413368
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5432336099724866659}
+  m_CullTransparentMesh: 1
+--- !u!114 &1219770633928010234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5432336099724866659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 8
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
+  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &5622855954873124094
 GameObject:
   m_ObjectHideFlags: 0
@@ -5223,8 +5840,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 17, y: -215}
-  m_SizeDelta: {x: 316, y: 76}
+  m_AnchoredPosition: {x: 1, y: 81}
+  m_SizeDelta: {x: 380, y: 152}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5049475929828424530
 CanvasRenderer:
@@ -5256,17 +5873,17 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 0}
-    m_FontSize: 32
+    m_FontSize: 46
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 0.85
+    m_LineSpacing: 0.95
   m_Text: "\u0416\u0415\u041C\u0427\u0423\u0416\u0418\u041D\u0410\n\u041C\u041E\u0420\u0421\u041A\u041E\u0413\u041E
     \u0426\u0410\u0420\u042F"
 --- !u!114 &8955584151603396838
@@ -5315,6 +5932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
+  ExpandedCaption: 1
 --- !u!1 &5720272870168945646
 GameObject:
   m_ObjectHideFlags: 0
@@ -6127,8 +6745,9 @@ RectTransform:
   m_Children:
   - {fileID: 1188338952394138536}
   - {fileID: 3865632607170423115}
-  - {fileID: 6797702965365544627}
   - {fileID: 5241344649840255527}
+  - {fileID: 1746382859902639823}
+  - {fileID: 6797702965365544627}
   m_Father: {fileID: 5101551253853299248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -6187,6 +6806,78 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayBoosterCard
   Target: {fileID: 5399189098199060825}
+--- !u!1 &6622679910300952962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4718543339439978310}
+  - component: {fileID: 5514881713973607705}
+  - component: {fileID: 4595679015639237070}
+  m_Layer: 5
+  m_Name: CaptionBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4718543339439978310
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6622679910300952962}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5938433476754378070}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 84}
+  m_SizeDelta: {x: 192, y: 82}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &5514881713973607705
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6622679910300952962}
+  m_CullTransparentMesh: 1
+--- !u!114 &4595679015639237070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6622679910300952962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 8
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
+  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &6689926845254175377
 GameObject:
   m_ObjectHideFlags: 0
@@ -6252,7 +6943,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 50ba28375a9a4edb1be246997041faea, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6515,8 +7206,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 17, y: -215}
-  m_SizeDelta: {x: 316, y: 76}
+  m_AnchoredPosition: {x: 1, y: 81}
+  m_SizeDelta: {x: 380, y: 152}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6259402085393196260
 CanvasRenderer:
@@ -6548,17 +7239,17 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 0}
-    m_FontSize: 32
+    m_FontSize: 46
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 0.85
+    m_LineSpacing: 0.95
   m_Text: "\u0411\u041E\u0413\u0410\u0422\u042B\u0420\u0421\u041A\u0410\u042F\n\u0411\u0423\u041B\u0410\u0412\u0410"
 --- !u!114 &4096554400371750206
 MonoBehaviour:
@@ -6606,6 +7297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
+  ExpandedCaption: 1
 --- !u!1 &7601876404679409946
 GameObject:
   m_ObjectHideFlags: 0
@@ -6682,8 +7374,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 17, y: -215}
-  m_SizeDelta: {x: 316, y: 76}
+  m_AnchoredPosition: {x: 1, y: 81}
+  m_SizeDelta: {x: 380, y: 152}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &972933387211779832
 CanvasRenderer:
@@ -6715,17 +7407,17 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 0}
-    m_FontSize: 32
+    m_FontSize: 46
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 46
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 0.85
+    m_LineSpacing: 0.95
   m_Text: "\u041F\u0415\u0420\u041E\n\u0416\u0410\u0420-\u041F\u0422\u0418\u0426\u042B"
 --- !u!114 &6412445270061999862
 MonoBehaviour:
@@ -6773,6 +7465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bb0da21d5c50f149cf42958137aeb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCaptionFit
+  ExpandedCaption: 1
 --- !u!1 &8028730957893219296
 GameObject:
   m_ObjectHideFlags: 0
@@ -6806,8 +7499,9 @@ RectTransform:
   m_Children:
   - {fileID: 8364956270531602872}
   - {fileID: 303684999950616351}
-  - {fileID: 4758810458422433118}
   - {fileID: 5440304680423997586}
+  - {fileID: 5331993099753239815}
+  - {fileID: 4758810458422433118}
   m_Father: {fileID: 5101551253853299248}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -7046,6 +7740,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6222439772279917575}
   - {fileID: 4296720808036516261}
   m_Father: {fileID: 5938433476754378070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7163,6 +7858,78 @@ MonoBehaviour:
   GridOnly: 0
   Columns: 8
   Rows: 7
+--- !u!1 &8345606962675745735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1746382859902639823}
+  - component: {fileID: 2996972208755085846}
+  - component: {fileID: 2015431463240286250}
+  m_Layer: 5
+  m_Name: CaptionBacking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1746382859902639823
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345606962675745735}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1448291901246882471}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 84}
+  m_SizeDelta: {x: 192, y: 82}
+  m_Pivot: {x: 0, y: 1}
+--- !u!222 &2996972208755085846
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345606962675745735}
+  m_CullTransparentMesh: 1
+--- !u!114 &2015431463240286250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345606962675745735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  Radius: 8
+  Frame: 1
+  CornerJewels: 0
+  RaisedBadge: 0
+  LeftColor: {r: 0.05882353, g: 0.11372549, b: 0.16470589, a: 1}
+  RightColor: {r: 0.03529412, g: 0.07450981, b: 0.1254902, a: 1}
+  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
 --- !u!1 &8356209022218806649
 GameObject:
   m_ObjectHideFlags: 0

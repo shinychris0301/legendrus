@@ -1,0 +1,33 @@
+{
+  "passed": 23,
+  "failed": 0,
+  "checks": [
+    "nginx_configuration_valid",
+    "https_readiness",
+    "responses_not_cached",
+    "untrusted_certificate_rejected",
+    "unknown_tls_hostname_rejected",
+    "plaintext_no_redirect_or_api",
+    "query_rejected",
+    "oversized_body_rejected",
+    "commerce_closed",
+    "transient_guest_closed",
+    "bootstrap_over_tls",
+    "bootstrap_retry_same_account",
+    "authenticated_zero_wallet",
+    "rotation",
+    "lost_response_retry_after_process_restart",
+    "old_access_revoked",
+    "new_access_after_restart",
+    "logout",
+    "logout_revokes_access",
+    "logout_revokes_recovery",
+    "auth_rate_limit_429",
+    "readiness_fails_when_backend_down",
+    "no_fixture_credentials_in_logs"
+  ],
+  "scope": "Local loopback nginx TLS + Gunicorn; disposable certificate and database",
+  "publicDeployment": false,
+  "androidSessionTested": false,
+  "credentialValuesExported": false
+}

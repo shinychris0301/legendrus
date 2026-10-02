@@ -1,0 +1,49 @@
+{
+  "unity": "6000.5.9f1",
+  "foundationCases": 24,
+  "results": [
+    {
+      "path": "QA/Verify02/PlayMode/results.xml",
+      "total": "2",
+      "passed": "0",
+      "failed": "2",
+      "skipped": "0",
+      "result": "Failed(Child)"
+    },
+    {
+      "path": "QA/Verify03/PlayMode/results.xml",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "result": "Passed"
+    },
+    {
+      "path": "QA/Verify01/EditMode/results.xml",
+      "total": "128",
+      "passed": "128",
+      "failed": "0",
+      "skipped": "0",
+      "result": "Passed"
+    },
+    {
+      "path": "QA/Verify01/PlayMode/results.xml",
+      "total": "0",
+      "passed": "0",
+      "failed": "0",
+      "skipped": "0",
+      "result": "Passed"
+    }
+  ],
+  "acceptedRuns": [
+    "Verify01/EditMode",
+    "Verify03/PlayMode"
+  ],
+  "invalidEvidence": [
+    "Verify01/PlayMode: incorrect namespace, zero tests",
+    "Verify02/PlayMode: missing capture directory, failed setup before journey"
+  ],
+  "temporaryBuildArtifacts": "Unity Addressables removes its generated link.xml and meta on Editor initialization. Both restored byte-for-byte from verified cached XML and recovered SourceAssetDB GUID, matching pre-run SHA256. No new GUID assigned.",
+  "physicalDeviceTest": false,
+  "runtimeCutover": false
+}

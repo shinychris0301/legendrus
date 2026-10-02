@@ -164,7 +164,8 @@ namespace LegendsOfRus.Tests.PlayMode
             var view=Root().GetComponentInChildren<ProductionWorldMapView>();
             Assert.That(view.Cards.Length,Is.EqualTo(20));
             var first=view.Cards[0];Assert.That(first.Current,Is.True);
-            Assert.That(first.Progress.text,Is.EqualTo("0/30"));
+            Assert.That(ChapterLevelCatalog.LoadChapter1().levels.Length,Is.EqualTo(500));
+            Assert.That(first.Progress.text,Is.EqualTo("0/1500"));
             Assert.That(first.BorderGlow.gameObject.activeSelf,Is.True);
             Assert.That(first.Surface.color,Is.EqualTo(Color.white));
             Assert.That(first.Terrain.color,Is.EqualTo(Color.white));
@@ -211,6 +212,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("WorldMap_1080x2400_safearea_RU", new Vector2Int(1080,2400), new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en"); yield return null; yield return null;
             Capture("WorldMap_941x1672_EN", new Vector2Int(941,1672), new Rect(0,0,941,1672));
+            Capture("WorldMap_1080x2400_safearea_EN", new Vector2Int(1080,2400), new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("ru"); yield return null; yield return null;
             Capture("WorldMap_941x1672_RU_roundtrip", new Vector2Int(941,1672), new Rect(0,0,941,1672));
             var view=Root().GetComponentInChildren<ProductionWorldMapView>();
@@ -221,6 +223,28 @@ namespace LegendsOfRus.Tests.PlayMode
             DemoFeatureState.SetLanguage("en");yield return null;yield return null;
             Capture("WorldMap_Tasks_941x1672_EN", new Vector2Int(941,1672), new Rect(0,0,941,1672));
             view.NavButtons[0].onClick.Invoke();Assert.That(view.TaskPanel.activeSelf,Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator ResizingPreservesChapterScrollProgressAndOrder()
+        {
+            var view = Root().GetComponentInChildren<ProductionWorldMapView>();
+            foreach (float progress in new[] { 0f, .5f, 1f })
+            {
+                view.ChapterScroll.verticalNormalizedPosition = progress;
+                view.ChapterScroll.StopMovement();
+                yield return null;
+                Capture("WorldMap_Resize_" + Mathf.RoundToInt(progress * 100),
+                    new Vector2Int(1080,2400), new Rect(45,100,990,2160), camera =>
+                    {
+                        Assert.That(view.ChapterScroll.verticalNormalizedPosition,
+                            Is.EqualTo(progress).Within(.001f), "Keep scroll progress during resize");
+                        Assert.That(view.Cards[19].Root.anchoredPosition.y,
+                            Is.GreaterThan(view.Cards[0].Root.anchoredPosition.y), "Later chapters remain above");
+                    });
+                Assert.That(view.ChapterScroll.verticalNormalizedPosition,
+                    Is.EqualTo(progress).Within(.001f), "Keep scroll progress after restoring display");
+            }
         }
 
         GameObject Root()
@@ -339,6 +363,15 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(mesh,Is.Not.Null,graphic.name);
                 Assert.That(mesh.vertexCount,Is.GreaterThan(0),graphic.name+" must have rendered geometry");
             }
+            Rect hud = Bounds(view.Hud, camera), footer = Bounds(view.Footer, camera);
+            Rect viewport = Bounds(view.MapArea, camera), title = Bounds(view.TitleArea, camera);
+            Rect action = Bounds((RectTransform)view.ChapterAction.transform, camera);
+            float scale = footer.width / 941f;
+            Assert.That(hud.yMax, Is.EqualTo(safe.yMax).Within(1f), "Shared header at safe top");
+            Assert.That(footer.yMin, Is.EqualTo(safe.yMin).Within(1f), "Navigation at safe bottom");
+            Assert.That(title.yMin - viewport.yMax, Is.EqualTo(6 * scale).Within(1f), "Title/viewport clearance");
+            Assert.That(viewport.yMin - action.yMax, Is.EqualTo(-scale).Within(1f), "Original scroll/action join");
+            Assert.That(viewport.height, Is.EqualTo(safe.height - 666 * scale).Within(1f), "Viewport uses extra height");
             Rect environment=Bounds(view.Environment.rectTransform,camera);
             Assert.That(environment.xMin,Is.LessThanOrEqualTo(1));Assert.That(environment.yMin,Is.LessThanOrEqualTo(1));
             Assert.That(environment.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(environment.yMax,Is.GreaterThanOrEqualTo(size.y-1));
@@ -348,7 +381,6 @@ namespace LegendsOfRus.Tests.PlayMode
                 Rect rect=Bounds(button.transform as RectTransform,camera);
                 if(button.transform.IsChildOf(view.ChapterScroll.content))
                 {
-                    Rect viewport=Bounds(view.ChapterScroll.viewport,camera);
                     if(!viewport.Contains(rect.center))continue;
                 }
                 Assert.That(rect.xMin,Is.GreaterThanOrEqualTo(safe.xMin-1),button.name);

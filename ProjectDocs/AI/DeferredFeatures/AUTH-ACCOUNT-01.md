@@ -1,8 +1,20 @@
 # AUTH-ACCOUNT-01 — Account services after UI
 
-Status: integration follow-up identified during approved Visual Page30 UI work; not implemented or activated. No provider/backend choice or production credentials requested for this design pass.
+**2026-09-30 priority update:** hosting and further online-service integration are postponed while core gameplay, offline lifecycle and Android acceptance take priority. Existing backend/storage work is retained; this feature remains incomplete. See the [current schedule](../DevelopmentSchedule.md).
 
-Before implementation, define supported identity providers and email/phone authentication, approved backend, account-link/merge rules, recovery, sign-out/deletion, legal destinations and consent policy. Reconcile the separate CHAPTER-SMS-01 trigger with the chosen identity flow; do not assume Chapter Complete verification creates or links an account automatically.
+**2026-09-30 HTTPS staging:** isolated deployment/restore package implemented; 47 backend and 23 local nginx/TLS/Gunicorn checks passed. Host/domain still needed; no public deploy or Android authenticated-session pass. Normal accounts remain unconfigured. See [results](../BackendHttpsStaging/R1/TestResults.md).
+
+**2026-09-30 device storage verified on Android 16:** R5 passes actual Unity JNI, Keystore and AtomicFile prepare/restart/fault/cleanup phases using disposable data. Entry-point and campaign startup fixes are installed; 161 focused Unity cases passed. [Evidence](../AndroidCredentialStorage/R5DeviceExecution/TestResults.md). Hosted HTTPS/authenticated session recovery, linking and cross-device recovery are still pending; Login remains unconfigured. This supersedes the earlier no-device statements below only for the specific tested storage scope.
+
+**2026-09-30 device probe implemented:** development-only empty-vault ownership, process restart and deliberate AtomicFile/corruption/missing-key test sequence are installed in the current APK. 148 Unity and 12 runner-report checks passed; Android execution still awaits a connected test device. [R4 results and commands](../AndroidCredentialStorage/R4DeviceProbe/TestResults.md). This does not enable real login or establish authenticated session recovery.
+
+**2026-09-30 packaging verified:** user-approved exact Java source/importer exception applied; 120 Unity build-policy cases passed and the current development APK built. Signature, manifest, unchanged permissions, ZIP/ELF alignment and packaged Java/JNI definitions passed inspection. [R3 results](../AndroidCredentialStorage/R3ApprovedBuild/TestResults.md). No device was attached; explicit storage probes and hosted HTTPS remain next. Ordinary app launch does not exercise the unconfigured account adapter.
+
+Status: **device-bound guest-session renewal and Unity transport foundation implemented; production account UI, linking and cross-device recovery remain pending.** User selected RuStore and our own backend. [BackendSessions/R1 verification](../BackendSessions/R1/TestResults.md) covers rotating session recovery, lost responses, client restart, same identity, revocation and separate wallet reads. The runtime account service starts unconfigured; Login remains unavailable online. No secrets are stored in the normal save or PlayerPrefs.
+
+Android Keystore/atomic-file storage and asynchronous Unity integration are now implemented ([storage verification](../AndroidCredentialStorage/R1/TestResults.md)); packaging is verified; device execution remains unverified. Next perform explicit device storage and hosted checks, followed by linked recovery and explicit save reconciliation. Recovery credentials currently last30days; device loss and expiry beyond this window are not solved. The legacy transient guest API is not automatically upgraded. Preserve this distinction from the original UI-only status.
+
+Before activating account UI, define supported identity providers and email/phone authentication, account-link/merge rules, recovery, sign-out/deletion, legal destinations and consent policy. Reconcile the separate CHAPTER-SMS-01 trigger with the chosen identity flow; do not assume Chapter Complete verification creates or links an account automatically.
 
 Implement real authentication and cancellable provider flows, secure platform session storage, local-to-cloud progress reconciliation with explicit conflict handling, recovery and online/offline states. Preserve guest progress and device language preference. Keep existing compliance activation guards until their dependencies are satisfied.
 

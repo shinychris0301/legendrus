@@ -7,9 +7,12 @@ namespace LegendsOfRus
 {
     public sealed class ProductionTutorialView : MonoBehaviour
     {
-        public const int CurrentRevision=2;
+        public const int CurrentRevision=7;
         public int Revision=CurrentRevision;
         public RectTransform Content,Body;
+        public ProductionTutorialOverview Overview;
+        public bool DetailsVisible {get;private set;}
+        public bool ReturnToRound {get;private set;}
         public GameObject MatchDiagram;
         public Text BeforeLabel,AfterLabel,MatchInstruction;
         public Image Environment;
@@ -25,20 +28,36 @@ namespace LegendsOfRus
         readonly List<Button> buttons=new List<Button>();
         readonly List<UnityAction> listeners=new List<UnityAction>();
         string language;bool committed;Action exit;
-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&MatchDiagram&&BeforeLabel&&AfterLabel&&MatchInstruction&&Environment&&BodyFont&&TitleFont&&Heading&&Subtitle&&Hint&&Counter&&PreviousLabel&&NextLabel&&Close&&Previous&&Next&&Tabs!=null&&Tabs.Length==4&&TabLabels!=null&&TabLabels.Length==4&&Rows!=null&&Rows.Length==4&&RowIcons!=null&&RowIcons.Length==4&&RowTitles!=null&&RowTitles.Length==4&&RowDescriptions!=null&&RowDescriptions.Length==4;
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Content&&Body&&Overview&&Overview.HasBindings&&MatchDiagram&&BeforeLabel&&AfterLabel&&MatchInstruction&&Environment&&BodyFont&&TitleFont&&Heading&&Subtitle&&Hint&&Counter&&PreviousLabel&&NextLabel&&Close&&Previous&&Next&&Tabs!=null&&Tabs.Length==4&&TabLabels!=null&&TabLabels.Length==4&&Rows!=null&&Rows.Length==4&&RowIcons!=null&&RowIcons.Length==4&&RowTitles!=null&&RowTitles.Length==4&&RowDescriptions!=null&&RowDescriptions.Length==4;
         void OnEnable(){RefreshContent();}
         void OnDisable(){Unbind();}
         void Update(){if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
         void Unbind(){for(int i=0;i<buttons.Count;i++)if(buttons[i])buttons[i].onClick.RemoveListener(listeners[i]);buttons.Clear();listeners.Clear();ActionsBound=false;}
-        bool Ready()=>ActionsBound&&!committed&&isActiveAndEnabled&&(ScreenRouter.Instance==null||(!ScreenRouter.Instance.IsScreenTransitioning&&!ScreenRouter.Instance.HasActiveModalBlocker));
+        bool Ready()=>ActionsBound&&!committed&&isActiveAndEnabled&&(ScreenRouter.Instance==null||(!ScreenRouter.Instance.IsScreenTransitioning&&(ReturnToRound?ScreenRouter.Instance.ActiveModal==ScreenId.TutorialOverlay&&!ScreenRouter.Instance.IsModalTransitioning:!ScreenRouter.Instance.HasActiveModalBlocker)));
         void Listen(Button b,Action a){UnityAction call=()=>{if(Ready()&&b.IsInteractable())a();};b.onClick.AddListener(call);buttons.Add(b);listeners.Add(call);}
-        public void Bind(Action back){Unbind();exit=back;committed=false;Listen(Close,Leave);Listen(Previous,()=>SelectSection(Section-1));Listen(Next,()=>{if(Section==3)Leave();else SelectSection(Section+1);});for(int i=0;i<4;i++){int j=i;Listen(Tabs[i],()=>SelectSection(j));}ActionsBound=true;RefreshContent();}
+        public void Bind(Action back,Action firstLevel=null,Action<ScreenId> navigate=null,bool returnToRound=false,Action<string> openShop=null)
+        {
+            Unbind();exit=back;committed=false;ReturnToRound=returnToRound;
+            Listen(Close,()=>{if(DetailsVisible)ShowOverview();else Leave();});
+            Listen(Previous,()=>SelectSection(Section-1));Listen(Next,()=>{if(Section==3)ShowOverview();else SelectSection(Section+1);});
+            for(int i=0;i<4;i++){int j=i;Listen(Tabs[i],()=>SelectSection(j));}
+            Listen(Overview.Done,Leave);Listen(Overview.Back,Leave);
+            Overview.First.interactable=firstLevel!=null;
+            Listen(Overview.First,()=>{committed=true;firstLevel?.Invoke();});
+            for(int i=0;i<3;i++){int section=new[]{0,1,3}[i];Listen(Overview.Lessons[i],()=>ShowDetails(section));}
+            if(navigate!=null){Listen(Overview.Header.Profile,()=>Route(navigate,ScreenId.Profile));Listen(Overview.Header.Settings,()=>Route(navigate,ScreenId.Settings));for(int i=0;i<3;i++){int j=i;Listen(Overview.Header.Plus[i],()=>{if(j<2&&openShop!=null){committed=true;openShop(j==0?"coins":"gems");}else Route(navigate,j==2?ScreenId.OutOfEnergy:ScreenId.Shop);});}}
+            ActionsBound=true;RefreshContent();
+        }
+        void Route(Action<ScreenId> navigate,ScreenId page){if(ReturnToRound)return;committed=true;navigate(page);}
+        public void ShowDetails(int section=0){DetailsVisible=true;SelectSection(section);}
+        public void ShowOverview(){DetailsVisible=false;RefreshContent();}
+        public bool TryDismissDetails(){if(!DetailsVisible)return false;ShowOverview();return true;}
         void Leave(){committed=true;exit?.Invoke();}
         public void SelectSection(int section){Section=Mathf.Clamp(section,0,3);RefreshContent();}
         public void RefreshContent()
         {
             if(!HasRequiredBindings)return;
-            language=DemoFeatureState.LanguageCode;bool en=language=="en";
+            language=DemoFeatureState.LanguageCode;bool en=language=="en";Body.gameObject.SetActive(DetailsVisible);Overview.gameObject.SetActive(!DetailsVisible);Overview.Refresh(ReturnToRound);
             string[] topics=en?new[]{"BASICS","SPECIALS","BOOSTERS","OBSTACLES"}:new[]{"ОСНОВЫ","КОМБИНАЦИИ","БУСТЕРЫ","ПРЕГРАДЫ"};
             Heading.text=en?"HOW TO PLAY":"КАК ИГРАТЬ";Subtitle.text=Section==0?(en?"Match three in a row":"Соберите три в ряд"):topics[Section];Counter.text=(Section+1)+" / 4";PreviousLabel.text=en?"PREVIOUS":"НАЗАД";NextLabel.text=Section==3?(en?"DONE":"ПОНЯТНО"):(en?"NEXT":"ДАЛЕЕ");Previous.interactable=Section>0;Previous.gameObject.SetActive(Section>0);
             MatchDiagram.SetActive(Section==0);
@@ -62,7 +81,7 @@ namespace LegendsOfRus
             }else if(Section==2){
                 titles=en?new[]{"BOGATYR MACE","FIREBIRD FEATHER","LIVING LIGHT","SEA KING’S PEARL"}:new[]{"БОГАТЫРСКАЯ БУЛАВА","ПЕРО ЖАР-ПТИЦЫ","ЖИВОЙ СВЕТ","ЖЕМЧУЖИНА МОРСКОГО ЦАРЯ"};
                 details=en?new[]{"Choose the booster, then tap a cell to clear its row. Swipe up or down to clear its column.","Choose a cell to clear a 3×3 area around it.","Choose a gem to clear all gems of that color.","Adds five moves to the current round."}:new[]{"Выберите бустер и коснитесь клетки: очистится ряд. Проведите вверх или вниз: столбец.","Выберите клетку, чтобы очистить область 3×3 вокруг неё.","Выберите самоцвет, чтобы убрать все самоцветы этого цвета.","Добавляет пять ходов в текущем раунде."};
-                icons=new[]{ProductionGameplayArt.Booster(0),ProductionGameplayArt.Booster(1),ProductionGameplayArt.Booster(2),ProductionGameplayArt.Booster(3)};
+                icons=new[]{ProductionBoosterArt.Icon(0,true),ProductionBoosterArt.Icon(1,true),ProductionBoosterArt.Icon(2,true),ProductionBoosterArt.Icon(3,true)};
                 Hint.text=en?"Inventory boosters are used during a round, not in this guide.":"Бустеры из запаса применяются в раунде, а не в справке.";
             }else{
                 titles=en?new[]{"WOODEN CRATES","ICE","CHAINS"}:new[]{"ДЕРЕВЯННЫЕ ЯЩИКИ","ЛЁД","ЦЕПИ"};
