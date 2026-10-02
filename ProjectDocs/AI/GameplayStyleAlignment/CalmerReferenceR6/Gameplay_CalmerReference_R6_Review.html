@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gameplay — Calmer board R6</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1018;color:#eee3cd;font:15px/1.5 system-ui,sans-serif}main{max-width:780px;margin:0 auto;padding:20px 16px 40px}h1{font-size:23px;line-height:1.25;margin:0 0 10px}p{margin:10px 0}a{color:#b4d7ff}label{display:block;margin:16px 0 5px}select{font:inherit;width:100%;background:#172332;color:#fff0ce;border:1px solid #756142;border-radius:5px;padding:10px}button{font:inherit;background:#203148;color:#fff0ce;border:1px solid #756142;padding:7px 12px;border-radius:4px;cursor:pointer}.switches{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}figure{margin:18px auto 0;width:100%;max-width:560px}img{display:block;width:100%;height:auto;background:#050a10}#note{font-size:14px;color:#c5cbd5;min-height:4em}nav{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}.tag{color:#c8b58d;font-size:13px;margin-top:0}
+</style>
+<main>
+<h1>Gameplay — Calmer board R6</h1><p class="tag">Actual Unity revision 6 · Ready for visual review</p>
+<p>8×7 board, calmer emblem gems, parchment objectives and wood-and-gold booster cards. Two missions in rounds 1–5, three from round 6. Existing character and boosters retained. Font appearance approximated with the project font, as authorized. Unedited Unity captures below.</p>
+<nav><a href="ImplementationReport.md">Implementation and checks</a><a href="ReferenceComparison.md">Reference comparison</a><a id="openCapture" href="UnityVerification/Gameplay/Gameplay_941x1672_RU.png" target="_blank" rel="noopener">Open full-resolution image</a><a href="UnityVerification/PlayMode.xml">Unity test results</a></nav>
+<label for="capture">View</label><select id="capture"></select><div class="switches"><button type="button" data-view="Gameplay_941x1672_RU">Current R6</button><button type="button" data-view="Gameplay_Level06_RU">Three missions</button><button type="button" data-view="before">Previous R5</button></div>
+<p id="note" aria-live="polite"></p><figure><img id="portrait" alt="Gameplay capture" width="941" height="1672"></figure>
+</main><script>
+const views={
+  "Gameplay_941x1672_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_RU.png",
+    "label": "R6 \u2014 Russian, reference portrait",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_941x1672_EN": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_EN.png",
+    "label": "R6 \u2014 English, reference portrait",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_576x1280_safearea_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_576x1280_safearea_RU.png",
+    "label": "R6 \u2014 Russian, 576 \u00d7 1280 safe area",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Simulated phone display and safe area, not device testing. "
+  },
+  "Gameplay_1080x2400_safearea_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_1080x2400_safearea_RU.png",
+    "label": "R6 \u2014 Russian, 1080 \u00d7 2400 safe area",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Simulated phone display and safe area, not device testing. "
+  },
+  "Gameplay_Status_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Status_RU.png",
+    "label": "Living Light instruction \u2014 Russian",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Live targeting instruction; activation VFX unchanged."
+  },
+  "Gameplay_Status_EN": {
+    "src": "UnityVerification/Gameplay/Gameplay_Status_EN.png",
+    "label": "Living Light instruction \u2014 English",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Live targeting instruction; activation VFX unchanged."
+  },
+  "Gameplay_Status_576x1280_safearea_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Status_576x1280_safearea_RU.png",
+    "label": "Living Light \u2014 Russian, narrow safe area",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Simulated phone display and safe area, not device testing. Live targeting instruction; activation VFX unchanged."
+  },
+  "Gameplay_Status_1080x2400_safearea_EN": {
+    "src": "UnityVerification/Gameplay/Gameplay_Status_1080x2400_safearea_EN.png",
+    "label": "Living Light \u2014 English, tall safe area",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. Simulated phone display and safe area, not device testing. Live targeting instruction; activation VFX unchanged."
+  },
+  "Gameplay_Level04_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level04_RU.png",
+    "label": "Level 4 \u2014 live obstacle goals",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_Level06_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level06_RU.png",
+    "label": "Level 6 \u2014 score goal and crates",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_Level08_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level08_RU.png",
+    "label": "Level 8 \u2014 authored objectives",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_Level09_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level09_RU.png",
+    "label": "Level 9 \u2014 survival goal and ice",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_Level10_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level10_RU.png",
+    "label": "Level 10 \u2014 authored objectives, Russian",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_Level10_EN": {
+    "src": "UnityVerification/Gameplay/Gameplay_Level10_EN.png",
+    "label": "Level 10 \u2014 authored objectives, English",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "Gameplay_941x1672_RU_roundtrip": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_RU_roundtrip.png",
+    "label": "R6 \u2014 Russian after language roundtrip",
+    "note": "Actual Unity 6000.5.9f1 capture of R6. Real 8\u00d77 board; rounds 1\u20135 have two missions, rounds 6\u201310 three. Isolated save with tutorials completed for capture. Original Ivan and booster artwork retained. "
+  },
+  "before": {
+    "src": "../UpperHudClarityR5/UnityVerification/Gameplay/Gameplay_941x1672_RU.png",
+    "label": "Previous R5 \u2014 actual Unity capture",
+    "note": "Historical rejected Gameplay direction, for before/after comparison. This is not the new target reference."
+  },
+  "PreLevel_1080x2400_safearea_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_1080x2400_safearea_RU.png",
+    "label": "Pre-Level \u2014 1080x2400 safearea RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_576x1280_safearea_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_576x1280_safearea_RU.png",
+    "label": "Pre-Level \u2014 576x1280 safearea RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_941x1672_EN": {
+    "src": "UnityVerification/PreLevel/PreLevel_941x1672_EN.png",
+    "label": "Pre-Level \u2014 941x1672 EN",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_941x1672_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_941x1672_RU.png",
+    "label": "Pre-Level \u2014 941x1672 RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_941x1672_RU_roundtrip": {
+    "src": "UnityVerification/PreLevel/PreLevel_941x1672_RU_roundtrip.png",
+    "label": "Pre-Level \u2014 941x1672 RU roundtrip",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_Level08_EN": {
+    "src": "UnityVerification/PreLevel/PreLevel_Level08_EN.png",
+    "label": "Pre-Level \u2014 Level08 EN",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_Level08_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_Level08_RU.png",
+    "label": "Pre-Level \u2014 Level08 RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_Level10_Rewards_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_Level10_Rewards_RU.png",
+    "label": "Pre-Level \u2014 Level10 Rewards RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  },
+  "PreLevel_RewardClaimed_RU": {
+    "src": "UnityVerification/PreLevel/PreLevel_RewardClaimed_RU.png",
+    "label": "Pre-Level \u2014 RewardClaimed RU",
+    "note": "Actual Unity capture: selected-round objectives now include the third mission from round 6. Other Pre-Level areas retain their established layout. Simulated display; not a device test."
+  }
+};
+const select=document.querySelector('#capture'),portrait=document.querySelector('#portrait'),note=document.querySelector('#note');
+for(const [key,view] of Object.entries(views)){const o=document.createElement('option');o.value=key;o.textContent=view.label;select.append(o)}
+function show(){const view=views[select.value];note.textContent=view.note;document.querySelector("#openCapture").href=view.src;portrait.alt=view.label;window.viewReady=new Promise((resolve,reject)=>{portrait.onload=resolve;portrait.onerror=()=>reject(new Error('Could not load '+view.src));portrait.src=view.src;});return window.viewReady;}
+select.addEventListener('change',show);document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.view;show()}));
+window.previewReady=show();
+</script></html>

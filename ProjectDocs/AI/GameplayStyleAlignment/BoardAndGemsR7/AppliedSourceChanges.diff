@@ -1,0 +1,1642 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -86,8 +86,8 @@
+   screenId: 5
+   referenceMatchVersion: v1.20-step03.3R3
+   referenceSha256: d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800
+-  proofScope: gameplay-calm-r6-8x7-staged-goals-wood-cards
+-  productionComponentCount: 7
++  proofScope: gameplay-board-gems-r7-cut-glass-carved-frame
++  productionComponentCount: 8
+   fullScreenScreenshotDependency: 0
+   preservesLiveGameplayBoard: 1
+   overlaysLiveGameplayForPause: 0
+@@ -103,7 +103,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 6
++  Revision: 7
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+   Hud: {fileID: 8217009214204697501}
+@@ -216,13 +216,14 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children: []
++  m_Children:
++  - {fileID: 8221693705280609500}
+   m_Father: {fileID: 3917723589328396355}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: -6, y: 6}
+-  m_SizeDelta: {x: 820, y: 719}
++  m_AnchoredPosition: {x: -14, y: 10}
++  m_SizeDelta: {x: 836, y: 768}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7429455722689013006
+ CanvasRenderer:
+@@ -239,7 +240,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 47222228546885672}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: b0ff7bda264c2a4539a3aef2e06672a2, type: 3}
+   m_Name: 
+@@ -451,8 +452,83 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 68, y: -486}
+-  m_SizeDelta: {x: 808, y: 707}
+-  m_Pivot: {x: 0, y: 1}
++  m_SizeDelta: {x: 808, y: 748}
++  m_Pivot: {x: 0, y: 1}
++--- !u!1 &492414717815005089
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 8221693705280609500}
++  - component: {fileID: 9109858271784946478}
++  - component: {fileID: 4274617766422639551}
++  m_Layer: 5
++  m_Name: CarvedFrame
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &8221693705280609500
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 492414717815005089}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 2085298007730886872}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 836, y: 768}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &9109858271784946478
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 492414717815005089}
++  m_CullTransparentMesh: 1
++--- !u!114 &4274617766422639551
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 492414717815005089}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 234f7ed67a2f47f68405f09b46c81185, type: 3}
++  m_Type: 1
++  m_PreserveAspect: 0
++  m_FillCenter: 0
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 4
+ --- !u!1 &866661266614901959
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -982,7 +1058,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 808, y: 707}
++  m_SizeDelta: {x: 808, y: 748}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &1777932862405371737
+ GameObject:
+@@ -2132,7 +2208,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 808, y: 707}
++  m_SizeDelta: {x: 808, y: 748}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2356042256953010720
+ CanvasRenderer:
+@@ -2162,7 +2238,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 89ca29eb9ed0a9714bcb8fbaf98fa225, type: 3}
++  m_Sprite: {fileID: 21300000, guid: ba6cb26937ea4106bce3dc8cf4fa2842, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -7171,11 +7247,11 @@
+   - {fileID: 2165671807438562337}
+   - {fileID: 8074530572069647273}
+   - {fileID: 8677890717523168164}
++  - {fileID: 6894187107335854941}
++  - {fileID: 8982005165721925474}
+   - {fileID: 5446839482811941757}
+-  - {fileID: 6894187107335854941}
++  - {fileID: 5688100981434024315}
+   - {fileID: 7013470336829781469}
+-  - {fileID: 8982005165721925474}
+-  - {fileID: 5688100981434024315}
+   - {fileID: 5546372066297179303}
+   - {fileID: 2025166198612947581}
+   - {fileID: 4509355948746218223}
+@@ -7189,9 +7265,9 @@
+   - {fileID: 1134318192843277968}
+   - {fileID: 321161227473910148}
+   - {fileID: 2820033030082699044}
++  - {fileID: 5729801829045711836}
+   - {fileID: 8681459086211531613}
+   - {fileID: 1552182209835045933}
+-  - {fileID: 5729801829045711836}
+   m_Father: {fileID: 9173441830046244190}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
+@@ -6978,7 +6978,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: fbe78b5060af01f80858dcc716e82861, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 1a0b9371293e4305affcef810c14d36c, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -8284,7 +8284,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8874900d54751c8d89c2438c93247cac, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 0f9c11c08b454c9cb4044769034888c4, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- before/Assets/LegendsOfRus/Scripts/Editor/GameplayAlignmentArtImporter.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/GameplayAlignmentArtImporter.cs
+@@ -9,6 +9,9 @@
+         internal static void Configure(TextureImporter ti,string name)
+         {
+             LockedDesignImporter.ConfigureWorldMapTexture(ti,name);
++            // Keep the new frame's corner carving at a controlled display size.
++            // The existing artwork and all other imports retain their settings.
++            if(name=="board_frame_r7")ti.spriteBorder=new Vector4(128,128,128,128);
+             var regions=new List<SpriteMetaData>();
+             foreach(var region in ProductionGameplayArt.Regions)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -496,7 +496,7 @@
+                 ProductionGameplayRuntime.BuildInto(rect);
+                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.Gameplay,
+                     "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800",
+-                    "gameplay-calm-r6-8x7-staged-goals-wood-cards",7,true,false);
++                    "gameplay-board-gems-r7-cut-glass-carved-frame",8,true,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
+             }
+             finally{PrefabUtility.UnloadPrefabContents(root);}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
+@@ -290,8 +290,8 @@
+                     );
+                     visual.transform.SetParent(content.transform, false);
+                     var visualRt = visual.GetComponent<RectTransform>();
+-                    visualRt.anchorMin = new Vector2(0.03f, 0.01f);
+-                    visualRt.anchorMax = new Vector2(0.97f, 0.99f);
++                    visualRt.anchorMin = new Vector2(0.10f, 0.07f);
++                    visualRt.anchorMax = new Vector2(0.90f, 0.93f);
+                     visualRt.offsetMin = Vector2.zero;
+                     visualRt.offsetMax = Vector2.zero;
+                     visualRoots[x, y] = visualRt;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
+@@ -9,7 +9,7 @@
+     public static class ProductionGameplayArt
+     {
+         public const string Root="ProductionUI/GameplayAligned/";
+-        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer","hud_header_r3","score_panel_r3","pause_gear_r3","goal_score_r5","goal_survival_r5","gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6","card_wood_r6","panel_parchment_r6","panel_moves_r6","panel_score_r6","environment_r6"};
++        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer","hud_header_r3","score_panel_r3","pause_gear_r3","goal_score_r5","goal_survival_r5","gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6","card_wood_r6","panel_parchment_r6","panel_moves_r6","panel_score_r6","environment_r6","gem_ruby_r7","gem_sapphire_r7","gem_emerald_r7","gem_gold_r7","gem_amethyst_r7","gem_orange_r7","board_frame_r7","board_wood_r7"};
+         public readonly struct Region
+         {
+             public readonly string Sheet,Name;
+@@ -44,7 +44,7 @@
+             if(sprite==null)throw new InvalidOperationException("Missing Gameplay art: "+name);
+             cache[name]=sprite;return sprite;
+         }
+-        public static Sprite Gem(int tile)=>Load(new[]{"gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6"}[Mathf.Clamp(tile,0,5)]);
++        public static Sprite Gem(int tile)=>Load(new[]{"gem_ruby_r7","gem_sapphire_r7","gem_emerald_r7","gem_gold_r7","gem_amethyst_r7","gem_orange_r7"}[Mathf.Clamp(tile,0,5)]);
+         public static Sprite Obstacle(BoardObstacleKind kind,int layers=1)
+         {
+             switch(kind){case BoardObstacleKind.Ice:return Load("ice");case BoardObstacleKind.Chain:return Load("chain");case BoardObstacleKind.Crate:return Load(layers>1?"reinforced":"crate");default:return null;}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCell.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCell.cs
+@@ -12,14 +12,16 @@
+         {
+             vh.Clear();Rect r=GetPixelAdjustedRect();if(r.width<=0||r.height<=0)return;
+             if(FrameOnly){BoardRim(vh,r);return;}
+-            // Continuous independent lacquer lies under the translucent cell faces.
+-            Quad(vh,r,BronzeSurface?new Color32(28,23,16,255):new Color32(36,27,15,220),
+-                BronzeSurface?new Color32(12,12,10,255):new Color32(12,10,7,245));
+-            Border(vh,r,1.15f,Dark);r=Inset(r,1.15f);Border(vh,r,.65f,Gold);
+-            r=Inset(r,.65f);Border(vh,r,.55f,new Color32(32,23,15,255));
+-            float radius=InsetPanel?5.1f:2.65f;
+-            Joint(vh,new Vector2(r.xMin,r.yMin),radius);Joint(vh,new Vector2(r.xMax,r.yMin),radius);
+-            Joint(vh,new Vector2(r.xMin,r.yMax),radius);Joint(vh,new Vector2(r.xMax,r.yMax),radius);
++            bool boardCell=!InsetPanel&&!BronzeSurface;
++            // The independent wood plate remains visible through a recessed, translucent cell face.
++            Quad(vh,r,BronzeSurface?new Color32(28,23,16,255):boardCell?new Color32(25,19,12,95):new Color32(36,27,15,220),
++                BronzeSurface?new Color32(12,12,10,255):boardCell?new Color32(10,8,5,142):new Color32(12,10,7,245));
++            float goldWidth=boardCell?.5f:.65f;
++            Border(vh,r,1.15f,Dark);r=Inset(r,1.15f);Border(vh,r,goldWidth,boardCell?new Color32(150,108,51,255):Gold);
++            r=Inset(r,goldWidth);Border(vh,r,.55f,new Color32(32,23,15,255));
++            float radius=InsetPanel?5.1f:boardCell?2.4f:2.65f;
++            Joint(vh,new Vector2(r.xMin,r.yMin),radius,boardCell);Joint(vh,new Vector2(r.xMax,r.yMin),radius,boardCell);
++            Joint(vh,new Vector2(r.xMin,r.yMax),radius,boardCell);Joint(vh,new Vector2(r.xMax,r.yMax),radius,boardCell);
+             if(InsetPanel)
+             {
+                 Curl(vh,new Vector2(r.xMin+8,r.yMax-3),new Vector2(1,-1),5);
+@@ -66,16 +68,17 @@
+             Vector2 d=(b-a).normalized,n=new Vector2(-d.y,d.x)*width*.5f;
+             Tri(vh,a+n,b+n,b-n,c,c,c);Tri(vh,b-n,a-n,a+n,c,c,c);
+         }
+-        void Joint(VertexHelper vh,Vector2 center,float radius)
++        void Joint(VertexHelper vh,Vector2 center,float radius,bool subdued=false)
+         {
+             Vector2 previous=Vector2.zero;const int count=16;
++            Color jointLight=subdued?new Color32(174,133,74,255):Light,jointGold=subdued?new Color32(133,93,42,255):Gold;
+             for(int i=0;i<=count;i++)
+             {
+                 float angle=i*Mathf.PI*2/count,r=radius*(.78f+.22f*Mathf.Cos(angle*4));
+                 Vector2 p=center+new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*r;
+-                if(i>0)Line(vh,previous,p,.65f,i>count/2?Gold:Light);previous=p;
++                if(i>0)Line(vh,previous,p,subdued?.5f:.65f,i>count/2?jointGold:jointLight);previous=p;
+             }
+-            Jewel(vh,center,radius*.36f,radius*.46f,false);
++            if(!subdued)Jewel(vh,center,radius*.36f,radius*.46f,false);
+         }
+         void Curl(VertexHelper vh,Vector2 origin,Vector2 direction,float size)
+         {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
+@@ -68,9 +68,17 @@
+             }
+             v.PauseButton.GetComponent<Image>().sprite=ProductionGameplayArt.Load("pause_gear_r3");
+             Place(v.PauseButton.GetComponent<RectTransform>(),838,240,91,96);
+-            Place(v.BoardArea,68,486,808,707);Place(v.BoardMount,0,0,808,707);
+-            Place(v.BoardArea.Find("BoardLacquer").GetComponent<RectTransform>(),0,0,808,707);
+-            Place(v.BoardArea.Find("BoardFrame").GetComponent<RectTransform>(),-6,-6,820,719);
++            Place(v.BoardArea,68,486,808,748);Place(v.BoardMount,0,0,808,748);
++            var wood=v.BoardArea.Find("BoardLacquer").GetComponent<Image>();
++            wood.sprite=ProductionGameplayArt.Load("board_wood_r7");wood.preserveAspect=false;wood.raycastTarget=false;
++            Place(wood.rectTransform,0,0,808,748);
++            var boardFrame=v.BoardArea.Find("BoardFrame").GetComponent<RectTransform>();
++            Place(boardFrame,-14,-10,836,768);
++            // Retain the serialized frame and its component identity while using the isolated carved artwork.
++            boardFrame.GetComponent<ProductionGameplayCell>().enabled=false;
++            var carving=Panel(boardFrame,"CarvedFrame","board_frame_r7",0,0,836,768);carving.preserveAspect=false;
++            carving.type=Image.Type.Sliced;carving.pixelsPerUnitMultiplier=4f;carving.fillCenter=false;
++            boardFrame.SetAsLastSibling();
+             EnsureStatus(v);
+             v.Revision=ProductionGameplayView.CurrentRevision;
+         }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayLayout.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayLayout.cs
+@@ -21,7 +21,7 @@
+                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
+                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin,height=high.y-low.y;
+                 Position(View.Hud,0,top);Position(View.Footer,0,bottom-1336);
+-                float boardScale=Mathf.Min(1,Mathf.Max(.1f,(height-890)/707));
++                float boardScale=Mathf.Min(1,Mathf.Max(.1f,(height-890)/748));
+                 float extra=Mathf.Max(0,height-1672);
+                 Position(View.BoardArea,68+(808-808*boardScale)*.5f,top-486-extra*.5f);
+                 View.BoardArea.localScale=Vector3.one*boardScale;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=6;
++        public const int CurrentRevision=7;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Footer,BoardArea,BoardMount;
+@@ -32,7 +32,7 @@
+         internal bool HasCoreBindings=>Typography!=null&&Content!=null&&Hud!=null&&Footer!=null&&BoardArea!=null&&BoardMount!=null&&
+             Environment!=null&&Environment.sprite!=null&&GoalProgress!=null&&StarProgress!=null&&HeroName!=null&&LevelText!=null&&MovesHeading!=null&&MovesValue!=null&&GoalsHeading!=null&&ScoreHeading!=null&&ScoreValue!=null&&
+             Valid(BoosterButtons,4)&&Valid(BoosterCounts,4)&&Valid(Stars,3)&&Valid(ArmedMarkers,4)&&PauseButton!=null&&Goals!=null&&Goals.Length==3&&Array.TrueForAll(Goals,g=>g!=null&&g.Root!=null&&g.Icon!=null&&g.Count!=null&&g.Description!=null);
+-        public bool HasFramePolishBindings=>BoardArea!=null&&BoardArea.Find("BoardLacquer")!=null&&Hud!=null&&Hud.Find("GoalLacquer")!=null&&
++        public bool HasFramePolishBindings=>BoardArea!=null&&BoardArea.Find("BoardFrame/CarvedFrame")?.GetComponent<Image>()?.sprite!=null&&BoardArea.Find("BoardLacquer")!=null&&Hud!=null&&Hud.Find("GoalLacquer")!=null&&
+             Footer!=null&&Footer.Find("ScoreInset")!=null&&Valid(Stars,3)&&Array.TrueForAll(Stars,s=>s.GetComponent<ProductionGameplayStarPolish>()!=null);
+         static bool Valid<T>(T[] a,int length)where T:UnityEngine.Object=>a!=null&&a.Length==length&&Array.TrueForAll(a,x=>x!=null);
+         string language;GameState state;Action pause;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -334,7 +334,10 @@
+             Rect movesFrame=Bounds(view.Hud.Find("MovesMedallion").GetComponent<RectTransform>(),camera);
+             Rect movesText=Bounds(view.MovesValue.rectTransform,camera);
+             Assert.That(Mathf.Abs(movesFrame.center.x-movesText.center.x),Is.LessThan(2.5f),"The moves number must remain centered in its medallion.");
+-            Assert.That(board.width/board.height,Is.EqualTo(8f/7).Within(.001f));
++            Assert.That(view.Board.ColumnCount,Is.EqualTo(8));Assert.That(view.Board.RowCount,Is.EqualTo(7));
++            Assert.That(board.width/board.height,Is.EqualTo(808f/748).Within(.001f),"The 8×7 board uses slightly taller cells to match the reference proportions.");
++            Assert.That(board.xMin,Is.GreaterThanOrEqualTo(safe.xMin-1));Assert.That(board.xMax,Is.LessThanOrEqualTo(safe.xMax+1));
++            Assert.That(board.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1));Assert.That(board.yMax,Is.LessThanOrEqualTo(safe.yMax+1));
+             Assert.That(view.ScoreMeter.Fraction,Is.EqualTo(view.StarProgress.fillAmount).Within(.0001f));
+             Assert.That(view.ScoreMeter.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(18));
+             if(view.Status.IsVisible)
+@@ -357,13 +360,42 @@
+                 var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
+                 Assert.That(hits,Is.Not.Empty,button.name);Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name);
+             }
++            var cellInputs=new HashSet<Match3CellInput>();
+             for(int y=0;y<view.Board.RowCount;y++)for(int x=0;x<view.Board.ColumnCount;x++)
+             {
+                 var cell=view.Board.GetCellInputForTesting(x,y);Rect rect=Bounds((RectTransform)cell.transform,camera);
+-                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},hits);
+-                Assert.That(hits,Is.Not.Empty);Assert.That(hits[0].gameObject.GetComponent<Match3CellInput>(),Is.SameAs(cell));
++                Assert.That(cellInputs.Add(cell),Is.True,"Each logical position must own a distinct input cell.");
++                float width=board.width/8,height=board.height/7;
++                Assert.That(rect.xMin,Is.EqualTo(board.xMin+x*width).Within(.2f));
++                Assert.That(rect.yMax,Is.EqualTo(board.yMax-y*height).Within(.2f));
++                Assert.That(rect.width,Is.EqualTo(width).Within(.2f));Assert.That(rect.height,Is.EqualTo(height).Within(.2f));
++                // Artwork padding must never shrink the full-cell touch target, including the four corners.
++                foreach(var point in new[]{rect.center,
++                    new Vector2(rect.xMin+width*.02f,rect.yMin+height*.02f),
++                    new Vector2(rect.xMin+width*.02f,rect.yMax-height*.02f),
++                    new Vector2(rect.xMax-width*.02f,rect.yMin+height*.02f),
++                    new Vector2(rect.xMax-width*.02f,rect.yMax-height*.02f)})
++                {
++                    var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
++                    Assert.That(hits,Is.Not.Empty,cell.name);Assert.That(hits[0].gameObject.GetComponent<Match3CellInput>(),Is.SameAs(cell),cell.name);
++                }
+                 var graphic=cell.GetComponentInChildren<ProductionGameplayCell>();Assert.That(graphic.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
+-            }
++                var gem=cell.transform.Find("CellContent/GemVisual/Gem").GetComponent<Image>();
++                if(gem.enabled&&gem.sprite!=null&&gem.sprite.name.StartsWith("gem_",StringComparison.Ordinal))
++                {
++                    Assert.That(gem.preserveAspect,Is.True,"Rectangular board cells must not stretch the gem artwork.");
++                    var mesh=gem.canvasRenderer.GetMesh();Assert.That(mesh.vertexCount,Is.GreaterThan(0));
++                    var rendered=mesh.bounds;
++                    Assert.That(rendered.size.x/rendered.size.y,Is.EqualTo(gem.sprite.rect.width/gem.sprite.rect.height).Within(.002f),gem.sprite.name);
++                    var min=RectTransformUtility.WorldToScreenPoint(camera,gem.rectTransform.TransformPoint(rendered.min));
++                    var max=RectTransformUtility.WorldToScreenPoint(camera,gem.rectTransform.TransformPoint(rendered.max));
++                    Assert.That(max.x-min.x,Is.LessThanOrEqualTo(rect.width*.90f),"Normal gems need horizontal breathing room.");
++                    Assert.That(max.y-min.y,Is.LessThanOrEqualTo(rect.height*.90f),"Normal gems need vertical breathing room.");
++                    Assert.That(min.x,Is.GreaterThan(rect.xMin));Assert.That(max.x,Is.LessThan(rect.xMax));
++                    Assert.That(min.y,Is.GreaterThan(rect.yMin));Assert.That(max.y,Is.LessThan(rect.yMax));
++                }
++            }
++            Assert.That(cellInputs.Count,Is.EqualTo(56));
+             foreach(var star in view.Stars)Assert.That(star.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
+             foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())Assert.That(badge.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(100));
+             var layout=view.GetComponent<ProductionGameplayLayout>();Vector2 old=view.BoardArea.anchoredPosition;layout.ApplyNow();Canvas.ForceUpdateCanvases();Assert.That(Vector2.Distance(old,view.BoardArea.anchoredPosition),Is.LessThan(.01f));
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
+@@ -21,7 +21,7 @@
+                 var transforms=instance.GetComponentsInChildren<Transform>(true);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+-                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(6));
++                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(7));
+                 Assert.That(view.BoosterButtons,Is.EqualTo(controls));Assert.That(view.BoardMount,Is.SameAs(boardMount));
+                 Assert.That(instance.GetComponentsInChildren<Transform>(true),Is.EquivalentTo(transforms));
+                 Assert.That(view.Hud.Find("HudPanel").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Load("hud_header_r3")));
+@@ -31,6 +31,11 @@
+                 Assert.That(view.Goals.All(g=>g.Symbol!=null),Is.True);
+                 Assert.That(view.BoardArea.GetChild(0).name,Is.EqualTo("BoardLacquer"));
+                 Assert.That(view.BoardArea.GetChild(view.BoardArea.childCount-1).name,Is.EqualTo("BoardFrame"));
++                var frame=view.BoardArea.Find("BoardFrame");
++                Assert.That(frame.GetComponent<ProductionGameplayCell>().enabled,Is.False,"Only the carved frame should render above the board.");
++                var carvedFrame=frame.Find("CarvedFrame").GetComponent<Image>();
++                Assert.That(carvedFrame.sprite,Is.SameAs(ProductionGameplayArt.Load("board_frame_r7")));
++                Assert.That(carvedFrame.raycastTarget,Is.False,"The decorative frame must not intercept edge-cell input.");
+                 Assert.That(view.Hud.Find("MovesMedallion").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Load("panel_moves_r6")));
+                 var inset=view.Footer.Find("ScoreInset").GetComponent<ProductionGameplayCell>();
+                 Assert.That(inset.BronzeSurface&&inset.InsetPanel,Is.True);Assert.That(inset.enabled,Is.False,"Dedicated footer contains the opaque score well.");Assert.That(inset.raycastTarget,Is.False);
+@@ -86,6 +91,24 @@
+             Assert.That(Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>().Revision,Is.EqualTo(2));
+             var view=AssetDatabase.LoadAssetAtPath<GameObject>(Path).GetComponent<ProductionGameplayView>();Assert.That(view.Typography,Is.SameAs(home.Typography));
+         }
++
++        [Test] public void CarvedBoardFrameHasATransparentWindowInsteadOfAnOpaqueReferencePlate()
++        {
++            var sprite=ProductionGameplayArt.Load("board_frame_r7");
++            var path=AssetDatabase.GetAssetPath(sprite.texture);
++            var pixels=new Texture2D(2,2,TextureFormat.RGBA32,false);
++            try
++            {
++                Assert.That(pixels.LoadImage(File.ReadAllBytes(path)),Is.True);
++                var colors=pixels.GetPixels32();
++                int left=pixels.width/5,right=pixels.width*4/5;
++                int bottom=pixels.height/5,top=pixels.height*4/5;
++                for(int y=bottom;y<top;y++)for(int x=left;x<right;x++)
++                    if(colors[y*pixels.width+x].a>2)
++                        Assert.Fail("The board frame contains opaque pixels over the playable window at "+x+","+y+".");
++            }
++            finally{Object.DestroyImmediate(pixels);}
++        }
+     }
+ }
+ #endif
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/board_frame_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 234f7ed67a2f47f68405f09b46c81185
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 128, y: 128, z: 128, w: 128}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 12038aba49f04a9e8c995c3276e7376a
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/board_wood_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: ba6cb26937ea4106bce3dc8cf4fa2842
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 7f146597be1242fbb15fafeb30556333
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_amethyst_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 5c0787fad4924583a833fd48c50d17fc
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 0b87d6ac4efe477d995cfd160a79e4aa
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_emerald_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 50ec8d4135a84f89bc8ba8d3d2f0e621
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: c0b40e553b5a40f4aee0baf6cfabcdc4
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_gold_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 0baef06b80a04b9a9d3b35e33fcfa1d8
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: c36b10bd615c4e4e9f8fdfdb3d001bf2
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_orange_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 64369a20adb444edb4c0a402cc84d44f
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: d4759ac626ca4d9cbdc576b3a7560e81
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_ruby_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 1a0b9371293e4305affcef810c14d36c
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: e44112af8ec4441d99d01f32d519f359
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/gem_sapphire_r7.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 0f9c11c08b454c9cb4044769034888c4
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 253a9caa620d41cdb177494537f7ca97
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

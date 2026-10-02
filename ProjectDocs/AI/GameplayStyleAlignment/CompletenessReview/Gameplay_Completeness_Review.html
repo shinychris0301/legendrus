@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gameplay — completeness review</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1018;color:#eee3cd;font:15px/1.5 system-ui,sans-serif}main{max-width:780px;margin:0 auto;padding:20px 16px 40px}h1{font-size:23px;line-height:1.25;margin:0 0 10px}p{margin:10px 0}a{color:#b4d7ff}label{display:block;margin:16px 0 5px}select{font:inherit;width:100%;background:#172332;color:#fff0ce;border:1px solid #756142;border-radius:5px;padding:10px}button{font:inherit;background:#203148;color:#fff0ce;border:1px solid #756142;padding:7px 12px;border-radius:4px;cursor:pointer}.switches{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}figure{margin:18px auto 0;width:100%;max-width:560px}img{display:block;width:100%;height:auto;background:#050a10}#note{font-size:14px;color:#c5cbd5;min-height:4em}nav{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}.tag{color:#c8b58d;font-size:13px;margin-top:0}
+</style>
+<main>
+<h1>Gameplay — completeness review</h1><p class="tag">Audit of current R2 · No production design changes</p>
+<p>Compare the current HUD with the reference, then inspect boosters, obstacles and overlays. Each view is a whole portrait; no artwork is composited into these captures.</p>
+<nav><a href="ReviewReport.md">Findings and recommended work</a><a href="UnityVerification/PlayMode.xml">Unity audit results</a><a href="../FramePolishR2/Gameplay_FramePolish_R2_Review.html">Earlier R2 review</a></nav>
+<label for="capture">View</label><select id="capture"></select><div class="switches"><button type="button" data-view="02_Idle">Current idle</button><button type="button" data-view="reference">Gameplay reference</button><button type="button" data-view="11_Firebird_Activation_QAPreset">Firebird effect</button></div>
+<p id="note" aria-live="polite"></p><figure><img id="portrait" alt="Gameplay capture" width="941" height="1672"></figure>
+</main><script>
+const views={
+  "02_Idle": {
+    "src": "UnityVerification/Captures/02_Idle.png",
+    "label": "Current Gameplay — idle",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. Compare the portrait/moves/goals grouping, booster badges, gear and score frame with the reference."
+  },
+  "01_FirstEntryTutorial": {
+    "src": "UnityVerification/Captures/01_FirstEntryTutorial.png",
+    "label": "First entry — tutorial",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. This first-entry overlay is skipped by the regular idle review captures."
+  },
+  "03_SelectedTopLeftGem": {
+    "src": "UnityVerification/Captures/03_SelectedTopLeftGem.png",
+    "label": "Selected top-left tile",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. "
+  },
+  "04_Pause": {
+    "src": "UnityVerification/Captures/04_Pause.png",
+    "label": "Current Pause overlay",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. The older modal kit still uses simplified gems and booster symbols."
+  },
+  "05_FirebirdTargeting_QAPreset": {
+    "src": "UnityVerification/Captures/05_FirebirdTargeting_QAPreset.png",
+    "label": "Firebird — targeting (separate case)",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "06_FirebirdActivation_QAPreset": {
+    "src": "UnityVerification/Captures/06_FirebirdActivation_QAPreset.png",
+    "label": "Firebird — activation (separate case)",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "10_Firebird_Armed_QAPreset": {
+    "src": "UnityVerification/Captures/10_Firebird_Armed_QAPreset.png",
+    "label": "Firebird — armed",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "10_LivingLight_Armed_QAPreset": {
+    "src": "UnityVerification/Captures/10_LivingLight_Armed_QAPreset.png",
+    "label": "LivingLight — armed",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "10_MaceColumn_Armed_QAPreset": {
+    "src": "UnityVerification/Captures/10_MaceColumn_Armed_QAPreset.png",
+    "label": "MaceColumn — armed",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "10_MaceRow_Armed_QAPreset": {
+    "src": "UnityVerification/Captures/10_MaceRow_Armed_QAPreset.png",
+    "label": "MaceRow — armed",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "11_Firebird_Activation_QAPreset": {
+    "src": "UnityVerification/Captures/11_Firebird_Activation_QAPreset.png",
+    "label": "Firebird — activation",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "11_LivingLight_Activation_QAPreset": {
+    "src": "UnityVerification/Captures/11_LivingLight_Activation_QAPreset.png",
+    "label": "LivingLight — activation",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "11_MaceColumn_Activation_QAPreset": {
+    "src": "UnityVerification/Captures/11_MaceColumn_Activation_QAPreset.png",
+    "label": "MaceColumn — activation",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "11_MaceRow_Activation_QAPreset": {
+    "src": "UnityVerification/Captures/11_MaceRow_Activation_QAPreset.png",
+    "label": "MaceRow — activation",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "11_SeaPearl_Activation_QAPreset": {
+    "src": "UnityVerification/Captures/11_SeaPearl_Activation_QAPreset.png",
+    "label": "SeaPearl — activation",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. The existing effect presenter was advanced by 0.06 seconds for this snapshot; this is not a video."
+  },
+  "20_Level04_AuthoredObstacles": {
+    "src": "UnityVerification/Captures/20_Level04_AuthoredObstacles.png",
+    "label": "Level04 — authored obstacles",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. "
+  },
+  "20_Level06_AuthoredObstacles": {
+    "src": "UnityVerification/Captures/20_Level06_AuthoredObstacles.png",
+    "label": "Level06 — authored obstacles",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. "
+  },
+  "20_Level08_AuthoredObstacles": {
+    "src": "UnityVerification/Captures/20_Level08_AuthoredObstacles.png",
+    "label": "Level08 — authored obstacles",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. "
+  },
+  "20_Level10_AuthoredObstacles": {
+    "src": "UnityVerification/Captures/20_Level10_AuthoredObstacles.png",
+    "label": "Level10 — authored obstacles",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. Existing routed page and authored level; isolated save. "
+  },
+  "21_special.burst-burst_QAPreset": {
+    "src": "UnityVerification/Captures/21_special.burst-burst_QAPreset.png",
+    "label": "Special pieces — burst-burst",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "21_special.color-normal_QAPreset": {
+    "src": "UnityVerification/Captures/21_special.color-normal_QAPreset.png",
+    "label": "Special pieces — color-normal",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "21_special.row-column_QAPreset": {
+    "src": "UnityVerification/Captures/21_special.row-column_QAPreset.png",
+    "label": "Special pieces — row-column",
+    "note": "Actual Unity capture · Russian · 941 × 1672 · 14 Sep 2026. QA board for state inspection: 50 starting moves and 999 goals are test data. "
+  },
+  "reference": {
+    "src": "../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Gameplay.png",
+    "label": "Gameplay reference — design guidance",
+    "note": "Reference image, not a Unity implementation. It depicts a special activation; sample numbers and extra tile drawings do not establish gameplay rules."
+  },
+  "pauseReference": {
+    "src": "../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Pause.png",
+    "label": "Pause reference — design guidance",
+    "note": "Reference image, not a Unity implementation."
+  }
+};
+const select=document.querySelector('#capture'),portrait=document.querySelector('#portrait'),note=document.querySelector('#note');
+for(const [key,view] of Object.entries(views)){const o=document.createElement('option');o.value=key;o.textContent=view.label;select.append(o)}
+function show(){const view=views[select.value];note.textContent=view.note;portrait.alt=view.label;window.viewReady=new Promise((resolve,reject)=>{portrait.onload=resolve;portrait.onerror=()=>reject(new Error('Could not load '+view.src));portrait.src=view.src;});return window.viewReady;}
+select.addEventListener('change',show);document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.view;show()}));
+window.previewReady=show();
+</script></html>

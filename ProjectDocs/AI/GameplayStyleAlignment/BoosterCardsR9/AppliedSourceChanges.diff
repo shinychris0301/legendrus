@@ -1,0 +1,1517 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -86,7 +86,7 @@
+   screenId: 5
+   referenceMatchVersion: v1.20-step03.3R3
+   referenceSha256: a1f5768c4c9b74ee9d631784ae531559c05ea618cace93d13364f79d8fa20852
+-  proofScope: gameplay-source-palette-r8-independent-gems
++  proofScope: gameplay-booster-cards-r9-preserved-objects
+   productionComponentCount: 8
+   fullScreenScreenshotDependency: 0
+   preservesLiveGameplayBoard: 1
+@@ -103,7 +103,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 8
++  Revision: 9
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+   Hud: {fileID: 8217009214204697501}
+@@ -1091,14 +1091,13 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children:
+-  - {fileID: 5440304680423997586}
++  m_Children: []
+   m_Father: {fileID: 9211076187924112702}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -24}
+-  m_SizeDelta: {x: 150, y: 150}
++  m_AnchoredPosition: {x: 14, y: -22}
++  m_SizeDelta: {x: 152, y: 156}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8834043707895407447
+ CanvasRenderer:
+@@ -1128,7 +1127,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: -3459046735364265390, guid: c5acc0d3a61bc4648959e0ca1b3e409d, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 9a655b6966df17cf7ba9a5c185b8c5aa, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -1229,12 +1228,13 @@
+   - {fileID: 2458129824362471231}
+   - {fileID: 3724315308523035358}
+   - {fileID: 3354784920745706049}
++  - {fileID: 9168653241091263462}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 466, y: -0}
+-  m_SizeDelta: {x: 184, y: 252}
++  m_SizeDelta: {x: 180, y: 252}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &328107729298532718
+ CanvasRenderer:
+@@ -1264,8 +1264,8 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: ece63e4b931bb0730ae6b5f53183844f, type: 3}
+-  m_Type: 0
++  m_Sprite: {fileID: 21300000, guid: 935f171f9019d7a5dafba440d7f8c765, type: 3}
++  m_Type: 1
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+@@ -1273,7 +1273,7 @@
+   m_FillClockwise: 1
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+-  m_PixelsPerUnitMultiplier: 1
++  m_PixelsPerUnitMultiplier: 4.5
+ --- !u!114 &7716355792926974849
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -1325,7 +1325,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: -0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 90, y: 90}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &366931984659850636
+ CanvasRenderer:
+@@ -1357,7 +1357,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 60
+     m_FontStyle: 0
+     m_BestFit: 1
+     m_MinSize: 30
+@@ -1582,12 +1582,12 @@
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 2319858930439044965}
+-  m_Father: {fileID: 3724315308523035358}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 106, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_Father: {fileID: 4701323611185058877}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 125, y: -134}
++  m_SizeDelta: {x: 45, y: 45}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1476209401436884541
+ CanvasRenderer:
+@@ -1655,7 +1655,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: -0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 90, y: 90}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2080536264140818041
+ CanvasRenderer:
+@@ -1687,7 +1687,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 60
+     m_FontStyle: 0
+     m_BestFit: 1
+     m_MinSize: 30
+@@ -2527,12 +2527,12 @@
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 4296078980593445230}
+-  m_Father: {fileID: 3865632607170423115}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 106, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_Father: {fileID: 1448291901246882471}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 125, y: -134}
++  m_SizeDelta: {x: 45, y: 45}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6662100029800911696
+ CanvasRenderer:
+@@ -2596,12 +2596,13 @@
+   - {fileID: 2271072849010180116}
+   - {fileID: 622922741575247284}
+   - {fileID: 4403881780174026728}
++  - {fileID: 6728665183223279658}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 274, y: -0}
+-  m_SizeDelta: {x: 184, y: 252}
++  m_SizeDelta: {x: 180, y: 252}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8436236324556313802
+ CanvasRenderer:
+@@ -2631,8 +2632,8 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: ece63e4b931bb0730ae6b5f53183844f, type: 3}
+-  m_Type: 0
++  m_Sprite: {fileID: 21300000, guid: 935f171f9019d7a5dafba440d7f8c765, type: 3}
++  m_Type: 1
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+@@ -2640,7 +2641,7 @@
+   m_FillClockwise: 1
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+-  m_PixelsPerUnitMultiplier: 1
++  m_PixelsPerUnitMultiplier: 4.5
+ --- !u!114 &7231358463521615448
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -2727,14 +2728,13 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children:
+-  - {fileID: 5241344649840255527}
++  m_Children: []
+   m_Father: {fileID: 1448291901246882471}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -24}
+-  m_SizeDelta: {x: 150, y: 150}
++  m_AnchoredPosition: {x: 14, y: -22}
++  m_SizeDelta: {x: 152, y: 156}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4641353739810257582
+ CanvasRenderer:
+@@ -2764,7 +2764,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 9baceaa928f86cbd398aaed718200a7a, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 4a0806693c5c985e7a47ecd2d4c36836, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -3284,8 +3284,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 8, y: -9}
+-  m_SizeDelta: {x: 168, y: 185}
++  m_AnchoredPosition: {x: 7, y: -8}
++  m_SizeDelta: {x: 166, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5125096191052940341
+ CanvasRenderer:
+@@ -3510,7 +3510,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: -0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 90, y: 90}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7860549942845394123
+ CanvasRenderer:
+@@ -3542,7 +3542,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 60
+     m_FontStyle: 0
+     m_BestFit: 1
+     m_MinSize: 30
+@@ -3674,14 +3674,13 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children:
+-  - {fileID: 9168653241091263462}
++  m_Children: []
+   m_Father: {fileID: 4701323611185058877}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -24}
+-  m_SizeDelta: {x: 150, y: 150}
++  m_AnchoredPosition: {x: 14, y: -22}
++  m_SizeDelta: {x: 152, y: 156}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5375814979923767247
+ CanvasRenderer:
+@@ -3711,7 +3710,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 569574851608200015, guid: c5acc0d3a61bc4648959e0ca1b3e409d, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 8739c10fe076699dca3d45646c296228, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -3809,12 +3808,12 @@
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 5326955694407331561}
+-  m_Father: {fileID: 303684999950616351}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 106, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_Father: {fileID: 9211076187924112702}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 125, y: -134}
++  m_SizeDelta: {x: 45, y: 45}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1889485940514693061
+ CanvasRenderer:
+@@ -3880,8 +3879,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -198}
+-  m_SizeDelta: {x: 328, y: 84}
++  m_AnchoredPosition: {x: 13, y: -187}
++  m_SizeDelta: {x: 308, y: 92}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7648515659779284591
+ CanvasRenderer:
+@@ -3913,7 +3912,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -4204,7 +4203,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: -0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 90, y: 90}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &979248498041858363
+ CanvasRenderer:
+@@ -4236,7 +4235,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 64
++    m_FontSize: 60
+     m_FontStyle: 0
+     m_BestFit: 1
+     m_MinSize: 30
+@@ -5023,8 +5022,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 8, y: -9}
+-  m_SizeDelta: {x: 168, y: 185}
++  m_AnchoredPosition: {x: 7, y: -8}
++  m_SizeDelta: {x: 166, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7778932039709072628
+ CanvasRenderer:
+@@ -5092,8 +5091,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -198}
+-  m_SizeDelta: {x: 328, y: 84}
++  m_AnchoredPosition: {x: 13, y: -187}
++  m_SizeDelta: {x: 308, y: 92}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5049475929828424530
+ CanvasRenderer:
+@@ -5125,7 +5124,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -5776,14 +5775,13 @@
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+-  m_Children:
+-  - {fileID: 6728665183223279658}
++  m_Children: []
+   m_Father: {fileID: 5938433476754378070}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 17, y: -24}
+-  m_SizeDelta: {x: 150, y: 150}
++  m_AnchoredPosition: {x: 14, y: -22}
++  m_SizeDelta: {x: 152, y: 156}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1950305098980028035
+ CanvasRenderer:
+@@ -5813,7 +5811,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 6275155087975111331, guid: c5acc0d3a61bc4648959e0ca1b3e409d, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2a443fedc39aaec72a2ec48ff170e84b, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -5914,8 +5912,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 8, y: -9}
+-  m_SizeDelta: {x: 168, y: 185}
++  m_AnchoredPosition: {x: 7, y: -8}
++  m_SizeDelta: {x: 166, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1564728246654240863
+ CanvasRenderer:
+@@ -5981,12 +5979,13 @@
+   - {fileID: 1188338952394138536}
+   - {fileID: 3865632607170423115}
+   - {fileID: 6797702965365544627}
++  - {fileID: 5241344649840255527}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 658, y: -0}
+-  m_SizeDelta: {x: 184, y: 252}
++  m_SizeDelta: {x: 180, y: 252}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4918988778563136736
+ CanvasRenderer:
+@@ -6016,8 +6015,8 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: ece63e4b931bb0730ae6b5f53183844f, type: 3}
+-  m_Type: 0
++  m_Sprite: {fileID: 21300000, guid: 935f171f9019d7a5dafba440d7f8c765, type: 3}
++  m_Type: 1
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+@@ -6025,7 +6024,7 @@
+   m_FillClockwise: 1
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+-  m_PixelsPerUnitMultiplier: 1
++  m_PixelsPerUnitMultiplier: 4.5
+ --- !u!114 &6775717662447915111
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -6366,8 +6365,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -198}
+-  m_SizeDelta: {x: 328, y: 84}
++  m_AnchoredPosition: {x: 13, y: -187}
++  m_SizeDelta: {x: 308, y: 92}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6259402085393196260
+ CanvasRenderer:
+@@ -6399,7 +6398,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -6520,8 +6519,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 10, y: -198}
+-  m_SizeDelta: {x: 328, y: 84}
++  m_AnchoredPosition: {x: 13, y: -187}
++  m_SizeDelta: {x: 308, y: 92}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &972933387211779832
+ CanvasRenderer:
+@@ -6553,7 +6552,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -6564,7 +6563,7 @@
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+-  m_Text: "\u041F\u0415\u0420\u041E \u0416\u0410\u0420-\u041F\u0422\u0418\u0426\u042B"
++  m_Text: "\u041F\u0415\u0420\u041E\n\u0416\u0410\u0420-\u041F\u0422\u0418\u0426\u042B"
+ --- !u!114 &6412445270061999862
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -6633,12 +6632,13 @@
+   - {fileID: 8364956270531602872}
+   - {fileID: 303684999950616351}
+   - {fileID: 4758810458422433118}
++  - {fileID: 5440304680423997586}
+   m_Father: {fileID: 5101551253853299248}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 82, y: -0}
+-  m_SizeDelta: {x: 184, y: 252}
++  m_SizeDelta: {x: 180, y: 252}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2692719482367813218
+ CanvasRenderer:
+@@ -6668,8 +6668,8 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: ece63e4b931bb0730ae6b5f53183844f, type: 3}
+-  m_Type: 0
++  m_Sprite: {fileID: 21300000, guid: 935f171f9019d7a5dafba440d7f8c765, type: 3}
++  m_Type: 1
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+@@ -6677,7 +6677,7 @@
+   m_FillClockwise: 1
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+-  m_PixelsPerUnitMultiplier: 1
++  m_PixelsPerUnitMultiplier: 4.5
+ --- !u!114 &6356795610306190856
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -6872,12 +6872,12 @@
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 4296720808036516261}
+-  m_Father: {fileID: 622922741575247284}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 106, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_Father: {fileID: 5938433476754378070}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 125, y: -134}
++  m_SizeDelta: {x: 45, y: 45}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3283376034951372618
+ CanvasRenderer:
+@@ -7251,10 +7251,10 @@
+   - {fileID: 8982005165721925474}
+   - {fileID: 5688100981434024315}
+   - {fileID: 5546372066297179303}
++  - {fileID: 2025166198612947581}
++  - {fileID: 4509355948746218223}
+   - {fileID: 5446839482811941757}
+-  - {fileID: 2025166198612947581}
+   - {fileID: 7013470336829781469}
+-  - {fileID: 4509355948746218223}
+   - {fileID: 1732326179906220576}
+   - {fileID: 5961585591966638298}
+   - {fileID: 9049847966201723819}
+@@ -7309,8 +7309,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 8, y: -9}
+-  m_SizeDelta: {x: 168, y: 185}
++  m_AnchoredPosition: {x: 7, y: -8}
++  m_SizeDelta: {x: 166, y: 176}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4311563438335023649
+ CanvasRenderer:
+--- before/Assets/LegendsOfRus/Scripts/Editor/GameplayAlignmentArtImporter.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/GameplayAlignmentArtImporter.cs
+@@ -12,6 +12,7 @@
+             // Keep the new frame's corner carving at a controlled display size.
+             // The existing artwork and all other imports retain their settings.
+             if(name=="board_frame_r7")ti.spriteBorder=new Vector4(128,128,128,128);
++            if(name=="card_wood_r9")ti.spriteBorder=new Vector4(100,420,100,150);
+             var regions=new List<SpriteMetaData>();
+             foreach(var region in ProductionGameplayArt.Regions)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -496,7 +496,7 @@
+                 ProductionGameplayRuntime.BuildInto(rect);
+                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.Gameplay,
+                     "a1f5768c4c9b74ee9d631784ae531559c05ea618cace93d13364f79d8fa20852",
+-                    "gameplay-source-palette-r8-independent-gems",8,true,false);
++                    "gameplay-booster-cards-r9-preserved-objects",8,true,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
+             }
+             finally{PrefabUtility.UnloadPrefabContents(root);}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
+@@ -9,7 +9,7 @@
+     public static class ProductionGameplayArt
+     {
+         public const string Root="ProductionUI/GameplayAligned/";
+-        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer","hud_header_r3","score_panel_r3","pause_gear_r3","goal_score_r5","goal_survival_r5","gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6","card_wood_r6","panel_parchment_r6","panel_moves_r6","panel_score_r6","environment_r6","gem_ruby_r7","gem_sapphire_r7","gem_emerald_r7","gem_gold_r7","gem_amethyst_r7","gem_orange_r7","board_frame_r7","board_wood_r7","gem_ruby_r8","gem_sapphire_r8","gem_emerald_r8","gem_gold_r8","gem_amethyst_r8","gem_orange_r8"};
++        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer","hud_header_r3","score_panel_r3","pause_gear_r3","goal_score_r5","goal_survival_r5","gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6","card_wood_r6","panel_parchment_r6","panel_moves_r6","panel_score_r6","environment_r6","gem_ruby_r7","gem_sapphire_r7","gem_emerald_r7","gem_gold_r7","gem_amethyst_r7","gem_orange_r7","board_frame_r7","board_wood_r7","gem_ruby_r8","gem_sapphire_r8","gem_emerald_r8","gem_gold_r8","gem_amethyst_r8","gem_orange_r8","booster_mace_r9","booster_firebird_r9","booster_livinglight_r9","booster_seapearl_r9","card_wood_r9"};
+         public readonly struct Region
+         {
+             public readonly string Sheet,Name;
+@@ -45,6 +45,7 @@
+             cache[name]=sprite;return sprite;
+         }
+         public static Sprite Gem(int tile)=>Load(new[]{"gem_ruby_r8","gem_sapphire_r8","gem_emerald_r8","gem_gold_r8","gem_amethyst_r8","gem_orange_r8"}[Mathf.Clamp(tile,0,5)]);
++        public static Sprite Booster(int index)=>Load(new[]{"booster_mace_r9","booster_firebird_r9","booster_livinglight_r9","booster_seapearl_r9"}[Mathf.Clamp(index,0,3)]);
+         public static Sprite Obstacle(BoardObstacleKind kind,int layers=1)
+         {
+             switch(kind){case BoardObstacleKind.Ice:return Load("ice");case BoardObstacleKind.Chain:return Load("chain");case BoardObstacleKind.Crate:return Load(layers>1?"reinforced":"crate");default:return null;}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
+@@ -54,16 +54,17 @@
+             LayoutGoals(v,2);
+             for(int i=0;i<4;i++)
+             {
+-                Image card=Panel(v.Footer,"BoosterCard_"+i,"card_wood_r6",82+i*192,0,184,252);
++                Image card=Panel(v.Footer,"BoosterCard_"+i,"card_wood_r9",82+i*192,0,180,252);
++                card.type=Image.Type.Sliced;card.pixelsPerUnitMultiplier=4.5f;card.fillCenter=true;
+                 var hit=card.GetComponent<ProductionGameplayBoosterCard>()??card.gameObject.AddComponent<ProductionGameplayBoosterCard>();hit.Target=v.BoosterButtons[i];card.raycastTarget=true;
+-                var face=v.BoosterButtons[i].GetComponent<Image>();face.transform.SetParent(card.transform,false);Place(face.rectTransform,17,24,150,150);
+-                var badge=v.BoosterCounts[i].transform.parent.GetComponent<RectTransform>();Place(badge,106,130,49,49);
+-                HeaderText(v.BoosterCounts[i],0,0,49,49,32,false);
++                var face=v.BoosterButtons[i].GetComponent<Image>();face.transform.SetParent(card.transform,false);Place(face.rectTransform,14,22,152,156);
++                var badge=v.BoosterCounts[i].transform.parent.GetComponent<RectTransform>();badge.SetParent(card.transform,false);Place(badge,125,134,45,45);
++                HeaderText(v.BoosterCounts[i],0,0,45,45,30,false);
+                 v.BoosterCounts[i].resizeTextForBestFit=true;v.BoosterCounts[i].resizeTextMinSize=30;v.BoosterCounts[i].resizeTextMaxSize=64;
+                 var found=card.transform.Find("BoosterLabel");
+                 Text label=found!=null?found.GetComponent<Text>():ProductionGameplayRuntime.Rect(card.transform,"BoosterLabel",0,0,1,1).gameObject.AddComponent<Text>();
+-                HeaderText(label,10,198,164,42,19,false);label.font=v.Typography.RegularFont;label.horizontalOverflow=HorizontalWrapMode.Wrap;label.verticalOverflow=VerticalWrapMode.Truncate;
+-                v.ArmedMarkers[i].transform.SetParent(card.transform,false);Place(v.ArmedMarkers[i].rectTransform,8,9,168,185);
++                HeaderText(label,13,187,154,46,18,false);label.font=v.Typography.RegularFont;label.horizontalOverflow=HorizontalWrapMode.Wrap;label.verticalOverflow=VerticalWrapMode.Truncate;
++                v.ArmedMarkers[i].transform.SetParent(card.transform,false);Place(v.ArmedMarkers[i].rectTransform,7,8,166,176);
+                 v.ArmedMarkers[i].transform.SetAsFirstSibling();
+             }
+             v.PauseButton.GetComponent<Image>().sprite=ProductionGameplayArt.Load("pause_gear_r3");
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
+@@ -48,11 +48,10 @@
+             }
+             v.Footer=Rect(v.Content,"GameplayFooter",0,1308,941,364);
+             v.BoosterButtons=new Button[4];v.BoosterCounts=new Text[4];v.ArmedMarkers=new ProductionWorldMapGraphic[4];
+-            string[] names={"mace","firebird","livinglight","seapearl"};
+             for(int i=0;i<4;i++)
+             {
+                 var marker=Rect(v.Footer,"Armed_"+i,39+i*197,-4,196,196).gameObject.AddComponent<ProductionWorldMapGraphic>();marker.Kind=WorldMapGraphicKind.Halo;marker.raycastTarget=false;marker.gameObject.SetActive(false);v.ArmedMarkers[i]=marker;
+-                var face=Art(v.Footer,"Booster_"+ProductionPreLevelRuntime.Boosters[i],ProductionGameplayArt.Load(names[i]),43+i*197,2,188,188);face.preserveAspect=true;
++                var face=Art(v.Footer,"Booster_"+ProductionPreLevelRuntime.Boosters[i],ProductionGameplayArt.Booster(i),43+i*197,2,188,188);face.preserveAspect=true;
+                 v.BoosterButtons[i]=Button(face);
+                 var badge=Rect(face.transform,"StockBadge",130,138,54,54).gameObject.AddComponent<ProductionPreLevelBadge>();badge.raycastTarget=false;
+                 v.BoosterCounts[i]=Label(v,badge.transform,"Count","0",0,0,54,54,30);v.BoosterCounts[i].resizeTextForBestFit=true;v.BoosterCounts[i].resizeTextMinSize=30;v.BoosterCounts[i].resizeTextMaxSize=60;
+@@ -116,8 +115,7 @@
+         {
+             v.Environment.sprite=ProductionGameplayArt.Load("environment_r6");
+             v.Environment.color=new Color32(210,211,220,255);
+-            string[] boosterArt={"mace","firebird","livinglight","seapearl"};
+-            for(int i=0;i<4;i++)v.BoosterButtons[i].GetComponent<Image>().sprite=ProductionGameplayArt.Load(boosterArt[i]);
++            for(int i=0;i<4;i++)v.BoosterButtons[i].GetComponent<Image>().sprite=ProductionGameplayArt.Booster(i);
+             var frame=(RectTransform)v.Hud.Find("IvanFrame");frame.anchoredPosition=new Vector2(-8,8);frame.sizeDelta=new Vector2(231,231f*1425/1104);
+             frame.GetComponent<Image>().preserveAspect=false;
+             // Reuse Home's whole portrait and the same circular stencil construction.
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=8;
++        public const int CurrentRevision=9;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Footer,BoardArea,BoardMount;
+@@ -72,8 +72,8 @@
+             HeroName.text=en?"Ivan":"Иван";MovesHeading.text=en?"MOVES":"ХОДЫ";GoalsHeading.text=en?"GOALS":"ЦЕЛИ";ScoreHeading.text=en?"SCORE":"СЧЁТ";
+             string source;Font font=Application.isPlaying?Typography.Resolve(false,out source):Typography.RegularFont;
+             foreach(var t in GetComponentsInChildren<Text>(true)){t.font=font;t.raycastTarget=false;}
+-            string[] ru={"БОГАТЫРСКАЯ\nБУЛАВА","ПЕРО ЖАР-ПТИЦЫ","ЖИВОЙ СВЕТ","ЖЕМЧУЖИНА\nМОРСКОГО ЦАРЯ"};
+-            string[] english={"BOGATYR MACE","FIREBIRD FEATHER","LIVING LIGHT","SEA KING'S PEARL"};
++            string[] ru={"БОГАТЫРСКАЯ\nБУЛАВА","ПЕРО\nЖАР-ПТИЦЫ","ЖИВОЙ СВЕТ","ЖЕМЧУЖИНА\nМОРСКОГО ЦАРЯ"};
++            string[] english={"BOGATYR\nMACE","FIREBIRD\nFEATHER","LIVING LIGHT","SEA KING'S\nPEARL"};
+             for(int i=0;i<4;i++)Footer.Find("BoosterCard_"+i+"/BoosterLabel").GetComponent<Text>().text=en?english[i]:ru[i];
+             RefreshState();
+         }
+--- before/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -119,11 +119,10 @@
+             int inventory=state.BoosterCount(BoosterType.Firebird);string before=board.BoardStateHash;
+             view.BoosterButtons[1].onClick.Invoke();yield return null;
+             Assert.That(board.ArmedBooster,Is.EqualTo(BoosterType.Firebird));Assert.That(view.ArmedMarkers[1].gameObject.activeSelf,Is.True);
+-            var card=view.Footer.Find("BoosterCard_1").gameObject;
+-            var tap=new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left};
+-            ExecuteEvents.Execute(card,tap,ExecuteEvents.pointerClickHandler);yield return null;
++            var card=view.Footer.Find("BoosterCard_1").GetComponent<ProductionGameplayBoosterCard>();
++            ClickCardEdge(card);yield return null;
+             Assert.That(board.IsBoosterArmed,Is.False,"The wood-card surface must reach the existing button action.");
+-            ExecuteEvents.Execute(card,tap,ExecuteEvents.pointerClickHandler);yield return null;
++            ClickCardEdge(card);yield return null;
+             Assert.That(board.IsBoosterArmed,Is.True);
+             view.BoosterButtons[1].onClick.Invoke();yield return null;Assert.That(board.IsBoosterArmed,Is.False);
+             Assert.That(state.BoosterCount(BoosterType.Firebird),Is.EqualTo(inventory));Assert.That(board.BoardStateHash,Is.EqualTo(before));
+@@ -305,6 +304,75 @@
+             var corners=new Vector3[4];rect.GetWorldCorners(corners);
+             Vector2 a=RectTransformUtility.WorldToScreenPoint(camera,corners[0]),b=RectTransformUtility.WorldToScreenPoint(camera,corners[2]);
+             return Rect.MinMaxRect(a.x,a.y,b.x,b.y);
++        }
++        static void AssertInside(Rect inner,Rect outer,string message)
++        {
++            Assert.That(inner.xMin,Is.GreaterThanOrEqualTo(outer.xMin-1),message);
++            Assert.That(inner.yMin,Is.GreaterThanOrEqualTo(outer.yMin-1),message);
++            Assert.That(inner.xMax,Is.LessThanOrEqualTo(outer.xMax+1),message);
++            Assert.That(inner.yMax,Is.LessThanOrEqualTo(outer.yMax+1),message);
++        }
++        static GameObject RaycastCard(ProductionGameplayBoosterCard card,Vector2 point)
++        {
++            var hits=new List<RaycastResult>();
++            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
++            Assert.That(hits,Is.Not.Empty,card.name);
++            Assert.That(hits[0].gameObject.GetComponentInParent<ProductionGameplayBoosterCard>(),Is.SameAs(card),card.name+" edge must reach its existing forwarding control.");
++            Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.Null,"This point must exercise the card surface, outside the retained image button.");
++            return hits[0].gameObject;
++        }
++        static void ClickCardEdge(ProductionGameplayBoosterCard card)
++        {
++            Canvas.ForceUpdateCanvases();
++            var canvas=card.GetComponentInParent<Canvas>().rootCanvas;
++            var camera=canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera;
++            Rect rect=Bounds(card.GetComponent<RectTransform>(),camera);
++            Vector2 point=new Vector2(rect.center.x,Mathf.Lerp(rect.yMin,rect.yMax,.03f));
++            var target=RaycastCard(card,point);
++            var tap=new PointerEventData(EventSystem.current){position=point,button=PointerEventData.InputButton.Left};
++            ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerDownHandler);
++            ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerUpHandler);
++            ExecuteEvents.ExecuteHierarchy(target,tap,ExecuteEvents.pointerClickHandler);
++        }
++        static void VerifyBoosterCards(ProductionGameplayView view,Camera camera,Rect safe)
++        {
++            for(int i=0;i<view.BoosterButtons.Length;i++)
++            {
++                var card=view.Footer.Find("BoosterCard_"+i).GetComponent<ProductionGameplayBoosterCard>();
++                Assert.That(card.Target,Is.SameAs(view.BoosterButtons[i]));
++                Rect cardBounds=Bounds(card.GetComponent<RectTransform>(),camera);
++                AssertInside(cardBounds,safe,card.name+" must fit the safe area.");
++                var label=card.transform.Find("BoosterLabel").GetComponent<Text>();
++                Rect labelBounds=Bounds(label.rectTransform,camera);
++                AssertInside(labelBounds,cardBounds,label.text+" label must remain inside its card.");
++                Assert.That(label.text,Is.Not.Empty);
++                Assert.That(label.cachedTextGenerator.lineCount,Is.InRange(1,2),label.text);
++                Assert.That(label.preferredWidth,Is.LessThanOrEqualTo(label.rectTransform.rect.width+1),label.text+" must fit without horizontal clipping.");
++                Assert.That(label.preferredHeight,Is.LessThanOrEqualTo(label.rectTransform.rect.height+1),label.text+" must fit without vertical truncation.");
++                var textMesh=label.canvasRenderer.GetMesh();
++                Assert.That(textMesh.vertexCount,Is.GreaterThan(0),label.text);
++                var glyphBounds=textMesh.bounds;
++                var a=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.min));
++                var b=RectTransformUtility.WorldToScreenPoint(camera,label.rectTransform.TransformPoint(glyphBounds.max));
++                AssertInside(Rect.MinMaxRect(a.x,a.y,b.x,b.y),labelBounds,label.text+" rendered lettering must stay inside its label well.");
++                Rect badge=Bounds(view.BoosterCounts[i].transform.parent.GetComponent<RectTransform>(),camera);
++                AssertInside(badge,cardBounds,card.name+" stock badge must remain inside its card.");
++                Assert.That(badge.Overlaps(labelBounds),Is.False,card.name+" stock badge must not cover the live label.");
++                foreach(var point in new[]{new Vector2(Mathf.Lerp(cardBounds.xMin,cardBounds.xMax,.02f),cardBounds.center.y),
++                    new Vector2(Mathf.Lerp(cardBounds.xMin,cardBounds.xMax,.98f),cardBounds.center.y),
++                    new Vector2(cardBounds.center.x,Mathf.Lerp(cardBounds.yMin,cardBounds.yMax,.02f)),
++                    new Vector2(cardBounds.center.x,Mathf.Lerp(cardBounds.yMin,cardBounds.yMax,.98f))})RaycastCard(card,point);
++                var marker=view.ArmedMarkers[i];
++                if(marker.gameObject.activeInHierarchy)
++                {
++                    Assert.That(marker.enabled,Is.True);Assert.That(marker.canvasRenderer.cull,Is.False);
++                    Assert.That(marker.raycastTarget,Is.False);
++                    Assert.That(marker.transform.parent,Is.SameAs(card.transform));
++                    Assert.That(marker.transform.GetSiblingIndex(),Is.LessThan(view.BoosterButtons[i].transform.GetSiblingIndex()),"Armed feedback must render behind the isolated object.");
++                    var mesh=marker.canvasRenderer.GetMesh();Assert.That(mesh.vertexCount,Is.GreaterThan(0));
++                    Assert.That(Array.Exists(mesh.colors32,c=>c.a>0),Is.True,"Armed feedback must have visible geometry.");
++                }
++            }
+         }
+         void VerifyLayoutAndInput(ProductionGameplayView view,Camera camera,Vector2Int size,Rect safe)
+         {
+@@ -340,6 +408,7 @@
+             Assert.That(board.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1));Assert.That(board.yMax,Is.LessThanOrEqualTo(safe.yMax+1));
+             Assert.That(view.ScoreMeter.Fraction,Is.EqualTo(view.StarProgress.fillAmount).Within(.0001f));
+             Assert.That(view.ScoreMeter.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(18));
++            VerifyBoosterCards(view,camera,safe);
+             if(view.Status.IsVisible)
+             {
+                 Rect statusRect=Bounds(view.Status.Panel,camera);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
+@@ -21,7 +21,7 @@
+                 var transforms=instance.GetComponentsInChildren<Transform>(true);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+-                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(8));
++                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(9));
+                 Assert.That(view.BoosterButtons,Is.EqualTo(controls));Assert.That(view.BoardMount,Is.SameAs(boardMount));
+                 Assert.That(instance.GetComponentsInChildren<Transform>(true),Is.EquivalentTo(transforms));
+                 Assert.That(view.Hud.Find("HudPanel").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Load("hud_header_r3")));
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_firebird_r9.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 2a443fedc39aaec72a2ec48ff170e84b
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_livinglight_r9.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 8739c10fe076699dca3d45646c296228
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_mace_r9.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 9a655b6966df17cf7ba9a5c185b8c5aa
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_seapearl_r9.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 4a0806693c5c985e7a47ecd2d4c36836
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/card_wood_r9.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 935f171f9019d7a5dafba440d7f8c765
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 100, y: 420, z: 100, w: 150}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 

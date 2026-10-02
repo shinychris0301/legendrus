@@ -1,0 +1,124 @@
+{
+  "operation": "Authorized local alpha-only removal of dedicated atlas medallion rims/backings; original central object RGB is unchanged. No generation, repaint, screenshot-region crops, upscaling or RGB color correction.",
+  "sourceAtlas": {
+    "path": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/boosters.png",
+    "sha256": "16790d6fb2b26d977dbd9daf9418d470e7902f830e0f4f9bbaba68dd2e09de5e",
+    "regionsXYWH": {
+      "mace": [
+        43,
+        0,
+        339,
+        323
+      ],
+      "firebird": [
+        383,
+        0,
+        325,
+        323
+      ],
+      "livinglight": [
+        709,
+        0,
+        328,
+        323
+      ]
+    }
+  },
+  "sourceSeaPearl": {
+    "path": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/isolated_seapearl.png",
+    "sha256": "0c736abe18672ae2420e7a0ce5627a605eff1750a5f4f9a207984aa2bb8ba4ae"
+  },
+  "method": "8\u00d7 supersampled hand traced alpha contours, alpha-only warmth filtering for firebird and bottle chain holes, isolated Firebird connected object selection; subpixel outline contraction on mace and shield removes medallion fringes. Near-opaque alpha (>=240) restored to255, alpha<4 removed. All retained RGB bytes asserted identical to native source crop.",
+  "limitations": [
+    "Native central object dimensions are retained; artwork detail remains source-limited.",
+    "Firebird outer scatter and circular flame backing removed; central wing and tail silhouette retained with partial alpha around fine flames.",
+    "Bottle itself remains intentionally opaque glass artwork; only surrounding backing and chain holes are transparent."
+  ],
+  "assets": [
+    {
+      "name": "mace",
+      "source": "Sources/mace_native.png",
+      "sourceCrop": [
+        41,
+        48,
+        282,
+        297
+      ],
+      "size": [
+        241,
+        249
+      ],
+      "opaquePixels": 21539,
+      "partialPixels": 1204,
+      "rgbUnchanged": true,
+      "runtimePath": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_mace_r9.png",
+      "runtimeSHA256": "b05cefdf93c8461f4dbe90099dd0c5550cc1b4b0c9043a41a3c307071ca95e40",
+      "nativeReferenceSHA256": "e4c66f94f4b758018215365ef0fbc180bcc239bcb8ce30b12cbbba6b9b0f991e"
+    },
+    {
+      "name": "firebird",
+      "source": "Sources/firebird_native.png",
+      "sourceCrop": [
+        56,
+        54,
+        272,
+        287
+      ],
+      "size": [
+        216,
+        233
+      ],
+      "opaquePixels": 22497,
+      "partialPixels": 3506,
+      "rgbUnchanged": true,
+      "runtimePath": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_firebird_r9.png",
+      "runtimeSHA256": "c94cd7301a3197f1b3dc123fe5f934959dbb7db6d7f3861dd3da7763b1466e61",
+      "nativeReferenceSHA256": "f453694650592f5ec1a119ed92148a42bbd3832b41d3739892f2e4e48af8ea74"
+    },
+    {
+      "name": "livinglight",
+      "source": "Sources/livinglight_native.png",
+      "sourceCrop": [
+        65,
+        60,
+        252,
+        274
+      ],
+      "size": [
+        187,
+        214
+      ],
+      "opaquePixels": 27153,
+      "partialPixels": 819,
+      "rgbUnchanged": true,
+      "runtimePath": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_livinglight_r9.png",
+      "runtimeSHA256": "373af5366475c9cba82de11733a256c9de07229dbb13ec2b4bb5c7fd5ecbdea8",
+      "nativeReferenceSHA256": "bd72ebd1b2f25952bbccbaa434a40950c69a202fd04922cf165a37aad835765e"
+    },
+    {
+      "name": "seapearl",
+      "source": "Sources/seapearl_native.png",
+      "sourceCrop": [
+        75,
+        58,
+        247,
+        274
+      ],
+      "size": [
+        172,
+        216
+      ],
+      "opaquePixels": 20029,
+      "partialPixels": 1130,
+      "rgbUnchanged": true,
+      "runtimePath": "Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/booster_seapearl_r9.png",
+      "runtimeSHA256": "3de00689c0015aa5a979561f9b39ee5747f25d23f7d31b8a7d4fed64ed46e1c5",
+      "nativeReferenceSHA256": "0c736abe18672ae2420e7a0ce5627a605eff1750a5f4f9a207984aa2bb8ba4ae"
+    }
+  ],
+  "proofs": [
+    "QA/BoosterAlpha_Black.png",
+    "QA/BoosterAlpha_White.png",
+    "QA/BoosterAlpha_Magenta.png"
+  ]
+}
