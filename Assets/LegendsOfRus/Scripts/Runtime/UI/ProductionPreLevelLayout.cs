@@ -24,6 +24,18 @@ namespace LegendsOfRus
                 safeRect.GetWorldCorners(corners);
                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin;
+                if(View.SourceControls)
+                {
+                    Position(View.Hud,0,top);Position(View.TitleArea,0,top-116);Position(View.Footer,0,bottom-1440);
+                    Position(View.FooterOrnament.rectTransform,0,bottom-1590);Size(View.FooterOrnament.rectTransform,new Vector2(941,82));
+                    float room=Mathf.Max(1,high.y-low.y-594),bodyScale=Mathf.Min(1,room/1078),spare=Mathf.Max(0,room-1078);
+                    Position(View.Body,(941-941*bodyScale)*.5f,top-382);View.Body.localScale=Vector3.one*bodyScale;
+                    Position(View.GoalsArea,208,0);Position(View.MovesArea,365,-(293+spare*.28f));Position(View.BoostersArea,120,-(437+spare*.5f));Position(View.RewardsArea,122,-(758+spare));
+                    canvasRect.GetWorldCorners(corners);Vector3 a=content.InverseTransformPoint(corners[0]),b=content.InverseTransformPoint(corners[2]);
+                    Vector2 n=View.Environment.sprite.rect.size;float cover=Mathf.Max((b.x-a.x)/n.x,(b.y-a.y)/n.y);Vector2 sz=n*cover;
+                    Position(View.Environment.rectTransform,(a.x+b.x-sz.x)*.5f-content.rect.xMin,(a.y+b.y+sz.y)*.5f-content.rect.yMax);Size(View.Environment.rectTransform,sz);
+                    return;
+                }
                 Position(View.Hud,0,top);Position(View.HudBacking,5,top-5);
                 Position(View.TitleArea,0,top-130);Position(View.Footer,0,bottom-1440);
                 float available=Mathf.Max(1,high.y-low.y-632);

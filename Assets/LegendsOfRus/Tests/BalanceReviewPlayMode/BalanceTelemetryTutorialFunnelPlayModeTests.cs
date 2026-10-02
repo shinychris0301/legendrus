@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Reflection;
 using LegendsOfRus.BalanceReview;
 using NUnit.Framework;
 using UnityEngine;
@@ -10,21 +11,47 @@ namespace LegendsOfRus.Tests
     {
         GameObject host;
         BalanceTelemetryReviewService service;
+        BalanceObservationBuffer previousObservations;
+        ScreenRouter previousRouter;
+        GameState previousState;
+        static readonly FieldInfo Observations = typeof(BalanceTelemetryReviewService)
+            .GetField("observations", BindingFlags.Instance | BindingFlags.NonPublic);
 
         [SetUp]
         public void SetUp()
         {
-            if (BalanceTelemetryReviewService.Instance != null)
-                Object.DestroyImmediate(BalanceTelemetryReviewService.Instance.gameObject);
-            host = new GameObject("BalanceReviewTestHost");
-            service = host.AddComponent<BalanceTelemetryReviewService>();
+            previousRouter = ScreenRouter.Instance;
+            previousState = GameState.Instance;
+            service = BalanceTelemetryReviewService.Instance;
+            if (service == null)
+            {
+                host = new GameObject("BalanceReviewTestHost");
+                service = host.AddComponent<BalanceTelemetryReviewService>();
+            }
+            else
+            {
+                // Keep the shared root and every other service alive. Swap only this
+                // fixture's transient buffer and restore the exact original object.
+                Assert.That(Observations, Is.Not.Null);
+                previousObservations = (BalanceObservationBuffer)Observations.GetValue(service);
+                Observations.SetValue(service, new BalanceObservationBuffer());
+            }
         }
 
         [TearDown]
         public void TearDown()
         {
             if (host != null)
+            {
                 Object.DestroyImmediate(host);
+                host = null;
+            }
+            else if (service != null)
+                Observations.SetValue(service, previousObservations);
+            Assert.That(ScreenRouter.Instance, Is.SameAs(previousRouter));
+            Assert.That(GameState.Instance, Is.SameAs(previousState));
+            service = null;
+            previousObservations = null;
         }
 
         [Test]

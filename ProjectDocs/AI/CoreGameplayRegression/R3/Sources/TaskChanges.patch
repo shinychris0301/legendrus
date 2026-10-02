@@ -1,0 +1,212 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopVfxBoosterFeedbackPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopVfxBoosterFeedbackPlayModeTests.cs
+@@ -107,6 +107,7 @@
+                 rows = BoardQAPresetFactory.Height,
+                 tileTypes = BoardQAPresetFactory.TileTypes
+             }, null, null);
++            Assert.That(board.RuleVersion, Is.EqualTo(Match3Board.CurrentGameplayRules));
+             presenter = board.VfxPresenter;
+             Canvas.ForceUpdateCanvases();
+             yield return null;
+@@ -138,9 +139,10 @@
+             PlayerPrefs.Save();
+         }
+ 
+-        [UnityTest]
++        [UnityTest, Category("LegacyVfxCompatibility")]
+         public IEnumerator NativeFacetsRingsAndTrails_RenderThenReturnToPool()
+         {
++            UseBoardlessCompatibilityPool();
+             var motions = new[] {
+                 Motion(1, GameplayMotionKind.MatchWaveStarted),
+                 Motion(2, GameplayMotionKind.SpecialActivationStarted, special: SpecialGemKind.Burst),
+@@ -204,7 +206,7 @@
+                 Canvas.ForceUpdateCanvases(); camera.Render(); RenderTexture.active = target;
+                 image.ReadPixels(new Rect(0, 0, 941, 1200), 0, 0); image.Apply();
+                 System.IO.File.WriteAllBytes(System.IO.Path.Combine(directory, "Vfx_" + name + ".png"), image.EncodeToPNG());
+-                var details = new System.Text.StringBuilder("Controlled native 8x9 QA stress board with hit-area gems hidden for effect visibility; production remains 8x7.\n");
++                var details = new System.Text.StringBuilder("Legacy boardless pool compatibility capture on an 8x9 QA fixture; not the production effect path. Hit-area gems are hidden for geometry inspection. Production remains 8x7.\n");
+                 foreach (var effect in presenter.VfxRoot.GetComponentsInChildren<CoreLoopEffectGraphic>())
+                     details.AppendLine(effect.Cue + " color=" + effect.color + " progress=" + effect.Progress + " size=" + effect.rectTransform.rect.size);
+                 System.IO.File.WriteAllText(System.IO.Path.Combine(directory, "Vfx_" + name + ".txt"), details.ToString());
+@@ -216,6 +218,42 @@
+                 UnityEngine.Object.Destroy(image); UnityEngine.Object.Destroy(cameraObject);
+                 target.Release(); UnityEngine.Object.Destroy(target);
+             }
++        }
++
++        // Exercise the retained pool in isolation, without changing the game's current rules
++        // or attaching duplicate legacy rings to a live production board.
++        void UseBoardlessCompatibilityPool()
++        {
++            presenter.Initialize((RectTransform)boardObject.transform,
++                BoardQAPresetFactory.Width, BoardQAPresetFactory.Height);
++            presenter.ResetEffects();
++            presenter.ResetDiagnostics();
++        }
++
++        [Test]
++        public void CurrentRules_SuppressDuplicateLegacyEffectsButRetainSwapTrailAndDiagnostics()
++        {
++            presenter.ResetEffects();
++            presenter.ResetDiagnostics();
++            int sequence=0;
++            foreach(GameplayMotionKind kind in Enum.GetValues(typeof(GameplayMotionKind)))
++            {
++                if(kind==GameplayMotionKind.SwapStarted)continue;
++                var motion=Motion(++sequence,kind,affected:9,special:SpecialGemKind.Burst,
++                    booster:GameplayBoosterKind.Firebird);
++                presenter.Present(motion);
++                Assert.That(presenter.ActiveEffectCount,Is.Zero,kind.ToString());
++                Assert.That(presenter.SpawnRequestCount,Is.Zero,kind.ToString());
++                Assert.That(presenter.LastMotionSequence,Is.EqualTo(sequence));
++                Assert.That(presenter.CueCount,Is.EqualTo(sequence));
++                Assert.That(presenter.LastEffectTrace.EmittedEffects,Is.Zero);
++            }
++            presenter.Present(Motion(++sequence,GameplayMotionKind.SwapStarted,affected:2));
++            Assert.That(presenter.ActiveEffectCount,Is.GreaterThan(0));
++            Assert.That(presenter.HasActiveCue(CoreLoopVfxCue.SwapTrail),Is.True);
++            presenter.TickForTesting(2f);
++            Assert.That(presenter.ActiveEffectCount,Is.Zero);
++            Assert.That(presenter.AvailableEffectCount,Is.EqualTo(presenter.PoolCapacity));
+         }
+ 
+         [Test]
+@@ -367,9 +405,10 @@
+             Assert.That(second, Is.EqualTo(first));
+         }
+ 
+-        [Test]
++        [Test, Category("LegacyVfxCompatibility")]
+         public void FixedPool_IsPrewarmedAndBoundedUnderBurstLoad()
+         {
++            UseBoardlessCompatibilityPool();
+             presenter.ResetEffects();
+             presenter.ResetDiagnostics();
+ 
+@@ -398,9 +437,10 @@
+             Assert.That(trace.ActiveEffectsAfter, Is.EqualTo(presenter.PoolCapacity));
+         }
+ 
+-        [Test]
++        [Test, Category("LegacyVfxCompatibility")]
+         public void PoolReuse_DoesNotCreateObjectsAfterRelease()
+         {
++            UseBoardlessCompatibilityPool();
+             presenter.ResetEffects();
+             presenter.ResetDiagnostics();
+             int created = presenter.CreatedEffectCount;
+@@ -430,12 +470,13 @@
+             presenter.Present(
+                 Motion(
+                     1,
+-                    GameplayMotionKind.BoosterActivated,
++                    GameplayMotionKind.SwapStarted,
+                     affected: 72,
+                     booster: GameplayBoosterKind.LivingLight
+                 )
+             );
+ 
++            Assert.That(presenter.ActiveEffectCount,Is.GreaterThan(0));
+             Assert.That(presenter.IsRaycastSafe, Is.True);
+             Assert.That(presenter.VfxRoot.GetComponent<RectMask2D>(), Is.Not.Null);
+             CanvasGroup group = presenter.VfxRoot.GetComponent<CanvasGroup>();
+@@ -469,11 +510,12 @@
+             presenter.Present(
+                 Motion(
+                     1,
+-                    GameplayMotionKind.BoosterActivated,
++                    GameplayMotionKind.SwapStarted,
+                     affected: 72,
+                     booster: GameplayBoosterKind.LivingLight
+                 )
+             );
++            Assert.That(presenter.ActiveEffectCount,Is.GreaterThan(0),"Raycasts must be checked with a visible current effect.");
+             Canvas.ForceUpdateCanvases();
+             yield return null;
+ 
+@@ -508,7 +550,7 @@
+         public IEnumerator ResetPresetAndDisable_CleanEffectsAndRestoreSubscription()
+         {
+             presenter.Present(
+-                Motion(1, GameplayMotionKind.SpecialCreationStarted, affected: 1)
++                Motion(1, GameplayMotionKind.SwapStarted, affected: 1)
+             );
+             Assert.That(presenter.ActiveEffectCount, Is.GreaterThan(0));
+ 
+@@ -518,15 +560,16 @@
+             Assert.That(presenter.AvailableEffectCount, Is.EqualTo(presenter.PoolCapacity));
+ 
+             presenter.Present(
+-                Motion(2, GameplayMotionKind.BoosterActivated, affected: 9, booster: GameplayBoosterKind.Firebird)
++                Motion(2, GameplayMotionKind.SwapStarted, affected: 9, booster: GameplayBoosterKind.Firebird)
+             );
+             Assert.That(presenter.ActiveEffectCount, Is.GreaterThan(0));
+             Assert.That(board.LoadQAPreset("booster.firebird"), Is.True);
+             Assert.That(presenter.ActiveEffectCount, Is.Zero);
+ 
+             presenter.Present(
+-                Motion(3, GameplayMotionKind.ReshuffleStarted, affected: 1)
+-            );
++                Motion(3, GameplayMotionKind.SwapStarted, affected: 1)
++            );
++            Assert.That(presenter.ActiveEffectCount, Is.GreaterThan(0));
+             presenter.enabled = false;
+             Assert.That(presenter.ActiveEffectCount, Is.Zero);
+             presenter.enabled = true;
+@@ -578,6 +621,9 @@
+                 board.MotionEventPublished += handler;
+                 presenter.ResetDiagnostics();
+ 
++                var boosterView=board.GetComponentInChildren<PrototypeBoosterView>();
++                Assert.That(boosterView,Is.Not.Null);
++                int presentationCount=boosterView.PresentationCount;
+                 board.UseBooster(inventoryKinds[i]);
+                 if (presentationKinds[i] == GameplayBoosterKind.SeaPearl)
+                 {
+@@ -595,6 +641,9 @@
+                     Assert.That(board.TapCell(preset.Primary.X, preset.Primary.Y), Is.True);
+                 }
+ 
++                Assert.That(boosterView.IsPresenting,Is.True,presentationKinds[i].ToString());
++                Assert.That(boosterView.PresentationCount,Is.EqualTo(presentationCount+1));
++                Assert.That(presenter.ActiveEffectCount,Is.Zero,"No duplicate pooled booster effect.");
+                 yield return WaitUntilInteractive();
+                 board.MotionEventPublished -= handler;
+ 
+@@ -708,10 +757,13 @@
+             Assert.That(board.TapCell(preset.Primary.X, preset.Primary.Y), Is.True);
+             Assert.That(board.HasActiveCommand, Is.True);
+             Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(beforeInventory - 1));
+-            Assert.That(
+-                presenter.HasActiveCue(CoreLoopVfxCue.BoosterFirebird),
+-                Is.True
+-            );
++            var boosterView=board.GetComponentInChildren<PrototypeBoosterView>();
++            Assert.That(boosterView,Is.Not.Null);
++            Assert.That(boosterView.IsPresenting,Is.True);
++            Assert.That(presenter.HasActiveCue(CoreLoopVfxCue.BoosterFirebird),Is.False,
++                "The dedicated current booster must not also emit a legacy ring.");
++            presenter.Present(Motion(100,GameplayMotionKind.SwapStarted,affected:2));
++            Assert.That(presenter.ActiveEffectCount,Is.GreaterThan(0));
+             Match3CellInput heldInput = board.GetCellInputForTesting(2, 2);
+             heldInput.OnPointerDown(CreatePointer(91, 2, 2));
+             Assert.That(board.OwnsPointer(91), Is.True);
+@@ -724,6 +776,8 @@
+             yield return null;
+             yield return null;
+ 
++            Assert.That(boosterView.IsPresenting,Is.False,"Recovery clears the dedicated booster immediately.");
++            Assert.That(presenter.ActiveEffectCount,Is.Zero,"Recovery clears pooled trails too.");
+             Assert.That(board.HasActiveCommand, Is.False);
+             Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Idle));
+             Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash));
+@@ -769,6 +823,8 @@
+                         booster: GameplayBoosterKind.Firebird
+                     )
+                 );
++                presenter.Present(Motion(3,GameplayMotionKind.SwapStarted,affected:2));
++                Assert.That(presenter.ActiveEffectCount,Is.GreaterThan(0));
+                 presenter.TickForTesting(10f);
+             }
+             finally

@@ -1,0 +1,15 @@
+{
+  "model": "model_openai-gpt-image-2",
+  "body": {
+    "prompt": "Exact localized edit of this asset atlas. Maintain all five panels in precisely the SAME locations, dimensions and colors. Remove ALL lettering from the red chapter banner at top, green button and blue button below it, small red victory ribbon in the middle, and parchment teaser at bottom. Reconstruct smooth continuous intricate painterly materials underneath: crimson embossed silk for the banners, emerald lacquer and sapphire lacquer for the buttons, warm old parchment for the teaser. Keep original gold frames, sapphire jewels and right-side forest illustration. The faces must have subtle irregular natural texture, NO repeating tiles or stripes, NO letters, NO numbers, NO new decorations. Do not move or resize anything. Keep dark original colors. Original exterior pixels will be restored by bounded compositing, only the text-removal regions are needed.",
+    "referenceImages": [
+      "asset_rNStepAA4SMWdifJE34xyqqw"
+    ],
+    "width": 1024,
+    "height": 1024,
+    "quality": "medium",
+    "background": "opaque",
+    "numOutputs": 1
+  },
+  "reason": "Original faces are occluded by sample lettering and icons; replace only bounded interior masks, retaining original gold and alpha."
+}

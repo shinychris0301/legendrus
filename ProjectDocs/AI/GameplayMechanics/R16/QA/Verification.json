@@ -1,0 +1,32 @@
+{
+  "unity": "6000.5.9f1",
+  "backend": "Previously authorized verification-only Vulkan process override",
+  "playModePassed": 75,
+  "playModeFailed": 0,
+  "skipped": 0,
+  "editModeRunThisPass": false,
+  "attempts": [
+    {
+      "run": "Verify01/Spectacle",
+      "passed": 4,
+      "failed": 0,
+      "visualFinding": "Incorrect new color mask omitted red; corrected before final broad run."
+    },
+    {
+      "run": "Verify02/All",
+      "passed": 75,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "newChecks": [
+    "Rendered gold channels and destination alpha",
+    "RectMask2D energy clipping",
+    "R4 material lifecycle and R3 material preservation"
+  ],
+  "scope": "PrototypeR4 development sandbox; no core rule or project graphics-setting changes",
+  "limitations": [
+    "No physical Android shader/performance verification",
+    "No subjective player acceptance yet"
+  ]
+}

@@ -1,0 +1,37 @@
+/* Latest reference: complete source plaque and framed chapter cards. */
+#stage{background:#0a1421 url('Assets/reference_environment.png') center/cover}
+.title{left:154px;top:102px;width:644px;height:205px;z-index:8;filter:drop-shadow(0 5px 5px #0008)}
+.title-backdrop{display:none}
+.scrollHint{top:297px;font-size:15px;color:#d9c492}
+.map-window{top:313px;height:1006px;left:92px;right:91px;mask-image:none;background:none}
+.region,.compact .region{width:758px;height:258px;margin:0 0 13px;isolation:isolate;overflow:hidden;background:none}
+.region{height:320px}
+.card-face{position:absolute;inset:10px 12px 12px;background:url('Assets/card_surface.png') center/cover;border-radius:26px;z-index:0}
+.terrain,.compact .terrain{inset:15px auto 16px 18px;width:445px;height:calc(100% - 31px);object-fit:cover;object-position:center;mask-image:linear-gradient(90deg,#000 60%,transparent);z-index:1;opacity:1;border-radius:21px}
+.region.locked .terrain{filter:saturate(.38) brightness(.65)}.region.active .terrain{filter:saturate(.62) brightness(.86)}
+.shade,.region.locked .shade{display:none}
+.frame{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
+.copy,.compact .copy{left:390px;right:31px;top:31px;bottom:22px;text-align:center;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.chapter{font-size:27px;letter-spacing:0;color:#eccb79}
+.name,.compact .name{font-size:37px;line-height:1.03;text-transform:uppercase;font-weight:normal;color:#efcb79;margin:8px 0 10px}
+.status{font-size:24px;line-height:1.12;color:#dfcd9d}.locked .status{color:#8f927f}
+.progress-plate{display:block;position:relative;width:183px;height:57px;min-height:57px;margin-top:10px;background:url('Assets/progress_plate.png') center/contain no-repeat}
+.progress-plate span{position:absolute;left:22px;top:7px;width:96px;text-align:center;font:34px Numbers;color:#e5c68d}
+.locked .progress-plate{filter:saturate(.5) brightness(.65)}
+.lock,.compact .lock{left:325px;right:auto;bottom:0;width:109px;height:119px;z-index:5;filter:none}
+.footer{top:1436px;bottom:auto;height:236px;background:url('Assets/footer_backing.png') center/cover;box-shadow:none}
+.footer-carving{height:218px;bottom:0}
+.nav{top:0;height:236px;filter:none}.nav[data-nav=home]{left:0;width:192px}.nav[data-nav=map]{left:192px;width:185px}.nav[data-nav=tasks]{left:377px;width:188px}.nav[data-nav=guild]{left:565px;width:186px}.nav[data-nav=shop]{left:751px;width:190px}
+.back{left:0;bottom:auto;top:1334px;width:208px;height:91px;z-index:6}
+.to-map{position:absolute;left:220px;top:1318px;width:495px;height:128px;padding:0;border:0;background:none;z-index:5}.to-map img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+.compact .region{height:230px;margin-bottom:9px}.compact .region.active{height:270px}
+.copy,.compact .copy{left:391px;right:28px;top:17px;bottom:18px;justify-content:center}
+.chapter{font-size:25px;line-height:29px}.name,.compact .name{font-size:30px;line-height:1.02;margin:4px 0 5px;max-width:100%}
+.status{font-size:19px;line-height:23px}.progress-plate{margin-top:6px}
+.continue-art{width:259px;height:72px;object-fit:contain;max-width:100%;margin-top:0;flex-shrink:0}
+.active .progress-plate{margin-top:2px}.active .status{display:none}
+.active .frame{filter:drop-shadow(0 0 2px #ffd35f)}
+.heroName{font-size:30px}.heroLevel{font-size:22px}.balance{font-size:22px}
+
+.scrollHint{display:none}
+.bar{left:186px;top:113px;width:135px;height:8px;border:0;background:linear-gradient(90deg,#2887be 65%,#08101a 65%)}

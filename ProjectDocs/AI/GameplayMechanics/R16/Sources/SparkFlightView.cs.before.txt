@@ -1,0 +1,115 @@
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace LegendsOfRus
+{
+    // Presentation only: destinations and carried power-ups come from the immutable plan.
+    public sealed class SparkFlightView : MonoBehaviour
+    {
+        sealed class Flight
+        {
+            public RectTransform Icon;
+            public Image Image, Payload;
+            public Image[] Trail;
+            public BoardPosition From, To;
+            public float Born;
+            public bool Active;
+        }
+        const int Capacity = 128;
+        public const float Duration = .52f;
+        readonly List<Flight> pool = new List<Flight>();
+        Match3Board board;
+        RectTransform root;
+        public int FlightCount { get; private set; }
+        public int ActiveCount { get; private set; }
+        public int ActivePayloadCount { get; private set; }
+        public SpecialGemKind LastPayload { get; private set; }
+        public BoardPosition LastTarget { get; private set; }
+
+        public static SparkFlightView Attach(Match3Board board)
+        {
+            var go = new GameObject("SparkFlights",typeof(RectTransform),typeof(RectMask2D));
+            go.transform.SetParent(board.transform,false);
+            var r=(RectTransform)go.transform;
+            r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;
+            var view=go.AddComponent<SparkFlightView>();view.board=board;view.root=r;
+            board.MotionEventPublished+=view.OnMotion;
+            return view;
+        }
+        void OnMotion(GameplayMotionEvent e)
+        {
+            if(e.Kind==GameplayMotionKind.CommandRecovered) Clear();
+        }
+        public void Present(BoardSpecialActivationInstruction activation)
+        {
+            if(!activation.Target.HasValue)return;
+            Flight f=pool.Find(x=>!x.Active);
+            if(f==null)
+            {
+                if(pool.Count>=Capacity)return;
+                var go=new GameObject("Spark",typeof(RectTransform),typeof(Image));
+                go.transform.SetParent(root,false);
+                var icon=go.GetComponent<Image>();icon.sprite=PrototypeBoardArt.Load("spark");icon.raycastTarget=false;icon.preserveAspect=true;
+                f=new Flight{Icon=(RectTransform)go.transform,Image=icon,Trail=new Image[4]};
+                for(int i=0;i<f.Trail.Length;i++)
+                {
+                    var dot=new GameObject("Ember",typeof(RectTransform),typeof(Image));dot.transform.SetParent(root,false);
+                    var image=dot.GetComponent<Image>();image.raycastTarget=false;f.Trail[i]=image;
+                }
+                var payload=new GameObject("CarriedPayload",typeof(RectTransform),typeof(Image));payload.transform.SetParent(f.Icon,false);
+                f.Payload=payload.GetComponent<Image>();f.Payload.raycastTarget=false;f.Payload.preserveAspect=true;
+                f.Payload.rectTransform.anchorMin=new Vector2(.25f,-.12f);f.Payload.rectTransform.anchorMax=new Vector2(.75f,.38f);
+                f.Payload.rectTransform.offsetMin=f.Payload.rectTransform.offsetMax=Vector2.zero;
+                f.Icon.SetAsLastSibling();pool.Add(f);
+            }
+            LastPayload=activation.Payload;
+            f.Payload.enabled=board.RuleVersion>=GameplayRuleVersion.PrototypeR4&&activation.Payload!=SpecialGemKind.None;
+            f.Payload.sprite=PrototypeBoardArt.Load(activation.Payload==SpecialGemKind.Burst?"bomb":"line");
+            f.Payload.rectTransform.localRotation=Quaternion.Euler(0,0,activation.Payload==SpecialGemKind.Column?90:0);
+            f.From=activation.Position;f.To=activation.Target.Value;f.Born=Time.unscaledTime;f.Active=true;
+            f.Icon.gameObject.SetActive(true);foreach(var dot in f.Trail)dot.gameObject.SetActive(true);FlightCount++;LastTarget=f.To;
+            Place(f,0);
+        }
+        Vector2 Cell(BoardPosition p)
+        {
+            var r=root.rect;
+            return new Vector2(r.xMin+(p.X+.5f)*r.width/board.ColumnCount,r.yMax-(p.Y+.5f)*r.height/board.RowCount);
+        }
+        void Place(Flight f,float t)
+        {
+            var r=root.rect;float cell=Mathf.Min(r.width/board.ColumnCount,r.height/board.RowCount);
+            float travel=t*t*(3-2*t);
+            var p=Vector2.Lerp(Cell(f.From),Cell(f.To),travel)+Vector2.up*(Mathf.Sin(travel*Mathf.PI)*cell*.65f);
+            p.x=Mathf.Clamp(p.x,r.xMin+cell*.38f,r.xMax-cell*.38f);
+            p.y=Mathf.Clamp(p.y,r.yMin+cell*.38f,r.yMax-cell*.38f);
+            f.Icon.anchoredPosition=p;f.Icon.sizeDelta=Vector2.one*cell*(.7f+Mathf.Sin(t*Mathf.PI)*.2f);
+            f.Icon.localRotation=Quaternion.Euler(0,0,Mathf.Sin(t*Mathf.PI*2)*12);
+            f.Image.color=new Color(1,1,1,1);
+            for(int i=0;i<f.Trail.Length;i++)
+            {
+                float trailT=Mathf.Max(0,travel-.035f*(i+1));
+                var point=Vector2.Lerp(Cell(f.From),Cell(f.To),trailT)+Vector2.up*(Mathf.Sin(trailT*Mathf.PI)*cell*.65f);
+                var dot=f.Trail[i];dot.rectTransform.anchoredPosition=point;
+                dot.rectTransform.sizeDelta=Vector2.one*cell*(.055f-i*.009f);
+                dot.rectTransform.localRotation=Quaternion.Euler(0,0,45);
+                dot.color=new Color(1,.62f,.13f,.65f-i*.13f);
+            }
+        }
+        void LateUpdate()
+        {
+            ActiveCount=0;ActivePayloadCount=0;
+            foreach(var f in pool)
+            {
+                if(!f.Active)continue;
+                float t=(Time.unscaledTime-f.Born)/Duration;
+                if(t>=1){f.Active=false;f.Icon.gameObject.SetActive(false);foreach(var dot in f.Trail)dot.gameObject.SetActive(false);continue;}
+                Place(f,t);ActiveCount++;if(f.Payload.enabled)ActivePayloadCount++;
+            }
+        }
+        void Clear(){foreach(var f in pool){f.Active=false;f.Icon.gameObject.SetActive(false);foreach(var dot in f.Trail)dot.gameObject.SetActive(false);}ActiveCount=0;ActivePayloadCount=0;}
+        void OnDisable()=>Clear();
+        void OnDestroy(){if(board)board.MotionEventPublished-=OnMotion;}
+    }
+}

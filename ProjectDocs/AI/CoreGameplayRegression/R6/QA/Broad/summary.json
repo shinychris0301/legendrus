@@ -1,0 +1,120 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R6/QA/Broad/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R6/QA/Broad/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 2076.306689977646,
+  "isolatedConfig": "/tmp/lor-continuation-r1/core-regression-r6/Broad/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {
+    "XDG_CONFIG_HOME": "/tmp/lor-continuation-r1/core-regression-r6/Broad/config",
+    "LOR_LOADING_TEST_CONFIG_ROOT": "/tmp/lor-continuation-r1/core-regression-r6/Broad/config",
+    "LOR_JOURNEY_CAPTURE_DIR": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R6/QA/BroadJourneys"
+  },
+  "result": {
+    "id": "2",
+    "testcasecount": "1345",
+    "result": "Failed(Child)",
+    "total": "1345",
+    "passed": "1330",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "13",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 23:07:41Z",
+    "end-time": "2026-10-01 23:41:54Z",
+    "duration": "2053.4729019"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.MechanicsSpectacleTests.EveryInventoryBoosterHasAVisibleReleaseAndKeepsMoveCost",
+      "result": "Failed",
+      "message": "  actual clears must shatter approved gems\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.AndroidInputCompatibilityPlayModeTests.QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput",
+      "result": "Failed",
+      "message": "  Expected: String starting with \"/tmp/lor-android-input-r1/\"\n  But was:  \"/tmp/lor-continuation-r1/core-regression-r6/Broad/config\"\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation",
+      "result": "Skipped",
+      "message": "Requires isolated loopback backend verification runner"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.ReadAndRecoverCommittedRotationAfterRestart",
+      "result": "Skipped",
+      "message": "Separate-process reader only"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BackendSessionRestartPlayModeTests.WriteCommittedRotationWithLostResponse",
+      "result": "Skipped",
+      "message": "Separate-process writer only"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.ReadRefundAndRejectReplay",
+      "result": "Skipped",
+      "message": "Requires isolated continuation restart phase."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.ReadReservationAndRefund",
+      "result": "Skipped",
+      "message": "Requires isolated continuation restart phase."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationRestartPlayModeTests.WriteReservation",
+      "result": "Skipped",
+      "message": "Requires isolated continuation restart phase."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DevelopmentGameplayProfilePlayModeTests.ColdProcessProfileIsolationAndPersistence",
+      "result": "Skipped",
+      "message": "Requires the isolated gameplay-profile phase runner."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceReaderRestoresWithoutDuplicateReward",
+      "result": "Skipped",
+      "message": "Run the isolated persistence audit writer/reader phases separately."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceWriterCompletesAndSaves",
+      "result": "Skipped",
+      "message": "Run the isolated persistence audit writer/reader phases separately."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguagePreferenceRestartPlayModeTests.DevicePreferenceSurvivesFreshUnityProcess",
+      "result": "Skipped",
+      "message": "Requires dedicated isolated two-process check."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadDeclinedRoundAfterSecondRestart",
+      "result": "Skipped",
+      "message": "Requires the named isolated restart phase."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.ReadFailureAfterRestartAndDecline",
+      "result": "Skipped",
+      "message": "Requires the named isolated restart phase."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundRestartPlayModeTests.WriteFailedRound",
+      "result": "Skipped",
+      "message": "Requires the named isolated restart phase."
+    }
+  ]
+}

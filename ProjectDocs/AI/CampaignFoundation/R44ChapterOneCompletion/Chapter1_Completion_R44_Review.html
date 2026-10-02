@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chapter 1 — 500-round completion</title>
+<style>
+body{margin:0;background:#0b1018;color:#e6ded0;font:16px/1.5 system-ui,sans-serif}main{max-width:760px;margin:auto;padding:24px}h1{font-size:24px;margin-bottom:8px}a{color:#a8d5f2}select{background:#152238;color:#f1e5cb;padding:8px;border:1px solid #80633a;margin:6px 8px 16px 0}figure{margin:0}img{display:block;max-width:100%;height:auto;margin:auto}figcaption{margin-top:16px}small{color:#b1b9c6}
+</style>
+<main>
+<h1>Chapter 1: the round-500 finale</h1>
+<p>Actual Unity 6000.5.9f1 capture of the existing native Chapter Complete page, reached through the map, a played round and its finale.</p>
+<label>Language <select id="language"><option value="ru">Russian</option><option value="en">English</option></select></label>
+<label>Capture width <select id="width"><option>576</option><option>360</option></select></label>
+<figure><img id="capture" width="576" height="1280" alt="Chapter Complete at round 500"><figcaption>Earlier progress is a test fixture; the visible star count is not a human playtest result. Rewards show already-claimed level totals, with no second grant. Chapter 2 remains unavailable.</figcaption></figure>
+<p><a href="TestResults.md">Test results</a> · <a href="ChapterPlan.md">Chapter plan</a> · <a href="PlaytestInstructions.md">Recorded playtest instructions</a></p>
+<small>Rendered using process-only Vulkan. This is not an Android-device capture. At 360 pixels, the existing summary and reward captions remain small; passing fit checks does not establish physical-device readability.</small>
+</main>
+<script>
+const language=document.getElementById('language'),width=document.getElementById('width'),capture=document.getElementById('capture');
+function update(){capture.src=`QA/Integration02/Captures/LOR_CHAPTER_COMPLETE_CAPTURE_DIR/Chapter1_500_${language.value}_${width.value}.png`;capture.width=Number(width.value);capture.height=width.value==='576'?1280:640;}
+language.onchange=width.onchange=update;update();
+</script>
+</html>

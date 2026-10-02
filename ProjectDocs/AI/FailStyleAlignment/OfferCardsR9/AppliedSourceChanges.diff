@@ -1,0 +1,324 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 8
++  Revision: 9
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -3722,8 +3722,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 140, y: -104}
+-  m_SizeDelta: {x: 88, y: 44}
++  m_AnchoredPosition: {x: 140, y: -97}
++  m_SizeDelta: {x: 88, y: 72}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5456759259171582905
+ CanvasRenderer:
+@@ -3755,11 +3755,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 44
++    m_FontSize: 64
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 52
++    m_MaxSize: 64
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -4219,6 +4219,7 @@
+   - component: {fileID: 7581123159915034496}
+   - component: {fileID: 84143719463635825}
+   - component: {fileID: 1819384914450948256}
++  - component: {fileID: 5178201192556784416}
+   m_Layer: 5
+   m_Name: RewardedContinueOffer
+   m_TagString: Untagged
+@@ -4246,7 +4247,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 512, y: -999}
+-  m_SizeDelta: {x: 324, y: 132.57422}
++  m_SizeDelta: {x: 324, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7581123159915034496
+ CanvasRenderer:
+@@ -4276,9 +4277,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: dcc5688a18d6a0e8980bf8848261eb85, type: 3}
++  m_Sprite: {fileID: 21300000, guid: ef4df53120384dfcbaae6821a9be3adf, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 1
++  m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -4330,6 +4331,21 @@
+   m_OnClick:
+     m_PersistentCalls:
+       m_Calls: []
++--- !u!114 &5178201192556784416
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4155715940150218782}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
++  TopProtectedFraction: 0.2
++  BottomProtectedFraction: 0.45
++  ProtectedDetailScale: 1
+ --- !u!1 &4173516233426344844
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4778,6 +4794,7 @@
+   - component: {fileID: 5590398645453770370}
+   - component: {fileID: 7051277009292706601}
+   - component: {fileID: 4799404156401435305}
++  - component: {fileID: 7045119795038057679}
+   m_Layer: 5
+   m_Name: PaidMovesOffer
+   m_TagString: Untagged
+@@ -4806,8 +4823,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 105, y: -1015}
+-  m_SizeDelta: {x: 324, y: 118.108376}
++  m_AnchoredPosition: {x: 105, y: -999}
++  m_SizeDelta: {x: 324, y: 140}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5590398645453770370
+ CanvasRenderer:
+@@ -4837,9 +4854,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 6c94442ca625fff14a4a7ca2208f0628, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2e6bf8890c1749f290e4915e4f9bca32, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 1
++  m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -4891,6 +4908,21 @@
+   m_OnClick:
+     m_PersistentCalls:
+       m_Calls: []
++--- !u!114 &7045119795038057679
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4472017785673375143}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
++  TopProtectedFraction: 0.2
++  BottomProtectedFraction: 0.45
++  ProtectedDetailScale: 1
+ --- !u!1 &4614561008554195576
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5079,7 +5111,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 42, y: -76}
++  m_AnchoredPosition: {x: 42, y: -61}
+   m_SizeDelta: {x: 480, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8207354783645223317
+@@ -5189,8 +5221,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 117, y: -86}
+-  m_SizeDelta: {x: 26, y: 26}
++  m_AnchoredPosition: {x: 110, y: -98}
++  m_SizeDelta: {x: 34, y: 34}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2623364927183477300
+ CanvasRenderer:
+@@ -9314,8 +9346,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 151, y: -86}
+-  m_SizeDelta: {x: 108, y: 52}
++  m_AnchoredPosition: {x: 151, y: -97}
++  m_SizeDelta: {x: 120, y: 72}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2679999608740035958
+ CanvasRenderer:
+@@ -9347,11 +9379,11 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 48
++    m_FontSize: 56
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 48
++    m_MaxSize: 56
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -9560,7 +9592,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -27}
++  m_AnchoredPosition: {x: 24, y: -10}
+   m_SizeDelta: {x: 552, y: 94}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5260431335434088739
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,7 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R8 refines goal-frame detail scale, heading plaque and live typography; independent Scenario
++            // R9 fits new deep-face offer cards while preserving their green panels and border detail; independent Scenario
+             // surfaces and live lettering retain all prior actions and references.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -6,7 +6,7 @@
+     public static class ProductionFailRuntime
+     {
+         public const string ContentName="FAIL_ALIGNED_CONTENT",ArtRoot="ProductionUI/FailAligned/";
+-        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4"};
++        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9"};
+         public static void BuildInto(RectTransform root)
+         {
+             var old=root.GetComponent<ProductionFailView>();
+@@ -144,29 +144,34 @@
+         internal static void ApplyOffers(ProductionFailView v)
+         {
+             if(v.Body==null)return;
+-            // Match the painted face and green inset baselines, allowing for the ad crest.
+-            // Keep both complete sprites at their native aspect ratio.
+-            var paidSprite=Load(ArtRoot+"paid_r4");var adSprite=Load(ArtRoot+"ad_r4");
+-            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,1015,324,324*paidSprite.rect.height/paidSprite.rect.width);
+-            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,999,324,324*adSprite.rect.height/adSprite.rect.width);
++            // Whole isolated card sprites: preserve corner/green-face detail at uniform
++            // scale and fit only the plain upper spans to the shared reference height.
++            var paidSprite=Load(ArtRoot+"paid_r9");var adSprite=Load(ArtRoot+"ad_r9");
++            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,999,324,140);
++            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,999,324,140);
++            foreach(var card in new[]{paid,ad})
++            {
++                var fit=card.GetComponent<ProductionFailPanelFit>()??card.gameObject.AddComponent<ProductionFailPanelFit>();
++                fit.TopProtectedFraction=.2f;fit.BottomProtectedFraction=.45f;fit.ProtectedDetailScale=1;
++            }
+             v.PaidOffer=paid.GetComponent<Button>()??Button(paid);
+             v.AdOffer=ad.GetComponent<Button>()??Button(ad);
+             foreach(var b in new[]{v.PaidOffer,v.AdOffer})
+             {
+                 b.interactable=false;b.navigation=new Navigation{mode=Navigation.Mode.None};
+                 var colors=b.colors;colors.disabledColor=new Color(.82f,.82f,.82f,1);b.colors=colors;
+-                b.GetComponent<Image>().preserveAspect=true;b.GetComponent<Image>().raycastTarget=true;
++                b.GetComponent<Image>().preserveAspect=false;b.GetComponent<Image>().raycastTarget=true;
+             }
+             v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,12,276,37,30);
+-            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,27,276,47,22);
++            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,10,276,47,22);
+             v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
+             v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,24,19);
+-            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),117,86,26,26);gem.preserveAspect=true;
+-            EnsureLabel(v,paid.transform,"Price",151,86,54,26,24).text="—";
++            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),110,98,34,34);gem.preserveAspect=true;
++            EnsureLabel(v,paid.transform,"Price",151,97,60,36,28).text="—";
+             var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;
+-            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,76,240,24,19);
++            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,61,240,24,19);
+             ClearLabel(v.PaidOfferStatus,true);ClearLabel(v.AdOfferStatus,true);
+-            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,104,44,22,22);play.text="▶";
++            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,97,44,36,32);play.text="▶";
+             v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);
+         }
+         static Text EnsureLabel(ProductionFailView v,Transform parent,string name,float x,float y,float w,float h,int size)
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=8;
++        public const int CurrentRevision=9;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -262,17 +262,31 @@
+             Assert.That(exit.yMin,Is.GreaterThan(mainPanel.yMin+mainPanel.height*.09f),"Chapter-map action covers footer carving.");
+             Assert.That(exit.Overlaps(heading),Is.False,"Return action overlaps booster heading.");
+             foreach(var button in v.BoosterButtons)Assert.That(exit.Overlaps(Bounds((RectTransform)button.transform,camera)),Is.False);
+-            // Landmarks measured on the whole source art: upper face and green face centers.
+-            // Verify painted alignment, not just equal outer rectangles.
+-            float paidFace=paid.yMax-paid.height*(36f/370),adFace=ad.yMax-ad.height*(85f/419);
+-            float paidGreen=paid.yMax-paid.height*(310f/370),adGreen=ad.yMax-ad.height*(363f/419);
++            // R9 resizes only plain spans. These source landmarks sit entirely in
++            // the protected top/bottom bands and keep uniform scale from card width.
++            float paidScale=paid.width/998,adScale=ad.width/990;
++            float paidFace=paid.yMax-27*paidScale,adFace=ad.yMax-24*adScale;
++            float paidGreen=paid.yMin+(345-268)*paidScale,adGreen=ad.yMin+(394-318)*adScale;
+             float tolerance=paid.width/324*3;
+             Assert.That(Mathf.Abs(paidFace-adFace),Is.LessThan(tolerance),"Offer upper painted faces misaligned.");
+             Assert.That(Mathf.Abs(paidGreen-adGreen),Is.LessThan(tolerance),"Offer green faces misaligned.");
++            var price=(RectTransform)v.PaidOffer.transform.Find("Price");
++            var currency=(RectTransform)v.PaidOffer.transform.Find("Currency");
++            var play=(RectTransform)v.AdOffer.transform.Find("PlaySymbol");
++            Rect paidInner=new Rect(paid.xMin+185*paidScale,paid.yMin+(345-329)*paidScale,615*paidScale,124*paidScale);
++            Rect adInner=new Rect(ad.xMin+178*adScale,ad.yMin+(394-379)*adScale,630*adScale,124*adScale);
++            foreach(var item in new[]{price,currency})
++            {
++                var bounds=Bounds(item,camera);
++                Assert.That(paidInner.Contains(bounds.min)&&paidInner.Contains(bounds.max),Is.True,"Currency/price must fit within green face.");
++            }
++            Rect playBounds=Bounds(play,camera);
++            Assert.That(adInner.Contains(playBounds.min)&&adInner.Contains(playBounds.max),Is.True,"Play symbol must fit within green face.");
+             foreach(var offer in new[]{v.PaidOffer,v.AdOffer})
+             {
+-                var offerArt=offer.GetComponent<Image>();var rect=Bounds(offerArt.rectTransform,camera);
+-                Assert.That(rect.width/rect.height,Is.EqualTo(offerArt.sprite.rect.width/offerArt.sprite.rect.height).Within(.001f),"Whole offer art must retain native aspect.");
++                var fit=offer.GetComponent<ProductionFailPanelFit>();Assert.That(fit,Is.Not.Null);
++                Assert.That(fit.enabled,Is.True);
++                Assert.That(offer.GetComponent<Image>().preserveAspect,Is.False,"Card uses protected mesh fitting, not whole-image distortion.");
+             }
+             Assert.That(Bounds(v.AdOfferTitle.rectTransform,camera).Overlaps(Bounds(v.AdOfferStatus.rectTransform,camera)),Is.False,"Ad title/status need separate lines.");
+             Rect plaque=Bounds(v.Body.Find("GoalsHeadingPlaque") as RectTransform,camera);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(8));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(9));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);

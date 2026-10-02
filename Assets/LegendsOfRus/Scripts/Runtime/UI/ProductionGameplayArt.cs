@@ -9,7 +9,7 @@ namespace LegendsOfRus
     public static class ProductionGameplayArt
     {
         public const string Root="ProductionUI/GameplayAligned/";
-        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer"};
+        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer","hud_header_r3","score_panel_r3","pause_gear_r3","goal_score_r5","goal_survival_r5","gem_ruby_r6","gem_sapphire_r6","gem_emerald_r6","gem_gold_r6","gem_amethyst_r6","gem_orange_r6","card_wood_r6","panel_parchment_r6","panel_moves_r6","panel_score_r6","environment_r6","gem_ruby_r7","gem_sapphire_r7","gem_emerald_r7","gem_gold_r7","gem_amethyst_r7","gem_orange_r7","board_frame_r7","board_wood_r7","gem_ruby_r8","gem_sapphire_r8","gem_emerald_r8","gem_gold_r8","gem_amethyst_r8","gem_orange_r8","booster_mace_r9","booster_firebird_r9","booster_livinglight_r9","booster_seapearl_r9","card_wood_r9","hud_moves_r10","hud_goals_r10","hud_score_r10","hud_portrait_r10","special_ruby_r10","special_sapphire_r10","special_emerald_r10","special_gold_r10","special_amethyst_r10","special_orange_r10"};
         public readonly struct Region
         {
             public readonly string Sheet,Name;
@@ -44,7 +44,9 @@ namespace LegendsOfRus
             if(sprite==null)throw new InvalidOperationException("Missing Gameplay art: "+name);
             cache[name]=sprite;return sprite;
         }
-        public static Sprite Gem(int tile)=>Load(new[]{"ruby","sapphire","emerald","amber","amethyst","shield"}[Mathf.Clamp(tile,0,5)]);
+        public static Sprite Gem(int tile)=>ProductionGameplaySourceControls.Load(new[]{"gem_ruby","gem_sapphire","gem_emerald","gem_gold","gem_amethyst","gem_orange"}[Mathf.Clamp(tile,0,5)]);
+        public static Sprite LineSpecial(int tile)=>Load(new[]{"special_ruby_r10","special_sapphire_r10","special_emerald_r10","special_gold_r10","special_amethyst_r10","special_orange_r10"}[Mathf.Clamp(tile,0,5)]);
+        public static Sprite Booster(int index)=>ProductionBoosterArt.Icon(Mathf.Clamp(index,0,3));
         public static Sprite Obstacle(BoardObstacleKind kind,int layers=1)
         {
             switch(kind){case BoardObstacleKind.Ice:return Load("ice");case BoardObstacleKind.Chain:return Load("chain");case BoardObstacleKind.Crate:return Load(layers>1?"reinforced":"crate");default:return null;}

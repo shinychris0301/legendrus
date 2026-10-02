@@ -1,0 +1,67 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "prompts": {
+    "bomb": "Use case: style-transfer. Edit image1 into a replacement match-3 BOMB sprite, styled precisely like the board gems in image2 and image3. Keep a round bomb silhouette and short burning fuse, but remove ALL tiny filigree, grains, scratches and realistic metal textures. Use a large amber faceted round body like the gold gem, thick smooth dark-gold bevel, ONE simple embossed fleur-de-lis symbol, one dark navy collar and short stub fuse with tiny orange tip. Broad hand-painted flat color planes with strong light top-left, very few large highlights, bold clean silhouette. Front facing, minimal depth. This must read at 48px beside the reference gems. Body fills 80% of square, fuse within 90%, even narrow transparent margins. True transparent RGBA background, no wood/background from reference2/3, no shadows outside the silhouette, no glow cloud, no lettering, no numbers. Single isolated entire game piece.",
+    "line": "Use case: style-transfer. Edit image1 into a replacement horizontal DIRECTIONAL match-3 sapphire sprite. Match the large simple faceted blue gem in image2 and restrained embossed detail of image3. Remove scrollwork and complex gold cages. One broad sapphire hexagonal crystal, with left and right pointed cyan arrowhead facets built into its silhouette, one slim smooth antique-gold center collar. Only 6-8 broad blue facets, dark blue edge with thin white/cyan edge light, no tiny facets or surface noise. Nearly square compact body with aspect 1.2:1, fills 85% of square width and 72% height; no long thin weapon. Front facing, hand-painted game-gem shading, top-left lighting. Transparent RGBA background, no wood, no scenery, no separate frame, no shadow outside silhouette, no numbers/text. Single entire isolated piece.",
+    "crate": "Use case: style-transfer. Edit image1 into a REINFORCED CRATE blocker game sprite matching the clean hand-painted gem style of image2 and image3. Front view square wooden box, three broad honey-brown planks, two chunky smooth antique-gold metal bands, 4 large studs total, ONE small simple fleur-de-lis stamped in wood. No side perspective, no fine wood grain, no scratches, no filigree panels, no carved curls. Broad smooth cel-painted shadows and top-left highlights, confident dark brown outline. Strong simple silhouette readable at 48px with the gems. Intact two-hit stage: BOTH metal straps unbroken, all planks intact. Entire square occupies 86% of square canvas with even margins. True transparent RGBA background outside solid box, no text/numbers, no backdrop, no ground shadow, no glow. Single complete isolated item."
+  },
+  "stages": [
+    {
+      "name": "crate_damaged",
+      "prompt": "Use case: precise-object-edit. Create the ONE-HIT-REMAINING damaged version of this exact crate sprite. Keep identical canvas, front view, placement, overall size, color palette and hand-painted broad highlights. Remove most of BOTH gold vertical reinforcement bands, leaving only small snapped metal stubs at top and bottom corners. Expose the broad wooden planks; split the central plank with one large jagged diagonal dark crack through its fleur-de-lis. Chip one corner visibly, but keep a recognizable complete wooden crate blocking the cell. This state must look clearly less reinforced at 48px. No floating fragments, no glow, no additional decoration, no numbers or text. Preserve true transparent background and entire unclipped silhouette.",
+      "refs": [
+        "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-bb34ea6c-75e6-49a8-9a9b-74413b7efb8a.png"
+      ]
+    },
+    {
+      "name": "ice",
+      "prompt": "Use case: style-transfer. Replace image1 with a simple intact TWO-HIT ICE SHELL blocker that belongs with the sapphire gem in image2. Front-facing square with clipped corners, broad pale cyan beveled crystalline edge, thick smooth translucent frost panel center, only three broad white glints on top-left. No fractures in intact state. No realistic frosty grain, microcracks, snowflakes, speckle or ornaments. Clean hand-painted broad facet style, confident blue outline. Central panel translucent alpha so a gem behind remains discernible, but edges opaque. Full square occupies 88% of canvas, even transparent margins. True RGBA transparency outside, no backdrop, no text/numbers/shadow, no enclosed gem. One single whole isolated sprite.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/MechanicsPowerupsR9/ice.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/GameplayReferenceAligned/gem_sapphire.png"
+      ]
+    },
+    {
+      "name": "seal",
+      "prompt": "Use case: style-transfer. Replace image1 with a simple intact TWO-HIT RUNIC SEAL blocker in the broad faceted hand-painted style of sapphire gem image2 and gold gem image3. One compact front-facing dark navy octagonal stone tablet; one smooth thick antique gold bevel (NO ornamental frame, no inset mini gems); one large bright sapphire branching rune occupying center. Deep blue large smooth planes, thick light top-left bevel and darker lower-right. No cracks in intact state. No stone grain, tiny filigree, scratches, realism, elaborate scrollwork. Broad clean readable shape at 48px. Occupies 86% of square canvas with equal margins, whole silhouette. Truly transparent background outside solid tablet. No number, text, scene, shadow or halo.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/MechanicsPowerupsR9/seal.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/GameplayReferenceAligned/gem_sapphire.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/GameplayReferenceAligned/gem_gold.png"
+      ]
+    },
+    {
+      "name": "ice_damaged",
+      "prompt": "Use case: precise-object-edit. Make the ONE-HIT-REMAINING damaged version of this exact ice shell sprite. Preserve canvas, front view, alignment, size and clean broad faceted style. Large diagonal fracture crosses the ice. Break away the upper-right corner and most of the center frost so there is a large genuinely TRANSPARENT opening through the center, leaving a thinner fractured ice rim with broad cracks and large angular shards still attached to edges. Silhouette remains the same general square occupying same bounds except the broken corner. No scattered debris, no snow grain, no number/text, no new gems. Actual transparent RGBA background and central opening, no black fill or checkerboard.",
+      "refs": [
+        "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-dca05f1c-0a4d-4815-9a1f-2ac129c91596.png"
+      ]
+    },
+    {
+      "name": "seal_damaged",
+      "prompt": "Use case: precise-object-edit. Make the ONE-HIT-REMAINING damaged state of this exact runic seal game sprite. Preserve square canvas, octagonal silhouette scale, front view, placement, blue/gold palette and broad gem-like painted style. Break off the upper-right portion of the gold rim, expose jagged navy stone below it. One wide jagged diagonal dark crack splits both the navy tablet AND its large sapphire rune into offset upper and lower halves. The rune is visibly broken and dimmer but still recognizable. Missing corner and rim section make damage obvious at 48px. Keep solid blocking tablet center. No extra ornaments, no particles or scattered debris, no numbers, no text. Actual transparent background outside entire unclipped object.",
+      "refs": [
+        "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-9ce3a2cf-db7a-436f-afbb-c298c22afc43.png"
+      ]
+    },
+    {
+      "name": "chain",
+      "prompt": "Use case: style-transfer. Replace image1 with a simplified intact TWO-HIT CHAIN LOCK blocker matching the clean hand-painted facets of sapphire/gold gems images2/3. One square loop with ONLY 3 large chunky linked ovals per side, smooth dark bronze with broad antique-gold top-left highlights and deep brown edges. At bottom center a compact plain golden padlock with ONE sapphire keyhole, no engraved curls. Large center completely EMPTY and TRANSPARENT to reveal the matchable gem underneath. Simple bold material planes, no realistic pitting, grain, noisy highlights, tiny links, filigree, jewels or ornamental frame. Front view, square occupies 90% canvas including padlock, even narrow transparent margins. Whole silhouette visible, actual RGBA transparency including all openings. No background, shadows, numbers/text.",
+      "refs": [
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/MechanicsPowerupsR9/chain.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/GameplayReferenceAligned/gem_sapphire.png",
+        "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Resources/ProductionUI/GameplayReferenceAligned/gem_gold.png"
+      ]
+    }
+  ],
+  "outputs": {
+    "bomb": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-9d76dc5e-251d-4933-9507-a494a50c0db7.png",
+    "line": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-9acea989-3c20-46a7-9d3f-6baf9194afda.png",
+    "crate": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-bb34ea6c-75e6-49a8-9a9b-74413b7efb8a.png",
+    "crate_damaged": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-00e2d2f7-c3db-49a2-91d2-b17aade9e81d.png",
+    "ice": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-dca05f1c-0a4d-4815-9a1f-2ac129c91596.png",
+    "seal": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-9ce3a2cf-db7a-436f-afbb-c298c22afc43.png",
+    "seal_damaged": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-b140c3a7-c0bb-4dfb-967a-5f8fa3490f11.png",
+    "ice_damaged": "/home/k2/.codex/generated_images/01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8/exec-d302936a-4c47-46c5-a7e1-733a37b6117c.png"
+  }
+}

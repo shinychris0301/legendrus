@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scenario Trial 01 — Booster medallion</title>
+<style>
+body{margin:0;background:#10141d;color:#e8dfc6;font:17px/1.5 system-ui,sans-serif}main{max-width:720px;margin:24px auto;padding:20px}h1{font-size:25px}a{color:#a9d3ff}label{display:inline-block;margin:0 16px 12px 0}select{padding:8px;font-size:16px}#stage{background:#000;display:grid;place-items:center;min-height:220px;padding:12px;border:1px solid #66563a}img{display:block;width:min(100%,512px);height:auto}p{max-width:65ch}
+</style>
+<main>
+<h1>Scenario trial 01: empty booster medallion</h1>
+<p>Generated asset preview. Unity integration pending. One image generated through Scenario; reported cost: 12 compute units.</p>
+<label>Backdrop <select id="backdrop"><option value="#000000">Black</option><option value="#ffffff">White</option><option value="#ff00ff">Magenta</option><option value="#091222">Navy</option></select></label>
+<label>Display size <select id="size"><option value="512px">512 px inspection</option><option value="170px">170 px icon</option></select></label>
+<div id="stage"><img id="asset" src="booster_medallion_trial01.png" alt="Empty navy medallion with carved gold rim and sapphire accents"></div>
+<p>The isolated exterior and empty center work for layering the existing booster artwork. The rim is brighter and its sapphires more prominent than the reference. The central surface is slightly translucent (center alpha 252/255); no source pixels have been changed.</p>
+<p><a href="booster_medallion_trial01.png">Original RGBA PNG</a> · <a href="TrialReport.md">Inspection report</a> · <a href="Request.json">Exact prompt and settings</a> · <a href="../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Fail.png">Original Failure reference</a></p>
+</main>
+<script>
+document.getElementById('backdrop').addEventListener('change',e=>document.getElementById('stage').style.background=e.target.value);
+document.getElementById('size').addEventListener('change',e=>document.getElementById('asset').style.width='min(100%, '+e.target.value+')');
+</script>
+</html>

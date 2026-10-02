@@ -1,0 +1,59 @@
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    // Code-native geometry: no replacement art, no puzzle mutation, bounded debris.
+    [RequireComponent(typeof(CanvasRenderer))]
+    public sealed class PrototypeImpactView : MaskableGraphic
+    {
+        struct Effect { public Vector2 Cell; public Color Color; public float Born, Radius; public bool Ring; }
+        readonly List<Effect> effects=new List<Effect>(192);
+        Match3Board board;
+        public int ActiveCount=>effects.Count;
+        public static PrototypeImpactView Attach(Match3Board board)
+        {
+            var go=new GameObject("PrototypeMaterialImpacts",typeof(RectTransform));go.transform.SetParent(board.transform,false);
+            var r=(RectTransform)go.transform;r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;
+            var g=go.AddComponent<PrototypeImpactView>();g.raycastTarget=false;g.board=board;
+            board.MotionEventPublished+=g.Motion;board.ObstacleInteracted+=g.Obstacle;return g;
+        }
+        protected override void OnDestroy(){if(board){board.MotionEventPublished-=Motion;board.ObstacleInteracted-=Obstacle;}base.OnDestroy();}
+        void Update(){if(effects.RemoveAll(e=>Time.unscaledTime-e.Born>.42f)>0||effects.Count>0)SetVerticesDirty();}
+        void Add(BoardPosition p,Color c,bool ring=false,float radius=1,float delay=0){if(effects.Count>=192)effects.RemoveAt(0);effects.Add(new Effect{Cell=new Vector2(p.X,p.Y),Color=c,Born=Time.unscaledTime+delay,Ring=ring,Radius=radius});SetVerticesDirty();}
+        static readonly Color[] Colors={new Color(1,.16f,.08f),new Color(.15f,.65f,1),new Color(.4f,.9f,.15f),new Color(1,.75f,.15f),new Color(.75f,.25f,1),new Color(1,.4f,.08f)};
+        void Motion(GameplayMotionEvent m)
+        {
+            if(m.Kind==GameplayMotionKind.CommandRecovered){effects.Clear();SetVerticesDirty();return;}
+            if(m.Kind==GameplayMotionKind.MatchWaveStarted&&m.ClearedCells!=null)
+                foreach(var c in m.ClearedCells)Add(c.Position,Colors[Mathf.Clamp(c.Cell.TileType,0,5)]);
+            if(m.Kind==GameplayMotionKind.SpecialActivationStarted){
+                if(m.SpecialKind==SpecialGemKind.Spark){Add(m.Primary,new Color(1,.65f,.15f),true,.5f);Add(m.Secondary,new Color(1,.8f,.25f),true,.8f,SparkFlightView.Duration);}
+                else if(m.SpecialKind==SpecialGemKind.Burst)Add(m.Primary,new Color(1,.6f,.12f),true,2.5f);
+                else if(m.SpecialKind==SpecialGemKind.Row)for(int x=0;x<board.ColumnCount;x++)Add(new BoardPosition(x,m.Primary.Y),new Color(1,.85f,.4f),true,.5f);
+                else if(m.SpecialKind==SpecialGemKind.Column)for(int y=0;y<board.RowCount;y++)Add(new BoardPosition(m.Primary.X,y),new Color(1,.85f,.4f),true,.5f);
+                else Add(m.Primary,new Color(.5f,.85f,1),true,1.2f);
+            }
+            if(m.Kind==GameplayMotionKind.SpecialCreationStarted)Add(m.Primary,new Color(1,.9f,.6f),true,.8f);
+        }
+        void Obstacle(BoardObstacleInteractionInstruction o)
+        {
+            Color c=o.Kind==BoardObstacleKind.RunicSeal?new Color(.22f,.62f,1):o.Kind==BoardObstacleKind.Ice?new Color(.65f,.9f,1):o.Kind==BoardObstacleKind.Chain?new Color(.8f,.75f,.58f):new Color(.55f,.3f,.12f);
+            Add(o.Position,c,true,.5f);if(o.LayersAfter==0)Add(o.Position,c,false,1.3f);
+        }
+        protected override void OnPopulateMesh(VertexHelper vh)
+        {
+            vh.Clear();if(!board)return;var r=rectTransform.rect;float cw=r.width/board.ColumnCount,ch=r.height/board.RowCount;
+            foreach(var e in effects){if(Time.unscaledTime<e.Born)continue;float t=Mathf.Clamp01((Time.unscaledTime-e.Born)/.42f);Color c=e.Color;c.a=(1-t)*.9f;Vector2 center=new Vector2(r.xMin+(e.Cell.x+.5f)*cw,r.yMax-(e.Cell.y+.5f)*ch);
+                if(e.Ring){float rad=(.12f+t*e.Radius)*Mathf.Min(cw,ch);for(int i=0;i<32;i++){float a=i*Mathf.PI/16,b=(i+1)*Mathf.PI/16;Quad(vh,r,center+new Vector2(Mathf.Cos(a),Mathf.Sin(a))*rad,center+new Vector2(Mathf.Cos(b),Mathf.Sin(b))*rad,center+new Vector2(Mathf.Cos(b),Mathf.Sin(b))*(rad+3),center+new Vector2(Mathf.Cos(a),Mathf.Sin(a))*(rad+3),c);}}
+                else for(int i=0;i<6;i++){float a=i*Mathf.PI/3+.35f;Vector2 p=center+new Vector2(Mathf.Cos(a),Mathf.Sin(a))*(t*.65f*e.Radius*cw)+Vector2.down*(t*t*.22f*ch);float size=(1-t)*cw*.075f;Quad(vh,r,p+Vector2.up*size,p+Vector2.right*size*.65f,p+Vector2.down*size,p+Vector2.left*size*.65f,c);}
+            }
+        }
+        static void Vertex(VertexHelper h,Rect r,Vector2 p,Color c)=>h.AddVert(new Vector3(Mathf.Clamp(p.x,r.xMin,r.xMax),Mathf.Clamp(p.y,r.yMin,r.yMax)),c,Vector2.zero);
+        static void Quad(VertexHelper h,Rect clip,Vector2 a,Vector2 b,Vector2 c,Vector2 d,Color color)
+        {
+            int n=h.currentVertCount;Vertex(h,clip,a,color);Vertex(h,clip,b,color);Vertex(h,clip,c,color);Vertex(h,clip,d,color);h.AddTriangle(n,n+1,n+2);h.AddTriangle(n,n+2,n+3);
+        }
+    }
+}

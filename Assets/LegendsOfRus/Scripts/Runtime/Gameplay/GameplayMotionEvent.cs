@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using LegendsOfRus.GameplayCore;
 
 namespace LegendsOfRus
@@ -26,7 +28,8 @@ namespace LegendsOfRus
         CommandRecovered,
         BoosterActivated,
         BoosterCompleted,
-        BoosterRejected
+        BoosterRejected,
+        CellsImpacted, SpecialGatherStarted, SpecialConversionStarted, SpecialPayloadImpact
     }
 
     /// <summary>
@@ -46,6 +49,7 @@ namespace LegendsOfRus
 
     public sealed class GameplayMotionEvent
     {
+        public SpecialGemKind Payload { get; }
         public int Sequence { get; }
         public GameplayMotionKind Kind { get; }
         public BoardPosition Primary { get; }
@@ -56,6 +60,7 @@ namespace LegendsOfRus
         public string PlanHash { get; }
         public SpecialCombinationKind CombinationKind { get; }
         public GameplayBoosterKind BoosterKind { get; }
+        public IReadOnlyList<BoardClearedCellInstruction> ClearedCells { get; }
 
         public GameplayMotionEvent(
             int sequence,
@@ -67,9 +72,12 @@ namespace LegendsOfRus
             SpecialGemKind specialKind,
             string planHash,
             SpecialCombinationKind combinationKind = SpecialCombinationKind.None,
-            GameplayBoosterKind boosterKind = GameplayBoosterKind.None
+            GameplayBoosterKind boosterKind = GameplayBoosterKind.None,
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null,
+            SpecialGemKind payload = SpecialGemKind.None
         )
         {
+            Payload = payload;
             Sequence = sequence < 1 ? 1 : sequence;
             Kind = kind;
             Primary = primary;
@@ -80,6 +88,7 @@ namespace LegendsOfRus
             PlanHash = planHash ?? string.Empty;
             CombinationKind = combinationKind;
             BoosterKind = boosterKind;
+            ClearedCells = clearedCells ?? Array.Empty<BoardClearedCellInstruction>();
         }
 
         public override string ToString()

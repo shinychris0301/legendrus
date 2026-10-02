@@ -1,0 +1,31 @@
+from pathlib import Path
+import json,html,argparse
+from PIL import Image
+p=argparse.ArgumentParser();p.add_argument('run');args=p.parse_args()
+base=Path(__file__).resolve().parent.parent;journey=base/'QA'/args.run/'All/Journey';out=base/'Captures';out.mkdir(exist_ok=True)
+labels={'Creation':'Gather into a new item','Chain':'Directional sweep → bomb chain','Conversion':'Rainbow → directional conversions','PayloadRow':'Firebird carrying a row item','PayloadColumn':'Firebird carrying a column item','PayloadBurst':'Firebird carrying a bomb'}
+items=[]
+for key,label in labels.items():
+    samples=[(int(line.split('\t')[0]),float(line.split('\t')[1])) for line in (journey/(key+'_Frames.tsv')).read_text().splitlines()]
+    before=journey/('Mechanics_CausalR13_'+key+'_Before.png');after=journey/('Mechanics_CausalR13_'+key+'_After.png')
+    paths=[before]+[journey/('Mechanics_CausalR13_'+key+'_'+str(i).zfill(2)+'.png') for i,t in samples]+[after]
+    images=[Image.open(path).convert('RGB') for path in paths]
+    times=[400]+[max(1,round((samples[i+1][1]-t)*1000)) if i+1<len(samples) else 160 for i,(index,t) in enumerate(samples)]+[900]
+    dest=out/(key+'.webp');images[0].save(dest,save_all=True,append_images=images[1:],duration=times,loop=0,lossless=True,method=4)
+    for image in images:image.close()
+    frames=[str(path.relative_to(base)) for path in paths]
+    items.append({'key':key,'label':label,'animation':str(dest.relative_to(base)),'frames':frames,'samples':len(samples),'timestampFile':str((journey/(key+'_Frames.tsv')).relative_to(base))})
+(base/'QA/ReviewCaptures.json').write_text(json.dumps(items,indent=2))
+options=''.join('<option value="'+str(i)+'">'+html.escape(item['label'])+'</option>' for i,item in enumerate(items))
+(base/'Gameplay_Mechanics_R13_Review.html').write_text('''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gameplay R13 — Causal Animation</title><style>
+*{box-sizing:border-box}body{background:#0c1420;color:#efdebb;margin:0;font:17px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:24px}h1,h2{color:#e8be66;line-height:1.2}a{color:#afd7ff}.layout{display:grid;grid-template-columns:minmax(260px,390px) 1fr;gap:24px;align-items:start}section{padding:18px;border:1px solid #655536;border-radius:12px;margin:20px 0;background:#121f2b}img{display:block;width:100%;height:auto}select,button{font:inherit;color:#f0debb;background:#20394a;border:1px solid #91764b;padding:10px;margin:5px 0;max-width:100%;border-radius:5px}select{width:100%}button{cursor:pointer}input{width:100%}label{display:block}small{display:block;color:#bfc7ce}.status{min-height:3em} @media(max-width:700px){main{padding:14px}.layout{grid-template-columns:1fr}.portrait{max-width:390px;margin:auto}}
+</style><main><p>Gameplay Mechanics · R13</p><h1>Creation, conversion and timed impacts</h1><p>Presentation follows the planned effects across the board. Approved gems and item artwork retained.</p><div class="layout"><section class="portrait"><label for="sequence">Actual Unity sequence</label><select id="sequence">'''+options+'''</select><button id="play">Play sequence</button> <button id="stop">Inspect frame</button><label for="frame">Frame</label><input id="frame" type="range" min="0" value="0"><p id="status" class="status"></p><img id="screen" alt="Actual Unity sandbox animation capture"><small>576 × 1280 Unity test captures. Sampled opening sequence followed by the final settled state. Sample intervals are preserved, with review holds before/after; no interpolated or generated frames. Silent preview, not a frame-rate benchmark.</small></section><div><section><h2>Implemented</h2><ul><li>Matched gems gather into the creation cell before the new special appears.</li><li>Rainbow links reveal converted items before their activation.</li><li>Directional sweeps and bomb waves trigger chain items at visible contact.</li><li>Firebirds carry the actual payload artwork and release its directional or area effect at landing.</li><li>Cells shatter progressively, with obstacle damage artwork updating at the hit.</li></ul><p>The new sequence applies to PrototypeR4 in the development sandbox. Production Legacy rules and the five round move budgets are unchanged.</p></section><section><h2>Verification</h2><p id="tests"></p><p>Input release, final plan hashes, all 15 special pairs, five rounds, recording, recovery, and prior effects/audio are checked. See the evidence for exact scope.</p><p><a href="ImplementationReport.md">Implementation report</a> · <a href="QA/Verification.json">Test results</a> · <a href="QA/Scope.json">Changed files</a></p></section><section><h2>Review in Unity</h2><p>Home → Development → Gameplay Mechanics Sandbox. Use R4 rounds and Fixtures to compare creation, rainbow combinations and Firebird payloads.</p><p>This is the sequencing pass. Material-specific debris refinement, physical-phone performance and player acceptance remain outstanding.</p></section></div></div></main><script>
+const items='''+json.dumps(items)+''';const sequence=document.querySelector('#sequence'),frame=document.querySelector('#frame'),picture=document.querySelector('#screen'),status=document.querySelector('#status');
+function still(){const item=items[+sequence.value];picture.src=item.frames[+frame.value];status.textContent=item.label+' · frame '+(+frame.value+1)+' / '+item.frames.length;picture.alt='Actual Unity capture: '+status.textContent;}
+function select(){frame.max=items[+sequence.value].frames.length-1;frame.value=0;still();}
+sequence.onchange=select;frame.oninput=still;document.querySelector('#stop').onclick=still;document.querySelector('#play').onclick=()=>{const item=items[+sequence.value];picture.src=item.animation;status.textContent=item.label+' · sampled Unity playback';};select();
+</script></html>''')
+review=base/'Gameplay_Mechanics_R13_Review.html'
+verification=json.loads((base/'QA/Verification.json').read_text())
+review.write_text(review.read_text().replace('<p id="tests"></p>','<p id="tests">'+str(verification['editModePassed'])+' EditMode + '+str(verification['playModePassed'])+' PlayMode checks passed; no failures or skips in the final runs.</p>'))
+print('Built six lossless animated Unity sequences and frame inspector')

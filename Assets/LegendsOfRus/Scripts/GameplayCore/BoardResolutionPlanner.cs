@@ -10,10 +10,15 @@ namespace LegendsOfRus.GameplayCore
     /// The runtime view consumes the plan step-by-step. Puzzle rules no longer
     /// depend on animation timing or MonoBehaviour coroutine order.
     /// </summary>
-    public sealed class BoardResolutionPlanner
+    public sealed partial class BoardResolutionPlanner
     {
         readonly BoardModel source;
         readonly BoardBalanceProfile balance;
+        readonly GameplayRuleVersion rules;
+        bool Prototype => rules != GameplayRuleVersion.Legacy;
+        bool SparkRules => rules >= GameplayRuleVersion.PrototypeR2;
+        bool SealRules => rules >= GameplayRuleVersion.PrototypeR3;
+        bool StandaloneRules => rules >= GameplayRuleVersion.PrototypeR4;
 
         public BoardResolutionPlanner(BoardModel source)
             : this(source, BoardBalanceProfile.CommercialDefault)
@@ -22,11 +27,21 @@ namespace LegendsOfRus.GameplayCore
 
         public BoardResolutionPlanner(
             BoardModel source,
-            BoardBalanceProfile balance
+            BoardBalanceProfile balance, GameplayRuleVersion rules = GameplayRuleVersion.Legacy
         )
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
-            this.balance = balance ?? BoardBalanceProfile.CommercialDefault;
+            if (!Enum.IsDefined(typeof(GameplayRuleVersion), rules)) throw new ArgumentOutOfRangeException(nameof(rules));
+            this.rules = rules;
+            if (!SealRules)
+                for (int y=0;y<source.Height;y++) for(int x=0;x<source.Width;x++)
+                    if(source.GetObstacle(new BoardPosition(x,y)).Kind==BoardObstacleKind.RunicSeal)
+                        throw new ArgumentException("Runic seals require PrototypeR3 rules.");
+            if (!SparkRules)
+                for (int y=0;y<source.Height;y++) for(int x=0;x<source.Width;x++)
+                    if(source.GetSpecial(new BoardPosition(x,y))==SpecialGemKind.Spark)
+                        throw new ArgumentException("Spark requires PrototypeR2 rules.");
+            this.balance = Prototype ? new BoardBalanceProfile(burstRadius:2, burstBurstRadius:4) : balance ?? BoardBalanceProfile.CommercialDefault;
         }
 
         public BoardResolutionPlan PlanSwap(BoardPosition a, BoardPosition b)
@@ -133,7 +148,7 @@ namespace LegendsOfRus.GameplayCore
                 runs = working.FindRuns();
             }
 
-            BoardReshuffleResult reshuffle = working.EnsurePlayableBoard();
+            BoardReshuffleResult reshuffle = EnsurePlayable(working);
             BoardSnapshot afterReshuffle = reshuffle.Attempts > 0
                 ? working.CreateSnapshot()
                 : null;
@@ -157,6 +172,29 @@ namespace LegendsOfRus.GameplayCore
             );
         }
 
+        BoardReshuffleResult EnsurePlayable(BoardModel working)
+        {
+            if(Prototype)for(int y=0;y<working.Height;y++)for(int x=0;x<working.Width;x++){var p=new BoardPosition(x,y);if(working.IsSwappableCell(p)&&working.GetSpecial(p)!=SpecialGemKind.None)return new BoardReshuffleResult(0,false);}
+            return working.EnsurePlayableBoard();
+        }
+
+        public BoardResolutionPlan PlanTapSpecial(BoardPosition target)
+        {
+            var before=source.CreateSnapshot();int seed=CreateResolutionSeed(before,$"tap:{target.X},{target.Y}");
+            if(!Prototype || !source.IsInside(target) || !source.IsSwappableCell(target) || source.GetSpecial(target)==SpecialGemKind.None)
+                return new BoardResolutionPlan(BoardResolutionActionKind.TapSpecial,BoardResolutionStatus.Rejected,"Special is absent, blocked, or rule profile does not allow taps.",target,target,BoardBoosterCommandKind.None,false,seed,before,before,Array.Empty<BoardResolutionWave>(),new BoardReshuffleResult(0,false),null,before);
+            var working=CreateWorkingModel(before,seed);var cell=working.GetCell(target);int color=cell.TileType;
+            if(cell.Special==SpecialGemKind.Color && StandaloneRules) color=MostCommonOrdinaryColor(working);
+            else if(cell.Special==SpecialGemKind.Color){var counts=new int[working.TileTypeCount];for(int y=0;y<working.Height;y++)for(int x=0;x<working.Width;x++){var c=working.GetCell(new BoardPosition(x,y));if(c.TileType>=0)counts[c.TileType]++;}color=0;for(int i=1;i<counts.Length;i++)if(counts[i]>counts[color])color=i;}
+            var clear=new HashSet<BoardPosition>{target};var queue=new Queue<BoardSpecialActivationInstruction>();var activations=new List<BoardSpecialActivationInstruction>();
+            QueueActivation(queue,target,cell.Special,color,true);ExpandActivationQueue(working,queue,activations,new HashSet<string>(),clear);
+            var waves=new List<BoardResolutionWave>{ResolveWaveMutation(working,1,SpecialCombinationKind.None,BoardBoosterCommandKind.None,Array.Empty<BoardMatchRun>(),Array.Empty<BoardPosition>(),Array.Empty<BoardSpecialCreationInstruction>(),activations,clear,balance.ScoreForMatchCell(1))};
+            var runs=working.FindRuns();int combo=2;
+            while(runs.Count>0){waves.Add(ResolveMatchWave(working,runs,null,combo++));runs=working.FindRuns();}
+            var reshuffle=EnsurePlayable(working);var final=working.CreateSnapshot();
+            return new BoardResolutionPlan(BoardResolutionActionKind.TapSpecial,BoardResolutionStatus.Resolved,string.Empty,target,target,BoardBoosterCommandKind.None,true,seed,before,before,waves,reshuffle,reshuffle.Attempts>0?final:null,final);
+        }
+
         public BoardResolutionPlan PlanBooster(BoardBoosterRequest request)
         {
             BoardSnapshot before = source.CreateSnapshot();
@@ -166,7 +204,7 @@ namespace LegendsOfRus.GameplayCore
             );
 
             BoardBoosterValidationResult validation =
-                BoardBoosterCommandValidator.Validate(source, request, balance);
+                BoardBoosterCommandValidator.Validate(source, request, balance, SealRules);
 
             if (!validation.IsValid)
             {
@@ -212,7 +250,7 @@ namespace LegendsOfRus.GameplayCore
                 runs = working.FindRuns();
             }
 
-            BoardReshuffleResult reshuffle = working.EnsurePlayableBoard();
+            BoardReshuffleResult reshuffle = EnsurePlayable(working);
             BoardSnapshot afterReshuffle = reshuffle.Attempts > 0
                 ? working.CreateSnapshot()
                 : null;
@@ -273,6 +311,8 @@ namespace LegendsOfRus.GameplayCore
                 snapshot.TileTypeCount,
                 new SeededBoardRandom(resolutionSeed)
             );
+            model.SquareMatches = SparkRules;
+            model.StandaloneSpecials = StandaloneRules;
             model.RestoreSnapshot(snapshot);
             return model;
         }
@@ -287,19 +327,27 @@ namespace LegendsOfRus.GameplayCore
             List<BoardMatchRun> copiedRuns = CopyRuns(runs);
             HashSet<BoardPosition> matched = working.CollectMatchedCells(runs);
             Dictionary<BoardPosition, SpecialGemKind> creationMap =
-                working.DetermineSpecialCreations(runs, preferred);
+                working.DetermineSpecialCreations(runs, preferred, Prototype);
 
-            var triggeredPositions = new List<BoardPosition>();
-            HashSet<BoardPosition> clear = working.ExpandSpecialEffects(
-                matched,
-                triggeredPositions
-            );
-
+            HashSet<BoardPosition> clear;
+            List<BoardSpecialActivationInstruction> activations;
+            if (SparkRules)
+            {
+                clear = new HashSet<BoardPosition>(matched);
+                var queue = new Queue<BoardSpecialActivationInstruction>();
+                foreach (var position in ToSortedList(matched))
+                    QueueActivation(queue, position, working.GetSpecial(position), working.GetTile(position), false);
+                activations = new List<BoardSpecialActivationInstruction>();
+                ExpandActivationQueue(working, queue, activations, new HashSet<string>(), clear);
+            }
+            else
+            {
+                var triggeredPositions = new List<BoardPosition>();
+                clear = working.ExpandSpecialEffects(matched, triggeredPositions, balance.BurstRadius);
+                activations = BuildActualActivations(working, triggeredPositions);
+            }
             foreach (BoardPosition creationPosition in creationMap.Keys)
                 clear.Remove(creationPosition);
-
-            List<BoardSpecialActivationInstruction> activations =
-                BuildActualActivations(working, triggeredPositions);
             List<BoardSpecialCreationInstruction> creations =
                 BuildCreations(working, creationMap);
 
@@ -338,7 +386,28 @@ namespace LegendsOfRus.GameplayCore
             clear.Add(a);
             clear.Add(b);
 
-            switch (combination)
+            if (StandaloneRules && (combination == SpecialCombinationKind.RowWithNormal ||
+                combination == SpecialCombinationKind.ColumnWithNormal || combination == SpecialCombinationKind.BurstWithNormal))
+            {
+                // The ordinary piece remains at the origin unless the actual blast reaches it.
+                clear.Clear();
+                var position = afterA.Special != SpecialGemKind.None ? a : b;
+                var cell = working.GetCell(position);
+                clear.Add(position);
+                QueueActivation(activationQueue, position, cell.Special, cell.TileType, true);
+            }
+            else if (SparkRules && (afterA.Special == SpecialGemKind.Spark || afterB.Special == SpecialGemKind.Spark))
+            {
+                ResolveSparkCombination(working, a, b, afterA, afterB, activationQueue, clear, processed);
+            }
+            else if (Prototype && (combination == SpecialCombinationKind.RowWithRow || combination == SpecialCombinationKind.ColumnWithColumn || combination == SpecialCombinationKind.RowWithColumn))
+            {
+                QueueActivation(activationQueue,b,SpecialGemKind.Row,afterB.TileType,true);
+                QueueActivation(activationQueue,b,SpecialGemKind.Column,afterB.TileType,true);
+                // Consume both source pieces without re-activating the first outside the cross.
+                processed.Add($"{a.X}:{a.Y}:{(int)afterA.Special}");
+            }
+            else switch (combination)
             {
                 case SpecialCombinationKind.ColorWithNormal:
                     QueueActivation(
@@ -379,7 +448,8 @@ namespace LegendsOfRus.GameplayCore
                         afterB,
                         combination,
                         activationQueue,
-                        clear
+                        clear,
+                        processed
                     );
                     break;
 
@@ -403,11 +473,13 @@ namespace LegendsOfRus.GameplayCore
                     BoardPosition burst = FindPositionWithSpecial(
                         a, b, afterA, afterB, SpecialGemKind.Burst
                     );
-                    QueueActivation(
+                    if(Prototype)processed.Add($"{burst.X}:{burst.Y}:{(int)SpecialGemKind.Burst}");
+                    else QueueActivation(
                         activationQueue, burst, SpecialGemKind.Burst,
                         working.GetTile(burst), true
                     );
                     QueueThreeRows(working, burst, activationQueue);
+                    if(Prototype)QueueThreeColumns(working, burst, activationQueue);
                     break;
                 }
 
@@ -416,11 +488,13 @@ namespace LegendsOfRus.GameplayCore
                     BoardPosition burst = FindPositionWithSpecial(
                         a, b, afterA, afterB, SpecialGemKind.Burst
                     );
-                    QueueActivation(
+                    if(Prototype)processed.Add($"{burst.X}:{burst.Y}:{(int)SpecialGemKind.Burst}");
+                    else QueueActivation(
                         activationQueue, burst, SpecialGemKind.Burst,
                         working.GetTile(burst), true
                     );
                     QueueThreeColumns(working, burst, activationQueue);
+                    if(Prototype)QueueThreeRows(working, burst, activationQueue);
                     break;
                 }
 
@@ -559,7 +633,8 @@ namespace LegendsOfRus.GameplayCore
                 ApplyObstacleInteractions(
                     working,
                     clearSorted,
-                    matchedCells
+                    matchedCells,
+                    SealRules && (activations.Count > 0 || booster != BoardBoosterCommandKind.None)
                 );
 
             for (int i = 0; i < clearSorted.Count; i++)
@@ -572,7 +647,7 @@ namespace LegendsOfRus.GameplayCore
                     new BoardClearedCellInstruction(position, cell)
                 );
 
-                if (cell.TileType >= 0 && cell.TileType < clearedByType.Length)
+                if (cell.TileType >= 0 && cell.TileType < clearedByType.Length && (!StandaloneRules || cell.Special == SpecialGemKind.None))
                     clearedByType[cell.TileType]++;
             }
 
@@ -616,13 +691,13 @@ namespace LegendsOfRus.GameplayCore
         List<BoardObstacleInteractionInstruction> ApplyObstacleInteractions(
             BoardModel working,
             IReadOnlyList<BoardPosition> directClearCells,
-            IReadOnlyList<BoardPosition> matchedCells
+            IReadOnlyList<BoardPosition> matchedCells, bool allowSealDamage
         )
         {
             var causes = new Dictionary<BoardPosition, BoardObstacleHitCause>();
 
-            AddDirectObstacleCandidates(working, directClearCells, causes);
-            AddDirectObstacleCandidates(working, matchedCells, causes);
+            AddDirectObstacleCandidates(working, directClearCells, causes, allowSealDamage);
+            AddDirectObstacleCandidates(working, matchedCells, causes, false);
 
             for (int i = 0; i < matchedCells.Count; i++)
             {
@@ -685,7 +760,7 @@ namespace LegendsOfRus.GameplayCore
         void AddDirectObstacleCandidates(
             BoardModel working,
             IReadOnlyList<BoardPosition> positions,
-            Dictionary<BoardPosition, BoardObstacleHitCause> causes
+            Dictionary<BoardPosition, BoardObstacleHitCause> causes, bool allowSealDamage
         )
         {
             for (int i = 0; i < positions.Count; i++)
@@ -693,6 +768,7 @@ namespace LegendsOfRus.GameplayCore
                 BoardPosition position = positions[i];
                 if (!working.IsInside(position)) continue;
                 if (working.GetObstacle(position).IsEmpty) continue;
+                if (working.GetObstacle(position).Kind == BoardObstacleKind.RunicSeal && !allowSealDamage) continue;
                 causes[position] = BoardObstacleHitCause.DirectClear;
             }
         }
@@ -772,7 +848,8 @@ namespace LegendsOfRus.GameplayCore
             BoardCellData afterB,
             SpecialCombinationKind combination,
             Queue<BoardSpecialActivationInstruction> queue,
-            HashSet<BoardPosition> clear
+            HashSet<BoardPosition> clear,
+            HashSet<string> processed
         )
         {
             BoardPosition colorPosition = FindColorPosition(a, b, afterA, afterB);
@@ -784,11 +861,13 @@ namespace LegendsOfRus.GameplayCore
                     ? SpecialGemKind.Column
                     : SpecialGemKind.Burst;
 
+            int chosenColor = StandaloneRules ? MostCommonOrdinaryColor(working) : partner.TileType;
+            if (StandaloneRules) processed.Add($"{partnerPosition.X}:{partnerPosition.Y}:{(int)partner.Special}");
             QueueActivation(
                 queue,
                 colorPosition,
                 SpecialGemKind.Color,
-                partner.TileType,
+                chosenColor,
                 true
             );
 
@@ -797,7 +876,7 @@ namespace LegendsOfRus.GameplayCore
             {
                 var position = new BoardPosition(x, y);
                 BoardCellData cell = working.GetCell(position);
-                if (cell.IsEmpty || cell.TileType != partner.TileType) continue;
+                if (cell.IsEmpty || cell.TileType != chosenColor || (StandaloneRules && !working.IsOrdinaryMatchCell(position))) continue;
 
                 clear.Add(position);
                 QueueActivation(
@@ -825,8 +904,13 @@ namespace LegendsOfRus.GameplayCore
                 if (!processed.Add(key)) continue;
                 if (!working.IsInside(activation.Position)) continue;
 
-                activations.Add(activation);
-                ApplyActivationEffect(working, activation, clear);
+                if (SparkRules && activation.Kind == SpecialGemKind.Spark)
+                    ResolveSparkFlight(working, activation, clear, activations);
+                else
+                {
+                    activations.Add(activation);
+                    ApplyActivationEffect(working, activation, clear);
+                }
 
                 var newlyFound = new List<BoardPosition>(clear);
                 newlyFound.Sort();
@@ -854,9 +938,25 @@ namespace LegendsOfRus.GameplayCore
                 {
                     int byPosition = left.Position.CompareTo(right.Position);
                     if (byPosition != 0) return byPosition;
-                    return left.Kind.CompareTo(right.Kind);
+                    int byKind = left.Kind.CompareTo(right.Kind);
+                    if (byKind != 0) return byKind;
+                    return left.Target.GetValueOrDefault().CompareTo(right.Target.GetValueOrDefault());
                 }
             );
+        }
+
+        static int MostCommonOrdinaryColor(BoardModel board)
+        {
+            var counts = new int[board.TileTypeCount];
+            for (int y=0;y<board.Height;y++) for (int x=0;x<board.Width;x++)
+            {
+                var p=new BoardPosition(x,y);
+                if (board.IsOrdinaryMatchCell(p)) counts[board.GetTile(p)]++;
+            }
+            // Stable lowest tile ID wins ties; no eligible gems means source consumption only.
+            int chosen=-1;
+            for(int i=0;i<counts.Length;i++) if(counts[i]>0 && (chosen<0 || counts[i]>counts[chosen])) chosen=i;
+            return chosen;
         }
 
         void ApplyActivationEffect(
@@ -887,7 +987,7 @@ namespace LegendsOfRus.GameplayCore
                     {
                         var candidate = new BoardPosition(x, y);
                         BoardCellData cell = working.GetCell(candidate);
-                        if (!cell.IsEmpty && cell.TileType == activation.TileType)
+                        if (!cell.IsEmpty && cell.TileType == activation.TileType && (!StandaloneRules || working.IsOrdinaryMatchCell(candidate)))
                             clear.Add(candidate);
                     }
                     break;
@@ -1035,7 +1135,7 @@ namespace LegendsOfRus.GameplayCore
                 originalA.Special == SpecialGemKind.Color ||
                 originalB.Special == SpecialGemKind.Color;
 
-            return bothSpecial || hasColor;
+            return (StandaloneRules && (originalA.Special != SpecialGemKind.None || originalB.Special != SpecialGemKind.None)) || bothSpecial || hasColor || (SparkRules && (originalA.Special == SpecialGemKind.Spark || originalB.Special == SpecialGemKind.Spark));
         }
 
         SpecialCombinationKind DetermineCombination(
@@ -1043,6 +1143,26 @@ namespace LegendsOfRus.GameplayCore
             SpecialGemKind b
         )
         {
+            if (SparkRules && (a == SpecialGemKind.Spark || b == SpecialGemKind.Spark))
+            {
+                var partner = a == SpecialGemKind.Spark ? b : a;
+                switch(partner)
+                {
+                    case SpecialGemKind.Spark: return SpecialCombinationKind.SparkWithSpark;
+                    case SpecialGemKind.Row: return SpecialCombinationKind.SparkWithRow;
+                    case SpecialGemKind.Column: return SpecialCombinationKind.SparkWithColumn;
+                    case SpecialGemKind.Burst: return SpecialCombinationKind.SparkWithBurst;
+                    case SpecialGemKind.Color: return SpecialCombinationKind.ColorWithSpark;
+                    default: return SpecialCombinationKind.SparkWithNormal;
+                }
+            }
+            if (StandaloneRules && (a == SpecialGemKind.None || b == SpecialGemKind.None))
+            {
+                var special = a == SpecialGemKind.None ? b : a;
+                if (special == SpecialGemKind.Row) return SpecialCombinationKind.RowWithNormal;
+                if (special == SpecialGemKind.Column) return SpecialCombinationKind.ColumnWithNormal;
+                if (special == SpecialGemKind.Burst) return SpecialCombinationKind.BurstWithNormal;
+            }
             if (a == SpecialGemKind.Color && b == SpecialGemKind.Color)
                 return SpecialCombinationKind.ColorWithColor;
 
@@ -1105,6 +1225,7 @@ namespace LegendsOfRus.GameplayCore
                 var copy = new BoardMatchRun
                 {
                     Horizontal = sourceRun.Horizontal,
+                    Square = sourceRun.Square,
                     Type = sourceRun.Type
                 };
                 copy.Cells.AddRange(sourceRun.Cells);
@@ -1124,7 +1245,7 @@ namespace LegendsOfRus.GameplayCore
         {
             unchecked
             {
-                int hash = 17;
+                int hash = SealRules ? 3704 : SparkRules ? 2703 : Prototype ? 1702 : 17;
                 hash = hash * 31 + snapshot.Width;
                 hash = hash * 31 + snapshot.Height;
                 hash = hash * 31 + snapshot.TileTypeCount;

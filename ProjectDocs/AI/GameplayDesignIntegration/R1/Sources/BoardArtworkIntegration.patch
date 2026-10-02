@@ -1,0 +1,110 @@
+--- task-start/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
++++ Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
+@@ -22,7 +22,11 @@
+         BoardResolutionPlanner resolutionPlanner;
+         GameplayRuleVersion ruleVersion = GameplayRuleVersion.Legacy;
+         PrototypeBoardAudio mechanicsAudio;
++        public const GameplayRuleVersion CurrentGameplayRules = GameplayRuleVersion.PrototypeR4;
+         public GameplayRuleVersion RuleVersion => ruleVersion;
++        // Artwork adoption is independent from matching rules and prototype animation rollout.
++        bool useCurrentBoardArt = true;
++        public bool UsesCurrentBoardArt => useCurrentBoardArt || ruleVersion != GameplayRuleVersion.Legacy;
+         public MechanicsReplayCommand LastMechanicsCommand {get;private set;}
+         LevelData currentLevel;
+         LevelGoalRuntime goalRuntime;
+@@ -133,7 +137,8 @@
+             Action<int> onFail
+         )
+         {
+-            ruleVersion = GameplayRuleVersion.Legacy;
++            ruleVersion = CurrentGameplayRules;
++            useCurrentBoardArt = true;
+             campaignInventory = null;
+             InitializeCore(levelData, onWin, onFail, null);
+         }
+@@ -142,7 +147,8 @@
+         public void InitializeCampaign(LevelData levelData, int committedAttempt, Action<int> onWin, Action<int> onFail, ICampaignBoardInventory inventory = null)
+         {
+             if (levelData == null || committedAttempt < 1) throw new ArgumentException("Committed campaign level/attempt required.");
+-            ruleVersion = GameplayRuleVersion.Legacy;
++            ruleVersion = CurrentGameplayRules;
++            useCurrentBoardArt = true;
+             campaignInventory = inventory;
+             InitializeCore(levelData, onWin, onFail, committedAttempt);
+         }
+@@ -151,11 +157,9 @@
+         public void InitializeMechanicsSandbox(LevelData level, GameplayRuleVersion rules, ICampaignBoardInventory inventory)
+         {
+             if(!Enum.IsDefined(typeof(GameplayRuleVersion),rules))throw new ArgumentException("Unknown rules");
+-            ruleVersion=rules;campaignInventory=inventory;
++            ruleVersion=rules;useCurrentBoardArt=false;campaignInventory=inventory;
+             InitializeCore(level,_=>{},_=>{},1);
+-            if(rules!=GameplayRuleVersion.Legacy){GemShatterView.Attach(this);PrototypeImpactView.Attach(this);PrototypeBoosterView.Attach(this);mechanicsAudio=PrototypeBoardAudio.Attach(this);}
+-            if(rules>=GameplayRuleVersion.PrototypeR2)SparkFlightView.Attach(this);
+-            if(rules>=GameplayRuleVersion.PrototypeR4){MaterialBreakView.Attach(this);SpecialSequenceView.Attach(this);}
++
+         }
+ 
+         void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt)
+@@ -203,8 +207,8 @@
+             for (int i = 0; i < gemSprites.Length; i++) gemSprites[i] = ProductionGameplayArt.Gem(i);
+             rowSpecialSprite = ProductionGameplayArt.Load("row");
+             columnSpecialSprite = ProductionGameplayArt.Load("column");
+-            burstSpecialSprite = ruleVersion==GameplayRuleVersion.Legacy ? ProductionGameplayArt.Load("burst") : PrototypeBoardArt.Load("bomb");
+-            colorSpecialSprite = ruleVersion==GameplayRuleVersion.Legacy ? ProductionGameplayArt.Load("color") : PrototypeBoardArt.Load("color");
++            burstSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("bomb") : ProductionGameplayArt.Load("burst");
++            colorSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("color") : ProductionGameplayArt.Load("color");
+ 
+             BuildGrid();
+             vfxPresenter = GetComponent<CoreLoopVfxPresenter>();
+@@ -218,6 +222,11 @@
+                 $"hash={model.ComputeStateHash()}"
+             );
+             RefreshAll();
++            // Shared composition for the adopted rules and explicit sandbox profiles.
++            // Existing R25 presentation is retained; further effect refinement is deferred.
++            if(ruleVersion!=GameplayRuleVersion.Legacy){GemShatterView.Attach(this);PrototypeImpactView.Attach(this);PrototypeBoosterView.Attach(this);mechanicsAudio=PrototypeBoardAudio.Attach(this);}
++            if(ruleVersion>=GameplayRuleVersion.PrototypeR2)SparkFlightView.Attach(this);
++            if(ruleVersion>=GameplayRuleVersion.PrototypeR4){MaterialBreakView.Attach(this);SpecialSequenceView.Attach(this);}
+             PublishState();
+         }
+ 
+@@ -354,7 +363,7 @@
+                     var typography = Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
+                     string fontSource;
+                     Font font = typography != null ? typography.Resolve(false, out fontSource) : null;
+-                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font, ruleVersion!=GameplayRuleVersion.Legacy);
++                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font, UsesCurrentBoardArt);
+                 }
+             }
+             var grid = new GameObject("SharedGrid", typeof(RectTransform), typeof(ProductionGameplayCell));
+@@ -2260,22 +2269,22 @@
+             Stretch(special.rectTransform);
+             if (specialType == SpecialGem.Row || specialType == SpecialGem.Column)
+             {
+-                special.sprite = ruleVersion==GameplayRuleVersion.Legacy ? ProductionGameplayArt.LineSpecial(type) : PrototypeBoardArt.Load("line");
+-                special.preserveAspect = ruleVersion!=GameplayRuleVersion.Legacy;
++                special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("line") : ProductionGameplayArt.LineSpecial(type);
++                special.preserveAspect = UsesCurrentBoardArt;
+                 var specialRect = special.rectTransform;
+                 // Relative anchors stay valid when Refresh precedes the first layout,
+                 // and when the board is resized. Give the colored body a readable thickness.
+-                specialRect.anchorMin = new Vector2(0, ruleVersion==GameplayRuleVersion.Legacy?.21f:0);
+-                specialRect.anchorMax = new Vector2(1, ruleVersion==GameplayRuleVersion.Legacy?.79f:1);
++                specialRect.anchorMin = new Vector2(0, UsesCurrentBoardArt?0:.21f);
++                specialRect.anchorMax = new Vector2(1, UsesCurrentBoardArt?1:.79f);
+                 specialRect.offsetMin = specialRect.offsetMax = Vector2.zero;
+                 // A single elongated object carries direction through physical orientation.
+                 special.rectTransform.localRotation = Quaternion.Euler(0, 0, specialType == SpecialGem.Column ? 90 : 0);
+             }
+             else if (specialType == SpecialGem.Burst) special.sprite = burstSpecialSprite;
+             else if (specialType == SpecialGem.Color) special.sprite = colorSpecialSprite;
+-            else if (specialType == SpecialGem.Spark) special.sprite = ruleVersion==GameplayRuleVersion.Legacy ? ProductionBoosterArt.Icon(1) : PrototypeBoardArt.Load("spark");
+-
+-            if(ruleVersion!=GameplayRuleVersion.Legacy && special.enabled)
++            else if (specialType == SpecialGem.Spark) special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("spark") : ProductionBoosterArt.Icon(1);
++
++            if(UsesCurrentBoardArt && special.enabled)
+             {
+                 special.rectTransform.anchorMin = Vector2.one * -.04f;
+                 special.rectTransform.anchorMax = Vector2.one * 1.04f;

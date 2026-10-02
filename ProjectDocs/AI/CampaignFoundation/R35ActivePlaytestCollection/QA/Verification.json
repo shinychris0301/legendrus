@@ -1,0 +1,51 @@
+{
+  "unity": "6000.5.9f1",
+  "finalRun": "Verify03",
+  "passed": 48,
+  "failed": 0,
+  "skipped": 0,
+  "distinctCases": 48,
+  "suites": [
+    {
+      "suite": "ActiveCollection",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 73.1894712,
+      "results": "QA/Verify03/ActiveCollection/results.xml"
+    },
+    {
+      "suite": "Recorder",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 24.1326406,
+      "results": "QA/Verify03/Recorder/results.xml"
+    },
+    {
+      "suite": "Tuning",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 15.2783721,
+      "results": "QA/Verify03/Tuning/results.xml"
+    }
+  ],
+  "priorRuns": [
+    {
+      "run": "Verify01",
+      "result": "Compilation failed: missing GameplayCore using in new test; corrected."
+    },
+    {
+      "run": "Verify02",
+      "result": "20 passed / 8 teardown failures: normal GameState full-energy timestamp update. Harness now excludes only that clock timestamp and guarantees teardown cleanup; all other player fields remain checked."
+    }
+  ],
+  "environment": "Isolated save stores; prior authorized process-only Vulkan and descriptor limit 4096; project settings unchanged.",
+  "notRun": [
+    "Android build/device",
+    "Human difficulty assessment",
+    "Full-project suite",
+    "Fresh production navigation/visual acceptance"
+  ]
+}

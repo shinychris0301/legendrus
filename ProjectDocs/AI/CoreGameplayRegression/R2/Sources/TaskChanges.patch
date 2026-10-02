@@ -1,0 +1,291 @@
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignGranaryCandidateTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignGranaryCandidateTests.cs
+@@ -129,7 +129,7 @@
+                         if(round==21){Assert.That(ui.VisiblePage,Is.EqualTo("PreLevel"));s.TryLoad(out var next,out _);Assert.That(next.player.selectedLevel,Is.EqualTo(22));}
+                         else{
+                             Assert.That(ui.VisiblePage,Is.EqualTo("Dialogue"));Capture(root,"GranaryStory_EN");DemoFeatureState.SetLanguage("ru");ui.GetComponentInChildren<ProductionDialogueView>().Refresh();Capture(root,"GranaryStory_RU");DrainUI(ui);yield return null;
+-                            Assert.That(ui.PlaytestComplete,Is.True);Capture(root,"GranaryComplete_RU");var dialog=ui.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(dialog.Description.text,Does.Contain("21–30"));Assert.That(dialog.Description.text,Does.Contain("31"));
++                            Assert.That(ui.PlaytestComplete,Is.True);Capture(root,"GranaryComplete_RU");var dialog=ui.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(dialog.Description.text,Does.Contain("21–30"));Assert.That(dialog.Description.text,Does.Contain("Этот тест заканчивается на раунде 30."));
+                             DemoFeatureState.SetLanguage("en");yield return new WaitForSecondsRealtime(.3f);Capture(root,"GranaryComplete_EN");
+                             s.TryLoad(out var before,out _);Assert.That(ui.Coordinator.Recover(),Is.True);s.TryLoad(out var after,out _);Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(before)));Assert.That(after.player.acknowledgedChapterCompletions,Is.Empty);Assert.That(s.SelectRound(1,31).Committed,Is.False);
+                             ui.ReplayCompletedPlaytest();Assert.That(ui.VisiblePage,Is.EqualTo("PreLevel"));s.TryLoad(out var selected,out _);Assert.That(selected.player.energy,Is.EqualTo(before.player.energy));Assert.That(selected.player.gold,Is.EqualTo(before.player.gold));
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignRiverbankCandidateTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignRiverbankCandidateTests.cs
+@@ -130,7 +130,7 @@
+                         if(round==31){Assert.That(ui.VisiblePage,Is.EqualTo("PreLevel"));s.TryLoad(out var next,out _);Assert.That(next.player.selectedLevel,Is.EqualTo(32));}
+                         else{
+                             Assert.That(ui.VisiblePage,Is.EqualTo("Dialogue"));Capture(root,"RiverbankStory_EN");DemoFeatureState.SetLanguage("ru");ui.GetComponentInChildren<ProductionDialogueView>().Refresh();Capture(root,"RiverbankStory_RU");DrainUI(ui);yield return null;
+-                            Assert.That(ui.PlaytestComplete,Is.True);Capture(root,"RiverbankComplete_RU");var dialog=ui.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(dialog.Description.text,Does.Contain("31–40"));Assert.That(dialog.Description.text,Does.Contain("41"));
++                            Assert.That(ui.PlaytestComplete,Is.True);Capture(root,"RiverbankComplete_RU");var dialog=ui.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(dialog.Description.text,Does.Contain("31–40"));Assert.That(dialog.Description.text,Does.Contain("Этот тест заканчивается на раунде 40."));
+                             DemoFeatureState.SetLanguage("en");yield return new WaitForSecondsRealtime(.3f);Capture(root,"RiverbankComplete_EN");
+                             s.TryLoad(out var before,out _);Assert.That(ui.Coordinator.Recover(),Is.True);s.TryLoad(out var after,out _);Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(before)));Assert.That(after.player.acknowledgedChapterCompletions,Is.Empty);Assert.That(s.SelectRound(1,41).Committed,Is.False);
+                             ui.ReplayCompletedPlaytest();Assert.That(ui.VisiblePage,Is.EqualTo("PreLevel"));s.TryLoad(out var selected,out _);Assert.That(selected.player.energy,Is.EqualTo(before.player.energy));Assert.That(selected.player.gold,Is.EqualTo(before.player.gold));
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignSectorCandidateTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignSectorCandidateTests.cs
+@@ -24,7 +24,7 @@
+         static BoardModel Start(LevelData l,int attempt)=>LevelBoardFactory.Create(l,BoardSeedUtility.CreateRuntimeSeed(1,l.levelId,l.boardSeed+attempt),rules:Match3Board.CurrentGameplayRules);
+         [Test] public void CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries()
+         {
+-            var c=Catalog();var levels=c.LoadChapter(1);Assert.That(levels.levels.Length,Is.EqualTo(20));var legacy=ChapterLevelCatalog.LoadChapter1();
++            var c=Catalog();var levels=c.LoadChapter(1);Assert.That(levels.levels.Length,Is.EqualTo(20));var legacy=JsonUtility.FromJson<ChapterLevelCatalogData>(Resources.Load<TextAsset>("Config/chapter01_levels").text);
+             for(int i=0;i<10;i++){
+                 var a=JsonUtility.FromJson<LevelData>(JsonUtility.ToJson(levels.levels[i]));var b=legacy.levels[i];
+                 a.storyTriggers=b.storyTriggers;a.displayName=b.displayName;a.difficulty=b.difficulty;
+@@ -33,7 +33,9 @@
+             var s=c.LoadStory(1);Assert.That(s.scenes.Any(x=>x.id=="chapter01.finale"),Is.False);Assert.That(s.completion==null||s.completion.finalLevelId==0,Is.True);
+             Assert.That(s.milestones.Single(m=>m.afterLevelId==10).sceneId,Is.EqualTo("campaign.chapter01.hearth_secured"));
+             Assert.That(s.milestones.Single(m=>m.afterLevelId==20).sceneId,Is.EqualTo("campaign.chapter01.well_cleared"));
+-            Assert.That(StoryCatalog.LoadChapter1().completion.finalLevelId,Is.EqualTo(10));
++            var legacyStory=JsonUtility.FromJson<ChapterStoryCatalogData>(Resources.Load<TextAsset>("Config/chapter01_story").text);
++            Assert.That(legacyStory.completion.finalLevelId,Is.EqualTo(10));
++            Assert.That(ActiveCampaignContent.Load().LoadStory(1).completion.finalLevelId,Is.EqualTo(500),"Historical candidate checks must not replace the installed finale.");
+             var progress=c.Progression(Enumerable.Range(1,20).Select(n=>new CampaignProgressRecord{ChapterId=1,RoundId=n,Completions=1}),Array.Empty<int>());
+             Assert.That(progress.Availability(1,21),Is.EqualTo(CampaignRoundAvailability.ContentUnavailable));Assert.That(progress.Availability(2,1),Is.Not.EqualTo(CampaignRoundAvailability.Playable));
+         }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs
+@@ -87,9 +87,9 @@
+             Assert.That(View().Teaser.sprite.name,Is.EqualTo("teaser_blank_r8"));
+             Capture("ChapterComplete_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             Capture("ChapterComplete_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+-            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save),"Showing/localizing the summary cannot award rewards or acknowledge completion.");
++            AssertUnchangedSummarySave(save);
+             router.Show(ScreenId.ChapterComplete);Settle();yield return null;
+-            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save));
++            AssertUnchangedSummarySave(save);
+         }
+         [UnityTest]public IEnumerator NativeActionsAcknowledgeExactlyOnceWithoutRewardDuplication()
+         {
+@@ -113,6 +113,17 @@
+             Assert.That(View().Summary.text,Does.Contain("1/10").And.Contain("1/30"));Assert.That(View().RewardCounts[0].text,Is.EqualTo("120"));
+             View().Actions[1].onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
+             Assert.That(GameState.Instance.GetChapterCompletionPhase(1),Is.EqualTo(ChapterCompletionPhase.InProgress));
++        }
++        static void AssertUnchangedSummarySave(string beforeJson)
++        {
++            var before=JsonUtility.FromJson<PlayerSaveData>(beforeJson);
++            var after=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
++            if(before.energy>=before.energyMax)
++            {
++                Assert.That(after.lastEnergyUtcTicks,Is.GreaterThanOrEqualTo(before.lastEnergyUtcTicks));
++                after.lastEnergyUtcTicks=before.lastEnergyUtcTicks;
++            }
++            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(beforeJson),"Summary rendering must preserve energy, rewards, progress and acknowledgement.");
+         }
+         IEnumerator WaitForNormalButtonColors()
+         {
+--- a/Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs
+@@ -36,19 +36,29 @@
+  }
+  [UnityTest] public IEnumerator EveryMilestoneRendersAndReturnsToItsEstablishedRoute(){
+  while(router.CurrentScreen==ScreenId.Dialogue){ClickContinue();yield return null;}
++ var story=StoryCatalog.LoadChapter1();
++ Assert.That(story.completion.finalLevelId,Is.EqualTo(500));
+  int completedLevel=0;
+  foreach(var milestone in StoryCatalog.LoadChapter1().milestones){
+  while(completedLevel<milestone.afterLevelId){var level=ChapterLevelCatalog.Find(1,++completedLevel);GameState.Instance.CompleteLevel(level,level.starScoreThresholds[0]);}Assert.That(StoryService.TryBeginPostVictoryDialogue(),Is.True);Assert.That(StoryService.ActiveSceneId,Is.EqualTo(milestone.sceneId));router.Show(ScreenId.Dialogue);Settle();yield return null;
++ var scene=StoryCatalog.FindScene(milestone.sceneId);
++ bool finale=milestone.sceneId==story.completion.finaleSceneId;
+  int line=0;
+  while(router.CurrentScreen==ScreenId.Dialogue){
++ Assert.That(line,Is.LessThan(scene.lines.Length));
++ string speaker=scene.lines[line].speakerKey;
++ Assert.That(View().Ivan.gameObject.activeSelf,Is.EqualTo(speaker=="speaker.ivan"));
++ Assert.That(View().Dobrynya.gameObject.activeSelf,Is.EqualTo(speaker=="speaker.dobrynya"));
++ Assert.That(View().Firebird.gameObject.activeSelf,Is.EqualTo(speaker=="speaker.firebird"));
+  foreach(var language in new[]{"ru","en"}){DemoFeatureState.SetLanguage(language);View().Refresh();Canvas.ForceUpdateCanvases();foreach(var t in View().GetComponentsInChildren<Text>())if(t.enabled)Assert.That(t.cachedTextGenerator.characterCountVisible,Is.GreaterThanOrEqualTo(t.text.Length),milestone.sceneId+" "+t.name+" "+language);}
+  if(milestone.afterLevelId==1&&line==1){Assert.That(View().Firebird.gameObject.activeSelf,Is.True);Assert.That(View().Dobrynya.gameObject.activeSelf,Is.False);yield return WaitForNormalButtonColors();Capture("Dialogue_Firebird_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));}
+- if(milestone.afterLevelId==10&&line==0){Assert.That(View().Ivan.gameObject.activeSelf||View().Dobrynya.gameObject.activeSelf||View().Firebird.gameObject.activeSelf,Is.False);yield return WaitForNormalButtonColors();Capture("Dialogue_Finale_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));}
++ if(finale&&line==0){yield return WaitForNormalButtonColors();Capture("Dialogue_Finale_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));}
+  if(milestone.afterLevelId==1&&line==1){DemoFeatureState.SetLanguage("ru");View().Refresh();Capture("Dialogue_Firebird_Short_RU",new Vector2Int(941,1450),new Rect(0,0,941,1450));}
+- if(milestone.afterLevelId==10&&line==4){DemoFeatureState.SetLanguage("en");View().Refresh();Capture("Dialogue_FinaleLast_Tall_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));}
+- ClickContinue();line++;yield return null;Assert.That(line,Is.LessThanOrEqualTo(5));
+- }
+- Assert.That(router.CurrentScreen,Is.EqualTo(milestone.afterLevelId==10?ScreenId.ChapterComplete:ScreenId.ChapterMap));Assert.That(GameState.Instance.HasCompletedStoryScene(milestone.sceneId),Is.True);
++ if(finale&&line==scene.lines.Length-1){DemoFeatureState.SetLanguage("en");View().Refresh();Capture("Dialogue_FinaleLast_Tall_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));}
++ ClickContinue();line++;yield return null;Assert.That(line,Is.LessThanOrEqualTo(scene.lines.Length));
++ }
++ Assert.That(line,Is.EqualTo(scene.lines.Length));
++ Assert.That(router.CurrentScreen,Is.EqualTo(finale?ScreenId.ChapterComplete:ScreenId.ChapterMap));Assert.That(GameState.Instance.HasCompletedStoryScene(milestone.sceneId),Is.True);
+  }
+  }
+  [UnityTest] public IEnumerator RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions(){
+--- a/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -208,20 +208,20 @@
+             Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Idle));Assert.That(view.Board,Is.SameAs(board));Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(view.ActionsBound,Is.True);
+         }
+ 
+-        [UnityTest]
++        [UnityTest,Timeout(600000)]
+         public IEnumerator AuthoredGoalsObstaclesAndFeathersUseTheirActualState()
+         {
+-            GameState.Instance.Save.highestUnlockedLevel=10;
++            GameState.Instance.Save.highestUnlockedLevel=ChapterLevelCatalog.LoadChapter1().levels.Length;
+             foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
+             {
+-                GameState.Instance.SelectLevel(1,level.levelId);router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;yield return WaitForNormalButtonColors();
++                GameState.Instance.SelectLevel(1,level.levelId);Assert.That(GameState.Instance.Save.selectedLevel,Is.EqualTo(level.levelId));router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;yield return WaitForNormalButtonColors();
+                 var view=Root().GetComponentInChildren<ProductionGameplayView>();var board=view.Board;
+                 Assert.That(Array.TrueForAll(view.Stars,star=>star.Dimmed),Is.True,"No score stars are lit before earning points.");
+                 Assert.That(board.Score,Is.Zero,"Every authored round starts at zero earned points.");
+                 Assert.That(view.ScoreValue.text.Replace(" ",""),Is.EqualTo("0"));
+                 Assert.That(view.HeroName.gameObject.activeSelf,Is.False);
+                 Assert.That(board.ColumnCount,Is.EqualTo(8));Assert.That(board.RowCount,Is.EqualTo(7));
+-                Assert.That(board.GoalCount,Is.EqualTo(level.levelId<6?2:3));
++                Assert.That(board.GoalCount,Is.EqualTo(level.goals.Length));
+                 Assert.That(board.CurrentLevel.levelId,Is.EqualTo(level.levelId));Assert.That(view.LevelText.text,Is.EqualTo("УРОВЕНЬ "+level.levelId));
+                 for(int i=0;i<level.goals.Length;i++)
+                 {
+@@ -238,9 +238,9 @@
+                 {
+                     var pos=new BoardPosition(x,y);var cell=board.GetCellInputForTesting(x,y);var obstacle=model.GetObstacle(pos);
+                     var graphic=cell.transform.Find("CellContent/Obstacle").GetComponent<Image>();
+-                    Assert.That(graphic.enabled,Is.EqualTo(!obstacle.IsEmpty));if(!obstacle.IsEmpty)Assert.That(graphic.sprite,Is.SameAs(ProductionGameplayArt.Obstacle(obstacle.Kind,obstacle.Layers)));
+-                    var count=cell.transform.Find("CellContent/ObstacleLayers").GetComponent<Text>();Assert.That(count.enabled,Is.EqualTo(!obstacle.IsEmpty&&obstacle.Layers>1));
+-                    if(count.enabled)Assert.That(count.text,Is.EqualTo(obstacle.Layers.ToString()));
++                    Assert.That(graphic.enabled,Is.EqualTo(!obstacle.IsEmpty));if(!obstacle.IsEmpty)Assert.That(graphic.sprite,Is.SameAs(PrototypeObstacleArt.Load(obstacle.Kind,obstacle.Layers)));
++                    Assert.That(cell.transform.Find("CellContent/ObstacleLayers"),Is.Null,"Approved obstacle stages use damaged artwork, not numbers.");
++                    if(obstacle.Layers>1)Assert.That(PrototypeObstacleArt.Load(obstacle.Kind,1),Is.Not.SameAs(graphic.sprite),"Final-stage art must differ from intact art.");
+                     var gem=cell.transform.Find("CellContent/GemVisual/Gem").GetComponent<Image>();
+                     Assert.That(cell.transform.Find("CellContent/GemVisual/SpecialMatchColor"),Is.Null);
+                     if(model.GetObjectiveItem(pos)!=BoardObjectiveItemKind.None){Assert.That(gem.enabled,Is.True);Assert.That(gem.sprite,Is.SameAs(ProductionGameplayArt.Load("feather")));}
+@@ -249,7 +249,7 @@
+                 if(level.levelId==4||level.levelId==6||level.levelId==8||level.levelId==9||level.levelId==10)Capture("Gameplay_Level"+level.levelId.ToString("00")+"_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             }
+             var finalView=Root().GetComponentInChildren<ProductionGameplayView>();DemoFeatureState.SetLanguage("en");yield return null;yield return null;
+-            Capture("Gameplay_Level10_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Gameplay_LastInstalledLevel_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+         }
+ 
+         [UnityTest]
+@@ -270,7 +270,7 @@
+                 var root=board.GetCellInputForTesting(x,y).transform.Find("CellContent/GemVisual");
+                 Assert.That(root.Find("SpecialMatchColor"),Is.Null);
+                 var special=root.Find("Special").GetComponent<Image>();
+-                Assert.That(special.enabled,Is.True);Assert.That(special.sprite,Is.SameAs(ProductionGameplayArt.LineSpecial(x)));
++                Assert.That(special.enabled,Is.True);Assert.That(special.sprite,Is.SameAs(PrototypeBoardArt.Load("line")));
+                 Assert.That(Mathf.DeltaAngle(special.rectTransform.localEulerAngles.z,y==1?0:90),Is.EqualTo(0).Within(.001));
+                 Assert.That(root.Find("Gem").GetComponent<Image>().enabled,Is.False);
+             }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelGoalRuntimeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelGoalRuntimeTests.cs
+@@ -198,15 +198,17 @@
+         public void StagedChapterBoardsRemainPlayableAcrossSeeds()
+         {
+             var catalog=ChapterLevelCatalog.LoadChapter1();
+-            Assert.That(LevelDataValidator.ValidateCatalog(catalog).IsValid,Is.True);
+-            Assert.That(Chapter01ProgressionValidator.Validate(catalog).IsValid,Is.True);
++            var report=LevelDataValidator.ValidateCampaignCatalog(catalog);
++            Assert.That(report.IsValid,Is.True,string.Join("\n",report.Errors));
++            Assert.That(catalog.levels.Length,Is.EqualTo(500));
++            Assert.That(Chapter01ProgressionValidator.Validate(LegacyChapterTestFixture.Levels()).IsValid,Is.True,"The ten-round teaching validator applies to the retained historical fixture.");
+             foreach(var level in catalog.levels)
+             {
+                 Assert.That(level.columns,Is.EqualTo(8));Assert.That(level.rows,Is.EqualTo(7));
+-                Assert.That(level.goals.Length,Is.EqualTo(level.levelId<6?2:3));
++                Assert.That(level.goals.Length,Is.InRange(1,3),level.id);
+                 for(int offset=0;offset<12;offset++)
+                 {
+-                    var board=LevelBoardFactory.Create(level,level.boardSeed+offset);
++                    var board=LevelBoardFactory.Create(level,level.boardSeed+offset,rules:Match3Board.CurrentGameplayRules);
+                     Assert.That(board.HasAnyMatches(),Is.False,level.id);Assert.That(board.HasLegalMove(),Is.True,level.id);
+                     foreach(var cell in level.fixedCells)
+                     {
+--- a/Assets/LegendsOfRus/Tests/PlayMode/MetaUiMotionTransitionPolishPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/MetaUiMotionTransitionPolishPlayModeTests.cs
+@@ -694,27 +694,16 @@
+ 
+             GameObject worldMap = GameObject.Find("Screen_WorldMap");
+             Assert.That(worldMap, Is.Not.Null);
+-            AnimatedHotspot chapter = FindHotspot(
+-                worldMap,
+-                "Hotspot_Chapter1"
+-            );
+-            Assert.That(chapter, Is.Not.Null);
+-            Assert.That(chapter.Role, Is.EqualTo(MetaUiControlRole.MapNode));
+-            MetaUiMapNodeFeedback mapFeedback =
+-                chapter.GetComponent<MetaUiMapNodeFeedback>();
+-            Assert.That(mapFeedback, Is.Not.Null);
+-
+-            Activate(chapter, Pointer(39));
+-            Assert.That(mapFeedback.PulseCount, Is.EqualTo(1));
+-            Assert.That(mapFeedback.IsRaycastSafe, Is.True);
+-            Tick(routerClock, 2);
+-            Assert.That(
+-                router.CurrentScreen,
+-                Is.EqualTo(ScreenId.WorldMap),
+-                "The map pulse must become visible before navigation dispatch."
+-            );
+-            Tick(routerClock, 2);
+-            Assert.That(router.CurrentScreen, Is.EqualTo(ScreenId.ChapterMap));
++            var mapView=worldMap.GetComponentInChildren<ProductionWorldMapView>();
++            Assert.That(mapView,Is.Not.Null);
++            Assert.That(worldMap.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
++            var chapter=mapView.Cards[0].Button;
++            Assert.That(chapter.interactable,Is.True);
++            int generation=router.RouteGeneration;
++            chapter.onClick.Invoke();chapter.onClick.Invoke();
++            Tick(routerClock,12);
++            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
++            Assert.That(router.RouteGeneration,Is.EqualTo(generation+1),"Native chapter button dispatches once.");
+ 
+             router.Show(ScreenId.PreLevel);
+             Tick(routerClock, 12);
+@@ -725,10 +714,10 @@
+             Assert.That(screenGroup.alpha, Is.EqualTo(1f));
+             Assert.That(screenGroup.blocksRaycasts, Is.True);
+ 
+-            AnimatedHotspot boosters = FindHotspot(preLevel, "Hotspot_Boosters");
+-            Assert.That(boosters, Is.Not.Null);
+-            Activate(boosters, Pointer(41));
+-            boosters.TickForTesting(0.05f);
++            var preView=preLevel.GetComponentInChildren<ProductionPreLevelView>();
++            Assert.That(preView,Is.Not.Null);
++            Assert.That(preLevel.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
++            preView.BoosterCatalog.onClick.Invoke();
+ 
+             GameObject modal = GameObject.Find("Modal_BoosterSelect");
+             Assert.That(modal, Is.Not.Null);
+@@ -747,13 +736,10 @@
+             Assert.That(visualGroup.blocksRaycasts, Is.True);
+             Assert.That(router.IsModalTransitioning, Is.False);
+ 
+-            AnimatedHotspot close = FindHotspot(
+-                visual.gameObject,
+-                "Hotspot_Close"
+-            );
+-            Assert.That(close, Is.Not.Null);
+-            Activate(close, Pointer(43));
+-            close.TickForTesting(0.05f);
++            var boosterView=visual.GetComponentInChildren<ProductionBoosterSelectionView>();
++            Assert.That(boosterView,Is.Not.Null);
++            Assert.That(visual.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
++            boosterView.Close.onClick.Invoke();
+ 
+             Assert.That(modal.activeSelf, Is.True);
+             Assert.That(blocker.raycastTarget, Is.True);
+--- a/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
+@@ -62,7 +62,7 @@
+             Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.ActionsBound,Is.True);
+             Assert.That(Root().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+             Assert.That(Root().transform.Find("DynamicHUD"),Is.Null);
+-            state.Save.highestUnlockedLevel=10;
++            state.Save.highestUnlockedLevel=ChapterLevelCatalog.LoadChapter1().levels.Length;
+             foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
+             {
+                 state.SelectLevel(1,level.levelId);string before=JsonUtility.ToJson(state.Save);view.RefreshContent();
+--- a/Assets/LegendsOfRus/Tests/PlayMode/WorldMapAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/WorldMapAlignmentPlayModeTests.cs
+@@ -164,7 +164,8 @@
+             var view=Root().GetComponentInChildren<ProductionWorldMapView>();
+             Assert.That(view.Cards.Length,Is.EqualTo(20));
+             var first=view.Cards[0];Assert.That(first.Current,Is.True);
+-            Assert.That(first.Progress.text,Is.EqualTo("0/30"));
++            Assert.That(ChapterLevelCatalog.LoadChapter1().levels.Length,Is.EqualTo(500));
++            Assert.That(first.Progress.text,Is.EqualTo("0/1500"));
+             Assert.That(first.BorderGlow.gameObject.activeSelf,Is.True);
+             Assert.That(first.Surface.color,Is.EqualTo(Color.white));
+             Assert.That(first.Terrain.color,Is.EqualTo(Color.white));

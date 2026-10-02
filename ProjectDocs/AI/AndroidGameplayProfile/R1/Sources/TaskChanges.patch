@@ -1,0 +1,157 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/RuntimeBootstrap.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/RuntimeBootstrap.cs
+@@ -65,6 +65,10 @@
+ 
+ #if UNITY_EDITOR || DEVELOPMENT_BUILD
+             FindOrAdd<RuntimePerformanceProbe>(root);
++#if UNITY_EDITOR || UNITY_ANDROID
++            if (DevelopmentGameplayProfile.Active)
++                FindOrAdd<DevelopmentGameplayProfileBadge>(root);
++#endif
+ #endif
+ 
+             if (existingRouter != null)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/BackendAccountService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/BackendAccountService.cs
+@@ -16,7 +16,11 @@
+             Instance = this;
+         }
+ #if UNITY_ANDROID && DEVELOPMENT_BUILD && !UNITY_EDITOR
+-        IEnumerator Start() => AndroidCredentialDevelopmentProbe.RunRequested(this);
++        IEnumerator Start()
++        {
++            if (!DevelopmentGameplayProfile.Active)
++                yield return AndroidCredentialDevelopmentProbe.RunRequested(this);
++        }
+ #endif
+         void OnDestroy()
+         {
+@@ -32,7 +36,7 @@
+         // The Android adapter exists; hosted/device verification is still required.
+         internal bool TryConfigureAndroid(string httpsOrigin)
+         {
+-            if (IsConfigured || !AndroidBackendCredentialStore.TryCreate(out var store)) return false;
++            if (DevelopmentGameplayProfile.Active || IsConfigured || !AndroidBackendCredentialStore.TryCreate(out var store)) return false;
+             BackendHttpTransport transport;
+             try { transport = new BackendHttpTransport(httpsOrigin); }
+             catch (ArgumentException) { return false; }
+@@ -46,6 +50,8 @@
+             if (AndroidCredentialDevelopmentProbe.BlocksAccounts)
+                 throw new InvalidOperationException("Development credential probe owns the empty test vault");
+ #endif
++            if (DevelopmentGameplayProfile.Active)
++                throw new InvalidOperationException("Accounts disabled in disposable gameplay profile");
+             if (IsConfigured) throw new InvalidOperationException("Backend already configured");
+             session = new BackendSessionClient(store, transport);
+         }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/LanguagePreference.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/LanguagePreference.cs
+@@ -9,12 +9,12 @@
+         public const string Key = "LegendsOfRus_Language_v1";
+         public static string Normalize(string code) =>
+             string.Equals(code, "en", StringComparison.OrdinalIgnoreCase) ? "en" : "ru";
+-        public static string Load() => Normalize(PlayerPrefs.GetString(Key, "ru"));
++        public static string Load() => Normalize(PlayerPrefs.GetString(DevelopmentGameplayProfile.PreferenceKey(Key), "ru"));
+         public static void Save(string code)
+         {
+             string normalized = Normalize(code);
+-            if (PlayerPrefs.HasKey(Key) && PlayerPrefs.GetString(Key) == normalized) return;
+-            PlayerPrefs.SetString(Key, normalized);
++            if (PlayerPrefs.HasKey(DevelopmentGameplayProfile.PreferenceKey(Key)) && PlayerPrefs.GetString(DevelopmentGameplayProfile.PreferenceKey(Key)) == normalized) return;
++            PlayerPrefs.SetString(DevelopmentGameplayProfile.PreferenceKey(Key), normalized);
+             PlayerPrefs.Save();
+         }
+     }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/MonetizationService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/MonetizationService.cs
+@@ -144,7 +144,7 @@
+ 
+         internal bool TryBindRuntimePort(IRuntimeMonetizationPort port)
+         {
+-            if (port == null)
++            if (DevelopmentGameplayProfile.Active || port == null)
+                 return false;
+ 
+             lock (syncRoot)
+@@ -218,6 +218,8 @@
+             Func<IRuntimeMonetizationPort, RuntimeMonetizationActionResult> action
+         )
+         {
++            if (DevelopmentGameplayProfile.Active)
++                return RuntimeMonetizationActionResult.Unavailable("GAMEPLAY_QA_OFFLINE");
+             IRuntimeMonetizationPort port;
+             lock (syncRoot)
+                 port = runtimePort ?? DisabledPort;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerPrefsComplianceStateStore.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerPrefsComplianceStateStore.cs
+@@ -26,10 +26,10 @@
+         internal bool TryLoad(out ComplianceStateSnapshot state)
+         {
+             state = null;
+-            if (!PlayerPrefs.HasKey(Key))
++            if (!PlayerPrefs.HasKey(DevelopmentGameplayProfile.PreferenceKey(Key)))
+                 return false;
+ 
+-            string serialized = PlayerPrefs.GetString(Key, string.Empty);
++            string serialized = PlayerPrefs.GetString(DevelopmentGameplayProfile.PreferenceKey(Key), string.Empty);
+             if (string.IsNullOrEmpty(serialized) ||
+                 serialized.Length > MaximumSerializedCharacters)
+                 return false;
+@@ -68,14 +68,14 @@
+                 serialized.Length > MaximumSerializedCharacters)
+                 return false;
+ 
+-            PlayerPrefs.SetString(Key, serialized);
++            PlayerPrefs.SetString(DevelopmentGameplayProfile.PreferenceKey(Key), serialized);
+             PlayerPrefs.Save();
+             return true;
+         }
+ 
+         internal void Clear()
+         {
+-            PlayerPrefs.DeleteKey(Key);
++            PlayerPrefs.DeleteKey(DevelopmentGameplayProfile.PreferenceKey(Key));
+             PlayerPrefs.Save();
+         }
+ 
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerPrefsSaveJournalStore.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerPrefsSaveJournalStore.cs
+@@ -7,24 +7,24 @@
+     {
+         public bool TryRead(string key, out string value)
+         {
+-            if (!PlayerPrefs.HasKey(key))
++            if (!PlayerPrefs.HasKey(DevelopmentGameplayProfile.PreferenceKey(key)))
+             {
+                 value = null;
+                 return false;
+             }
+ 
+-            value = PlayerPrefs.GetString(key, null);
++            value = PlayerPrefs.GetString(DevelopmentGameplayProfile.PreferenceKey(key), null);
+             return true;
+         }
+ 
+         public void Write(string key, string value)
+         {
+-            PlayerPrefs.SetString(key, value);
++            PlayerPrefs.SetString(DevelopmentGameplayProfile.PreferenceKey(key), value);
+         }
+ 
+         public void Delete(string key)
+         {
+-            PlayerPrefs.DeleteKey(key);
++            PlayerPrefs.DeleteKey(DevelopmentGameplayProfile.PreferenceKey(key));
+         }
+ 
+         public void Flush()
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/PrivacyAwareAnalytics.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/PrivacyAwareAnalytics.cs
+@@ -11,6 +11,7 @@
+     public static class PrivacyAwareAnalytics
+     {
+         static bool Allowed =>
++            !DevelopmentGameplayProfile.Active &&
+             PrivacySupportService.Instance != null &&
+             PrivacySupportService.Instance.MayUseAnalytics;
+ 

@@ -1,0 +1,22 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialDevelopmentProbe.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/AndroidCredentialDevelopmentProbe.cs
+@@ -46,7 +46,7 @@
+                 using (var intent = activity.Call<AndroidJavaObject>("getIntent"))
+                 {
+                     command = intent.Call<string>("getStringExtra", Extra);
+-                    intent.Call<AndroidJavaObject>("removeExtra", Extra)?.Dispose();
++                    intent.Call("removeExtra", Extra);
+                 }
+             }
+             catch { yield break; }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/CampaignDevelopmentUI.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/CampaignDevelopmentUI.cs
+@@ -115,7 +115,7 @@
+             if(!PlaytestComplete)return;
+             if(PlaytestRecorder.SaveNow())Exit();else ConfigurePlaytestComplete();
+         }
+-        public bool Start(LevelData level,int attempt,Action<CampaignBoardResult> completed)
++        bool ICampaignBoardHost.Start(LevelData level,int attempt,Action<CampaignBoardResult> completed)
+         {
+             if(!Read())return false;
+             var v=Clone<ProductionGameplayView>("Gameplay");page.SetActive(true);

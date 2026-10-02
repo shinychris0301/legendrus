@@ -10,9 +10,11 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class SplashTitleView : MonoBehaviour
     {
-        public const int CurrentRevision = 7;
+        public const int CurrentRevision = 9;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
+        public Font ReferenceTitleFont, ReferenceVersionFont;
+        public Sprite ReferenceStartRussian, ReferenceStartBlank;
         public Button StartButton;
         public Button LanguageButton;
         public Button SettingsButton;
@@ -37,13 +39,14 @@ namespace LegendsOfRus
             AccountText != null && HelpText != null && TaglineText != null && LegalText != null;
         public bool HasResponsiveBindings => GetComponent<SplashTitleForegroundLayout>() != null &&
             GetComponent<SplashTitleForegroundLayout>().HasRequiredBindings;
-        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings && HasResponsiveBindings && HasHomeStyleBindings;
+        public bool HasRequiredBindings => HasCurrentRevision && HasCompleteBindings && HasResponsiveBindings && HasReferenceStyleBindings;
 
-        public bool HasHomeStyleBindings => HasArt("Logo", "home_logo") &&
-            HasArt("BackgroundEnvironment", "home_environment_generated") &&
-            HasArt("Ivan", "ivan_splash_dusk") && HasArt("Masha", "masha_dusk") &&
+        public bool HasReferenceStyleBindings => ReferenceTitleFont != null && ReferenceVersionFont != null && HasArt("Logo", "source_logo") &&
+            HasArt("BackgroundEnvironment", "clean_environment") &&
+            HasArt("Ivan", "source_ivan_firebird") && HasArt("SourceOuterFrame", "source_outer_frame") &&
             StartButton != null && StartButton.targetGraphic is Image start && start.sprite != null &&
-            start.sprite.name == "home_play_button" && StartText != null &&
+            ReferenceStartRussian != null && ReferenceStartBlank != null &&
+            (start.sprite == ReferenceStartRussian || start.sprite == ReferenceStartBlank) && StartText != null &&
             StartText.GetComponent<ProductionHomeGoldText>() != null &&
             StartText.GetComponent<ProductionHomeGoldText>().BeveledFace;
 
@@ -71,7 +74,7 @@ namespace LegendsOfRus
             for (int i = 0; i < references.Length; i++)
                 if (references[i] == null) issues.Add("Missing binding: " + names[i]);
             if (!HasResponsiveBindings) issues.Add("Missing Splash foreground responsive bindings or authored layout");
-            if (!HasHomeStyleBindings) issues.Add("Missing shared Home-style artwork or Start lettering");
+            if (!HasReferenceStyleBindings) issues.Add("Missing original-reference artwork or live Start lettering");
             return string.Join("; ", issues);
         }
 
@@ -96,7 +99,10 @@ namespace LegendsOfRus
             bool en = lastLanguage == "en";
             VersionText.text = "v" + Application.version;
             LanguageText.text = en ? "English" : "Русский";
-            StartText.text = en ? "Start" : "Начать";
+            StartText.text = en ? "TAP TO START" : "НАЖМИТЕ, ЧТОБЫ НАЧАТЬ";
+            ((Image)StartButton.targetGraphic).sprite = en ? ReferenceStartBlank : ReferenceStartRussian;
+            // Russian retains the original source lettering. English uses the existing live label.
+            StartText.enabled = en;
             SettingsText.text = en ? "Settings" : "Настройки";
             AccountText.text = en ? "Account" : "Аккаунт";
             HelpText.text = en ? "Help" : "Помощь";
@@ -104,11 +110,11 @@ namespace LegendsOfRus
             // Preserve the approved copy/year; do not invent a new copyright date.
             LegalText.text = en ? "© 2024–2025 Legends of Rus. All rights reserved." : "© 2024–2025 Легенды Руси. Все права защищены.";
             string source;
-            Font regular = Typography.Resolve(false, out source);
+            Font regular = ReferenceVersionFont; source = regular.name + " (reference identity unverified)";
             ActiveFontSource = source;
             Text[] labels = { VersionText, LanguageText, SettingsText, AccountText, HelpText, TaglineText, LegalText };
             foreach (Text label in labels) { label.font = regular; label.raycastTarget = false; }
-            StartText.font = Typography.Resolve(true, out source);
+            StartText.font = ReferenceTitleFont;
             StartText.raycastTarget = false;
         }
 

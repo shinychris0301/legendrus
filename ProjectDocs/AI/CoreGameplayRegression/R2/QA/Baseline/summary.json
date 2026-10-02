@@ -1,0 +1,91 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary;LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary;LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries;LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures;LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute;LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState;LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments;LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates;LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds;LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking;LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave;LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R2/QA/Baseline/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R2/QA/Baseline/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 89.72331166267395,
+  "isolatedConfig": "/tmp/lor-core-regression-r2/Baseline/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "12",
+    "result": "Failed(Child)",
+    "total": "12",
+    "passed": "2",
+    "failed": "10",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 13:17:15Z",
+    "end-time": "2026-09-30 13:18:21Z",
+    "duration": "65.9894932"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary",
+      "result": "Failed",
+      "message": "  Expected: String containing \"31\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 21\u201330 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 30.\"\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary",
+      "result": "Failed",
+      "message": "  Expected: String containing \"41\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 31\u201340 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 40.\"\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries",
+      "result": "Failed",
+      "message": "  Expected: 10\n  But was:  500\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments",
+      "result": "Failed",
+      "message": "  Expected: same as <special_ruby_r10 (UnityEngine.Sprite)>\n  But was:  <line (UnityEngine.Sprite)>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking",
+      "result": "Failed",
+      "message": "  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave",
+      "result": "Failed",
+      "message": "  String lengths are both 10. Strings differ at index 9.\n  Expected: \"\u0423\u0420\u041e\u0412\u0415\u041d\u042c 11\"\n  But was:  \"\u0423\u0420\u041e\u0412\u0415\u041d\u042c 10\"\n  --------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress",
+      "result": "Failed",
+      "message": "  Expected string length 4 but was 6. Strings differ at index 2.\n  Expected: \"0/30\"\n  But was:  \"0/1500\"\n  -------------^\n"
+    }
+  ]
+}

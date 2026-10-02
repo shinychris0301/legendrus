@@ -5,11 +5,15 @@ namespace LegendsOfRus
 {
     public static class LevelBoardFactory
     {
-        public static BoardModel Create(LevelData level, int seed, int maxAttempts = 128)
+        public static BoardModel Create(LevelData level, int seed, int maxAttempts = 128, GameplayRuleVersion rules = GameplayRuleVersion.Legacy)
         {
             if (level == null) throw new ArgumentNullException(nameof(level));
             if (maxAttempts < 1) throw new ArgumentOutOfRangeException(nameof(maxAttempts));
 
+            if (!Enum.IsDefined(typeof(GameplayRuleVersion),rules)) throw new ArgumentOutOfRangeException(nameof(rules));
+            if (level.obstacles != null) foreach(var obstacle in level.obstacles)
+                if(obstacle != null && obstacle.type == LevelObstacleTypes.RunicSeal && rules < GameplayRuleVersion.PrototypeR3)
+                    throw new ArgumentException("Runic seals require explicit PrototypeR3 rules.");
             var model = new BoardModel(
                 level.columns,
                 level.rows,
@@ -17,6 +21,8 @@ namespace LegendsOfRus
                 new SeededBoardRandom(seed)
             );
 
+            model.SquareMatches = rules >= GameplayRuleVersion.PrototypeR2;
+            model.StandaloneSpecials = rules >= GameplayRuleVersion.PrototypeR4;
             for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
                 model.GeneratePlayableBoard();

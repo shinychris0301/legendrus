@@ -9,7 +9,7 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionLoadingView : MonoBehaviour
     {
-        public const int CurrentRevision = 4;
+        public const int CurrentRevision = 5;
         public int Revision = CurrentRevision;
         public SplashTitleTypography Typography;
         public Image Environment;
@@ -25,16 +25,21 @@ namespace LegendsOfRus
         public ProductionLoadingProgressBar ProgressBar;
         public Button RetryButton;
         public Text RetryText;
+        public Sprite SourceTipRussian, SourceTipBlank;
+        public Image SourceStatus, SourceOuterFrame, SourceProgressTrack;
+        public Font ReferenceBodyFont, ReferenceTitleFont;
 
         public bool HasRequiredBindings => Revision == CurrentRevision && Typography != null &&
             Environment != null && Environment.sprite != null && Logo != null && Logo.sprite != null &&
             Ivan != null && Ivan.sprite != null && Firebird != null && Firebird.sprite != null &&
-            Logo.sprite.name == "home_logo" && Environment.sprite.name == "loading_environment_dusk" &&
-            Ivan.sprite.name == "ivan_loading_dusk" &&
+            Logo.sprite.name == "source_logo" && Environment.sprite.name == "clean_environment" &&
+            Ivan.sprite.name == "source_ivan" && Firebird.sprite.name == "source_firebird" &&
+            SourceTipRussian != null && SourceTipBlank != null && SourceStatus != null &&
+            SourceOuterFrame != null && SourceProgressTrack != null && ReferenceBodyFont != null && ReferenceTitleFont != null &&
             TipPanel != null && TipPanel.sprite != null && LowerShade != null &&
             LowerShade.GetComponent<CanvasRenderer>() != null && TipTitle != null && TipBody != null &&
             StatusText != null && PercentText != null && ProgressBar != null &&
-            ProgressBar.GetComponent<CanvasRenderer>() != null &&
+            ProgressBar.GetComponent<CanvasRenderer>() != null && ProgressBar.SourceFill != null &&
             GetComponent<ProductionLoadingShadeLayout>() != null &&
             GetComponent<ProductionLoadingShadeLayout>().Shade == LowerShade &&
             RetryButton != null && RetryText != null;
@@ -105,12 +110,14 @@ namespace LegendsOfRus
             TipTitle.text = en ? "TIP" : "СОВЕТ";
             TipBody.text = en
                 ? "Tip: combine special gems to clear the darkness faster."
-                : "Совет: объединяйте особые самоцветы,\nчтобы очищать тьму быстрее.";
+                : "Совет: объединяйте особые\nсамоцветы, чтобы очищать\nтьму быстрее.";
+            TipPanel.sprite = en ? SourceTipBlank : SourceTipRussian;
+            TipTitle.enabled = TipBody.enabled = en;
             RetryText.text = en ? "Try again" : "Повторить";
-            string source;
-            Font font = Typography.Resolve(false, out source);
+            Font font = ReferenceBodyFont;
             Text[] labels = { TipTitle, TipBody, StatusText, PercentText, RetryText };
             foreach (Text label in labels) { label.font = font; label.raycastTarget = false; }
+            TipTitle.font = StatusText.font = ReferenceTitleFont;
             RefreshState();
         }
 
@@ -120,6 +127,8 @@ namespace LegendsOfRus
             bool en = DemoFeatureState.LanguageCode == "en";
             StatusText.text = failed ? (en ? "Unable to load" : "Не удалось загрузить")
                 : (en ? "Loading..." : "Загрузка...");
+            if (SourceStatus != null) SourceStatus.enabled = !en && !failed;
+            StatusText.enabled = en || failed;
             ProgressBar.SetProgress(progress, indeterminate);
             PercentText.gameObject.SetActive(!indeterminate && !failed);
             // Never round incomplete work up to 100%.

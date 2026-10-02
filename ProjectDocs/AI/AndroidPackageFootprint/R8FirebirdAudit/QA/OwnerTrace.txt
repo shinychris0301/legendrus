@@ -1,0 +1,21 @@
+Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs:18:                ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs:116:                ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs:227:        internal static void ConfigureHomeAlignmentTexture(TextureImporter ti, string name)
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs:13:            "clean_environment", "source_hero", "source_logo", "source_avatar", "source_header",
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs:34:            Put(v.Ivan, content, "source_hero", 0, 466, 941, 990);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs:92:            v.Ivan.sprite.name=="source_hero" && v.Logo.sprite.name=="source_logo" && v.HudFrame.sprite.name=="source_header" &&
+Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs:763:            ImportHomeAlignmentArt();
+Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs:835:        static void ImportHomeAlignmentArt()
+Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs:848:                LockedDesignImporter.ConfigureHomeAlignmentTexture(importer, name);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:22:        public Image Firebird;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:87:            Ivan != null && Ivan.sprite != null && Firebird != null && !Firebird.gameObject.activeSelf && Firebird.sprite == null &&
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:22:        static readonly string[] TextureNames = {
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:30:        static readonly string[] TextureKeys = Array.ConvertAll(ProductionHomeSourceComposition.Names,
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:32:        public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:53:            view.Firebird = Art(content, "ApprovedFirebird", null, 495, 442, 550, 825);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:54:            view.Firebird.gameObject.SetActive(false);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:90:            layout.Ivan = view.Ivan.rectTransform; layout.Firebird = view.Firebird.rectTransform;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:124:            // Home now uses its own complete reference character and perched Firebird.
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:130:            view.Firebird.sprite = null;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:131:            view.Firebird.gameObject.SetActive(false);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:438:            foreach (string name in TextureNames)

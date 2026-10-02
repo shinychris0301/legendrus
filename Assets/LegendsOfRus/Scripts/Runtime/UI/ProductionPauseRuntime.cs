@@ -1,0 +1,131 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace LegendsOfRus
+{
+    public static class ProductionPauseRuntime
+    {
+        public const string ContentName="PAUSE_ALIGNED_CONTENT", ArtRoot="ProductionUI/PauseAligned/";
+        public static readonly string[] ActionNames={"resume","restart","settings","exit"};
+        public static readonly string[] ArtNames={"panel","goals","title_ru","title_blank","resume_ru","resume_blank","restart_ru","restart_blank","settings_ru","settings_blank","exit_ru","exit_blank","mace","firebird","shield","potion","panel_r2","goals_r2","goals_heading_ru_r2","goals_flourishes_r2","boosters_heading_ru_r2","boosters_flourishes_r2","instructions_ru_r2","mace_r2","firebird_r2","shield_r2","potion_r2"};
+        public static Sprite Load(string name)=>ProductionBoosterArt.Replacement(ArtRoot+name)??Resources.Load<Sprite>(ArtRoot+name);
+        public static void BuildInto(RectTransform root)
+        {
+            var existing=root.GetComponent<ProductionPauseView>();
+            if(existing!=null)
+            {
+                if(!Application.isPlaying)existing.Revision=ProductionPauseView.CurrentRevision;
+                if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Pause bindings outside Play Mode.");
+                foreach(var goal in existing.Goals)
+                {
+                    goal.Icon.rectTransform.anchoredPosition=new Vector2(29,0);goal.Icon.rectTransform.sizeDelta=new Vector2(82,82);
+                    goal.Count.rectTransform.anchoredPosition=new Vector2(0,-84);goal.Count.rectTransform.sizeDelta=new Vector2(140,30);goal.Count.fontSize=25;
+                }
+                existing.Instructions.rectTransform.anchoredPosition=new Vector2(112,-385);existing.Instructions.rectTransform.sizeDelta=new Vector2(400,61);
+                ApplyPresentation(existing);existing.RefreshContent();return;
+            }
+            if(root.Find(ContentName)!=null||root.Find("FIX01_CONTENT")!=null)throw new InvalidOperationException("Repair legacy Pause outside Play Mode.");
+            var v=root.gameObject.AddComponent<ProductionPauseView>();
+            v.Typography=Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>().Typography;
+            v.Content=Rect(root,ContentName,0,0,941,1672);
+            v.Shade=Art(v.Content,"DimLiveGameplay",null,0,0,941,1672);v.Shade.color=new Color(0,0,0,.48f);v.Shade.raycastTarget=true;
+            v.Body=Rect(v.Content,"PausePanel",160,253,621,1177);
+            Art(v.Body,"MainPanel",Load("panel"),14,153,596,1024);
+            v.TitleArt=Art(v.Body,"TitleArt",Load("title_ru"),0,0,621,198);
+            v.Title=Label(v,v.Body,"Title",135,76,360,84,66);
+            Art(v.Body,"GoalsPanel",Load("goals"),92,233,438,220);
+            v.GoalsHeading=Label(v,v.Body,"GoalsHeading",175,218,280,50,33);
+            v.Goals=new PreLevelGoalView[3];
+            for(int i=0;i<3;i++)
+            {
+                var slot=Rect(v.Body,"Goal_"+i,100+i*140,277,140,110);
+                v.Goals[i]=new PreLevelGoalView{Root=slot,Icon=Art(slot,"Icon",null,29,0,82,82),Count=Label(v,slot,"Remaining",0,84,140,30,25)};
+            }
+            v.Instructions=Label(v,v.Body,"Instructions",112,385,400,61,26);v.Instructions.horizontalOverflow=HorizontalWrapMode.Wrap;
+            v.BoostersHeading=Label(v,v.Body,"BoostersHeading",145,466,330,48,34);
+            v.BoosterArt=new Image[4];v.BoosterCounts=new Text[4];
+            string[] boosters={"mace","firebird","shield","potion"};
+            for(int i=0;i<4;i++)
+            {
+                v.BoosterArt[i]=Art(v.Body,"Booster_"+i,Load(boosters[i]),69+i*124,515,116,133);
+                v.BoosterCounts[i]=Label(v,v.BoosterArt[i].transform,"Stock",74,88,32,36,25);
+            }
+            v.Actions=new Button[4];v.ActionLabels=new Text[4];
+            int[] ys={665,780,893,1007};
+            for(int i=0;i<4;i++)
+            {
+                var image=Art(v.Body,ActionNames[i],Load(ActionNames[i]+"_ru"),81,ys[i],460,106);image.raycastTarget=true;
+                var button=image.gameObject.AddComponent<Button>();button.targetGraphic=image;button.navigation=new Navigation{mode=Navigation.Mode.None};
+                v.Actions[i]=button;v.ActionLabels[i]=Label(v,image.transform,"Label",60,23,340,63,40);
+            }
+            var layout=root.gameObject.AddComponent<ProductionPauseLayout>();layout.View=v;
+            ApplyPresentation(v);v.RefreshContent();layout.ApplyNow();
+            if(!v.HasRequiredBindings)throw new InvalidOperationException("Pause native bindings incomplete.");
+        }
+        static void ApplyPresentation(ProductionPauseView v)
+        {
+            foreach(var goal in v.Goals)
+            {
+                goal.Icon.rectTransform.anchoredPosition=new Vector2(31,0);goal.Icon.rectTransform.sizeDelta=new Vector2(78,78);
+                goal.Count.rectTransform.anchoredPosition=new Vector2(0,-80);goal.Count.rectTransform.sizeDelta=new Vector2(140,34);goal.Count.fontSize=28;
+            }
+            v.Body.Find("MainPanel").GetComponent<Image>().sprite=Load("panel_r2");
+            v.Body.Find("GoalsPanel").GetComponent<Image>().sprite=Load("goals_r2");
+            EnsureArt(v.Body,"GoalsCaption", "goals_heading_ru_r2",145,215,330,46);
+            EnsureArt(v.Body,"BoostersCaption", "boosters_heading_ru_r2",108,468,402,42);
+            EnsureArt(v.Body,"InstructionsArtwork", "instructions_ru_r2",124,381,381,59);
+            ProductionVictoryView.PlaceText(v.GoalsHeading,189,215,244,46,28);
+            ProductionVictoryView.PlaceText(v.BoostersHeading,214,468,192,42,30);
+            ProductionVictoryView.PlaceText(v.Instructions,112,385,400,61,26);
+            // PlaceText uses double-density glyphs; keep the intended physical label size.
+            foreach(var text in new[]{v.GoalsHeading,v.BoostersHeading,v.Instructions})text.rectTransform.localScale=new Vector3(.5f,.5f,1);
+            string[] boosters={"mace","firebird","shield","potion"};
+            for(int i=0;i<4;i++)
+            {
+                v.BoosterArt[i].sprite=ProductionBoosterArt.Icon(i,true);
+                var parent=v.BoosterArt[i].transform;
+                var badge=parent.Find("SharedStockBadge") as RectTransform;
+                if(badge==null)
+                {
+                    badge=Rect(parent,"SharedStockBadge",73,89,36,36);
+                    var face=badge.gameObject.AddComponent<ProductionPreLevelBadge>();face.raycastTarget=false;
+                }
+                badge.SetAsLastSibling();
+                ProductionPreLevelBadge.AlignCount(v.BoosterCounts[i],badge);
+            }
+        }
+        internal static void ApplyLocalizedArtwork(ProductionPauseView v,bool english,bool hasRound)
+        {
+            var goals=v.Body.Find("GoalsCaption");if(goals==null)return;
+            goals.GetComponent<Image>().sprite=Load(english?"goals_flourishes_r2":"goals_heading_ru_r2");
+            v.Body.Find("BoostersCaption").GetComponent<Image>().sprite=Load(english?"boosters_flourishes_r2":"boosters_heading_ru_r2");
+            v.GoalsHeading.enabled=v.BoostersHeading.enabled=english;
+            bool sourceInstructions=!english&&hasRound;
+            v.Body.Find("InstructionsArtwork").gameObject.SetActive(sourceInstructions);
+            v.Instructions.enabled=!sourceInstructions;
+        }
+        static Image EnsureArt(Transform parent,string name,string resource,float x,float y,float w,float h)
+        {
+            var found=parent.Find(name);
+            var image=found!=null?found.GetComponent<Image>():Art(parent,name,Load(resource),x,y,w,h);
+            image.sprite=Load(resource);image.preserveAspect=true;image.raycastTarget=false;
+            ProductionVictoryView.Place(image.rectTransform,x,y,w,h);return image;
+        }
+        static RectTransform Rect(Transform parent,string name,float x,float y,float w,float h)
+        {
+            var go=new GameObject(name,typeof(RectTransform));go.layer=5;go.transform.SetParent(parent,false);
+            var rect=(RectTransform)go.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(0,1);rect.anchoredPosition=new Vector2(x,-y);rect.sizeDelta=new Vector2(w,h);return rect;
+        }
+        static Image Art(Transform parent,string name,Sprite sprite,float x,float y,float w,float h)
+        {
+            var image=Rect(parent,name,x,y,w,h).gameObject.AddComponent<Image>();image.sprite=sprite;image.preserveAspect=sprite!=null;image.raycastTarget=false;return image;
+        }
+        static Text Label(ProductionPauseView v,Transform parent,string name,float x,float y,float w,float h,int size)
+        {
+            var t=Rect(parent,name,x,y,w,h).gameObject.AddComponent<Text>();t.font=v.Typography.RegularFont;t.fontSize=size;t.color=new Color32(240,205,134,255);
+            t.alignment=TextAnchor.MiddleCenter;t.horizontalOverflow=HorizontalWrapMode.Overflow;t.verticalOverflow=VerticalWrapMode.Truncate;t.raycastTarget=false;
+            return t;
+        }
+    }
+}

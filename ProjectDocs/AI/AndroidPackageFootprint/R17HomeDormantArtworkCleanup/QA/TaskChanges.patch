@@ -1,0 +1,356 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -3040,7 +3040,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4bbb7d70ab8e8c29385b536e7e8dbf2f, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -4116,7 +4116,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: d76c3dc6c6b59ff2ca8b7698b698ec03, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -6095,7 +6095,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 69135cdae1222fa598c05c4ab1539397, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -6684,7 +6684,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2cb9251bbe55ba200b4383179b701814, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -6986,7 +6986,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 94bad924675b43dcadb2595547a51117, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -8286,7 +8286,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 23aee3e96f6777c45a4cae8a64c33c4c, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -8426,7 +8426,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: c799ce05d21b30886a6fa33a9c3e4c33, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -8638,7 +8638,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: b22f4fdf95dddd63f8c32fab7a753da0, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -9379,7 +9379,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 717db484c9b631d909a47c6df0c87daf, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -20,7 +20,16 @@
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_play_button.png" ||
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/hud_frame.png" ||
+                 assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_panel.png" ||
+-                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/footer_base_generated.png")
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/footer_base_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_map_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_shop_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_events_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/nav_characters_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/mail_medallion_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/reward_medallion_generated.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_reward_frame.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/quest_reward_gem.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredHome/home_map_foliage.png")
+             {
+                 ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
+                 return;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -20,12 +20,9 @@
+         public static readonly Color EnvironmentTone = new Color32(235, 235, 235, 255);
+         public static readonly Color HeroTone = new Color32(242, 242, 242, 255);
+         static readonly string[] TextureNames = {
+-            "nav_map_generated", "nav_shop_generated", "nav_events_generated",
+-            "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+             "home_logo", "avatar_portrait", "avatar_ring",
+             "resource_capsule", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+-            "resource_plus", "quest_reward_frame", "quest_reward_gem",
+-            "home_map_foliage"
++            "resource_plus"
+         };
+         static readonly string[] TextureKeys = Array.ConvertAll(ProductionHomeSourceComposition.Names,
+             name => ProductionHomeSourceComposition.ArtRoot + name).Concat(ProductionHomeSourceComposition.ShortcutResources).ToArray();
+@@ -36,7 +33,7 @@
+         {
+             ProductionHomeView existing = root.GetComponent<ProductionHomeView>();
+             ProductionHomeLayout oldLayout = root.GetComponent<ProductionHomeLayout>();
+-            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) { ClearDormantProgress(existing); ClearDormantPlayArtwork(existing.PlayButton); return; }
++            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) { ClearDormantProgress(existing); ClearDormantPlayArtwork(existing.PlayButton); ClearDormantArtwork(existing); return; }
+             if (root.Find(ContentName) != null)
+                 throw new InvalidOperationException("Home aligned bindings are incomplete; repair the existing Home prefab outside Play Mode.");
+             if (loadSprite == null) loadSprite = Resources.Load<Sprite>;
+@@ -76,15 +73,15 @@
+             view.PlayButton.GetComponent<ProductionHomeButtonFeedback>().Role = MetaUiControlRole.Primary;
+             view.PlayText = Label(view.PlayButton.transform as RectTransform, "PlayLabel", "ИГРАТЬ", 91, 570f * 803 / 1959 - 157, 388 / .92f, 106, 90, typography);
+             RectTransform nav = Rect(content, "Navigation", 51, 1230, 839, 222);
+-            view.WorldMapButton = Nav(nav, "WorldMap", sprites["nav_map_generated"], "КАРТА МИРА", typography, out view.WorldMapText);
+-            view.ShopButton = Nav(nav, "Shop", sprites["nav_shop_generated"], "МАГАЗИН", typography, out view.ShopText);
+-            view.EventsButton = Nav(nav, "Events", sprites["nav_events_generated"], "СОБЫТИЯ", typography, out view.EventsText);
+-            view.CharactersButton = Nav(nav, "Characters", sprites["nav_characters_generated"], "ПЕРСОНАЖИ", typography, out view.CharactersText);
++            view.WorldMapButton = Nav(nav, "WorldMap", null, "КАРТА МИРА", typography, out view.WorldMapText);
++            view.ShopButton = Nav(nav, "Shop", null, "МАГАЗИН", typography, out view.ShopText);
++            view.EventsButton = Nav(nav, "Events", null, "СОБЫТИЯ", typography, out view.EventsText);
++            view.CharactersButton = Nav(nav, "Characters", null, "ПЕРСОНАЖИ", typography, out view.CharactersText);
+             RectTransform footer = Rect(content, "Footer", 0, 1450, 941, 222);
+-            view.MailButton = Medallion(footer, "MailButton", sprites["mail_medallion_generated"]);
++            view.MailButton = Medallion(footer, "MailButton", null);
+             view.QuestFrame = Frame(footer, "QuestPanel", null, 177, 0, 587, 210);
+             view.QuestText = Label(view.QuestFrame.rectTransform, "QuestCopy", "Соберите синие самоцветы", 38, 31, 398, 43, 31, typography);
+-            view.DailyRewardButton = Medallion(footer, "DailyRewardButton", sprites["reward_medallion_generated"]);
++            view.DailyRewardButton = Medallion(footer, "DailyRewardButton", null);
+             ProductionHomeLayout layout = oldLayout != null ? oldLayout : root.gameObject.AddComponent<ProductionHomeLayout>();
+             layout.Content = content; layout.Hud = h; layout.Logo = view.Logo.rectTransform;
+             layout.Ivan = view.Ivan.rectTransform; layout.Firebird = view.Firebird.rectTransform;
+@@ -171,7 +168,6 @@
+             SetRect(layout.Navigation, 51, 1230, 839, 222);
+             Button[] navigation = { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton };
+             Text[] labels = { view.WorldMapText, view.ShopText, view.EventsText, view.CharactersText };
+-            string[] navNames = { "nav_map_generated", "nav_shop_generated", "nav_events_generated", "nav_characters_generated" };
+             // The shared reference card frame maps its full unchanged square PNG to
+             // 224x255: its authored inner body becomes193x192, matching the reference.
+             // All captions share one ink baseline while native hit areas stay disjoint.
+@@ -183,7 +179,7 @@
+                 Image hit = EnsureFrame(card, null);
+                 SetRect(card, i * 212, 0, 203, 222);
+                 hit.color = Color.clear; hit.raycastTarget = true;
+-                Image artwork = EnsureArt(card, "ReferenceArtwork", sprites[navNames[i]],
++                Image artwork = EnsureArt(card, "ReferenceArtwork", null,
+                     -10.5f, cardArtY, 224, 255);
+                 artwork.preserveAspect = false; artwork.raycastTarget = false;
+                 artwork.transform.SetAsFirstSibling(); navigation[i].targetGraphic = artwork;
+@@ -216,8 +212,8 @@
+             EnsureBacking(layout.Footer, "FooterOpaqueBacking", 0, 222 - 362 * footerScale, 941, 362 * footerScale, 0, 0, new Color32(6, 8, 11, 255));
+             layout.FooterBacking = layout.Footer.Find("FooterOpaqueBacking") as RectTransform;
+             layout.FooterBase = view.FooterBase.rectTransform;
+-            AlignMedallion(view.MailButton, sprites["mail_medallion_generated"], 0, 12, 181);
+-            AlignMedallion(view.DailyRewardButton, sprites["reward_medallion_generated"], 758, 12, 181);
++            AlignMedallion(view.MailButton, null, 0, 12, 181);
++            AlignMedallion(view.DailyRewardButton, null, 758, 12, 181);
+             view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, null);
+             // Place the complete final source around its measured(21,56)-(2187,657)
+             // wood frame. The separate live children use reference page coordinates.
+@@ -240,13 +236,13 @@
+             view.QuestProgressText = EnsureLabel(view.QuestProgressFrame.rectTransform, "MeasuredValue", "— / —", 25, 44, 327, 34, 29, view.Typography);
+             view.QuestProgressText.color = new Color32(236, 228, 204, 255);
+             float rewardX = 612 - 189f / 712 * 114, rewardY = 38 - 193f / 1053 * 132;
+-            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", sprites["quest_reward_frame"],
++            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", null,
+                 rewardX - questX, rewardY - questY, 1095f / 712 * 114, 1437f / 1053 * 132);
+             view.QuestRewardFrame.preserveAspect = false;
+             EnsureBacking(quest, "RewardOpaqueNavyBacking", 620 - questX, 49 - questY, 96, 113, 5,
+                 view.QuestRewardFrame.transform.GetSiblingIndex());
+             float rewardGemScale = 77f / 797;
+-            view.QuestRewardIcon = EnsureArt(view.QuestRewardFrame.rectTransform, "RewardGem", sprites["quest_reward_gem"],
++            view.QuestRewardIcon = EnsureArt(view.QuestRewardFrame.rectTransform, "RewardGem", null,
+                 669 - 613.5f * rewardGemScale - rewardX, 85 - 660.5f * rewardGemScale - rewardY,
+                 1230 * rewardGemScale, 1278 * rewardGemScale);
+             view.QuestRewardText = EnsureLabel(view.QuestRewardFrame.rectTransform, "RewardValue", "—", 623.5f - rewardX, 130 - rewardY, 91, 36, 34, view.Typography);
+@@ -255,7 +251,7 @@
+             view.DailyRewardBadgeText = EnsureLabel(view.DailyRewardBadge.rectTransform, "AvailableCount", "1", 0, 0, 44, 44, 29, view.Typography);
+             AlignBadgeLabel(view.DailyRewardBadgeText);
+             view.DailyRewardBadge.gameObject.SetActive(false);
+-            AlignReferenceBackdrop(view, layout, sprites["home_map_foliage"]);
++            AlignReferenceBackdrop(view, layout, null);
+             AlignSceneLighting(view.Ivan, HeroLightingMaterialResource);
+             AlignSceneLighting(view.MapFoliage, FoliageLightingMaterialResource);
+             view.Revision = ProductionHomeView.CurrentRevision;
+@@ -419,7 +415,7 @@
+             if (oldMask != null) oldMask.enabled = false;
+             EnsureBacking(rect, "OpaqueNavyBacking", 20, 20, size - 40, size - 40, (size - 40) * .5f, 0);
+             Image image = button.transform.Find("Medallion").GetComponent<Image>();
+-            bool gift = sprite.name == "reward_medallion_generated";
++            bool gift = button.name == "DailyRewardButton";
+             float artSize = gift ? 194 : 186;
+             SetArt(image, sprite, (size - artSize) * .5f, gift ? -2 : 2, artSize, artSize);
+             button.targetGraphic = image;
+@@ -430,6 +426,21 @@
+             var old = button.transform.Find("ReferenceArtwork");
+             var image = old != null ? old.GetComponent<Image>() : null;
+             if (image != null && image != button.targetGraphic) image.sprite = null;
++        }
++
++        // Run after current source targets are assigned. Keep every native object/component.
++        internal static void ClearDormantArtwork(ProductionHomeView view)
++        {
++            foreach (var button in new[] { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton })
++                ClearDormantPlayArtwork(button);
++            foreach (var button in new[] { view.MailButton, view.DailyRewardButton })
++            {
++                var old = button.transform.Find("Medallion");
++                var image = old != null ? old.GetComponent<Image>() : null;
++                if (image != null && image != button.targetGraphic) image.sprite = null;
++            }
++            foreach (var image in new[] { view.QuestRewardFrame, view.QuestRewardIcon, view.MapFoliage })
++                if (image != null && !image.enabled) image.sprite = null;
+         }
+ 
+         internal static void ClearDormantProgress(ProductionHomeView view)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs
+@@ -80,6 +80,7 @@
+             v.FriendsButton=Shortcut(content,"FriendsShortcut",ShortcutResources[2],830,out v.FriendsText);
+             layout.SocialShortcuts = new[] { (RectTransform)v.RankingButton.transform,
+                 (RectTransform)v.TeamButton.transform, (RectTransform)v.FriendsButton.transform };
++            ProductionHomeRuntime.ClearDormantArtwork(v);
+             layout.SourceComposition=true;
+             v.Revision=ProductionHomeView.CurrentRevision;
+             Refresh(v);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -97,43 +97,25 @@
+             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
+             ProductionHomeSourceComposition.Valid(this);
+ 
+-        public bool HasSceneLightingBindings => HasSceneLighting(Ivan, "home_hero_lighting", 0) &&
+-            HasSceneLighting(MapFoliage, "home_foliage_lighting", 1);
+-
+-        static bool HasSceneLighting(Image image, string materialName, int profile)
+-        {
+-            if (image == null || image.material == null || image.material.name != materialName ||
+-                image.material.shader.name != ProductionHomeRuntime.SceneLightingShader ||
+-                image.material.GetFloat("_Profile") != profile) return false;
+-            ProductionHomeSceneLighting lighting = image.GetComponent<ProductionHomeSceneLighting>();
+-            return lighting != null && lighting.enabled && lighting.Strength == 1f && lighting.Padding == .03f;
+-        }
+-
+-        public bool HasReferenceBackdropBindings =>
+-            Environment != null && Ivan != null && Environment.transform.parent == Ivan.transform.parent &&
+-            Environment.transform.GetSiblingIndex() < Ivan.transform.GetSiblingIndex() &&
+-            BackgroundShade != null && BackgroundShade.enabled && BackgroundShade.gameObject.activeSelf &&
+-            BackgroundShade.GetComponent<CanvasRenderer>() != null && !BackgroundShade.raycastTarget &&
+-            BackgroundShade.transform.parent == Environment.transform &&
+-            BackgroundShade.rectTransform.anchorMin == Vector2.zero && BackgroundShade.rectTransform.anchorMax == Vector2.one &&
+-            BackgroundShade.rectTransform.offsetMin == Vector2.zero && BackgroundShade.rectTransform.offsetMax == Vector2.zero &&
+-            HasArtwork(MapFoliage, "home_map_foliage") && MapFoliage.enabled && MapFoliage.gameObject.activeSelf && !MapFoliage.raycastTarget &&
+-            WorldMapButton != null && MapFoliage.transform.parent == WorldMapButton.transform.parent &&
+-            MapFoliage.transform.parent != null && MapFoliage.transform.parent.parent == Ivan.transform.parent &&
+-            MapFoliage.transform.parent.GetSiblingIndex() > Ivan.transform.GetSiblingIndex() &&
+-            MapFoliage.transform.GetSiblingIndex() == 0;
++        // Current source art does not use the historical lighting effects or foliage overlay.
++        public bool HasSceneLightingBindings => HasRequiredBindings &&
++            HasDisabledLighting(Ivan) && HasDisabledLighting(MapFoliage);
++
++        static bool HasDisabledLighting(Image image)
++        {
++            var lighting = image != null ? image.GetComponent<ProductionHomeSceneLighting>() : null;
++            return lighting != null && !lighting.enabled;
++        }
++
++        public bool HasReferenceBackdropBindings => HasRequiredBindings &&
++            BackgroundShade != null && !BackgroundShade.enabled &&
++            MapFoliage != null && !MapFoliage.enabled && MapFoliage.sprite == null;
+ 
+         // The historical control diagnostic now validates the installed source composition.
+         public bool HasGeneratedControlBindings => HasRequiredBindings;
+ 
+         // Keep the historical diagnostic aligned with the current source composition.
+         public bool HasReferenceForegroundBindings => HasRequiredBindings;
+-
+-        static bool HasArtwork(Image image, string expectedName) =>
+-            image != null && image.sprite != null && image.sprite.name == expectedName;
+-
+-        static bool HasButtonArtwork(Button button, string expectedName) =>
+-            button != null && HasArtwork(button.targetGraphic as Image, expectedName);
+ 
+         readonly Button[] boundButtons = new Button[15];
+         readonly UnityAction[] ownedListeners = new UnityAction[15];
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeHeaderQuestEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeHeaderQuestEditModeTests.cs
+@@ -53,7 +53,7 @@
+                 Func<string,Sprite> load=key=>{requested.Add(key);foreach(var name in Names)Assert.That(key,Is.Not.EqualTo(ProductionHomeRuntime.ArtRoot+name));return Resources.Load<Sprite>(key);};
+                 if(mode=="Fresh")ProductionHomeRuntime.BuildInto((RectTransform)root.transform,load);
+                 else{var view=root.GetComponent<ProductionHomeView>();if(mode=="LegacyMigration")view.SourcePlay=null;ProductionHomeRuntime.UpgradeReferenceForeground(view,load);}
+-                Check(root.GetComponent<ProductionHomeView>());Assert.That(requested.Count,Is.EqualTo(mode=="CurrentMigration"?0:18));
++                Check(root.GetComponent<ProductionHomeView>());Assert.That(requested.Count,Is.EqualTo(mode=="CurrentMigration"?0:9));
+                 Save(mode,new Built{mode=mode,requested=requested.ToArray(),valid=true});
+             }
+             finally{UnityEngine.Object.DestroyImmediate(root);}
+@@ -102,18 +102,18 @@
+             foreach(var page in new[]{"Home","WorldMap","ChapterMap","PreLevel","SplashTitle","Loading"})foreach(var name in Names)
+                 Assert.That(AssetDatabase.GetDependencies(Pages+page+".prefab",true),Does.Not.Contain(Archive+name+".png"));
+             foreach(var name in Names)Assert.That(ProductionHomeRuntime.GetTextureResourceKeys(),Does.Not.Contain(ProductionHomeRuntime.ArtRoot+name));
+-            foreach(var name in new[]{"home_logo","avatar_portrait","avatar_ring","resource_capsule","resource_plus","settings_medallion","coin_icon","gems_icon","energy_icon","quest_reward_frame"})Assert.That(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+name),Is.Not.Null);
++            foreach(var name in new[]{"home_logo","avatar_portrait","avatar_ring","resource_capsule","resource_plus","settings_medallion","coin_icon","gems_icon","energy_icon"})Assert.That(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+name),Is.Not.Null);
+             var view=AssetDatabase.LoadAssetAtPath<GameObject>(Pages+"Home.prefab").GetComponent<ProductionHomeView>();
+             Assert.That(view.SourceRussianQuest.name,Is.EqualTo("source_quest_ru"));Assert.That(view.SourceBlankQuest.name,Is.EqualTo("source_quest_blank"));
+         }
+-        [Test] public void MissingUnrelatedQuestRewardStillBlocksFreshAndLegacyConstruction()
++        [Test] public void MissingUnrelatedCapsuleStillBlocksFreshAndLegacyConstruction()
+         {
+             foreach(var mode in new[]{"Fresh","Legacy"})
+             {
+                 var root=mode=="Fresh"?new GameObject("DeniedHome",typeof(RectTransform)):Installed("Home");
+                 try
+                 {
+-                    Func<string,Sprite> load=key=>key==ProductionHomeRuntime.ArtRoot+"quest_reward_frame"?null:Resources.Load<Sprite>(key);
++                    Func<string,Sprite> load=key=>key==ProductionHomeRuntime.ArtRoot+"resource_capsule"?null:Resources.Load<Sprite>(key);
+                     if(mode=="Fresh")Assert.Throws<InvalidOperationException>(()=>ProductionHomeRuntime.BuildInto((RectTransform)root.transform,load));
+                     else{var view=root.GetComponent<ProductionHomeView>();view.SourcePlay=null;Assert.Throws<InvalidOperationException>(()=>ProductionHomeRuntime.UpgradeReferenceForeground(view,load));}
+                 }
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeWorldMapFooterEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/RetiredHomeWorldMapFooterEditModeTests.cs
+@@ -47,7 +47,7 @@
+                 Func<string,Sprite> load=key=>{requested.Add(key);Assert.That(key,Is.Not.EqualTo(ProductionHomeRuntime.ArtRoot+Name));return Resources.Load<Sprite>(key);};
+                 if(mode=="Fresh")ProductionHomeRuntime.BuildInto((RectTransform)root.transform,load);
+                 else{var view=root.GetComponent<ProductionHomeView>();if(mode=="LegacyMigration")view.SourcePlay=null;ProductionHomeRuntime.UpgradeReferenceForeground(view,load);}
+-                var home=root.GetComponent<ProductionHomeView>();Assert.That(home.HasRequiredBindings,Is.True);Assert.That(home.FooterBase.sprite.name,Is.EqualTo("source_footer_carving"));Assert.That(home.FooterBase.enabled,Is.True);Assert.That(requested.Count,Is.EqualTo(mode=="CurrentMigration"?0:18));
++                var home=root.GetComponent<ProductionHomeView>();Assert.That(home.HasRequiredBindings,Is.True);Assert.That(home.FooterBase.sprite.name,Is.EqualTo("source_footer_carving"));Assert.That(home.FooterBase.enabled,Is.True);Assert.That(requested.Count,Is.EqualTo(mode=="CurrentMigration"?0:9));
+                 Save(mode,new Built{mode=mode,requested=requested.ToArray(),valid=true});
+             }
+             finally{UnityEngine.Object.DestroyImmediate(root);}
+@@ -102,7 +102,7 @@
+         {
+             Assert.That(ProductionHomeRuntime.GetTextureResourceKeys(),Does.Not.Contain(ProductionHomeRuntime.ArtRoot+Name));
+             foreach(var page in new[]{"Home","WorldMap","ChapterMap","PreLevel","SplashTitle","Loading"})Assert.That(AssetDatabase.GetDependencies(Pages+page+".prefab",true),Does.Not.Contain(Archive));
+-            foreach(var name in new[]{"home_logo","avatar_portrait","avatar_ring","resource_capsule","resource_plus","settings_medallion","coin_icon","gems_icon","energy_icon","quest_reward_frame"})Assert.That(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+name),Is.Not.Null);
++            foreach(var name in new[]{"home_logo","avatar_portrait","avatar_ring","resource_capsule","resource_plus","settings_medallion","coin_icon","gems_icon","energy_icon"})Assert.That(Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+name),Is.Not.Null);
+         }
+     }
+ }

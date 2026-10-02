@@ -1,0 +1,45 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using LegendsOfRus.ContentPipeline;
+using LegendsOfRus.SaveCore;
+using UnityEditor;
+using UnityEngine;
+namespace LegendsOfRus.Editor
+{
+    public static class CampaignDevelopmentPreviewMenu
+    {
+        // Preview-only store: survives reopening within this preview, discarded on leaving Play Mode.
+        sealed class PreviewStore : ISaveJournalStore
+        {
+            Dictionary<string,string> values=new Dictionary<string,string>(),durable=new Dictionary<string,string>();
+            public bool TryRead(string key,out string value)=>values.TryGetValue(key,out value);
+            public void Write(string key,string value)=>values[key]=value;
+            public void Delete(string key)=>values.Remove(key);
+            public void Flush(){durable=new Dictionary<string,string>(values);}
+            public void Reload(){values=new Dictionary<string,string>(durable);}
+        }
+        const string Menu="Legends of Rus/Development/Campaign UI Preview (In Memory)";
+        [MenuItem(Menu,true)] static bool Available()=>Application.isPlaying&&ScreenRouter.Instance!=null&&ScreenRouter.Instance.CurrentScreen==ScreenId.Home&&!ScreenRouter.Instance.HasActiveModalBlocker&&UnityEngine.Object.FindFirstObjectByType<CampaignDevelopmentUI>()==null&&UnityEngine.Object.FindFirstObjectByType<MechanicsSandbox>()==null;
+        [MenuItem(Menu)] static void Open()
+        {
+            if(!Available())return;
+            var definition=JsonUtility.FromJson<CampaignDefinition>(File.ReadAllText(Path.Combine(Application.dataPath,"../ProjectDocs/ContentPipeline/CampaignV2/campaign_definition.json")));
+            var catalog=new ValidatedCampaignCatalog(definition);
+            if(!catalog.TryAdd(new CampaignPackageInput{ChapterId=1,ContentRevision=definition.ContentRevision,LegacyChapterOne=true,
+                LevelsJson=Resources.Load<TextAsset>("Config/chapter01_levels").text,StoryJson=Resources.Load<TextAsset>("Config/chapter01_story").text,
+                RussianJson=Resources.Load<TextAsset>("Localization/story_ru").text,EnglishJson=Resources.Load<TextAsset>("Localization/story_en").text},out var errors))
+                throw new InvalidOperationException(string.Join(";",errors));
+            var store=new PreviewStore();Func<CampaignSaveSession> reopen=()=>{store.Reload();return new CampaignSaveSession(store,definition,catalog);};
+            var session=reopen();var imported=session.ImportLegacyCopy(JsonUtility.ToJson(new PlayerSaveData{lastEnergyUtcTicks=DateTime.UtcNow.Ticks}));
+            if(!imported.Committed)throw new InvalidOperationException(imported.Diagnostic);
+            var parent=ScreenRouter.Instance.SafeArea;
+            var previous=parent.Cast<Transform>().Where(t=>t.gameObject.activeSelf).Select(t=>t.gameObject).ToArray();
+            CampaignDevelopmentUI.Open(parent,session,reopen,()=>{foreach(var item in previous)if(item)item.SetActive(true);});
+            foreach(var item in previous)item.SetActive(false);
+        }
+    }
+}
+#endif

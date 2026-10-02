@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chapter Complete — Phone Captions R2</title>
+<style>body{margin:0;background:#10151e;color:#f3e5ca;font:16px/1.5 system-ui,sans-serif}main{max-width:920px;margin:auto;padding:24px}h1{font-size:24px}a{color:#ecd49a}label{display:inline-block;margin:0 16px 12px 0}select{font:inherit;padding:5px;background:#202936;color:inherit}figure{margin:16px 0}img{display:block;width:360px;max-width:100%;height:auto;margin:auto}figcaption{text-align:center;margin:12px}.native{overflow:auto}.native img{max-width:none}p{max-width:800px}</style>
+<main><h1>Chapter Complete — readable rewards and captions</h1><p>Actual Unity Play Mode captures from the implemented revision-9 prefab. Synthetic completed Chapter 1: 500/500 rounds and 1500/1500 stars. Simulated screen sizes and safe areas; these are not Android device captures.</p>
+<label>Language <select id="language"><option value="ru">Russian</option><option value="en">English</option></select></label>
+<label>Capture <select id="size"><option value="360">360 × 640</option><option value="576">576 × 1280</option><option value="1080">1080 × 2400</option></select></label>
+<label><input id="native" type="checkbox"> Native capture pixels</label>
+<figure id="frame"><img id="capture" src="QA/FinalPlayMode/Captures/LOR_CHAPTER_COMPLETE_CAPTURE_DIR/ChapterComplete_Current_360_ru.png" alt="Implemented Chapter Complete screen in Russian"><figcaption id="caption">Russian · 360 × 640 · actual Unity capture</figcaption></figure>
+<p>Larger live reward values, a two-line progress summary, and live Russian/English teaser captions. Existing artwork is reused; the hero is scaled proportionally and the footer preserves its corners through nine-slicing. Reward values and the bottom description now clear the decorative frames.</p>
+<p>Verification: <strong>16 Play Mode + 2 Edit Mode tests passed; 0 failed or skipped.</strong> Button routing, repeated acknowledgment without duplicate rewards, save preservation, text fit and decorative margins are covered. <a href="TestResults.md">Test results and limitations</a>.</p></main>
+<script>
+const language=document.getElementById('language'),size=document.getElementById('size'),native=document.getElementById('native'),capture=document.getElementById('capture'),frame=document.getElementById('frame');
+function update(){const lang=language.value,label=lang==='ru'?'Russian':'English';capture.src=`QA/FinalPlayMode/Captures/LOR_CHAPTER_COMPLETE_CAPTURE_DIR/ChapterComplete_Current_${size.value}_${lang}.png`;capture.alt=`Implemented Chapter Complete screen in ${label}`;capture.style.width=native.checked?`${size.value}px`:'360px';frame.classList.toggle('native',native.checked);document.getElementById('caption').textContent=`${label} · ${size.selectedOptions[0].text} · actual Unity capture`;}
+[language,size,native].forEach(control=>control.addEventListener('change',update));
+</script></html>

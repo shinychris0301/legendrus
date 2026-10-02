@@ -1,0 +1,46 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary;LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary;LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries;LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures;LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute;LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState;LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments;LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates;LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds;LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking;LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave;LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R2/QA/CurrentContent/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R2/QA/CurrentContent/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 109.82788920402527,
+  "isolatedConfig": "/tmp/lor-core-regression-r2/CurrentContent/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "12",
+    "result": "Failed(Child)",
+    "total": "12",
+    "passed": "11",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 13:20:49Z",
+    "end-time": "2026-09-30 13:22:12Z",
+    "duration": "83.1350806"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState",
+      "result": "Failed",
+      "message": "  Expected: 2\n  But was:  3\n"
+    }
+  ]
+}

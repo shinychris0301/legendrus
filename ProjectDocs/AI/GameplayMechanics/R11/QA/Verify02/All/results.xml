@@ -1,0 +1,1186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="55" result="Failed(Child)" total="55" passed="54" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="106.2689476">
+  <test-suite type="TestSuite" id="1638" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="526" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="106.268948" total="55" passed="54" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1058" name="LegendsOfRus.Campaign.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Campaign.PlayModeTests.dll" runstate="Runnable" testcasecount="37" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="105.994010" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3869043" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1059" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="37" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="105.983884" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1060" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="37" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="105.968495" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1061" name="CampaignPlayMode" fullname="LegendsOfRus.Tests.CampaignPlayMode" runstate="Runnable" testcasecount="37" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:39:11Z" duration="105.951978" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1020" name="MechanicsAudioTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:37:36Z" duration="11.089156" total="6" passed="5" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1022" name="ActualBombAndSparkKeepPlansAndImpactTiming" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.ActualBombAndSparkKeepPlansAndImpactTiming" methodname="ActualBombAndSparkKeepPlansAndImpactTiming" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="454452007" result="Failed" start-time="2026-09-26 23:37:25Z" end-time="2026-09-26 23:37:26Z" duration="0.870893" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: Bomb
+  But was:  Match
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests+<ActualBombAndSparkKeepPlansAndImpactTiming>d__15.MoveNext () [0x0014c] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsAudioTests.cs:72
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+]]></output>
+              </test-case>
+              <test-case id="1021" name="AllClipsImportAndLegacyHasNoLocalAudio" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.AllClipsImportAndLegacyHasNoLocalAudio" methodname="AllClipsImportAndLegacyHasNoLocalAudio" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="1511364222" result="Passed" start-time="2026-09-26 23:37:26Z" end-time="2026-09-26 23:37:26Z" duration="0.158646" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+]]></output>
+              </test-case>
+              <test-case id="1024" name="BatchCoalescingAndPriorityKeepFourVoicesBounded" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.BatchCoalescingAndPriorityKeepFourVoicesBounded" methodname="BatchCoalescingAndPriorityKeepFourVoicesBounded" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="1788258052" result="Passed" start-time="2026-09-26 23:37:26Z" end-time="2026-09-26 23:37:26Z" duration="0.274544" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+              <test-case id="1026" name="LocalAudioRetainsSharedHapticsWithoutDuplicateSfx" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.LocalAudioRetainsSharedHapticsWithoutDuplicateSfx" methodname="LocalAudioRetainsSharedHapticsWithoutDuplicateSfx" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="23521265" result="Passed" start-time="2026-09-26 23:37:26Z" end-time="2026-09-26 23:37:26Z" duration="0.074593" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+              <test-case id="1025" name="MaterialsAndBoostersHaveDistinctCuesAndDamageStrength" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.MaterialsAndBoostersHaveDistinctCuesAndDamageStrength" methodname="MaterialsAndBoostersHaveDistinctCuesAndDamageStrength" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="2021061325" result="Passed" start-time="2026-09-26 23:37:26Z" end-time="2026-09-26 23:37:34Z" duration="7.732499" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus EDITOR memory observation: allocated=301 MiB, reserved=651 MiB, managed=28 MiB. Exceeded guardrails: reserved >= 640 MiB (warning). Comparison band=Warning. Editor measurements are not an Android Player budget verdict. Profile a Development Build on the target device. Evidence remains local and bounded.
+]]></output>
+              </test-case>
+              <test-case id="1023" name="MuteFocusAndDisableCancelPendingWithoutReplay" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests.MuteFocusAndDisableCancelPendingWithoutReplay" methodname="MuteFocusAndDisableCancelPendingWithoutReplay" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsAudioTests" runstate="Runnable" seed="1860825439" result="Passed" start-time="2026-09-26 23:37:34Z" end-time="2026-09-26 23:37:36Z" duration="1.955783" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1027" name="MechanicsImpactReadabilityTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-26 23:37:36Z" end-time="2026-09-26 23:37:57Z" duration="21.545823" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1029" name="BoosterIllustrationsStayVisibleAndActivationsKeepInventorySemantics" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.BoosterIllustrationsStayVisibleAndActivationsKeepInventorySemantics" methodname="BoosterIllustrationsStayVisibleAndActivationsKeepInventorySemantics" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="1838614853" result="Passed" start-time="2026-09-26 23:37:36Z" end-time="2026-09-26 23:37:43Z" duration="7.162043" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1220619687 waves=1 score=200 final=BBD047139651600E plan=22C1B15929BC9A95
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1222466729 waves=3 score=1920 final=59F4EBF17BCBDEC5 plan=604E834DCC1EE326
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1223390250 waves=2 score=500 final=04DB9E1EB2C70069 plan=F743DC711BCD0F8C
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> Idle
+]]></output>
+              </test-case>
+              <test-case id="1032" name="GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking" methodname="GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="1239774994" result="Passed" start-time="2026-09-26 23:37:43Z" end-time="2026-09-26 23:37:44Z" duration="0.794411" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+              <test-case id="1033" name="ImpactMeshIsBoundedAndDisableClearsPresentation" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.ImpactMeshIsBoundedAndDisableClearsPresentation" methodname="ImpactMeshIsBoundedAndDisableClearsPresentation" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="1508473507" result="Passed" start-time="2026-09-26 23:37:44Z" end-time="2026-09-26 23:37:44Z" duration="0.314932" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+              <test-case id="1031" name="MaterialStagesReplaceNumeralsAndKeepResolvedLayerCounts" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.MaterialStagesReplaceNumeralsAndKeepResolvedLayerCounts" methodname="MaterialStagesReplaceNumeralsAndKeepResolvedLayerCounts" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="625512654" result="Passed" start-time="2026-09-26 23:37:44Z" end-time="2026-09-26 23:37:50Z" duration="5.863184" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1504428536 waves=1 score=200 final=A9A5D1D6B72C4303 plan=72F0C1699F6D7E50
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=1537789146 waves=1 score=150 final=4DB4EF0CF762424A plan=79F67DD8796A891C
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+]]></output>
+              </test-case>
+              <test-case id="1030" name="ObstacleArtworkAndGoalsUseTheSameFamily" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.ObstacleArtworkAndGoalsUseTheSameFamily" methodname="ObstacleArtworkAndGoalsUseTheSameFamily" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="657001533" result="Passed" start-time="2026-09-26 23:37:50Z" end-time="2026-09-26 23:37:50Z" duration="0.300165" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+]]></output>
+              </test-case>
+              <test-case id="1028" name="SpecialActivationPrecedesFragmentsAndInputUnlocksAfterSettle" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.SpecialActivationPrecedesFragmentsAndInputUnlocksAfterSettle" methodname="SpecialActivationPrecedesFragmentsAndInputUnlocksAfterSettle" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests" runstate="Runnable" seed="1181881596" result="Passed" start-time="2026-09-26 23:37:50Z" end-time="2026-09-26 23:37:57Z" duration="7.094883" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1034" name="MechanicsPlaytestRecordingTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-26 23:37:57Z" end-time="2026-09-26 23:38:06Z" duration="8.335385" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1036" name="ExportPreservesActiveAttemptAndCreatesDistinctValidFiles" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests.ExportPreservesActiveAttemptAndCreatesDistinctValidFiles" methodname="ExportPreservesActiveAttemptAndCreatesDistinctValidFiles" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" seed="1720652607" result="Passed" start-time="2026-09-26 23:37:57Z" end-time="2026-09-26 23:37:57Z" duration="0.017938" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="RetentionCapReportsDiscardedRecordsWithoutReusingNumbers" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests.RetentionCapReportsDiscardedRecordsWithoutReusingNumbers" methodname="RetentionCapReportsDiscardedRecordsWithoutReusingNumbers" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" seed="599574273" result="Passed" start-time="2026-09-26 23:37:57Z" end-time="2026-09-26 23:37:57Z" duration="0.015057" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1039" name="RuntimeFailureRecordedOnceAndRetryStartsUnratedAttempt" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests.RuntimeFailureRecordedOnceAndRetryStartsUnratedAttempt" methodname="RuntimeFailureRecordedOnceAndRetryStartsUnratedAttempt" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" seed="684676484" result="Passed" start-time="2026-09-26 23:37:57Z" end-time="2026-09-26 23:38:04Z" duration="6.388621" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=2032783416 waves=1 score=150 final=0F5E6F0A91FDDCD1 plan=85C9D6B0452CAE51
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1284091480 waves=1 score=150 final=4A261B7009A097D2 plan=6AABEE0054A5EA5C
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1225657596 waves=1 score=150 final=87CF8762A5DE0C36 plan=68EA938CD9E204BB
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=875492911 waves=1 score=150 final=2A5355DE5AFFDF8F plan=DE945D3A70D3ED06
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1490157687 waves=1 score=150 final=4374210A2433F7CA plan=C72D931266F72E61
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=549457308 waves=1 score=150 final=B7063BE99FBA9934 plan=53218CE2B1817DE2
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=2022863728 waves=2 score=330 final=88410D598797F525 plan=07037558CB25B892
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1043896903 waves=1 score=150 final=1B374BDA4ACCE321 plan=DEC50CB7D33CF645
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1543701203 waves=1 score=150 final=950DFEB0A2545053 plan=D43A183A4713D0CE
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Failed
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+]]></output>
+              </test-case>
+              <test-case id="1038" name="RuntimeWinFeedbackInterruptionsAndExportAreAccurate" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests.RuntimeWinFeedbackInterruptionsAndExportAreAccurate" methodname="RuntimeWinFeedbackInterruptionsAndExportAreAccurate" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" seed="1699939519" result="Passed" start-time="2026-09-26 23:38:04Z" end-time="2026-09-26 23:38:06Z" duration="1.879731" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1509995533 waves=1 score=150 final=F97665F4CA814AEB plan=B96123D9B1816A80
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Gameplay phase: Idle -> Swapping
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Legends of Rus level=mechanics.playtest.3, attempt=1, board=8x7, seed=507545, hash=B9ECDF72AB0B1270
+Legends of Rus level=mechanics.playtest.4, attempt=1, board=8x7, seed=507577, hash=939A203096F7DC97
+]]></output>
+              </test-case>
+              <test-case id="1035" name="TerminalRecordsAreIdempotentAndRatingsRemainExplicit" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests.TerminalRecordsAreIdempotentAndRatingsRemainExplicit" methodname="TerminalRecordsAreIdempotentAndRatingsRemainExplicit" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestRecordingTests" runstate="Runnable" seed="1006290144" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.016635" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1040" name="MechanicsPlaytestStorageTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:09Z" duration="3.033832" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1045" name="BackgroundAndShutdownPreserveOngoingAndInterruptedSeparately" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.BackgroundAndShutdownPreserveOngoingAndInterruptedSeparately" methodname="BackgroundAndShutdownPreserveOngoingAndInterruptedSeparately" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="1208045147" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.329083" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Gameplay phase: Idle -> Swapping
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+              <test-case id="1042" name="BlockedReplacementRetainsLastGoodFileAndCanRetry" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.BlockedReplacementRetainsLastGoodFileAndCanRetry" methodname="BlockedReplacementRetainsLastGoodFileAndCanRetry" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="1585774262" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.016883" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1041" name="CheckpointsReplaceAtomicallyKeepPreviousAndSkipUnchangedWrites" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.CheckpointsReplaceAtomicallyKeepPreviousAndSkipUnchangedWrites" methodname="CheckpointsReplaceAtomicallyKeepPreviousAndSkipUnchangedWrites" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="720055708" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.016562" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="NewSessionsNeverOverwritePriorManualOrAutomatedRecords" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.NewSessionsNeverOverwritePriorManualOrAutomatedRecords" methodname="NewSessionsNeverOverwritePriorManualOrAutomatedRecords" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="762965216" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.016202" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="SaveFailureIsVisibleRetryableAndBatchCannotLookManual" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.SaveFailureIsVisibleRetryableAndBatchCannotLookManual" methodname="SaveFailureIsVisibleRetryableAndBatchCannotLookManual" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="396347140" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:06Z" duration="0.223052" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.2, attempt=1, board=8x7, seed=507513, hash=A0EA836020BD2DF5
+]]></output>
+              </test-case>
+              <test-case id="1044" name="WinAndFeedbackSurviveExitWithoutExplicitExport" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests.WinAndFeedbackSurviveExitWithoutExplicitExport" methodname="WinAndFeedbackSurviveExitWithoutExplicitExport" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsPlaytestStorageTests" runstate="Runnable" seed="1623567592" result="Passed" start-time="2026-09-26 23:38:06Z" end-time="2026-09-26 23:38:09Z" duration="2.414705" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1509995533 waves=1 score=150 final=F97665F4CA814AEB plan=B96123D9B1816A80
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1047" name="MechanicsRoundPlaytestTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-26 23:38:09Z" end-time="2026-09-26 23:38:32Z" duration="23.404176" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1048" name="AllFiveRoundsWinWithoutInventoryAndRetryRestoresExactStart" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests.AllFiveRoundsWinWithoutInventoryAndRetryRestoresExactStart" methodname="AllFiveRoundsWinWithoutInventoryAndRetryRestoresExactStart" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests" runstate="Runnable" seed="1526793015" result="Passed" start-time="2026-09-26 23:38:09Z" end-time="2026-09-26 23:38:26Z" duration="17.225914" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1509995533 waves=1 score=150 final=F97665F4CA814AEB plan=B96123D9B1816A80
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.2, attempt=1, board=8x7, seed=507513, hash=A0EA836020BD2DF5
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=114850274 waves=3 score=1970 final=1044D971E6F66702 plan=0EE8C893780614E2
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.2, attempt=1, board=8x7, seed=507513, hash=A0EA836020BD2DF5
+Legends of Rus level=mechanics.playtest.3, attempt=1, board=8x7, seed=507545, hash=B9ECDF72AB0B1270
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=368842525 waves=1 score=150 final=B8926D2E1980DAF9 plan=0BD96AEA069FA821
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-722656767 waves=2 score=430 final=31130D608C3C8BFD plan=38D74BC83AF705A3
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.3, attempt=1, board=8x7, seed=507545, hash=B9ECDF72AB0B1270
+Legends of Rus level=mechanics.playtest.4, attempt=1, board=8x7, seed=507577, hash=939A203096F7DC97
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1945177939 waves=2 score=630 final=F3E304F03D1B876D plan=A1677AFE5AC43095
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.4, attempt=1, board=8x7, seed=507577, hash=939A203096F7DC97
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-481634513 waves=2 score=610 final=AC7058B3609A125B plan=C6555A31EC467E2E
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=787587571 waves=2 score=1710 final=B4090B0589022CBC plan=1EAD9066AFA6AF84
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+]]></output>
+              </test-case>
+              <test-case id="1049" name="ExhaustionStopsInputAndRetryRestoresRound" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests.ExhaustionStopsInputAndRetryRestoresRound" methodname="ExhaustionStopsInputAndRetryRestoresRound" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsRoundPlaytestTests" runstate="Runnable" seed="1435629702" result="Passed" start-time="2026-09-26 23:38:26Z" end-time="2026-09-26 23:38:32Z" duration="6.146770" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=2032783416 waves=1 score=150 final=0F5E6F0A91FDDCD1 plan=85C9D6B0452CAE51
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1284091480 waves=1 score=150 final=4A261B7009A097D2 plan=6AABEE0054A5EA5C
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1225657596 waves=1 score=150 final=87CF8762A5DE0C36 plan=68EA938CD9E204BB
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=875492911 waves=1 score=150 final=2A5355DE5AFFDF8F plan=DE945D3A70D3ED06
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1490157687 waves=1 score=150 final=4374210A2433F7CA plan=C72D931266F72E61
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=549457308 waves=1 score=150 final=B7063BE99FBA9934 plan=53218CE2B1817DE2
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=2022863728 waves=2 score=330 final=88410D598797F525 plan=07037558CB25B892
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1043896903 waves=1 score=150 final=1B374BDA4ACCE321 plan=DEC50CB7D33CF645
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1543701203 waves=1 score=150 final=950DFEB0A2545053 plan=D43A183A4713D0CE
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Failed
+Legends of Rus level=mechanics.playtest.5, attempt=1, board=8x7, seed=507609, hash=817102CDCE404C86
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1050" name="MechanicsSandboxPlayModeTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-26 23:38:32Z" end-time="2026-09-26 23:38:52Z" duration="19.861075" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1052" name="FixturesAndAllInventoryBoostersRemainPlayable" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests.FixturesAndAllInventoryBoostersRemainPlayable" methodname="FixturesAndAllInventoryBoostersRemainPlayable" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests" runstate="Runnable" seed="1265648043" result="Passed" start-time="2026-09-26 23:38:32Z" end-time="2026-09-26 23:38:48Z" duration="16.177283" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1617069665 waves=2 score=1404 final=C312184D9BCF6972 plan=DF074E5CCD1E1EE2
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1534739227 waves=1 score=560 final=4E584C35FC389EC5 plan=9598476FE5B24152
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=596212080 waves=3 score=2250 final=18AD8928B0B473F9 plan=6144BDE26B6FD1CE
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1237811602 waves=1 score=150 final=98B0ADCC4024A9F3 plan=E98EACE846A38995
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=665120213 waves=1 score=200 final=3AD6786E45AAA4EE plan=779C4B520BBC38C6
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=666967255 waves=3 score=1230 final=0E753CA13038F7D1 plan=2480C47B35D5ED6B
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=667890776 waves=2 score=500 final=944A6C80ED1D3717 plan=728671B7722EFA35
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> Idle
+]]></output>
+              </test-case>
+              <test-case id="1051" name="PrototypeTapRecordsReplayAndCapturesImpact" fullname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests.PrototypeTapRecordsReplayAndCapturesImpact" methodname="PrototypeTapRecordsReplayAndCapturesImpact" classname="LegendsOfRus.Tests.CampaignPlayMode.MechanicsSandboxPlayModeTests" runstate="Runnable" seed="219863460" result="Passed" start-time="2026-09-26 23:38:48Z" end-time="2026-09-26 23:38:52Z" duration="3.666659" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Selected
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1053" name="RunicSealPlayModeTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests" classname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-26 23:38:52Z" end-time="2026-09-26 23:39:00Z" duration="7.737529" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1054" name="AuthoredSealsRequireR3AndGenerateLegalBoards" fullname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests.AuthoredSealsRequireR3AndGenerateLegalBoards" methodname="AuthoredSealsRequireR3AndGenerateLegalBoards" classname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests" runstate="Runnable" seed="2007790322" result="Passed" start-time="2026-09-26 23:38:52Z" end-time="2026-09-26 23:38:52Z" duration="0.016493" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1055" name="SealDamageGoalsAndVisualsFollowResolvedState" fullname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests.SealDamageGoalsAndVisualsFollowResolvedState" methodname="SealDamageGoalsAndVisualsFollowResolvedState" classname="LegendsOfRus.Tests.CampaignPlayMode.RunicSealPlayModeTests" runstate="Runnable" seed="1590285390" result="Passed" start-time="2026-09-26 23:38:52Z" end-time="2026-09-26 23:39:00Z" duration="7.704742" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-796082821 waves=1 score=150 final=8F8C6AC3E53CEBDE plan=5D7B761E45D805F4
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=-922262884 waves=1 score=175 final=98C75947D336B743 plan=E735334994B54969
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay phase: Idle -> BoosterTargeting
+Gameplay phase: BoosterTargeting -> ActivatingSpecials
+Booster resolution plan: Booster/Resolved seed=-639908262 waves=2 score=355 final=647043263105D278 plan=67748331FFED3A21
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Completed
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1056" name="SparkSandboxPlayModeTests" fullname="LegendsOfRus.Tests.CampaignPlayMode.SparkSandboxPlayModeTests" classname="LegendsOfRus.Tests.CampaignPlayMode.SparkSandboxPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-26 23:39:00Z" end-time="2026-09-26 23:39:11Z" duration="10.910252" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1057" name="SquareCreationAndAllSparkCombinationsReachRecordedOutcome" fullname="LegendsOfRus.Tests.CampaignPlayMode.SparkSandboxPlayModeTests.SquareCreationAndAllSparkCombinationsReachRecordedOutcome" methodname="SquareCreationAndAllSparkCombinationsReachRecordedOutcome" classname="LegendsOfRus.Tests.CampaignPlayMode.SparkSandboxPlayModeTests" runstate="Runnable" seed="1734282374" result="Passed" start-time="2026-09-26 23:39:00Z" end-time="2026-09-26 23:39:11Z" duration="10.893320" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus level=mechanics.playtest.1, attempt=1, board=8x7, seed=507481, hash=7A1906F3C028227C
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-200705299 waves=2 score=330 final=12C7C671FC1D7CF0 plan=5DFFC72B3BB9AE9B
+Gameplay phase: ResolvingMatches -> CreatingSpecials
+Gameplay phase: CreatingSpecials -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-444258606 waves=1 score=350 final=8A272675AEE76C10 plan=23A76BCCE301C4E9
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=-1650968765 waves=3 score=990 final=F9DF4A22DEA418A1 plan=4940D203AEDE81B5
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=1462043586 waves=1 score=850 final=834D8FBA7268A66B plan=399630A7194B2303
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Resolution plan: Swap/Resolved seed=197448189 waves=2 score=2780 final=016EB9CF1E97D167 plan=0C1ED4BE7218FC24
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Swapping
+Gameplay phase: Swapping -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> ActivatingSpecials
+Gameplay phase: ActivatingSpecials -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Falling
+Gameplay phase: Falling -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Legends of Rus level=mechanics.sandbox, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1632" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="451" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.246671" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3869043" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1633" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="451" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.232680" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1634" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="451" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.215879" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1635" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="451" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.198884" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1122" name="AudioHapticsFidelityVerificationPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" testcasecount="25" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.073317" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1140" name="AdaptiveCanvasScaler_ApplyUsesSafeAreaFitScaleAndCrossover" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.AdaptiveCanvasScaler_ApplyUsesSafeAreaFitScaleAndCrossover" methodname="AdaptiveCanvasScaler_ApplyUsesSafeAreaFitScaleAndCrossover" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1014141809" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.005511" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1141" name="AdaptiveCanvasScaler_RefreshesFixedTextOnlyWhenActualScaleChanges" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.AdaptiveCanvasScaler_RefreshesFixedTextOnlyWhenActualScaleChanges" methodname="AdaptiveCanvasScaler_RefreshesFixedTextOnlyWhenActualScaleChanges" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="342382128" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.002639" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="CoreLoopFeedback_DeduplicatesLaterCascadeAndActivationBeats" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.CoreLoopFeedback_DeduplicatesLaterCascadeAndActivationBeats" methodname="CoreLoopFeedback_DeduplicatesLaterCascadeAndActivationBeats" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1070239849" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001013" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1127" name="CoreLoopFeedback_PreservesEveryMotionMetadataField" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.CoreLoopFeedback_PreservesEveryMotionMetadataField" methodname="CoreLoopFeedback_PreservesEveryMotionMetadataField" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="767720145" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001068" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="FidelityVerification_CalculatesExpectedViewportForEveryTarget" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.FidelityVerification_CalculatesExpectedViewportForEveryTarget" methodname="FidelityVerification_CalculatesExpectedViewportForEveryTarget" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1761420630" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001036" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1138" name="FidelityVerification_EvaluationPassesExactPlanAndRejectsDrift" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.FidelityVerification_EvaluationPassesExactPlanAndRejectsDrift" methodname="FidelityVerification_EvaluationPassesExactPlanAndRejectsDrift" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="298276940" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001723" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1135" name="FidelityVerification_ExposesTheFourExactPortraitTargets" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.FidelityVerification_ExposesTheFourExactPortraitTargets" methodname="FidelityVerification_ExposesTheFourExactPortraitTargets" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1878699560" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001132" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1137" name="FidelityVerification_NormalizesInvalidAndClampedSafeAreas" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.FidelityVerification_NormalizesInvalidAndClampedSafeAreas" methodname="FidelityVerification_NormalizesInvalidAndClampedSafeAreas" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="172862542" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.000784" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1124" name="MetaUiFeedback_AcceptedActionsPreserveIdentityAndRequestRoleHaptics" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.MetaUiFeedback_AcceptedActionsPreserveIdentityAndRequestRoleHaptics" methodname="MetaUiFeedback_AcceptedActionsPreserveIdentityAndRequestRoleHaptics" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1841597725" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001376" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1126" name="MetaUiFeedback_FaultyObserversAndSinksAreIsolated" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.MetaUiFeedback_FaultyObserversAndSinksAreIsolated" methodname="MetaUiFeedback_FaultyObserversAndSinksAreIsolated" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="767052418" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.006141" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Meta UI feedback observer failed and was isolated: observer
+Meta UI SFX sink failed and was isolated: sfx
+Meta UI haptic sink failed and was isolated: haptic
+]]></output>
+              </test-case>
+              <test-case id="1125" name="MetaUiFeedback_SettingsAreReadForEverySignal" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.MetaUiFeedback_SettingsAreReadForEverySignal" methodname="MetaUiFeedback_SettingsAreReadForEverySignal" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1699042939" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001157" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1123" name="MetaUiFeedback_StartPhasesEmitOnceAndCompletionPhasesAreFiltered" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.MetaUiFeedback_StartPhasesEmitOnceAndCompletionPhasesAreFiltered" methodname="MetaUiFeedback_StartPhasesEmitOnceAndCompletionPhasesAreFiltered" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1983585480" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001010" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="PlatformHaptics_MapsEveryCoreLoopCueToSemanticIntent" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_MapsEveryCoreLoopCueToSemanticIntent" methodname="PlatformHaptics_MapsEveryCoreLoopCueToSemanticIntent" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1422046528" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.002717" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1130" name="PlatformHaptics_MapsMetaRolesAndOutcomeCuesToSemanticIntent" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_MapsMetaRolesAndOutcomeCuesToSemanticIntent" methodname="PlatformHaptics_MapsMetaRolesAndOutcomeCuesToSemanticIntent" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1352699839" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.000741" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="PlatformHaptics_StrongerIntentBypassesGuardButLowerOrEqualDoesNot" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_StrongerIntentBypassesGuardButLowerOrEqualDoesNot" methodname="PlatformHaptics_StrongerIntentBypassesGuardButLowerOrEqualDoesNot" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="805186688" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.002367" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="PlatformHaptics_SuspendResetsThrottleAndDisposeIsIdempotent" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_SuspendResetsThrottleAndDisposeIsIdempotent" methodname="PlatformHaptics_SuspendResetsThrottleAndDisposeIsIdempotent" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="70550931" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001145" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="PlatformHaptics_UnsupportedAndFailedBridgesAreSafeNoOps" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_UnsupportedAndFailedBridgesAreSafeNoOps" methodname="PlatformHaptics_UnsupportedAndFailedBridgesAreSafeNoOps" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="50416654" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001252" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="PlatformHaptics_UsesExactSixtyMillisecondBoundary" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.PlatformHaptics_UsesExactSixtyMillisecondBoundary" methodname="PlatformHaptics_UsesExactSixtyMillisecondBoundary" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1197345605" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.000754" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1146" name="ProductionFeedbackProvider_ConfiguresVariantsAndFallsBackWhenClipsAreMissing" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.ProductionFeedbackProvider_ConfiguresVariantsAndFallsBackWhenClipsAreMissing" methodname="ProductionFeedbackProvider_ConfiguresVariantsAndFallsBackWhenClipsAreMissing" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="2116291561" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.004209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1147" name="ProductionFeedbackProvider_PrewarmsHierarchyOnceAndMissingClipsNoOp" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.ProductionFeedbackProvider_PrewarmsHierarchyOnceAndMissingClipsNoOp" methodname="ProductionFeedbackProvider_PrewarmsHierarchyOnceAndMissingClipsNoOp" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="118256795" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001879" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="QACaptureService_AllowsOnlyOnePendingRequestWithoutCapturing" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.QACaptureService_AllowsOnlyOnePendingRequestWithoutCapturing" methodname="QACaptureService_AllowsOnlyOnePendingRequestWithoutCapturing" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1712737664" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001728" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="RuntimePerformanceAccumulator_AppliesFrameAndAllocationGates" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.RuntimePerformanceAccumulator_AppliesFrameAndAllocationGates" methodname="RuntimePerformanceAccumulator_AppliesFrameAndAllocationGates" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="2002006202" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.005851" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="RuntimePerformanceAccumulator_UnsupportedMetricsStayIncomplete" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.RuntimePerformanceAccumulator_UnsupportedMetricsStayIncomplete" methodname="RuntimePerformanceAccumulator_UnsupportedMetricsStayIncomplete" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="449331914" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.004156" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="RuntimePerformanceAccumulator_UsesNearestRankPercentiles" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.RuntimePerformanceAccumulator_UsesNearestRankPercentiles" methodname="RuntimePerformanceAccumulator_UsesNearestRankPercentiles" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="1793583647" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.000977" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1139" name="SafeAreaFitter_ApplyUsesInjectedScreenAndSafeArea" fullname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests.SafeAreaFitter_ApplyUsesInjectedScreenAndSafeArea" methodname="SafeAreaFitter_ApplyUsesInjectedScreenAndSafeArea" classname="LegendsOfRus.Tests.PlayMode.AudioHapticsFidelityVerificationPlayModeTests" runstate="Runnable" seed="630568587" result="Passed" start-time="2026-09-26 23:39:11Z" end-time="2026-09-26 23:39:11Z" duration="0.001292" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /tmp/lor-gameplay-mechanics-r11/Verify02/All/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

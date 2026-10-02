@@ -1,0 +1,40 @@
+using System.Collections;
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public sealed partial class Match3Board
+    {
+        readonly Dictionary<BoardPosition,SpecialCreationGraphic> creationGraphics=new Dictionary<BoardPosition,SpecialCreationGraphic>();
+        RectTransform creationClip;
+        SpecialCreationGraphic PrepareCreation(BoardSpecialCreationInstruction creation)
+        {
+            if(!creationClip)
+            {var go=new GameObject("CreationAssemblyClip",typeof(RectTransform),typeof(RectMask2D));go.transform.SetParent(transform,false);creationClip=(RectTransform)go.transform;Stretch(creationClip);}
+            if(!creationGraphics.TryGetValue(creation.Position,out var view)||!view)
+            {
+                var go=new GameObject("CreationAssembly",typeof(RectTransform),typeof(SpecialCreationGraphic));go.transform.SetParent(creationClip,false);Stretch((RectTransform)go.transform);view=go.GetComponent<SpecialCreationGraphic>();creationGraphics[creation.Position]=view;
+            }
+            var kind=creation.Kind;
+            var sprite=kind==SpecialGemKind.Row||kind==SpecialGemKind.Column?PrototypeBoardArt.Load("line"):kind==SpecialGemKind.Burst?burstSpecialSprite:kind==SpecialGemKind.Color?colorSpecialSprite:PrototypeBoardArt.Load("spark");
+            view.Begin(sprite,visualRoots[creation.Position.X,creation.Position.Y],kind==SpecialGemKind.Column);return view;
+        }
+        void ClearCreationGraphics(){foreach(var pair in creationGraphics)if(pair.Value)pair.Value.Finish();}
+        IEnumerator AnimateCreationsR21(BoardResolutionWave wave,string hash,GameplayBoosterKind booster)
+        {
+            foreach(var creation in wave.Creations)
+            {
+                var p=creation.Position;
+                if(!creationGraphics.TryGetValue(p,out var view)||!view||!view.Active)view=PrepareCreation(creation);
+                specialImages[p.X,p.Y].enabled=false;view.Settle();
+                PublishMotion(GameplayMotionKind.SpecialCreationStarted,ToView(p),ToView(p),wave.ComboIndex,1,creation.Kind,hash,wave.Combination,booster);
+            }
+            // All items in the wave complete together; no early idle-icon flash after RefreshAll.
+            float elapsed=0;while(elapsed<SpecialCreationGraphic.SettleSeconds){yield return null;elapsed+=Time.unscaledDeltaTime;}
+            foreach(var creation in wave.Creations)
+            {var p=creation.Position;creationGraphics[p].Finish();Refresh(p.X,p.Y);}
+        }
+    }
+}

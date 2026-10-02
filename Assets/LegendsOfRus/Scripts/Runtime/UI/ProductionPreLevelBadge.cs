@@ -2,10 +2,33 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace LegendsOfRus
 {
-    /// <summary>Emerald stock dome using the accepted Home badge lighting geometry.</summary>
+    /// <summary>Source-matched forest-green stock badge with antique-gold edging.</summary>
     [RequireComponent(typeof(CanvasRenderer))]
     public sealed class ProductionPreLevelBadge : MaskableGraphic
     {
+        public static void AlignCount(Text label, RectTransform badge)
+        {
+            if(label==null||badge==null)return;
+            var rect=label.rectTransform;
+            if(rect.parent!=badge)rect.SetParent(badge,false);
+            rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(0,1);
+            // Keep wide inventory values inside the circular face, not merely the square bounds.
+            rect.anchoredPosition=new Vector2(badge.sizeDelta.x*.14f,0);
+            rect.sizeDelta=new Vector2(badge.sizeDelta.x*1.44f,badge.sizeDelta.y*2);
+            rect.localScale=new Vector3(.5f,.5f,1);rect.localRotation=Quaternion.identity;
+            foreach(var effect in label.GetComponents<BaseMeshEffect>())effect.enabled=false;
+            var geometry=label.GetComponent<SplashTitleTextGeometry>()??label.gameObject.AddComponent<SplashTitleTextGeometry>();
+            geometry.enabled=true;geometry.CenterHorizontally=geometry.CenterVertically=true;
+            geometry.SnapToScreenPixels=false;geometry.OpticalOffset=Vector2.zero;
+            var font=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/RankNumbers");
+            if(font!=null)label.font=font;
+            label.fontStyle=FontStyle.Normal;label.material=null;label.color=new Color32(247,235,187,255);
+            label.alignment=TextAnchor.MiddleCenter;label.horizontalOverflow=HorizontalWrapMode.Wrap;
+            label.verticalOverflow=VerticalWrapMode.Truncate;label.raycastTarget=false;
+            label.resizeTextForBestFit=true;label.resizeTextMinSize=Mathf.RoundToInt(badge.sizeDelta.y*.64f);
+            label.resizeTextMaxSize=label.fontSize=Mathf.RoundToInt(badge.sizeDelta.y*1.4f);
+            label.SetVerticesDirty();
+        }
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();Rect rect=GetPixelAdjustedRect();
@@ -33,16 +56,16 @@ namespace LegendsOfRus
                 new Color32(194, 129, 43, 255), dark);
             BadgeBand(vh, center, radius, 1f, .967f,
                 new Color32(194, 129, 43, 255), dark,
-                new Color32(255, 242, 190, 255), new Color32(167, 95, 24, 255));
+                new Color32(240, 231, 173, 255), new Color32(127, 84, 26, 255));
             BadgeBand(vh, center, radius, .967f, .895f,
-                new Color32(255, 242, 190, 255), new Color32(167, 95, 24, 255),
-                new Color32(205, 145, 49, 255), new Color32(96, 43, 9, 255));
+                new Color32(240, 231, 173, 255), new Color32(127, 84, 26, 255),
+                new Color32(172, 134, 59, 255), new Color32(74, 44, 12, 255));
             BadgeBand(vh, center, radius, .895f, .85f,
-                new Color32(205, 145, 49, 255), new Color32(96, 43, 9, 255),
+                new Color32(172, 134, 59, 255), new Color32(74, 44, 12, 255),
                 new Color32(69, 26, 6, 255), new Color32(38, 11, 3, 255));
             BadgeBand(vh, center, radius, .85f, .807f,
-                new Color32(100, 45, 11, 255), new Color32(221, 146, 47, 255),
-                new Color32(176, 101, 22, 255), new Color32(255, 214, 121, 255));
+                new Color32(49, 39, 13, 255), new Color32(106, 78, 26, 255),
+                new Color32(80, 63, 21, 255), new Color32(145, 116, 51, 255));
             BadgeBand(vh, center, radius, .807f, .78f,
                 new Color32(4, 32, 14, 255), new Color32(2, 16, 8, 255),
                 EmeraldColor(Vector2.up), EmeraldColor(Vector2.down));
@@ -96,9 +119,9 @@ namespace LegendsOfRus
             Vector2 slope = point * .82f;
             Vector3 normal = new Vector3(slope.x, slope.y, Mathf.Sqrt(Mathf.Max(0, 1 - slope.sqrMagnitude)));
             float diffuse = Mathf.Clamp01(Vector3.Dot(normal, new Vector3(-.4f, .55f, .7331439f)));
-            Color ruby = Color.Lerp(new Color32(3, 30, 14, 255), new Color32(28, 131, 55, 255), diffuse * diffuse);
+            Color face = Color.Lerp(new Color32(3, 20, 2, 255), new Color32(22, 57, 7, 255), diffuse * diffuse);
             float highlight = Mathf.Pow(Mathf.Clamp01(Vector3.Dot(normal, new Vector3(-.25f, .37f, .8947625f))), 70);
-            return Color.Lerp(ruby, new Color32(205, 240, 169, 255), highlight * .73f);
+            return Color.Lerp(face, new Color32(99, 124, 45, 255), highlight * .22f);
         }
 
     }

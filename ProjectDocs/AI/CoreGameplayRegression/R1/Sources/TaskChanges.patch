@@ -1,0 +1,65 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopMotionFeedbackPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopMotionFeedbackPlayModeTests.cs
+@@ -108,7 +108,18 @@
+             boardRect.sizeDelta = new Vector2(786f, 942f);
+ 
+             board = boardObject.AddComponent<Match3Board>();
+-            board.Initialize(null, null);
++            // QA presets are 8x9; do not inherit dimensions/tutorials from the selected campaign level.
++            // Use the normal initializer so gestures, inventory and planning exercise current rules.
++            board.Initialize(new LevelData
++            {
++                id = "qa.input-motion",
++                columns = BoardQAPresetFactory.Width,
++                rows = BoardQAPresetFactory.Height,
++                tileTypes = BoardQAPresetFactory.TileTypes,
++                moveLimit = 50,
++                goals = new[] { new LevelGoalData { target = 999, tileType = 0 } }
++            }, null, null);
++            Assert.That(board.RuleVersion, Is.EqualTo(Match3Board.CurrentGameplayRules));
+             Canvas.ForceUpdateCanvases();
+             yield return null;
+         }
+@@ -285,6 +296,8 @@
+                     cascadeDepths.Add(motions[i].ComboIndex);
+             }
+ 
++            Assert.That(board.BoardStateHash, Is.EqualTo(plan.FinalSnapshot.StateHash),
++                "The fixture planner and runtime must resolve using the same current rules.");
+             Assert.That(cascadeDepths.Count, Is.GreaterThanOrEqualTo(1));
+             Assert.That(cascadeDepths[0], Is.EqualTo(2));
+             for (int i = 1; i < cascadeDepths.Count; i++)
+@@ -818,8 +831,10 @@
+                     BoardQAPresetFactory.TileTypes,
+                     new SeededBoardRandom(141400 + seed)
+                 );
++                model.SquareMatches = Match3Board.CurrentGameplayRules >= GameplayRuleVersion.PrototypeR2;
++                model.StandaloneSpecials = Match3Board.CurrentGameplayRules >= GameplayRuleVersion.PrototypeR4;
+                 model.GeneratePlayableBoard();
+-                var planner = new BoardResolutionPlanner(model);
++                var planner = new BoardResolutionPlanner(model, null, Match3Board.CurrentGameplayRules);
+ 
+                 for (int y = 0; y < model.Height; y++)
+                 for (int x = 0; x < model.Width; x++)
+--- a/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
+@@ -86,7 +86,18 @@
+             boardRect.sizeDelta = new Vector2(786f, 942f);
+ 
+             board = boardObject.AddComponent<Match3Board>();
+-            board.Initialize(null, null);
++            // QA presets are 8x9; do not inherit dimensions/tutorials from the selected campaign level.
++            // Use the normal initializer so gestures, inventory and planning exercise current rules.
++            board.Initialize(new LevelData
++            {
++                id = "qa.input-motion",
++                columns = BoardQAPresetFactory.Width,
++                rows = BoardQAPresetFactory.Height,
++                tileTypes = BoardQAPresetFactory.TileTypes,
++                moveLimit = 50,
++                goals = new[] { new LevelGoalData { target = 999, tileType = 0 } }
++            }, null, null);
++            Assert.That(board.RuleVersion, Is.EqualTo(Match3Board.CurrentGameplayRules));
+             Canvas.ForceUpdateCanvases();
+             yield return null;
+         }

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Failed(Child)" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.2858864">
+  <test-suite type="TestSuite" id="1357" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="288" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.285886" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1351" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="250" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.274306" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1527168" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1352" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="250" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.260958" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1353" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="250" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.244874" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1354" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="250" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.228162" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1341" name="VictoryAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" testcasecount="5" result="Failed" site="Child" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:04Z" duration="4.210611" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1342" name="AllAuthoredRewardsAndCurrentRoundScoreUseTheCompletionResult" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.AllAuthoredRewardsAndCurrentRoundScoreUseTheCompletionResult" methodname="AllAuthoredRewardsAndCurrentRoundScoreUseTheCompletionResult" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="87110721" result="Failed" start-time="2026-09-14 20:27:00Z" end-time="2026-09-14 20:27:01Z" duration="1.322209" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionVictoryView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x002e4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:278
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00243] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:225
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<AllAuthoredRewardsAndCurrentRoundScoreUseTheCompletionResult>d__10.MoveNext () [0x002bd] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:85
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1346" name="ReferenceAndPhonePortraitsRetainNativeInputLiveTextAndSafeAreas" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.ReferenceAndPhonePortraitsRetainNativeInputLiveTextAndSafeAreas" methodname="ReferenceAndPhonePortraitsRetainNativeInputLiveTextAndSafeAreas" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="1898383115" result="Failed" start-time="2026-09-14 20:27:01Z" end-time="2026-09-14 20:27:02Z" duration="1.217927" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionVictoryView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x002e4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:278
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00243] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:225
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<ReferenceAndPhonePortraitsRetainNativeInputLiveTextAndSafeAreas>d__14.MoveNext () [0x000cd] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:144
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1343" name="ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards" methodname="ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="1716362746" result="Failed" label="Error" start-time="2026-09-14 20:27:02Z" end-time="2026-09-14 20:27:03Z" duration="0.202284" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Cannot complete locked level 1:2.]]></message>
+                  <stack-trace><![CDATA[  at LegendsOfRus.GameState.CompleteLevel (LegendsOfRus.LevelData levelData, System.Int32 score) [0x00300] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:638 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Win (System.Int32 level, System.Int32 score) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:59 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards>d__11.MoveNext () [0x00039] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:94 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1345" name="UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow" methodname="UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="179134577" result="Failed" start-time="2026-09-14 20:27:03Z" end-time="2026-09-14 20:27:04Z" duration="1.250752" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionVictoryView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x002e4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:278
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00243] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:225
+at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow>d__13.MoveNext () [0x0015a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:128
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1344" name="VerifiedRewardDomainOperationUpdatesGoldOnlyAndOnlyOnce" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.VerifiedRewardDomainOperationUpdatesGoldOnlyAndOnlyOnce" methodname="VerifiedRewardDomainOperationUpdatesGoldOnlyAndOnlyOnce" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="1390880887" result="Failed" label="Error" start-time="2026-09-14 20:27:04Z" end-time="2026-09-14 20:27:04Z" duration="0.196695" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Cannot complete locked level 1:3.]]></message>
+                  <stack-trace><![CDATA[  at LegendsOfRus.GameState.CompleteLevel (LegendsOfRus.LevelData levelData, System.Int32 score) [0x00300] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:638 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.Win (System.Int32 level, System.Int32 score) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:59 
+  at LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests+<VerifiedRewardDomainOperationUpdatesGoldOnlyAndOnlyOnce>d__12.MoveNext () [0x00034] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs:109 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /home/k2/.cache/lor-victory-r1/run2/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

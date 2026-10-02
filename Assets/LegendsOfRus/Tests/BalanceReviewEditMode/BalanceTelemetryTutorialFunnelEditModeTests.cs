@@ -66,11 +66,13 @@ namespace LegendsOfRus.BalanceReview.Tests
             Assert.That(report.Levels[0].WinRate, Is.EqualTo(0.6f).Within(0.001f));
         }
 
-        [Test]
-        public void AggregateComputesWinningMoveMargin()
+        [TestCase(1)]
+        [TestCase(3)]
+        [TestCase(6)]
+        public void AggregateComputesWinningMoveMargin(int wins)
         {
             var buffer = new BalanceObservationBuffer();
-            for (int attempt = 1; attempt <= 3; attempt++)
+            for (int attempt = 1; attempt <= wins; attempt++)
             {
                 buffer.TryRecord(BalanceObservationCode.LevelStarted, 3, attempt);
                 buffer.TryRecord(BalanceObservationCode.LevelWon, 3, attempt, 5, 20, 1000);

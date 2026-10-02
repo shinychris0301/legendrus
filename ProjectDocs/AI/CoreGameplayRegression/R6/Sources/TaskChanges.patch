@@ -1,0 +1,74 @@
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSpectacleTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsSpectacleTests.cs
+@@ -14,8 +14,21 @@
+  public class MechanicsSpectacleTests
+  {
+   GameObject root;
++  bool observedFragments;
+   [UnityTearDown] public IEnumerator Cleanup(){if(root)UnityEngine.Object.Destroy(root);yield return null;}
+-  MechanicsSandbox Open(){root=new GameObject("SpectacleReview",typeof(RectTransform),typeof(Canvas));return MechanicsSandbox.Open((RectTransform)root.transform,()=>{},true);}
++  MechanicsSandbox Open()
++  {
++   root=new GameObject("SpectacleReview",typeof(RectTransform),typeof(Canvas));
++   var s=MechanicsSandbox.Open((RectTransform)root.transform,()=>{},true);
++   // Subscribe after the native fragment batches. PNG readback can skip their
++   // entire lifetime, so also inspect their actual state at the clear event.
++   s.Board.MotionEventPublished+=e=>
++   {
++    if(e.Kind==GameplayMotionKind.CellsImpacted)
++     observedFragments|=s.Board.GetComponentsInChildren<GemShatterView>().Any(v=>v.ActivePieces>0);
++   };
++   return s;
++  }
+   static BoardModel Fixture(SpecialGemKind kind)
+   {
+    var b=new BoardModel(8,7,6,new SeededBoardRandom(3));for(int y=0;y<7;y++)for(int x=0;x<8;x++)b.SetCell(new BoardPosition(x,y),new BoardCellData((x+2*y)%6));
+@@ -41,6 +54,7 @@
+    }
+    Assert.That(s.Board.HasActiveCommand,Is.False);Assert.That(s.Board.CanAcceptPointerInput,Is.True);
+    Assert.That(peak,Is.GreaterThan(0).And.LessThan(65535));
++   fragments|=observedFragments;
+    if(key!="SeaPearl")Assert.That(fragments,Is.True,"actual clears must shatter approved gems");
+    if(key=="Gems"||key=="Row"||key=="Column"||key=="Burst")Assert.That(s.Board.BoardStateHash,Is.EqualTo(s.Board.LastMechanicsCommand.Resolve().FinalSnapshot.StateHash));
+    else if(key!="SeaPearl")Assert.That(s.Board.BoardStateHash,Is.EqualTo(s.Board.LastPlanFinalStateHash));
+@@ -52,7 +66,7 @@
+    var s=Open();yield return null;
+    foreach(var kind in new[]{SpecialGemKind.Row,SpecialGemKind.Column,SpecialGemKind.Burst})
+    {
+-    s.Reset(0,GameplayRuleVersion.PrototypeR4);yield return null;s.Board.LoadSnapshotForTesting(Fixture(kind).CreateSnapshot());Capture(kind+"_Before");Assert.That(s.Board.TapCell(3,3),Is.True);yield return Record(s,kind.ToString());Assert.That(s.Board.Moves,Is.EqualTo(49));
++    s.Reset(0,GameplayRuleVersion.PrototypeR4);yield return null;s.Board.LoadSnapshotForTesting(Fixture(kind).CreateSnapshot());Capture(kind+"_Before");observedFragments=false;Assert.That(s.Board.TapCell(3,3),Is.True);yield return Record(s,kind.ToString());Assert.That(s.Board.Moves,Is.EqualTo(49));
+    }
+   }
+   [UnityTest] public IEnumerator EveryInventoryBoosterHasAVisibleReleaseAndKeepsMoveCost()
+@@ -61,7 +75,7 @@
+    foreach(BoosterType type in Enum.GetValues(typeof(BoosterType)))
+    {
+     s.Reset(0,GameplayRuleVersion.PrototypeR4);yield return null;s.Board.LoadSnapshotForTesting(Fixture(SpecialGemKind.None).CreateSnapshot());Capture(type+"_Before");
+-    s.Board.UseBooster(type);if(type!=BoosterType.SeaPearl)Assert.That(s.Board.TapCell(3,3),Is.True);
++    observedFragments=false;s.Board.UseBooster(type);if(type!=BoosterType.SeaPearl)Assert.That(s.Board.TapCell(3,3),Is.True);
+     Assert.That(s.Board.GetComponentInChildren<PrototypeBoosterView>().PresentationCount,Is.EqualTo(1));
+     yield return Record(s,type.ToString());Assert.That(s.Board.Moves,Is.EqualTo(type==BoosterType.SeaPearl?55:50));
+    }
+@@ -69,7 +83,7 @@
+   [UnityTest] public IEnumerator OrdinaryMatchShowsTextureFragmentsAndColoredChips()
+   {
+    var s=Open();s.Reset(0,GameplayRuleVersion.PrototypeR4);yield return null;var b=Fixture(SpecialGemKind.None);b.SetCell(new BoardPosition(1,3),new BoardCellData(2));
+-   b.SetCell(new BoardPosition(2,3),new BoardCellData(1));b.SetCell(new BoardPosition(3,3),new BoardCellData(1));b.SetCell(new BoardPosition(4,3),new BoardCellData(2));b.SetCell(new BoardPosition(4,2),new BoardCellData(1));s.Board.LoadSnapshotForTesting(b.CreateSnapshot());Capture("Gems_Before");Assert.That(s.Board.SwipeCell(4,2,new Vector2Int(0,1)),Is.True);yield return Record(s,"Gems");Assert.That(s.Board.Moves,Is.EqualTo(49));
++   b.SetCell(new BoardPosition(2,3),new BoardCellData(1));b.SetCell(new BoardPosition(3,3),new BoardCellData(1));b.SetCell(new BoardPosition(4,3),new BoardCellData(2));b.SetCell(new BoardPosition(4,2),new BoardCellData(1));s.Board.LoadSnapshotForTesting(b.CreateSnapshot());Capture("Gems_Before");observedFragments=false;Assert.That(s.Board.SwipeCell(4,2,new Vector2Int(0,1)),Is.True);yield return Record(s,"Gems");Assert.That(s.Board.Moves,Is.EqualTo(49));
+   }
+   [UnityTest] public IEnumerator RichEffectsAreBoundedRecoverableAndIgnoreDisabledEvents()
+   {
+--- a/Assets/LegendsOfRus/Tests/PlayMode/AndroidInputCompatibilityPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/AndroidInputCompatibilityPlayModeTests.cs
+@@ -32,7 +32,10 @@
+         public IEnumerator QueuedTouchMouseAndEscapeUseNativeUiWithoutLegacyInput()
+         {
+             string config = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
+-            Assert.That(config, Does.StartWith("/tmp/lor-android-input-r1/"));
++            Assert.That(config, Is.Not.Null.And.Not.Empty);
++            Assert.That(config.StartsWith("/tmp/lor-android-input-r1/", StringComparison.Ordinal) ||
++                config.StartsWith("/tmp/lor-continuation-r1/core-regression-", StringComparison.Ordinal),
++                Is.True, "Use the dedicated input store or the isolated broad-regression store.");
+             Assert.That(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), Is.EqualTo(config));
+             Assert.That(Application.persistentDataPath, Does.StartWith(config + "/"));
+             var router = ScreenRouter.Instance;

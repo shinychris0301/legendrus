@@ -5,16 +5,21 @@ namespace LegendsOfRus
 {
     public enum WorldMapGraphicKind { Node, Star, Halo, Lock, Path, Back }
 
-    /// <summary>Native gold bevels, star facets and path lamps; no reference pixels or textures.</summary>
+    /// <summary>Native gold bevels and path lamps, with optional source-backed stars.</summary>
     [RequireComponent(typeof(CanvasRenderer))]
     public sealed class ProductionWorldMapGraphic : MaskableGraphic
     {
         public WorldMapGraphicKind Kind;
         public bool Dimmed;
+        // Optional source stars, assigned only by Gameplay; other pages retain native geometry.
+        public Sprite StarFilledArt,StarEmptyArt;
+        public Sprite ActiveStarArt=>Kind==WorldMapGraphicKind.Star?(Dimmed?StarEmptyArt:StarFilledArt):null;
+        public override Texture mainTexture=>ActiveStarArt!=null?ActiveStarArt.texture:base.mainTexture;
         static readonly Color Gold=new Color32(235,176,71,255),Light=new Color32(255,236,171,255),Dark=new Color32(63,38,14,255);
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();Rect r=GetPixelAdjustedRect();Vector2 c=r.center;float radius=Mathf.Min(r.width,r.height)*.5f;
+            if(ActiveStarArt!=null){SourceStar(vh,r,ActiveStarArt);return;}
             if(Kind==WorldMapGraphicKind.Path){Path(vh,r);return;}
             if(Kind==WorldMapGraphicKind.Star){Star(vh,c,radius);return;}
             if(Kind==WorldMapGraphicKind.Halo){Glow(vh,c,radius,new Color(1,.61f,.15f,.35f));return;}
@@ -25,6 +30,17 @@ namespace LegendsOfRus
                 Vector2 a=c+new Vector2(radius*.25f,radius*.45f),b=c-new Vector2(radius*.25f,0),d=c+new Vector2(radius*.25f,-radius*.45f);
                 Line(vh,a,b,4,Light);Line(vh,b,d,4,Gold);
             }
+        }
+        void SourceStar(VertexHelper vh,Rect r,Sprite art)
+        {
+            float fit=Mathf.Min(r.width/art.rect.width,r.height/art.rect.height);
+            Vector2 size=art.rect.size*fit;Rect q=new Rect(r.center-size*.5f,size);
+            Vector4 uv=UnityEngine.Sprites.DataUtility.GetOuterUV(art);
+            vh.AddVert(new Vector3(q.xMin,q.yMin),color,new Vector2(uv.x,uv.y));
+            vh.AddVert(new Vector3(q.xMin,q.yMax),color,new Vector2(uv.x,uv.w));
+            vh.AddVert(new Vector3(q.xMax,q.yMax),color,new Vector2(uv.z,uv.w));
+            vh.AddVert(new Vector3(q.xMax,q.yMin),color,new Vector2(uv.z,uv.y));
+            vh.AddTriangle(0,1,2);vh.AddTriangle(2,3,0);
         }
         Color Tone(Color input)
         {

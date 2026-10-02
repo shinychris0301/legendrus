@@ -7,7 +7,8 @@ namespace LegendsOfRus.GameplayCore
     public enum BoardResolutionActionKind
     {
         Swap = 0,
-        Booster = 1
+        Booster = 1,
+        TapSpecial = 2
     }
 
     public enum BoardResolutionStatus
@@ -39,7 +40,10 @@ namespace LegendsOfRus.GameplayCore
         RowWithColumn = 8,
         RowWithBurst = 9,
         ColumnWithBurst = 10,
-        BurstWithBurst = 11
+        BurstWithBurst = 11,
+        SparkWithNormal = 12, SparkWithSpark = 13, SparkWithRow = 14,
+        SparkWithColumn = 15, SparkWithBurst = 16, ColorWithSpark = 17,
+        RowWithNormal = 18, ColumnWithNormal = 19, BurstWithNormal = 20
     }
 
     public readonly struct BoardBoosterRequest
@@ -81,18 +85,23 @@ namespace LegendsOfRus.GameplayCore
         public readonly SpecialGemKind Kind;
         public readonly int TileType;
         public readonly bool ForcedByCombination;
+        public readonly BoardPosition? Target;
+        public readonly SpecialGemKind Payload;
+        public readonly int FlightCount;
 
         public BoardSpecialActivationInstruction(
             BoardPosition position,
             SpecialGemKind kind,
             int tileType,
-            bool forcedByCombination
+            bool forcedByCombination, BoardPosition? target = null,
+            SpecialGemKind payload = SpecialGemKind.None, int flightCount = 1
         )
         {
             Position = position;
             Kind = kind;
             TileType = tileType;
             ForcedByCombination = forcedByCombination;
+            Target = target; Payload = payload; FlightCount = flightCount;
         }
 
         public override string ToString()
@@ -341,6 +350,13 @@ namespace LegendsOfRus.GameplayCore
                         Add(ref hash, (int)activation.Kind, prime);
                         Add(ref hash, activation.TileType, prime);
                         Add(ref hash, activation.ForcedByCombination ? 1 : 0, prime);
+                        if (activation.Target.HasValue)
+                        {
+                            Add(ref hash, 5202, prime);
+                            Add(ref hash, activation.Target.Value.X, prime);
+                            Add(ref hash, activation.Target.Value.Y, prime);
+                            Add(ref hash, (int)activation.Payload, prime);
+                        }
                     }
 
                     Add(ref hash, wave.SnapshotAfterClear?.StateHash, prime);

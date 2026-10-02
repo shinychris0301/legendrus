@@ -1,0 +1,164 @@
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+
+namespace LegendsOfRus
+{
+    /// <summary>Board-local sound for the development rules. Never changes the resolution plan.</summary>
+    public sealed class PrototypeBoardAudio : MonoBehaviour
+    {
+        public enum Cue { Swap, Reject, Match, Create, Bomb, Line, Flight, Arrival, Color, Mace, Firebird, Renewal, Wood, Ice, Metal, Seal }
+        public const int VoiceCapacity = 4;
+        const int QueueCapacity = 24;
+        struct Pending { public Cue Cue; public float Due, Gain, Pitch; public int Priority; }
+        readonly AudioClip[] clips = new AudioClip[16];
+        readonly AudioSource[] voices = new AudioSource[VoiceCapacity];
+        readonly int[] priorities = new int[VoiceCapacity];
+        readonly float[] ends = new float[VoiceCapacity];
+        readonly float[] lastPlayed = new float[16];
+        readonly Pending[] queue = new Pending[QueueCapacity];
+        int count;
+        Match3Board board;
+        bool paused, focused = true;
+        public int PendingCount => count;
+        public int PlayedCount { get; private set; }
+        public int DroppedCount { get; private set; }
+        public Cue LastCue { get; private set; }
+        public float LastPlayedAt(Cue cue) => lastPlayed[(int)cue];
+        public bool HandlesSound => isActiveAndEnabled;
+        public bool SoundAllowed => !paused && focused && GameState.Instance != null &&
+            GameState.Instance.Save != null && GameState.Instance.Save.sfx;
+
+        public static PrototypeBoardAudio Attach(Match3Board board)
+        {
+            var audio = board.gameObject.AddComponent<PrototypeBoardAudio>();
+            audio.board = board;
+            for (int i = 0; i < audio.clips.Length; i++)
+            {
+                audio.clips[i] = Resources.Load<AudioClip>("MechanicsAudioR11/" + ((Cue)i).ToString().ToLowerInvariant());
+                audio.lastPlayed[i] = -1000;
+            }
+            for (int i = 0; i < VoiceCapacity; i++)
+            {
+                var source = board.gameObject.AddComponent<AudioSource>();
+                source.playOnAwake = false; source.loop = false; source.spatialBlend = 0;
+                audio.voices[i] = source;
+            }
+            board.MotionEventPublished += audio.Motion;
+            board.ObstacleInteracted += audio.Obstacle;
+            return audio;
+        }
+
+        void Motion(GameplayMotionEvent motion)
+        {
+            if (motion.Kind == GameplayMotionKind.CommandRecovered) { Silence(); return; }
+            if (!SoundAllowed || !isActiveAndEnabled) return;
+            switch (motion.Kind)
+            {
+                case GameplayMotionKind.SwapStarted: Enqueue(Cue.Swap, 0, .20f, 1); break;
+                case GameplayMotionKind.SwapRejected:
+                case GameplayMotionKind.SwapReturnStarted:
+                case GameplayMotionKind.BoosterRejected: Enqueue(Cue.Reject, 0, .22f, 1); break;
+                case GameplayMotionKind.MatchWaveStarted:
+                    if (motion.ClearedCells.Count > 0)
+                        Enqueue(Cue.Match, 0, .30f, 1, Mathf.Min(1.18f, 1 + .035f * Mathf.Max(0, motion.ComboIndex - 1)));
+                    break;
+                case GameplayMotionKind.SpecialCreationStarted: Enqueue(Cue.Create, 0, .30f, 2); break;
+                case GameplayMotionKind.SpecialActivationStarted:
+                    // Each distinct type in a batch remains audible; repeated copies coalesce.
+                    if (motion.SpecialKind == SpecialGemKind.Spark)
+                    {
+                        Enqueue(Cue.Flight, 0, .30f, 2);
+                        Enqueue(Cue.Arrival, SparkFlightView.Duration, .44f, 3);
+                    }
+                    else Enqueue(motion.SpecialKind == SpecialGemKind.Burst ? Cue.Bomb :
+                        motion.SpecialKind == SpecialGemKind.Color ? Cue.Color : Cue.Line,
+                        PrototypeImpactView.Anticipation, .48f, 3);
+                    break;
+                case GameplayMotionKind.BoosterActivated:
+                    Cue cue = motion.BoosterKind == GameplayBoosterKind.SeaPearl ? Cue.Renewal :
+                        motion.BoosterKind == GameplayBoosterKind.LivingLight ? Cue.Color :
+                        motion.BoosterKind == GameplayBoosterKind.Firebird ? Cue.Firebird : Cue.Mace;
+                    Enqueue(cue, cue == Cue.Renewal ? 0 : PrototypeImpactView.Anticipation, .48f, 3);
+                    break;
+            }
+        }
+
+        void Obstacle(BoardObstacleInteractionInstruction hit)
+        {
+            if (!SoundAllowed || !isActiveAndEnabled || hit.LayersAfter >= hit.LayersBefore) return;
+            Cue cue;
+            switch (hit.Kind)
+            {
+                case BoardObstacleKind.Crate: cue = Cue.Wood; break;
+                case BoardObstacleKind.Ice: cue = Cue.Ice; break;
+                case BoardObstacleKind.Chain: cue = Cue.Metal; break;
+                case BoardObstacleKind.RunicSeal: cue = Cue.Seal; break;
+                default: return;
+            }
+            bool cleared = hit.LayersAfter == 0;
+            Enqueue(cue, 0, cleared ? .40f : .23f, 2, cleared ? 1 : .82f);
+        }
+
+        void Enqueue(Cue cue, float delay, float gain, int priority, float pitch = 1)
+        {
+            float due = Time.unscaledTime + delay;
+            for (int i = 0; i < count; i++)
+                if (queue[i].Cue == cue && Mathf.Abs(queue[i].Due - due) < .045f)
+                {
+                    // Keep the stronger final-break cue when both layers fall in one beat.
+                    if (gain > queue[i].Gain) queue[i] = new Pending { Cue = cue, Due = due, Gain = gain, Pitch = pitch, Priority = priority };
+                    return;
+                }
+            if (count == QueueCapacity) { DroppedCount++; return; }
+            queue[count++] = new Pending { Cue = cue, Due = due, Gain = gain, Pitch = pitch, Priority = priority };
+        }
+
+        void Update()
+        {
+            if (!SoundAllowed) { Silence(); return; }
+            float now = Time.unscaledTime;
+            for (int i = 0; i < count;)
+            {
+                var pending = queue[i];
+                if (pending.Due > now) { i++; continue; }
+                // Preserve enqueue order for equal-time impacts.
+                for (int j = i + 1; j < count; j++) queue[j - 1] = queue[j];
+                count--;
+                if (now - pending.Due > .15f) { DroppedCount++; continue; }
+                Play(pending, now);
+            }
+        }
+
+        void Play(Pending pending, float now)
+        {
+            int key = (int)pending.Cue;
+            if (clips[key] == null || now - lastPlayed[key] < .055f) { DroppedCount++; return; }
+            int slot = -1;
+            for (int i = 0; i < VoiceCapacity; i++) if (ends[i] <= now) { slot = i; break; }
+            if (slot < 0)
+            {
+                for (int i = 0; i < VoiceCapacity; i++)
+                    if (priorities[i] < pending.Priority && (slot < 0 || priorities[i] < priorities[slot])) slot = i;
+            }
+            if (slot < 0) { DroppedCount++; return; }
+            var source = voices[slot]; source.Stop(); source.clip = clips[key];
+            // Four voices, each <= .48 * .72 peak, retain sum headroom.
+            source.volume = pending.Gain * .65f; source.pitch = pending.Pitch; source.Play();
+            ends[slot] = now + clips[key].length / pending.Pitch; priorities[slot] = pending.Priority;
+            lastPlayed[key] = now; LastCue = pending.Cue; PlayedCount++;
+        }
+
+        void Silence()
+        {
+            count = 0;
+            for (int i = 0; i < VoiceCapacity; i++) { if (voices[i]) voices[i].Stop(); ends[i] = 0; }
+        }
+        void OnApplicationPause(bool value) { paused = value; if (value) Silence(); }
+        void OnApplicationFocus(bool value) { focused = value; if (!value) Silence(); }
+        void OnDisable() => Silence();
+        void OnDestroy()
+        {
+            if (board) { board.MotionEventPublished -= Motion; board.ObstacleInteracted -= Obstacle; }
+        }
+    }
+}

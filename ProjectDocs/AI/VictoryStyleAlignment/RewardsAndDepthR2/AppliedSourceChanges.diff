@@ -1,0 +1,290 @@
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -536,6 +536,7 @@
+             {
+                 var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
+                 var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
++                // Upgrade native Victory in place, retaining existing serialized object IDs.
+                 ProductionVictoryRuntime.BuildInto(rect);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Victory.");
+             }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryLayout.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryLayout.cs
+@@ -23,9 +23,9 @@
+                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
+                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin;
+                 View.Hud.anchoredPosition=new Vector2(0,top);
+-                View.Footer.anchoredPosition=new Vector2(0,bottom-1340);
+-                float available=Mathf.Max(1,high.y-low.y-492);
+-                float scale=Mathf.Min(1,available/1205),extra=Mathf.Max(0,available-1205);
++                View.Footer.anchoredPosition=new Vector2(0,bottom-1280);
++                float available=Mathf.Max(1,high.y-low.y-552);
++                float scale=Mathf.Min(1,available/1180),extra=Mathf.Max(0,available-1180);
+                 View.Body.anchoredPosition=new Vector2(941*(1-scale)*.5f,top-140-extra*.5f);View.Body.localScale=Vector3.one*scale;
+                 canvasRect.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);
+                 Vector2 native=View.Environment.sprite.rect.size;float cover=Mathf.Max((high.x-low.x)/native.x,(high.y-low.y)/native.y);Vector2 size=native*cover;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryRuntime.cs
+@@ -6,12 +6,12 @@
+     public static class ProductionVictoryRuntime
+     {
+         public const string ContentName="VICTORY_ALIGNED_CONTENT",ArtRoot="ProductionUI/VictoryAligned/";
+-        public static readonly string[] ArtNames={"firebird","banner","video"};
++        public static readonly string[] ArtNames={"firebird","banner","video","rewards_panel_r2"};
+         public static Sprite Home(string name)=>Load(ProductionHomeRuntime.ArtRoot+name);
+         public static void BuildInto(RectTransform root)
+         {
+             var existing=root.GetComponent<ProductionVictoryView>();
+-            if(existing!=null&&existing.HasRequiredBindings){ApplyCurrentStyle(existing);existing.RefreshContent();return;}
++            if(existing!=null&&existing.HasBaseBindings){ApplyCurrentStyle(existing);existing.RefreshContent();return;}
+             if(root.Find(ContentName)!=null)throw new InvalidOperationException("Repair Victory bindings outside Play Mode.");
+             var legacy=root.Find("FIX01_CONTENT");if(legacy!=null)throw new InvalidOperationException("Victory legacy content must be removed by its editor builder.");
+             var source=Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>();
+@@ -70,14 +70,65 @@
+         // The prefab owner and runtime repair path apply the same page-only style.
+         public static void ApplyCurrentStyle(ProductionVictoryView view)
+         {
++            // Upgrade in place: keep all prior object identities and serialized actions.
++            if(view.RewardsPanel==null)
++            {
++                var panel=view.RewardsArea.Find("RewardsPanel");
++                view.RewardsPanel=panel!=null?panel.GetComponent<Image>():Art(view.RewardsArea,"RewardsPanel",Load(ArtRoot+"rewards_panel_r2"),50,0,841,420);
++            }
++            view.RewardsPanel.transform.SetAsFirstSibling();
++            view.RewardsPanel.sprite=Load(ArtRoot+"rewards_panel_r2");
++            ProductionVictoryView.Place(view.RewardsPanel.rectTransform,50,0,841,420);
++            ProductionVictoryView.Place(view.RewardsArea,0,760,941,420);
++            ProductionVictoryView.PlaceText(view.RewardsHeading,155,60,631,32,30);
++            view.Score.transform.SetParent(view.RewardsArea,false);
++            ProductionVictoryView.PlaceText(view.Score,155,95,631,25,22);
++            ProductionVictoryView.PlaceText(view.RewardStatus,120,122,701,20,17);
++            view.Reaction.transform.SetParent(view.Footer,false);
++            ProductionVictoryView.PlaceText(view.Reaction,105,319,731,32,18);
+             foreach(RectTransform card in view.RewardCards)card.GetComponent<Image>().type=Image.Type.Simple;
++
++            var banner=view.Body.Find("VictoryBanner") as RectTransform;
++            ProductionVictoryView.Place(banner,40,365,861,389);
++            ProductionVictoryView.PlaceText(view.Title,130,450,681,144,116);
++            ApplyGoldLettering(view.Title,true);
++            for(int i=0;i<3;i++)
++            {
++                float size=i==1?155:140;
++                float centerX=313+i*158;
++                float y=i==1?603:618;
++                ProductionVictoryView.Place(view.Stars[i].rectTransform,centerX-size*.5f,y,size,size);
++                ProductionVictoryView.Place(view.StarGlows[i].rectTransform,centerX-112,y+size*.5f-112,224,224);
++                var polish=view.Stars[i].GetComponent<ProductionVictoryStarDepth>();
++                if(polish==null)polish=view.Stars[i].gameObject.AddComponent<ProductionVictoryStarDepth>();
++            }
++            view.Body.sizeDelta=new Vector2(941,1180);
++            view.Footer.sizeDelta=new Vector2(941,392);
++            ProductionVictoryView.Place(view.ContinueButton.transform as RectTransform,140,0,661,155);
++            ProductionVictoryView.PlaceText(view.ContinueText,65,47,531,66,48);
++            ApplyGoldLettering(view.ContinueText,true);
+             var video=view.DoubleButton.GetComponent<Image>();video.sprite=Load(ArtRoot+"video");video.type=Image.Type.Simple;
+-            ProductionVictoryView.Place(video.rectTransform,170,163,601,112);
+-            ProductionVictoryView.PlaceText(view.DoubleText,132,24,410,64,24);
++            ProductionVictoryView.Place(video.rectTransform,140,174,661,125);
++            ProductionVictoryView.PlaceText(view.DoubleText,132,27,450,67,26);
+             view.DoubleText.color=new Color32(43,23,5,255);
+             view.DoubleText.GetComponent<Shadow>().effectColor=new Color32(255,219,110,90);
+             view.DoubleText.GetComponent<Shadow>().effectDistance=new Vector2(0,-1);
++            view.FooterOrnament=view.Footer.Find("Ornament").GetComponent<Image>();
++            ProductionVictoryView.Place(view.FooterOrnament.rectTransform,0,242,941,150);
++            view.FooterOrnament.transform.SetAsFirstSibling();
++            ProductionVictoryView.PlaceText(view.Status,120,319,701,32,20);
++            view.Revision=ProductionVictoryView.CurrentRevision;
+         }
++        static void ApplyGoldLettering(Text text,bool bold)
++        {
++            var home=Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>();
++            var effect=text.GetComponent<ProductionHomeGoldText>();
++            if(effect==null)effect=text.gameObject.AddComponent<ProductionHomeGoldText>();
++            effect.BeveledFace=true;effect.TopColor=new Color32(255,236,157,255);effect.BottomColor=new Color32(191,113,17,255);
++            text.material=home.PlayText.material;text.fontStyle=bold?FontStyle.Bold:FontStyle.Normal;
++            var shadow=text.GetComponent<Shadow>();shadow.effectColor=new Color32(45,19,3,245);shadow.effectDistance=new Vector2(4,-5);
++        }
++
+         static Sprite Load(string key)=>Resources.Load<Sprite>(key)??throw new InvalidOperationException("Missing Victory resource: "+key);
+         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h)=>ProductionChapterMapRuntime.Rect(p,n,x,y,w,h);
+         static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.raycastTarget=false;return a;}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
+@@ -10,11 +10,12 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionVictoryView : MonoBehaviour
+     {
+-        public const int CurrentRevision=1;
++        public const int CurrentRevision=2;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Body,Footer,RewardsArea;
+         public Image Environment,Firebird;
++        public Image RewardsPanel,FooterOrnament;
+         public Text Title,Score,Reaction,RewardsHeading,RewardStatus,ContinueText,DoubleText,Status;
+         public Text[] ResourceValues,RewardValues,RewardLabels;
+         public RectTransform[] RewardCards;
+@@ -23,7 +24,8 @@
+         public Button ContinueButton,DoubleButton;
+         public Button[] ResourceButtons;
+         public bool ActionsBound{get;private set;}
+-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography!=null&&Content!=null&&Hud!=null&&Body!=null&&Footer!=null&&RewardsArea!=null&&Environment!=null&&Environment.sprite!=null&&Firebird!=null&&Firebird.sprite!=null&&Title!=null&&Score!=null&&Reaction!=null&&RewardsHeading!=null&&RewardStatus!=null&&ContinueText!=null&&DoubleText!=null&&Status!=null&&ContinueButton!=null&&DoubleButton!=null&&Valid(ResourceButtons,3)&&Valid(ResourceValues,3)&&Valid(RewardCards,6)&&Valid(RewardIcons,6)&&Valid(RewardValues,6)&&Valid(RewardLabels,6)&&Valid(Stars,3)&&Valid(StarGlows,3);
++        public bool HasRequiredBindings=>Revision==CurrentRevision&&RewardsPanel!=null&&RewardsPanel.sprite!=null&&FooterOrnament!=null&&HasBaseBindings;
++        public bool HasBaseBindings=>Typography!=null&&Content!=null&&Hud!=null&&Body!=null&&Footer!=null&&RewardsArea!=null&&Environment!=null&&Environment.sprite!=null&&Firebird!=null&&Firebird.sprite!=null&&Title!=null&&Score!=null&&Reaction!=null&&RewardsHeading!=null&&RewardStatus!=null&&ContinueText!=null&&DoubleText!=null&&Status!=null&&ContinueButton!=null&&DoubleButton!=null&&Valid(ResourceButtons,3)&&Valid(ResourceValues,3)&&Valid(RewardCards,6)&&Valid(RewardIcons,6)&&Valid(RewardValues,6)&&Valid(RewardLabels,6)&&Valid(Stars,3)&&Valid(StarGlows,3);
+         static bool Valid<T>(T[] items,int n)where T:UnityEngine.Object=>items!=null&&items.Length==n&&Array.TrueForAll(items,x=>x!=null);
+         GameState subscribed;
+         string language;
+@@ -44,7 +46,7 @@
+                 {
+                     float t=Mathf.SmoothStep(0,1,Mathf.Clamp01((elapsed-i*.12f)/.55f));
+                     Stars[i].rectTransform.localScale=Vector3.one*Mathf.Lerp(.88f,1,t);
+-                    Color glow=StarGlows[i].color;glow.a=Stars[i].Dimmed?0:.20f*t;StarGlows[i].color=glow;
++                    Color glow=StarGlows[i].color;glow.a=Stars[i].Dimmed?0:.45f*t;StarGlows[i].color=glow;
+                 }
+         }
+         void BindState(){if(subscribed!=null)subscribed.Changed-=RefreshState;subscribed=GameState.Instance;if(subscribed!=null)subscribed.Changed+=RefreshState;}
+@@ -54,6 +56,7 @@
+             language=DemoFeatureState.LanguageCode;bool en=language=="en";string source;
+             Font font=Application.isPlaying?Typography.Resolve(false,out source):Typography.RegularFont;
+             foreach(Text text in GetComponentsInChildren<Text>(true)){text.font=font;text.raycastTarget=false;}
++            if(Application.isPlaying){Title.font=Typography.Resolve(true,out source);ContinueText.font=Title.font;}
+             Title.text=en?"VICTORY!":"ПОБЕДА!";RewardsHeading.text=en?"YOUR REWARDS":"ВАШИ НАГРАДЫ";
+             ContinueText.text=en?"CONTINUE":"ПРОДОЛЖИТЬ";Status.text="";
+             RefreshState();
+@@ -70,6 +73,7 @@
+             Score.text=current?(en?"LEVEL ":"УРОВЕНЬ ")+result.Level.levelId+"  •  "+(en?"SCORE ":"СЧЁТ ")+Number(result.Score):(en?"No completed round":"Нет завершённого раунда");
+             var reaction=current?StoryService.GetLocalizedReaction(result.Level,StoryReactionOutcomes.Victory):null;
+             Reaction.text=reaction!=null?reaction.Speaker+": "+reaction.Text:"";
++            Reaction.gameObject.SetActive(string.IsNullOrEmpty(Status.text));
+             bool granted=current&&result.FirstClearRewardGranted;
+             RewardStatus.text=!current?"":granted?(en?"Rewards added":"Награды начислены"):(en?"First-clear rewards already received":"Награда за первое прохождение уже получена");
+             int gold=current?result.GoldReward:0,gems=current?result.GemReward:0;
+@@ -88,11 +92,11 @@
+             for(int i=0;i<6;i++)
+             {
+                 RewardCards[i].gameObject.SetActive(i<count);if(i>=count)continue;
+-                RewardCards[i].anchoredPosition=new Vector2(start+i*(width+14),-62);RewardCards[i].sizeDelta=new Vector2(width,220);
+-                float icon=Mathf.Min(116,width-24);
+-                Place(RewardIcons[i].rectTransform,(width-icon)*.5f,51,icon,105);
+-                PlaceText(RewardValues[i],10,169,width-20,35,30);
+-                PlaceText(RewardLabels[i],8,24,width-16,24,count>3?15:19);
++                RewardCards[i].anchoredPosition=new Vector2(start+i*(width+14),-145);RewardCards[i].sizeDelta=new Vector2(width,180);
++                float icon=Mathf.Min(140,width-24);
++                Place(RewardIcons[i].rectTransform,(width-icon)*.5f,33,icon,107);
++                PlaceText(RewardValues[i],10,141,width-20,30,29);
++                PlaceText(RewardLabels[i],8,12,width-16,22,count>3?15:18);
+             }
+             bool eligible=current&&save.lastRewardEligibleForDouble&&!save.lastRewardDoubled;
+             DoubleButton.interactable=eligible;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
+@@ -123,7 +123,7 @@
+             int gold=state.Save.gold,gems=state.Save.gems;
+             View().DoubleButton.onClick.Invoke();yield return null;
+             Assert.That(state.Save.gold,Is.EqualTo(gold));Assert.That(state.Save.gems,Is.EqualTo(gems));
+-            Assert.That(state.Save.lastRewardDoubled,Is.False);Assert.That(View().Status.text,Does.Contain("Видео недоступно"));
++            Assert.That(state.Save.lastRewardDoubled,Is.False);Assert.That(View().Status.text,Does.Contain("Видео недоступно"));Assert.That(View().Reaction.gameObject.activeSelf,Is.False);
+             yield return new WaitForSecondsRealtime(1);
+             Capture("Victory_VideoUnavailable_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             var button=View().ContinueButton;button.onClick.Invoke();Settle();ScreenId destination=router.CurrentScreen;
+@@ -289,6 +289,33 @@
+                 Assert.That(text.preferredWidth,Is.LessThanOrEqualTo(text.rectTransform.rect.width+2),text.name+" horizontal overflow");
+                 Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+2),text.name+" vertical overflow");
+             }
++            Rect panel=Bounds(view.RewardsPanel.rectTransform,camera);
++            foreach(var card in view.RewardCards)
++            {
++                if(!card.gameObject.activeSelf)continue;
++                Rect bounds=Bounds(card,camera);
++                Assert.That(bounds.xMin,Is.GreaterThan(panel.xMin+panel.width*.035f),"Reward card must clear the outer gold rim.");
++                Assert.That(bounds.xMax,Is.LessThan(panel.xMax-panel.width*.035f));
++                Assert.That(bounds.yMin,Is.GreaterThan(panel.yMin+panel.height*.12f));
++                Assert.That(bounds.yMax,Is.LessThan(panel.yMax-panel.height*.18f));
++            }
++            foreach(Text text in new[]{view.Score,view.RewardsHeading,view.RewardStatus})
++            {
++                Rect bounds=Bounds(text.rectTransform,camera);
++                Assert.That(bounds.xMin,Is.GreaterThanOrEqualTo(panel.xMin));Assert.That(bounds.xMax,Is.LessThanOrEqualTo(panel.xMax));
++                Assert.That(bounds.yMin,Is.GreaterThanOrEqualTo(panel.yMin));Assert.That(bounds.yMax,Is.LessThanOrEqualTo(panel.yMax-panel.height*.13f),"Result text must sit below the top carving.");
++                Assert.That(bounds.yMin,Is.GreaterThanOrEqualTo(panel.yMin+panel.height*.17f),"Result text must clear the bottom carving.");
++            }
++            Rect ornament=Bounds(view.FooterOrnament.rectTransform,camera);
++            Assert.That(ornament.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1),"Footer must remain visible at reference height.");
++            Assert.That(ornament.yMax,Is.LessThanOrEqualTo(safe.yMax));
++            Assert.That(ornament.yMin,Is.LessThan(safe.yMin+2),"Footer remains attached to safe-area bottom.");
++            Assert.That(view.Title.GetComponent<ProductionHomeGoldText>().BeveledFace,Is.True);
++            foreach(var star in view.Stars)
++            {
++                Assert.That(star.GetComponent<ProductionVictoryStarDepth>(),Is.Not.Null);
++                Assert.That(star.canvasRenderer.GetMesh().vertexCount,Is.GreaterThanOrEqualTo(240),"Raised star requires rendered bevel geometry.");
++            }
+             Assert.That(Bounds(view.RewardsArea,camera).Overlaps(Bounds(view.ContinueButton.transform as RectTransform,camera)),Is.False);
+             foreach(var star in view.Stars)Assert.That(star.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
+             Vector2 old=view.Body.anchoredPosition;view.GetComponent<ProductionVictoryLayout>().ApplyNow();Canvas.ForceUpdateCanvases();
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
+@@ -13,6 +13,9 @@
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Victory),Is.EqualTo("ProductionUI/Pages/Victory"));
+             var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=prefab.GetComponent<ProductionVictoryView>();
+             Assert.That(view,Is.Not.Null);Assert.That(view.HasRequiredBindings,Is.True);
++            Assert.That(view.Revision,Is.EqualTo(2));
++            Assert.That(view.RewardsPanel.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionVictoryRuntime.ArtRoot+"rewards_panel_r2")));
++            Assert.That(view.Title.GetComponent<ProductionHomeGoldText>().BeveledFace,Is.True);
+             Assert.That(prefab.GetComponent<ProductionVictoryLayout>().View,Is.SameAs(view));
+             Assert.That(prefab.GetComponentsInChildren<Canvas>(true),Is.Empty);
+             Assert.That(prefab.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryStarDepth.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryStarDepth.cs
+@@ -0,0 +1,52 @@
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus
++{
++    /// <summary>Victory-only raised gold rim, recessed outline and alternating face facets.</summary>
++    [DisallowMultipleComponent]
++    public sealed class ProductionVictoryStarDepth : BaseMeshEffect
++    {
++        public override void ModifyMesh(VertexHelper vh)
++        {
++            var star=graphic as ProductionWorldMapGraphic;
++            if(!IsActive()||star==null||star.Kind!=WorldMapGraphicKind.Star)return;
++            vh.Clear();Rect rect=star.GetPixelAdjustedRect();Vector2 center=rect.center;
++            float radius=Mathf.Min(rect.width,rect.height)*.48f;
++            Color dark=new Color32(58,26,4,255),gold=new Color32(214,132,20,255);
++            Color light=new Color32(255,243,169,255),edge=new Color32(255,199,53,255);
++            for(int i=0;i<10;i++)
++            {
++                Vector2 a=Point(i,radius),b=Point(i+1,radius);
++                // Downward cast edge, outside bevel, narrow luminous lip, then inner bevel.
++                Tri(vh,center+new Vector2(0,-3),center+a+new Vector2(0,-3),center+b+new Vector2(0,-3),dark,dark,dark);
++                Ring(vh,center,a,b,1,.91f,dark,edge);
++                Ring(vh,center,a,b,.91f,.86f,light,edge);
++                Ring(vh,center,a,b,.86f,.72f,i%2==0?light:gold,i%2==0?gold:dark);
++                if(star.Dimmed)
++                {
++                    Color recess=new Color32(17,21,25,255);
++                    Tri(vh,center,center+a*.72f,center+b*.72f,recess,recess,recess);
++                }
++                else
++                {
++                    Color face=i%2==0?new Color32(255,218,87,255):new Color32(223,141,20,255);
++                    Tri(vh,center,center+a*.72f,center+b*.72f,light,face,i%2==0?gold:face);
++                }
++            }
++        }
++        static void Ring(VertexHelper vh,Vector2 c,Vector2 a,Vector2 b,float outer,float inner,Color outside,Color inside)
++        {
++            Tri(vh,c+a*outer,c+b*outer,c+b*inner,outside,outside,inside);
++            Tri(vh,c+b*inner,c+a*inner,c+a*outer,inside,inside,outside);
++        }
++        static Vector2 Point(int i,float radius)
++        {
++            float angle=Mathf.PI*.5f+i*Mathf.PI/5;return new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius*(i%2==0?1:.44f);
++        }
++        static void Tri(VertexHelper vh,Vector2 a,Vector2 b,Vector2 c,Color ca,Color cb,Color cc)
++        {
++            int n=vh.currentVertCount;vh.AddVert(a,ca,Vector2.zero);vh.AddVert(b,cb,Vector2.zero);vh.AddVert(c,cc,Vector2.zero);vh.AddTriangle(n,n+1,n+2);
++        }
++    }
++}

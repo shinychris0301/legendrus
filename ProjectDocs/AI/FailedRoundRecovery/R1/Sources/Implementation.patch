@@ -1,0 +1,636 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -133,9 +133,11 @@
+         public bool sfx = true;
+         public bool vibration = true;
+         public bool notifications = true;
++        // Optional v6 extension with its own schema; legacy saves simply have no retained attempt.
++        public RetainedRoundData retainedRound;
+     }
+ 
+-    public sealed class GameState : MonoBehaviour
++    public sealed partial class GameState : MonoBehaviour
+     {
+         public static GameState Instance { get; private set; }
+ 
+@@ -217,6 +219,9 @@
+                 return;
+             }
+             Save = migration.Data;
++            // Migration clones through Unity JSON, which may materialize an empty optional object.
++            if (Save.retainedRound != null && string.IsNullOrEmpty(Save.retainedRound.attemptId))
++                Save.retainedRound = null;
+ 
+             NormalizeLevelProgress();
+             NormalizeTutorialProgress();
+@@ -472,6 +477,7 @@
+ 
+         public bool SelectLevel(int chapterId, int levelId)
+         {
++            if (TryGetRetainedRound(out var retained) && (retained.chapter != chapterId || retained.level != levelId)) return false;
+             if (!IsLevelUnlocked(chapterId, levelId)) return false;
+             if (ChapterLevelCatalog.Find(chapterId, levelId) == null) return false;
+ 
+@@ -523,6 +529,9 @@
+         public int RegisterLevelAttempt(LevelData levelData)
+         {
+             if (levelData == null) return 0;
++            if (TryGetRetainedRound(out _)) throw new InvalidOperationException("Resolve the retained attempt before starting another round.");
++            Save.retainedRound = null; // Reject stale/incompatible optional checkpoints without resetting progress.
++            unsavedRetainedRound = null;
+             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
+                 return 0;
+ 
+@@ -938,6 +947,7 @@
+             StoryService.ResetRuntime();
+             LastCompletionResult = null;
+             LastFailureResult = null;
++            unsavedRetainedRound = null;
+             Save = reset;
+             canPersist = writeCompleted;
+             if (!writeCompleted)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
+@@ -162,7 +162,7 @@
+ 
+         }
+ 
+-        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt)
++        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null)
+         {
+             campaignManaged = committedAttempt.HasValue;
+             this.onWin = onWin;
+@@ -190,9 +190,11 @@
+             score = Mathf.Max(0, currentLevel.startingScore);
+             goalRuntime = new LevelGoalRuntime(currentLevel, score);
+ 
+-            int attempt = committedAttempt ?? (GameState.Instance != null
++            int attempt = retained?.attempt ?? committedAttempt ?? (GameState.Instance != null
+                 ? GameState.Instance.RegisterLevelAttempt(currentLevel)
+                 : 1);
++            retainedAttemptNumber = attempt;
++            retainedAttemptId = retained?.attemptId ?? Guid.NewGuid().ToString("N");
+             int seed = BoardSeedUtility.CreateRuntimeSeed(
+                 currentLevel.chapterId,
+                 currentLevel.levelId,
+@@ -201,6 +203,12 @@
+             model = LevelBoardFactory.Create(currentLevel, seed, rules:ruleVersion);
+             model.SquareMatches = ruleVersion >= GameplayRuleVersion.PrototypeR2;
+             model.StandaloneSpecials = ruleVersion >= GameplayRuleVersion.PrototypeR4;
++            if (retained != null)
++            {
++                model.RestoreSnapshot(retained.Snapshot(currentLevel));moves=retained.moves;score=retained.score;
++                goalRuntime.RestoreSnapshot(new LevelGoalRuntimeSnapshot(retained.goals));
++                interaction.Force(GameplayPhase.Failed);
++            }
+ 
+             // Supplied isolated gem/booster sheets, independent from reference-screen artwork.
+             gemSprites = new Sprite[6];
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -398,6 +398,18 @@
+ 
+         public void Show(ScreenId id)
+         {
++            if (GameState.Instance != null && GameState.Instance.TryGetRetainedRound(out _))
++            {
++                if (current == ScreenId.Fail && (id == ScreenId.Home || id == ScreenId.ChapterMap || id == ScreenId.WorldMap))
++                {
++                    if (!FinalizeRetainedRound()) return;
++                }
++                else if (id == ScreenId.Home || id == ScreenId.Gameplay || id == ScreenId.PreLevel)
++                {
++                    GameState.Instance.RestoreRetainedFailurePresentation();
++                    id = ScreenId.Fail;
++                }
++            }
+             if(id==ScreenId.TutorialOverlay && current==ScreenId.Gameplay){
+                 if(activeModalId==ScreenId.TutorialOverlay||IsModalTransitioning||IsScreenTransitioning)return;
+                 if(activeBoard==null)return;
+@@ -1104,6 +1116,7 @@
+ 
+         void StartLevel()
+         {
++            if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
+             GameState.Instance.EnsureSelectedLevelIsUnlocked();
+             if (!GameState.Instance.SpendEnergy())
+             {
+@@ -1169,7 +1182,21 @@
+ 
+         void RestartCurrentLevel()
+         {
+-            Show(ScreenId.Gameplay);
++            if (!FinalizeRetainedRound()) return;
++            Show(ScreenId.Gameplay); // Preserve the existing retry energy policy.
++        }
++
++        bool FinalizeRetainedRound()
++        {
++            var state = GameState.Instance;
++            if (!state.TryGetRetainedRound(out var retained)) return true;
++            if (state.TryFinalizeRetainedFailure(retained.attemptId)) return true;
++            // Rebuild resets the native button's one-shot navigation latch after a failed write.
++            Show(ScreenId.Fail);
++            Toast(DemoFeatureState.LanguageCode == "ru"
++                ? "Не удалось сохранить раунд. Повторите попытку."
++                : "Could not save the round. Please try again.");
++            return false;
+         }
+ 
+         void ContinueAfterVictory()
+@@ -1576,25 +1603,16 @@
+                 onFail: score =>
+                 {
+                     LevelData outcomeLevel = activeBoard.CurrentLevel;
+-                    var failedProgress=new int[activeBoard.GoalCount];
+-                    for(int i=0;i<failedProgress.Length;i++)failedProgress[i]=activeBoard.GetGoalSlot(i).Current;
+-                    GameState.Instance.RecordLevelFailure(outcomeLevel, score, failedProgress);
+-                    PrivacyAwareAnalytics.TryLevelFail(
+-                        outcomeLevel.id,
+-                        activeAnalyticsAttemptNumber,
+-                        score
+-                    );
+-                    BalanceTelemetryReviewService.Instance?.TryRecordLevelFail(
+-                        outcomeLevel,
+-                        activeAnalyticsAttemptNumber,
+-                        score
+-                    );
++                    bool retained = GameState.Instance.TrySuspendRound(activeBoard.CaptureFailedRound());
+                     ClearActiveGameplayAnalytics();
+                     ShowOutcome(
+                         ScreenId.Fail,
+                         outcomeLevel,
+                         StoryReactionOutcomes.Failure
+                     );
++                    if (!retained) Toast(DemoFeatureState.LanguageCode == "ru"
++                        ? "Раунд не сохранён. Не закрывайте игру; повторите попытку или выйдите через меню."
++                        : "Round not saved. Keep the game open; retry or leave through the menu.");
+                 }
+             );
+ 
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/SaveService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/SaveService.cs
+@@ -285,6 +285,11 @@
+                 );
+             }
+ 
++            // Unity inline serialization can materialize a null optional class as an
++            // empty object. An absent identity is the explicit cleared-checkpoint sentinel.
++            if (data.retainedRound != null && string.IsNullOrEmpty(data.retainedRound.attemptId))
++                data.retainedRound = null;
++
+             bool recovered = journal.Status == SaveJournalLoadStatus.RecoveredBackup;
+             return new PlayerSaveLoadResult(
+                 recovered
+--- a/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -196,7 +196,11 @@
+             var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+             var tracker=(LevelGoalRuntime)typeof(Match3Board).GetField("goalRuntime",flags).GetValue(board);
+             tracker.RestoreSnapshot(new LevelGoalRuntimeSnapshot(new[]{3,4}));
+-            var callback=(Action<int>)typeof(Match3Board).GetField("onFail",flags).GetValue(board);callback(567);Settle();yield return null;
++            // Explicitly settle the fixture before invoking the real end-state transition.
++            typeof(Match3Board).GetField("moves",flags).SetValue(board,0);
++            typeof(Match3Board).GetField("score",flags).SetValue(board,567);
++            if (board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Paused) board.TryResume();
++            yield return (IEnumerator)typeof(Match3Board).GetMethod("CheckEndState",flags).Invoke(board,null);Settle();yield return null;
+             var result=GameState.Instance.LastFailureResult;Assert.That(result.Score,Is.EqualTo(567));Assert.That(result.CurrentAt(0),Is.EqualTo(3));Assert.That(result.CurrentAt(1),Is.EqualTo(4));
+             Assert.That(View().Goals[0].Count.text,Does.StartWith("3/"));Assert.That(View().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+             Assert.That(Root().transform.Find("OutcomeReaction"),Is.Null,"No legacy story overlay over Ivan.");
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.RetainedRound.cs
+@@ -0,0 +1,63 @@
++using System;
++using System.Linq;
++using UnityEngine;
++
++namespace LegendsOfRus
++{
++    public sealed partial class GameState
++    {
++        RetainedRoundData unsavedRetainedRound;
++        internal Func<PlayerSaveData,PlayerSaveWriteResult> RetainedWriteOverride;
++        public bool HasUnsavedRetainedRound => unsavedRetainedRound != null;
++        bool OwnsRetained(RetainedRoundData data) => data != null &&
++            GetLevelProgress(data.chapter,data.level)?.attempts == data.attempt &&
++            Save.selectedChapter == data.chapter && Save.selectedLevel == data.level;
++
++        public bool TryGetRetainedRound(out RetainedRoundData data)
++        {
++            var source = unsavedRetainedRound ?? Save.retainedRound;
++            if (!OwnsRetained(source) || !source.IsCompatible(ChapterLevelCatalog.Find(source.chapter,source.level))) { data=null; return false; }
++            data=source.Copy();return true;
++        }
++        public bool RestoreRetainedFailurePresentation()
++        {
++            if (!TryGetRetainedRound(out var data)) return false;
++            LastFailureResult=new LevelFailureResult(ChapterLevelCatalog.Find(data.chapter,data.level),data.score,data.goals);
++            return true;
++        }
++        // The board is already settled and input-locked. A failed write retains a memory copy
++        // for retry; it never masquerades as a durable checkpoint or increments loss counters.
++        public bool TrySuspendRound(RetainedRoundData data)
++        {
++            if (!OwnsRetained(data) || !data.IsCompatible(ChapterLevelCatalog.Find(data.chapter,data.level))) return false;
++            var current=unsavedRetainedRound??Save.retainedRound;
++            if (current!=null && !string.IsNullOrEmpty(current.attemptId) && JsonUtility.ToJson(current)!=JsonUtility.ToJson(data)) return false;
++            if (unsavedRetainedRound==null && current!=null && !string.IsNullOrEmpty(current.attemptId)) return true;
++            unsavedRetainedRound=data.Copy();RestoreRetainedFailurePresentation();
++            var candidate=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));candidate.retainedRound=data.Copy();
++            if (!CommitRetained(candidate)) return false;
++            unsavedRetainedRound=null;return true;
++        }
++        public bool TryFinalizeRetainedFailure(string attemptId)
++        {
++            if (!TryGetRetainedRound(out var data) || data.attemptId!=attemptId) return false;
++            var candidate=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            var progress=candidate.levelProgress.Single(p=>p.chapterId==data.chapter&&p.levelId==data.level);
++            progress.failures++;progress.bestScore=Math.Max(progress.bestScore,data.score);candidate.retainedRound=null;
++            if (!CommitRetained(candidate)) return false;
++            unsavedRetainedRound=null;
++            PrivacyAwareAnalytics.TryLevelFail(ChapterLevelCatalog.Find(data.chapter,data.level).id,data.attempt,data.score);
++            BalanceTelemetryReviewService.Instance?.TryRecordLevelFail(ChapterLevelCatalog.Find(data.chapter,data.level),data.attempt,data.score);
++            return true;
++        }
++        bool CommitRetained(PlayerSaveData candidate)
++        {
++            PlayerSaveWriteResult result;
++            if (RetainedWriteOverride!=null) result=RetainedWriteOverride(candidate);
++            else SaveService.TrySave(candidate,out result);
++            LastWriteResult=result;
++            if (result==null || !result.Success&&!result.PrimaryDurablyCommitted) { canPersist=false;return false; }
++            Save=candidate;unsavedRetainedRound=null;canPersist=result.Success;Changed?.Invoke();return true;
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.RetainedRound.cs
+@@ -0,0 +1,35 @@
++using System;
++using System.Linq;
++using LegendsOfRus.GameplayCore;
++
++namespace LegendsOfRus
++{
++    public sealed partial class Match3Board
++    {
++        string retainedAttemptId;
++        int retainedAttemptNumber;
++        public RetainedRoundData CaptureFailedRound()
++        {
++            if (campaignManaged || activeCommand!=null || Phase!=GameplayPhase.Failed || moves!=0 || goalRuntime.AllComplete)
++                throw new InvalidOperationException("Only a settled normal-game failure can be retained.");
++            var board=model.CreateSnapshot();
++            return new RetainedRoundData { attemptId=retainedAttemptId,attempt=retainedAttemptNumber,
++                chapter=currentLevel.chapterId,level=currentLevel.levelId,levelFingerprint=RetainedRoundData.Fingerprint(currentLevel),
++                rules=(int)ruleVersion,seed=model.Seed??0,score=score,moves=moves,stateHash=board.StateHash,
++                tiles=board.Tiles,specials=board.Specials.Select(n=>(int)n).ToArray(),obstacles=board.Obstacles.Select(n=>(int)n).ToArray(),
++                layers=board.ObstacleLayers.Select(n=>(int)n).ToArray(),items=board.ObjectiveItems.Select(n=>(int)n).ToArray(),
++                goals=Enumerable.Range(0,GoalCount).Select(i=>GetGoalSlot(i).Current).ToArray() };
++        }
++        // Reconstructs the suspended board without registering an attempt, spending energy,
++        // granting moves or enabling input. CONT-02 must supply a durable continuation entitlement.
++        public void InitializeRetained(RetainedRoundData data,Action<int> win,Action<int> fail)
++        {
++            if (model!=null) throw new InvalidOperationException("Restore requires a new board instance.");
++            if (!GameState.Instance.TryGetRetainedRound(out var current) ||
++                UnityEngine.JsonUtility.ToJson(data)!=UnityEngine.JsonUtility.ToJson(current))
++                throw new ArgumentException("Retained attempt is stale or incompatible.");
++            ruleVersion=CurrentGameplayRules;useCurrentBoardArt=true;campaignInventory=null;
++            InitializeCore(ChapterLevelCatalog.Find(data.chapter,data.level),win,fail,null,data);
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/RetainedRoundData.cs
+@@ -0,0 +1,58 @@
++using System;
++using System.Linq;
++using System.Security.Cryptography;
++using System.Text;
++using LegendsOfRus.GameplayCore;
++using UnityEngine;
++
++namespace LegendsOfRus
++{
++    [Serializable]
++    public sealed class RetainedRoundData
++    {
++        public int schema = 1;
++        public string attemptId, levelFingerprint, stateHash;
++        public int chapter, level, attempt, rules, seed, score, moves;
++        public string randomContract = "snapshot-action-v1";
++        public int[] tiles, specials, obstacles, layers, items, goals;
++
++        public RetainedRoundData Copy() => JsonUtility.FromJson<RetainedRoundData>(JsonUtility.ToJson(this));
++        public static string Fingerprint(LevelData level)
++        {
++            using (var sha = SHA256.Create())
++                return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(JsonUtility.ToJson(level)))).Replace("-", "");
++        }
++        public BoardSnapshot Snapshot(LevelData definition) => new BoardSnapshot(definition.columns, definition.rows,
++            definition.tileTypes, (int[])tiles.Clone(), specials.Select(n => (SpecialGemKind)n).ToArray(),
++            obstacles.Select(n => (BoardObstacleKind)n).ToArray(), layers.Select(n => (byte)n).ToArray(),
++            items.Select(n => (BoardObjectiveItemKind)n).ToArray(), stateHash);
++
++        public bool IsCompatible(LevelData definition)
++        {
++            if (definition == null || schema != 1 || !Guid.TryParseExact(attemptId,"N",out _) || attempt < 1 ||
++                chapter != definition.chapterId || level != definition.levelId || moves != 0 || score < 0 ||
++                rules != (int)Match3Board.CurrentGameplayRules || randomContract != "snapshot-action-v1" ||
++                levelFingerprint != Fingerprint(definition)) return false;
++            int count = definition.columns * definition.rows;
++            if (count < 9 || count > 256 || new[]{tiles,specials,obstacles,layers,items}.Any(a => a == null || a.Length != count) ||
++                goals == null || definition.goals == null || goals.Length != definition.goals.Length) return false;
++            bool incomplete = false;
++            for (int i=0;i<goals.Length;i++) {
++                if (goals[i]<0 || goals[i]>definition.goals[i].target) return false;
++                incomplete |= goals[i]<definition.goals[i].target;
++            }
++            if (!incomplete) return false;
++            for (int i=0;i<count;i++) {
++                if (tiles[i]<BoardModel.EmptyTile || tiles[i]>=definition.tileTypes ||
++                    !Enum.IsDefined(typeof(SpecialGemKind),specials[i]) || !Enum.IsDefined(typeof(BoardObstacleKind),obstacles[i]) ||
++                    !Enum.IsDefined(typeof(BoardObjectiveItemKind),items[i]) || layers[i]<0 || layers[i]>3 ||
++                    (obstacles[i]==0)!=(layers[i]==0)) return false;
++            }
++            try {
++                var model = new BoardModel(definition.columns,definition.rows,definition.tileTypes,new SeededBoardRandom(seed));
++                model.SquareMatches = true; model.StandaloneSpecials = true; model.RestoreSnapshot(Snapshot(definition));
++                return model.ComputeStateHash()==stateHash && !model.HasAnyMatches();
++            } catch (ArgumentException) { return false; }
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundPlayModeTests.cs
+@@ -0,0 +1,200 @@
++using System;
++using System.Collections;
++using System.IO;
++using System.Linq;
++using System.Reflection;
++using LegendsOfRus.GameplayCore;
++using NUnit.Framework;
++using UnityEngine;
++using UnityEngine.TestTools;
++
++namespace LegendsOfRus.Tests.PlayMode
++{
++    public sealed class RetainedRoundPlayModeTests
++    {
++        GameState State => GameState.Instance;
++        ScreenRouter Router => ScreenRouter.Instance;
++        const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
++        string previous;
++        string[] values;
++        readonly string[] keys = {"LegendsOfRus_Save_v1", "LegendsOfRus_Save_v1_Backup", "LegendsOfRus_Save_v1_Staging"};
++        [SetUp] public void SetUp()
++        {
++            string isolated=Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            Assert.That(isolated,Does.StartWith("/tmp/"));
++            Assert.That(Application.persistentDataPath,Does.StartWith(isolated+"/"));
++            Assert.That(State,Is.Not.Null);
++            previous=JsonUtility.ToJson(State.Save);
++            values=keys.Select(k=>PlayerPrefs.HasKey(k)?PlayerPrefs.GetString(k):null).ToArray();
++            Router.Show(ScreenId.SplashTitle);Settle();State.ResetProgress();
++        }
++        [TearDown] public void TearDown()
++        {
++            State.RetainedWriteOverride=null;State.ResetProgress();
++            Router.Show(ScreenId.SplashTitle);Settle();
++            State.Save=JsonUtility.FromJson<PlayerSaveData>(previous);
++            for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(values[i]!=null)PlayerPrefs.SetString(keys[i],values[i]);}
++            PlayerPrefs.Save();
++            foreach(var board in UnityEngine.Object.FindObjectsByType<Match3Board>(FindObjectsSortMode.None))
++                if(board.name=="RetainedFixture")UnityEngine.Object.DestroyImmediate(board.gameObject);
++        }
++        void Settle(){for(int i=0;i<24;i++)Router.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds);Canvas.ForceUpdateCanvases();}
++        RetainedRoundData Fixture(int number=31)
++        {
++            State.Save.highestUnlockedLevel=500;Assert.That(State.SelectLevel(1,number),Is.True);
++            var level=ChapterLevelCatalog.Find(1,number);int attempt=State.RegisterLevelAttempt(level);
++            int seed=BoardSeedUtility.CreateRuntimeSeed(1,number,level.boardSeed+attempt);
++            var model=LevelBoardFactory.Create(level,seed,rules:Match3Board.CurrentGameplayRules);
++            // Deliberate settled checkpoint fixture; not a human difficulty result.
++            for(int x=0;x<5;x++) {
++                var position=new BoardPosition(x,0);model.SetObstacle(position,new BoardObstacleData(BoardObstacleKind.None,0));
++                model.SetTile(position,x%level.tileTypes);model.SetSpecial(position,(SpecialGemKind)(x+1));
++            }
++            model.SetObstacle(new BoardPosition(0,1),new BoardObstacleData(BoardObstacleKind.Crate,3));
++            model.SetObstacle(new BoardPosition(1,1),new BoardObstacleData(BoardObstacleKind.Ice,2));
++            model.SetObstacle(new BoardPosition(2,1),new BoardObstacleData(BoardObstacleKind.Chain,1));
++            model.SetObstacle(new BoardPosition(3,1),new BoardObstacleData(BoardObstacleKind.RunicSeal,2));
++            var feather=new BoardPosition(4,1);model.SetObstacle(feather,new BoardObstacleData(BoardObstacleKind.None,0));
++            model.SetObjectiveItem(feather,BoardObjectiveItemKind.FirebirdFeather);
++            var snapshot=model.CreateSnapshot();
++            return new RetainedRoundData{attemptId=Guid.NewGuid().ToString("N"),chapter=1,level=number,attempt=attempt,
++                levelFingerprint=RetainedRoundData.Fingerprint(level),rules=(int)Match3Board.CurrentGameplayRules,seed=seed,
++                score=371,moves=0,stateHash=snapshot.StateHash,tiles=snapshot.Tiles,specials=snapshot.Specials.Select(x=>(int)x).ToArray(),
++                obstacles=snapshot.Obstacles.Select(x=>(int)x).ToArray(),layers=snapshot.ObstacleLayers.Select(x=>(int)x).ToArray(),
++                items=snapshot.ObjectiveItems.Select(x=>(int)x).ToArray(),goals=level.goals.Select(g=>Math.Min(1,g.target-1)).ToArray()};
++        }
++        static PlayerSaveWriteResult Failure(PlayerSaveData _) => new PlayerSaveWriteResult(PlayerSaveWriteStatus.StorageFailure,"test",0,"injected");
++        [Test] public void JournalRoundTripPreservesAttemptBoardGoalsAndInventory()
++        {
++            var data=Fixture();int energy=State.Save.energy,gold=State.Save.gold,gems=State.Save.gems;
++            Assert.That(State.TrySuspendRound(data),Is.True);State.Save=SaveService.Load();
++            Assert.That(State.TryGetRetainedRound(out var restored),Is.True);
++            Assert.That(JsonUtility.ToJson(restored),Is.EqualTo(JsonUtility.ToJson(data)));
++            Assert.That(State.Save.energy,Is.EqualTo(energy));Assert.That(State.Save.gold,Is.EqualTo(gold));Assert.That(State.Save.gems,Is.EqualTo(gems));
++            Assert.That(State.GetLevelProgress(1,31).failures,Is.Zero);
++            Assert.That(State.RestoreRetainedFailurePresentation(),Is.True);Assert.That(State.LastFailureResult.Score,Is.EqualTo(371));
++        }
++        [Test] public void DuplicateAndForeignCallbacksCannotOverwriteAttempt()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);Assert.That(State.TrySuspendRound(data),Is.True);
++            var changed=data.Copy();changed.score++;Assert.That(State.TrySuspendRound(changed),Is.False);
++            changed=data.Copy();changed.attemptId=Guid.NewGuid().ToString("N");Assert.That(State.TrySuspendRound(changed),Is.False);
++            Assert.That(State.SelectLevel(1,32),Is.False);
++            Assert.Throws<InvalidOperationException>(()=>State.RegisterLevelAttempt(ChapterLevelCatalog.Find(1,31)));
++            Assert.That(State.GetLevelProgress(1,31).attempts,Is.EqualTo(1));
++        }
++        [Test] public void DeclineIsDurableAndIdempotentWithoutRewardsOrEnergyCharge()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);int gold=State.Save.gold,energy=State.Save.energy;
++            Assert.That(State.TryFinalizeRetainedFailure("wrong"),Is.False);
++            Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.True);
++            Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.False);
++            State.Save=SaveService.Load();Assert.That(State.Save.retainedRound,Is.Null);
++            var progress=State.GetLevelProgress(1,31);Assert.That(progress.failures,Is.EqualTo(1));Assert.That(progress.completions,Is.Zero);
++            Assert.That(State.Save.gold,Is.EqualTo(gold));Assert.That(State.Save.energy,Is.EqualTo(energy));
++        }
++        [Test] public void FailedWritesKeepMemoryCopyAndDoNotFinalizeLoss()
++        {
++            var data=Fixture();State.RetainedWriteOverride=Failure;
++            Assert.That(State.TrySuspendRound(data),Is.False);Assert.That(State.HasUnsavedRetainedRound,Is.True);
++            Assert.That(State.Save.retainedRound,Is.Null);Assert.That(State.TryGetRetainedRound(out _),Is.True);
++            Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.False);Assert.That(State.GetLevelProgress(1,31).failures,Is.Zero);
++            State.RetainedWriteOverride=null;Assert.That(State.TrySuspendRound(data),Is.True);Assert.That(State.HasUnsavedRetainedRound,Is.False);
++            State.RetainedWriteOverride=Failure;Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.False);
++            Assert.That(SaveService.Load().retainedRound.attemptId,Is.EqualTo(data.attemptId));
++            State.RetainedWriteOverride=null;Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.True);
++        }
++        [Test] public void ChangeListenersSeeCommittedStateAfterRecoveredWrite()
++        {
++            var data=Fixture();State.RetainedWriteOverride=Failure;Assert.That(State.TrySuspendRound(data),Is.False);
++            State.RetainedWriteOverride=null;bool notified=false;
++            Action changed=()=>{notified=true;Assert.That(State.HasUnsavedRetainedRound,Is.False);Assert.That(State.TryGetRetainedRound(out _),Is.False);};
++            State.Changed+=changed;
++            try{Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.True);Assert.That(notified,Is.True);}
++            finally{State.Changed-=changed;}
++        }
++        [Test] public void ResetClearsUnsavedAttempt()
++        {var data=Fixture();State.RetainedWriteOverride=Failure;State.TrySuspendRound(data);State.RetainedWriteOverride=null;State.ResetProgress();Assert.That(State.TryGetRetainedRound(out _),Is.False);Assert.That(State.HasUnsavedRetainedRound,Is.False);}
++        [TestCase("schema")][TestCase("rules")][TestCase("fingerprint")][TestCase("hash")][TestCase("length")][TestCase("goal")][TestCase("enum")][TestCase("layers")][TestCase("identity")]
++        public void IncompatibleOptionalCheckpointDoesNotResetProgress(string damage)
++        {
++            var data=Fixture();switch(damage){case "schema":data.schema++;break;case "rules":data.rules=0;break;case "fingerprint":data.levelFingerprint="old";break;case "hash":data.stateHash="bad";break;case "length":data.tiles=new int[1];break;case "goal":data.goals[0]=-1;break;case "enum":data.specials[0]=999;break;case "layers":data.layers[0]=999;break;case "identity":data.attemptId="bad";break;}
++            State.Save.gold=812;State.Save.retainedRound=data;State.Persist();State.Save=SaveService.Load();
++            Assert.That(State.TryGetRetainedRound(out _),Is.False);Assert.That(State.Save.gold,Is.EqualTo(812));
++            Assert.That(State.RegisterLevelAttempt(ChapterLevelCatalog.Find(1,31)),Is.EqualTo(2));Assert.That(State.Save.retainedRound,Is.Null);
++        }
++        [UnityTest] public IEnumerator RestoredBoardIsLockedAndDoesNotSpendOrRegisterAgain()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);
++            int energy=State.Save.energy;var go=new GameObject("RetainedFixture",typeof(RectTransform));
++            var board=go.AddComponent<Match3Board>();board.InitializeRetained(data,_=>Assert.Fail("win"),_=>Assert.Fail("fail"));yield return null;
++            Assert.That(board.BoardStateHash,Is.EqualTo(data.stateHash));Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Failed));
++            Assert.That(board.Score,Is.EqualTo(data.score));Assert.That(board.Moves,Is.Zero);
++            for(int i=0;i<data.goals.Length;i++)Assert.That(board.GetGoalSlot(i).Current,Is.EqualTo(data.goals[i]));
++            Assert.That(State.GetLevelProgress(1,31).attempts,Is.EqualTo(data.attempt));Assert.That(State.Save.energy,Is.EqualTo(energy));
++            Assert.That(JsonUtility.ToJson(board.CaptureFailedRound()),Is.EqualTo(JsonUtility.ToJson(data)));
++        }
++        [Test] public void FutureResolutionDependsOnSnapshotAndActionNotRandomCursor()
++        {
++            var data=Fixture();var level=ChapterLevelCatalog.Find(1,31);
++            var a=LevelBoardFactory.Create(level,123,rules:Match3Board.CurrentGameplayRules);
++            var b=LevelBoardFactory.Create(level,987,rules:Match3Board.CurrentGameplayRules);
++            a.RestoreSnapshot(data.Snapshot(level));b.RestoreSnapshot(data.Snapshot(level));
++            var pa=new BoardResolutionPlanner(a,null,Match3Board.CurrentGameplayRules);var pb=new BoardResolutionPlanner(b,null,Match3Board.CurrentGameplayRules);
++            int legal=0;for(int y=0;y<level.rows;y++)for(int x=0;x<level.columns-1;x++){
++                var from=new BoardPosition(x,y);var to=new BoardPosition(x+1,y);var p=pa.PlanSwap(from,to);var q=pb.PlanSwap(from,to);
++                Assert.That(q.FinalSnapshot.StateHash,Is.EqualTo(p.FinalSnapshot.StateHash));Assert.That(q.PlanHash,Is.EqualTo(p.PlanHash));if(p.FinalSnapshot.StateHash!=data.stateHash)legal++;
++            }Assert.That(legal,Is.GreaterThan(0));
++        }
++        [UnityTest] public IEnumerator FailedDeclineWriteKeepsFailureActionUsable()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);
++            Router.Show(ScreenId.Home);Settle();yield return null;
++            State.RetainedWriteOverride=Failure;
++            Router.Viewport.GetComponentInChildren<ProductionFailView>().Exit.onClick.Invoke();Settle();yield return null;
++            Assert.That(State.GetLevelProgress(1,31).failures,Is.Zero);
++            var view=Router.Viewport.GetComponentInChildren<ProductionFailView>();Assert.That(view,Is.Not.Null);
++            Assert.That(view.PaidOffer.interactable || view.AdOffer.interactable,Is.False);
++            State.RetainedWriteOverride=null;view.Exit.onClick.Invoke();Settle();yield return null;
++            Assert.That(State.GetLevelProgress(1,31).failures,Is.EqualTo(1));Assert.That(State.TryGetRetainedRound(out _),Is.False);
++        }
++        [Test] public void LegacySaveWithoutOptionalCheckpointStillLoads()
++        {
++            const string key="LegendsOfRus_Save_v1";
++            foreach(var k in keys)PlayerPrefs.DeleteKey(k);
++            PlayerPrefs.SetString(key,"{\"saveVersion\":5,\"gold\":812,\"gems\":4,\"energy\":3,\"chapter\":1,\"level\":1}");PlayerPrefs.Save();
++            var result=SaveService.LoadWithResult();Assert.That(result.Succeeded,Is.True);
++            Assert.That(result.Data.gold,Is.EqualTo(812));Assert.That(result.Data.retainedRound,Is.Null);
++        }
++        [UnityTest] public IEnumerator RealSwapOnLastMovePersistsSettledFailure()
++        {
++            State.Save.highestUnlockedLevel=31;State.SelectLevel(1,31);
++            Router.Show(ScreenId.Gameplay);Settle();yield return null;
++            var board=Router.Viewport.GetComponentInChildren<Match3Board>();
++            var model=(BoardModel)typeof(Match3Board).GetField("model",Private).GetValue(board);
++            var planner=new BoardResolutionPlanner(model,null,Match3Board.CurrentGameplayRules);
++            BoardPosition from=default,to=default;bool found=false;
++            for(int y=0;y<model.Height&&!found;y++)for(int x=0;x<model.Width-1&&!found;x++){
++                from=new BoardPosition(x,y);to=new BoardPosition(x+1,y);found=planner.PlanSwap(from,to).IsResolved;
++            }
++            Assert.That(found,Is.True);typeof(Match3Board).GetField("moves",Private).SetValue(board,1);
++            yield return (IEnumerator)typeof(Match3Board).GetMethod("TrySwap",Private).Invoke(board,new object[]{new Vector2Int(from.X,from.Y),new Vector2Int(to.X,to.Y)});
++            Settle();yield return null;
++            Assert.That(State.TryGetRetainedRound(out var saved),Is.True);
++            Assert.That(saved.moves,Is.Zero);Assert.That(saved.score,Is.GreaterThan(0));Assert.That(State.GetLevelProgress(1,31).failures,Is.Zero);
++            Assert.That(saved.IsCompatible(ChapterLevelCatalog.Find(1,31)),Is.True);
++            Assert.That(SaveService.Load().retainedRound.stateHash,Is.EqualTo(saved.stateHash));
++        }
++        [UnityTest] public IEnumerator HomeRecoveryAndRetryUseSavedFailureThenOneNewAttempt()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);State.Save=SaveService.Load();
++            Router.Show(ScreenId.Home);Settle();yield return null;
++            var view=Router.Viewport.GetComponentInChildren<ProductionFailView>();Assert.That(view,Is.Not.Null);
++            Assert.That(State.GetLevelProgress(1,31).failures,Is.Zero);int energy=State.Save.energy;
++            view.Retry.onClick.Invoke();view.Retry.onClick.Invoke();Settle();yield return null;
++            Assert.That(Router.Viewport.GetComponentInChildren<Match3Board>(),Is.Not.Null);
++            Assert.That(State.GetLevelProgress(1,31).failures,Is.EqualTo(1));Assert.That(State.GetLevelProgress(1,31).attempts,Is.EqualTo(2));
++            Assert.That(State.Save.energy,Is.EqualTo(energy));Assert.That(State.Save.retainedRound,Is.Null);
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundRestartPlayModeTests.cs
+@@ -0,0 +1,66 @@
++using System;
++using System.Collections;
++using System.IO;
++using System.Reflection;
++using NUnit.Framework;
++using UnityEngine;
++using UnityEngine.TestTools;
++
++namespace LegendsOfRus.Tests.PlayMode
++{
++    // Three independent Editor processes share only an isolated save namespace.
++    public sealed class RetainedRoundRestartPlayModeTests
++    {
++        const BindingFlags Private=BindingFlags.Instance|BindingFlags.NonPublic;
++        string Checkpoint => Environment.GetEnvironmentVariable("LOR_PERSISTENCE_CHECKPOINT");
++        void Guard(string phase)
++        {
++            if (Environment.GetEnvironmentVariable("LOR_PERSISTENCE_PHASE") != phase) Assert.Ignore("Requires the named isolated restart phase.");
++            string config=Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            Assert.That(config,Does.StartWith("/tmp/lor-retained-round-r1/"));
++            Assert.That(Application.persistentDataPath,Does.StartWith(config+"/"));
++            Assert.That(Environment.GetEnvironmentVariable("LOR_PERSISTENCE_PHASE"),Is.EqualTo(phase));
++            Assert.That(Checkpoint,Does.StartWith("/tmp/lor-retained-round-r1/"));
++        }
++        void Settle(){for(int i=0;i<24;i++)ScreenRouter.Instance.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds);Canvas.ForceUpdateCanvases();}
++        [UnityTest] public IEnumerator WriteFailedRound()
++        {
++            Guard("retained-write");var state=GameState.Instance;state.ResetProgress();state.Save.highestUnlockedLevel=2;
++            state.SelectLevel(1,2);Assert.That(state.SpendEnergy(),Is.True);
++            ScreenRouter.Instance.Show(ScreenId.Gameplay);Settle();yield return null;
++            var board=ScreenRouter.Instance.Viewport.GetComponentInChildren<Match3Board>();
++            Assert.That(board,Is.Not.Null);
++            // Controlled near-failure fixture; the owning board's end-state and router save path are real.
++            typeof(Match3Board).GetField("moves",Private).SetValue(board,0);
++            typeof(Match3Board).GetField("score",Private).SetValue(board,567);
++            if (board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Paused) board.TryResume();
++            yield return (IEnumerator)typeof(Match3Board).GetMethod("CheckEndState",Private).Invoke(board,null);Settle();yield return null;
++            Assert.That(ScreenRouter.Instance.Viewport.GetComponentInChildren<ProductionFailView>(),Is.Not.Null);
++            Assert.That(state.TryGetRetainedRound(out var retained),Is.True);Assert.That(state.GetLevelProgress(1,2).failures,Is.Zero);
++            Assert.That(state.HasUnsavedRetainedRound,Is.False);
++            File.WriteAllText(Checkpoint,JsonUtility.ToJson(state.Save));
++        }
++        [UnityTest] public IEnumerator ReadFailureAfterRestartAndDecline()
++        {
++            Guard("retained-read");var expected=JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(Checkpoint));var state=GameState.Instance;
++            Assert.That(state.TryGetRetainedRound(out var restored),Is.True);
++            Assert.That(JsonUtility.ToJson(restored),Is.EqualTo(JsonUtility.ToJson(expected.retainedRound)));
++            Assert.That(state.Save.energy,Is.EqualTo(expected.energy));
++            ScreenRouter.Instance.Show(ScreenId.Home);Settle();yield return null;
++            var view=ScreenRouter.Instance.Viewport.GetComponentInChildren<ProductionFailView>();Assert.That(view,Is.Not.Null);
++            Assert.That(view.Score.text,Does.Contain("567"));Assert.That(state.GetLevelProgress(1,2).attempts,Is.EqualTo(1));
++            Assert.That(state.GetLevelProgress(1,2).failures,Is.Zero);
++            view.Exit.onClick.Invoke();view.Exit.onClick.Invoke();Settle();yield return null;
++            Assert.That(state.TryGetRetainedRound(out _),Is.False);Assert.That(state.GetLevelProgress(1,2).failures,Is.EqualTo(1));
++            Assert.That(state.Save.energy,Is.EqualTo(expected.energy));Assert.That(state.Save.gold,Is.EqualTo(expected.gold));
++        }
++        [UnityTest] public IEnumerator ReadDeclinedRoundAfterSecondRestart()
++        {
++            Guard("retained-cleared");var state=GameState.Instance;
++            Assert.That(state.Save.retainedRound,Is.Null);Assert.That(state.GetLevelProgress(1,2).failures,Is.EqualTo(1));
++            Assert.That(state.GetLevelProgress(1,2).attempts,Is.EqualTo(1));
++            ScreenRouter.Instance.Show(ScreenId.Home);Settle();yield return null;
++            Assert.That(ScreenRouter.Instance.Viewport.GetComponentInChildren<ProductionFailView>(),Is.Null);
++        }
++    }
++}

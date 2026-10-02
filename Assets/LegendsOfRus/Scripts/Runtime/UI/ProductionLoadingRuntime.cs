@@ -7,10 +7,10 @@ namespace LegendsOfRus
     /// <summary>Shared owner of the serialized Loading composition and its asset-only runtime repair.</summary>
     public static class ProductionLoadingRuntime
     {
-        public const string ArtRoot = "ProductionUI/LoadingAligned/";
-        public const string LogoResource = "ProductionUI/HomeAligned/home_logo";
-        public const string EnvironmentResource = "ProductionUI/FrontEndHomeAligned/loading_environment_dusk";
-        public const string IvanResource = "ProductionUI/FrontEndHomeAligned/ivan_loading_dusk";
+        public const string ArtRoot = "ProductionUI/LoadingReferenceAligned/";
+        public const string LogoResource = ArtRoot + "source_logo";
+        public const string EnvironmentResource = ArtRoot + "clean_environment";
+        public const string IvanResource = ArtRoot + "source_ivan";
         public const string TypographyResource = "ProductionUI/SplashTitleConfig/SplashTitleTypography";
         public const string ContentName = "LOADING_ALIGNED_CONTENT";
 
@@ -29,8 +29,8 @@ namespace LegendsOfRus
             Sprite environment = RequireSprite(loadSprite, EnvironmentResource);
             Sprite logo = RequireSprite(loadSprite, LogoResource);
             Sprite ivan = RequireSprite(loadSprite, IvanResource);
-            Sprite firebird = RequireSprite(loadSprite, ArtRoot + "firebird_journey");
-            Sprite panel = RequireSprite(loadSprite, ArtRoot + "tip_panel");
+            Sprite firebird = RequireSprite(loadSprite, ArtRoot + "source_firebird");
+            Sprite panel = RequireSprite(loadSprite, ArtRoot + "source_tip_ru");
             if (typography == null) throw new InvalidOperationException("Missing shared SplashTitleTypography resource.");
 
             ProductionLoadingView view = existing != null ? existing : root.gameObject.AddComponent<ProductionLoadingView>();
@@ -83,6 +83,7 @@ namespace LegendsOfRus
             ProductionLoadingShadeLayout shadeLayout = root.GetComponent<ProductionLoadingShadeLayout>();
             if (shadeLayout == null) shadeLayout = root.gameObject.AddComponent<ProductionLoadingShadeLayout>();
             shadeLayout.Shade = shade;
+            ApplyReferenceComposition(view, loadSprite);
             if (Application.isPlaying) { view.RefreshContent(); responsive.ApplyNow(); shadeLayout.ApplyNow(); }
         }
 
@@ -92,15 +93,71 @@ namespace LegendsOfRus
             if (Application.isPlaying) throw new InvalidOperationException("Loading art migration must run outside Play Mode.");
             if (view == null || view.Revision < 3 || view.Revision > ProductionLoadingView.CurrentRevision)
                 throw new InvalidOperationException("Loading Home-style migration requires the installed aligned page.");
-            view.Environment.sprite = RequireSprite(loadSprite, EnvironmentResource);
-            view.Logo.sprite = RequireSprite(loadSprite, LogoResource);
-            view.Ivan.sprite = RequireSprite(loadSprite, IvanResource);
-            view.Environment.color = ProductionHomeRuntime.EnvironmentTone;
-            view.Ivan.color = ProductionHomeRuntime.HeroTone;
-            view.Firebird.color = ProductionHomeRuntime.HeroTone;
-            view.Logo.rectTransform.sizeDelta = new Vector2(550, 550f * 1041 / 1511);
-            view.Revision = ProductionLoadingView.CurrentRevision;
-            if (!view.HasRequiredBindings) throw new InvalidOperationException("Loading migration produced incomplete bindings.");
+            ApplyReferenceComposition(view, loadSprite);
+            if (!view.HasRequiredBindings) throw new InvalidOperationException("Loading reference migration produced incomplete bindings.");
+        }
+
+        static void ApplyReferenceComposition(ProductionLoadingView view, Func<string, Sprite> loadSprite)
+        {
+            RectTransform content=(RectTransform)view.transform.Find(ContentName);
+            view.Environment.sprite=RequireSprite(loadSprite,EnvironmentResource);
+            view.Logo.sprite=RequireSprite(loadSprite,LogoResource);
+            view.Ivan.sprite=RequireSprite(loadSprite,IvanResource);
+            view.Firebird.sprite=RequireSprite(loadSprite,ArtRoot+"source_firebird");
+            view.Environment.color=view.Logo.color=view.Ivan.color=view.Firebird.color=Color.white;
+            Place(view.Logo.rectTransform,185,15,565,398);
+            Place(view.Ivan.rectTransform,23,383,409,831);
+            Place(view.Firebird.rectTransform,481,619,437,832);
+            view.SourceTipRussian=RequireSprite(loadSprite,ArtRoot+"source_tip_ru");
+            view.SourceTipBlank=RequireSprite(loadSprite,ArtRoot+"source_tip_blank");
+            view.TipPanel.sprite=view.SourceTipRussian;view.TipPanel.preserveAspect=true;
+            Place(view.TipPanel.rectTransform,276,1068,394,361);
+            Transform backing=content.Find("OpaquePaperBacking");if(backing)backing.gameObject.SetActive(false);
+            view.LowerShade.color=Color.clear;
+            view.ReferenceBodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
+            view.ReferenceTitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
+            PlaceText(view.TipTitle,326,1152,294,58,42,view.ReferenceTitleFont);
+            PlaceText(view.TipBody,312,1238,326,113,22,view.ReferenceBodyFont);
+            view.TipTitle.enabled=view.TipBody.enabled=false;
+            PlaceText(view.StatusText,290,1432,360,51,34,view.ReferenceTitleFont);
+            view.StatusText.enabled=false;
+            view.SourceStatus=ReferenceImage(content,"OriginalLoadingLettering",RequireSprite(loadSprite,ArtRoot+"source_loading_ru"),229,1433,488,51);
+            view.SourceProgressTrack=ReferenceImage(content,"OriginalProgressTrack",RequireSprite(loadSprite,ArtRoot+"source_progress_track"),105,1480,730,92);
+            Place(view.ProgressBar.rectTransform,179,1507,585,41);
+            view.ProgressBar.SourceFill=RequireSprite(loadSprite,ArtRoot+"source_progress_fill");
+            view.ProgressBar.SetMaterialDirty();view.ProgressBar.SetVerticesDirty();
+            view.SourceOuterFrame=ReferenceImage(content,"OriginalOuterFrame",RequireSprite(loadSprite,ArtRoot+"source_outer_frame"),0,0,941,1672);
+            PlaceText(view.PercentText,406,1511,130,36,30,view.ReferenceBodyFont);
+            view.PercentText.color=new Color32(255,234,171,255);
+            var percentShadow=view.PercentText.GetComponent<Outline>()??view.PercentText.gameObject.AddComponent<Outline>();
+            percentShadow.effectColor=new Color32(3,8,12,255);percentShadow.effectDistance=new Vector2(2,-2);
+            Place(view.RetryButton.GetComponent<RectTransform>(),320.5f,1480,300,94);
+            var retryImage=(Image)view.RetryButton.targetGraphic;
+            retryImage.sprite=RequireSprite(loadSprite,"ProductionUI/SplashReferenceAligned/source_start_blank");
+            retryImage.color=Color.white;retryImage.preserveAspect=true;
+            var retryOutline=retryImage.GetComponent<Outline>();if(retryOutline)retryOutline.enabled=false;
+            PlaceText(view.RetryText,25,25,250,44,24,view.ReferenceBodyFont);
+            // Preserve source ornament depth; the measured fill/number are separate native layers.
+            view.SourceProgressTrack.transform.SetAsLastSibling();view.ProgressBar.transform.SetAsLastSibling();
+            view.SourceOuterFrame.transform.SetAsLastSibling();view.SourceStatus.transform.SetAsLastSibling();
+            view.StatusText.transform.SetAsLastSibling();view.PercentText.transform.SetAsLastSibling();view.RetryButton.transform.SetAsLastSibling();
+            view.Revision=ProductionLoadingView.CurrentRevision;
+        }
+
+        static Image ReferenceImage(RectTransform content,string name,Sprite sprite,float x,float y,float w,float h)
+        {
+            Transform old=content.Find(name);Image image=old?old.GetComponent<Image>():MakeImage(content,name,sprite,x,y,w,h);
+            image.sprite=sprite;image.color=Color.white;image.raycastTarget=false;image.preserveAspect=true;
+            Place(image.rectTransform,x,y,w,h);return image;
+        }
+        static void Place(RectTransform rect,float x,float y,float w,float h,int density=1)
+        {
+            rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(0,1);rect.anchoredPosition=new Vector2(x,-y);
+            rect.sizeDelta=new Vector2(w,h)*density;rect.localScale=new Vector3(1f/density,1f/density,1);
+        }
+        static void PlaceText(Text text,float x,float y,float w,float h,int size,Font font)
+        {
+            Place(text.rectTransform,x,y,w,h,2);text.font=font;text.fontSize=size*2;text.alignment=TextAnchor.MiddleCenter;
         }
 
         static Sprite RequireSprite(Func<string, Sprite> loadSprite, string key)

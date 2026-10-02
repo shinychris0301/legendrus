@@ -1,0 +1,227 @@
+MASTER PRODUCTION BIBLE
+Complete Game Development Package for Solo Developer
+«ЛЕГЕНДЫ РУСИ: ТРИ В РЯД»
+Match Legends of Rus
+Writer + Artist Direction + Level Design + Monetization + Technical Architecture
+Version 1.0  |  August 2026
+1. Vision & Solo Development Approach
+You are developing this game alone. This Bible is written so one person can build a high-quality, monetizable Match-3 game step by step without a full team.
+Core principle: Build the vertical slice first (Chapter 1 fully playable + monetization), then expand. Never try to finish all 20 chapters before launch.
+Recommended tech stack for solo:
+Unity 2022 LTS or 2023 LTS + Unity UI / UI Toolkit (or Godot 4 if preferred)
+Firebase or PlayFab for backend (auth, leaderboards, remote config, analytics)
+Unity IAP + AdMob / AppLovin MAX for monetization
+Addressables or Asset Bundles for chapter content streaming
+Simple custom Match-3 engine (no need for complex third-party board plugins at start)
+2. Technical Architecture
+2.1 High-Level Systems
+Core Game Loop System – board generation, matching, cascades, goals, moves
+Progression System – chapters, levels, stars, unlocks
+Economy System – soft currency (gold), hard currency (gems), energy/lives
+Booster System – inventory, usage, effects
+Story System – dialogue triggers, cutscene player, character state
+Meta Systems – shop, daily rewards, events, rankings, profile
+Social Layer – simple chat (optional at launch), friends, team/clan later
+LiveOps / Remote Config – event schedules, offers, balance tweaks without update
+Analytics & Attribution – track funnels, LTV, retention
+2.2 Recommended Scene / Screen Flow
+Splash → Home → (World Map) → Chapter Level Select → Pre-Level → Gameplay → Result → back to Level Select or next level. Side branches: Shop, Characters, Events, Settings, Story Viewer.
+2.3 Data Structure Suggestions
+Level data: ScriptableObjects or JSON. Each level contains: board size, pre-filled tiles, goals, move limit, special rules, story trigger flags, difficulty tag.
+Chapter data: list of levels + background ID + music ID + unlock condition + story summary.
+Player save: current chapter/level, currencies, energy, boosters inventory, unlocked characters, stars per level, daily reward day, event progress.
+3. Design System Quick Reference
+Colors:
+Gold #D4A017 / #FFD700 – primary CTAs, stars, highlights
+Deep Red #8B0000 / #C00000 – important titles, danger
+Forest Green #2E5A1C – nature, secondary
+Cream #F5E6C8 – panels
+Magic Blue #4A90D9 – Living Lights, special
+Dark Wood #3E2723 – frames
+Typography:
+Titles: decorative / serif with Slavic feel
+UI text: Roboto or Noto Sans, Russian only for players
+Style keywords for any new art: warm, fairy-tale, Slavic ornaments, soft glow, premium but cozy.
+4. Full Story Bible (Writer)
+4.1 Overall Story in One Paragraph
+The World Tree is wounded. Living Lights that once fed all of Rus are fading. A young descendant of the bogatyrs discovers the Matching Magic and, guided by a wounded Firebird, travels across twenty realms — from the native village through forests, underwater kingdoms, mountains, mythical Moscow, Baikal, and finally to the roots and crown of the World Tree — to restore the light and balance Chernobog’s darkness. Along the way the hero gains allies (Vasilisa, the three bogatyrs, even a complicated Baba Yaga) and faces classic villains (Koschei, Nightingale the Robber, Zmey Gorynych). The story ends with the rebirth of Rus and an open door for future seasons.
+4.2 Story Triggers – When Story Plays
+Chapter Start – short intro dialogue + illustration (5–15 seconds of text)
+Every 10–15 levels inside a chapter – small character moment or lore line
+Major milestone levels (boss or story gate) – longer dialogue
+Chapter Complete – full summary + emotional beat + unlock next chapter
+Character unlock – dedicated short scene
+Do NOT force story after every single level. Players who want pure puzzle can skip most dialogue (always give Skip button).
+4.3 Chapter-by-Chapter Story Beats (for implementation)
+Chapter 1 – Родная Деревня
+Start: Firebird falls. Hero learns Matching Magic. First light returns to one tree.
+Mid: Dark crow appears. Elder asks hero to go further.
+End: Village is partially restored. Hero leaves with Firebird on shoulder. Emotional line: “I will return when the lights are bright again.”
+Chapter 2 – Густой Лес
+Start: Forest is sick. Leshy is angry.
+Mid: Night attack. Firebird creates circle of light.
+End: Leshy becomes ally. Gives sacred oak branch. Warns about Baba Yaga.
+Chapter 3 – Избушка на Курьих Ножках
+Start: Baba Yaga tests the hero with three tasks.
+Mid: Tasks completed (special levels).
+End: Yaga respects the hero, gives mortar booster, warns about Koschei.
+Chapter 4 – Царство Жар-Птицы
+Start: Firebird’s home is under attack.
+Mid: Free captured Firebirds.
+End: Corrupted queen purified. Firebird almost fully restored. First major victory feeling.
+Chapter 5 – Молочные Берега
+Start: Soft dream-like shores. Meet Vasilisa.
+Mid: Quiet conversations, friendship/romance choice.
+End: Vasilisa joins. Magic doll booster unlocked.
+Chapter 6 – Подводное Царство
+Start: Dive into Sea Tsar’s domain. New mechanics.
+Mid: Rescue mission.
+End: Sea Tsar ally. Pearl time-freeze booster.
+Chapter 7 – Уральские Горы
+Start: Meet spirit of Ilya Muromets.
+Mid: Training and stone golem.
+End: “The blood of the bogatyrs runs in you.” Bogatyr Strength unlocked.
+Chapter 8 – Сибирская Тайга
+Start: Endless cold forest. Meet Bear spirit.
+Mid: Blizzard survival, moment of despair.
+End: Bear and cubs saved. Emotional recovery.
+Chapter 9 – Северное Сияние
+Start: Meet Morozko and Snegurochka.
+Mid: Prove light and frost can coexist.
+End: First real wound to Chernobog’s forces.
+Chapter 10 – Москва Златоглавая
+Start: Mythical Moscow under siege.
+Mid: Three bogatyrs gather.
+End: Mid-game climax. Hope is real. National pride peak.
+Chapters 11–15 (summary for space)
+11 Северная Венеция – elegance, deeper bonds. 12 Таврида – prophecy, Chernobog speaks. 13 Кавказ – honor tests. 14 Байкал – pure truth, major revelation. 15 Дальний Восток – eastern allies, Zmey Gorynych, path to World Tree opens.
+Chapters 16–20 (final arc)
+16 Roots – sacrifice, spirits of dead heroes. 17 Trunk – all allies return, power grows. 18 Heavenly Halls – final blessing. 19 Realm of Chernobog – darkest levels, Koschei multi-stage death. 20 Rebirth of Rus – final battle, World Tree restored, open ending, return to village.
+4.4 Example Dialogues (ready to use)
+Chapter 1 – First meeting with Firebird:
+Firebird: «Свет умирает… Только Чистая Магия Совпадений может вернуть Живые Огни. Три одинаковых… три одинаковых… и свет рождается вновь. Ты должен идти.»
+Hero (choice): «Я помогу тебе.» / «Что мне делать?» / «Я боюсь, но попробую.»
+Chapter 3 – Baba Yaga after tasks:
+Baba Yaga: «Хе-хе… Не съела. Редко кто проходит мои испытания с чистым сердцем. Бери ступу. И слушай: Кощей уже вышел. Он ищет последние Огни. А птица на твоём плече… она важнее, чем ты думаешь.»
+Chapter 20 – Final line after victory:
+Firebird (fully restored): «Ты вернул свет. Теперь я свободна… но всегда буду рядом, когда позовёшь. Руси нужно больше героев. А ты… ты уже стал легендой.»
+5. Character Bible
+Hero – Customizable (Ivan / Masha default). Grows from ordinary to legend.
+Firebird – Main companion, guide, sarcastic but loyal. Visual progress: gains more fire over chapters.
+Vasilisa – Equal partner, wise, brave. Romance/friendship option.
+Baba Yaga – Most popular. Ambiguous, funny, dangerous, eventually ally. High merch potential.
+Ilya Muromets, Dobrynya, Alyosha – Mentors and power-ups in later chapters.
+Koschei – Classic multi-phase boss. Death hidden in nested objects (level objective design).
+Chernobog – Final villain. Felt as absence of color long before he appears.
+For each major character prepare: portrait, full-body, 3–4 emotion variants, short voice line list (even if text-only at launch).
+6. Level Design Framework (Level Designer Role)
+You cannot hand-craft 200 000 levels. Use a hybrid system:
+Story Path: 300–600 carefully designed levels per chapter (hand-authored or heavily curated).
+Challenge / Side path: variants with different goals, higher difficulty, collectibles.
+Endless / Infinite Realm mode: procedural or semi-procedural boards using chapter theme tiles and rules. High-score + exclusive rewards.
+Daily / Event levels: generated or from a large pool, count toward chapter progress.
+Level goals types to implement:
+Score
+Collect N of color X
+Clear all blockers (ice, chains, boxes, etc.)
+Bring special items down
+Survive N moves / timed
+Boss damage (match next to boss or special gem)
+Nested object (Koschei-style)
+Difficulty curve: gentle in Chapter 1, rising peaks before chapter end, recovery after. Always allow continue with soft/hard currency.
+7. Monetization Strategy (Full)
+7.1 Core Economy
+Energy / Lives – regenerates over time (e.g. 1 per 20–30 min, max 5–8). Main gate.
+Gold (soft) – from levels, daily, ads. Used for continues, some boosters.
+Gems (hard) – mainly from IAP and rare rewards. Used for premium boosters, energy, special packs.
+Boosters – consumable. Sold in shop and as level-start upsells.
+7.2 Main Revenue Sources
+Continue after fail (gold or gem) – highest frequency
+Energy refill packs
+Booster packs and single boosters
+Starter packs and “remove ads” (if hybrid)
+Seasonal / event limited offers (highest ARPU)
+Character skins / cosmetic frames (emotional spending)
+Rewarded video (x2 rewards, free energy, free booster) – carefully balanced
+7.3 Key Monetization Moments in Story
+Out of moves → continue offer with story flavor (“The light is fading… one more try?”)
+Out of energy → “The Living Lights need rest” + timer + offers
+Pre-level → “Take the Firebird’s feather with you?”
+Chapter end → celebration pack
+Character rescue events → strong emotional IAP
+7.4 Pricing Guidance (Russia / CIS)
+Use local prices. Typical successful range for this genre in RU: small packs 99–299 ₽, medium 499–999 ₽, large / battle pass style 1 499–2 999 ₽. Always show value clearly.
+8. Social Features, Chat, Rankings
+Phase 1 (Launch):
+Local / friends leaderboard (if Facebook or Google Play Games)
+Simple global leaderboard per chapter or weekly
+Phase 2:
+Team / Clan system (join team, team chest, team chat)
+Basic text chat inside team (moderated or filtered)
+Individual ranking (stars, levels completed, event scores)
+Chat UI should feel warm and Slavic – wooden frames, soft colors. Never make chat mandatory.
+Rankings screens: clean list with avatar, name, score, rank badge. Top 3 highlighted with gold/silver/bronze Slavic ornaments.
+9. Shop, Boosters & Gem Design Specs
+9.1 Core Boosters (implement these first)
+Перо Жар-Птицы (Firebird Feather) – destroys one gem + neighbors or creates a line blast
+Ступа Бабы-Яги (Yaga’s Mortar) – area clear (3×3 or 5×5)
+Булава Богатыря (Bogatyr Mace) – destroys entire row or column
+Гусли-самогуды – shuffles or converts random gems
+Жемчужина Морского Царя – freezes time / adds moves
+Живой Огонь (Living Light) – special win condition helper or powerful single clear
+Each booster needs: icon, short description, use animation, inventory count.
+9.2 Gem Design Direction
+6–8 base colors. Each gem should look like a carved Slavic jewel or painted ornament, not generic candy. Soft inner glow. Special gems (striped, wrapped, color bomb equivalents) should feel magical – Firebird feather trail, ice crystal, etc.
+Recommended colors: Ruby Red, Sapphire Blue, Emerald Green, Amber Gold, Amethyst Purple, Topaz Orange, optional Diamond White and Dark Obsidian for special levels.
+10. Events & LiveOps
+Daily Login – 7 or 30 day calendar
+Weekly Tournament / Leaderboard event
+Character Rescue limited event (strong spender driver)
+Seasonal: New Year, Maslenitsa, 8 March, Victory Day, Ivan Kupala, autumn harvest
+Chapter-themed mini-events that temporarily open old chapters with new rewards
+All events controlled by remote config so you can change dates and rewards without app update.
+11. Technical Task Statement for App Developer (You)
+11.1 MVP Scope (First Playable Release)
+Splash + Home + Level Select (Chapter 1 only)
+Full Match-3 core (swap, match 3+, cascades, basic blockers)
+Pre-level + Gameplay + Victory + Fail + Continue
+Energy system + Out of energy popup
+Basic Shop (gold, gems, 3–4 boosters)
+Daily reward (simple)
+Settings (sound, music)
+Simple story dialogues for Chapter 1
+IAP + rewarded ads integration
+Basic analytics events
+Everything else is post-MVP.
+11.2 Architecture Requirements
+Clean separation: Board logic independent from UI
+Save system (local + cloud backup recommended)
+Remote config ready
+Addressable / downloadable content for future chapters
+Support 16:9 to 20:9 and different DPIs
+Russian as primary language from day one
+12. Solo Developer Roadmap
+Phase 0 – Setup (1–2 weeks)
+Project setup, basic UI framework, design system implementation, analytics + IAP skeleton.
+Phase 1 – Core Loop (4–8 weeks)
+Playable Match-3 + Chapter 1 levels + basic meta (energy, continue, simple shop).
+Phase 2 – Polish & Soft Launch (3–6 weeks)
+Story dialogues, better VFX, balance, soft launch in one region, first monetization tuning.
+Phase 3 – Expand (ongoing)
+Chapter 2–5, events, characters collection, rankings, more boosters, LiveOps.
+Phase 4 – Scale
+Remaining chapters, team features, major seasonal events, optimization, UA.
+13. Priority Visual Assets Still Needed
+You already have many screen mockups. Next highest priority art to create or commission:
+Full gem set (6–8 colors + special variants)
+All booster icons (at least 8)
+Character portraits (12+) with 2–3 expressions each
+Chapter 1–3 backgrounds (full screen)
+World map illustration
+Shop item icons and chest art
+Ranking badges and frame ornaments
+UI 9-slice panels and buttons in final style
+I can generate more specific asset concepts on request (gems, boosters, portraits, etc.).
+— End of Master Production Bible —
+You now have the complete foundation: story, design system, architecture, monetization, level framework, and roadmap.
+Build Chapter 1 first. Everything else can grow from a working, monetizing core.

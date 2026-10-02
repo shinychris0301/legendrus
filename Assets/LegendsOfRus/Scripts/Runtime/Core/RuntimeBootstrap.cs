@@ -49,6 +49,7 @@ namespace LegendsOfRus
             FindOrAdd<MonetizationService>(root);
             FindOrAdd<ContentDeliveryService>(root);
             FindOrAdd<PrivacySupportService>(root);
+            FindOrAdd<BackendAccountService>(root);
             FindOrAdd<ClosedTestQaService>(root);
             FindOrAdd<BalanceTelemetryReviewService>(root);
             // Runtime analytics is consent-gated even if a future trusted
@@ -64,6 +65,10 @@ namespace LegendsOfRus
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             FindOrAdd<RuntimePerformanceProbe>(root);
+#if UNITY_EDITOR || UNITY_ANDROID
+            if (DevelopmentGameplayProfile.Active)
+                FindOrAdd<DevelopmentGameplayProfileBadge>(root);
+#endif
 #endif
 
             if (existingRouter != null)

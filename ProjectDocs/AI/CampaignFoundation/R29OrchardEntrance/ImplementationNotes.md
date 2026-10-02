@@ -1,0 +1,9 @@
+# R29 implementation and reproduction
+
+The active resources remain `Assets/LegendsOfRus/Resources/CampaignActive/`. Four JSONs now match `Assets/LegendsOfRus/EditorContent/CampaignCandidates/Chapter01Sector04R29/` byte-for-byte. The definition, resource metas/GUIDs, loaders, save services, routing, prefabs, art, matching rules and project settings are preserved.
+
+Only existing test expectations change alongside content: ActiveCampaignIntegrationTests adds151–160 replay cases and150-save migration, checks new candidate/preservation, and plays150/151/155/158/160 through normal board/map routes. CampaignBoardIntegrationTests and LevelSystemRuntimePlayModeTests expect160 records. CampaignCheckpointLifecycleTests retains earlier cases, adds160 unread/failure-retry coverage and updates the full23-milestone backlog and unavailable161 boundary. Prior progress is a fixture, not evidence of full manual play.
+
+Sources holds task-start SHA inventory, five content snapshots, four test snapshots, test patch and captured authoring preparation. `PrepareImplementation.py` is a one-time transformation of the saved R28 working state; do not rerun it on an already edited tree. `AuthorAndInstall.py` builds from saved pre-task JSONs and the approved RoundBriefs. CheckContent/AuditContent validate preservation, counts, localization/story references, economy and default manual exports. Verify runs serial Unity suites with isolated stores and the prior authorized process-only Vulkan/descriptor4096 workaround. Summarize/SummarizeWitnesses summarize actual XML/replays; CleanAndAudit removes only new test artifacts and restores the generated linker snapshot before comparing project hashes.
+
+No live player save is used by verification. Candidate/meta files are new; existing GUIDs are preserved. No commit or device build is part of this task. See TestResults.md for actual outcomes and limitations.

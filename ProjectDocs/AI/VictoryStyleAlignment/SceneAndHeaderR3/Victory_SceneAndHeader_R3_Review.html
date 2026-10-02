@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Victory — Scene and Header R3</title>
+  <style>
+    body{margin:0;background:#08111a;color:#ead7ac;font:16px Georgia,serif}
+    main{max-width:740px;margin:24px auto;padding:0 16px}
+    h1{font-size:24px}
+    p{line-height:1.5}
+    a{color:#ebc67b}
+    nav{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0}
+    select{box-sizing:border-box;width:100%;padding:12px;background:#122333;color:#f7e6bd;border:1px solid #9b7943;border-radius:4px;font:inherit}
+    figure{margin:18px auto;max-width:520px}
+    img{display:block;width:100%;height:auto}
+    figcaption{font-size:14px;margin:10px 0;line-height:1.5}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Victory — «Победа» · R3</h1>
+  <p>An evening-city environment, an airy Firebird with glowing wings and a flowing tail, and three wooden resource compartments with gold borders. The energy status reads the existing refill clock. R2 rewards, lettering, stars and native button actions are retained.</p>
+  <nav>
+    <a href="ImplementationReport.md">Implementation and checks</a>
+    <a href="QA/SourceAudit.json">Preservation check</a>
+    <a href="ReferenceComparison.md">Reference comparison</a>
+  </nav>
+  <label for="capture">Portrait</label>
+  <select id="capture">
+    <option value="UnityVerification/Victory/Victory_Level2_Rewards_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">Level 2 rewards · RU</option>
+    <option value="UnityVerification/Victory/Victory_1080x2400_safe_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">1080 × 2400 safe area · RU</option>
+    <option value="UnityVerification/Victory/Victory_576x1280_safe_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">576 × 1280 safe area · RU</option>
+    <option value="UnityVerification/Victory/Victory_941x1672_EN.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">941 × 1672 · EN</option>
+    <option value="UnityVerification/Victory/Victory_941x1672_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">941 × 1672 · RU</option>
+    <option value="UnityVerification/Victory/Victory_GoldDoubled_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • domain reward operation in an isolated test save; not a live rewarded-ad transaction">Gold doubled · RU</option>
+    <option value="UnityVerification/Victory/Victory_Level10_Rewards_576_EN.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">Level 10 rewards · 576 px · EN</option>
+    <option value="UnityVerification/Victory/Victory_Level10_Rewards_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save">Level 10 rewards · RU</option>
+    <option value="UnityVerification/Victory/Victory_NoResult_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • no completed round in the isolated test save">No result · RU</option>
+    <option value="UnityVerification/Victory/Victory_Replay_OneStar_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • replay with one earned star and no repeated first-clear rewards">Replay, one star · RU</option>
+    <option value="UnityVerification/Victory/Victory_VideoUnavailable_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • unavailable-video message with normal rewards preserved">Video unavailable · RU</option>
+    <option value="UnityVerification/Victory/Victory_EnergyCountdown_576_RU.png" data-note="Actual Unity 6000.5.9f1 R3 capture • refill countdown from the existing service clock • isolated test save">Energy countdown · 576 px · RU</option>
+    <option value="../RewardsAndDepthR2/UnityVerification/Victory/Victory_Level2_Rewards_RU.png" data-note="Historical actual Unity R2 capture before the scene, Firebird and resource-header refinement">Before — R2 three rewards · RU</option>
+    <option value="../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Victory.png" data-note="Original Victory reference artwork only; not runtime UI">Original Victory reference</option>
+  </select>
+  <figure>
+    <img id="portrait" src="UnityVerification/Victory/Victory_Level2_Rewards_RU.png" alt="Victory R3 — Level 2 rewards, Russian">
+    <figcaption id="note">Actual Unity 6000.5.9f1 R3 capture • simulated display/safe area • isolated test save</figcaption>
+  </figure>
+  <p>This viewer displays one full portrait at a time. The new artwork is independently generated and assembled with live text and interactive controls in Unity. Exact reference fidelity is not claimed; visual acceptance remains pending. These captures are Editor evidence, not physical Android testing.</p>
+</main>
+<script>
+  const select=document.querySelector('#capture');
+  const portrait=document.querySelector('#portrait');
+  function show(){
+    const selected=select.selectedOptions[0];
+    portrait.src=selected.value;
+    portrait.alt='Victory portrait — '+selected.textContent;
+    document.querySelector('#note').textContent=selected.dataset.note;
+  }
+  select.addEventListener('change',show);
+  show();
+</script>
+</body>
+</html>

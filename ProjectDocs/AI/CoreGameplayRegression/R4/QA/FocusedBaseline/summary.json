@@ -1,0 +1,51 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests;LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PressFeedbackNoticeAndDragCancellation;LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.LanguageAndUnavailableServicesPreserveProgress;LegendsOfRus.Tests.CampaignPlayMode.MechanicsCausalAnimationTests.RainbowShowsConversionsBeforeDirectionalRelease",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R4/QA/FocusedBaseline/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R4/QA/FocusedBaseline/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 24.826103448867798,
+  "isolatedConfig": "/tmp/lor-continuation-r1/core-regression-r4/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {
+    "XDG_CONFIG_HOME": "/tmp/lor-continuation-r1/core-regression-r4/config",
+    "LOR_LOADING_TEST_CONFIG_ROOT": "/tmp/lor-continuation-r1/core-regression-r4/config",
+    "LOR_PERSISTENCE_CHECKPOINT": "/tmp/lor-continuation-r1/core-regression-r4/checkpoint.json",
+    "LOR_JOURNEY_CAPTURE_DIR": "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreGameplayRegression/R4/QA/RuntimeJourneys"
+  },
+  "result": {
+    "id": "2",
+    "testcasecount": "33",
+    "result": "Failed(Child)",
+    "total": "33",
+    "passed": "32",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 14:51:54Z",
+    "end-time": "2026-09-30 14:51:58Z",
+    "duration": "4.4337101"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PressFeedbackNoticeAndDragCancellation",
+      "result": "Failed",
+      "message": "  Expected: String containing \"\u0441\u043a\u043e\u0440\u043e\"\n  But was:  \"\u041f\u0440\u043e\u0439\u0434\u0438\u0442\u0435 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0438\u0439 \u0443\u0440\u043e\u0432\u0435\u043d\u044c, \u0447\u0442\u043e\u0431\u044b \u043e\u0442\u043a\u0440\u044b\u0442\u044c \u044d\u0442\u043e\u0442.\"\n"
+    }
+  ]
+}

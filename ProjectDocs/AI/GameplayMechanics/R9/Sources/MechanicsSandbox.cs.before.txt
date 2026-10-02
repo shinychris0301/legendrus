@@ -1,0 +1,189 @@
+using System;
+using System.Linq;
+using System.IO;
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    // Disposable laboratory: never reads/writes progress or campaign receipts.
+    public sealed class MechanicsSandbox : MonoBehaviour
+    {
+        public Match3Board Board {get;private set;}
+        public GameplayRuleVersion Rules {get;private set;}=GameplayRuleVersion.PrototypeR3;
+        public int Fixture {get;private set;}
+        ProductionGameplayView view;Text status,description,modeLabel,rulesLabel;Action exit;Stock stock;
+        public bool IsRoundPlaytest {get;private set;}
+        public int RoundIndex {get;private set;}
+        string roundTitle;
+        GameplayPhase shownPhase;
+        public MechanicsPlaytestLog AttemptLog {get;private set;}
+        public string LastExportPath {get;private set;}
+        public string ExportStatus {get;private set;}
+        public string SaveStatus {get;private set;}="Not saved yet";
+        public string CheckpointPath=>storage?.CheckpointPath;
+        MechanicsPlaytestStorage storage;
+        float nextCheckpoint;
+        public static string PlaytestExportDirectory=>Path.Combine(Application.persistentDataPath,"MechanicsPlaytests");
+        MechanicsPlaytestFeedback feedback;
+        bool focused=true,paused;
+        string lastObservedHash;
+        public static readonly string[] Names={"Line activation","Bomb + layered ice","Color activation","Line + bomb","Two lines","Two bombs","Chain hits","Crate hits","Create line-four","Create square Spark","Spark targeting","Two Sparks","Spark + line","Spark + bomb","Color + Spark","Spark cascade chain","Seal: adjacent match immunity","Seal: two line hits","Seal: two Spark hits","Seal: direct booster hits"};
+        public static MechanicsSandbox Open(RectTransform parent,Action exit,bool automated=false,string recordingDirectory=null)
+        {
+            var go=new GameObject("MechanicsSandbox",typeof(RectTransform));go.transform.SetParent(parent,false);Stretch((RectTransform)go.transform);
+            var s=go.AddComponent<MechanicsSandbox>();s.exit=exit;s.AttemptLog=new MechanicsPlaytestLog(automated||Application.isBatchMode,Application.version);
+            s.storage=new MechanicsPlaytestStorage(s.AttemptLog,recordingDirectory??PlaytestExportDirectory);s.Build();return s;
+        }
+        static void Stretch(RectTransform r){r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;}
+        void Build()
+        {
+            var prefab=Resources.Load<GameObject>("ProductionUI/Pages/Gameplay");var page=Instantiate(prefab,transform,false);Stretch((RectTransform)page.transform);view=page.GetComponentInChildren<ProductionGameplayView>();
+            foreach(var b in page.GetComponentsInChildren<Button>(true)){b.onClick.RemoveAllListeners();b.interactable=false;}
+            var controls=new GameObject("LaboratoryControls",typeof(RectTransform),typeof(Image));controls.transform.SetParent(transform,false);var r=(RectTransform)controls.transform;r.anchorMin=new Vector2(.08f,.73f);r.anchorMax=new Vector2(.92f,.83f);r.offsetMin=r.offsetMax=Vector2.zero;controls.GetComponent<Image>().color=new Color(.02f,.04f,.08f,.97f);
+            status=Label(controls.transform,"",new Vector2(0,.67f),Vector2.one);
+            description=Label(controls.transform,"",new Vector2(0,.30f),new Vector2(1,.67f));
+            modeLabel=AddButton(controls.transform,"Fixtures",0,()=>{if(IsRoundPlaytest)Reset(0,GameplayRuleVersion.PrototypeR3);else OpenRound(0);});
+            rulesLabel=AddButton(controls.transform,"Rules",1,()=>{if(!IsRoundPlaytest)Reset(Fixture,Rules==GameplayRuleVersion.Legacy?GameplayRuleVersion.PrototypeR1:Rules==GameplayRuleVersion.PrototypeR1?GameplayRuleVersion.PrototypeR2:Rules==GameplayRuleVersion.PrototypeR2?GameplayRuleVersion.PrototypeR3:GameplayRuleVersion.Legacy);});
+            AddButton(controls.transform,"Next",2,()=>{if(IsRoundPlaytest)OpenRound((RoundIndex+1)%MechanicsPlaytestRounds.Count);else Reset((Fixture+1)%FixtureCount(Rules),Rules);});
+            AddButton(controls.transform,"Retry",3,()=>{if(IsRoundPlaytest)OpenRound(RoundIndex);else Reset(Fixture,Rules);});
+            AddButton(controls.transform,"Exit",4,Close);
+            feedback=new MechanicsPlaytestFeedback(this,transform);
+            OpenRound(0);
+        }
+        void Close(){FinishAttempt("exit");gameObject.SetActive(false);exit();Destroy(gameObject);}
+        void Update()
+        {
+            if(!IsRoundPlaytest||!Board)return;
+            ObserveAttempt();AttemptLog.Tick(Time.unscaledDeltaTime,focused&&!paused);
+            if(Time.realtimeSinceStartup>=nextCheckpoint)SavePlaytest();
+            feedback.Refresh(true);
+            if(shownPhase==Board.Phase)return;
+            shownPhase=Board.Phase;
+            string state=Board.Phase==GameplayPhase.Completed?" · Пройдено":Board.Phase==GameplayPhase.Failed?" · Попробуйте ещё":"";
+            status.text=$"PLAYTEST · {RoundIndex+1}/{MechanicsPlaytestRounds.Count} · {roundTitle}{state}";
+        }
+        public void OpenRound(int index)
+        {
+            var round=MechanicsPlaytestRounds.Create(index);
+            FinishAttempt(IsRoundPlaytest&&RoundIndex==index?"retry":"next_round");
+            if(Board){Board.gameObject.SetActive(false);Destroy(Board.gameObject);}
+            IsRoundPlaytest=true;RoundIndex=index;Rules=GameplayRuleVersion.PrototypeR3;stock=new Stock(0);roundTitle=round.Title;
+            var go=new GameObject("PlaytestBoard",typeof(RectTransform));go.transform.SetParent(view.BoardMount,false);Stretch((RectTransform)go.transform);Board=go.AddComponent<Match3Board>();
+            Board.InitializeMechanicsSandbox(round.Level,Rules,stock);Board.LoadSnapshotForTesting(round.Snapshot,true);view.BindCampaign(Board,Close,stock.Count);
+            AttemptLog.Begin(index+1,round.Title,(int)Rules,round.Level.moveLimit,round.Snapshot.StateHash,round.Level.goals.Select(g=>g.target).ToArray());lastObservedHash=null;ExportStatus=null;
+            modeLabel.text="Fixtures";rulesLabel.text="R3";rulesLabel.GetComponent<Button>().interactable=false;description.text=round.Instruction;shownPhase=(GameplayPhase)(-1);Update();
+        }
+
+        void ObserveAttempt()
+        {
+            if(!IsRoundPlaytest||!Board||AttemptLog==null||AttemptLog.Current==null)return;
+            bool ongoing=AttemptLog.Current.outcome=="ongoing";
+            // Hash only on a meaningful state transition, not on every frame.
+            bool changed=lastObservedHash!=Board.LastPlanFinalStateHash||shownPhase!=Board.Phase||AttemptLog.Current.movesRemaining!=Board.Moves;
+            if(changed)
+            {
+                AttemptLog.Observe(Board.Moves,Board.Score,Board.Phase.ToString(),Board.BoardStateHash,Enumerable.Range(0,Board.GoalCount).Select(i=>Board.GetGoalSlot(i).Remaining).ToArray(),!Board.HasActiveCommand);
+                lastObservedHash=Board.LastPlanFinalStateHash;
+            }
+            if(Board.Phase==GameplayPhase.Completed)AttemptLog.Finish("won","goals_complete");
+            else if(Board.Phase==GameplayPhase.Failed)AttemptLog.Finish("lost","moves_exhausted");
+            if(ongoing&&((changed&&!Board.HasActiveCommand)||AttemptLog.Current.outcome!="ongoing"))SavePlaytest();
+        }
+        void FinishAttempt(string reason)
+        {
+            if(AttemptLog==null||!IsRoundPlaytest)return;
+            ObserveAttempt();AttemptLog.Finish("interrupted",reason);
+            SavePlaytest();
+        }
+        public bool SavePlaytest()
+        {
+            if(storage==null)return false;
+            nextCheckpoint=Time.realtimeSinceStartup+15f;
+            try{storage.Save();SaveStatus="Saved locally";return true;}
+            catch(Exception e) when(e is IOException||e is UnauthorizedAccessException||e is ArgumentException||e is NotSupportedException)
+            {SaveStatus="Local save failed · retry Save";return false;}
+        }
+        public void RatePlaytest(string field,string value){AttemptLog.Rate(field,value);SavePlaytest();}
+        public bool ExportPlaytest(string directory=null)
+        {
+            ObserveAttempt();
+            try{LastExportPath=AttemptLog.Export(directory??PlaytestExportDirectory);ExportStatus="Exported snapshot";}
+            catch(Exception e) when(e is IOException||e is UnauthorizedAccessException||e is ArgumentException||e is NotSupportedException)
+            {ExportStatus="Export failed · retry";feedback.Refresh(IsRoundPlaytest);return false;}
+            feedback.Refresh(IsRoundPlaytest);return true;
+        }
+        void OnApplicationFocus(bool value){focused=value;if(!value){ObserveAttempt();SavePlaytest();}}
+        void OnApplicationPause(bool value){paused=value;if(value){ObserveAttempt();SavePlaytest();}}
+        void OnApplicationQuit(){FinishAttempt("application_quit");}
+        void OnDisable(){FinishAttempt("disabled");}
+        void OnDestroy(){FinishAttempt("destroyed");}
+
+        static Text Label(Transform parent,string value,Vector2 min,Vector2 max)
+        {
+            var go=new GameObject("Label",typeof(RectTransform),typeof(Text));go.transform.SetParent(parent,false);var r=(RectTransform)go.transform;r.anchorMin=min;r.anchorMax=max;r.offsetMin=r.offsetMax=Vector2.zero;
+            var t=go.GetComponent<Text>();t.font=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");t.text=value;t.fontSize=22;t.resizeTextForBestFit=true;t.resizeTextMinSize=12;t.resizeTextMaxSize=22;t.alignment=TextAnchor.MiddleCenter;t.color=new Color32(242,213,155,255);t.raycastTarget=false;return t;
+        }
+        static Text AddButton(Transform p,string title,int i,Action action){var t=Label(p,title,new Vector2(i/5f,0),new Vector2((i+1)/5f,.28f));var b=t.gameObject.AddComponent<Button>();t.raycastTarget=true;b.targetGraphic=t;b.onClick.AddListener(()=>action());return t;}
+        static int FixtureCount(GameplayRuleVersion rules)=>rules==GameplayRuleVersion.PrototypeR3?Names.Length:rules==GameplayRuleVersion.PrototypeR2?16:9;
+        public void Reset(int fixture,GameplayRuleVersion rules)
+        {
+            if(fixture>=FixtureCount(rules))fixture=0;
+            if(fixture<0||fixture>=Names.Length)throw new ArgumentOutOfRangeException(nameof(fixture));
+            FinishAttempt("fixtures");feedback.Refresh(false);
+            if(Board){Board.gameObject.SetActive(false);Destroy(Board.gameObject);}Fixture=fixture;Rules=rules;stock=new Stock(20);IsRoundPlaytest=false;modeLabel.text="Rounds";rulesLabel.text="Rules";rulesLabel.GetComponent<Button>().interactable=true;description.text="Isolated mechanics fixtures · temporary inventory";
+            var go=new GameObject("PrototypeBoard",typeof(RectTransform));go.transform.SetParent(view.BoardMount,false);Stretch((RectTransform)go.transform);Board=go.AddComponent<Match3Board>();
+            var level=new LevelData{id="mechanics.sandbox",moveLimit=50,goals=new[]{new LevelGoalData{target=999}}};
+            if(fixture>=16)level.goals=new[]{new LevelGoalData{type=LevelGoalTypes.ClearObstacle,obstacleType=LevelObstacleTypes.RunicSeal,target=1}};
+            Board.InitializeMechanicsSandbox(level,rules,stock);Board.LoadSnapshotForTesting(CreateFixture(fixture),fixture>=16);view.BindCampaign(Board,Close,stock.Count);
+            status.text=$"SANDBOX · {rules} · {fixture+1}/{FixtureCount(rules)}: {Names[fixture]}";
+        }
+        public static BoardSnapshot CreateFixture(int fixture)
+        {
+            var m=new BoardModel(8,7,6,new SeededBoardRandom(1));for(int y=0;y<7;y++)for(int x=0;x<8;x++)m.SetCell(new BoardPosition(x,y),new BoardCellData((x+2*y)%6,SpecialGemKind.None));
+            var p=new BoardPosition(3,3);var q=new BoardPosition(4,3);
+            var kind=fixture==2?SpecialGemKind.Color:fixture==1||fixture==5?SpecialGemKind.Burst:SpecialGemKind.Row;m.SetCell(p,new BoardCellData(1,kind));
+            if(fixture==3||fixture==5)m.SetCell(q,new BoardCellData(2,SpecialGemKind.Burst));
+            if(fixture==4)m.SetCell(q,new BoardCellData(2,SpecialGemKind.Row));
+            if(fixture==1||fixture==6||fixture==7)for(int x=1;x<=5;x+=2){var at=new BoardPosition(x,fixture==1?4:3);if(at==p)continue;m.SetObstacle(at,new BoardObstacleData(fixture==1?BoardObstacleKind.Ice:fixture==6?BoardObstacleKind.Chain:BoardObstacleKind.Crate,2));}
+            if(fixture==8){m.SetCell(p,new BoardCellData(2,SpecialGemKind.None));for(int x=1;x<=4;x++)m.SetCell(new BoardPosition(x,2),new BoardCellData(x==3?3:2,SpecialGemKind.None));}
+            if(fixture==9)
+            {
+                // Swap (4,3) left into (3,3) to close the square at (2,2).
+                m.SetCell(p,new BoardCellData(3));m.SetCell(new BoardPosition(4,2),new BoardCellData(4));
+                foreach(var c in new[]{new BoardPosition(2,2),new BoardPosition(3,2),new BoardPosition(2,3),q})m.SetCell(c,new BoardCellData(2));
+            }
+            if(fixture>=10&&fixture<16)
+            {
+                m.SetCell(p,new BoardCellData(1,SpecialGemKind.Spark));
+                m.SetObstacle(new BoardPosition(6,1),new BoardObstacleData(BoardObstacleKind.Crate,2));
+                m.SetObstacle(new BoardPosition(1,5),new BoardObstacleData(BoardObstacleKind.Ice,2));
+                if(fixture>=11&&fixture<=14)m.SetCell(q,new BoardCellData(2,fixture==11?SpecialGemKind.Spark:fixture==12?SpecialGemKind.Row:fixture==13?SpecialGemKind.Burst:SpecialGemKind.Color));
+                if(fixture==15){m.SetCell(new BoardPosition(5,5),new BoardCellData(2,SpecialGemKind.Spark));m.SetObstacle(new BoardPosition(6,1),new BoardObstacleData(BoardObstacleKind.None,0));m.SetObstacle(new BoardPosition(1,5),new BoardObstacleData(BoardObstacleKind.None,0));}
+            }
+            if(fixture>=16)
+            {
+                m.SetCell(p,new BoardCellData(1));
+                var seal=new BoardPosition(5,3);
+                if(fixture==16)
+                {
+                    seal=new BoardPosition(4,2);
+                    for(int x=1;x<=3;x++)m.SetCell(new BoardPosition(x,2),new BoardCellData(x==3?3:2));
+                    m.SetCell(p,new BoardCellData(2));
+                }
+                if(fixture==17){m.SetCell(p,new BoardCellData(1,SpecialGemKind.Row));m.SetCell(new BoardPosition(3,2),new BoardCellData(4,SpecialGemKind.Row));}
+                if(fixture==18){m.SetCell(p,new BoardCellData(1,SpecialGemKind.Spark));m.SetCell(new BoardPosition(1,5),new BoardCellData(4,SpecialGemKind.Spark));}
+                m.SetObstacle(seal,new BoardObstacleData(BoardObstacleKind.RunicSeal,2));
+            }
+            return m.CreateSnapshot();
+        }
+        sealed class Stock:ICampaignBoardInventory
+        {
+            readonly int[] counts;BoosterType pending;bool reserved;
+            public Stock(int amount){counts=new[]{amount,amount,amount,amount};}
+            public bool Blocked=>false;public int Count(BoosterType t)=>counts[(int)t];
+            public bool Consume(BoosterType t){if(reserved||Count(t)==0)return false;counts[(int)t]--;pending=t;reserved=true;return true;}
+            public bool Complete(){reserved=false;return true;}public bool Refund(){if(reserved)counts[(int)pending]++;reserved=false;return true;}
+        }
+    }
+}

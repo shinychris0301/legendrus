@@ -1,0 +1,9 @@
+# R26 provision-path design review
+
+Bounded131–140 follows R22's sector outline and R25's storehouse checkpoint. Reuse existing gems/items, crate/ice/chain and feather delivery mechanics, plus consumed-move survival. No new assets, animations or gameplay rules.
+
+Recovery131/136 surrounds peaks135/140.132 places one left delivery beside a separate right ice task;133 concentrates layered crates on the left with open working space on the right;134 scatters unequal lock groups.135 offsets layered delivery gates.137 leaves space for special creation around isolated two-hit ice.138 has three unevenly spaced routes with staggered locks.139 uses18 consumed moves, not a clock.140 separates left crate shelves and right chains around unequal delivery routes. Explicit geometry is in Sources/PrepareBriefs.py. Starts/exits are free, positions unique, targets count cleared cells rather than hits. Seeds14131–14140;5/6colors;28–34moves, comparable to prior blocks and provisional pending human play.
+
+First-clear total1840gold/6gems/1Firebird booster. No scene/replay/sector bonus. After140 Ivan confirms the storehouse-to-home paths are clear and introduces joining them to the mill road. No production, distributed-supply state, new currency, full Firebird healing, chapter departure or finale is implied. Feathers stay feathers;141–150 remains outline content.
+
+Before installation, all ten briefs passed geometry, goal-count, delivery-exit and survival-budget checks. Preserve first130 and previous bilingual copy. Verify three starts/replays per installed round,130→131 migration,140 rewards/reload/story, map input and141/Chapter2 bounds. TestResults.md records actual Unity results. Human31–140 and Android remain open; do not infer player win rates or tighten budgets solely from solver results. Effects stay last.

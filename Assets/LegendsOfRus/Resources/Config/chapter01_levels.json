@@ -9,10 +9,10 @@
       "levelId": 1,
       "displayName": "Первый огонь",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 28,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1101,
       "difficulty": "tutorial",
       "difficultyRating": 1,
@@ -24,7 +24,7 @@
       "obstacles": [],
       "boardItems": [],
       "rewards": { "gold": 120, "gems": 0, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13000, 13600, 14400],
+      "starScoreThresholds": [460, 1060, 1860],
       "storyTriggers": ["dialogue.firebird_found"],
       "tutorialSteps": [
         {
@@ -48,26 +48,26 @@
       "chapterId": 1,
       "levelId": 2,
       "displayName": "След на пепле",
-      "columns": 7,
-      "rows": 8,
+      "columns": 8,
+      "rows": 7,
       "tileTypes": 5,
       "moveLimit": 27,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1102,
       "difficulty": "easy",
       "difficultyRating": 2,
       "goals": [
         { "type": "collect_tile", "tileType": 0, "target": 14 },
-        { "type": "score", "target": 13800 }
+        { "type": "score", "target": 1260 }
       ],
       "fixedCells": [
         { "x": 0, "y": 0, "tileType": 0, "special": 0 },
-        { "x": 6, "y": 7, "tileType": 1, "special": 0 }
+        { "x": 6, "y": 6, "tileType": 1, "special": 0 }
       ],
       "obstacles": [],
       "boardItems": [],
       "rewards": { "gold": 130, "gems": 0, "boosterMace": 1, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13100, 13800, 14700],
+      "starScoreThresholds": [560, 1260, 2160],
       "storyTriggers": [],
       "tutorialSteps": [
         {
@@ -92,10 +92,10 @@
       "levelId": 3,
       "displayName": "Ворон над полем",
       "columns": 8,
-      "rows": 8,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 26,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1103,
       "difficulty": "peak",
       "difficultyRating": 4,
@@ -114,7 +114,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 140, "gems": 5, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13200, 14000, 15000],
+      "starScoreThresholds": [660, 1460, 2460],
       "storyTriggers": ["dialogue.raven_watch"],
       "tutorialSteps": [
         {
@@ -139,10 +139,10 @@
       "levelId": 4,
       "displayName": "Просьба старейшины",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 30,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1104,
       "difficulty": "recovery",
       "difficultyRating": 2,
@@ -152,7 +152,7 @@
       ],
       "fixedCells": [
         { "x": 1, "y": 1, "tileType": 3, "special": 0 },
-        { "x": 6, "y": 7, "tileType": 4, "special": 0 }
+        { "x": 6, "y": 6, "tileType": 4, "special": 0 }
       ],
       "obstacles": [
         { "x": 1, "y": 3, "type": "ice", "layers": 1 },
@@ -162,7 +162,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 150, "gems": 0, "boosterMace": 0, "boosterFirebird": 1, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13150, 13900, 14900],
+      "starScoreThresholds": [610, 1360, 2360],
       "storyTriggers": ["dialogue.elder_request"],
       "tutorialSteps": []
     },
@@ -171,11 +171,11 @@
       "chapterId": 1,
       "levelId": 5,
       "displayName": "Тропа к мельнице",
-      "columns": 7,
-      "rows": 9,
+      "columns": 8,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 27,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1105,
       "difficulty": "normal",
       "difficultyRating": 4,
@@ -194,7 +194,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 160, "gems": 0, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 1, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13250, 14100, 15200],
+      "starScoreThresholds": [710, 1560, 2660],
       "storyTriggers": [],
       "tutorialSteps": [
         {
@@ -219,16 +219,17 @@
       "levelId": 6,
       "displayName": "Погасший очаг",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 25,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1106,
       "difficulty": "peak",
       "difficultyRating": 6,
       "goals": [
         { "type": "clear_obstacle", "obstacleType": "crate", "target": 8 },
-        { "type": "score", "target": 14600 }
+        { "type": "score", "target": 2060 },
+        { "type": "collect_tile", "tileType": 2, "target": 10 }
       ],
       "fixedCells": [
         { "x": 2, "y": 2, "tileType": 4, "special": 0 },
@@ -246,7 +247,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 190, "gems": 5, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13400, 14600, 15800],
+      "starScoreThresholds": [860, 2060, 3260],
       "storyTriggers": ["dialogue.embers_fade"],
       "tutorialSteps": [
         {
@@ -271,16 +272,17 @@
       "levelId": 7,
       "displayName": "После бури",
       "columns": 8,
-      "rows": 8,
+      "rows": 7,
       "tileTypes": 5,
       "moveLimit": 30,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1107,
       "difficulty": "recovery",
       "difficultyRating": 3,
       "goals": [
         { "type": "clear_obstacle", "obstacleType": "crate", "target": 4 },
-        { "type": "clear_obstacle", "obstacleType": "ice", "target": 4 }
+        { "type": "clear_obstacle", "obstacleType": "ice", "target": 4 },
+        { "type": "collect_tile", "tileType": 2, "target": 8 }
       ],
       "fixedCells": [],
       "obstacles": [
@@ -295,7 +297,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 170, "gems": 0, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 1 },
-      "starScoreThresholds": [13100, 13850, 14800],
+      "starScoreThresholds": [560, 1310, 2260],
       "storyTriggers": [],
       "tutorialSteps": []
     },
@@ -305,19 +307,20 @@
       "levelId": 8,
       "displayName": "Тени у реки",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 28,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1108,
       "difficulty": "hard",
       "difficultyRating": 4,
       "goals": [
         { "type": "bring_down", "itemType": "firebird_feather", "target": 2 },
-        { "type": "clear_obstacle", "obstacleType": "chain", "target": 4 }
+        { "type": "clear_obstacle", "obstacleType": "chain", "target": 4 },
+        { "type": "collect_tile", "tileType": 2, "target": 12 }
       ],
       "fixedCells": [
-        { "x": 0, "y": 8, "tileType": 2, "special": 1 },
+        { "x": 0, "y": 6, "tileType": 2, "special": 1 },
         { "x": 7, "y": 0, "tileType": 3, "special": 2 }
       ],
       "obstacles": [
@@ -331,7 +334,7 @@
         { "x": 5, "y": 1, "type": "firebird_feather" }
       ],
       "rewards": { "gold": 210, "gems": 5, "boosterMace": 0, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13400, 14400, 15700],
+      "starScoreThresholds": [860, 1860, 3160],
       "storyTriggers": ["dialogue.river_shadow"],
       "tutorialSteps": [
         {
@@ -356,16 +359,17 @@
       "levelId": 9,
       "displayName": "Живой огонь",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 22,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1109,
       "difficulty": "hard",
       "difficultyRating": 5,
       "goals": [
         { "type": "survival", "target": 16 },
-        { "type": "clear_obstacle", "obstacleType": "ice", "target": 6 }
+        { "type": "clear_obstacle", "obstacleType": "ice", "target": 6 },
+        { "type": "collect_tile", "tileType": 2, "target": 14 }
       ],
       "fixedCells": [
         { "x": 3, "y": 4, "tileType": 0, "special": 3 },
@@ -381,7 +385,7 @@
       ],
       "boardItems": [],
       "rewards": { "gold": 230, "gems": 5, "boosterMace": 1, "boosterFirebird": 0, "boosterLivingLight": 0, "boosterSeaPearl": 0 },
-      "starScoreThresholds": [13500, 14600, 16000],
+      "starScoreThresholds": [960, 2060, 3460],
       "storyTriggers": ["dialogue.living_flame"],
       "tutorialSteps": [
         {
@@ -406,20 +410,21 @@
       "levelId": 10,
       "displayName": "Сердце деревни",
       "columns": 8,
-      "rows": 9,
+      "rows": 7,
       "tileTypes": 6,
       "moveLimit": 24,
-      "startingScore": 12540,
+      "startingScore": 0,
       "boardSeed": 1110,
       "difficulty": "finale",
       "difficultyRating": 7,
       "goals": [
         { "type": "clear_obstacle", "obstacleType": "crate", "target": 8 },
-        { "type": "bring_down", "itemType": "firebird_feather", "target": 3 }
+        { "type": "bring_down", "itemType": "firebird_feather", "target": 3 },
+        { "type": "collect_tile", "tileType": 2, "target": 16 }
       ],
       "fixedCells": [
         { "x": 3, "y": 4, "tileType": 0, "special": 4 },
-        { "x": 1, "y": 7, "tileType": 4, "special": 0 },
+        { "x": 1, "y": 6, "tileType": 4, "special": 0 },
         { "x": 6, "y": 1, "tileType": 5, "special": 0 }
       ],
       "obstacles": [
@@ -446,7 +451,7 @@
         { "x": 6, "y": 0, "type": "firebird_feather" }
       ],
       "rewards": { "gold": 350, "gems": 20, "boosterMace": 0, "boosterFirebird": 1, "boosterLivingLight": 1, "boosterSeaPearl": 1 },
-      "starScoreThresholds": [13800, 15100, 16800],
+      "starScoreThresholds": [1260, 2560, 4260],
       "storyTriggers": ["dialogue.chapter_finale", "chapter.complete"],
       "tutorialSteps": []
     }

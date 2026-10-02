@@ -52,6 +52,12 @@ namespace LegendsOfRus.Editor
             if (settings == null)
                 throw new InvalidOperationException("Addressables settings have not been created.");
 
+            if (string.IsNullOrEmpty(settings.RemoteCatalogBuildPath.Id) ||
+                string.IsNullOrEmpty(settings.RemoteCatalogLoadPath.Id))
+                throw new InvalidOperationException("Catalog profile path references are missing.");
+            if (settings.BuildRemoteCatalog)
+                throw new InvalidOperationException("Remote catalogs are not approved for the local foundation.");
+
             for (int i = 0; i < Groups.Length; i++)
             {
                 if (settings.FindGroup(Groups[i]) == null)
@@ -90,6 +96,17 @@ namespace LegendsOfRus.Editor
                 AddressableAssetSettingsDefaultObject.GetSettings(true);
             if (settings == null)
                 throw new InvalidOperationException("Unable to create Addressables settings.");
+
+            // Build-layout generation evaluates the remote build reference even when
+            // remote catalogs are disabled. Older serialized empty IDs bypass the
+            // package's null-only initialization. Repair only missing references;
+            // keep custom paths, profile values and remote activation unchanged.
+            if (string.IsNullOrEmpty(settings.RemoteCatalogBuildPath.Id))
+                settings.RemoteCatalogBuildPath.SetVariableByName(
+                    settings, AddressableAssetSettings.kRemoteBuildPath);
+            if (string.IsNullOrEmpty(settings.RemoteCatalogLoadPath.Id))
+                settings.RemoteCatalogLoadPath.SetVariableByName(
+                    settings, AddressableAssetSettings.kRemoteLoadPath);
 
             for (int i = 0; i < Labels.Length; i++)
                 settings.AddLabel(Labels[i]);

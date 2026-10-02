@@ -140,7 +140,17 @@ namespace LegendsOfRus
             int requestedBefore = layer.SpawnRequestCount;
             int emittedBefore = layer.EmittedEffectCount;
             int droppedBefore = layer.DroppedEffectCount;
-            EmitMotion(cue, motion);
+            // Spark has its own approved icon flight and mesh accents.
+            bool candidateSettle = board != null && board.RuleVersion >= GameplayRuleVersion.PrototypeR2 &&
+                (cue == CoreLoopVfxCue.FallSettleSpark || cue == CoreLoopVfxCue.MatchResolveGlint);
+            bool causalMesh = board != null && board.RuleVersion >= GameplayRuleVersion.PrototypeR4 &&
+                (motion.Kind == GameplayMotionKind.MatchWaveStarted || motion.Kind == GameplayMotionKind.SpecialActivationStarted);
+            // R4 has dedicated formation, impact, flight and booster renderers. The pooled
+            // defaults otherwise add creation/cascade/booster rings on top of those renderers.
+            // Keep the non-circular swap trail; preserve cue/trace diagnostics below.
+            bool dedicatedPresentation = board != null && board.RuleVersion >= GameplayRuleVersion.PrototypeR4 &&
+                cue != CoreLoopVfxCue.SwapTrail;
+            if (motion.SpecialKind != SpecialGemKind.Spark && !candidateSettle && !causalMesh && !dedicatedPresentation) EmitMotion(cue, motion);
             lastCueEmissionCount = layer.EmittedEffectCount - emittedBefore;
             lastEffectTrace = new CoreLoopVfxTrace(
                 motion.Sequence,
@@ -563,6 +573,17 @@ namespace LegendsOfRus
             float delayStep = 0.022f
         )
         {
+            if (motion.ClearedCells.Count > 0)
+            {
+                // Bound the burst count and use real resolver cells, including cascades.
+                int bursts = Mathf.Min(motion.ClearedCells.Count, CoreLoopVfxProfile.MaximumBurstEffectsPerCue);
+                for (int i = 0; i < bursts; i++)
+                {
+                    var cell = motion.ClearedCells[i * motion.ClearedCells.Count / bursts];
+                    EmitAtPosition(cue, cell.Position, i * delayStep, .018f);
+                }
+                return;
+            }
             int count = Mathf.Clamp(
                 requestedCount <= 0
                     ? 1

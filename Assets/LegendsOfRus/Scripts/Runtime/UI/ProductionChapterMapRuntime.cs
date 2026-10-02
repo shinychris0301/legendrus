@@ -11,16 +11,43 @@ namespace LegendsOfRus
         public const string ArtRoot = "ProductionUI/ChapterMapAligned/";
         public static readonly string[] ArtNames = { "environment", "banner", "node" };
         // Ten authored levels follow the newly painted village path, bottom to top.
+        public const int NodePoolSize=14;
         public static readonly Vector2[] NodeCenters = {
             new Vector2(435,1355), new Vector2(560,1270), new Vector2(435,1185), new Vector2(565,1100),
             new Vector2(365,1015), new Vector2(520,930), new Vector2(385,845), new Vector2(560,760),
             new Vector2(435,675), new Vector2(645,590)
         };
 
+        public static void EnsureNodePool(ProductionChapterMapView view)
+        {
+            if(view.Nodes.Length>=NodePoolSize)return;
+            int previous=view.Nodes.Length;
+            Array.Resize(ref view.Nodes,NodePoolSize);
+            for(int i=previous;i<view.Nodes.Length;i++)view.Nodes[i]=CreateNode(view,i);
+        }
+        static ChapterMapNode CreateNode(ProductionChapterMapView view,int i)
+        {
+                RectTransform node = Rect(view.MapArea,"Level_"+(i+1),NodeCenters[i%NodeCenters.Length].x-63,NodeCenters[i%NodeCenters.Length].y-450,126,132);
+                var hit = node.gameObject.AddComponent<Image>(); hit.color = Color.clear;
+                Button button = Button(hit); button.transition = Selectable.Transition.None;
+                button.GetComponent<ProductionHomeButtonFeedback>().Role = MetaUiControlRole.MapNode;
+                var halo = Graphic(node,"SelectedHalo",WorldMapGraphicKind.Halo,3,-10,120,120);
+                var face = Art(node,"LevelMedallion",Load("node"),8,-5,110,110);
+                Text number = Label(node,"Number",(i+1).ToString(),22,12,82,72,43,view.Typography);
+                number.gameObject.AddComponent<ProductionHomeGoldText>().BeveledFace = true;
+                number.material = Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+"home_play_gold");
+                var stars = new ProductionWorldMapGraphic[3];
+                for (int j=0;j<3;j++) stars[j]=Graphic(node,"Star_"+j,WorldMapGraphicKind.Star,15+j*31,98,31,32);
+                var locked=Graphic(node,"Lock",WorldMapGraphicKind.Lock,96,74,24,28);
+                return new ChapterMapNode{Root=node,Button=button,Face=face,Halo=halo,Number=number,Stars=stars,Lock=locked};
+        }
+
         public static void BuildInto(RectTransform root)
         {
             var existing = root.GetComponent<ProductionChapterMapView>();
-            if (existing != null && existing.HasRequiredBindings) { AlignPresentation(existing); return; }
+            if (existing != null && existing.HasRequiredBindings) { ProductionChapterMapSourceControls.Apply(existing); return; }
+            if(existing!=null && existing.Content!=null && !Application.isPlaying)
+            { ProductionChapterMapSourceControls.Apply(existing);return; }
             if (root.Find(ContentName) != null)
                 throw new InvalidOperationException("Chapter Map bindings need repair outside Play Mode.");
             var homePrefab = Resources.Load<GameObject>("ProductionUI/Pages/Home");
@@ -36,34 +63,23 @@ namespace LegendsOfRus
             shade.color = new Color32(4,8,15,255); shade.raycastTarget = false; shade.rectTransform.anchorMin = Vector2.zero; shade.rectTransform.anchorMax = Vector2.one;
             shade.rectTransform.offsetMin = shade.rectTransform.offsetMax = Vector2.zero;
             view.MapArea = Rect(content,"LevelPath",0,400,941,1040);
-            view.Nodes = new ChapterMapNode[NodeCenters.Length];
-            for (int i = 0; i < view.Nodes.Length; i++)
-            {
-                RectTransform node = Rect(view.MapArea,"Level_"+(i+1),NodeCenters[i].x-63,NodeCenters[i].y-450,126,132);
-                var hit = node.gameObject.AddComponent<Image>(); hit.color = Color.clear;
-                Button button = Button(hit); button.transition = Selectable.Transition.None;
-                button.GetComponent<ProductionHomeButtonFeedback>().Role = MetaUiControlRole.MapNode;
-                var halo = Graphic(node,"SelectedHalo",WorldMapGraphicKind.Halo,3,-10,120,120);
-                var face = Art(node,"LevelMedallion",Load("node"),8,-5,110,110);
-                Text number = Label(node,"Number",(i+1).ToString(),22,12,82,72,43,view.Typography);
-                number.gameObject.AddComponent<ProductionHomeGoldText>().BeveledFace = true;
-                number.material = Resources.Load<Material>(ProductionHomeRuntime.ArtRoot+"home_play_gold");
-                var stars = new ProductionWorldMapGraphic[3];
-                for (int j=0;j<3;j++) stars[j]=Graphic(node,"Star_"+j,WorldMapGraphicKind.Star,15+j*31,98,31,32);
-                var locked=Graphic(node,"Lock",WorldMapGraphicKind.Lock,96,74,24,28);
-                view.Nodes[i]=new ChapterMapNode{Root=node,Button=button,Face=face,Halo=halo,Number=number,Stars=stars,Lock=locked};
-            }
+            view.Nodes = new ChapterMapNode[NodePoolSize];
+            for(int i=0;i<view.Nodes.Length;i++)view.Nodes[i]=CreateNode(view,i);
             view.HudBacking = Clone(home.GetComponent<ProductionHomeLayout>().HudBacking,content,"HudOpaqueNavyBacking");
             view.Hud = Clone(home.GetComponent<ProductionHomeLayout>().Hud,content,"ChapterMapHud");
-            view.ProfileButton = view.Hud.Find("ProfileButton").GetComponent<Button>();
-            view.SettingsButton = view.Hud.Find("SettingsButton").GetComponent<Button>();
-            view.HeroName = view.ProfileButton.transform.Find("HeroName").GetComponent<Text>();
-            view.LevelText = view.ProfileButton.transform.Find("SavedLevel").GetComponent<Text>();
-            view.GoldText = view.Hud.Find("GoldResource/GoldValue").GetComponent<Text>();
-            view.GemsText = view.Hud.Find("GemsResource/GemsValue").GetComponent<Text>();
-            view.EnergyText = view.Hud.Find("EnergyResource/EnergyValue").GetComponent<Text>();
-            view.PlusButtons = new[] { view.Hud.Find("GoldResource/ResourcePlus").GetComponent<Button>(),
-                view.Hud.Find("GemsResource/ResourcePlus").GetComponent<Button>(),view.Hud.Find("EnergyResource/ResourcePlus").GetComponent<Button>() };
+            // Instantiate remaps the shared header's serialized references to this clone.
+            // Home's current capsules no longer live at the historical GoldResource paths.
+            var header = view.Hud.GetComponent<ProductionPlayerHeader>();
+            if (header == null || !header.HasBindings)
+                throw new InvalidOperationException("Cloned Home HUD requires complete shared header bindings.");
+            view.ProfileButton = header.Profile;
+            view.SettingsButton = header.Settings;
+            view.HeroName = header.PlayerName;
+            view.LevelText = header.Level;
+            view.GoldText = header.Balances[0];
+            view.GemsText = header.Balances[1];
+            view.EnergyText = header.Balances[2];
+            view.PlusButtons = (Button[])header.Plus.Clone();
             view.TitleArea=Rect(content,"TitleArea",0,130,941,280);
             view.TitlePlaque=Art(view.TitleArea,"ChapterBanner",Load("banner"),55,0,831,277);
             view.ChapterText=Label(view.TitleArea,"Chapter","ГЛАВА 1",240,68,461,47,32,view.Typography);
@@ -82,6 +98,7 @@ namespace LegendsOfRus
             view.PlayButton=play.GetComponent<Button>();view.PlayText=play.Find("PlayLabel").GetComponent<Text>();
             var layout = root.GetComponent<ProductionChapterMapLayout>() ?? root.gameObject.AddComponent<ProductionChapterMapLayout>();
             layout.View = view;
+            ProductionChapterMapSourceControls.Apply(view);
             view.Revision = ProductionChapterMapView.CurrentRevision;
             view.RefreshContent(); layout.ApplyNow();
             if (!view.HasRequiredBindings) throw new InvalidOperationException("Chapter Map composition bindings are incomplete.");
@@ -90,6 +107,7 @@ namespace LegendsOfRus
 
         public static void AlignPresentation(ProductionChapterMapView view)
         {
+            if(view.SourceControls)return;
             for(int i=0;i<view.Nodes.Length;i++)
             {
                 var node=view.Nodes[i];Vector2 center=NodeCenters[i];
@@ -111,6 +129,7 @@ namespace LegendsOfRus
             if(view.BackButton.transform.Find("BackMedallion")==null)
                 Art(view.BackButton.transform,"BackMedallion",Load("node"),-5,-5,154,154).transform.SetAsFirstSibling();
             view.BackButton.GetComponent<ProductionHomeButtonFeedback>().Role=MetaUiControlRole.Back;
+            ProductionNavigationStyle.Apply(view);
 
         }
 

@@ -1,0 +1,904 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
+@@ -85,7 +85,7 @@
+   screenId: 4
+   referenceMatchVersion: v1.20-step03.3R3
+   referenceSha256: 32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195
+-  proofScope: pre-level-r2-staged-three-goals
++  proofScope: pre-level-r3-in-game-booster-guide
+   productionComponentCount: 8
+   fullScreenScreenshotDependency: 0
+   preservesLiveGameplayBoard: 0
+@@ -102,7 +102,7 @@
+   m_Script: {fileID: 11500000, guid: 44d0814060fce97ae9d3abf8a3b17497, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionPreLevelView
+-  Revision: 2
++  Revision: 3
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 5042561358815628004}
+   Hud: {fileID: 7944400378413947317}
+@@ -149,6 +149,11 @@
+   - {fileID: 2068335827309086385}
+   - {fileID: 7534753545289587177}
+   - {fileID: 1957562719685542562}
++  BoosterDetailsRoot: {fileID: 4332176141285414658}
++  BoosterDetailIcon: {fileID: 7150522179139489296}
++  BoosterDetailText: {fileID: 8084836703768808249}
++  BoosterDetailsBackText: {fileID: 5513150915795714555}
++  BoosterDetailsBack: {fileID: 6133738072964734537}
+   BoosterCounts:
+   - {fileID: 8815686047973946197}
+   - {fileID: 5497817063955554939}
+@@ -562,6 +567,7 @@
+   - {fileID: 4014236381044329497}
+   - {fileID: 3890003341867539989}
+   - {fileID: 5186641943740728875}
++  - {fileID: 4332176141285414658}
+   m_Father: {fileID: 6357601318716112615}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -1334,7 +1340,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.92156863, g: 0.92156863, b: 0.92156863, a: 1}
++  m_Color: {r: 0.8109804, g: 0.8109804, b: 0.8109804, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -1660,6 +1666,122 @@
+   m_AnchoredPosition: {x: 0, y: -400}
+   m_SizeDelta: {x: 941, y: 1040}
+   m_Pivot: {x: 0, y: 1}
++--- !u!1 &1486447580600221186
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5763624408971284477}
++  - component: {fileID: 8670466961213916389}
++  - component: {fileID: 8084836703768808249}
++  - component: {fileID: 8531650756110253229}
++  - component: {fileID: 1269458230699537217}
++  m_Layer: 5
++  m_Name: Explanation
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5763624408971284477
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1486447580600221186}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 4332176141285414658}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 164, y: -0}
++  m_SizeDelta: {x: 914, y: 172}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &8670466961213916389
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1486447580600221186}
++  m_CullTransparentMesh: 1
++--- !u!114 &8084836703768808249
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1486447580600221186}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.9529412, g: 0.8352941, b: 0.6117647, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 42
++    m_FontStyle: 0
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 42
++    m_Alignment: 3
++    m_AlignByGeometry: 0
++    m_RichText: 1
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 1
++    m_LineSpacing: 1
++  m_Text: 
++--- !u!114 &8531650756110253229
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1486447580600221186}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 2050f6ff92824cffa76944e85fd81368, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleTextGeometry
++  CenterHorizontally: 1
++  CenterVertically: 1
++  SnapToScreenPixels: 0
++  OpticalOffset: {x: 0, y: 0}
++--- !u!114 &1269458230699537217
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1486447580600221186}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: e33c805ca54fc546883e1086b3b567a9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeGoldText
++  TopColor:
++    serializedVersion: 2
++    rgba: 4288997375
++  BottomColor:
++    serializedVersion: 2
++    rgba: 4279921072
++  BeveledFace: 1
+ --- !u!1 &1488787713240168417
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4192,6 +4314,216 @@
+     m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: "\u0418\u0432\u0430\u043D"
++--- !u!1 &3479853135795718265
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 2751349666047362929}
++  - component: {fileID: 5680873921676229848}
++  - component: {fileID: 7150522179139489296}
++  m_Layer: 5
++  m_Name: Icon
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &2751349666047362929
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3479853135795718265}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 4332176141285414658}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 10, y: -0}
++  m_SizeDelta: {x: 130, y: 130}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &5680873921676229848
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3479853135795718265}
++  m_CullTransparentMesh: 1
++--- !u!114 &7150522179139489296
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3479853135795718265}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: f281bf4d074f4f378daf07c7619b4437, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3510294139569226436
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 1115530192166322905}
++  - component: {fileID: 2376887345445781067}
++  - component: {fileID: 6809964640837255425}
++  - component: {fileID: 6133738072964734537}
++  - component: {fileID: 6367406298258660105}
++  m_Layer: 5
++  m_Name: AllBoosters
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &1115530192166322905
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3510294139569226436}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children:
++  - {fileID: 1630907919257183570}
++  m_Father: {fileID: 4332176141285414658}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 350, y: -127}
++  m_SizeDelta: {x: 250, y: 74}
++  m_Pivot: {x: 0.5, y: 0.5}
++--- !u!222 &2376887345445781067
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3510294139569226436}
++  m_CullTransparentMesh: 1
++--- !u!114 &6809964640837255425
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3510294139569226436}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: bbb3a20b4740b869c94d2023f0da4929, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 1
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!114 &6133738072964734537
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3510294139569226436}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
++  m_Navigation:
++    m_Mode: 0
++    m_WrapAround: 0
++    m_SelectOnUp: {fileID: 0}
++    m_SelectOnDown: {fileID: 0}
++    m_SelectOnLeft: {fileID: 0}
++    m_SelectOnRight: {fileID: 0}
++  m_Transition: 1
++  m_Colors:
++    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
++    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
++    m_PressedColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
++    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
++    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
++    m_ColorMultiplier: 1
++    m_FadeDuration: 0.06
++  m_SpriteState:
++    m_HighlightedSprite: {fileID: 0}
++    m_PressedSprite: {fileID: 0}
++    m_SelectedSprite: {fileID: 0}
++    m_DisabledSprite: {fileID: 0}
++  m_AnimationTriggers:
++    m_NormalTrigger: Normal
++    m_HighlightedTrigger: Highlighted
++    m_PressedTrigger: Pressed
++    m_SelectedTrigger: Selected
++    m_DisabledTrigger: Disabled
++  m_Interactable: 1
++  m_TargetGraphic: {fileID: 6809964640837255425}
++  m_OnClick:
++    m_PersistentCalls:
++      m_Calls: []
++--- !u!114 &6367406298258660105
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3510294139569226436}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 9fa5a83b356448c2a518d915677a299c, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeButtonFeedback
++  Role: 0
+ --- !u!1 &3589725462374618715
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6568,6 +6900,44 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeButtonFeedback
+   Role: 0
++--- !u!1 &6030533596080748765
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4332176141285414658}
++  m_Layer: 5
++  m_Name: BoosterDetails
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 0
++--- !u!224 &4332176141285414658
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 6030533596080748765}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children:
++  - {fileID: 2751349666047362929}
++  - {fileID: 5763624408971284477}
++  - {fileID: 1115530192166322905}
++  m_Father: {fileID: 8065350095578364591}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 50, y: -96}
++  m_SizeDelta: {x: 631, y: 164}
++  m_Pivot: {x: 0, y: 1}
+ --- !u!1 &6048463208302328090
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -7068,7 +7438,7 @@
+     m_HorizontalOverflow: 1
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u0412\u042B\u0411\u0415\u0420\u0418\u0422\u0415 \u0411\u0423\u0421\u0422\u0415\u0420\u042B"
++  m_Text: "\u0411\u0423\u0421\u0422\u0415\u0420\u042B \u0412 \u0418\u0413\u0420\u0415"
+ --- !u!114 &3750342566630695300
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -9158,6 +9528,122 @@
+   m_AnchoredPosition: {x: 393, y: -218}
+   m_SizeDelta: {x: 83, y: 32}
+   m_Pivot: {x: 0, y: 1}
++--- !u!1 &8838840475799072735
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 1630907919257183570}
++  - component: {fileID: 2367516984202491956}
++  - component: {fileID: 5513150915795714555}
++  - component: {fileID: 3557165151348006556}
++  - component: {fileID: 2056013601338898249}
++  m_Layer: 5
++  m_Name: Label
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &1630907919257183570
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8838840475799072735}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 1115530192166322905}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 15, y: -23}
++  m_SizeDelta: {x: 440, y: 56}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &2367516984202491956
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8838840475799072735}
++  m_CullTransparentMesh: 1
++--- !u!114 &5513150915795714555
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8838840475799072735}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.9529412, g: 0.8352941, b: 0.6117647, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_FontData:
++    m_Font: {fileID: 0}
++    m_FontSize: 40
++    m_FontStyle: 1
++    m_BestFit: 0
++    m_MinSize: 10
++    m_MaxSize: 40
++    m_Alignment: 4
++    m_AlignByGeometry: 0
++    m_RichText: 1
++    m_HorizontalOverflow: 1
++    m_VerticalOverflow: 1
++    m_LineSpacing: 1
++  m_Text: "\u0412\u0421\u0415 \u0411\u0423\u0421\u0422\u0415\u0420\u042B"
++--- !u!114 &3557165151348006556
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8838840475799072735}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 2050f6ff92824cffa76944e85fd81368, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.SplashTitleTextGeometry
++  CenterHorizontally: 1
++  CenterVertically: 1
++  SnapToScreenPixels: 0
++  OpticalOffset: {x: 0, y: 0}
++--- !u!114 &2056013601338898249
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8838840475799072735}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: e33c805ca54fc546883e1086b3b567a9, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomeGoldText
++  TopColor:
++    serializedVersion: 2
++    rgba: 4288997375
++  BottomColor:
++    serializedVersion: 2
++    rgba: 4279921072
++  BeveledFace: 1
+ --- !u!1 &8944005602068830042
+ GameObject:
+   m_ObjectHideFlags: 0
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -523,7 +523,7 @@
+                 ProductionPreLevelRuntime.BuildInto(rect);
+                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.PreLevel,
+                     "32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195",
+-                    "pre-level-r2-staged-three-goals",8,false,false);
++                    "pre-level-r3-in-game-booster-guide",8,false,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);
+                 if(!saved)throw new IOException("Could not save aligned Pre-Level.");
+             }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -605,7 +605,7 @@
+                         throw new InvalidOperationException("Pre-Level native bindings are missing.");
+                     preparation.BindNavigation(target=>Show(target),
+                         ()=>{StartLevel();return current!=ScreenId.PreLevel;},
+-                        ()=>NavigateBackFrom(ScreenId.PreLevel),()=>ShowModal(ScreenId.BoosterSelect));
++                        ()=>NavigateBackFrom(ScreenId.PreLevel));
+                     return;
+ 
+                 case ScreenId.Gameplay:
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs
+@@ -8,6 +8,7 @@
+     public static class ProductionPreLevelRuntime
+     {
+         public const string ContentName = "PRE_LEVEL_ALIGNED_CONTENT";
++        public const float EnvironmentTone = .88f;
+         public const string ArtRoot = "ProductionUI/PreLevelAligned/";
+         public static readonly string[] ArtNames = { "panel_goals", "panel_wide", "ruby", "mace", "firebird", "shield", "potion", "chest" };
+         public static readonly BoosterType[] Boosters = { BoosterType.BogatyrMace, BoosterType.Firebird, BoosterType.LivingLight, BoosterType.SeaPearl };
+@@ -15,7 +16,7 @@
+         public static void BuildInto(RectTransform root)
+         {
+             var existing = root.GetComponent<ProductionPreLevelView>();
+-            if(existing!=null) EnsureGoalCapacity(existing);
++            if(existing!=null){EnsureGoalCapacity(existing);EnsureBoosterDetails(existing);}
+             if (existing != null && existing.HasRequiredBindings) { AlignPresentation(existing); existing.RefreshContent(); return; }
+             if (root.Find(ContentName) != null) throw new InvalidOperationException("Pre-Level bindings need repair outside Play Mode.");
+             var source = Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>();
+@@ -48,7 +49,7 @@
+             view.MovesValue=Label(view,view.MovesArea,"MovesValue","28",25,78,150,78,62);
+             view.BoostersArea=Rect(view.Body,"Boosters",105,455,731,295);
+             Art(view.BoostersArea,"BoostersPanel",Load("panel_wide"),0,0,731,295);
+-            view.BoostersHeading=Label(view,view.BoostersArea,"BoostersHeading","ВЫБЕРИТЕ БУСТЕРЫ",50,29,631,47,32);
++            view.BoostersHeading=Label(view,view.BoostersArea,"BoostersHeading","БУСТЕРЫ В ИГРЕ",50,29,631,47,32);
+             view.BoosterButtons=new Button[4];view.BoosterCounts=new Text[4];view.BonusRoots=new RectTransform[4];view.BonusCounts=new Text[4];
+             string[] art = {"mace","firebird","shield","potion"};
+             for(int i=0;i<4;i++)
+@@ -84,8 +85,38 @@
+             view.FooterOrnament=Clone(source.FooterOrnament.rectTransform,view.Content,"FooterOrnament").GetComponent<Image>();
+             view.Footer=Clone(source.Footer,view.Content,"Navigation");view.BackButton=view.Footer.Find("Back").GetComponent<Button>();view.PlayButton=view.Footer.Find("PlayButton").GetComponent<Button>();view.PlayText=view.PlayButton.transform.Find("PlayLabel").GetComponent<Text>();
+             var layout=root.GetComponent<ProductionPreLevelLayout>()??root.gameObject.AddComponent<ProductionPreLevelLayout>();layout.View=view;
+-            view.Revision=ProductionPreLevelView.CurrentRevision;AlignPresentation(view);view.RefreshContent();layout.ApplyNow();
++            EnsureBoosterDetails(view);view.Revision=ProductionPreLevelView.CurrentRevision;AlignPresentation(view);view.RefreshContent();layout.ApplyNow();
+             if(!view.HasRequiredBindings)throw new InvalidOperationException("Pre-Level composition is incomplete.");
++        }
++        static void EnsureBoosterDetails(ProductionPreLevelView view)
++        {
++            if(view.BoostersArea==null||view.PlayButton==null)return;
++            if(view.BoosterDetailsRoot==null)
++            {
++                view.BoosterDetailsRoot=Rect(view.BoostersArea,"BoosterDetails",50,96,631,164);
++                view.BoosterDetailIcon=Art(view.BoosterDetailsRoot,"Icon",Load("mace"),10,0,130,130);
++                view.BoosterDetailIcon.preserveAspect=true;
++                view.BoosterDetailText=Label(view,view.BoosterDetailsRoot,"Explanation","",164,0,457,86,21);
++                // Small explanatory text uses a flat face for legibility on the lacquer.
++                view.BoosterDetailText.GetComponent<ProductionHomeGoldText>().enabled=false;
++                view.BoosterDetailText.material=null;
++                view.BoosterDetailText.fontStyle=FontStyle.Normal;
++                view.BoosterDetailText.alignment=TextAnchor.MiddleLeft;
++                view.BoosterDetailText.horizontalOverflow=HorizontalWrapMode.Wrap;
++                var back=Art(view.BoosterDetailsRoot,"AllBoosters",view.PlayButton.targetGraphic.GetComponent<Image>().sprite,225,90,250,74);
++                view.BoosterDetailsBack=Button(back);
++                view.BoosterDetailsBackText=Label(view,back.transform,"Label","НАЗАД",15,23,220,28,20);
++                view.BoosterDetailsBackText.GetComponent<ProductionHomeGoldText>().enabled=false;
++                view.BoosterDetailsBackText.material=null;
++            }
++            Place(view.BoosterDetailText,164,0,457,86,21);
++            var returnRect=(RectTransform)view.BoosterDetailsBack.transform;
++            returnRect.pivot=new Vector2(.5f,.5f);
++            returnRect.anchoredPosition=new Vector2(350,-127);returnRect.sizeDelta=new Vector2(250,74);
++            view.BoosterDetailsBack.GetComponent<Image>().preserveAspect=true;
++            Place(view.BoosterDetailsBackText,15,23,220,28,20);
++            view.BoosterDetailsRoot.gameObject.SetActive(false);
++            view.Revision=ProductionPreLevelView.CurrentRevision;
+         }
+         static void EnsureGoalCapacity(ProductionPreLevelView view)
+         {
+@@ -97,6 +128,9 @@
+         }
+         static void AlignPresentation(ProductionPreLevelView view)
+         {
++            // Derive from the shared source each time so rebuilds never compound the tint.
++            Color scenery=Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>().Environment.color;
++            view.Environment.color=new Color(scenery.r*EnvironmentTone,scenery.g*EnvironmentTone,scenery.b*EnvironmentTone,scenery.a);
+             // Position live lettering inside the lacquer surface, clear of the raised trim.
+             view.GoalsArea.sizeDelta=new Vector2(571,380);
+             ((RectTransform)view.GoalsArea.Find("GoalsPanel")).sizeDelta=new Vector2(571,380);
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelView.cs
+@@ -17,7 +17,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionPreLevelView : MonoBehaviour
+     {
+-        public const int CurrentRevision=2;
++        public const int CurrentRevision=3;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,HudBacking,TitleArea,Footer,Body,GoalsArea,MovesArea,BoostersArea,RewardsArea;
+@@ -27,6 +27,11 @@
+         public Text GoalsHeading,SelectedLevel,MovesHeading,MovesValue,BoostersHeading,RewardsHeading,RewardStatus,RewardGold,RewardGems;
+         public Button ProfileButton,SettingsButton,BackButton,PlayButton;
+         public Button[] PlusButtons,BoosterButtons;
++        public RectTransform BoosterDetailsRoot;
++        public Image BoosterDetailIcon;
++        public Text BoosterDetailText,BoosterDetailsBackText;
++        public Button BoosterDetailsBack;
++        public int InspectedBoosterIndex{get;private set;}=-1;
+         public Text[] BoosterCounts,BonusCounts;
+         public RectTransform[] BonusRoots;
+         public PreLevelGoalView[] Goals;
+@@ -36,6 +41,7 @@
+             Ruby!=null&&Sapphire!=null&&GoalMedallion!=null&&HeroName!=null&&LevelText!=null&&GoldText!=null&&GemsText!=null&&EnergyText!=null&&TitleText!=null&&ChapterText!=null&&PlayText!=null&&
+             GoalsHeading!=null&&SelectedLevel!=null&&MovesHeading!=null&&MovesValue!=null&&BoostersHeading!=null&&RewardsHeading!=null&&RewardStatus!=null&&RewardGold!=null&&RewardGems!=null&&
+             ProfileButton!=null&&SettingsButton!=null&&BackButton!=null&&PlayButton!=null&&Valid(PlusButtons,3)&&Valid(BoosterButtons,4)&&Valid(BoosterCounts,4)&&Valid(BonusCounts,4)&&Valid(BonusRoots,4)&&
++            BoosterDetailsRoot!=null&&BoosterDetailIcon!=null&&BoosterDetailText!=null&&BoosterDetailsBackText!=null&&BoosterDetailsBack!=null&&
+             Goals!=null&&Goals.Length==3&&Array.TrueForAll(Goals,g=>g!=null&&g.Root!=null&&g.Icon!=null&&g.Description!=null&&g.Count!=null);
+         static bool Valid<T>(T[] values,int length) where T:UnityEngine.Object=>values!=null&&values.Length==length&&Array.TrueForAll(values,x=>x!=null);
+         GameState subscribed;
+@@ -43,7 +49,7 @@
+         bool committed;
+         readonly List<Button> bound=new List<Button>();
+         readonly List<UnityAction> listeners=new List<UnityAction>();
+-        void OnEnable(){committed=false;BindState();RefreshContent();}
++        void OnEnable(){InspectedBoosterIndex=-1;committed=false;BindState();RefreshContent();}
+         void Update()
+         {
+             if(subscribed!=GameState.Instance){BindState();RefreshState();}
+@@ -60,7 +66,7 @@
+             if(!HasRequiredBindings)return;
+             language=DemoFeatureState.LanguageCode;bool en=language=="en";
+             HeroName.text=en?"Ivan":"Иван";ChapterText.text=en?"CHAPTER 1":"ГЛАВА 1";TitleText.text=en?"NATIVE VILLAGE":"РОДНАЯ ДЕРЕВНЯ";PlayText.text=en?"PLAY":"ИГРАТЬ";
+-            GoalsHeading.text=en?"GOALS":"ЦЕЛИ";MovesHeading.text=en?"MOVES":"ХОДЫ";BoostersHeading.text=en?"CHOOSE BOOSTERS":"ВЫБЕРИТЕ БУСТЕРЫ";RewardsHeading.text=en?"LEVEL REWARDS":"НАГРАДА ЗА УРОВЕНЬ";
++            GoalsHeading.text=en?"GOALS":"ЦЕЛИ";MovesHeading.text=en?"MOVES":"ХОДЫ";BoostersHeading.text=en?"IN-GAME BOOSTERS":"БУСТЕРЫ В ИГРЕ";RewardsHeading.text=en?"LEVEL REWARDS":"НАГРАДА ЗА УРОВЕНЬ";
+             string source;Font font=Application.isPlaying?Typography.Resolve(false,out source):Typography.RegularFont;
+             foreach(Text text in GetComponentsInChildren<Text>(true)){text.font=font;text.raycastTarget=false;}
+             PlayText.font=Application.isPlaying?Typography.Resolve(true,out source):(Typography.StartFont!=null?Typography.StartFont:font);
+@@ -96,7 +102,39 @@
+                 int bonus=claimed?0:BoosterReward(reward,i);BonusCounts[i].text="+"+bonus;BonusRoots[i].gameObject.SetActive(bonus>0);
+                 if(bonus>0)BonusRoots[i].anchoredPosition=new Vector2(310+slotIndex++*83,-200);
+             }
++            RefreshBoosterDetails(en);
+             PlayButton.interactable=save!=null&&state.IsLevelUnlocked(level.chapterId,level.levelId);
++        }
++        public void InspectBooster(int index)
++        {
++            if(index < -1 || index >= BoosterButtons.Length)return;
++            InspectedBoosterIndex=index;
++            RefreshState();
++        }
++        void RefreshBoosterDetails(bool en)
++        {
++            bool inspecting=InspectedBoosterIndex>=0;
++            BoosterDetailsRoot.gameObject.SetActive(inspecting);
++            foreach(Button button in BoosterButtons)button.gameObject.SetActive(!inspecting);
++            BoostersHeading.text=en?"IN-GAME BOOSTERS":"БУСТЕРЫ В ИГРЕ";
++            if(!inspecting)return;
++            int i=InspectedBoosterIndex;
++            string[] names=en?new[]{"BOGATYR MACE","FIREBIRD FEATHER","LIVING LIGHT","SEA KING'S PEARL"}:
++                new[]{"БОГАТЫРСКАЯ БУЛАВА","ПЕРО ЖАР-ПТИЦЫ","ЖИВОЙ СВЕТ","ЖЕМЧУЖИНА МОРСКОГО ЦАРЯ"};
++            string[] effects=en?new[]{
++                "Tap a cell to clear its row.\nSwipe up/down to clear its column.",
++                "Choose a cell to clear\na 3×3 area around it.",
++                "Choose a gem to clear\nall gems of that color.",
++                "Adds 5 moves\nto the current round."}:
++                new[]{"Коснитесь клетки: очистить ряд.\nПроведите вверх/вниз: столбец.",
++                "Выберите клетку: очистить\nобласть 3×3 вокруг неё.",
++                "Выберите самоцвет: убрать\nвсе самоцветы этого цвета.",
++                "Добавляет 5 ходов\nв текущем раунде."};
++            BoostersHeading.text=names[i];
++            BoosterDetailIcon.sprite=BoosterButtons[i].GetComponent<Image>().sprite;
++            int stock=GameState.Instance!=null?GameState.Instance.BoosterCount(ProductionPreLevelRuntime.Boosters[i]):0;
++            BoosterDetailText.text=(en?"In-game • In stock: ":"В игре • В запасе: ")+Balance(stock)+"\n"+effects[i];
++            BoosterDetailsBackText.text=en?"BACK":"НАЗАД";
+         }
+         public static int BoosterReward(LevelRewardData reward,int index)
+         {
+@@ -117,15 +155,16 @@
+             }
+         }
+         static string Balance(int value)=>Mathf.Max(0,value).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
+-        public void BindNavigation(Action<ScreenId> show,Func<bool> start,Action back,Action openBoosters)
++        public void BindNavigation(Action<ScreenId> show,Func<bool> start,Action back)
+         {
+             Unbind();committed=false;
+             Bind(ProfileButton,()=>show(ScreenId.Profile),true);Bind(SettingsButton,()=>show(ScreenId.Settings),true);Bind(BackButton,back,true);
+             // An energy gate leaves this page active. Only commit after a successful route.
+             Bind(PlayButton,()=>committed=start(),false);
+             for(int i=0;i<3;i++){int resource=i;Bind(PlusButtons[i],()=>show(resource==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);}
+-            // Preserve the existing booster modal. Opening it neither selects nor consumes inventory.
+-            foreach(Button button in BoosterButtons)Bind(button,openBoosters,false);
++            // These inventory tools activate on the board; preparation only explains them.
++            for(int i=0;i<BoosterButtons.Length;i++){int index=i;Bind(BoosterButtons[i],()=>InspectBooster(index),false);}
++            Bind(BoosterDetailsBack,()=>InspectBooster(-1),false);
+             ActionsBound=true;
+         }
+         void Bind(Button button,Action action,bool route)
+--- before/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
+@@ -122,15 +122,17 @@
+         }
+ 
+         [UnityTest]
+-        public IEnumerator BoosterModalBackAndHudRoutesRemainNativeAndInventoryIsNotSpent()
++        public IEnumerator BoosterGuideBackAndHudRoutesRemainNativeAndInventoryIsNotSpent()
+         {
+             for(int i=0;i<4;i++)
+             {
+                 var view=Root().GetComponentInChildren<ProductionPreLevelView>();string before=JsonUtility.ToJson(GameState.Instance.Save);
+                 view.BoosterButtons[i].onClick.Invoke();Settle();yield return null;yield return null;
+-                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.BoosterSelect));Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
++                Assert.That(router.ActiveModal,Is.Null);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
++                Assert.That(view.InspectedBoosterIndex,Is.EqualTo(i));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.True);
+                 Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(before));
+-                CloseVisibleModal();Settle();yield return null;yield return null;
++                view.BoosterDetailsBack.onClick.Invoke();Settle();yield return null;yield return null;
++                Assert.That(view.InspectedBoosterIndex,Is.EqualTo(-1));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
+             }
+             Root().GetComponentInChildren<ProductionPreLevelView>().BackButton.onClick.Invoke();Settle();
+             Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
+@@ -142,6 +144,73 @@
+                 button.onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(targets[i]));
+             }
+             yield return null;
++        }
++
++        [UnityTest]
++        public IEnumerator BoosterGuideExplainsEachToolInBothLanguagesAndDoesNotSpendInventory()
++        {
++            var state=GameState.Instance;var view=Root().GetComponentInChildren<ProductionPreLevelView>();
++            string before=JsonUtility.ToJson(state.Save);
++            string[] ru={"ряд","3×3","этого цвета","5 ходов"};
++            string[] en={"row","3×3","that color","5 moves"};
++            foreach(string language in new[]{"ru","en"})
++            {
++                DemoFeatureState.SetLanguage(language);view.RefreshContent();
++                for(int i=0;i<4;i++)
++                {
++                    view.BoosterButtons[i].onClick.Invoke();yield return null;
++                    Assert.That(view.BoosterDetailText.text,Does.Contain(language=="en"?en[i]:ru[i]));
++                    Assert.That(view.BoosterDetailText.text,Does.Contain(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i]).ToString()));
++                    Assert.That(view.BoosterDetailIcon.sprite,Is.SameAs(view.BoosterButtons[i].GetComponent<Image>().sprite));
++                    Assert.That(router.ActiveModal,Is.Null);
++                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                    Capture("PreLevel_Booster_"+i+"_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672),camera=>VerifyBoosterGuideText(view,camera));
++                    view.BoosterDetailsBack.onClick.Invoke();yield return null;
++                }
++            }
++            // Details refresh in place on language/inventory changes; zero stock remains inspectable.
++            state.Save.boosterSeaPearl=0;
++            view.BoosterButtons[3].onClick.Invoke();DemoFeatureState.SetLanguage("ru");view.RefreshContent();
++            Assert.That(view.BoosterDetailText.text,Does.StartWith("В игре • В запасе: 0"));
++            yield return null;
++            Capture("PreLevel_Pearl_Empty_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672),camera=>VerifyBoosterGuideText(view,camera));
++            state.AddBooster(BoosterType.SeaPearl,2);
++            yield return null;
++            Assert.That(view.BoosterDetailText.text,Does.StartWith("В игре • В запасе: 2"));
++            Capture("PreLevel_Pearl_576x1280_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>VerifyBoosterGuideText(view,camera));
++            int stock=state.BoosterCount(BoosterType.SeaPearl),energy=state.Save.energy;
++            view.PlayButton.onClick.Invoke();view.PlayButton.onClick.Invoke();Settle();yield return null;
++            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));
++            Assert.That(state.Save.energy,Is.EqualTo(energy-1));Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(stock));
++            var board=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(board,Is.Not.Null);
++            Assert.That(board.Moves,Is.EqualTo(ChapterLevelCatalog.ResolveSelected(state.Save).moveLimit));
++            Assert.That(board.IsBoosterArmed,Is.False,"Inspecting a booster must not arm it on the board.");
++            router.Show(ScreenId.PreLevel);Settle();view=Root().GetComponentInChildren<ProductionPreLevelView>();
++            Assert.That(view.InspectedBoosterIndex,Is.EqualTo(-1));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
++        }
++
++        static void VerifyBoosterGuideText(ProductionPreLevelView view,Camera camera)
++        {
++            Rect panel=Bounds(view.BoostersArea,camera);
++            foreach(Text text in new[]{view.BoostersHeading,view.BoosterDetailText,view.BoosterDetailsBackText})
++            {
++                Assert.That(text.cachedTextGenerator.characterCountVisible,Is.GreaterThan(0),text.name);
++                Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+1),text.name+" vertical overflow");
++                var mesh=text.canvasRenderer.GetMesh();Assert.That(mesh,Is.Not.Null);Assert.That(mesh.vertexCount,Is.GreaterThan(0));
++                foreach(Vector3 vertex in mesh.vertices)
++                {
++                    Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,text.transform.TransformPoint(vertex));
++                    Assert.That(panel.Contains(point),Is.True,text.name+" outside booster panel");
++                }
++            }
++            Rect back=Bounds(view.BoosterDetailsBack.transform as RectTransform,camera);
++            foreach(Vector3 vertex in view.BoosterDetailsBackText.canvasRenderer.GetMesh().vertices)
++            {
++                Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,view.BoosterDetailsBackText.transform.TransformPoint(vertex));
++                Assert.That(Mathf.Abs(point.x-back.center.x),Is.LessThan(back.width*.25f),"Back lettering must clear the ornamental ends.");
++            }
++            Assert.That(view.BoosterDetailText.cachedTextGenerator.lineCount,Is.EqualTo(3));
++            Assert.That(Bounds(view.BoosterDetailText.rectTransform,camera).Overlaps(Bounds(view.BoosterDetailsBack.transform as RectTransform,camera)),Is.False);
+         }
+ 
+         [UnityTest]
+@@ -296,7 +365,7 @@
+                 var results=new List<RaycastResult>();
+                 EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},results);
+                 Assert.That(results.Count,Is.GreaterThan(0),button.name);
+-                Assert.That(results[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" is obscured");
++                Assert.That(results[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" is obscured by "+results[0].gameObject.name);
+             }
+             foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())
+             {
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/PreLevelAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/PreLevelAlignmentEditModeTests.cs
+@@ -21,7 +21,9 @@
+             Assert.That(prefab.GetComponentsInChildren<ProductionHomeView>(true),Is.Empty);
+             Assert.That(prefab.GetComponentsInChildren<Canvas>(true),Is.Empty);
+             Assert.That(view.BoosterButtons.Distinct().Count(),Is.EqualTo(4));
+-            Assert.That(view.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(11));
++            Assert.That(view.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(12));
++            Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
++            Assert.That(view.BoostersHeading.text,Is.EqualTo("БУСТЕРЫ В ИГРЕ"));
+             foreach(var graphic in view.GetComponentsInChildren<ProductionWorldMapGraphic>(true))
+                 Assert.That(graphic.GetComponent<CanvasRenderer>(),Is.Not.Null,graphic.name);
+             foreach(Image image in prefab.GetComponentsInChildren<Image>(true))
+@@ -52,7 +54,8 @@
+             Assert.That(map.PlayText.material,Is.SameAs(home.PlayText.material));
+             var chapter=Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>();
+             Assert.That(map.Environment.sprite,Is.SameAs(chapter.Environment.sprite));
+-            Assert.That(map.Environment.color,Is.EqualTo(chapter.Environment.color));
++            Color sourceTone=chapter.Environment.color;
++            Assert.That(map.Environment.color,Is.EqualTo(new Color(sourceTone.r*.88f,sourceTone.g*.88f,sourceTone.b*.88f,sourceTone.a)));
+             Assert.That(map.TitleArea.Find("ChapterBanner").GetComponent<Image>().sprite,Is.SameAs(chapter.TitlePlaque.sprite));
+             Assert.That(map.BackButton.transform.Find("BackMedallion").GetComponent<Image>().sprite,
+                 Is.SameAs(chapter.BackButton.transform.Find("BackMedallion").GetComponent<Image>().sprite));

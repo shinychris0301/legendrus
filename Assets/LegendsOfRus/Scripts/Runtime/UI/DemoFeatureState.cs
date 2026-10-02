@@ -13,13 +13,13 @@ namespace LegendsOfRus
         static bool friendEnergyRequested;
         static bool guestSignedIn;
         static int teamMessagesSent;
-        static string languageCode = "ru";
+        static string languageCode;
 
         public static bool EventRewardClaimed { get { return eventRewardClaimed; } }
         public static bool FriendEnergyRequested { get { return friendEnergyRequested; } }
         public static bool GuestSignedIn { get { return guestSignedIn; } }
         public static int TeamMessagesSent { get { return teamMessagesSent; } }
-        public static string LanguageCode { get { return languageCode; } }
+        public static string LanguageCode { get { return languageCode ?? (languageCode = LanguagePreference.Load()); } }
 
         public static bool TryClaimEventReward()
         {
@@ -51,6 +51,13 @@ namespace LegendsOfRus
                 languageCode = "ru";
         }
 
+        // User selection persists; SetLanguage remains a session override for previews/tests.
+        public static void SelectLanguage(string code)
+        {
+            SetLanguage(code);
+            LanguagePreference.Save(languageCode);
+        }
+
         public static void SignInGuest()
         {
             guestSignedIn = true;
@@ -62,7 +69,7 @@ namespace LegendsOfRus
             friendEnergyRequested = false;
             guestSignedIn = false;
             teamMessagesSent = 0;
-            languageCode = "ru";
+            languageCode = null; // Reload the device preference on the next access.
         }
     }
 }

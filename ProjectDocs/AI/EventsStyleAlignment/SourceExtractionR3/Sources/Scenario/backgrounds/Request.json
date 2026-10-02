@@ -1,0 +1,15 @@
+{
+  "model": "model_openai-gpt-image-2",
+  "body": {
+    "prompt": "Restore ONLY the backgrounds behind these four foreground characters as four clean environment plates. Characters will be original extracted sprites added separately: do NOT draw any characters or creatures. Exactly 2 by 2 equal rectangular panels, no gutters, no frames, no text. Top left: dense gilded Russian fairy-tale city with violet twilight sky and warm lamps, source firebird is completely absent, no feathers or wings. Top right: mysterious midnight teal enchanted forest, mossy hut on chicken legs, faint green magical light low down; no witch, cauldron or person. Bottom left: golden-lit medieval Russian merchant harbor and distant domed city; no merchant, chest or person. Bottom right: cold pale blue snowy Russian towers and ice landscape; no knight, shield or person. Faithfully retain the source architecture, local palette, soft painterly lighting and position of visible buildings where possible. Restore coherent empty scenery where foreground subjects obscure it. Each panel fills its own rectangle right to its boundary. No interface, lettering, icons, badges, banners or borders. These are separate background plates, not a game screen.",
+    "referenceImages": [
+      "asset_ytXYrpWBaGekpzmWTXp6AsTA"
+    ],
+    "width": 1024,
+    "height": 768,
+    "quality": "medium",
+    "background": "opaque",
+    "numOutputs": 1
+  },
+  "reason": "Original scenery hidden behind extracted subjects cannot be recovered from source pixels; generate only clean plates, retain original foreground."
+}

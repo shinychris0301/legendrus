@@ -1,0 +1,193 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests;LegendsOfRus.Tests.CommercialRuntime.PlayMode.CommercialRuntimeWiringPlayModeTests;LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/BackendSessions/R1/QA/Sessions02/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/BackendSessions/R1/QA/Sessions02/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 32.27172565460205,
+  "isolatedConfig": "/tmp/lor-backend-sessions-r1/Sessions02/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {
+    "LOR_BACKEND_TEST_ORIGIN": "http://127.0.0.1:45751"
+  },
+  "result": {
+    "id": "2",
+    "testcasecount": "61",
+    "result": "Failed(Child)",
+    "total": "61",
+    "passed": "31",
+    "failed": "30",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 23:57:28Z",
+    "end-time": "2026-09-29 23:57:30Z",
+    "duration": "1.7864366"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.CommitObserverCannotReenterAndFinalizePendingGrant",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.CorruptHistoryBlocksTransactionsAndDoesNotRefundUntrustedRecords(\"schema\")",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.CorruptHistoryBlocksTransactionsAndDoesNotRefundUntrustedRecords(\"duplicate\")",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.CorruptHistoryBlocksTransactionsAndDoesNotRefundUntrustedRecords(\"null\")",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.DebitAndGrantCommitTogetherAndSurviveReload(Gems)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.DebitAndGrantCommitTogetherAndSurviveReload(RewardedAd)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.DeclineRefundsUnusedReservationOnceAndRetainsReplayMarker(Gems)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.DeclineRefundsUnusedReservationOnceAndRetainsReplayMarker(RewardedAd)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.DuplicateCallbackDoesNotWriteOrSpendTwice",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.ExistingFailureOffersRemainUnavailableAndRetryRefundsBeforeNewAttempt",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.ExplicitLimitAndOldEvidenceRemainEffectiveAfterRestart",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.FailedRefundWriteCannotLoseReservationOrDuplicateRefund",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.FailedWriteLeavesBothBalanceAndGrantUnchangedThenCanRetry",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.HistoryCapacityNeverEvictsReplayProtection",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InsufficientAndExactBalance",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(Gems,0,5,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(Gems,-1,5,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(Gems,17,6,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(Gems,17,5,0)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(RewardedAd,1,3,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(RewardedAd,0,0,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.InvalidRecipeCannotMutateSave(99,17,5,1)",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.MissingPolicyOrMalformedIdentityIsRejected",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.PrimaryCommittedCleanupFailureIsAdoptedWithoutSecondDebit",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.RefundOverflowDoesNotClearPendingEntitlement",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.ReservedGrantBlocksOutOfBandAttemptAndResultMutation",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.SameEvidenceWithAnotherIdCannotGrantAgain",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.SameIdWithChangedTermsIsRejected",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.SecondPendingGrantIsRejectedEvenWithDifferentIdentity",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ContinuationTransactionPlayModeTests.WrongAttemptAndChangedSnapshotCannotCharge",
+      "result": "Failed",
+      "message": "SetUp :   Expected: String starting with \"/tmp/lor-continuation-r1/\"\n  But was:  \"/tmp/lor-backend-sessions-r1/Sessions02/config\"\n\nTearDown : System.NullReferenceException : Object reference not set to an instance of an object"
+    }
+  ]
+}

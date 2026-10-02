@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "unity": "6000.5.9f1",
+  "suites": [
+    {
+      "run": "Verify04",
+      "suite": "EditMode",
+      "total": "315",
+      "passed": "315",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify04/EditMode/results.xml"
+    },
+    {
+      "run": "Verify06",
+      "suite": "Spark",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify06/Spark/results.xml"
+    },
+    {
+      "run": "Verify07",
+      "suite": "Mechanics",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify07/Mechanics/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "CampaignUI",
+      "total": "5",
+      "passed": "5",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/CampaignUI/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "CampaignBoard",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/CampaignBoard/results.xml"
+    },
+    {
+      "run": "Verify03",
+      "suite": "NativeJourney",
+      "total": "2",
+      "passed": "2",
+      "failed": "0",
+      "skipped": "0",
+      "xml": "QA/Verify03/NativeJourney/results.xml"
+    }
+  ],
+  "editModeTotal": 315,
+  "playModeTotal": 12,
+  "newSparkCases": 18,
+  "captures": "Verify06/Journey: actual Unity render, sampled frames, not timing measurement",
+  "scope": "Development sandbox only; no production campaign activation",
+  "notRun": [
+    "Physical Android acceptance",
+    "IL2CPP build",
+    "Human difficulty test",
+    "Full-project test suite"
+  ],
+  "earlierRuns": {
+    "Verify01": "Two synthetic fixtures contained incidental matches; corrected fixture data.",
+    "Verify02": "All suites passed; captured duplicate source icon and generic effects.",
+    "Verify03": "All suites passed; hint-only-square case added, takeoff fixed.",
+    "Verify04": "Final EditMode including cascade-created Sparks and inventory activation.",
+    "Verify05": "Native Editor signal11 during combined PlayMode capture; no results XML, not counted as passed. Removed only generated InitTestScene files absent from before hashes.",
+    "Verify06": "Isolated final Spark runtime fixtures and captures.",
+    "Verify07": "Isolated baseline mechanics regression."
+  }
+}

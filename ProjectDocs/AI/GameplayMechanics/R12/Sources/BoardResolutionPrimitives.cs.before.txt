@@ -1,0 +1,415 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LegendsOfRus.GameplayCore
+{
+    public enum BoardResolutionActionKind
+    {
+        Swap = 0,
+        Booster = 1,
+        TapSpecial = 2
+    }
+
+    public enum BoardResolutionStatus
+    {
+        Rejected = 0,
+        InvalidSwap = 1,
+        Resolved = 2
+    }
+
+    public enum BoardBoosterCommandKind
+    {
+        None = 0,
+        MaceRow = 1,
+        MaceColumn = 2,
+        FirebirdArea = 3,
+        LivingLightColor = 4
+    }
+
+    public enum SpecialCombinationKind
+    {
+        None = 0,
+        ColorWithNormal = 1,
+        ColorWithRow = 2,
+        ColorWithColumn = 3,
+        ColorWithBurst = 4,
+        ColorWithColor = 5,
+        RowWithRow = 6,
+        ColumnWithColumn = 7,
+        RowWithColumn = 8,
+        RowWithBurst = 9,
+        ColumnWithBurst = 10,
+        BurstWithBurst = 11,
+        SparkWithNormal = 12, SparkWithSpark = 13, SparkWithRow = 14,
+        SparkWithColumn = 15, SparkWithBurst = 16, ColorWithSpark = 17
+    }
+
+    public readonly struct BoardBoosterRequest
+    {
+        public readonly BoardBoosterCommandKind Kind;
+        public readonly BoardPosition Target;
+
+        public BoardBoosterRequest(
+            BoardBoosterCommandKind kind,
+            BoardPosition target
+        )
+        {
+            Kind = kind;
+            Target = target;
+        }
+    }
+
+    public readonly struct BoardSpecialCreationInstruction
+    {
+        public readonly BoardPosition Position;
+        public readonly SpecialGemKind Kind;
+        public readonly BoardCellData CellBefore;
+
+        public BoardSpecialCreationInstruction(
+            BoardPosition position,
+            SpecialGemKind kind,
+            BoardCellData cellBefore
+        )
+        {
+            Position = position;
+            Kind = kind;
+            CellBefore = cellBefore;
+        }
+    }
+
+    public readonly struct BoardSpecialActivationInstruction
+    {
+        public readonly BoardPosition Position;
+        public readonly SpecialGemKind Kind;
+        public readonly int TileType;
+        public readonly bool ForcedByCombination;
+        public readonly BoardPosition? Target;
+        public readonly SpecialGemKind Payload;
+        public readonly int FlightCount;
+
+        public BoardSpecialActivationInstruction(
+            BoardPosition position,
+            SpecialGemKind kind,
+            int tileType,
+            bool forcedByCombination, BoardPosition? target = null,
+            SpecialGemKind payload = SpecialGemKind.None, int flightCount = 1
+        )
+        {
+            Position = position;
+            Kind = kind;
+            TileType = tileType;
+            ForcedByCombination = forcedByCombination;
+            Target = target; Payload = payload; FlightCount = flightCount;
+        }
+
+        public override string ToString()
+        {
+            return $"{Kind}@{Position}/tile={TileType}/forced={ForcedByCombination}";
+        }
+    }
+
+    public readonly struct BoardClearedCellInstruction
+    {
+        public readonly BoardPosition Position;
+        public readonly BoardCellData Cell;
+
+        public BoardClearedCellInstruction(
+            BoardPosition position,
+            BoardCellData cell
+        )
+        {
+            Position = position;
+            Cell = cell;
+        }
+    }
+
+    public enum BoardObstacleHitCause
+    {
+        DirectClear = 0,
+        AdjacentMatch = 1
+    }
+
+    public readonly struct BoardObstacleInteractionInstruction
+    {
+        public readonly BoardPosition Position;
+        public readonly BoardObstacleKind Kind;
+        public readonly int LayersBefore;
+        public readonly int LayersAfter;
+        public readonly BoardObstacleHitCause Cause;
+
+        public BoardObstacleInteractionInstruction(
+            BoardPosition position,
+            BoardObstacleKind kind,
+            int layersBefore,
+            int layersAfter,
+            BoardObstacleHitCause cause
+        )
+        {
+            Position = position;
+            Kind = kind;
+            LayersBefore = layersBefore;
+            LayersAfter = layersAfter;
+            Cause = cause;
+        }
+
+        public bool Destroyed => LayersBefore > 0 && LayersAfter == 0;
+    }
+
+    public sealed class BoardResolutionWave
+    {
+        public int ComboIndex { get; }
+        public SpecialCombinationKind Combination { get; }
+        public BoardBoosterCommandKind Booster { get; }
+        public IReadOnlyList<BoardMatchRun> Runs { get; }
+        public IReadOnlyList<BoardPosition> MatchedCells { get; }
+        public IReadOnlyList<BoardSpecialCreationInstruction> Creations { get; }
+        public IReadOnlyList<BoardSpecialActivationInstruction> Activations { get; }
+        public IReadOnlyList<BoardClearedCellInstruction> ClearedCells { get; }
+        public IReadOnlyList<BoardObstacleInteractionInstruction> ObstacleInteractions { get; }
+        public IReadOnlyList<int> ClearedByTileType { get; }
+        public int ScoreDelta { get; }
+        public BoardSnapshot SnapshotAfterClear { get; }
+        public BoardCollapseResult Collapse { get; }
+        public BoardSnapshot SnapshotAfterCollapse { get; }
+
+        public BoardResolutionWave(
+            int comboIndex,
+            SpecialCombinationKind combination,
+            BoardBoosterCommandKind booster,
+            IReadOnlyList<BoardMatchRun> runs,
+            IReadOnlyList<BoardPosition> matchedCells,
+            IReadOnlyList<BoardSpecialCreationInstruction> creations,
+            IReadOnlyList<BoardSpecialActivationInstruction> activations,
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells,
+            IReadOnlyList<BoardObstacleInteractionInstruction> obstacleInteractions,
+            IReadOnlyList<int> clearedByTileType,
+            int scoreDelta,
+            BoardSnapshot snapshotAfterClear,
+            BoardCollapseResult collapse,
+            BoardSnapshot snapshotAfterCollapse
+        )
+        {
+            ComboIndex = comboIndex;
+            Combination = combination;
+            Booster = booster;
+            Runs = runs ?? Array.Empty<BoardMatchRun>();
+            MatchedCells = matchedCells ?? Array.Empty<BoardPosition>();
+            Creations = creations ?? Array.Empty<BoardSpecialCreationInstruction>();
+            Activations = activations ?? Array.Empty<BoardSpecialActivationInstruction>();
+            ClearedCells = clearedCells ?? Array.Empty<BoardClearedCellInstruction>();
+            ObstacleInteractions = obstacleInteractions ??
+                Array.Empty<BoardObstacleInteractionInstruction>();
+            ClearedByTileType = clearedByTileType ?? Array.Empty<int>();
+            ScoreDelta = scoreDelta;
+            SnapshotAfterClear = snapshotAfterClear;
+            Collapse = collapse ?? new BoardCollapseResult();
+            SnapshotAfterCollapse = snapshotAfterCollapse;
+        }
+    }
+
+    public sealed class BoardResolutionPlan
+    {
+        public BoardResolutionActionKind ActionKind { get; }
+        public BoardResolutionStatus Status { get; }
+        public string RejectionReason { get; }
+        public BoardPosition PrimaryPosition { get; }
+        public BoardPosition SecondaryPosition { get; }
+        public BoardBoosterCommandKind Booster { get; }
+        public bool ConsumesMove { get; }
+        public int ResolutionSeed { get; }
+        public BoardSnapshot BeforeSnapshot { get; }
+        public BoardSnapshot SnapshotAfterSwap { get; }
+        public IReadOnlyList<BoardResolutionWave> Waves { get; }
+        public BoardReshuffleResult Reshuffle { get; }
+        public BoardSnapshot SnapshotAfterReshuffle { get; }
+        public BoardSnapshot FinalSnapshot { get; }
+        public string PlanHash { get; }
+
+        public bool IsResolved => Status == BoardResolutionStatus.Resolved;
+        public bool IsInvalidSwap => Status == BoardResolutionStatus.InvalidSwap;
+
+        public int TotalScoreDelta
+        {
+            get
+            {
+                int total = 0;
+                for (int i = 0; i < Waves.Count; i++)
+                    total += Waves[i].ScoreDelta;
+                return total;
+            }
+        }
+
+        public BoardResolutionPlan(
+            BoardResolutionActionKind actionKind,
+            BoardResolutionStatus status,
+            string rejectionReason,
+            BoardPosition primaryPosition,
+            BoardPosition secondaryPosition,
+            BoardBoosterCommandKind booster,
+            bool consumesMove,
+            int resolutionSeed,
+            BoardSnapshot beforeSnapshot,
+            BoardSnapshot snapshotAfterSwap,
+            IReadOnlyList<BoardResolutionWave> waves,
+            BoardReshuffleResult reshuffle,
+            BoardSnapshot snapshotAfterReshuffle,
+            BoardSnapshot finalSnapshot
+        )
+        {
+            ActionKind = actionKind;
+            Status = status;
+            RejectionReason = rejectionReason ?? string.Empty;
+            PrimaryPosition = primaryPosition;
+            SecondaryPosition = secondaryPosition;
+            Booster = booster;
+            ConsumesMove = consumesMove;
+            ResolutionSeed = resolutionSeed;
+            BeforeSnapshot = beforeSnapshot;
+            SnapshotAfterSwap = snapshotAfterSwap;
+            Waves = waves ?? Array.Empty<BoardResolutionWave>();
+            Reshuffle = reshuffle;
+            SnapshotAfterReshuffle = snapshotAfterReshuffle;
+            FinalSnapshot = finalSnapshot;
+            PlanHash = ComputePlanHash();
+        }
+
+        string ComputePlanHash()
+        {
+            unchecked
+            {
+                const ulong offset = 1469598103934665603UL;
+                const ulong prime = 1099511628211UL;
+                ulong hash = offset;
+
+                Add(ref hash, (int)ActionKind, prime);
+                Add(ref hash, (int)Status, prime);
+                Add(ref hash, PrimaryPosition.X, prime);
+                Add(ref hash, PrimaryPosition.Y, prime);
+                Add(ref hash, SecondaryPosition.X, prime);
+                Add(ref hash, SecondaryPosition.Y, prime);
+                Add(ref hash, (int)Booster, prime);
+                Add(ref hash, ConsumesMove ? 1 : 0, prime);
+                Add(ref hash, ResolutionSeed, prime);
+                Add(ref hash, BeforeSnapshot?.StateHash, prime);
+                Add(ref hash, SnapshotAfterSwap?.StateHash, prime);
+
+                for (int i = 0; i < Waves.Count; i++)
+                {
+                    BoardResolutionWave wave = Waves[i];
+                    Add(ref hash, wave.ComboIndex, prime);
+                    Add(ref hash, (int)wave.Combination, prime);
+                    Add(ref hash, (int)wave.Booster, prime);
+                    Add(ref hash, wave.ScoreDelta, prime);
+
+                    for (int c = 0; c < wave.ClearedCells.Count; c++)
+                    {
+                        var cleared = wave.ClearedCells[c];
+                        Add(ref hash, cleared.Position.X, prime);
+                        Add(ref hash, cleared.Position.Y, prime);
+                        Add(ref hash, cleared.Cell.TileType, prime);
+                        Add(ref hash, (int)cleared.Cell.Special, prime);
+                        Add(ref hash, (int)cleared.Cell.ObjectiveItem, prime);
+                    }
+
+                    for (int o = 0; o < wave.ObstacleInteractions.Count; o++)
+                    {
+                        var obstacle = wave.ObstacleInteractions[o];
+                        Add(ref hash, obstacle.Position.X, prime);
+                        Add(ref hash, obstacle.Position.Y, prime);
+                        Add(ref hash, (int)obstacle.Kind, prime);
+                        Add(ref hash, obstacle.LayersBefore, prime);
+                        Add(ref hash, obstacle.LayersAfter, prime);
+                        Add(ref hash, (int)obstacle.Cause, prime);
+                    }
+
+                    for (int c = 0; c < wave.Collapse.CollectedObjectiveItems.Count; c++)
+                    {
+                        var collected = wave.Collapse.CollectedObjectiveItems[c];
+                        Add(ref hash, collected.From.X, prime);
+                        Add(ref hash, collected.From.Y, prime);
+                        Add(ref hash, collected.Exit.X, prime);
+                        Add(ref hash, collected.Exit.Y, prime);
+                        Add(ref hash, (int)collected.Kind, prime);
+                    }
+
+                    for (int c = 0; c < wave.Creations.Count; c++)
+                    {
+                        var creation = wave.Creations[c];
+                        Add(ref hash, creation.Position.X, prime);
+                        Add(ref hash, creation.Position.Y, prime);
+                        Add(ref hash, (int)creation.Kind, prime);
+                    }
+
+                    for (int a = 0; a < wave.Activations.Count; a++)
+                    {
+                        var activation = wave.Activations[a];
+                        Add(ref hash, activation.Position.X, prime);
+                        Add(ref hash, activation.Position.Y, prime);
+                        Add(ref hash, (int)activation.Kind, prime);
+                        Add(ref hash, activation.TileType, prime);
+                        Add(ref hash, activation.ForcedByCombination ? 1 : 0, prime);
+                        if (activation.Target.HasValue)
+                        {
+                            Add(ref hash, 5202, prime);
+                            Add(ref hash, activation.Target.Value.X, prime);
+                            Add(ref hash, activation.Target.Value.Y, prime);
+                            Add(ref hash, (int)activation.Payload, prime);
+                        }
+                    }
+
+                    Add(ref hash, wave.SnapshotAfterClear?.StateHash, prime);
+                    Add(ref hash, wave.SnapshotAfterCollapse?.StateHash, prime);
+                }
+
+                Add(ref hash, Reshuffle.Attempts, prime);
+                Add(ref hash, Reshuffle.Regenerated ? 1 : 0, prime);
+                Add(ref hash, SnapshotAfterReshuffle?.StateHash, prime);
+                Add(ref hash, FinalSnapshot?.StateHash, prime);
+                Add(ref hash, RejectionReason, prime);
+
+                return hash.ToString("X16");
+            }
+        }
+
+        static void Add(ref ulong hash, int value, ulong prime)
+        {
+            hash = (hash ^ (uint)value) * prime;
+        }
+
+        static void Add(ref ulong hash, string value, ulong prime)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                Add(ref hash, 0, prime);
+                return;
+            }
+
+            for (int i = 0; i < value.Length; i++)
+                hash = (hash ^ value[i]) * prime;
+        }
+
+        public string ToDebugString()
+        {
+            var builder = new StringBuilder();
+            builder.Append(ActionKind)
+                .Append('/')
+                .Append(Status)
+                .Append(" seed=")
+                .Append(ResolutionSeed)
+                .Append(" waves=")
+                .Append(Waves.Count)
+                .Append(" score=")
+                .Append(TotalScoreDelta)
+                .Append(" final=")
+                .Append(FinalSnapshot?.StateHash ?? "none")
+                .Append(" plan=")
+                .Append(PlanHash);
+
+            if (!string.IsNullOrEmpty(RejectionReason))
+                builder.Append(" reason=").Append(RejectionReason);
+
+            return builder.ToString();
+        }
+    }
+}

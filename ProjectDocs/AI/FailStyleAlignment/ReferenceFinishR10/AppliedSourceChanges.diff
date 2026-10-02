@@ -1,0 +1,515 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 9
++  Revision: 10
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -337,7 +337,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 42594b32325e1ebbc979b4fb8bdecb41, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 3c0765cfef1f492a898d6b07fb903428, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -1293,7 +1293,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -1353,7 +1353,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 175, y: 36}
+-  m_SizeDelta: {x: 591, y: 530}
++  m_SizeDelta: {x: 591, y: 588}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2120137520451951263
+ CanvasRenderer:
+@@ -1383,7 +1383,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 0ed056a48bc80d0e8ae7c9e239196b96, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 71ec5bb250c74fa39f574446a123c9e0, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -1721,7 +1721,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -1887,7 +1887,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 894107e73f7d66e40b6631a5374efc26, type: 3}
++  m_Sprite: {fileID: 21300000, guid: a63b4b879bb14ef0ac6b08f9a926bac7, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -2415,8 +2415,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -182}
+-  m_SizeDelta: {x: 376, y: 96}
++  m_AnchoredPosition: {x: 10, y: -182}
++  m_SizeDelta: {x: 348, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &93123236864979424
+ CanvasRenderer:
+@@ -2452,14 +2452,14 @@
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 42
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u0416\u0418\u0412\u041E\u0419 \u0421\u0412\u0415\u0422"
++  m_Text: "\u0429\u0418\u0422 \u0414\u0420\u0423\u0416\u0418\u041D\u042B"
+ --- !u!114 &6165156360558855851
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -3196,7 +3196,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: cd13e346b8204121aa3dddcabf6a4f19, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2fdf326e93a74a6d9242a032aaae6048, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -3392,8 +3392,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: 300}
+-  m_SizeDelta: {x: 941, y: 1646.75}
++  m_AnchoredPosition: {x: 0, y: 35}
++  m_SizeDelta: {x: 941, y: 941}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8933406537082417875
+ CanvasRenderer:
+@@ -3423,7 +3423,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: cd13e346b8204121aa3dddcabf6a4f19, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2fdf326e93a74a6d9242a032aaae6048, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -3586,7 +3586,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8c5d1d4038f8366b6ac5764ffaff090c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -5921,8 +5921,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -182}
+-  m_SizeDelta: {x: 376, y: 96}
++  m_AnchoredPosition: {x: 10, y: -182}
++  m_SizeDelta: {x: 348, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &357769677848500320
+ CanvasRenderer:
+@@ -5958,15 +5958,14 @@
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 42
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u0416\u0415\u041C\u0427\u0423\u0416\u0418\u041D\u0410\n\u041C\u041E\u0420\u0421\u041A\u041E\u0413\u041E
+-    \u0426\u0410\u0420\u042F"
++  m_Text: "\u0417\u0415\u041B\u042C\u0415 \u0421\u0418\u041B\u042B"
+ --- !u!114 &9002354070549450097
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -6035,7 +6034,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 149, y: -550}
++  m_AnchoredPosition: {x: 149, y: -542}
+   m_SizeDelta: {x: 1286, y: 90}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8102526179609713147
+@@ -6458,8 +6457,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -182}
+-  m_SizeDelta: {x: 376, y: 96}
++  m_AnchoredPosition: {x: 10, y: -182}
++  m_SizeDelta: {x: 348, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1027816466407742971
+ CanvasRenderer:
+@@ -6495,14 +6494,14 @@
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 42
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u041F\u0415\u0420\u041E\n\u0416\u0410\u0420-\u041F\u0422\u0418\u0426\u042B"
++  m_Text: "\u0424\u0415\u041D\u0418\u041A\u0421"
+ --- !u!114 &8015779493015041251
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -6720,7 +6719,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -6811,7 +6810,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -6904,7 +6903,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8c5d1d4038f8366b6ac5764ffaff090c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -7053,7 +7052,8 @@
+     m_HorizontalOverflow: 1
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u0411\u0423\u0421\u0422\u0415\u0420\u042B \u0412 \u0418\u0413\u0420\u0415"
++  m_Text: "\u0420\u0415\u041A\u041E\u041C\u0415\u041D\u0414\u0423\u0415\u041C\u042B\u0415
++    \u0411\u0423\u0421\u0422\u0415\u0420\u042B"
+ --- !u!114 &5972785886750037405
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -7122,7 +7122,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 153, y: -460}
++  m_AnchoredPosition: {x: 153, y: -451}
+   m_SizeDelta: {x: 1270, y: 184}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6221928828635904463
+@@ -7211,7 +7211,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionVictoryTitleLettering
+   ArcHeight: 0
+-  BevelWidth: 0.85
++  BevelWidth: 1.1
+   BottomColor:
+     serializedVersion: 2
+     rgba: 4279589784
+@@ -7597,7 +7597,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -8246,7 +8246,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8c5d1d4038f8366b6ac5764ffaff090c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -9173,7 +9173,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8c5d1d4038f8366b6ac5764ffaff090c, type: 3}
++  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -9800,8 +9800,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 3, y: -182}
+-  m_SizeDelta: {x: 376, y: 96}
++  m_AnchoredPosition: {x: 10, y: -182}
++  m_SizeDelta: {x: 348, y: 96}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4157139819559285992
+ CanvasRenderer:
+@@ -9837,14 +9837,14 @@
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 42
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u0411\u041E\u0413\u0410\u0422\u042B\u0420\u0421\u041A\u0410\u042F\n\u0411\u0423\u041B\u0410\u0412\u0410"
++  m_Text: "\u041C\u041E\u041B\u041E\u0422 \u0413\u0420\u041E\u041C\u0410"
+ --- !u!114 &9168359743137014951
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,8 +543,8 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R9 fits new deep-face offer cards while preserving their green panels and border detail; independent Scenario
+-            // surfaces and live lettering retain all prior actions and references.
++            // R10 uses independent Scenario scene, hero and carved panels; offer/booster art remains R9 pending generation.
++            // Reference captions retain existing functions; live data and routes remain intact.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+                 var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionFailRuntime.ArtRoot+name+".png") as TextureImporter;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailLayout.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailLayout.cs
+@@ -28,7 +28,7 @@
+                     float gap=Mathf.Max(0,available-1515)*.5f/scale;
+                     ProductionVictoryView.Place(sceneWindow,0,-22-gap,941,555+gap);
+                     var scene=sceneWindow.Find("Scene") as RectTransform;
+-                    if(scene!=null)scene.anchoredPosition=new Vector2(0,300-gap);
++                    if(scene!=null)scene.anchoredPosition=new Vector2(0,-ProductionFailRuntime.SceneTop-gap);
+                 }
+                 canvasRect.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);
+                 Vector2 native=View.Environment.sprite.rect.size;float cover=Mathf.Max((high.x-low.x)/native.x,(high.y-low.y)/native.y);Vector2 size=native*cover;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -6,7 +6,8 @@
+     public static class ProductionFailRuntime
+     {
+         public const string ContentName="FAIL_ALIGNED_CONTENT",ArtRoot="ProductionUI/FailAligned/";
+-        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9"};
++        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10"};
++        public const float SceneTop=-35;
+         public static void BuildInto(RectTransform root)
+         {
+             var old=root.GetComponent<ProductionFailView>();
+@@ -66,37 +67,37 @@
+         static void ApplyPresentation(ProductionFailView v)
+         {
+             ApplyHeader(v);ApplyOffers(v);
+-            v.Environment.sprite=Load(ArtRoot+"environment_r2");
+-            v.Hero.sprite=Load(ArtRoot+"ivan_r2");
++            v.Environment.sprite=Load(ArtRoot+"environment_r10");
++            v.Hero.sprite=Load(ArtRoot+"ivan_r10");
+             v.Hero.color=new Color32(219,219,219,255);
+-            ProductionVictoryView.Place(v.Hero.rectTransform,175,-36,591,530);
++            ProductionVictoryView.Place(v.Hero.rectTransform,175,-36,591,588);
+             v.Hero.preserveAspect=true;
+             // A focal window on the independent environment plate places the fortress and
+             // burning houses behind Ivan; the full cover plate still fills every aspect ratio.
+             var scenery=v.Body.Find("SceneWindow") as RectTransform;
+             if(scenery==null){scenery=Rect(v.Body,"SceneWindow",0,-22,941,555);scenery.gameObject.AddComponent<RectMask2D>();scenery.SetAsFirstSibling();}
+-            var detail=EnsureArt(scenery,"Scene",v.Environment.sprite,0,-300,941,941*v.Environment.sprite.rect.height/v.Environment.sprite.rect.width);
++            var detail=EnsureArt(scenery,"Scene",v.Environment.sprite,0,SceneTop,941,941*v.Environment.sprite.rect.height/v.Environment.sprite.rect.width);
+             detail.raycastTarget=false;
+             if(detail.GetComponent<ProductionFailSceneBlend>()==null)detail.gameObject.AddComponent<ProductionFailSceneBlend>();
+-            SetPanel(v,"MainPanel","panel_r2",25,510,891,1005,true);
++            SetPanel(v,"MainPanel","panel_r10",25,510,891,1005,true);
+             // Reference plaque spans approximately x125..816 and y527..767,
+             // including its top crest. Preserve carved ends while fitting the face.
+-            SetPanel(v,"FailureTitlePanel","title_r4",125,377,691,240,true);
++            SetPanel(v,"FailureTitlePanel","title_r10",125,377,691,240,true);
+             var titleFit=v.Body.Find("FailureTitlePanel").GetComponent<ProductionFailPanelFit>();
+             titleFit.TopProtectedFraction=.35f;titleFit.BottomProtectedFraction=.07f;
+-            ProductionVictoryView.PlaceText(v.Title,153,460,635,92,76);
+-            ProductionVictoryView.PlaceText(v.Subtitle,149,550,643,45,34);
++            ProductionVictoryView.PlaceText(v.Title,153,451,635,92,76);
++            ProductionVictoryView.PlaceText(v.Subtitle,149,542,643,45,34);
+             v.Title.fontStyle=FontStyle.Bold;
+-            Gold(v.Title,.85f);Gold(v.Subtitle,.65f);
++            Gold(v.Title,1.1f);Gold(v.Subtitle,.65f);
+             // Enclose the heading and inset separately, behind all live goal content.
+-            SetPanel(v,"GoalsOuterPanel","goals_r2",149,648,643,221,true);
++            SetPanel(v,"GoalsOuterPanel","goals_r10",149,648,643,221,true);
+             v.Body.Find("GoalsOuterPanel").SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
+             var outer=v.Body.Find("GoalsOuterPanel").GetComponent<Image>();
+             outer.color=new Color32(185,181,169,255);
+             outer.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.5f;
+-            SetPanel(v,"GoalsPanel","goals_r2",169,680,603,179,true);
++            SetPanel(v,"GoalsPanel","goals_r10",169,680,603,179,true);
+             v.Body.Find("GoalsPanel").GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.78f;
+-            SetPanel(v,"GoalsHeadingPlaque","nameplate_r2",185.5f,632,570,44,true);
++            SetPanel(v,"GoalsHeadingPlaque","nameplate_r10",185.5f,632,570,44,true);
+             var plaque=v.Body.Find("GoalsHeadingPlaque");
+             plaque.SetAsLastSibling();
+             plaque.SetSiblingIndex(v.GoalsHeading.transform.GetSiblingIndex());
+@@ -112,31 +113,32 @@
+             float retryWidth=625,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
+             ProductionVictoryView.Place((RectTransform)v.Retry.transform,(941-retryWidth)*.5f,877,retryWidth,retryHeight);
+             ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,36);Gold(v.RetryText,.8f);
+-            var exit=v.Exit.GetComponent<Image>();exit.sprite=Load(ArtRoot+"goals_r2");
++            var exit=v.Exit.GetComponent<Image>();exit.sprite=Load(ArtRoot+"goals_r10");
+             ProductionVictoryView.Place((RectTransform)v.Exit.transform,642,1158,200,56);
+             ProductionVictoryView.PlaceText(v.ExitText,10,5,180,46,19);
+             v.ExitText.horizontalOverflow=HorizontalWrapMode.Wrap;
+             ProductionVictoryView.PlaceText(v.Reaction,104,1158,518,49,18);
+             v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
+             v.Reaction.gameObject.SetActive(false);
+-            SetPanel(v,"BoostersPanel","goals_r2",72,1145,797,300,true);
++            SetPanel(v,"BoostersPanel","goals_r10",72,1145,797,300,true);
+             ProductionVictoryView.PlaceText(v.BoostersHeading,104,1160,518,40,26);
+             for(int i=0;i<4;i++)
+             {
+                 var group=v.Body.Find("Booster_"+i) as RectTransform;
+                 ProductionVictoryView.Place(group,83+i*194,1210,194,234);
+                 var frame=EnsureArt(group,"Medallion",Load(ArtRoot+"medallion_r2"),9,0,176,176);frame.transform.SetAsFirstSibling();
+-                frame.preserveAspect=true;
++                frame.preserveAspect=true;frame.gameObject.SetActive(true);
+                 frame.color=new Color32(205,199,184,255);
+                 // Keep a generous interactive rectangle while preserving the whole booster illustration.
+                 var art=v.BoosterButtons[i].GetComponent<Image>();
++                art.sprite=ProductionGameplayArt.Booster(i);
+                 ProductionVictoryView.Place(art.rectTransform,27,18,140,140);art.preserveAspect=true;art.color=new Color32(225,225,225,255);
+                 ProductionVictoryView.Place(group.Find("StockBadge") as RectTransform,132,130,49,49);
+                 ProductionVictoryView.PlaceText(v.BoosterCounts[i],0,0,49,49,28);
+-                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r2"),0,178,194,56);
++                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r10"),0,178,194,56);
+                 var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit==null)plate.gameObject.AddComponent<ProductionFailPanelFit>();
+                 plate.transform.SetSiblingIndex(1);
+-                ProductionVictoryView.PlaceText(v.BoosterLabels[i],3,182,188,48,20);
++                ProductionVictoryView.PlaceText(v.BoosterLabels[i],10,182,174,48,20);
+                 ClearLabel(v.BoosterLabels[i],false);
+                 v.BoosterLabels[i].transform.SetAsLastSibling();
+             }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=9;
++        public const int CurrentRevision=10;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+@@ -45,8 +45,8 @@
+             AdOfferTitle.text=en?"CONTINUE\nWATCH AN AD":"ПРОДОЛЖИТЬ\nЧЕРЕЗ РЕКЛАМУ";
+             PaidOfferStatus.text=AdOfferStatus.text=en?"UNAVAILABLE":"НЕДОСТУПНО";
+             OfferSeparator.text=en?"OR":"ИЛИ";
+-            BoostersHeading.text=en?"IN-GAME BOOSTERS":"БУСТЕРЫ В ИГРЕ";
+-            string[] names=en?new[]{"BOGATYR\nMACE","FIREBIRD\nFEATHER","LIVING LIGHT","SEA KING'S\nPEARL"}:new[]{"БОГАТЫРСКАЯ\nБУЛАВА","ПЕРО\nЖАР-ПТИЦЫ","ЖИВОЙ СВЕТ","ЖЕМЧУЖИНА\nМОРСКОГО ЦАРЯ"};
++            BoostersHeading.text=en?"RECOMMENDED BOOSTERS":"РЕКОМЕНДУЕМЫЕ БУСТЕРЫ";
++            string[] names=en?new[]{"THUNDER\nHAMMER","PHOENIX","DRUZHINA\nSHIELD","POWER POTION"}:new[]{"МОЛОТ ГРОМА","ФЕНИКС","ЩИТ ДРУЖИНЫ","ЗЕЛЬЕ СИЛЫ"};
+             for(int i=0;i<4;i++)BoosterLabels[i].text=names[i];
+             RefreshState();
+         }
+@@ -82,7 +82,7 @@
+             BoostersHeading.gameObject.SetActive(inspected<0);
+             if(inspected>=0)
+             {
+-                string[] info=en?new[]{"Mace: clears a row; swipe vertically for a column.","Firebird feather: clears a 3×3 area.","Living light: clears all gems of the selected color.","Sea king's pearl: adds 5 moves during gameplay."}:new[]{"Булава: очистить ряд; вертикальный жест — столбец.","Перо Жар-птицы: очистить область 3×3.","Живой свет: убрать все самоцветы выбранного цвета.","Жемчужина: добавить 5 ходов во время игры."};
++                string[] info=en?new[]{"Thunder hammer: clears a row; swipe vertically for a column.","Phoenix: clears a 3×3 area.","Druzhina shield: clears all gems of the selected color.","Power potion: adds 5 moves during gameplay."}:new[]{"Молот грома: очистить ряд; вертикальный жест — столбец.","Феникс: очистить область 3×3.","Щит дружины: убрать все самоцветы выбранного цвета.","Зелье силы: добавить 5 ходов во время игры."};
+                 Reaction.text=info[inspected];
+             }
+         }
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -95,7 +95,16 @@
+         [UnityTest]public IEnumerator RetryExitAndBoosterGuidePreserveExistingTransactions()
+         {
+             Fail(2,130,new[]{1,2});yield return null;var v=View();var state=GameState.Instance;
+-            string before=JsonUtility.ToJson(state.Save);v.PaidOffer.onClick.Invoke();v.AdOffer.onClick.Invoke();Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));v.BoosterButtons[3].onClick.Invoke();Assert.That(v.Reaction.text,Does.Contain("5"));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++            string before=JsonUtility.ToJson(state.Save);v.PaidOffer.onClick.Invoke();v.AdOffer.onClick.Invoke();Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++            string[] captions={"МОЛОТ ГРОМА","ФЕНИКС","ЩИТ ДРУЖИНЫ","ЗЕЛЬЕ СИЛЫ"};
++            string[] effects={"столбец","3×3","выбранного цвета","5 ходов"};
++            for(int i=0;i<4;i++)
++            {
++                Assert.That(v.BoosterLabels[i].text,Is.EqualTo(captions[i]));
++                v.BoosterButtons[i].onClick.Invoke();
++                Assert.That(v.Reaction.text,Does.Contain(effects[i]),"Reference alias must still explain the existing function.");
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before),"Inspecting an alias must not spend stock or resources.");
++            }
+             Capture("Fail_BoosterGuide_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             int energy=state.Save.energy,gold=state.Save.gold;
+             v.Retry.onClick.Invoke();Settle();yield return null;
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,23 +11,25 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(9));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(10));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+             Assert.That(root.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(13));
+             Assert.That(root.transform.Find("FIX01_CONTENT"),Is.Null);
+             foreach(string dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
+-            Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_r2")));
+-            Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_r2")));
++            Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_r10")));
++            Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_r10")));
+             Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"retry_r2")));
+-            Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_r2")));
+-            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r4")));
++            Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_r10")));
++            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r10")));
+             Assert.That(v.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+             for(int index=0;index<4;index++)
+             {
+                 var group=v.Body.Find("Booster_"+index);
+                 Assert.That(group.Find("Medallion").GetComponent<Image>().raycastTarget,Is.False);
++                Assert.That(group.Find("Medallion").gameObject.activeSelf,Is.True);
++                Assert.That(v.BoosterButtons[index].GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Booster(index)));
+                 Assert.That(group.Find("Nameplate").GetComponent<Image>().raycastTarget,Is.False);
+             }
+             Assert.That(v.Hud.Find("GoldResource/Icon").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"coin_r3")));

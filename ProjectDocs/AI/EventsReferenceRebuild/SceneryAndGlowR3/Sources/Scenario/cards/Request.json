@@ -1,0 +1,15 @@
+{
+  "model": "model_openai-gpt-image-2",
+  "body": {
+    "prompt": "Edit this exact 2x2 sheet by removing ONLY the four foreground subjects and inpainting their occupied pixels. Preserve visible background architecture, mountains, tree trunks, skyline, camera framing, color palette and light direction as closely as possible. Do not replace these scenes with different compositions. Return exactly four rectangular scenery-only plates in the same 2x2 arrangement, no gaps, frames or margins. Top-left remove the entire Firebird, ALL feathers, flame trails, golden sparks and fiery glow. Reconstruct the dark Russian onion-domed city and violet-orange dusk behind it. This plate should have twilight highlights only, not a firestorm or washed-out orange day. Top-right remove Baba Yaga and her entire foreground body, staff, cauldron, pot and smoke; retain the original eerie blue-green woods, original hut on chicken legs at the RIGHT and moonlight. Bottom-left remove the merchant and all foreground clothing/props, reconstruct the Russian harbor around the original large ship on the RIGHT and distant golden-domed skyline. Bottom-right remove the knight, helmet, body, sword and shield, retaining the exact pale icy castle composition. No humans, creatures, birds, tools, floating objects, text, UI frames or medallions in any plate. Do not add new characters. Painterly Russian fairy-tale style from the supplied image. These are clean environment layers behind separately preserved original characters, not finished UI cards.",
+    "referenceImages": [
+      "asset_rWN1ZvxMPpz77o6YfmeZW7TW"
+    ],
+    "width": 1024,
+    "height": 768,
+    "quality": "medium",
+    "background": "opaque",
+    "numOutputs": 1
+  },
+  "reason": "Reconstruct occluded scenery only; original subject art and UI remain separate."
+}

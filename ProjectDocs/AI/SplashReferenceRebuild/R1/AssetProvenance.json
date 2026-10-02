@@ -1,0 +1,31 @@
+{
+  "assets": [
+    {
+      "file": "source_logo.png",
+      "sha256": "9e485281876c0d5d4948e6f17dcc8398724022e4edb5e2c6c84b5887bde61c1f",
+      "operation": "Original RGB with Scenario alpha; opaque carved plaque retained"
+    },
+    {
+      "file": "source_start_blank.png",
+      "sha256": "be65e7c86e4b22ae20789f4c3c2cad5163ba07ec618906802aea10659fb2a29e",
+      "operation": "Original border RGB/Scenario alpha; bounded gold-letter mask inpaint only to support live localized text"
+    },
+    {
+      "file": "source_outer_frame.png",
+      "sha256": "a7ecd28be07feaf674abb35ee8f01400b9f68e559d7b576767589396789006b5",
+      "operation": "Original RGB; Scenario corner alpha limited by local metal/sapphire/contour masks; narrow source rails; no scenery regions"
+    },
+    {
+      "file": "source_ivan_firebird.png",
+      "sha256": "469d4fadfaab09893836bae301624dd17493428d1fdf2a3cbc2a8131f89879df",
+      "operation": "Original joint subject RGB/Scenario alpha; source button/frame alpha removed; bounded baked version lettering inpaint"
+    },
+    {
+      "file": "clean_environment.png",
+      "sha256": "154861faacaa706fd3e5d6ea069dc23f35e9a8f3566e0847a99657c274ffeca9",
+      "operation": "Unmodified Scenario reconstruction of hidden environment only"
+    }
+  ],
+  "assessment": "Sources/Assessment.json",
+  "limitations": "Scenery reconstructed; opaque button lettering and version areas locally repaired; source font identity unverified. Joint hero is cut where original native Start occluded it. Corner Scenario result retained scenery and was corrected locally."
+}

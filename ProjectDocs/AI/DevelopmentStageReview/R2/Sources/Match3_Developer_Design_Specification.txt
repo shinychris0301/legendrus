@@ -1,0 +1,175 @@
+UI / UX DESIGN SPECIFICATION
+FOR ANDROID DEVELOPERS
+«ЛЕГЕНДЫ РУСИ: ТРИ В РЯД»
+Match Legends of Rus – Complete Design System & Screen Specifications
+Version 1.0  |  August 2026  |  Ready for Implementation
+1. Project Overview
+This document is the complete UI/UX design specification for the Android Match-3 game «Легенды Руси: Три в Ряд». It is written for developers, UI programmers, and technical artists. All screens, components, colors, typography, spacing rules, and interaction patterns are defined so the game can be implemented consistently.
+Target platform: Android (portrait, 1080×1920 baseline, responsive to other aspect ratios).
+Art direction: Warm Russian fairy-tale aesthetic mixed with clean modern mobile UI. Rich gold, deep red, forest green, magical light effects, Slavic ornaments (Khokhloma / Gzhel inspired).
+2. Design System
+2.1 Color Palette
+Primary Colors:
+Gold Primary: #D4A017 / #FFD700 (buttons, highlights, stars)
+Deep Red: #8B0000 / #C00000 (important CTAs, titles)
+Forest Green: #2E5A1C (secondary elements, nature)
+Cream / Parchment: #F5E6C8 / #FFF8E7 (panels, cards)
+Magic Blue: #4A90D9 (Living Lights, special effects)
+Dark Wood: #3E2723 / #5D4037 (frames, bars)
+Text Dark: #2C1810   |   Text Light: #FFFFFF   |   Disabled: #9E9E9E
+2.2 Typography
+Titles / Headers: Elegant serif or decorative font with Slavic feel (e.g. “Old Standard”, “PT Serif”, or custom). Size 28–42 sp.
+Body / UI text: Clean sans-serif (Roboto or Noto Sans). Size 14–18 sp.
+Buttons: Bold sans-serif, 16–20 sp, uppercase or title case in Russian.
+All player-facing text must be in Russian (native). English only for internal debug.
+2.3 Spacing & Layout Rules
+Baseline grid: 8 dp.
+Screen edge margin: 16–24 dp.
+Card / panel corner radius: 12–16 dp.
+Primary button height: 52–56 dp.
+Safe area: respect Android system bars and notches.
+2.4 Core UI Components
+Primary Button: Golden gradient, dark text or white text, soft glow, Slavic border ornament optional.
+Secondary Button: Wooden / dark frame, cream fill.
+Resource Bar (top): Gold coins + Gems + Energy. Always visible on most screens.
+Panel / Card: Parchment or dark wood background with golden thin border.
+Icon style: Slightly painted / illustrated, not flat material. Soft glow on interactive icons.
+Progress bars: Golden fill on dark track, ornamental ends.
+3. Complete Screen Inventory
+Every screen that must be implemented is listed below with its purpose and key requirements.
+3.1 Entry & Meta Screens
+Splash / Loading – Logo + progress bar + “Загрузка...”
+Home / Main Menu – Play, Map, Shop, Events, Characters, Settings, Daily Rewards
+World Map – 20 chapter nodes on illustrated map of mythical Rus
+Chapter Level Select – Vertical path of levels for one chapter
+Profile / Player Card – Avatar, stats, achievements summary
+3.2 Core Gameplay Screens
+Pre-Level Start – Goals, selected boosters, “Играть” button
+Gameplay Board – Match-3 grid, moves, score, goals, side boosters
+Pause Menu – Resume, Restart, Settings, Quit
+Level Victory – Stars, rewards, Continue, Watch Ad x2
+Level Failed – Out of moves, Continue for coins, Use booster, Exit
+Chapter Complete – Special celebration + unlock next chapter
+3.3 Economy & Collection
+Shop – Tabs: Coins, Boosters, Packs, Skins
+Characters Collection – Grid + detail panel
+Booster Inventory / Detail popup
+Out of Energy / Lives popup
+3.4 Retention & LiveOps
+Daily Rewards – 7-day calendar
+Events Hub – List of active limited-time events
+Event Detail / Progress screen
+Story / Dialogue / Cutscene viewer
+3.5 System
+Settings – Sound, Music, Language, Notifications, Support, Credits
+Loading transition between screens
+Error / No Internet popup
+4. Detailed Screen Specifications
+4.1 Splash / Loading Screen
+Purpose: First impression + asset loading.
+Layout:
+Full-screen illustrated background (mystical forest + golden light).
+Centered: Logo (World Tree + Firebird) + title «ЛЕГЕНДЫ РУСИ» + subtitle «ТРИ В РЯД».
+Bottom: Ornamental progress bar + text “Загрузка...”
+No interactive elements. Auto-proceed when loading finishes.
+4.2 Home / Main Menu
+Purpose: Central hub of the game.
+Top bar: Player avatar + name/level + Gold + Gems (tap to open shop).
+Center: Large glowing “ИГРАТЬ” button (goes to current chapter level select or world map).
+Below Play: 2×2 or horizontal row of buttons – Карта мира, Магазин, События, Персонажи.
+Side icons: Settings (gear), Daily Rewards (gift).
+Background: Illustrated Russian village + distant World Tree at golden hour. Soft parallax if possible.
+4.3 World Map
+Purpose: Show overall progress across 20 chapters.
+Scrollable illustrated map of mythical Rus. 20 chapter nodes connected by a glowing path.
+Each node: Icon + chapter number + name (on tap). Locked chapters are greyed / silhouetted.
+Current chapter has pulsing glow + Firebird marker.
+Top resource bar. Bottom navigation or back button.
+4.4 Chapter Level Select
+Purpose: Choose which level to play inside one chapter.
+Vertical scrollable path of level nodes (circles with number).
+Completed levels show 1–3 stars. Current level is larger + glowing. Locked levels show lock icon.
+Background: Thematic illustration of the current chapter (changes per chapter).
+Bottom: “Играть” button for selected level + small booster shortcuts.
+4.5 Pre-Level Start Screen
+Purpose: Show goals and let player equip boosters before starting.
+Center panel: Level number + list of goals (e.g. Collect 20 red gems, Reach 15 000 points) with icons.
+Below goals: 3–4 booster slots. Player can select owned boosters to take into the level.
+Big “Играть” button. Small “Купить бустеры” link if needed.
+4.6 Gameplay Board (Core)
+Purpose: The main Match-3 interaction.
+Top bar: Moves left (large) | Score | Goal icons with counters.
+Center: 8×8 or 9×9 board (exact size may vary by level). Gems have Slavic ornamental style + soft glow.
+Left & Right sides: 2–4 booster buttons with remaining count.
+Bottom (optional): Goal progress panel or chapter name.
+Pause button (top-right or top-left). Background is blurred or dimmed version of chapter art.
+4.7 Level Victory
+Large “ПОБЕДА!” title with particle effects and 1–3 stars animation.
+Rewards panel: Gold, Gems, Living Lights, any special drops.
+Character celebration illustration (Firebird or current companion).
+Buttons: “Продолжить” (primary) and “Смотреть рекламу за x2” (secondary).
+4.8 Level Failed
+Title: “Ходы закончились” or “Не осталось ходов”.
+Friendly message + sad/concerned Firebird illustration.
+Buttons (stacked): “Продолжить за монеты” (shows price), “Использовать бустер”, “Выйти”.
+Tone must stay encouraging, never punishing.
+4.9 Shop
+Top tabs: Монеты | Усилители | Специальные наборы | Скины.
+Content: Grid or list of offer cards with icon, name, contents, price (₽ or soft currency).
+Highlight “ХИТ” and “АКЦИЯ” badges on best offers.
+Bottom navigation bar can stay visible or be hidden depending on design choice.
+4.10 Characters Collection
+Left/Center: Scrollable grid of character portraits (unlocked vs locked silhouette).
+Right or bottom sheet: Selected character large art + name + short lore + stars + bonus description + “Использовать” / “Смотреть историю” buttons.
+This screen drives emotional attachment and cosmetic desire.
+4.11 Daily Rewards & Events Hub
+Top section: 7-day login calendar with chests. Current day highlighted and claimable.
+Bottom section: List of active events (New Year, Maslenitsa, Character Rescue, etc.) with progress bars and remaining time.
+Tapping an event opens its detail / play screen.
+4.12 Settings
+Simple vertical list with toggles and navigation rows:
+Sound / Music (toggles)
+Language (shows “Русский”)
+Notifications
+Privacy / Support / Credits (open sub-pages or external)
+Background: soft wood + subtle ornament. Keep it calm and readable.
+5. Additional Critical Screens (Must Implement)
+5.1 Out of Energy / Lives Popup
+Modal. Shows current energy = 0. Options: Wait for refill (timer), Watch ad, Pay with gold/gems, or “More lives” pack from shop.
+5.2 Story / Dialogue Screen
+Full-screen or bottom dialogue box with character portrait, name, text, and “Далее” button. Background is chapter art. Used for cutscenes between levels and chapter intros.
+5.3 Pause Menu
+Overlay on gameplay. Buttons: Продолжить, Перезапуск, Настройки, Выйти на карту. Soft darken of board behind.
+5.4 Chapter Complete
+Special victory variant. Shows chapter name, total stars, unlock of next chapter, and a short story summary or character reaction.
+6. Main User Flows
+First Launch: Splash → (optional short tutorial) → Home → Play → Pre-Level → Gameplay → Victory/Fail → back to Level Select.
+Core Loop: Level Select → Pre-Level → Gameplay → Result → Level Select (or next level).
+Monetization moments: Out of moves, Out of energy, Pre-level booster upsell, Shop from any resource bar, Event limited offers.
+Story moments: Automatic dialogue after certain levels and at chapter start/end.
+7. Asset List for Developers / Artists
+Minimum required art assets:
+Logo + app icon
+20 chapter background illustrations (or 5–6 reusable + variants)
+Gem set (6–8 colors) with normal + special states
+Booster icons (8–12)
+Character portraits (at least 12) + full-body for key moments
+UI frames, buttons, panels, ornaments (9-slice / vector preferred)
+Particles / VFX: match explosion, star collect, level complete confetti, Living Light glow
+Map nodes and path graphics
+Shop item icons and chest art
+8. Technical Implementation Notes
+Use a UI framework that supports 9-slice sprites and dynamic fonts (Unity UI / UI Toolkit, or native Android Compose / XML).
+All text must be externalized for localization (even if only Russian at launch).
+Support different aspect ratios (18:9, 19.5:9, 16:9) with safe area handling.
+Animations: keep them smooth (60 fps target). Match cascade should feel juicy but not slow the game.
+Audio: separate music and SFX buses. Chapter-specific music recommended.
+Performance: Board should run smoothly even on mid-range Android devices (2022+).
+9. Implementation Priority for MVP
+Phase 1 (Core Loop): Splash, Home, Level Select, Pre-Level, Gameplay, Victory, Fail, basic Settings.
+Phase 2 (Progression): World Map, Chapter Complete, simple Story dialogue, Energy system + Out of Energy popup.
+Phase 3 (Monetization): Shop, Boosters, Continue offers, basic IAP.
+Phase 4 (Retention): Daily Rewards, Events Hub, Characters Collection, more story content.
+— End of Design Specification —
+This document + the previously generated screen mockups form the complete design package for developers.
+«Легенды Руси: Три в Ряд» – Ready for production.

@@ -1,0 +1,860 @@
+{
+  "status": "Draft design only; not installed, imported into Unity or solver-verified",
+  "rows": [
+    {
+      "round": 101,
+      "nameRu": "Тропа к мельнице",
+      "nameEn": "Path to the Mill",
+      "difficulty": "recovery",
+      "moveLimit": 34,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11101,
+      "goals": [
+        {
+          "type": "collect_tile",
+          "tileType": 0,
+          "target": 16
+        },
+        {
+          "type": "collect_tile",
+          "tileType": 3,
+          "target": 16
+        }
+      ],
+      "obstacles": [],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Open recovery after100.",
+      "rewards": {
+        "gold": 160,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 102,
+      "nameRu": "Склад у дороги",
+      "nameEn": "Roadside Store",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11102,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "crate",
+          "target": 10
+        },
+        {
+          "type": "collect_tile",
+          "tileType": 2,
+          "target": 20
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 0,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        }
+      ],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Two offset stockpile gates with accessible ends.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 103,
+      "nameRu": "Крепкие ворота",
+      "nameEn": "Sturdy Gates",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11103,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "crate",
+          "target": 6
+        },
+        {
+          "type": "collect_tile",
+          "tileType": 1,
+          "target": 20
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 2,
+          "type": "crate",
+          "layers": 2
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "type": "crate",
+          "layers": 2
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "type": "crate",
+          "layers": 2
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "type": "crate",
+          "layers": 2
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "crate",
+          "layers": 2
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "type": "crate",
+          "layers": 2
+        }
+      ],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Six layered crates contrast damage hits with cleared-cell goals.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 104,
+      "nameRu": "Две тропы у мельницы",
+      "nameEn": "Two Mill Paths",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11104,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "ice",
+          "target": 6
+        },
+        {
+          "type": "bring_down",
+          "itemType": "firebird_feather",
+          "target": 2
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 2,
+          "y": 2,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "type": "ice",
+          "layers": 1
+        }
+      ],
+      "boardItems": [
+        {
+          "x": 2,
+          "y": 0,
+          "type": "firebird_feather"
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "type": "firebird_feather"
+        }
+      ],
+      "fixedCells": [],
+      "intent": "Separated delivery lanes with side support-cell ice.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 105,
+      "nameRu": "Двор за воротами",
+      "nameEn": "The Yard beyond the Gate",
+      "difficulty": "hard",
+      "moveLimit": 28,
+      "tileTypes": 6,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11105,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "crate",
+          "target": 8
+        },
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "chain",
+          "target": 4
+        },
+        {
+          "type": "bring_down",
+          "itemType": "firebird_feather",
+          "target": 2
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 0,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 3,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "type": "chain",
+          "layers": 1
+        }
+      ],
+      "boardItems": [
+        {
+          "x": 1,
+          "y": 0,
+          "type": "firebird_feather"
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "type": "firebird_feather"
+        }
+      ],
+      "fixedCells": [],
+      "intent": "Two deliveries through offset shelves and individual locks.",
+      "rewards": {
+        "gold": 220,
+        "gems": 3,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 106,
+      "nameRu": "Передышка у мельницы",
+      "nameEn": "A Rest near the Mill",
+      "difficulty": "recovery",
+      "moveLimit": 34,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11106,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "ice",
+          "target": 4
+        },
+        {
+          "type": "collect_tile",
+          "tileType": 2,
+          "target": 16
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 0,
+          "y": 2,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 1,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 7,
+          "y": 4,
+          "type": "ice",
+          "layers": 1
+        }
+      ],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Scattered surface ice with an open center.",
+      "rewards": {
+        "gold": 160,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 107,
+      "nameRu": "Искры на ветру",
+      "nameEn": "Sparks in the Wind",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 6,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11107,
+      "goals": [
+        {
+          "type": "collect_tile",
+          "tileType": 0,
+          "target": 24
+        },
+        {
+          "type": "collect_tile",
+          "tileType": 1,
+          "target": 24
+        }
+      ],
+      "obstacles": [],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Open six-color space for optional special creation, no scripted opening.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 108,
+      "nameRu": "Ледяные ворота",
+      "nameEn": "Icy Gates",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 6,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11108,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "ice",
+          "target": 8
+        },
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "chain",
+          "target": 4
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 1,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 4,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "type": "ice",
+          "layers": 2
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "type": "ice",
+          "layers": 2
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "type": "ice",
+          "layers": 2
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "type": "ice",
+          "layers": 2
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "type": "chain",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "type": "chain",
+          "layers": 1
+        }
+      ],
+      "boardItems": [],
+      "fixedCells": [],
+      "intent": "Layered ice clusters and separate central locks.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 109,
+      "nameRu": "Три дороги к припасам",
+      "nameEn": "Three Supply Paths",
+      "difficulty": "normal",
+      "moveLimit": 29,
+      "tileTypes": 5,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11109,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "crate",
+          "target": 9
+        },
+        {
+          "type": "bring_down",
+          "itemType": "firebird_feather",
+          "target": 3
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 1,
+          "y": 1,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 5,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 1,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "type": "crate",
+          "layers": 1
+        }
+      ],
+      "boardItems": [
+        {
+          "x": 1,
+          "y": 0,
+          "type": "firebird_feather"
+        },
+        {
+          "x": 4,
+          "y": 0,
+          "type": "firebird_feather"
+        },
+        {
+          "x": 6,
+          "y": 0,
+          "type": "firebird_feather"
+        }
+      ],
+      "fixedCells": [],
+      "intent": "Three differently spaced delivery gates.",
+      "rewards": {
+        "gold": 180,
+        "gems": 0,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 0,
+        "boosterSeaPearl": 0
+      }
+    },
+    {
+      "round": 110,
+      "nameRu": "Дорога к мельнице открыта",
+      "nameEn": "The Mill Road Opens",
+      "difficulty": "hard",
+      "moveLimit": 30,
+      "tileTypes": 6,
+      "columns": 8,
+      "rows": 7,
+      "boardSeed": 11110,
+      "goals": [
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "crate",
+          "target": 8
+        },
+        {
+          "type": "clear_obstacle",
+          "obstacleType": "ice",
+          "target": 6
+        },
+        {
+          "type": "bring_down",
+          "itemType": "firebird_feather",
+          "target": 2
+        }
+      ],
+      "obstacles": [
+        {
+          "x": 0,
+          "y": 1,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 7,
+          "y": 2,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "type": "crate",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 2,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 2,
+          "y": 5,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 2,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 3,
+          "type": "ice",
+          "layers": 1
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "type": "ice",
+          "layers": 1
+        }
+      ],
+      "boardItems": [
+        {
+          "x": 2,
+          "y": 0,
+          "type": "firebird_feather"
+        },
+        {
+          "x": 5,
+          "y": 0,
+          "type": "firebird_feather"
+        }
+      ],
+      "fixedCells": [],
+      "intent": "Side stockpiles and two ice delivery routes mark local mill access.",
+      "rewards": {
+        "gold": 220,
+        "gems": 3,
+        "boosterMace": 0,
+        "boosterFirebird": 0,
+        "boosterLivingLight": 1,
+        "boosterSeaPearl": 0
+      }
+    }
+  ]
+}

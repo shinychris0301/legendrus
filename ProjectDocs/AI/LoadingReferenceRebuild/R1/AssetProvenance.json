@@ -1,0 +1,155 @@
+{
+  "assets": [
+    {
+      "file": "source_logo.png",
+      "sha256": "d3a6fc11ee5aa3ffe28acb563d9872dc39da60effd2e23ccfd8529abe33c664c",
+      "operation": "Original RGB/Scenario alpha; upper frame fragments excluded by contour"
+    },
+    {
+      "file": "source_tip_ru.png",
+      "sha256": "03e4dc662f8d960e19d402f0b67a31bc73042b37d2817abdc993a22fa96e3f44",
+      "operation": "Original complete parchment panel and Russian lettering; Scenario alpha; original RGB untouched"
+    },
+    {
+      "file": "source_tip_blank.png",
+      "sha256": "8fe78fc0cb2219abbb3e6a54c79d1eb5d4c9598fc50a253d8f34dc2263c84e07",
+      "operation": "Same source tip; bounded inpaint removes lettering for live English; original alpha"
+    },
+    {
+      "file": "source_ivan.png",
+      "sha256": "bed424b918dbd0236b096443d587d58f2833fef01f86ab5c5f04910fd194e38a",
+      "operation": "Original RGB with Scenario alpha, overlaid tip alpha excluded, detached UI fragments removed"
+    },
+    {
+      "file": "source_firebird.png",
+      "sha256": "17c80caf35ec41d8472eb57b70df038248b278ce2b1de5f6a0d0a282f952f2c2",
+      "operation": "Original RGB with Scenario alpha, overlaid tip alpha excluded, detached UI fragments removed"
+    },
+    {
+      "file": "source_progress_track.png",
+      "sha256": "ac1562db8c01b56e7442f53e7fe6ace878ec4699e6da09a0f44aa7db82185002",
+      "operation": "Original Scenario-isolated gold track, inside blue fill/fixed75% replaced by source navy donor texture"
+    },
+    {
+      "file": "source_progress_fill.png",
+      "sha256": "632263bd02ce7f36ddfd5b3dc09090fcc5927c347f222e23c640d009eaf12590",
+      "operation": "Clean original sapphire fill segment without numbers; native measured clipping"
+    },
+    {
+      "file": "source_loading_ru.png",
+      "sha256": "435251f2e4d6613c4089aba0a0bcac4e9182620249a2e77f6485cfc9af0075dd",
+      "operation": "Original Russian loading lettering and side flourishes; local gold-support alpha; original RGB"
+    },
+    {
+      "file": "source_outer_frame.png",
+      "sha256": "ddcef2f3955e66cdc91eeb0a2bc2b5ce68b0150f09c4c061b3d0bdb2da1c4483",
+      "operation": "Original RGB; Scenario ornament alpha plus bounded local contour/metal support; opaque scenery excluded"
+    },
+    {
+      "file": "clean_environment.png",
+      "sha256": "9756304549109b081c98a2d57c8a6d9e127e975f3d501ff018272192ae897783",
+      "operation": "Unmodified Scenario reconstruction of hidden village only"
+    }
+  ],
+  "source": {
+    "source": "/home/k2/Downloads/match3final/2.loading.png",
+    "sha256": "e25641a1dbddbd45826372ea3ad8dbd30e7de57784fa8adbc411bfe1e5d1f435",
+    "bounds": {
+      "logo": [
+        185,
+        15,
+        750,
+        413
+      ],
+      "ivan": [
+        23,
+        383,
+        432,
+        1214
+      ],
+      "firebird": [
+        481,
+        619,
+        918,
+        1451
+      ],
+      "tip": [
+        276,
+        1068,
+        670,
+        1429
+      ],
+      "progress": [
+        105,
+        1480,
+        835,
+        1572
+      ],
+      "ornamentTL": [
+        0,
+        0,
+        221,
+        220
+      ],
+      "ornamentTR": [
+        747,
+        0,
+        941,
+        221
+      ],
+      "ornamentBL": [
+        0,
+        1469,
+        272,
+        1672
+      ],
+      "ornamentBR": [
+        713,
+        1438,
+        941,
+        1672
+      ],
+      "ornamentBottom": [
+        270,
+        1573,
+        713,
+        1672
+      ]
+    },
+    "ornamentPlacements": {
+      "ornamentTL": [
+        0,
+        0,
+        221,
+        220
+      ],
+      "ornamentTR": [
+        260,
+        0,
+        454,
+        221
+      ],
+      "ornamentBL": [
+        0,
+        250,
+        272,
+        453
+      ],
+      "ornamentBR": [
+        280,
+        250,
+        508,
+        484
+      ],
+      "ornamentBottom": [
+        530,
+        0,
+        973,
+        99
+      ]
+    },
+    "userRequest": "Extract panels together with original static Russian text. Percentage remains measured; English retains translation.",
+    "navigation": "Existing measured Home preparation, no fake time or baked percentage."
+  },
+  "limitations": "Hidden scenery reconstructed; English panel lettering locally repaired; frame alpha locally bounded; native progress uses repeated source donor texture."
+}

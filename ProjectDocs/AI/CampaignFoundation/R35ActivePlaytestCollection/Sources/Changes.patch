@@ -1,0 +1,402 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/MechanicsPlaytestLog.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/MechanicsPlaytestLog.cs
+@@ -21,6 +21,8 @@
+     {
+         public int schemaVersion=1,droppedAttempts;
+         public string sessionId,source,applicationVersion,contentVersion="MechanicsRoundsR4-RulesR4-PresentationR25",createdUtc;
++        public int campaignStartRound, campaignEndRound, fixtureCompletedThrough;
++        public string collectionContext;
+         public List<MechanicsAttempt> attempts=new List<MechanicsAttempt>();
+         public MechanicsAttempt[] activeAttempts=Array.Empty<MechanicsAttempt>();
+     }
+@@ -41,6 +43,11 @@
+                 source=campaign?(automated?"automated_campaign":"manual_campaign"):(automated?"automated_test":"manual_sandbox"),
+                 applicationVersion=version,createdUtc=DateTime.UtcNow.ToString("O")};
+             if(!string.IsNullOrWhiteSpace(contentVersion))session.contentVersion=contentVersion;
++        }
++        public void SetCampaignContext(int start, int end, int fixtureThrough, string context)
++        {
++            session.campaignStartRound = start; session.campaignEndRound = end;
++            session.fixtureCompletedThrough = fixtureThrough; session.collectionContext = context;
+         }
+         public void Begin(int round,string title,int rules,int moves,string hash,int[] remaining)
+         {
+--- a/Assets/LegendsOfRus/Scripts/Editor/CampaignPlaytestWindow.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/CampaignPlaytestWindow.cs
+@@ -8,19 +8,41 @@
+     {
+         [MenuItem("Legends of Rus/Development/Campaign Playtest Monitor")]
+         public static void ShowMonitor()=>GetWindow<CampaignPlaytestWindow>("Campaign playtest");
++        int firstRound = 31;
++        string launchError;
++        [MenuItem("Legends of Rus/Development/Campaign Active Playtest (Recorded)")]
++        public static void ShowActivePlaytest() => ShowMonitor();
+         void OnInspectorUpdate()=>Repaint();
+         void OnGUI()
+         {
+             EditorGUILayout.LabelField("Campaign · local playtest",EditorStyles.boldLabel);
+-            EditorGUILayout.HelpBox("From Home: Development → Campaign Playtest 31-40 R14 Riverbank (Recorded). Earlier menus remain available. R14 fixture starts with 30 energy, one earned Mace and one Firebird: please play without inventory boosters. Progress is disposable; recordings survive Play Mode.",MessageType.Info);
+             var recorder=Object.FindFirstObjectByType<CampaignPlaytestRecorder>();
+-            if(!recorder){EditorGUILayout.LabelField("No active campaign recording.");if(GUILayout.Button("Open recordings folder"))EditorUtility.RevealInFinder(CampaignPlaytestRecorder.DefaultDirectory);return;}
++            if (!recorder)
++            {
++                EditorGUILayout.HelpBox("Installed campaign · disposable progress, 30 energy, zero starting boosters. From Home in Play Mode, select a block and start. Recordings survive leaving Play Mode. Earlier candidate menus remain available.", MessageType.Info);
++                try
++                {
++                    int[] blocks = CampaignActivePlaytestSetup.AvailableBlocks();
++                    int selected = System.Array.IndexOf(blocks, firstRound);
++                    if (selected < 0) selected = 0;
++                    string[] labels = System.Array.ConvertAll(blocks, n => $"Rounds {n}–{System.Math.Min(n+9, ActiveCampaignContent.Load().LoadChapter(1).levels.Length)}");
++                    firstRound = blocks[EditorGUILayout.Popup("Record block", selected, labels)];
++                    using (new EditorGUI.DisabledScope(!CampaignDevelopmentPreviewMenu.CanOpenActivePlaytest))
++                        if (GUILayout.Button("Start installed-campaign recording"))
++                        { CampaignDevelopmentPreviewMenu.OpenActivePlaytest(firstRound); launchError = null; }
++                }
++                catch (System.Exception e) { launchError = e.Message; }
++                if (!string.IsNullOrEmpty(launchError)) EditorGUILayout.HelpBox(launchError, MessageType.Error);
++                if(GUILayout.Button("Open recordings folder"))EditorUtility.RevealInFinder(CampaignPlaytestRecorder.DefaultDirectory);
++                return;
++            }
++            EditorGUILayout.LabelField($"Recording rounds {recorder.StartRound}–{recorder.EndRound}");
+             var a=recorder.Log.Current;
+             EditorGUILayout.LabelField(recorder.ContentVersion,EditorStyles.wordWrappedLabel);
+             var ui=recorder.GetComponent<CampaignDevelopmentUI>();
+             if(ui && ui.PlaytestComplete)
+             {
+-                EditorGUILayout.HelpBox($"PLAYTEST COMPLETE ({recorder.StartRound}–{recorder.EndRound}). Save or reveal the recording below. Round {recorder.EndRound+1} is unavailable. Replay is optional and will be recorded separately.",MessageType.Info);
++                EditorGUILayout.HelpBox($"PLAYTEST COMPLETE ({recorder.StartRound}–{recorder.EndRound}). Save or reveal the recording below. This recording stops at round {recorder.EndRound}. Replay is optional and will be recorded separately.",MessageType.Info);
+                 if(GUILayout.Button($"Replay round {recorder.EndRound} (optional)"))ui.ReplayCompletedPlaytest();
+                 if(GUILayout.Button("Exit playtest")){ui.ExitCompletedPlaytest();return;}
+             }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/CampaignPlaytestRecorder.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/CampaignPlaytestRecorder.cs
+@@ -24,13 +24,14 @@
+         bool focused=true,paused;
+         float nextSave;
+         string settledHash;
+-        public static CampaignPlaytestRecorder Attach(CampaignDevelopmentUI ui,CampaignSaveSession session,string contentFingerprint,string directory=null,bool automated=false,int endRound=0,int startRound=11)
++        public static CampaignPlaytestRecorder Attach(CampaignDevelopmentUI ui,CampaignSaveSession session,string contentFingerprint,string directory=null,bool automated=false,int endRound=0,int startRound=11,string collectionContext=null,int fixtureCompletedThrough=0)
+         {
+             if(ui==null||session==null||string.IsNullOrWhiteSpace(contentFingerprint))throw new ArgumentException("Explicit preview, session and content fingerprint required.");
+             if(ui.PlaytestRecorder!=null)throw new InvalidOperationException("Preview is already recording.");
+             if(endRound<0 || startRound<1 || (endRound>0 && startRound>endRound))throw new ArgumentOutOfRangeException(nameof(endRound));
+             var r=ui.gameObject.AddComponent<CampaignPlaytestRecorder>();r.session=session;r.EndRound=endRound;r.StartRound=startRound;r.ContentVersion=contentFingerprint;
+             r.Log=new MechanicsPlaytestLog(automated||Application.isBatchMode,Application.version,contentFingerprint,true);
++            r.Log.SetCampaignContext(startRound,endRound,fixtureCompletedThrough,collectionContext);
+             r.storage=new MechanicsPlaytestStorage(r.Log,directory??DefaultDirectory);ui.PlaytestRecorder=r;r.SaveNow();return r;
+         }
+         public static string Fingerprint(string value)
+--- a/Assets/LegendsOfRus/Scripts/Editor/CampaignDevelopmentPreviewMenu.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/CampaignDevelopmentPreviewMenu.cs
+@@ -23,6 +23,17 @@
+         }
+         const string Menu="Legends of Rus/Development/Campaign UI Preview (In Memory)";
+         [MenuItem(Menu,true)] static bool Available()=>Application.isPlaying&&ScreenRouter.Instance!=null&&ScreenRouter.Instance.CurrentScreen==ScreenId.Home&&!ScreenRouter.Instance.HasActiveModalBlocker&&UnityEngine.Object.FindFirstObjectByType<CampaignDevelopmentUI>()==null&&UnityEngine.Object.FindFirstObjectByType<MechanicsSandbox>()==null;
++        public static bool CanOpenActivePlaytest => Available();
++        public static void OpenActivePlaytest(int firstRound)
++        {
++            if (!Available()) throw new InvalidOperationException("Open Home in Play Mode and close other previews first.");
++            var fixture = CampaignActivePlaytestSetup.Create(firstRound);
++            var parent = ScreenRouter.Instance.SafeArea;
++            var previous = parent.Cast<Transform>().Where(t => t.gameObject.activeSelf).Select(t => t.gameObject).ToArray();
++            fixture.Open(parent, () => { foreach (var item in previous) if (item) item.SetActive(true); });
++            foreach (var item in previous) item.SetActive(false);
++            CampaignPlaytestWindow.ShowMonitor();
++        }
+         const string CandidateMenu="Legends of Rus/Development/Campaign Sector 01 Candidate (Rounds 1-20)";
+         [MenuItem(CandidateMenu,true)] static bool CandidateAvailable()=>Available();
+         [MenuItem(CandidateMenu)] static void OpenCandidate()=>OpenPreview(true);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/CampaignDevelopmentUI.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/CampaignDevelopmentUI.cs
+@@ -96,7 +96,7 @@
+             var v=page? page.GetComponentInChildren<ProductionErrorDialogView>(true):null;if(!v)return;
+             int first=PlaytestRecorder.StartRound,last=PlaytestRecorder.EndRound;
+             CustomDialog(v,En?"PLAYTEST COMPLETE":"ТЕСТ ЗАВЕРШЁН",
+-                En?$"Rounds {first}–{last} complete.\nSave / Reveal: Playtest Monitor.\nReplay is optional.\nRound {last+1} is not available.":$"Раунды {first}–{last} пройдены.\nЗапись — в мониторе теста.\nПовтор по желанию.\nРаунд {last+1} недоступен.",
++                En?$"Rounds {first}–{last} complete.\nSave / Reveal: Playtest Monitor.\nReplay is optional.\nThis recording ends at round {last}.":$"Раунды {first}–{last} пройдены.\nЗапись — в мониторе теста.\nПовтор по желанию.\nЭтот тест заканчивается на раунде {last}.",
+                 En?$"REPLAY ROUND {last}":$"ПОВТОРИТЬ {last}",En?"EXIT PLAYTEST":"ВЫЙТИ ИЗ ТЕСТА");
+             ProductionPreLevelSourceControls.Place(v.Description.rectTransform,94,255,508,230);
+             v.Emblem.gameObject.SetActive(false);v.Support.gameObject.SetActive(true);v.SupportLabel.enabled=true;
+@@ -108,7 +108,7 @@
+         public void ReplayCompletedPlaytest()
+         {
+             if(!PlaytestComplete||coordinator.State!=CampaignGameplayState.Ready)return;
+-            Run(()=>Read()&&ShowSelectedRound());
++            Run(()=>session.SelectRound(1,PlaytestRecorder.EndRound).Committed&&Read()&&ShowSelectedRound());
+         }
+         public void ExitCompletedPlaytest()
+         {
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/CampaignActivePlaytestSetup.cs
+@@ -0,0 +1,112 @@
++#if UNITY_EDITOR
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using UnityEngine;
++using LegendsOfRus.ContentPipeline;
++using LegendsOfRus.SaveCore;
++
++namespace LegendsOfRus
++{
++    // Editor-only, opt-in fixture. Owns only an in-memory journal; never imports a user's save.
++    public sealed class CampaignActivePlaytestSetup
++    {
++        sealed class MemoryStore : ISaveJournalStore
++        {
++            readonly Dictionary<string, string> values = new Dictionary<string, string>();
++            Dictionary<string, string> durable = new Dictionary<string, string>();
++            public bool TryRead(string key, out string value) => values.TryGetValue(key, out value);
++            public void Write(string key, string value) => values[key] = value;
++            public void Delete(string key) => values.Remove(key);
++            public void Flush() => durable = new Dictionary<string, string>(values);
++            public void Reload() { values.Clear(); foreach (var pair in durable) values.Add(pair.Key, pair.Value); }
++        }
++
++        readonly MemoryStore store = new MemoryStore();
++        readonly CampaignDefinition definition;
++        readonly ValidatedCampaignCatalog catalog;
++        public CampaignSaveSession Session { get; private set; }
++        public int StartRound { get; }
++        public int EndRound { get; }
++        public string Fingerprint { get; }
++        public const string Context = "CampaignActive; disposable earlier-progress fixture; 30 energy; zero starting boosters";
++
++        static string Read(string name)
++        {
++            var asset = Resources.Load<TextAsset>(ActiveCampaignContent.ResourceRoot + name);
++            if (!asset) throw new InvalidOperationException("Missing installed campaign resource: " + name);
++            return asset.text;
++        }
++
++        public static int[] AvailableBlocks()
++        {
++            var levels = ActiveCampaignContent.Load().LoadChapter(1).levels;
++            return levels.Where(l => (l.levelId - 1) % 10 == 0).Select(l => l.levelId).ToArray();
++        }
++
++        public static CampaignActivePlaytestSetup Create(int firstRound) => new CampaignActivePlaytestSetup(
++            firstRound, Read("definition"), Read("levels"), Read("story"), Read("story_ru"), Read("story_en"));
++
++        // Explicit inputs also permit validation tests without mutating installed resources.
++        public CampaignActivePlaytestSetup(int firstRound, string definitionJson, string levelsJson,
++            string storyJson, string russianJson, string englishJson)
++        {
++            definition = JsonUtility.FromJson<CampaignDefinition>(definitionJson);
++            catalog = new ValidatedCampaignCatalog(definition);
++            if (!catalog.TryAdd(new CampaignPackageInput { ChapterId = 1, ContentRevision = definition.ContentRevision,
++                LevelsJson = levelsJson, StoryJson = storyJson, RussianJson = russianJson, EnglishJson = englishJson }, out var errors))
++                throw new ArgumentException("Invalid installed campaign: " + string.Join("; ", errors));
++            var levels = catalog.LoadChapter(1).levels;
++            int last = levels.Max(l => l.levelId);
++            if (firstRound < 1 || (firstRound - 1) % 10 != 0 || firstRound > last)
++                throw new ArgumentOutOfRangeException(nameof(firstRound));
++            StartRound = firstRound; EndRound = Math.Min(last, firstRound + 9);
++            for (int n = 1; n <= EndRound; n++)
++                if (!levels.Any(l => l.levelId == n)) throw new ArgumentException("Missing campaign round " + n);
++            Fingerprint = "CampaignActive-" + CampaignPlaytestRecorder.Fingerprint(
++                definitionJson + "\n" + levelsJson + "\n" + storyJson + "\n" + russianJson + "\n" + englishJson);
++
++            var initial = new PlayerSaveData { energy = 30, energyMax = 30,
++                boosterMace = 0, boosterFirebird = 0, boosterLivingLight = 0, boosterSeaPearl = 0,
++                lastEnergyUtcTicks = DateTime.UtcNow.Ticks };
++            var fixture = CampaignPlayerSaveCodec.FromLegacy(JsonUtility.ToJson(initial), definition);
++            fixture.player.selectedChapter = 1; fixture.player.selectedLevel = firstRound;
++            fixture.player.levelProgress = Enumerable.Range(1, firstRound - 1).Select(n => new LevelProgressData {
++                chapterId = 1, levelId = n, attempts = 1, completions = 1, bestStars = 1, rewardClaimed = true
++            }).ToList();
++            CampaignPlayerSaveCodec.RefreshDerivedProgress(fixture.player);
++            var journal = new SaveJournalRepository(store, new SaveEnvelopeCodec(), new PlayerSavePayloadCodec(),
++                CampaignSaveSession.DevelopmentKeys(), CampaignPlayerSaveCodec.PayloadVersion);
++            var written = journal.TrySave(CampaignPlayerSaveCodec.Encode(fixture, definition), CampaignPlayerSaveCodec.PayloadVersion);
++            if (!written.Success) throw new InvalidOperationException(written.DiagnosticCode);
++            Session = Reopen();
++            // No simulated starts/wins, rewards or recorder events during fixture setup.
++            // At round 1 retain the intro; later blocks acknowledge only prior fixture scenes.
++            if (firstRound > 1)
++            {
++                while (true)
++                {
++                    if (!Session.TryGetPendingStory(out var pending, out var error)) throw new InvalidOperationException(error);
++                    if (pending == null) break;
++                    var acknowledged = Session.AcknowledgeStory(pending.Key);
++                    if (!acknowledged.Committed) throw new InvalidOperationException(acknowledged.Diagnostic);
++                }
++            }
++        }
++
++        public CampaignSaveSession Reopen()
++        {
++            store.Reload();
++            return Session = new CampaignSaveSession(store, definition, catalog);
++        }
++
++        public CampaignDevelopmentUI Open(RectTransform parent, Action onExit, string recordingDirectory = null, bool automated = false)
++        {
++            var ui = CampaignDevelopmentUI.Open(parent, Session, Reopen, onExit);
++            CampaignPlaytestRecorder.Attach(ui, Session, Fingerprint, recordingDirectory, automated, EndRound, StartRound,
++                Context, StartRound - 1);
++            return ui;
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignActivePlaytestTests.cs
+@@ -0,0 +1,156 @@
++#if UNITY_EDITOR
++using System;
++using System.Collections;
++using System.IO;
++using System.Linq;
++using NUnit.Framework;
++using LegendsOfRus.GameplayCore;
++using UnityEngine;
++using UnityEngine.TestTools;
++
++namespace LegendsOfRus.Tests.CampaignPlayMode
++{
++    public sealed class CampaignActivePlaytestTests
++    {
++        GameObject root, ownedState;
++        string folder, liveBefore;
++        [SetUp] public void SetUp()
++        {
++            string isolated = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            Assert.That(isolated, Is.Not.Null.And.Not.Empty);
++            Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar), Is.True);
++            if (!GameState.Instance) ownedState = new GameObject("CollectionIsolationState", typeof(GameState));
++            liveBefore = PlayerStateWithoutClockTick();
++            folder = Path.Combine(Path.GetTempPath(), "ActiveCollection-"+Guid.NewGuid().ToString("N"));
++        }
++        [UnityTearDown] public IEnumerator TearDown()
++        {
++            if (root) UnityEngine.Object.Destroy(root);
++            yield return null;
++            string liveAfter = PlayerStateWithoutClockTick();
++            if (ownedState) UnityEngine.Object.Destroy(ownedState);
++            yield return null;
++            if (Directory.Exists(folder)) Directory.Delete(folder,true);
++            Assert.That(liveAfter, Is.EqualTo(liveBefore), "Preview must not change normal progress, balances or preferences");
++        }
++        static string PlayerStateWithoutClockTick()
++        {
++            var copy = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
++            // GameState's normal five-second full-energy clock update continues independently.
++            // Exclude only its timestamp; energy, currencies, inventory, preferences and progress stay checked.
++            copy.lastEnergyUtcTicks = 0;
++            return JsonUtility.ToJson(copy);
++        }
++        static string Read(string name) => Resources.Load<TextAsset>("CampaignActive/"+name).text;
++        static CampaignActivePlaytestSetup FromTexts(int first, string story = null) => new CampaignActivePlaytestSetup(first,
++            Read("definition"),Read("levels"),story??Read("story"),Read("story_ru"),Read("story_en"));
++        static MechanicsPlaytestSession Export(string path) => JsonUtility.FromJson<MechanicsPlaytestSession>(File.ReadAllText(path));
++
++        [TestCase(1)][TestCase(11)][TestCase(21)][TestCase(31)][TestCase(41)][TestCase(51)][TestCase(61)][TestCase(71)][TestCase(81)][TestCase(91)]
++        [TestCase(101)][TestCase(111)][TestCase(121)][TestCase(131)][TestCase(141)][TestCase(151)][TestCase(161)][TestCase(171)][TestCase(181)][TestCase(191)]
++        public void EachInstalledBlockHasIsolatedExactContentFixtureAndNoMeasuredRuns(int first)
++        {
++            var fixture = CampaignActivePlaytestSetup.Create(first);
++            Assert.That(CampaignActivePlaytestSetup.AvailableBlocks(), Does.Contain(first));
++            Assert.That(fixture.EndRound, Is.EqualTo(first+9));
++            var s=fixture.Session;
++            Assert.That(s.TryLoad(out var save,out _),Is.True);
++            Assert.That(save.player.energy,Is.EqualTo(30));
++            Assert.That(save.player.boosterMace+save.player.boosterFirebird+save.player.boosterLivingLight+save.player.boosterSeaPearl,Is.Zero);
++            Assert.That(save.runSequence,Is.Zero);
++            Assert.That(save.player.levelProgress.Count,Is.EqualTo(first-1));
++            Assert.That(save.player.selectedLevel,Is.EqualTo(first));
++            Assert.That(s.ResolveSelectedRound().levelId,Is.EqualTo(first));
++            Assert.That(JsonUtility.ToJson(s.ResolveSelectedRound()),Is.EqualTo(JsonUtility.ToJson(ChapterLevelCatalog.Find(ActiveCampaignContent.Load(),1,first))));
++            Assert.That(s.TryGetPendingStory(out var story,out _),Is.True);
++            if(first==1) Assert.That(story.Scene.id,Is.EqualTo("chapter01.intro")); else Assert.That(story,Is.Null);
++            Assert.That(fixture.Reopen().TryLoad(out var reloaded,out _),Is.True);
++            Assert.That(JsonUtility.ToJson(reloaded),Is.EqualTo(JsonUtility.ToJson(save)));
++        }
++        [TestCase(0)][TestCase(2)][TestCase(201)] public void UnavailableOrMisalignedBlockRejected(int first) =>
++            Assert.Throws<ArgumentOutOfRangeException>(()=>CampaignActivePlaytestSetup.Create(first));
++        [Test] public void MalformedContentRejectedWithoutFallback() => Assert.Throws<ArgumentException>(()=>FromTexts(31,"{}"));
++        [Test] public void FingerprintIncludesDefinitionAndAllFourInstalledFiles()
++        {
++            var a=FromTexts(31);
++            Assert.That(a.Fingerprint,Is.EqualTo("CampaignActive-"+CampaignPlaytestRecorder.Fingerprint(string.Join("\n",new[]{Read("definition"),Read("levels"),Read("story"),Read("story_ru"),Read("story_en")}))));
++            var b=new CampaignActivePlaytestSetup(31,Read("definition")+"\n",Read("levels"),Read("story"),Read("story_ru"),Read("story_en"));
++            Assert.That(b.Fingerprint,Is.Not.EqualTo(a.Fingerprint));
++        }
++        CampaignDevelopmentUI Open(CampaignActivePlaytestSetup setup)
++        {
++            root=new GameObject("ActiveCollection",typeof(RectTransform),typeof(Canvas));
++            return setup.Open((RectTransform)root.transform,()=>{},folder,true);
++        }
++        [UnityTest] public IEnumerator RecordedBlockUsesCurrentRulesArtAndPersistsInterruptedAttemptOnClose()
++        {
++            var f=CampaignActivePlaytestSetup.Create(31);var ui=Open(f);var r=ui.PlaytestRecorder;
++            string path=r.CheckpointPath;var empty=Export(path);
++            Assert.That(empty.attempts,Is.Empty);Assert.That(empty.activeAttempts,Is.Empty);
++            Assert.That(empty.campaignStartRound,Is.EqualTo(31));Assert.That(empty.campaignEndRound,Is.EqualTo(40));
++            Assert.That(empty.fixtureCompletedThrough,Is.EqualTo(30));Assert.That(empty.collectionContext,Does.Contain("disposable"));
++            Assert.That(empty.contentVersion,Is.EqualTo(f.Fingerprint));
++            ui.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();yield return null;
++            Assert.That(ui.Board.RuleVersion,Is.EqualTo(Match3Board.CurrentGameplayRules));Assert.That(ui.Board.UsesCurrentBoardArt,Is.True);
++            Assert.That(r.Log.Current.committedAttempt,Is.EqualTo(1));Assert.That(r.Log.Current.campaignRun,Is.EqualTo(1));
++            f.Session.TryLoad(out var before,out _);Assert.That(before.player.energy,Is.EqualTo(29));
++            r.Rate("goals","clear");UnityEngine.Object.Destroy(root);yield return null;
++            var saved=Export(path);Assert.That(saved.source,Is.EqualTo("automated_campaign"));Assert.That(saved.activeAttempts,Is.Empty);
++            Assert.That(saved.attempts.Count,Is.EqualTo(1));Assert.That(saved.attempts[0].outcome,Is.EqualTo("interrupted"));
++            Assert.That(saved.attempts[0].round,Is.EqualTo(31));Assert.That(saved.attempts[0].goalClarity,Is.EqualTo("clear"));
++            Assert.That(f.Reopen().TryLoad(out var after,out _),Is.True);
++            Assert.That(after.player.energy,Is.EqualTo(before.player.energy));Assert.That(after.player.gold,Is.EqualTo(before.player.gold));
++        }
++        // Service-level progress fixture before the final round; not player outcomes or recording evidence.
++        static void AdvanceFixture(CampaignActivePlaytestSetup fixture)
++        {
++            var s=fixture.Session;
++            for(int n=fixture.StartRound;n<fixture.EndRound;n++)
++            {
++                Assert.That(s.SelectRound(1,n).Committed,Is.True);s.TryLoad(out var save,out _);
++                Assert.That(s.StartRound(save.runSequence,DateTime.UtcNow.Ticks).Committed,Is.True);
++                var l=s.ResolveSelectedRound();s.TryLoad(out save,out _);
++                Assert.That(s.FinishRound(save.runSequence,true,4000,l.goals.Select(g=>g.target).ToArray()).Committed,Is.True);
++                Assert.That(s.AcknowledgeResult(save.runSequence,true).Committed,Is.True);
++                while(s.TryGetPendingStory(out var story,out _)&&story!=null)Assert.That(s.AcknowledgeStory(story.Key).Committed,Is.True);
++            }
++        }
++        [Serializable] sealed class Witness {public MechanicsReplayCommand[] commands;}
++        [UnityTest,Timeout(180000)] public IEnumerator Round40StopsBefore41AndReplayStays40() {yield return Terminal(31);}
++        [UnityTest,Timeout(180000)] public IEnumerator Round200StopsWithoutChapterFinaleAndReplayStays200() {yield return Terminal(191);}
++        IEnumerator Terminal(int first)
++        {
++            var f=CampaignActivePlaytestSetup.Create(first);AdvanceFixture(f);var ui=Open(f);var r=ui.PlaytestRecorder;
++            Assert.That(r.Log.CompletedCount,Is.Zero);
++            ui.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();yield return null;
++            var witness=JsonUtility.FromJson<Witness>(File.ReadAllText(Path.Combine(Application.dataPath,$"../ProjectDocs/AI/CampaignFoundation/R33OrchardFieldCheckpoint/QA/Verify01/Active/Journey/Round{f.EndRound}_Attempt1_Witness.json")));
++            foreach(var a in witness.commands)
++            {
++                var board=ui.Board;Assert.That(board,Is.Not.Null);Assert.That(board.BoardReplayToken,Is.EqualTo(a.BeforeToken));
++                Assert.That(a.Tap?board.TapCell(a.X,a.Y):board.SwipeCell(a.X,a.Y,new Vector2Int(a.ToX-a.X,a.ToY-a.Y)),Is.True);
++                float until=Time.realtimeSinceStartup+20;while(ui.Board&&ui.Board.HasActiveCommand&&Time.realtimeSinceStartup<until)yield return null;
++                Assert.That(Time.realtimeSinceStartup,Is.LessThan(until));yield return null;
++            }
++            Assert.That(ui.VisiblePage,Is.EqualTo("Victory"));r.Rate("difficulty","fair");
++            ui.GetComponentInChildren<ProductionVictoryView>().ContinueButton.onClick.Invoke();yield return null;
++            Assert.That(ui.VisiblePage,Is.EqualTo("Dialogue"));
++            int guard=0;while(ui.VisiblePage=="Dialogue"){Assert.That(++guard,Is.LessThan(5));ui.GetComponentInChildren<ProductionDialogueView>().Continue.onClick.Invoke();}
++            Assert.That(ui.PlaytestComplete,Is.True);Assert.That(ui.Board,Is.Null);
++            f.Session.TryLoad(out var completed,out _);Assert.That(completed.player.acknowledgedChapterCompletions,Is.Empty);
++            Assert.That(Export(r.CheckpointPath).attempts.Count,Is.EqualTo(1));
++            ui.ReplayCompletedPlaytest();Assert.That(ui.VisiblePage,Is.EqualTo("PreLevel"));
++            f.Session.TryLoad(out var replaySelected,out _);Assert.That(replaySelected.player.selectedLevel,Is.EqualTo(f.EndRound));
++            Assert.That(replaySelected.player.energy,Is.EqualTo(completed.player.energy));Assert.That(replaySelected.player.gold,Is.EqualTo(completed.player.gold));
++            ui.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();yield return null;
++            Assert.That(r.Log.Current.round,Is.EqualTo(f.EndRound));Assert.That(r.Log.Current.committedAttempt,Is.EqualTo(2));
++            f.Session.TryLoad(out var replay,out _);Assert.That(replay.player.energy,Is.EqualTo(completed.player.energy-1));
++            string path=r.CheckpointPath;UnityEngine.Object.Destroy(root);yield return null;
++            var export=Export(path);Assert.That(export.attempts.Count,Is.EqualTo(2));Assert.That(export.attempts[0].outcome,Is.EqualTo("won"));
++            Assert.That(export.attempts[0].difficulty,Is.EqualTo("fair"));Assert.That(export.attempts[1].outcome,Is.EqualTo("interrupted"));
++            Assert.That(export.attempts.All(a=>a.round==f.EndRound),Is.True);
++            string capture=Environment.GetEnvironmentVariable("LOR_JOURNEY_CAPTURE_DIR");
++            if(!string.IsNullOrEmpty(capture)){Directory.CreateDirectory(capture);File.Copy(path,Path.Combine(capture,$"AutomatedTerminal{f.EndRound}.json"),true);}
++        }
++    }
++}
++#endif

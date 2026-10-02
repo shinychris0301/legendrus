@@ -1,0 +1,574 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 7
++  Revision: 8
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -361,6 +361,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.35
+   BottomProtectedFraction: 0.07
++  ProtectedDetailScale: 1
+ --- !u!1 &150107660985454550
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1316,6 +1317,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &952677146496982193
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1653,6 +1655,97 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &1161311944303576913
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4979151724744525031}
++  - component: {fileID: 1310560526719323714}
++  - component: {fileID: 8237479846531274263}
++  - component: {fileID: 5950164451684748293}
++  m_Layer: 5
++  m_Name: GoalsHeadingPlaque
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &4979151724744525031
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1161311944303576913}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5447443005004833745}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 185.5, y: -632}
++  m_SizeDelta: {x: 570, y: 44}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &1310560526719323714
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1161311944303576913}
++  m_CullTransparentMesh: 1
++--- !u!114 &8237479846531274263
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1161311944303576913}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 5c8c1b08f4294b49699692f5cad09807, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!114 &5950164451684748293
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1161311944303576913}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
++  TopProtectedFraction: 0.25
++  BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 0.65
+ --- !u!1 &1249009250160669787
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1818,6 +1911,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &1301625925730342164
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2345,7 +2439,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -2394,8 +2488,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &2128151705636373080
+ GameObject:
+@@ -2848,8 +2942,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 143, y: -630}
+-  m_SizeDelta: {x: 1310, y: 90}
++  m_AnchoredPosition: {x: 198, y: -635}
++  m_SizeDelta: {x: 1090, y: 76}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8639522157215161736
+ CanvasRenderer:
+@@ -2872,7 +2966,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -2881,8 +2975,8 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 60
+-    m_FontStyle: 0
++    m_FontSize: 56
++    m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+     m_MaxSize: 60
+@@ -2922,8 +3016,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &2687291484451137771
+ GameObject:
+@@ -3461,8 +3555,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 130, y: -622}
+-  m_SizeDelta: {x: 681, y: 247}
++  m_AnchoredPosition: {x: 149, y: -648}
++  m_SizeDelta: {x: 643, y: 221}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1845561508370703840
+ CanvasRenderer:
+@@ -3485,7 +3579,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_Color: {r: 0.7254902, g: 0.70980394, b: 0.6627451, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -3516,6 +3610,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 0.5
+ --- !u!1 &3225398997983378583
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4985,7 +5080,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 42, y: -76}
+-  m_SizeDelta: {x: 480, y: 40}
++  m_SizeDelta: {x: 480, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8207354783645223317
+ CanvasRenderer:
+@@ -5008,7 +5103,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -5017,8 +5112,8 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 32
+-    m_FontStyle: 0
++    m_FontSize: 38
++    m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+     m_MaxSize: 40
+@@ -5057,8 +5152,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &4865032346803570510
+ GameObject:
+@@ -5818,7 +5913,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -5868,8 +5963,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &5330107227402259544
+ GameObject:
+@@ -6355,7 +6450,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -6404,8 +6499,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &5861468007760376198
+ GameObject:
+@@ -6617,6 +6712,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &6322581650060253251
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6707,6 +6803,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &6440087134281328992
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -6799,6 +6896,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!114 &608246672335570325
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -7026,7 +7124,7 @@
+   m_FontData:
+     m_Font: {fileID: 0}
+     m_FontSize: 152
+-    m_FontStyle: 0
++    m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+     m_MaxSize: 152
+@@ -7081,7 +7179,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionVictoryTitleLettering
+   ArcHeight: 0
+-  BevelWidth: 1.2
++  BevelWidth: 0.85
+   BottomColor:
+     serializedVersion: 2
+     rgba: 4279589784
+@@ -7491,6 +7589,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &7143563737941587432
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -8025,6 +8124,7 @@
+   - {fileID: 6053909361932615193}
+   - {fileID: 8001486373292923289}
+   - {fileID: 3376402116492217271}
++  - {fileID: 4979151724744525031}
+   - {fileID: 901923114799496143}
+   - {fileID: 8845126027608843221}
+   - {fileID: 6459748209862057828}
+@@ -8138,6 +8238,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 1
+ --- !u!1 &7951267215725845335
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -9064,6 +9165,7 @@
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailPanelFit
+   TopProtectedFraction: 0.25
+   BottomProtectedFraction: 0.25
++  ProtectedDetailScale: 0.78
+ --- !u!1 &8621886943560730545
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -9101,7 +9203,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 42, y: -50}
+-  m_SizeDelta: {x: 480, y: 42}
++  m_SizeDelta: {x: 480, y: 48}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4645430481062124632
+ CanvasRenderer:
+@@ -9124,7 +9226,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -9133,8 +9235,8 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 34
+-    m_FontStyle: 0
++    m_FontSize: 38
++    m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+     m_MaxSize: 40
+@@ -9173,8 +9275,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &8675506129275146014
+ GameObject:
+@@ -9690,7 +9792,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 0.8862745, b: 0.63529414, a: 1}
++  m_Color: {r: 1, g: 0.9254902, b: 0.7529412, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -9739,8 +9841,8 @@
+   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+-  m_EffectColor: {r: 0.039215688, g: 0.023529412, b: 0.007843138, a: 0.8627451}
+-  m_EffectDistance: {x: 1, y: -1}
++  m_EffectColor: {r: 0.019607844, g: 0.03529412, b: 0.05490196, a: 1}
++  m_EffectDistance: {x: 0.6, y: -0.6}
+   m_UseGraphicAlpha: 1
+ --- !u!1 &9108378462598117800
+ GameObject:
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,7 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R7 aligns native offer faces, nested goals and footer/booster spacing; independent Scenario
++            // R8 refines goal-frame detail scale, heading plaque and live typography; independent Scenario
+             // surfaces and live lettering retain all prior actions and references.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailPanelFit.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailPanelFit.cs
+@@ -10,11 +10,13 @@
+     {
+         [Range(0,.45f)]public float TopProtectedFraction=.25f;
+         [Range(0,.45f)]public float BottomProtectedFraction=.25f;
++        [Range(.25f,1)]public float ProtectedDetailScale=1;
+         public override void ModifyMesh(VertexHelper vh)
+         {
+             var image=graphic as Image;if(!IsActive()||image==null||image.sprite==null)return;
+             Rect r=image.GetPixelAdjustedRect();Vector2 native=image.sprite.rect.size;
+             float s=Mathf.Min(r.width/native.x,r.height/native.y);
++            s*=Mathf.Clamp(ProtectedDetailScale,.25f,1);
+             if(s<=0)return;
+             float ex=native.x*.15f,cx=native.x*.09f;
+             float bottom=Mathf.Clamp(BottomProtectedFraction,0,.45f),top=Mathf.Clamp(TopProtectedFraction,0,.45f);
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -86,12 +86,23 @@
+             titleFit.TopProtectedFraction=.35f;titleFit.BottomProtectedFraction=.07f;
+             ProductionVictoryView.PlaceText(v.Title,153,460,635,92,76);
+             ProductionVictoryView.PlaceText(v.Subtitle,149,550,643,45,34);
+-            Gold(v.Title,1.2f);Gold(v.Subtitle,.65f);
++            v.Title.fontStyle=FontStyle.Bold;
++            Gold(v.Title,.85f);Gold(v.Subtitle,.65f);
+             // Enclose the heading and inset separately, behind all live goal content.
+-            SetPanel(v,"GoalsOuterPanel","goals_r2",130,622,681,247,true);
++            SetPanel(v,"GoalsOuterPanel","goals_r2",149,648,643,221,true);
+             v.Body.Find("GoalsOuterPanel").SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
++            var outer=v.Body.Find("GoalsOuterPanel").GetComponent<Image>();
++            outer.color=new Color32(185,181,169,255);
++            outer.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.5f;
+             SetPanel(v,"GoalsPanel","goals_r2",169,680,603,179,true);
+-            ProductionVictoryView.PlaceText(v.GoalsHeading,143,630,655,45,30);
++            v.Body.Find("GoalsPanel").GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.78f;
++            SetPanel(v,"GoalsHeadingPlaque","nameplate_r2",185.5f,632,570,44,true);
++            var plaque=v.Body.Find("GoalsHeadingPlaque");
++            plaque.SetAsLastSibling();
++            plaque.SetSiblingIndex(v.GoalsHeading.transform.GetSiblingIndex());
++            plaque.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.65f;
++            ProductionVictoryView.PlaceText(v.GoalsHeading,198,635,545,38,28);
++            ClearLabel(v.GoalsHeading,true);
+             // Retain the live round score as metadata, but the reference's hierarchy gives
+             // this space to the failed-goal icons. It is not a decorative sample score.
+             v.Score.gameObject.SetActive(false);
+@@ -126,6 +137,7 @@
+                 var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit==null)plate.gameObject.AddComponent<ProductionFailPanelFit>();
+                 plate.transform.SetSiblingIndex(1);
+                 ProductionVictoryView.PlaceText(v.BoosterLabels[i],3,182,188,48,20);
++                ClearLabel(v.BoosterLabels[i],false);
+                 v.BoosterLabels[i].transform.SetAsLastSibling();
+             }
+         }
+@@ -148,11 +160,12 @@
+             v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,12,276,37,30);
+             v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,27,276,47,22);
+             v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
+-            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,21,17);
++            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,24,19);
+             var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),117,86,26,26);gem.preserveAspect=true;
+             EnsureLabel(v,paid.transform,"Price",151,86,54,26,24).text="—";
+             var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;
+-            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,76,240,20,16);
++            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,76,240,24,19);
++            ClearLabel(v.PaidOfferStatus,true);ClearLabel(v.AdOfferStatus,true);
+             var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,104,44,22,22);play.text="▶";
+             v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);
+         }
+@@ -222,6 +235,14 @@
+             if(fit!=null)fit.enabled=fitted;
+             if(name=="BoostersPanel")image.transform.SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
+         }
++        static void ClearLabel(Text text,bool bold)
++        {
++            text.fontStyle=bold?FontStyle.Bold:FontStyle.Normal;
++            text.color=new Color32(255,236,192,255);
++            // A compact dark edge supports small live glyphs without a broad glow.
++            var shadow=text.GetComponent<Shadow>();
++            if(shadow!=null){shadow.enabled=true;shadow.effectColor=new Color32(5,9,14,255);shadow.effectDistance=new Vector2(.6f,-.6f);}
++        }
+         static void Gold(Text text,float bevel)
+         {
+             var home=Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>();
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=7;
++        public const int CurrentRevision=8;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -275,6 +275,10 @@
+                 Assert.That(rect.width/rect.height,Is.EqualTo(offerArt.sprite.rect.width/offerArt.sprite.rect.height).Within(.001f),"Whole offer art must retain native aspect.");
+             }
+             Assert.That(Bounds(v.AdOfferTitle.rectTransform,camera).Overlaps(Bounds(v.AdOfferStatus.rectTransform,camera)),Is.False,"Ad title/status need separate lines.");
++            Rect plaque=Bounds(v.Body.Find("GoalsHeadingPlaque") as RectTransform,camera);
++            Rect goalHeading=Bounds(v.GoalsHeading.rectTransform,camera);
++            Assert.That(plaque.Contains(goalHeading.min)&&plaque.Contains(goalHeading.max),Is.True,"Goal heading must fit its plaque.");
++            Assert.That(plaque.Overlaps(goalPanel),Is.False,"Heading plaque must not cover the goal inset.");
+             Rect outerGoals=Bounds(v.Body.Find("GoalsOuterPanel") as RectTransform,camera);
+             Assert.That(outerGoals.Contains(goalPanel.min)&&outerGoals.Contains(goalPanel.max),Is.True,"Goal inset must stay inside heading enclosure.");
+             foreach(var label in v.BoosterLabels)Assert.That(Bounds(label.rectTransform,camera).yMin,Is.GreaterThan(mainPanel.yMin+mainPanel.height*.055f),"Booster label must clear bottom carving.");
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(7));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(8));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+@@ -55,6 +55,7 @@
+                     ProductionFailRuntime.BuildInto((RectTransform)instance.transform);
+                     var view=instance.GetComponent<ProductionFailView>();
+                     Assert.That(instance.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(n));
++                    Assert.That(view.Body.Find("GoalsHeadingPlaque").GetSiblingIndex(),Is.LessThan(view.GoalsHeading.transform.GetSiblingIndex()),"Plaque must remain behind live heading on repeated refresh.");
+                     Assert.That(view.Body.Find("BoostersPanel").GetSiblingIndex(),Is.LessThan(view.BoostersHeading.transform.GetSiblingIndex()),"Panel cannot cover live booster heading on repeated refresh.");
+                 }
+             }

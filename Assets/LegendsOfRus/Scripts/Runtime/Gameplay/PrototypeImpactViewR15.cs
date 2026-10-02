@@ -1,0 +1,213 @@
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public sealed partial class PrototypeImpactView
+    {
+        // R16: dedicated additive energy, staged silhouettes and persistent wakes. No new textures,
+        // gameplay RNG, screen flash, camera motion or allocations per particle.
+        void PresentRichBooster(GameplayMotionEvent m)
+        {
+            var p=m.Primary;
+            if(m.BoosterKind==GameplayBoosterKind.SeaPearl)
+            {Add(new BoardPosition(board.ColumnCount/2,board.RowCount/2),new Color(.25f,.8f,1),Shape.Renewal,1,0,.72f);return;}
+            Add(p,Gold,Shape.Charge,1,0,.18f);
+            if(m.BoosterKind==GameplayBoosterKind.Firebird)
+                Add(p,new Color(1,.42f,.07f),Shape.Phoenix,2,.18f,.60f);
+            else if(m.BoosterKind==GameplayBoosterKind.LivingLight)
+                Add(p,new Color(.25f,.72f,1),Shape.Radiance,1,.18f,.6f);
+            else
+            {
+                Add(p,Gold,m.BoosterKind==GameplayBoosterKind.BogatyrMaceColumn?Shape.Column:Shape.Row,1,.18f,.52f);
+                Add(p,Gold,Shape.Blast,.85f,.18f,.45f);
+            }
+        }
+        bool RichEffect(VertexHelper h,Rect r,Effect e,Vector2 p,float u,float t)
+        {
+            float fade=1-Mathf.SmoothStep(0,1,Mathf.Clamp01((t-.12f)/.88f)),age=Time.unscaledTime-e.Born;
+            // R19 artwork owns the main silhouette. Keep only a compact supporting contact light.
+            if(MechanicsSequenceArt.Available && (e.Shape==Shape.Charge||e.Shape==Shape.Row||e.Shape==Shape.Column||e.Shape==Shape.Contact||e.Shape==Shape.Blast&&e.Color.r>.8f))
+            {Star(h,r,p,u*.16f,.35f,Alpha(Color.Lerp(e.Color,Color.white,.65f),.65f*fade*fade));return true;}
+            if(e.Shape==Shape.Charge)
+            {
+                float radius=u*e.Radius*(1.05f-.78f*t);
+                for(int i=0;i<8;i++)
+                {
+                    float a=i*Mathf.PI/4+t*2;Vector2 q=p+Direction(a)*radius;
+                    Trail(h,r,q+Direction(a-.4f)*u*.45f,q,u*.11f,Alpha(Gold,.8f));
+                    Star(h,r,q,u*.12f,a,Alpha(Color.white,.9f));
+                }
+                FacetedLight(h,r,p,u*(.25f+.55f*t),Alpha(e.Color,t*.7f));
+                return true;
+            }
+            if(e.Shape==Shape.Link)
+            {
+                Vector2 target=new Vector2(r.xMin+(e.End.x+.5f)*r.width/board.ColumnCount,r.yMax-(e.End.y+.5f)*r.height/board.RowCount);
+                Vector2 head=Vector2.Lerp(p,target,Mathf.Clamp01(t*2.8f)),delta=head-p,side=new Vector2(-delta.y,delta.x).normalized;
+                Vector2 previous=p;
+                for(int i=1;i<=12;i++)
+                {
+                    float f=i/12f;Vector2 q=p+delta*f+side*Mathf.Sin(f*Mathf.PI)*Mathf.Sin(i*2.4f+t*25)*u*.18f;
+                    Stroke(h,r,previous,q,u*.085f,Alpha(e.Color,.22f*fade));
+                    Stroke(h,r,previous,q,u*.022f,Alpha(new Color(.8f,.95f,1),fade));previous=q;
+                }
+                FacetedLight(h,r,head,u*.35f,Alpha(e.Color,fade*.75f));Star(h,r,head,u*.25f,t*4,Alpha(Color.white,fade));return true;
+            }
+            if(e.Shape==Shape.Flight)
+            {
+                Vector2 end=new Vector2(r.xMin+(e.End.x+.5f)*r.width/board.ColumnCount,r.yMax-(e.End.y+.5f)*r.height/board.RowCount);
+                float travel=t*t*(3-2*t);
+                Vector2 last=p;
+                for(int i=0;i<=16;i++)
+                {
+                    float f=Mathf.Max(0,travel-.30f+i*.30f/16);Vector2 q=Vector2.Lerp(p,end,f)+Vector2.up*Mathf.Sin(f*Mathf.PI)*u*.65f;
+                    if(i>0){float intensity=i/16f;Stroke(h,r,last,q,u*.16f*intensity,Alpha(new Color(1,.32f,.035f),.30f*intensity));Stroke(h,r,last,q,u*.045f*intensity,Alpha(Gold,.85f*intensity));}
+                    last=q;
+                }
+                FacetedLight(h,r,last,u*.6f,Alpha(Gold,.6f));return true;
+            }
+            if(e.Shape==Shape.Target)
+            {for(int corner=0;corner<4;corner++){float angle=Mathf.PI*.25f+corner*Mathf.PI*.5f;Vector2 q=p+Direction(angle)*u*.35f;Stroke(h,r,q,q+Vector2.right*(q.x>p.x?-.10f:.10f)*u,u*.015f,Alpha(Gold,.75f));Stroke(h,r,q,q+Vector2.up*(q.y>p.y?-.10f:.10f)*u,u*.015f,Alpha(Gold,.75f));}return true;}
+            if(e.Shape==Shape.Contact)
+            {
+                float reach=u*e.Radius*(.25f+Mathf.Sin(t*Mathf.PI*.5f));
+                FacetedLight(h,r,p,reach,Alpha(e.Color,.55f*fade));
+                for(int i=0;i<6;i++){Vector2 d=Direction(i*Mathf.PI/3+.2f);Trail(h,r,p+d*reach*.3f,p+d*reach,u*.08f*fade,Alpha(Color.white,.8f*fade));}
+                return true;
+            }
+            if(e.Shape==Shape.Jewel)
+            {
+                // A tapered contact flare and glints attached to actual chips. No ring/disc.
+                float contact=1-Mathf.SmoothStep(0,1,Mathf.Clamp01(age/.13f));
+                var cell=new BoardPosition((int)e.Cell.x,(int)e.Cell.y);
+                if(contact>0)
+                {
+                    Trail(h,r,p-Vector2.right*u*.48f,p,u*.22f,Alpha(e.Color,contact*.55f));
+                    Trail(h,r,p+Vector2.right*u*.48f,p,u*.22f,Alpha(e.Color,contact*.55f));
+                    Star(h,r,p,u*.25f,.15f,Alpha(Color.Lerp(e.Color,Color.white,.7f),contact));
+                }
+                for(int sparkle=0;sparkle<8;sparkle++)
+                {
+                    int i=sparkle*2+sparkle%2;
+                    float progress=age/GemShatterView.ChipLifetime(i);if(progress>=1)continue;
+                    float light=(1-Mathf.SmoothStep(0,1,progress))*(.65f+.35f*Mathf.Sin(i+age*35));
+                    Vector2 q=p+GemShatterView.ChipOffset(cell,i,u,age);
+                    Vector2 tail=p+GemShatterView.ChipOffset(cell,i,u,Mathf.Max(0,age-.028f));
+                    Trail(h,r,tail,q,u*.044f,Alpha(e.Color,light*.65f));
+                    Star(h,r,q,u*(.055f+(i%3)*.009f),i+age*4,Alpha(Color.Lerp(e.Color,Color.white,.65f),light*.7f));
+                }
+                return true;
+            }
+            if(e.Shape==Shape.Row||e.Shape==Shape.Column)
+            {
+                Vector2 axis=e.Shape==Shape.Row?Vector2.right:Vector2.up,normal=new Vector2(-axis.y,axis.x);
+                float reach=Mathf.Max(r.width,r.height)*Mathf.Clamp01(age/BoardPresentationTimeline.Sweep);
+                // A narrow fading wake remains behind the bright travelling head.
+                Beam(h,r,p,axis,reach,u*.11f*fade,Alpha(e.Color,fade*.65f));
+                FacetedLight(h,r,p,u*.65f,Alpha(e.Color,.65f*fade*fade));
+                for(int sign=-1;sign<=1;sign+=2)
+                {
+                    Vector2 head=p+axis*reach*sign,tail=p+axis*Mathf.Max(0,reach-u*3.0f)*sign;
+                    Trail(h,r,tail,head,u*.48f*fade,Alpha(e.Color,.55f*fade));
+                    Trail(h,r,tail,head,u*.17f*fade,Alpha(new Color(1,.96f,.73f),fade));
+                    for(int band=-1;band<=1;band+=2)
+                    {
+                        Vector2 previous=tail;
+                        for(int j=1;j<=9;j++)
+                        {
+                            float f=j/9f;Vector2 q=Vector2.Lerp(tail,head,f)+normal*Mathf.Sin(f*Mathf.PI)*Mathf.Sin(f*7+t*22)*u*.15f*band;
+                            Stroke(h,r,previous,q,u*.035f,Alpha(e.Color,fade*f));previous=q;
+                        }
+                    }
+                    if(r.Contains(head))
+                    {
+                        FacetedLight(h,r,head,u*.85f,Alpha(e.Color,.85f*fade));
+                        Star(h,r,head,u*.6f,t*4,Alpha(new Color(1,.98f,.87f),fade));
+                        for(int i=0;i<6;i++)
+                        {
+                            Vector2 q=head-axis*sign*u*(.15f+(i%3)*.26f)+normal*u*Mathf.Sin(i*2.4f+t*7)*.35f;
+                            Trail(h,r,q-axis*sign*u*.25f,q,u*.022f,Alpha(Gold,fade*.8f));
+                        }
+                    }
+                }
+                return true;
+            }
+            if(e.Shape==Shape.Blast && e.Color.b>.6f)
+            {
+                for(int band=0;band<6;band++)
+                {
+                    float a=band*Mathf.PI/3+t*2;Vector2 q=p+Direction(a)*u*(.45f+t*1.1f);
+                    FacetedLight(h,r,q,u*.38f,Alpha(Colors[band],.65f*fade));
+                    Trail(h,r,p,q,u*.14f,Alpha(Colors[band],.85f*fade));
+                    Star(h,r,q,u*.21f,a,Alpha(Color.white,.9f*fade));
+                }
+                FacetedLight(h,r,p,u*.75f,Alpha(new Color(.75f,.85f,1),.7f*fade));return true;
+            }
+            if(e.Shape==Shape.Blast||e.Shape==Shape.Phoenix)
+            {
+                float radius=u*(.12f+e.Radius*Mathf.Clamp01(age/BoardPresentationTimeline.Sweep));
+                FacetedLight(h,r,p,radius,Alpha(e.Color,.5f*fade*fade));
+                FacetedLight(h,r,p,radius*.58f,Alpha(new Color(1,.35f,.06f),.7f*fade*fade));
+                FacetedLight(h,r,p,u*(1.1f*fade),Alpha(new Color(1,.94f,.7f),.95f*fade*fade));
+                // A trailing broken shock front and tapered radial tongues avoid a flat disc.
+                for(int i=0;i<18;i++)
+                {
+                    float a=i*Mathf.PI/9;Vector2 d=Direction(a),tip=p+d*radius*(.78f+.22f*Mathf.Sin(i*2.7f));
+                    Trail(h,r,p+d*radius*.32f,tip,u*(.18f+(i%3)*.05f)*fade,Alpha(e.Color,.65f*fade));
+                    Vector2 ember=p+d*u*(.3f+t*(e.Radius+.8f))+Vector2.down*u*t*t*.6f;
+                    Diamond(h,r,ember,u*.075f*fade,a+t*5,Alpha(Color.Lerp(e.Color,Color.white,.5f),fade));
+                    if(i%3==0)Star(h,r,tip,u*.07f*fade,a,Alpha(Color.white,.75f*fade));
+                }
+                if(e.Shape==Shape.Phoenix)
+                    for(int sign=-1;sign<=1;sign+=2)for(int feather=0;feather<7;feather++)
+                    {
+                        Vector2 tip=p+new Vector2(sign*(.55f+feather*.22f),.6f+Mathf.Sin(feather*.44f)*.9f)*u*(.35f+t);
+                        Trail(h,r,p+Vector2.down*u*.25f,tip,u*.23f*fade,Alpha(new Color(1,.67f,.16f),fade*.9f));
+                    }
+                return true;
+            }
+            if(e.Shape==Shape.Radiance||e.Shape==Shape.Renewal)
+            {
+                bool renewal=e.Shape==Shape.Renewal;
+                FacetedLight(h,r,p,u*(.65f+t*1.2f),Alpha(e.Color,.6f*fade));
+                for(int i=0;i<12;i++)
+                {
+                    float a=i*Mathf.PI/6+t*4;Vector2 q=p+Direction(a)*u*(.35f+t*(renewal?.9f:1.7f));
+                    if(renewal)q+=Vector2.up*u*t*1.8f;
+                    Vector2 back=q-Direction(a+.5f)*u*.3f;
+                    Trail(h,r,back,q,u*.12f*fade,Alpha(e.Color,fade*.85f));
+                    Star(h,r,q,u*(i%3==0?.18f:.085f)*fade,a,Alpha(new Color(.85f,.96f,1),fade));
+                }
+                return true;
+            }
+            return false;
+        }
+        // Compact four-facet contact light; never a circular disc or expanding halo.
+        void FacetedLight(VertexHelper h,Rect r,Vector2 p,float radius,Color c)
+        {Star(h,r,p,Mathf.Min(radius,r.width/board.ColumnCount*.28f),.35f,c);}
+        static Vector2 Direction(float a)=>new Vector2(Mathf.Cos(a),Mathf.Sin(a));
+        void Diamond(VertexHelper h,Rect r,Vector2 p,float size,float angle,Color c)
+        {Vector2 d=Direction(angle)*size,s=new Vector2(-d.y,d.x)*.55f;Quad(h,r,p+d,p+s,p-d,p-s,c);}
+        void Star(VertexHelper h,Rect r,Vector2 p,float size,float angle,Color c)
+        {
+            // Fade each thin ray to transparency instead of painting a solid diamond.
+            for(int ray=0;ray<4;ray++)
+            {
+                Vector2 d=Direction(angle+ray*Mathf.PI*.5f),side=new Vector2(-d.y,d.x)*size*.12f;
+                int n=h.currentVertCount;
+                Vertex(h,r,p-side,Alpha(c,0));Vertex(h,r,p+d*size*(ray%2==0?1:.72f),Alpha(c,0));
+                Vertex(h,r,p+side,Alpha(c,0));Vertex(h,r,p,c);
+                h.AddTriangle(n,n+1,n+3);h.AddTriangle(n+1,n+2,n+3);
+            }
+        }
+        void Stroke(VertexHelper h,Rect r,Vector2 a,Vector2 b,float width,Color c)
+        {Vector2 d=b-a;Beam(h,r,(a+b)*.5f,d.normalized,d.magnitude*.5f,width,c);}
+        void Trail(VertexHelper h,Rect r,Vector2 a,Vector2 b,float width,Color c)
+        {
+            Vector2 d=(b-a).normalized,s=new Vector2(-d.y,d.x)*width;int n=h.currentVertCount;
+            Vertex(h,r,a,Alpha(c,0));Vertex(h,r,b+s,Alpha(c,0));Vertex(h,r,b,c);Vertex(h,r,b-s,Alpha(c,0));
+            h.AddTriangle(n,n+1,n+2);h.AddTriangle(n,n+2,n+3);
+        }
+    }
+}

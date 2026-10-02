@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Failed(Child)" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.1570927">
+  <test-suite type="TestSuite" id="1553" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="455" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.157093" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1547" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="417" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.135802" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="3825840" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1548" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="417" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.125592" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1549" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="417" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.110170" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1550" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="417" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.093494" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1135" name="CharactersAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:26Z" duration="5.061911" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1138" name="CurrentHeroOutlineAndLockedCardsScrollIndependently" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.CurrentHeroOutlineAndLockedCardsScrollIndependently" methodname="CurrentHeroOutlineAndLockedCardsScrollIndependently" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="339446928" result="Failed" start-time="2026-09-25 13:37:21Z" end-time="2026-09-25 13:37:22Z" duration="0.685094" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionCharactersView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x00207] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:218
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x0025d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:178
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests+<CurrentHeroOutlineAndLockedCardsScrollIndependently>d__14.MoveNext () [0x001ed] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:80
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1139" name="InfoBlocksUnderlyingInputAndBackDismisses" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.InfoBlocksUnderlyingInputAndBackDismisses" methodname="InfoBlocksUnderlyingInputAndBackDismisses" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="2089163154" result="Passed" start-time="2026-09-25 13:37:22Z" end-time="2026-09-25 13:37:23Z" duration="0.629503" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1136" name="LiveHeaderAndLocalizedPhoneLayouts" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts" methodname="LiveHeaderAndLocalizedPhoneLayouts" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="1406455438" result="Failed" start-time="2026-09-25 13:37:23Z" end-time="2026-09-25 13:37:23Z" duration="0.362154" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionCharactersView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x00207] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:218
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x0025d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:178
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests+<LiveHeaderAndLocalizedPhoneLayouts>d__12.MoveNext () [0x00100] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:61
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1140" name="NavigationUsesRealRoutesAndCommitsOnce" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.NavigationUsesRealRoutesAndCommitsOnce" methodname="NavigationUsesRealRoutesAndCommitsOnce" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="883627625" result="Passed" start-time="2026-09-25 13:37:23Z" end-time="2026-09-25 13:37:25Z" duration="2.262494" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+]]></output>
+              </test-case>
+              <test-case id="1142" name="PressCancellationPreservesHeroAndDisabledActions" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.PressCancellationPreservesHeroAndDisabledActions" methodname="PressCancellationPreservesHeroAndDisabledActions" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="1129227850" result="Passed" start-time="2026-09-25 13:37:25Z" end-time="2026-09-25 13:37:26Z" duration="0.512614" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1137" name="PreviewFiltersAndActionsNeverGrantOwnership" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.PreviewFiltersAndActionsNeverGrantOwnership" methodname="PreviewFiltersAndActionsNeverGrantOwnership" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="1975454861" result="Failed" start-time="2026-09-25 13:37:26Z" end-time="2026-09-25 13:37:26Z" duration="0.285467" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Profile outside safe area
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionCharactersView v, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea) [0x00207] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:218
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x0025d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:178
+at LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests+<PreviewFiltersAndActionsNeverGrantOwnership>d__13.MoveNext () [0x003c9] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs:69
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1141" name="RebindingAndDisableRemoveOwnedCallbacks" fullname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.RebindingAndDisableRemoveOwnedCallbacks" methodname="RebindingAndDisableRemoveOwnedCallbacks" classname="LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests" runstate="Runnable" seed="1346417795" result="Passed" start-time="2026-09-25 13:37:26Z" end-time="2026-09-25 13:37:26Z" duration="0.300073" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /tmp/lor-characters-rebuild-r1/Verify01/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -22,6 +22,13 @@ namespace LegendsOfRus.GameplayCore
         readonly BoardObjectiveItemKind[,] objectiveItems;
         readonly IBoardRandom random;
 
+        // Enabled only by the versioned development resolver.
+        public bool SquareMatches { get; set; }
+        // Runtime rule flag; selected by the versioned planner, never inferred from saved tile IDs.
+        public bool StandaloneSpecials { get; set; }
+        public bool IsOrdinaryMatchCell(BoardPosition p) => IsInside(p) && GetTile(p) >= 0 &&
+            GetSpecial(p) == SpecialGemKind.None && GetObjectiveItem(p) == BoardObjectiveItemKind.None;
+        int MatchType(int x, int y) => StandaloneSpecials && !IsOrdinaryMatchCell(new BoardPosition(x,y)) ? -1 : tiles[x,y];
         public int Width { get; }
         public int Height { get; }
         public int TileTypeCount { get; }
@@ -82,7 +89,7 @@ namespace LegendsOfRus.GameplayCore
             BoardObstacleKind obstacle = obstacles[position.X, position.Y];
             if (
                 obstacle == BoardObstacleKind.Chain ||
-                obstacle == BoardObstacleKind.Crate
+                BoardObstacleData.OccupiesCell(obstacle)
             )
             {
                 return false;
@@ -134,12 +141,12 @@ namespace LegendsOfRus.GameplayCore
             Validate(position);
             ValidateCell(cell);
             if (
-                obstacles[position.X, position.Y] == BoardObstacleKind.Crate &&
+                BoardObstacleData.OccupiesCell(obstacles[position.X, position.Y]) &&
                 !cell.IsEmpty
             )
             {
                 throw new InvalidOperationException(
-                    "A crate cell cannot contain a gem or objective item."
+                    "An occupying blocker cell cannot contain a gem or objective item."
                 );
             }
 
@@ -158,7 +165,7 @@ namespace LegendsOfRus.GameplayCore
 
             obstacles[position.X, position.Y] = obstacle.Kind;
             obstacleLayers[position.X, position.Y] = (byte)obstacle.Layers;
-            if (obstacle.Kind == BoardObstacleKind.Crate)
+            if (BoardObstacleData.OccupiesCell(obstacle.Kind))
             {
                 tiles[position.X, position.Y] = EmptyTile;
                 specials[position.X, position.Y] = SpecialGemKind.None;
@@ -215,11 +222,11 @@ namespace LegendsOfRus.GameplayCore
             ValidateObjectiveItem(objectiveItem);
             if (
                 objectiveItem != BoardObjectiveItemKind.None &&
-                obstacles[position.X, position.Y] == BoardObstacleKind.Crate
+                BoardObstacleData.OccupiesCell(obstacles[position.X, position.Y])
             )
             {
                 throw new InvalidOperationException(
-                    "A crate cell cannot contain an objective item."
+                    "An occupying blocker cell cannot contain an objective item."
                 );
             }
 
@@ -245,10 +252,10 @@ namespace LegendsOfRus.GameplayCore
             ValidateTile(tileType, allowEmpty: true);
             if (
                 tileType >= 0 &&
-                obstacles[position.X, position.Y] == BoardObstacleKind.Crate
+                BoardObstacleData.OccupiesCell(obstacles[position.X, position.Y])
             )
             {
-                throw new InvalidOperationException("A crate cell cannot contain a gem.");
+                throw new InvalidOperationException("An occupying blocker cell cannot contain a gem.");
             }
 
             tiles[position.X, position.Y] = tileType;
@@ -371,12 +378,12 @@ namespace LegendsOfRus.GameplayCore
                         $"Cell {index} cannot contain both a gem and an objective item."
                     );
                 if (
-                    obstacle == BoardObstacleKind.Crate &&
+                    BoardObstacleData.OccupiesCell(obstacle) &&
                     (tile >= 0 || objectiveItem != BoardObjectiveItemKind.None)
                 )
                 {
                     throw new ArgumentException(
-                        $"Crate cell {index} cannot contain a gem or objective item."
+                        $"Blocker cell {index} cannot contain a gem or objective item."
                     );
                 }
 
@@ -421,7 +428,7 @@ namespace LegendsOfRus.GameplayCore
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (obstacles[x, y] == BoardObstacleKind.Crate)
+                    if (BoardObstacleData.OccupiesCell(obstacles[x, y]))
                     {
                         tiles[x, y] = EmptyTile;
                         specials[x, y] = SpecialGemKind.None;
@@ -556,18 +563,18 @@ namespace LegendsOfRus.GameplayCore
                 {
                     bool same =
                         x < Width &&
-                        tiles[x, y] >= 0 &&
-                        tiles[x, y] == tiles[x - 1, y];
+                        MatchType(x, y) >= 0 &&
+                        MatchType(x, y) == MatchType(x - 1, y);
 
                     if (same) continue;
 
                     int length = x - start;
-                    if (length >= 3 && tiles[x - 1, y] >= 0)
+                    if (length >= 3 && MatchType(x - 1, y) >= 0)
                     {
                         var run = new BoardMatchRun
                         {
                             Horizontal = true,
-                            Type = tiles[x - 1, y]
+                            Type = MatchType(x - 1, y)
                         };
 
                         for (int k = start; k < x; k++)
@@ -588,18 +595,18 @@ namespace LegendsOfRus.GameplayCore
                 {
                     bool same =
                         y < Height &&
-                        tiles[x, y] >= 0 &&
-                        tiles[x, y] == tiles[x, y - 1];
+                        MatchType(x, y) >= 0 &&
+                        MatchType(x, y) == MatchType(x, y - 1);
 
                     if (same) continue;
 
                     int length = y - start;
-                    if (length >= 3 && tiles[x, y - 1] >= 0)
+                    if (length >= 3 && MatchType(x, y - 1) >= 0)
                     {
                         var run = new BoardMatchRun
                         {
                             Horizontal = false,
-                            Type = tiles[x, y - 1]
+                            Type = MatchType(x, y - 1)
                         };
 
                         for (int k = start; k < y; k++)
@@ -612,6 +619,16 @@ namespace LegendsOfRus.GameplayCore
                 }
             }
 
+            if (SquareMatches)
+                for (int y = 0; y < Height - 1; y++)
+                for (int x = 0; x < Width - 1; x++)
+                {
+                    int type = MatchType(x, y);
+                    if (type < 0 || MatchType(x+1, y) != type || MatchType(x, y+1) != type || MatchType(x+1, y+1) != type) continue;
+                    var square = new BoardMatchRun { Square = true, Type = type };
+                    square.Cells.AddRange(new[] { new BoardPosition(x,y), new BoardPosition(x+1,y), new BoardPosition(x,y+1), new BoardPosition(x+1,y+1) });
+                    runs.Add(square);
+                }
             return runs;
         }
 
@@ -636,11 +653,12 @@ namespace LegendsOfRus.GameplayCore
 
         public Dictionary<BoardPosition, SpecialGemKind> DetermineSpecialCreations(
             IReadOnlyList<BoardMatchRun> runs,
-            BoardPosition? preferred
+            BoardPosition? preferred, bool oppositeLines = false
         )
         {
             if (runs == null) throw new ArgumentNullException(nameof(runs));
 
+            if (SquareMatches) return SparkMatchRules.Creations(this, runs, preferred);
             var result = new Dictionary<BoardPosition, SpecialGemKind>();
             var horizontal = new HashSet<BoardPosition>();
             var vertical = new HashSet<BoardPosition>();
@@ -671,7 +689,7 @@ namespace LegendsOfRus.GameplayCore
 
                 result[cell] = run.Cells.Count >= 5
                     ? SpecialGemKind.Color
-                    : run.Horizontal
+                    : (run.Horizontal != oppositeLines)
                         ? SpecialGemKind.Row
                         : SpecialGemKind.Column;
             }
@@ -692,7 +710,7 @@ namespace LegendsOfRus.GameplayCore
 
         public HashSet<BoardPosition> ExpandSpecialEffects(
             IEnumerable<BoardPosition> initial,
-            IList<BoardPosition> triggered = null
+            IList<BoardPosition> triggered = null, int burstRadius = 1
         )
         {
             if (initial == null) throw new ArgumentNullException(nameof(initial));
@@ -730,8 +748,8 @@ namespace LegendsOfRus.GameplayCore
                         break;
 
                     case SpecialGemKind.Burst:
-                        for (int dy = -1; dy <= 1; dy++)
-                        for (int dx = -1; dx <= 1; dx++)
+                        for (int dy = -burstRadius; dy <= burstRadius; dy++)
+                        for (int dx = -burstRadius; dx <= burstRadius; dx++)
                             AddClear(
                                 new BoardPosition(position.X + dx, position.Y + dy),
                                 clear,
@@ -779,7 +797,7 @@ namespace LegendsOfRus.GameplayCore
                     bool boundary = y == Height;
                     if (!boundary)
                     {
-                        boundary = obstacles[x, y] == BoardObstacleKind.Crate;
+                        boundary = BoardObstacleData.OccupiesCell(obstacles[x, y]);
                     }
 
                     if (!boundary) continue;
@@ -882,28 +900,25 @@ namespace LegendsOfRus.GameplayCore
             }
         }
 
-        public bool HasLegalMove()
+        public bool HasLegalMove() => TryFindLegalAction(out _, out _);
+
+        // Hint/no-move query shares the exact square-aware validity path.
+        // Equal endpoints mean a tap; otherwise they are the adjacent swap endpoints.
+        public bool TryFindLegalAction(out BoardPosition from, out BoardPosition to)
         {
             for (int y = 0; y < Height; y++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int x = 0; x < Width; x++)
+                var a = new BoardPosition(x,y);
+                if (SquareMatches && IsSwappableCell(a) && GetSpecial(a) != SpecialGemKind.None)
+                { from = to = a; return true; }
+                foreach (var d in new[] { new BoardPosition(1,0), new BoardPosition(0,1) })
                 {
-                    var a = new BoardPosition(x, y);
-
-                    if (x + 1 < Width)
-                    {
-                        var b = new BoardPosition(x + 1, y);
-                        if (SwapCreatesMatch(a, b)) return true;
-                    }
-
-                    if (y + 1 < Height)
-                    {
-                        var b = new BoardPosition(x, y + 1);
-                        if (SwapCreatesMatch(a, b)) return true;
-                    }
+                    var b = a + d;
+                    if (SwapCreatesMatch(a,b)) { from=a; to=b; return true; }
                 }
             }
-
+            from = to = default;
             return false;
         }
 
@@ -1197,7 +1212,7 @@ namespace LegendsOfRus.GameplayCore
                     nameof(layers),
                     "An empty obstacle must have zero layers."
                 );
-            if (kind != BoardObstacleKind.None && (layers < 1 || layers > 3))
+            if (kind != BoardObstacleKind.None && (layers < 1 || layers > (kind == BoardObstacleKind.RunicSeal ? 2 : 3)))
                 throw new ArgumentOutOfRangeException(
                     nameof(layers),
                     "Obstacle layers must be in [1, 3]."

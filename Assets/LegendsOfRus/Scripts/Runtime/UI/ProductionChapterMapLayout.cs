@@ -21,6 +21,33 @@ namespace LegendsOfRus
             try
             {
                 RectTransform content=View.Content;
+                if(View.SourceControls)
+                {
+                    // Anchor navigation to the physical safe-area edges; only the map
+                    // viewport expands. Original artwork and controls keep their proportions.
+                    safeRect.GetWorldCorners(corners);
+                    Vector3 safeLow=content.InverseTransformPoint(corners[0]),safeHigh=content.InverseTransformPoint(corners[2]);
+                    float safeTop=safeHigh.y-content.rect.yMax,safeBottom=safeLow.y-content.rect.yMin;
+                    Position(View.Hud,0,safeTop);
+                    Position(View.TitleArea,0,safeTop-116);
+                    Position(View.Footer,0,safeBottom-1440);
+                    Position(View.FooterOrnament.rectTransform,0,safeBottom-1590);
+                    Position((RectTransform)View.Scroller.CurrentButton.transform,741,safeBottom-1508);
+                    Position(View.Scroller.RangeLabel.rectTransform,210,safeBottom-1425);
+                    float viewportHeight=1040+safeTop-safeBottom;
+                    Position(View.MapArea,0,safeTop-400);
+                    Size(View.MapArea,new Vector2(941,viewportHeight));
+                    View.Scroller.Reflow(viewportHeight);
+                    canvasRect.GetWorldCorners(corners);
+                    Vector3 lo=content.InverseTransformPoint(corners[0]),hi=content.InverseTransformPoint(corners[2]);
+                    Vector2 nativeSize=View.Environment.sprite.rect.size;
+                    float cover=Mathf.Max((hi.x-lo.x)/nativeSize.x,(hi.y-lo.y)/nativeSize.y);
+                    Vector2 dimensions=nativeSize*cover;
+                    Position(View.EnvironmentMargins.rectTransform,(lo.x+hi.x-dimensions.x)*.5f-content.rect.xMin,(lo.y+hi.y+dimensions.y)*.5f-content.rect.yMax);
+                    Size(View.EnvironmentMargins.rectTransform,dimensions);
+                    Position(View.Environment.rectTransform,0,0);Size(View.Environment.rectTransform,new Vector2(941,1672));
+                    return;
+                }
                 safeRect.GetWorldCorners(corners);
                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin;

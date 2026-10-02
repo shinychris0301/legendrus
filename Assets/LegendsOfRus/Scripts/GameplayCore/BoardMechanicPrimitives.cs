@@ -11,7 +11,8 @@ namespace LegendsOfRus.GameplayCore
         None = 0,
         Ice = 1,
         Chain = 2,
-        Crate = 3
+        Crate = 3,
+        RunicSeal = 4
     }
 
     /// <summary>
@@ -49,11 +50,14 @@ namespace LegendsOfRus.GameplayCore
                 );
             }
 
+            if (kind == BoardObstacleKind.RunicSeal && layers > 2)
+                throw new ArgumentOutOfRangeException(nameof(layers), "Runic seals have at most two layers.");
             Kind = kind;
             Layers = layers;
         }
 
         public bool IsEmpty => Kind == BoardObstacleKind.None;
+        public static bool OccupiesCell(BoardObstacleKind kind) => kind == BoardObstacleKind.Crate || kind == BoardObstacleKind.RunicSeal;
 
         public bool Equals(BoardObstacleData other) =>
             Kind == other.Kind && Layers == other.Layers;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,14 +20,12 @@ namespace LegendsOfRus
         public static readonly Color EnvironmentTone = new Color32(235, 235, 235, 255);
         public static readonly Color HeroTone = new Color32(242, 242, 242, 255);
         static readonly string[] TextureNames = {
-            "home_environment_generated", "nav_map_generated", "nav_shop_generated", "nav_events_generated",
-            "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
-            "home_hero_firebird", "home_logo", "home_play_button", "avatar_portrait", "hud_frame", "avatar_ring",
-            "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
-            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
-            "home_map_foliage"
+            "home_logo", "avatar_portrait", "avatar_ring",
+            "resource_capsule", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+            "resource_plus"
         };
-        static readonly string[] TextureKeys = Array.ConvertAll(TextureNames, name => ArtRoot + name);
+        static readonly string[] TextureKeys = Array.ConvertAll(ProductionHomeSourceComposition.Names,
+            name => ProductionHomeSourceComposition.ArtRoot + name).Concat(ProductionHomeSourceComposition.ShortcutResources).ToArray();
         public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);
         static readonly Color Gold = new Color32(232, 209, 162, 255);
 
@@ -34,7 +33,7 @@ namespace LegendsOfRus
         {
             ProductionHomeView existing = root.GetComponent<ProductionHomeView>();
             ProductionHomeLayout oldLayout = root.GetComponent<ProductionHomeLayout>();
-            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) return;
+            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) { ClearDormantProgress(existing); ClearDormantPlayArtwork(existing.PlayButton); ClearDormantArtwork(existing); return; }
             if (root.Find(ContentName) != null)
                 throw new InvalidOperationException("Home aligned bindings are incomplete; repair the existing Home prefab outside Play Mode.");
             if (loadSprite == null) loadSprite = Resources.Load<Sprite>;
@@ -46,15 +45,15 @@ namespace LegendsOfRus
             RectTransform content = Rect(root, ContentName, 0, 0, 941, 1672);
             content.anchorMin = Vector2.zero; content.anchorMax = Vector2.one;
             content.offsetMin = content.offsetMax = Vector2.zero;
-            view.Environment = Art(content, "WinterVillageEnvironment", sprites["home_environment_generated"], 0, 0, 941, 1672);
+            view.Environment = Art(content, "WinterVillageEnvironment", null, 0, 0, 941, 1672);
             // Retain the historical object names so full builds and in-place migrations agree.
             view.Firebird = Art(content, "ApprovedFirebird", null, 495, 442, 550, 825);
             view.Firebird.gameObject.SetActive(false);
-            view.Ivan = Art(content, "ApprovedIvan", sprites["home_hero_firebird"], -20, 474, 967, 967);
+            view.Ivan = Art(content, "ApprovedIvan", null, -20, 474, 967, 967);
             view.LowerShade = Rect(content, "LowerContrast", 0, 982, 941, 690).gameObject.AddComponent<ProductionHomeShade>();
             view.LowerShade.color = Color.clear; view.LowerShade.raycastTarget = false;
             view.Logo = Art(content, "ApprovedSplashLogo", sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
-            view.HudFrame = Frame(content, "HomeHud", sprites["hud_frame"], 0, 0, 941, 130);
+            view.HudFrame = Frame(content, "HomeHud", null, 0, 0, 941, 130);
             RectTransform h = view.HudFrame.rectTransform;
             ProductionHomePanel profile = Panel(h, "ProfileButton", 8, 0, 320, 233, 0);
             profile.Frame = false; profile.LeftColor = profile.RightColor = Color.clear;
@@ -70,19 +69,19 @@ namespace LegendsOfRus
             view.EnergyText = Resource(h, "Energy", sprites["resource_capsule"], sprites["energy_icon"], typography,
                 out view.EnergyCapsule, out view.EnergyIcon);
             view.SettingsButton = Button(Art(h, "SettingsButton", sprites["settings_medallion"], 853, 28, 85, 85));
-            view.PlayButton = Button(Art(content, "PlayButton", sprites["home_play_button"], 185.5f, 1230 - 570f * 803 / 1959, 570, 570f * 803 / 1959));
+            view.PlayButton = Button(Art(content, "PlayButton", null, 185.5f, 1230 - 570f * 803 / 1959, 570, 570f * 803 / 1959));
             view.PlayButton.GetComponent<ProductionHomeButtonFeedback>().Role = MetaUiControlRole.Primary;
             view.PlayText = Label(view.PlayButton.transform as RectTransform, "PlayLabel", "ИГРАТЬ", 91, 570f * 803 / 1959 - 157, 388 / .92f, 106, 90, typography);
             RectTransform nav = Rect(content, "Navigation", 51, 1230, 839, 222);
-            view.WorldMapButton = Nav(nav, "WorldMap", sprites["nav_map_generated"], "КАРТА МИРА", typography, out view.WorldMapText);
-            view.ShopButton = Nav(nav, "Shop", sprites["nav_shop_generated"], "МАГАЗИН", typography, out view.ShopText);
-            view.EventsButton = Nav(nav, "Events", sprites["nav_events_generated"], "СОБЫТИЯ", typography, out view.EventsText);
-            view.CharactersButton = Nav(nav, "Characters", sprites["nav_characters_generated"], "ПЕРСОНАЖИ", typography, out view.CharactersText);
+            view.WorldMapButton = Nav(nav, "WorldMap", null, "КАРТА МИРА", typography, out view.WorldMapText);
+            view.ShopButton = Nav(nav, "Shop", null, "МАГАЗИН", typography, out view.ShopText);
+            view.EventsButton = Nav(nav, "Events", null, "СОБЫТИЯ", typography, out view.EventsText);
+            view.CharactersButton = Nav(nav, "Characters", null, "ПЕРСОНАЖИ", typography, out view.CharactersText);
             RectTransform footer = Rect(content, "Footer", 0, 1450, 941, 222);
-            view.MailButton = Medallion(footer, "MailButton", sprites["mail_medallion_generated"]);
-            view.QuestFrame = Frame(footer, "QuestPanel", sprites["quest_panel"], 177, 0, 587, 210);
+            view.MailButton = Medallion(footer, "MailButton", null);
+            view.QuestFrame = Frame(footer, "QuestPanel", null, 177, 0, 587, 210);
             view.QuestText = Label(view.QuestFrame.rectTransform, "QuestCopy", "Соберите синие самоцветы", 38, 31, 398, 43, 31, typography);
-            view.DailyRewardButton = Medallion(footer, "DailyRewardButton", sprites["reward_medallion_generated"]);
+            view.DailyRewardButton = Medallion(footer, "DailyRewardButton", null);
             ProductionHomeLayout layout = oldLayout != null ? oldLayout : root.gameObject.AddComponent<ProductionHomeLayout>();
             layout.Content = content; layout.Hud = h; layout.Logo = view.Logo.rectTransform;
             layout.Ivan = view.Ivan.rectTransform; layout.Firebird = view.Firebird.rectTransform;
@@ -98,6 +97,12 @@ namespace LegendsOfRus
             if (Application.isPlaying) throw new InvalidOperationException("Home asset migration must run outside Play Mode.");
             if (view == null || view.Revision < 2 || view.Revision > ProductionHomeView.CurrentRevision)
                 throw new InvalidOperationException("Home reference migration requires an installed aligned Home view.");
+            if (view.SourcePlay != null)
+            {
+                ProductionHomeSourceComposition.Apply(view);
+                if (!view.HasRequiredBindings) throw new InvalidOperationException("Home source migration produced incomplete bindings.");
+                return;
+            }
             AlignReferenceComposition(view, LoadSprites(loadSprite));
             if (!view.HasRequiredBindings) throw new InvalidOperationException("Home reference migration produced incomplete bindings.");
         }
@@ -106,9 +111,9 @@ namespace LegendsOfRus
         {
             var layout = view.GetComponent<ProductionHomeLayout>();
             RectTransform content = view.transform.Find(ContentName) as RectTransform;
-            SetArt(view.Environment, sprites["home_environment_generated"], 0, 0, 941, 1672);
+            SetArt(view.Environment, null, 0, 0, 941, 1672);
             SetArt(view.Logo, sprites["home_logo"], 205.5f, 110, 530, 530f * 1041 / 1511);
-            SetArt(view.Ivan, sprites["home_hero_firebird"], -20, 474, 967, 967);
+            SetArt(view.Ivan, null, -20, 474, 967, 967);
             view.Environment.color = EnvironmentTone;
             view.Ivan.color = HeroTone;
             ProductionHomeArtFade oldFade = view.Ivan.GetComponent<ProductionHomeArtFade>();
@@ -128,7 +133,7 @@ namespace LegendsOfRus
             // The complete source contains a narrow bar inside real transparent padding.
             // Preserve the existing header container and all live child coordinates.
             float hudScale = 941f / 2132;
-            view.HudFrame = EnsureArt(hud, "ReferenceArtwork", sprites["hud_frame"],
+            view.HudFrame = EnsureArt(hud, "ReferenceArtwork", null,
                 -22 * hudScale, 8 - 198 * hudScale, 2176 * hudScale, 723 * hudScale);
             view.HudFrame.transform.SetAsFirstSibling();
             RectTransform profile = view.ProfileButton.transform as RectTransform;
@@ -141,7 +146,7 @@ namespace LegendsOfRus
             AlignReferencePortrait(view, sprites["avatar_portrait"]);
             SetLabel(view.HeroName, 172, 28, 145, 42, 34, TextAnchor.MiddleLeft);
             SetLabel(view.LevelText, 172, 71, 145, 29, 24, TextAnchor.MiddleLeft);
-            view.ProfileProgressFrame = EnsureArt(profile, "ProfileProgressFrame", sprites["progress_frame"], 169, 87, 164, 54.6667f);
+            view.ProfileProgressFrame = EnsureArt(profile, "ProfileProgressFrame", null, 169, 87, 164, 54.6667f);
             view.ProfileProgressText = EnsureLabel(view.ProfileProgressFrame.rectTransform, "UnavailableExperience", "—", 24, 17, 116, 20, 18, view.Typography);
             EnsureBacking(content, "HudOpaqueNavyBacking", 5, 5, 931, 117, 0, hud.GetSiblingIndex());
             layout.HudBacking = content.Find("HudOpaqueNavyBacking") as RectTransform;
@@ -154,7 +159,7 @@ namespace LegendsOfRus
             playHit.color = Color.clear; playHit.raycastTarget = true;
             // Match the measured139px emerald face while preserving the established
             // native hitbox and live text center; the taller ornament is decoration.
-            Image playArt = EnsureArt(playHit.rectTransform, "ReferenceArtwork", sprites["home_play_button"],
+            Image playArt = EnsureArt(playHit.rectTransform, "ReferenceArtwork", null,
                 0, 991 - (1230 - 570f * 803 / 1959), 570, 264);
             playArt.preserveAspect = false; playArt.raycastTarget = false;
             playArt.transform.SetAsFirstSibling(); view.PlayButton.targetGraphic = playArt;
@@ -163,7 +168,6 @@ namespace LegendsOfRus
             SetRect(layout.Navigation, 51, 1230, 839, 222);
             Button[] navigation = { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton };
             Text[] labels = { view.WorldMapText, view.ShopText, view.EventsText, view.CharactersText };
-            string[] navNames = { "nav_map_generated", "nav_shop_generated", "nav_events_generated", "nav_characters_generated" };
             // The shared reference card frame maps its full unchanged square PNG to
             // 224x255: its authored inner body becomes193x192, matching the reference.
             // All captions share one ink baseline while native hit areas stay disjoint.
@@ -175,7 +179,7 @@ namespace LegendsOfRus
                 Image hit = EnsureFrame(card, null);
                 SetRect(card, i * 212, 0, 203, 222);
                 hit.color = Color.clear; hit.raycastTarget = true;
-                Image artwork = EnsureArt(card, "ReferenceArtwork", sprites[navNames[i]],
+                Image artwork = EnsureArt(card, "ReferenceArtwork", null,
                     -10.5f, cardArtY, 224, 255);
                 artwork.preserveAspect = false; artwork.raycastTarget = false;
                 artwork.transform.SetAsFirstSibling(); navigation[i].targetGraphic = artwork;
@@ -201,16 +205,16 @@ namespace LegendsOfRus
             // A whole independently painted surround joins the three existing footer
             // controls. It is decoration behind the original native hit surfaces.
             float footerScale = 941f / 2136;
-            view.FooterBase = EnsureArt(layout.Footer, "ConnectedCarvedBase", sprites["footer_base_generated"],
+            view.FooterBase = EnsureArt(layout.Footer, "ConnectedCarvedBase", null,
                 -4 * footerScale, 222 - 708 * footerScale, 2143 * footerScale, 734 * footerScale);
             view.FooterBase.raycastTarget = false;
             view.FooterBase.transform.SetAsFirstSibling();
             EnsureBacking(layout.Footer, "FooterOpaqueBacking", 0, 222 - 362 * footerScale, 941, 362 * footerScale, 0, 0, new Color32(6, 8, 11, 255));
             layout.FooterBacking = layout.Footer.Find("FooterOpaqueBacking") as RectTransform;
             layout.FooterBase = view.FooterBase.rectTransform;
-            AlignMedallion(view.MailButton, sprites["mail_medallion_generated"], 0, 12, 181);
-            AlignMedallion(view.DailyRewardButton, sprites["reward_medallion_generated"], 758, 12, 181);
-            view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, sprites["quest_panel"]);
+            AlignMedallion(view.MailButton, null, 0, 12, 181);
+            AlignMedallion(view.DailyRewardButton, null, 758, 12, 181);
+            view.QuestFrame = EnsureFrame(view.QuestText.transform.parent, null);
             // Place the complete final source around its measured(21,56)-(2187,657)
             // wood frame. The separate live children use reference page coordinates.
             float questX = 182 - 21f / 2166 * 572, questY = 8 - 56f / 601 * 182;
@@ -222,23 +226,23 @@ namespace LegendsOfRus
             view.QuestText.fontStyle = FontStyle.Bold;
             view.QuestText.color = new Color32(231, 223, 197, 255);
             RectTransform quest = view.QuestFrame.rectTransform;
-            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", sprites["progress_frame"], 224 - questX, 67 - questY, 377, 126);
+            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", null, 224 - questX, 67 - questY, 377, 126);
             EnsureBacking(quest, "ProgressOpaqueTroughBacking", 253 - questX, 118 - questY, 320, 20, 3,
                 view.QuestProgressFrame.transform.GetSiblingIndex(), new Color32(19, 12, 4, 255));
-            view.QuestProgressFill = EnsureArt(view.QuestProgressFrame.rectTransform, "MeasuredFill", sprites["progress_fill"], 17, 6, 343, 114.3333f);
+            view.QuestProgressFill = EnsureArt(view.QuestProgressFrame.rectTransform, "MeasuredFill", null, 17, 6, 343, 114.3333f);
             view.QuestProgressFill.preserveAspect = false; view.QuestProgressFill.type = Image.Type.Filled;
             view.QuestProgressFill.fillMethod = Image.FillMethod.Horizontal; view.QuestProgressFill.fillOrigin = 0;
             view.QuestProgressFill.fillAmount = 0; view.QuestProgressFill.gameObject.SetActive(false);
             view.QuestProgressText = EnsureLabel(view.QuestProgressFrame.rectTransform, "MeasuredValue", "— / —", 25, 44, 327, 34, 29, view.Typography);
             view.QuestProgressText.color = new Color32(236, 228, 204, 255);
             float rewardX = 612 - 189f / 712 * 114, rewardY = 38 - 193f / 1053 * 132;
-            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", sprites["quest_reward_frame"],
+            view.QuestRewardFrame = EnsureArt(quest, "QuestRewardFrame", null,
                 rewardX - questX, rewardY - questY, 1095f / 712 * 114, 1437f / 1053 * 132);
             view.QuestRewardFrame.preserveAspect = false;
             EnsureBacking(quest, "RewardOpaqueNavyBacking", 620 - questX, 49 - questY, 96, 113, 5,
                 view.QuestRewardFrame.transform.GetSiblingIndex());
             float rewardGemScale = 77f / 797;
-            view.QuestRewardIcon = EnsureArt(view.QuestRewardFrame.rectTransform, "RewardGem", sprites["quest_reward_gem"],
+            view.QuestRewardIcon = EnsureArt(view.QuestRewardFrame.rectTransform, "RewardGem", null,
                 669 - 613.5f * rewardGemScale - rewardX, 85 - 660.5f * rewardGemScale - rewardY,
                 1230 * rewardGemScale, 1278 * rewardGemScale);
             view.QuestRewardText = EnsureLabel(view.QuestRewardFrame.rectTransform, "RewardValue", "—", 623.5f - rewardX, 130 - rewardY, 91, 36, 34, view.Typography);
@@ -247,10 +251,11 @@ namespace LegendsOfRus
             view.DailyRewardBadgeText = EnsureLabel(view.DailyRewardBadge.rectTransform, "AvailableCount", "1", 0, 0, 44, 44, 29, view.Typography);
             AlignBadgeLabel(view.DailyRewardBadgeText);
             view.DailyRewardBadge.gameObject.SetActive(false);
-            AlignReferenceBackdrop(view, layout, sprites["home_map_foliage"]);
+            AlignReferenceBackdrop(view, layout, null);
             AlignSceneLighting(view.Ivan, HeroLightingMaterialResource);
             AlignSceneLighting(view.MapFoliage, FoliageLightingMaterialResource);
             view.Revision = ProductionHomeView.CurrentRevision;
+            ProductionHomeSourceComposition.Apply(view);
         }
 
         static void AlignSceneLighting(Image image, string materialResource)
@@ -410,11 +415,41 @@ namespace LegendsOfRus
             if (oldMask != null) oldMask.enabled = false;
             EnsureBacking(rect, "OpaqueNavyBacking", 20, 20, size - 40, size - 40, (size - 40) * .5f, 0);
             Image image = button.transform.Find("Medallion").GetComponent<Image>();
-            bool gift = sprite.name == "reward_medallion_generated";
+            bool gift = button.name == "DailyRewardButton";
             float artSize = gift ? 194 : 186;
             SetArt(image, sprite, (size - artSize) * .5f, gift ? -2 : 2, artSize, artSize);
             button.targetGraphic = image;
         }
+        // Retain the serialized containers and live text bindings, without loading retired art.
+        internal static void ClearDormantPlayArtwork(Button button)
+        {
+            var old = button.transform.Find("ReferenceArtwork");
+            var image = old != null ? old.GetComponent<Image>() : null;
+            if (image != null && image != button.targetGraphic) image.sprite = null;
+        }
+
+        // Run after current source targets are assigned. Keep every native object/component.
+        internal static void ClearDormantArtwork(ProductionHomeView view)
+        {
+            foreach (var button in new[] { view.WorldMapButton, view.ShopButton, view.EventsButton, view.CharactersButton })
+                ClearDormantPlayArtwork(button);
+            foreach (var button in new[] { view.MailButton, view.DailyRewardButton })
+            {
+                var old = button.transform.Find("Medallion");
+                var image = old != null ? old.GetComponent<Image>() : null;
+                if (image != null && image != button.targetGraphic) image.sprite = null;
+            }
+            foreach (var image in new[] { view.QuestRewardFrame, view.QuestRewardIcon, view.MapFoliage })
+                if (image != null && !image.enabled) image.sprite = null;
+        }
+
+        internal static void ClearDormantProgress(ProductionHomeView view)
+        {
+            if (view.ProfileProgressFrame != null) view.ProfileProgressFrame.sprite = null;
+            if (view.QuestProgressFrame != null) view.QuestProgressFrame.sprite = null;
+            if (view.QuestProgressFill != null) view.QuestProgressFill.sprite = null;
+        }
+
         static Dictionary<string, Sprite> LoadSprites(Func<string, Sprite> loadSprite)
         {
             var result = new Dictionary<string, Sprite>();

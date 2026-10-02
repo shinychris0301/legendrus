@@ -1,0 +1,138 @@
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    /// <summary>Original-reference UI artwork around the existing live board and controls.</summary>
+    public static class ProductionGameplaySourceControls
+    {
+        public const string ArtRoot="ProductionUI/GameplayReferenceAligned/";
+        public static readonly string[] ArtNames={"portrait","moves","goals","score","board","card","level","pause","environment","wood","gem_ruby","gem_sapphire","gem_emerald","gem_gold","gem_amethyst","gem_orange","star_filled","star_empty","header","grid"};
+        public const string RefinedArtRoot="ProductionUI/GameplayRefinedR2/";
+        public static string AssetPath(string name)=>"Assets/LegendsOfRus/Resources/"+ResourcePath(name)+".png";
+        static string ResourcePath(string name)=>name=="grid"?"ProductionUI/GameplaySourceGridR11/grid":name=="environment"?"ProductionUI/GameplayHeaderSceneryR10/environment":(name=="header"||name=="portrait")?"ProductionUI/GameplayPortraitBandR7/"+name:name=="card"?"ProductionUI/GameplaySurfaceBoundariesR8/card":(name=="wood"||name=="score"||name.StartsWith("star_",System.StringComparison.Ordinal)?RefinedArtRoot:ArtRoot)+name;
+        public static Sprite Load(string name)
+        {
+#if UNITY_EDITOR
+            if(!Application.isPlaying)return UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>(AssetPath(name));
+#endif
+            return Resources.Load<Sprite>(ResourcePath(name));
+        }
+        public static void Apply(ProductionGameplayView v)
+        {
+            v.Environment.sprite=Load("environment");v.Environment.color=Color.white;
+            Art(v.Hud.Find("IvanFrame"),"portrait",8,15,232,229);
+            var clip=v.Hud.Find("PortraitClip").GetComponent<ProductionHomePanel>();
+            Place(clip.rectTransform,32,45,181,173);clip.Radius=86.5f;
+            Place((RectTransform)clip.transform.Find("IvanPortrait"),0,0,181,173);
+            // One continuous extracted backing avoids independently masked rails and box shadows.
+            var header=v.Hud.Find("JoinedHeaderBacking");
+            if(header==null)
+            {
+                header=ProductionGameplayRuntime.Rect(v.Hud,"JoinedHeaderBacking",115,57,824,186);
+                header.gameObject.AddComponent<Image>().raycastTarget=false;
+            }
+            Art(header,"header",115,57,824,186);header.SetAsFirstSibling();
+            Art(v.Hud.Find("MovesMedallion"),"moves",230,57,144,180);
+            v.Hud.Find("MovesMedallion").GetComponent<Image>().enabled=false;
+            Place((RectTransform)v.Hud.Find("MissionParchment"),373,57,351,180);
+            v.Hud.Find("MissionParchment").GetComponent<Image>().enabled=false;
+            Place((RectTransform)v.Hud.Find("TopScorePanel"),724,57,215,186);
+            v.Hud.Find("TopScorePanel").GetComponent<Image>().enabled=false;
+            Art(v.Hud.Find("RoundPlate"),"level",403,233,203,45);
+            Place(v.LevelText.rectTransform,412,241,370,60); // half-scale live typography
+            Art(v.BoardArea.Find("BoardLacquer"),"wood",0,0,808,748);
+            var frame=(RectTransform)v.BoardArea.Find("BoardFrame");Place(frame,-16,-14,837,777);
+            Art(frame.Find("CarvedFrame"),"board",0,0,837,777);
+            for(int i=0;i<4;i++)
+            {
+                var card=v.Footer.Find("BoosterCard_"+i);Art(card,"card",88+i*197,0,192,288);
+                Place((RectTransform)v.BoosterButtons[i].transform,27,41,138,148);
+                Place((RectTransform)v.BoosterCounts[i].transform.parent,123,161,52,52);
+                Place(v.BoosterCounts[i].rectTransform,0,0,104,104);
+                ProductionPreLevelBadge.AlignCount(v.BoosterCounts[i],(RectTransform)v.BoosterCounts[i].transform.parent);
+                var label=card.Find("BoosterLabel").GetComponent<Text>();Place(label.rectTransform,17,215,316,76);label.fontSize=32;label.lineSpacing=.85f;
+                if(label.GetComponent<ProductionGameplayCaptionFit>()==null)label.gameObject.AddComponent<ProductionGameplayCaptionFit>();
+                Place(v.ArmedMarkers[i].rectTransform,9,14,174,197);
+            }
+            Art(v.PauseButton.transform,"pause",837,235,104,102);
+            for(int i=0;i<3;i++)
+            {
+                v.Stars[i].StarFilledArt=Load("star_filled");v.Stars[i].StarEmptyArt=Load("star_empty");
+                Place(v.Stars[i].rectTransform,738+i*61,196,48,48);v.Stars[i].SetAllDirty();
+            }
+            Place(v.ScoreMeter.rectTransform,738,169,170,26);
+            foreach(var number in new[]{v.MovesValue,v.ScoreValue})
+                if(number.GetComponent<ProductionGameplayNumberFit>()==null)number.gameObject.AddComponent<ProductionGameplayNumberFit>();
+            v.MovesValue.resizeTextForBestFit=true;v.MovesValue.resizeTextMinSize=104;v.MovesValue.resizeTextMaxSize=164;
+            v.ScoreValue.resizeTextForBestFit=true;v.ScoreValue.resizeTextMinSize=48;v.ScoreValue.resizeTextMaxSize=70;
+            foreach(var goal in v.Goals){goal.Count.resizeTextForBestFit=true;goal.Count.resizeTextMinSize=44;goal.Count.resizeTextMaxSize=56;}
+            ApplyReadability(v);
+            v.SourceControls=true;
+        }
+        public static void ApplyReadability(ProductionGameplayView v)
+        {
+            ProductionControlTouchTarget.Ensure(v.PauseButton);
+            ApplyCaptionReadability(v);
+            foreach (var count in v.BoosterCounts)
+            {
+                count.horizontalOverflow = HorizontalWrapMode.Overflow;
+                count.resizeTextMinSize = 12;
+                var fit = count.GetComponent<ProductionGameplayNumberFit>() ?? count.gameObject.AddComponent<ProductionGameplayNumberFit>();
+                fit.enabled = true;
+                var badge = count.transform.parent.GetComponent<ProductionPreLevelBadge>();
+                var found = badge.transform.Find("WideStockBacking");
+                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
+                    : ProductionGameplayRuntime.Rect(badge.transform, "WideStockBacking", -114, 58, 174, 52)
+                        .gameObject.AddComponent<ProductionHomePanel>();
+                Place(backing.rectTransform, -114, 58, 174, 52);
+                backing.Radius = 26;
+                backing.Frame = true;
+                backing.LeftColor = new Color32(7, 46, 25, 255);
+                backing.RightColor = new Color32(3, 25, 15, 255);
+                backing.raycastTarget = false;
+                backing.transform.SetAsFirstSibling();
+                var stock = count.GetComponent<ProductionGameplayStockLayout>()
+                    ?? count.gameObject.AddComponent<ProductionGameplayStockLayout>();
+                stock.Badge = badge;
+                stock.WideBacking = backing;
+                stock.ApplyNow();
+            }
+        }
+        public static void ApplyCaptionReadability(ProductionGameplayView v)
+        {
+            for (int i = 0; i < v.BoosterButtons.Length; i++)
+            {
+                var card = v.Footer.Find("BoosterCard_" + i);
+                var found = card.Find("CaptionBacking");
+                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
+                    : ProductionGameplayRuntime.Rect(card, "CaptionBacking", 0, -84, 192, 82)
+                        .gameObject.AddComponent<ProductionHomePanel>();
+                Place(backing.rectTransform, 0, -84, 192, 82);
+                backing.Radius = 8;
+                backing.Frame = true;
+                backing.raycastTarget = true; // Existing parent card forwards native input to its retained Button.
+                var label = card.Find("BoosterLabel").GetComponent<Text>();
+                Place(label.rectTransform, 1, -81, 380, 152);
+                label.fontSize = 46;
+                label.resizeTextForBestFit = false;
+                label.lineSpacing = .95f;
+                label.horizontalOverflow = HorizontalWrapMode.Wrap;
+                label.verticalOverflow = VerticalWrapMode.Truncate;
+                label.raycastTarget = false;
+                var fit = label.GetComponent<ProductionGameplayCaptionFit>();
+                fit.ExpandedCaption = true;
+                fit.enabled = true;
+                backing.transform.SetAsLastSibling();
+                label.transform.SetAsLastSibling();
+                label.SetVerticesDirty();
+            }
+        }
+        static void Art(Transform t,string name,float x,float y,float w,float h)
+        {
+            var image=t.GetComponent<Image>();image.sprite=Load(name);image.type=Image.Type.Simple;
+            image.preserveAspect=true;image.color=Color.white;Place(image.rectTransform,x,y,w,h);
+        }
+        static void Place(RectTransform r,float x,float y,float w,float h)
+        {r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);}
+    }
+}

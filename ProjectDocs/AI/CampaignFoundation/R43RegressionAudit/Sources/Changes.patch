@@ -1,0 +1,275 @@
+--- before/Assets/LegendsOfRus/Scripts/BalanceReviewCore/BalanceReviewModels.cs
++++ after/Assets/LegendsOfRus/Scripts/BalanceReviewCore/BalanceReviewModels.cs
+@@ -31,7 +31,7 @@
+             ? (float)TotalWinningMovesRemaining / Wins
+             : 0f;
+         public float AverageWinningMoveMargin => Wins > 0 && TotalWinningMoveLimit > 0
+-            ? (float)TotalWinningMovesRemaining / (TotalWinningMoveLimit / (float)Wins)
++            ? (float)TotalWinningMovesRemaining / TotalWinningMoveLimit
+             : 0f;
+         public float AverageWinningScore => Wins > 0
+             ? (float)TotalWinningScore / Wins
+--- before/Assets/LegendsOfRus/Scripts/CommercialCore/Analytics/AnalyticsSchema.cs
++++ after/Assets/LegendsOfRus/Scripts/CommercialCore/Analytics/AnalyticsSchema.cs
+@@ -184,7 +184,22 @@
+             "characters",
+             "mail",
+             "out_of_energy",
+-            "chapter_complete"
++            "chapter_complete",
++            "splash_title",
++            "event_detail",
++            "individual_ranking",
++            "team_hub",
++            "team_ranking",
++            "team_chat",
++            "friends_list",
++            "inventory",
++            "special_offer",
++            "language_select",
++            "login",
++            "tutorial_overlay",
++            "offline_state",
++            "maintenance_state",
++            "empty_error_state"
+         };
+ 
+         static readonly string[] PurchaseOutcomes =
+--- before/Assets/LegendsOfRus/Tests/BalanceReviewEditMode/BalanceTelemetryTutorialFunnelEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/BalanceReviewEditMode/BalanceTelemetryTutorialFunnelEditModeTests.cs
+@@ -66,11 +66,13 @@
+             Assert.That(report.Levels[0].WinRate, Is.EqualTo(0.6f).Within(0.001f));
+         }
+ 
+-        [Test]
+-        public void AggregateComputesWinningMoveMargin()
++        [TestCase(1)]
++        [TestCase(3)]
++        [TestCase(6)]
++        public void AggregateComputesWinningMoveMargin(int wins)
+         {
+             var buffer = new BalanceObservationBuffer();
+-            for (int attempt = 1; attempt <= 3; attempt++)
++            for (int attempt = 1; attempt <= wins; attempt++)
+             {
+                 buffer.TryRecord(BalanceObservationCode.LevelStarted, 3, attempt);
+                 buffer.TryRecord(BalanceObservationCode.LevelWon, 3, attempt, 5, 20, 1000);
+--- before/Assets/LegendsOfRus/Tests/BalanceReviewPlayMode/BalanceTelemetryTutorialFunnelPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/BalanceReviewPlayMode/BalanceTelemetryTutorialFunnelPlayModeTests.cs
+@@ -1,4 +1,5 @@
+ using System.Collections;
++using System.Reflection;
+ using LegendsOfRus.BalanceReview;
+ using NUnit.Framework;
+ using UnityEngine;
+@@ -10,21 +11,47 @@
+     {
+         GameObject host;
+         BalanceTelemetryReviewService service;
++        BalanceObservationBuffer previousObservations;
++        ScreenRouter previousRouter;
++        GameState previousState;
++        static readonly FieldInfo Observations = typeof(BalanceTelemetryReviewService)
++            .GetField("observations", BindingFlags.Instance | BindingFlags.NonPublic);
+ 
+         [SetUp]
+         public void SetUp()
+         {
+-            if (BalanceTelemetryReviewService.Instance != null)
+-                Object.DestroyImmediate(BalanceTelemetryReviewService.Instance.gameObject);
+-            host = new GameObject("BalanceReviewTestHost");
+-            service = host.AddComponent<BalanceTelemetryReviewService>();
++            previousRouter = ScreenRouter.Instance;
++            previousState = GameState.Instance;
++            service = BalanceTelemetryReviewService.Instance;
++            if (service == null)
++            {
++                host = new GameObject("BalanceReviewTestHost");
++                service = host.AddComponent<BalanceTelemetryReviewService>();
++            }
++            else
++            {
++                // Keep the shared root and every other service alive. Swap only this
++                // fixture's transient buffer and restore the exact original object.
++                Assert.That(Observations, Is.Not.Null);
++                previousObservations = (BalanceObservationBuffer)Observations.GetValue(service);
++                Observations.SetValue(service, new BalanceObservationBuffer());
++            }
+         }
+ 
+         [TearDown]
+         public void TearDown()
+         {
+             if (host != null)
++            {
+                 Object.DestroyImmediate(host);
++                host = null;
++            }
++            else if (service != null)
++                Observations.SetValue(service, previousObservations);
++            Assert.That(ScreenRouter.Instance, Is.SameAs(previousRouter));
++            Assert.That(GameState.Instance, Is.SameAs(previousState));
++            service = null;
++            previousObservations = null;
+         }
+ 
+         [Test]
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ProductionUiFix01DeliveryEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ProductionUiFix01DeliveryEditModeTests.cs
+@@ -45,9 +45,19 @@
+         }
+ 
+         [Test]
+-        public void ExactlyTenSerializedPageFilesAreShipped()
+-        {
+-            Assert.That(Directory.GetFiles(PageRoot, "*.prefab", SearchOption.TopDirectoryOnly).Length, Is.EqualTo(10));
++        public void AllTenCoreLoopPagesRemainInExpandedSerializedDelivery()
++        {
++            // Later native pages share this directory; retain the original ten-page contract.
++            int count = 0;
++            foreach (ScreenId id in Enum.GetValues(typeof(ScreenId)))
++            {
++                if (!ProductionCoreLoopPageRegistry.IsCutover(id)) continue;
++                var page = Resources.Load<GameObject>(ProductionCoreLoopPageRegistry.ResourceKey(id));
++                Assert.That(page, Is.Not.Null, id.ToString());
++                Assert.That(page.GetComponent<ProductionUiFix01PageBootstrap>().ScreenId, Is.EqualTo(id));
++                count++;
++            }
++            Assert.That(count, Is.EqualTo(ProductionCoreLoopPageRegistry.CutoverPageCount));
+         }
+ 
+         [TestCase("Loading", ScreenId.Loading)]
+@@ -188,7 +198,11 @@
+         public void GameplayLiveBoardBoundaryIsStillPresent()
+         {
+             string router = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
+-            StringAssert.Contains("SetPixelRect(rt, 79, 357, 786, 942)", router);
++            StringAssert.Contains("boardGo.transform.SetParent(view.BoardMount, false)", router);
++            var view = Resources.Load<GameObject>("ProductionUI/Pages/Gameplay").GetComponent<ProductionGameplayView>();
++            Assert.That(view.HasRequiredBindings, Is.True);
++            Assert.That(view.BoardMount.rect.width, Is.GreaterThan(0));
++            Assert.That(view.BoardMount.rect.height, Is.GreaterThan(0));
+         }
+ 
+         [Test]
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ReferenceMatchCoreLoopUiEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ReferenceMatchCoreLoopUiEditModeTests.cs
+@@ -155,15 +155,14 @@
+             Assert.That(ProductionCoreLoopPageRegistry.IsCutover(ScreenId.ChapterMap), Is.True);
+         }
+ 
+-        [TestCase(ScreenId.Home, 6)]
+-        [TestCase(ScreenId.WorldMap, 4)]
+-        [TestCase(ScreenId.ChapterMap, 4)]
+-        public void GeneratedReferenceMatchPrefabIsProductionOnlyWhenBuildHasRun(ScreenId id, int expectedComponents)
++        [TestCase(ScreenId.Home, 30)]
++        [TestCase(ScreenId.WorldMap, 5)]
++        [TestCase(ScreenId.ChapterMap, 5)]
++        public void CurrentNativePrefabRetainsProductionOnlyDependencies(ScreenId id, int expectedComponents)
+         {
+             string path = PageRoot + "/" + id + ".prefab";
+             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+-            if (prefab == null)
+-                Assert.Ignore("Step 3.3R.2 deterministic prefab build has not run yet in this editor session.");
++            Assert.That(prefab, Is.Not.Null, path);
+ 
+             ProductionReferenceMatchPageMarker marker = prefab.GetComponent<ProductionReferenceMatchPageMarker>();
+             Assert.That(marker, Is.Not.Null);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ReferenceMatchR3CoreLoopUiEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/ReferenceMatchR3CoreLoopUiEditModeTests.cs
+@@ -115,7 +115,8 @@
+         {
+             string text = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
+             StringAssert.Contains("typeof(RectTransform), typeof(Match3Board)", text);
+-            StringAssert.Contains("SetPixelRect(rt, 79, 357, 786, 942);", text);
++            StringAssert.Contains("boardGo.transform.SetParent(view.BoardMount, false);", text);
++            StringAssert.Contains("view.Bind(activeBoard, ShowPause);", text);
+         }
+ 
+         [Test]
+@@ -128,13 +129,17 @@
+         }
+ 
+         [Test]
+-        public void CorrectedInteractionHotspotsMatchR3Geometry()
++        public void NativePreparationAndPauseExposeBoundInteractiveControls()
+         {
+-            string text = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
+-            StringAssert.Contains("Hotspot(parent, \"Boosters\", 110, 850, 720, 285", text);
+-            StringAssert.Contains("Hotspot(parent, \"StartLevel\", 205, 1435, 535, 190", text);
+-            StringAssert.Contains("Hotspot(parent, \"Resume\", 235, 910, 470, 105", text);
+-            StringAssert.Contains("Hotspot(parent, \"Exit\", 235, 1255, 470, 105", text);
++            var preparation = Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>();
++            var pause = Resources.Load<GameObject>("ProductionUI/Pages/Pause").GetComponent<ProductionPauseView>();
++            Assert.That(preparation.HasRequiredBindings, Is.True);
++            Assert.That(pause.HasRequiredBindings, Is.True);
++            Assert.That(preparation.PlayButton.targetGraphic.raycastTarget, Is.True);
++            foreach (var button in preparation.BoosterButtons)
++                Assert.That(button.targetGraphic.raycastTarget, Is.True);
++            foreach (var button in pause.Actions)
++                Assert.That(button.targetGraphic.raycastTarget, Is.True);
+         }
+ 
+         [Test]
+@@ -155,15 +160,14 @@
+             StringAssert.Contains("ReferenceMatchR3", text);
+         }
+ 
+-        [TestCase(ScreenId.PreLevel, 12, false, false)]
+-        [TestCase(ScreenId.Gameplay, 5, true, false)]
++        [TestCase(ScreenId.PreLevel, 8, false, false)]
++        [TestCase(ScreenId.Gameplay, 8, true, false)]
+         [TestCase(ScreenId.Pause, 7, false, true)]
+         public void GeneratedR3PrefabUsesExpectedLiveRuntimeBoundary(ScreenId id, int componentCount, bool preserveBoard, bool liveGameplayBehindPause)
+         {
+             string path = PageRoot + "/" + id + ".prefab";
+             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+-            if (prefab == null)
+-                Assert.Ignore("R3 deterministic prefab build has not run yet in this editor session.");
++            Assert.That(prefab, Is.Not.Null, path);
+ 
+             ProductionReferenceMatchR3PageMarker marker = prefab.GetComponent<ProductionReferenceMatchR3PageMarker>();
+             Assert.That(marker, Is.Not.Null);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/SharedBoosterArtEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/SharedBoosterArtEditModeTests.cs
+@@ -34,7 +34,7 @@
+                 Assert.That(ProductionGameplayArt.Booster(i),Is.SameAs(ProductionBoosterArt.Icon(i)));
+                 Assert.That(ProductionPreLevelSourceControls.Load(ProductionBoosterArt.Names[i]),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
+                 Assert.That(ProductionPauseRuntime.Load(ProductionBoosterArt.Names[i]+"_r2"),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
+-                Assert.That(ProductionInventoryRuntime.ItemArt(i+20),Is.SameAs(ProductionBoosterArt.Icon(i)));
++                Assert.That(ProductionInventoryRuntime.ItemArt(i+20),Is.SameAs(ProductionBoosterArt.Icon(i,true)));
+             }
+             Assert.That(ProductionBoosterArt.Replacement("GameplayAligned/gem_gold_r8"),Is.Null);
+             Assert.That(ProductionBoosterArt.Replacement("CharactersAligned/hero_firebird_r7"),Is.Null);
+--- before/Assets/LegendsOfRus/Tests/SaveRecoveryEditMode/SaveJournalLoadEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/SaveRecoveryEditMode/SaveJournalLoadEditModeTests.cs
+@@ -146,7 +146,8 @@
+         {
+             DurablePendingFakeStore store = new DurablePendingFakeStore();
+             store.SeedDurable(Keys.PrimaryKey, "CORRUPT");
+-            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6));
++            // A committed history replacement writes the identical envelope to backup.
++            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
+             store.SeedDurable(
+                 Keys.StagingKey,
+                 Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
+@@ -154,6 +155,19 @@
+             SaveJournalLoadResult result = Repository(store).Load();
+ 
+             AssertSuccess(result, SaveJournalLoadStatus.RecoveredBackup, SaveJournalSlot.Backup, "reset", 6, 6);
++        }
++
++        [Test]
++        public void EqualRevisionReplacementStagingWithOrdinaryBackup_BlocksInconsistentIntent()
++        {
++            var store = new DurablePendingFakeStore();
++            store.SeedDurable(Keys.PrimaryKey, "CORRUPT");
++            store.SeedDurable(Keys.BackupKey, Envelope("reset", 6, 6));
++            store.SeedDurable(Keys.StagingKey, Envelope("reset", 6, 6, SaveEnvelopeIntent.ReplaceHistory));
++            var result = Repository(store).Load();
++            Assert.That(result.Status, Is.EqualTo(SaveJournalLoadStatus.Unrecoverable));
++            Assert.That(result.DiagnosticCode, Is.EqualTo("SAVE_HISTORY_REPLACEMENT_INTERRUPTED"));
++            Assert.That(store.MutationOperationCount, Is.Zero);
+         }
+ 
+         [Test]

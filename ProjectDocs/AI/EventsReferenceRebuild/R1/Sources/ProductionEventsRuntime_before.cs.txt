@@ -1,0 +1,145 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public static class ProductionEventsRuntime
+    {
+        public const string ArtRoot="ProductionUI/EventsAligned/";
+        public static Sprite Load(string name)=>Resources.Load<Sprite>(ArtRoot+name);
+        static Sprite Shared(string key)=>Resources.Load<Sprite>("ProductionUI/"+key);
+        public static void BuildInto(RectTransform root)
+        {
+            var existing=root.GetComponent<ProductionEventsView>();if(existing!=null){if(existing.Revision<ProductionEventsView.CurrentRevision)existing.Revision=ProductionEventsView.CurrentRevision;if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Events outside Play Mode.");Align(existing);existing.RefreshContent();return;}
+            var v=root.gameObject.AddComponent<ProductionEventsView>();var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();
+            if(shop==null||!shop.HasRequiredBindings)throw new InvalidOperationException("Events requires the accepted Shop header.");v.Typography=shop.Typography;
+            v.Content=Rect(root,"EVENTS_ALIGNED_CONTENT",0,0,941,1672);v.Environment=Art(v.Content,"CleanEnvironment",Shared("FrontEndHomeAligned/loading_environment_dusk"),0,0,941,1672);v.Environment.color=new Color(.65f,.65f,.70f,1);
+            v.Body=Rect(v.Content,"Composition",0,0,941,1672);v.Hud=Rect(v.Body,"NativeHud",0,0,941,235);
+            Clone(shop.Body.Find("NativeHudBacking"),v.Hud);
+            v.ProfileButton=Clone(shop.ProfileButton.transform,v.Hud).GetComponent<Button>();v.SettingsButton=Clone(shop.SettingsButton.transform,v.Hud).GetComponent<Button>();
+            v.HeroName=Clone(shop.HeroName.transform,v.Hud).GetComponent<Text>();v.LevelText=Clone(shop.LevelText.transform,v.Hud).GetComponent<Text>();
+            v.PlusButtons=new Button[3];Text[] sourceValues={shop.GoldText,shop.GemsText,shop.EnergyText},values=new Text[3];
+            for(int i=0;i<3;i++){Clone(shop.Body.Find("ResourceCapsule_"+i),v.Hud);Clone(shop.Body.Find("ResourceIcon_"+i),v.Hud);values[i]=Clone(sourceValues[i].transform,v.Hud).GetComponent<Text>();v.PlusButtons[i]=Clone(shop.PlusButtons[i].transform,v.Hud).GetComponent<Button>();}
+            v.GoldText=values[0];v.GemsText=values[1];v.EnergyText=values[2];
+            v.Title=Art(v.Body,"TitlePlaque",Load("title"),217,140,526,166);v.Heading=Label(v,v.Body,"Heading",271,187,412,75,58);
+            v.Tabs=new Button[3];v.TabLabels=new Text[3];
+            for(int i=0;i<3;i++){v.Tabs[i]=Button(Art(v.Body,"Tab_"+i,Shared("ShopAligned/tab"),30+i*295,310,286,75));v.TabLabels[i]=Label(v,v.Tabs[i].transform,"Label",16,16,254,43,28);}
+            v.Cards=new RectTransform[4];v.Names=new Text[4];v.Descriptions=new Text[4];v.Statuses=new Text[4];v.Rewards=new Text[4];v.ActionLabels=new Text[4];v.DetailsButtons=new Button[4];
+            string[] art={"firebird","yaga","merchant","knight"};
+            for(int i=0;i<4;i++)
+            {
+                var card=Rect(v.Body,"Event_"+art[i],23,391+i*286,895,275);v.Cards[i]=card;
+                var background=Art(card,"LacquerBacking",Load("frame"),0,0,895,275);background.type=Image.Type.Sliced;background.preserveAspect=false;
+                Art(card,"Illustration",Load(art[i]),17,17,359,241);
+                // The outer frame is a separate sliced sprite; artwork stays inside its opaque face.
+                v.Names[i]=Label(v,card,"EventName",405,16,454,78,34);v.Names[i].alignment=TextAnchor.MiddleLeft;
+                v.Statuses[i]=Label(v,card,"Availability",405,96,454,29,22);v.Statuses[i].alignment=TextAnchor.MiddleLeft;
+                v.Descriptions[i]=Label(v,card,"Description",405,133,454,61,23);v.Descriptions[i].alignment=TextAnchor.MiddleLeft;
+                v.Rewards[i]=Label(v,card,"RewardsPending",405,201,198,51,20);v.Rewards[i].alignment=TextAnchor.MiddleLeft;
+                v.DetailsButtons[i]=Button(Art(card,"Details",Shared("ShopAligned/buy"),615,198,255,65));v.ActionLabels[i]=Label(v,v.DetailsButtons[i].transform,"Label",20,12,215,41,23);
+                var colors=v.DetailsButtons[i].colors;colors.disabledColor=new Color(.68f,.68f,.68f,1);v.DetailsButtons[i].colors=colors;
+            }
+            v.EmptyPanel=Rect(v.Body,"EmptyCategory",122,580,697,360).gameObject;
+            var empty=Art(v.EmptyPanel.transform,"Frame",Load("frame"),0,0,697,360);empty.type=Image.Type.Sliced;empty.preserveAspect=false;
+            v.EmptyText=Label(v,v.EmptyPanel.transform,"Message",60,80,577,200,34);
+            v.BackButton=Button(Art(v.Body,"Back",Shared("DailyRewardAligned/back_r2"),26,1554,90,86));
+            v.Footer=Label(v,v.Body,"EventScheduleNote",138,1558,754,72,24);
+            Art(v.Body,"FooterOrnament",Shared("ShopAligned/footer_ornament"),4,1627,933,44);
+            var layout=root.gameObject.AddComponent<ProductionEventsLayout>();layout.View=v;Align(v);v.RefreshContent();layout.ApplyNow();
+            if(!v.HasRequiredBindings)throw new InvalidOperationException("Events native bindings incomplete.");
+        }
+        static void Align(ProductionEventsView v)
+        {
+            v.Revision=ProductionEventsView.CurrentRevision;
+            Place(v.Title.rectTransform,211,117,535,184);
+            Place(v.Heading.rectTransform,262,169,431,105);v.Heading.fontSize=74;
+            Gold(v.Heading,true);v.Title.sprite=Load("title_r3");
+            var headingScene=v.Body.Find("HeadingEnvironment")?.GetComponent<Image>()??Art(v.Body,"HeadingEnvironment",Load("heading_scene_r3"),0,128,941,257);
+            headingScene.transform.SetAsFirstSibling();
+            float[] tops={385,735,1069,1347},heights={335,320,266,254};
+            for(int i=0;i<4;i++)
+            {
+                var card=v.Cards[i];float h=heights[i];Place(card,23,tops[i],895,h);
+                var backing=card.Find("LacquerBacking").GetComponent<Image>();backing.sprite=Load("frame_r3");
+                Place(backing.rectTransform,0,0,895,h);
+                // Crop only the independent generated painting, never a screenshot.
+                // Preserve the source aspect ratio and the existing Image/file IDs.
+                var window=card.Find("IllustrationWindow") as RectTransform;
+                var painting=(card.Find("Illustration")??window?.Find("Illustration")).GetComponent<Image>();
+                if(window==null){window=Rect(card,"IllustrationWindow",17,16,388,h-32);window.gameObject.AddComponent<RectMask2D>();window.SetSiblingIndex(1);painting.transform.SetParent(window,false);}
+                Place(window,17,16,388,h-32);
+                string[] names={"firebird","yaga","merchant","knight"};string key=names[i];
+                var scene=window.Find("CleanScene")?.GetComponent<Image>()??Art(window,"CleanScene",Load("scene_"+key+"_r3"),0,0,388,h-32);
+                scene.transform.SetAsFirstSibling();float sceneScale=Mathf.Max(388/scene.sprite.rect.width,(h-32)/scene.sprite.rect.height);
+                float sw=scene.sprite.rect.width*sceneScale,sh=scene.sprite.rect.height*sceneScale;
+                Place(scene.rectTransform,(388-sw)*.5f,(h-32-sh)*.5f,sw,sh);
+                // Source subject alpha is separate from clean generated scenery.
+                painting.sprite=Load(key+"_r3");painting.preserveAspect=true;
+                float scale=Mathf.Min(388/painting.sprite.rect.width,(h-32)/painting.sprite.rect.height);
+                float w=painting.sprite.rect.width*scale,ph=painting.sprite.rect.height*scale;
+                Place(painting.rectTransform,0,h-32-ph,w,ph);
+                var ornament=card.Find("FrameOrnaments")?.GetComponent<Image>()??Art(card,"FrameOrnaments",Load("frame_ornaments_r3"),0,0,895,h);
+                Place(ornament.rectTransform,0,0,895,h);ornament.type=Image.Type.Sliced;ornament.preserveAspect=false;ornament.transform.SetAsLastSibling();
+                float titleHeight=i<2?90:41,statusY=i<2?110:55,descriptionY=statusY+47;
+                Place(v.Names[i].rectTransform,415,12,460,titleHeight);v.Names[i].fontSize=i<2?43:38;v.Names[i].lineSpacing=.94f;Gold(v.Names[i],false);
+                var status=Panel(card,"StatusFrame",415,statusY,330,38);status.enabled=false;
+                var statusArt=status.transform.Find("SourceFrame")?.GetComponent<Image>()??Art(status.transform,"SourceFrame",Load("status_r3"),0,0,330,38);
+                statusArt.type=Image.Type.Sliced;statusArt.preserveAspect=false;
+                var clock=card.Find("Clock")?.GetComponent<Image>()??Art(card,"Clock",Load("clock_r2"),414,statusY-1,38,38);
+                Place(clock.rectTransform,414,statusY-1,38,38);
+                Place(v.Statuses[i].rectTransform,460,statusY,278,38);v.Statuses[i].fontSize=23;v.Statuses[i].transform.SetAsLastSibling();
+                Place(v.Descriptions[i].rectTransform,415,descriptionY,453,h-96-descriptionY-4);v.Descriptions[i].fontSize=22;
+                // Reserve the reference's reward strip without inventing reward recipes.
+                float rewardY=h-96;
+                var heading=card.Find("RewardHeading")?.GetComponent<Text>()??Label(v,card,"RewardHeading",415,rewardY,223,27,23);
+                Place(heading.rectTransform,415,rewardY,223,27);heading.alignment=TextAnchor.MiddleLeft;heading.color=new Color32(239,181,73,255);
+                Panel(card,"RewardPendingFrame",415,rewardY+32,225,49).gameObject.SetActive(false);
+                var examples=card.Find("RewardExamples")?.GetComponent<Image>()??Art(card,"RewardExamples",Load("rewards_"+key+"_r3"),415,rewardY+27,225,62);
+                Place(examples.rectTransform,415,rewardY+27,225,62);
+                if(i==2)
+                {
+                    var chest=examples.transform.Find("Chest")?.GetComponent<Image>()??Art(examples.transform,"Chest",Load("reward_merchant_chest_r3"),0,4,76,58);
+                    var medal=examples.transform.Find("Medal")?.GetComponent<Image>()??Art(examples.transform,"Medal",Load("reward_merchant_medal_r3"),158,0,68,62);
+                }
+                v.Rewards[i].gameObject.SetActive(false);
+                Place(v.Rewards[i].rectTransform,427,rewardY+38,202,37);v.Rewards[i].fontSize=20;v.Rewards[i].alignment=TextAnchor.MiddleCenter;v.Rewards[i].transform.SetAsLastSibling();
+                v.DetailsButtons[i].image.sprite=Load("action_r3");
+                Place((RectTransform)v.DetailsButtons[i].transform,650,h-86,230,76);
+                Place(v.ActionLabels[i].rectTransform,18,15,194,41);v.ActionLabels[i].fontSize=i==0?19:21;Gold(v.ActionLabels[i],false);
+            }
+            Place((RectTransform)v.BackButton.transform,18,1605,66,64);
+            Place(v.Footer.rectTransform,101,1609,789,43);v.Footer.fontSize=22;
+            Place((RectTransform)v.Body.Find("FooterOrnament"),101,1648,789,22);
+            for(int i=0;i<3;i++)
+            {
+                v.Tabs[i].image.sprite=Load("tab_r3");v.Tabs[i].image.type=Image.Type.Sliced;v.Tabs[i].image.preserveAspect=false;
+                if(v.Tabs[i].transform.Find("ActiveFace")==null)
+                {
+                    var face=Rect(v.Tabs[i].transform,"ActiveFace",22,17,242,40).gameObject.AddComponent<ProductionHomePanel>();
+                    face.Frame=false;face.Radius=10;face.LeftColor=new Color32(8,69,119,255);face.RightColor=new Color32(5,32,65,255);face.raycastTarget=false;face.transform.SetAsFirstSibling();
+                }
+            }
+        }
+        static void Place(RectTransform r,float x,float y,float w,float h)
+        {r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);}
+        static ProductionHomePanel Panel(Transform parent,string name,float x,float y,float w,float h)
+        {
+            var panel=parent.Find(name)?.GetComponent<ProductionHomePanel>()??Rect(parent,name,x,y,w,h).gameObject.AddComponent<ProductionHomePanel>();
+            Place(panel.rectTransform,x,y,w,h);panel.raycastTarget=false;panel.Radius=8;panel.BorderColor=new Color32(119,91,42,255);
+            panel.LeftColor=new Color32(7,20,30,255);panel.RightColor=new Color32(5,14,23,255);return panel;
+        }
+        static void Gold(Text text,bool bevel)
+        {
+            var shadow=text.GetComponent<Shadow>()??text.gameObject.AddComponent<Shadow>();
+            shadow.effectColor=new Color32(36,16,3,235);shadow.effectDistance=new Vector2(1.5f,-2);
+            var gold=text.GetComponent<ProductionHomeGoldText>()??text.gameObject.AddComponent<ProductionHomeGoldText>();
+            gold.BeveledFace=bevel;gold.TopColor=new Color32(255,235,163,255);gold.BottomColor=new Color32(189,115,25,255);
+            if(bevel)text.material=Resources.Load<Material>(ProductionHomeRuntime.PlayGoldMaterialResource);
+        }
+        static Transform Clone(Transform source,Transform parent){var copy=UnityEngine.Object.Instantiate(source,parent,false);copy.name=source.name;return copy;}
+        static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
+        static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=s;a.preserveAspect=s!=null;a.raycastTarget=false;return a;}
+        static Button Button(Image a){a.raycastTarget=true;var b=a.gameObject.AddComponent<Button>();b.targetGraphic=a;b.navigation=new Navigation{mode=Navigation.Mode.None};return b;}
+        static Text Label(ProductionEventsView v,Transform p,string n,float x,float y,float w,float h,int size){var t=Rect(p,n,x,y,w,h).gameObject.AddComponent<Text>();t.font=v.Typography.RegularFont;t.fontSize=size;t.color=new Color32(245,214,155,255);t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;return t;}
+    }
+}

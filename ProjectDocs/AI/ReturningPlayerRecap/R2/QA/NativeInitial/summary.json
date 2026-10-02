@@ -1,0 +1,52 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 76.33796215057373,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.EmptyHistoryIsTruthfulAndCannotOpenReader;LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.NativeReaderBrowsesAndReturnsWithoutChangingStoryOrJournal;LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.IntroRepeatedNativeTapAdvancesOneLineAndBackCloses;LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.FinaleFinishAndRepeatedReentryNeverDispatchChapterComplete;LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.DepartureRetiresReaderWithoutStaleCallbacks;LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates;LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.NativeContinueAdvancesOnceAndCompletesIntroBeforePreLevel;LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute;LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PlayPreservesIntroAndPreLevelRoutingAndHudActions",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/ReturningPlayerRecap/R2/QA/NativeInitial/results.xml",
+    "-logFile",
+    "/tmp/lor-returning-player-recap-r2/NativeInitial/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-returning-player-recap-r2/NativeInitial/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-returning-player-recap-r2/NativeInitial",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "21",
+    "result": "Failed(Child)",
+    "total": "21",
+    "passed": "19",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-02 06:01:39Z",
+    "end-time": "2026-10-02 06:02:17Z",
+    "duration": "37.7938941"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.NativeSectionsExpandedActionsAndTallModalPreserveSave",
+      "result": "Failed",
+      "message": "  Expected: same as <Tab_3 (UnityEngine.UI.Button)>\n  But was:  <StoryRecap (UnityEngine.UI.Button)>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.StoryRecapPlayModeTests.NativeReaderBrowsesAndReturnsWithoutChangingStoryOrJournal",
+      "result": "Failed",
+      "message": "  String lengths are both 2410. Strings differ at index 97.\n  Expected: \"...lastEnergyUtcTicks\":639265177369806350,\"chapter\":1,\"level\"...\"\n  But was:  \"...lastEnergyUtcTicks\":639265177374243570,\"chapter\":1,\"level\"...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+--- a/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/AndroidBuildStateReader.cs
+@@ -622,7 +622,8 @@
+                 SearchOption.AllDirectories))
+             {
+                 if (IsForbiddenAndroidArtifactExtension(
+-                    Path.GetExtension(file)))
++                    Path.GetExtension(file)) &&
++                    !ReviewedAndroidCredentialPlugins.IsAllowed(root, file))
+                     return false;
+                 if (IsForbiddenAndroidArtifactFileName(Path.GetFileName(file)))
+                     return false;
+--- /dev/null
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/ReviewedAndroidCredentialPlugins.cs
+@@ -0,0 +1,63 @@
++using System;
++using System.IO;
++using System.Security.Cryptography;
++
++namespace LegendsOfRus.AndroidBuild
++{
++    // Exact reviewed source-plugin inventory. Never a general Java/plugin exemption.
++    internal static class ReviewedAndroidCredentialPlugins
++    {
++        static readonly string[] Paths =
++        {
++            "Assets/LegendsOfRus/Plugins/AndroidCredentials/CredentialVault.java",
++            "Assets/LegendsOfRus/Plugins/AndroidCredentials/CredentialVault.java.meta",
++            "Assets/LegendsOfRus/Plugins/AndroidCredentials/AndroidCredentialBridge.java",
++            "Assets/LegendsOfRus/Plugins/AndroidCredentials/AndroidCredentialBridge.java.meta",
++        };
++        static readonly string[] Hashes =
++        {
++            "a1b82cddc35ad78953836d57476bf0d05bd23e36c3c8b97eb84618b02e84b9a1",
++            "7db80273fd38288024482db159386f648fa19e902bfb3348c6802bcc639d6c46",
++            "dc50fbcd8b7b4288b1edc908dd9fc50e360cf0ba8cff3b6f5b8e2c1914e5bc7d",
++            "b2c2d92d7a99fdd2df674daa76d60df1a11326fd650f0d453d171853da8e7db6",
++        };
++
++        internal static bool IsAllowed(string root, string candidate)
++        {
++            if (string.IsNullOrEmpty(root) || string.IsNullOrEmpty(candidate))
++                return false;
++            try
++            {
++                string absoluteRoot = Path.GetFullPath(root);
++                string absoluteCandidate = Path.GetFullPath(candidate);
++                bool isReviewedSource = false;
++                for (int i = 0; i < Paths.Length; i += 2)
++                    isReviewedSource |= string.Equals(absoluteCandidate,
++                        Path.GetFullPath(Path.Combine(absoluteRoot, Paths[i])),
++                        StringComparison.Ordinal);
++                if (!isReviewedSource)
++                    return false;
++
++                // Both Java files AND Android-only importer metadata must match.
++                for (int i = 0; i < Paths.Length; i++)
++                {
++                    using (var stream = File.OpenRead(Path.Combine(absoluteRoot, Paths[i])))
++                    using (var sha = SHA256.Create())
++                    {
++                        string actual = BitConverter.ToString(sha.ComputeHash(stream))
++                            .Replace("-", "").ToLowerInvariant();
++                        if (!string.Equals(actual, Hashes[i], StringComparison.Ordinal))
++                            return false;
++                    }
++                }
++                return true;
++            }
++            catch (IOException) { return false; }
++            catch (UnauthorizedAccessException) { return false; }
++            catch (ArgumentException) { return false; }
++            catch (NotSupportedException) { return false; }
++            catch (System.Security.SecurityException) { return false; }
++            catch (CryptographicException) { return false; }
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Editor/AndroidBuild/Unity/ReviewedAndroidCredentialPlugins.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: c06f43ae9b65469db706530fd60a4f93
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidCredentialPluginGuardEditModeTests.cs
+@@ -0,0 +1,109 @@
++#if UNITY_EDITOR && UNITY_6000_0_OR_NEWER
++using System;
++using System.IO;
++using System.Reflection;
++using LegendsOfRus.AndroidBuild;
++using NUnit.Framework;
++using UnityEngine;
++
++namespace LegendsOfRus.Tests.AndroidBuild
++{
++    public sealed class AndroidCredentialPluginGuardEditModeTests
++    {
++        const string PluginDirectory = "Assets/LegendsOfRus/Plugins/AndroidCredentials/";
++        static readonly string[] Inventory = {
++            "CredentialVault.java", "CredentialVault.java.meta",
++            "AndroidCredentialBridge.java", "AndroidCredentialBridge.java.meta"
++        };
++        string root;
++
++        [SetUp]
++        public void SetUp()
++        {
++            root = Path.Combine(Path.GetTempPath(), "lor-credential-guard-" + Guid.NewGuid().ToString("N"));
++            Directory.CreateDirectory(Path.Combine(root, "Packages"));
++            Directory.CreateDirectory(Path.Combine(root, PluginDirectory));
++            string project = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
++            foreach (string name in Inventory)
++                File.Copy(Path.Combine(project, PluginDirectory + name), Path.Combine(root, PluginDirectory + name));
++        }
++
++        [TearDown]
++        public void TearDown()
++        {
++            if (Directory.Exists(root)) Directory.Delete(root, true);
++        }
++
++        bool ArtifactGate()
++        {
++            var method = typeof(AndroidBuildStateReader).GetMethod("NoForbiddenAndroidArtifacts",
++                BindingFlags.Static | BindingFlags.NonPublic);
++            Assert.IsNotNull(method);
++            return (bool)method.Invoke(null, new object[] { root });
++        }
++
++        [Test]
++        public void ReviewedPair_PassesArtifactGate_WhileJavaRemainsForbiddenByDefault()
++        {
++            Assert.IsTrue(AndroidBuildStateReader.IsForbiddenAndroidArtifactExtension(".java"));
++            Assert.IsTrue(ArtifactGate());
++        }
++
++        [TestCase("CredentialVault.java")]
++        [TestCase("CredentialVault.java.meta")]
++        [TestCase("AndroidCredentialBridge.java")]
++        [TestCase("AndroidCredentialBridge.java.meta")]
++        public void ChangedInventory_BlocksArtifactGate(string name)
++        {
++            File.AppendAllText(Path.Combine(root, PluginDirectory + name), "\n// changed\n");
++            Assert.IsFalse(ArtifactGate());
++        }
++
++        [TestCase("CredentialVault.java")]
++        [TestCase("CredentialVault.java.meta")]
++        [TestCase("AndroidCredentialBridge.java")]
++        [TestCase("AndroidCredentialBridge.java.meta")]
++        public void MissingInventory_BlocksRemainingPlugin(string name)
++        {
++            File.Delete(Path.Combine(root, PluginDirectory + name));
++            Assert.IsFalse(ArtifactGate());
++        }
++
++        [TestCase("Other.java")]
++        [TestCase("Other.kt")]
++        [TestCase("Other.jar")]
++        [TestCase("Other.aar")]
++        [TestCase("Other.so")]
++        [TestCase("AndroidManifest.xml")]
++        [TestCase("mainTemplate.gradle")]
++        public void AdditionalArtifact_StillBlocks(string name)
++        {
++            File.WriteAllText(Path.Combine(root, PluginDirectory + name), "synthetic guard fixture");
++            Assert.IsFalse(ArtifactGate());
++        }
++
++        [Test]
++        public void IdenticalSourceOutsideReviewedPath_StillBlocks()
++        {
++            File.Copy(Path.Combine(root, PluginDirectory + "CredentialVault.java"), Path.Combine(root, "Assets/CredentialVault.java"));
++            Assert.IsFalse(ArtifactGate());
++        }
++
++        [TestCase("Assets/Plugins/Android")]
++        [TestCase("Assets/Other.androidlib")]
++        [TestCase("Packages/embedded")]
++        public void ForbiddenDirectory_StillBlocks(string directory)
++        {
++            Directory.CreateDirectory(Path.Combine(root, directory));
++            Assert.IsFalse(ArtifactGate());
++        }
++
++        [Test]
++        public void ImporterMetadata_IsNotItselfAnExemptPlugin()
++        {
++            Assert.IsFalse(ReviewedAndroidCredentialPlugins.IsAllowed(root,
++                Path.Combine(root, PluginDirectory + "CredentialVault.java.meta")));
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/AndroidBuildEditMode/AndroidCredentialPluginGuardEditModeTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 50cca49dd6f74706bad76bcc048167cc

@@ -1,0 +1,34 @@
+{
+  "source": {
+    "path": "Sources/OriginalReference.png",
+    "origin": "Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Dialogue.png",
+    "sha256": "c88e0b0978108d0e09f1671fd6a15929678c3013e1491988fa5e1a4670431e9a",
+    "dimensions": [
+      941,
+      1672
+    ],
+    "unchangedCopy": true
+  },
+  "artAssessment": "Sources/Assessment.json",
+  "sourceSprites": "QA/AssetChecks.json",
+  "cleanHall": "Sources/Scenario/backgrounds/Request.json",
+  "scenarioAudit": "QA/ScenarioAudit.json",
+  "reused": [
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/FrontEndHomeAligned/loading_environment_dusk.png",
+      "sha256": "36859747568e2b14159802852791c01b98b3e62937f57bfe5738eeecc37160c7"
+    },
+    {
+      "path": "Assets/LegendsOfRus/Resources/ProductionUI/LoadingAligned/firebird_journey.png",
+      "sha256": "019cc7c3953d2089ab9f2c760f085c7c72503991e14c3e4670ab0b802507e2ba"
+    }
+  ],
+  "limitations": [
+    "Generated hall reconstructs obscured scenery, not exact hidden pixels.",
+    "Panel and button lettering removed locally; bounded repaired faces are reconstructed.",
+    "Characters retain visible original colors and poses; obscured lower bodies fade behind the panel. Dobrynya includes the adjacent original chest prop.",
+    "Other speakers use scenery without a substituted portrait; additional character art remains future work.",
+    "Existing selected fonts approximate reference letterforms; story wording remains existing catalog."
+  ],
+  "rejectedReuse": "Events firebird_r3 has a clipped lower edge at Dialogue scale; replaced by unmodified Loading firebird_journey after visual inspection."
+}

@@ -1,0 +1,78 @@
+{
+  "unity": "6000.5.9f1",
+  "runs": [
+    {
+      "run": "Verify01",
+      "suite": "Art",
+      "result": "Passed",
+      "total": "8",
+      "passed": "8",
+      "failed": "0",
+      "skipped": "0",
+      "failures": []
+    },
+    {
+      "run": "Verify02",
+      "suite": "All",
+      "result": "Failed(Child)",
+      "total": "85",
+      "passed": "84",
+      "failed": "1",
+      "skipped": "0",
+      "failures": [
+        {
+          "name": "LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking",
+          "message": "  Expected: 0\n  But was:  80\n"
+        }
+      ]
+    },
+    {
+      "run": "Verify03",
+      "suite": "All",
+      "result": "Failed(Child)",
+      "total": "85",
+      "passed": "83",
+      "failed": "2",
+      "skipped": "0",
+      "failures": [
+        {
+          "name": "LegendsOfRus.Tests.CampaignPlayMode.MechanicsCreationFinishTests.TwoCreationsFinishTogetherAndReturnToExactIdleArt",
+          "message": "  Expected: True\n  But was:  False\n"
+        },
+        {
+          "name": "LegendsOfRus.Tests.CampaignPlayMode.MechanicsImpactReadabilityTests.GemFragmentsUseApprovedTexturesAndRecoverWithoutLeaking",
+          "message": "  Expected: 0\n  But was:  60\n"
+        }
+      ]
+    },
+    {
+      "run": "Verify04",
+      "suite": "FinalArt",
+      "result": "Passed",
+      "total": "23",
+      "passed": "23",
+      "failed": "0",
+      "skipped": "0",
+      "failures": []
+    }
+  ],
+  "latestResultPerTestSummary": {
+    "Passed": 85
+  },
+  "note": "85 distinct selected tests have a passing latest result across runs; final focused run23/23, preceding broad run83/85 with two corrected capture/update-order assertions. This is not a claim of one final85/85 run.",
+  "captureIntervals": {
+    "Verify02": {
+      "samples": 11,
+      "medianSeconds": 0.08420000000000001,
+      "maxSeconds": 0.1812
+    },
+    "Verify04": {
+      "samples": 29,
+      "medianSeconds": 0.033299999999999996,
+      "maxSeconds": 0.0915
+    }
+  },
+  "backend": "Previously approved process-only Vulkan; descriptor4096",
+  "physicalAndroid": false,
+  "editMode": false
+}

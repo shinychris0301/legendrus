@@ -1,0 +1,144 @@
+using LegendsOfRus.GameplayCore;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public sealed partial class PrototypeImpactView
+    {
+        // R4 presentation only. Layered mesh gradients and tapered trails; no new textures,
+        // gameplay RNG, screen flash, camera motion or allocations per particle.
+        void PresentRichBooster(GameplayMotionEvent m)
+        {
+            var p=m.Primary;
+            if(m.BoosterKind==GameplayBoosterKind.SeaPearl)
+            {Add(new BoardPosition(board.ColumnCount/2,board.RowCount/2),new Color(.25f,.8f,1),Shape.Renewal,1,0,.72f);return;}
+            Add(p,Gold,Shape.Charge,1,0,.18f);
+            if(m.BoosterKind==GameplayBoosterKind.Firebird)
+                Add(p,new Color(1,.42f,.07f),Shape.Phoenix,2,.18f,.60f);
+            else if(m.BoosterKind==GameplayBoosterKind.LivingLight)
+                Add(p,new Color(.25f,.72f,1),Shape.Radiance,1,.18f,.6f);
+            else
+            {
+                Add(p,Gold,m.BoosterKind==GameplayBoosterKind.BogatyrMaceColumn?Shape.Column:Shape.Row,1,.18f,.52f);
+                Add(p,Gold,Shape.Blast,.85f,.18f,.45f);
+            }
+        }
+        bool RichEffect(VertexHelper h,Rect r,Effect e,Vector2 p,float u,float t)
+        {
+            float fade=1-t,age=Time.unscaledTime-e.Born;
+            if(e.Shape==Shape.Jewel)
+            {
+                // Expanding transparent corona, compact contact star, then bright chips and dust.
+                float contact=Mathf.Max(0,1-t*4);
+                Glow(h,r,p,u*(.35f+t*.7f),Alpha(e.Color,.28f*fade*fade));
+                Star(h,r,p,u*(.26f+contact*.25f),0,Alpha(new Color(1,.96f,.84f),contact*.92f));
+                for(int i=0;i<16;i++)
+                {
+                    float a=i*2.39996f+(e.Cell.x+e.Cell.y)*.21f;
+                    Vector2 d=Direction(a),q=p+d*u*(.16f+(1-Mathf.Pow(1-t,3))*(.55f+(i%4)*.18f))+Vector2.down*u*t*t*.65f;
+                    float size=u*(i%3==0?.055f:.028f)*(.8f+.2f*fade);
+                    Trail(h,r,q-d*u*.20f*fade,q,size*.4f,Alpha(e.Color,fade*.42f));
+                    if(i%3==0)Star(h,r,q,size*1.6f,a+t*5,Alpha(Color.Lerp(e.Color,Color.white,.72f),fade));
+                    else Diamond(h,r,q,size,a+t*(i%2==0?5:-4),Alpha(Color.Lerp(e.Color,Color.white,.35f),fade*fade));
+                }
+                return true;
+            }
+            if(e.Shape==Shape.Row||e.Shape==Shape.Column)
+            {
+                Vector2 axis=e.Shape==Shape.Row?Vector2.right:Vector2.up,normal=new Vector2(-axis.y,axis.x);
+                float reach=Mathf.Max(r.width,r.height)*Mathf.Clamp01(age/BoardPresentationTimeline.Sweep);
+                // A narrow fading wake remains behind the bright travelling head.
+                Beam(h,r,p,axis,reach,u*.045f*fade,Alpha(e.Color,fade*.38f));
+                Glow(h,r,p,u*.65f,Alpha(e.Color,.65f*fade*fade));
+                for(int sign=-1;sign<=1;sign+=2)
+                {
+                    Vector2 head=p+axis*reach*sign,tail=p+axis*Mathf.Max(0,reach-u*2.1f)*sign;
+                    Trail(h,r,tail,head,u*.27f*fade,Alpha(e.Color,.32f*fade));
+                    Trail(h,r,tail,head,u*.095f*fade,Alpha(new Color(1,.96f,.73f),.95f*fade));
+                    for(int band=-1;band<=1;band+=2)
+                    {
+                        Vector2 previous=tail;
+                        for(int j=1;j<=9;j++)
+                        {
+                            float f=j/9f;Vector2 q=Vector2.Lerp(tail,head,f)+normal*Mathf.Sin(f*Mathf.PI)*Mathf.Sin(f*7+t*22)*u*.15f*band;
+                            Stroke(h,r,previous,q,u*.02f,Alpha(e.Color,fade*f));previous=q;
+                        }
+                    }
+                    if(r.Contains(head))
+                    {
+                        Glow(h,r,head,u*.55f,Alpha(e.Color,.8f*fade));
+                        Star(h,r,head,u*.32f,t*4,Alpha(new Color(1,.98f,.87f),fade));
+                        for(int i=0;i<6;i++)
+                        {
+                            Vector2 q=head-axis*sign*u*(.15f+(i%3)*.26f)+normal*u*Mathf.Sin(i*2.4f+t*7)*.35f;
+                            Trail(h,r,q-axis*sign*u*.25f,q,u*.022f,Alpha(Gold,fade*.8f));
+                        }
+                    }
+                }
+                return true;
+            }
+            if(e.Shape==Shape.Blast||e.Shape==Shape.Phoenix)
+            {
+                float radius=u*(.12f+e.Radius*Mathf.Clamp01(age/BoardPresentationTimeline.Sweep));
+                Glow(h,r,p,radius,Alpha(e.Color,.22f*fade*fade));
+                Glow(h,r,p,u*(.8f*fade),Alpha(new Color(1,.94f,.7f),.95f*fade*fade));
+                Ring(h,r,p,radius,u*.038f*fade,Alpha(new Color(1,.9f,.54f),.8f*fade));
+                // A trailing broken shock front and tapered radial tongues avoid a flat disc.
+                for(int i=0;i<18;i++)
+                {
+                    float a=i*Mathf.PI/9;Vector2 d=Direction(a),tip=p+d*radius*(.78f+.22f*Mathf.Sin(i*2.7f));
+                    Trail(h,r,p+d*radius*.32f,tip,u*(.07f+(i%3)*.025f)*fade,Alpha(e.Color,.65f*fade));
+                    Vector2 ember=p+d*u*(.3f+t*(e.Radius+.8f))+Vector2.down*u*t*t*.6f;
+                    Diamond(h,r,ember,u*.045f*fade,a+t*5,Alpha(Color.Lerp(e.Color,Color.white,.5f),fade));
+                    if(i%3==0)Star(h,r,tip,u*.07f*fade,a,Alpha(Color.white,.75f*fade));
+                }
+                if(e.Shape==Shape.Phoenix)
+                    for(int sign=-1;sign<=1;sign+=2)for(int feather=0;feather<7;feather++)
+                    {
+                        Vector2 tip=p+new Vector2(sign*(.55f+feather*.22f),.6f+Mathf.Sin(feather*.44f)*.9f)*u*(.35f+t);
+                        Trail(h,r,p+Vector2.down*u*.25f,tip,u*.10f*fade,Alpha(new Color(1,.67f,.16f),fade*.8f));
+                    }
+                return true;
+            }
+            if(e.Shape==Shape.Radiance||e.Shape==Shape.Renewal)
+            {
+                bool renewal=e.Shape==Shape.Renewal;
+                Glow(h,r,p,u*(.5f+t),Alpha(e.Color,.3f*fade));
+                for(int i=0;i<12;i++)
+                {
+                    float a=i*Mathf.PI/6+t*4;Vector2 q=p+Direction(a)*u*(.35f+t*(renewal?.9f:1.7f));
+                    if(renewal)q+=Vector2.up*u*t*1.8f;
+                    Vector2 back=q-Direction(a+.5f)*u*.3f;
+                    Trail(h,r,back,q,u*.05f*fade,Alpha(e.Color,fade*.65f));
+                    Star(h,r,q,u*(i%3==0?.10f:.045f)*fade,a,Alpha(new Color(.85f,.96f,1),fade));
+                }
+                Ring(h,r,p,u*(.35f+t*1.2f),u*.025f*fade,Alpha(Gold,fade*.65f));
+                return true;
+            }
+            return false;
+        }
+        static Vector2 Direction(float a)=>new Vector2(Mathf.Cos(a),Mathf.Sin(a));
+        static void Diamond(VertexHelper h,Rect r,Vector2 p,float size,float angle,Color c)
+        {Vector2 d=Direction(angle)*size,s=new Vector2(-d.y,d.x)*.55f;Quad(h,r,p+d,p+s,p-d,p-s,c);}
+        static void Star(VertexHelper h,Rect r,Vector2 p,float size,float angle,Color c)
+        {
+            // Fade each thin ray to transparency instead of painting a solid diamond.
+            for(int ray=0;ray<4;ray++)
+            {
+                Vector2 d=Direction(angle+ray*Mathf.PI*.5f),side=new Vector2(-d.y,d.x)*size*.12f;
+                int n=h.currentVertCount;
+                Vertex(h,r,p-side,Alpha(c,0));Vertex(h,r,p+d*size*(ray%2==0?1:.72f),Alpha(c,0));
+                Vertex(h,r,p+side,Alpha(c,0));Vertex(h,r,p,c);
+                h.AddTriangle(n,n+1,n+3);h.AddTriangle(n+1,n+2,n+3);
+            }
+        }
+        static void Stroke(VertexHelper h,Rect r,Vector2 a,Vector2 b,float width,Color c)
+        {Vector2 d=b-a;Beam(h,r,(a+b)*.5f,d.normalized,d.magnitude*.5f,width,c);}
+        static void Trail(VertexHelper h,Rect r,Vector2 a,Vector2 b,float width,Color c)
+        {
+            Vector2 d=(b-a).normalized,s=new Vector2(-d.y,d.x)*width;int n=h.currentVertCount;
+            Vertex(h,r,a,Alpha(c,0));Vertex(h,r,b+s,Alpha(c,0));Vertex(h,r,b,c);Vertex(h,r,b-s,Alpha(c,0));
+            h.AddTriangle(n,n+1,n+2);h.AddTriangle(n,n+2,n+3);
+        }
+    }
+}

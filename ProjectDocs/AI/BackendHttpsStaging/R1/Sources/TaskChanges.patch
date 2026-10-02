@@ -1,0 +1,769 @@
+--- a/Backend/LegendsOfRusService/README.md
++++ b/Backend/LegendsOfRusService/README.md
+@@ -1,6 +1,8 @@
+ # Legends of Rus — RuStore backend foundation
+ 
+-The confirmed release store is RuStore. This repository now contains our own backend foundation; it does not depend on selecting a third-party game backend. It is a locally tested service, **not a deployed commercial backend**. A Unity transport and account-service composition now exist and have been exercised against the loopback backend. The Android Keystore/atomic-file credential adapter is now installed; production remains unconfigured pending Android device/packaging and hosted HTTPS verification.
++The confirmed release store is RuStore. This repository contains our own backend foundation; it does not depend on selecting a third-party game backend. It is a locally tested service, **not a deployed commercial backend**. A Unity transport and account-service composition exist and have been exercised against the loopback backend. The Android Keystore/atomic-file credential adapter passed packaging and physical Android 16 storage/restart/fault checks in AndroidCredentialStorage/R5DeviceExecution. Normal accounts remain unconfigured pending hosted HTTPS and authenticated Android session verification.
++
++An isolated [HTTPS staging package](deploy/README.md) now provides a pinned Gunicorn runner, nginx TLS/rate limits, a restricted session entry point, readiness, and verified SQLite snapshot/restore tooling. The real nginx/TLS/Gunicorn stack is locally tested; it is not a public deployment or an Android session pass.
+ 
+ ## Implemented
+ 
+@@ -53,15 +55,15 @@
+ 
+ Access lasts one day; recovery credentials last 30 days from issuance. These are current operational constants, not marketing or account-recovery guarantees. Exact retries return the same identity/response; a reused old secret with different terms is rejected. Rotation revokes prior access in that family. Logout revokes the whole family. An expired, revoked or missing credential requires recovery; the Unity client does not silently create a replacement account. There is no email/SMS/provider linking, cross-device recovery or renewal after the recovery window yet.
+ 
+-The Unity client keeps access tokens in memory and uses an injected atomic credential-store interface for recovery state. The installed Android adapter encrypts recovery state with an Android Keystore key and journals ciphertext in no-backup storage. No PlayerPrefs/game-save token adapter exists; Android execution is not yet verified on-device. Production transport requires HTTPS, rejects redirects and caps responses at 64 KiB with a 10-second timeout. Only explicit Editor verification allows literal loopback HTTP; no Android HTTP or certificate-validation setting changed. The normal service starts unconfigured and makes no network call. Login still truthfully reports online sign-in unavailable. Test credential files are disposable fixtures under a private temporary directory, not a production storage implementation.
++The Unity client keeps access tokens in memory and uses an injected atomic credential-store interface for recovery state. The installed Android adapter encrypts recovery state with an Android Keystore key and journals ciphertext in no-backup storage. No PlayerPrefs/game-save token adapter exists. Storage was verified on an Android 16 device using disposable fixtures; this does not yet verify authenticated HTTPS sessions. Production transport requires HTTPS, rejects redirects and caps responses at 64 KiB with a 10-second timeout. Only explicit Editor verification allows literal loopback HTTP; no Android HTTP or certificate-validation setting changed. The normal service starts unconfigured and makes no network call. Login still truthfully reports online sign-in unavailable.
+ 
+ Schema version 2 transactionally adds session families/recovery hashes and preserves version-1 wallets, orders, grants and sessions. Old transient sessions remain transient; migration does not invent a recovery secret. Unknown newer database versions fail closed.
+ 
+ ## Next implementation packages
+ 
+-1. Android packaging/device interruption verification for the installed Keystore credential adapter, then hosted HTTPS verification for the installed Unity transport. Add account linking and a user-visible recovery/deletion policy; device-bound renewal alone is not cross-device recovery. Production purchases must wait for these account boundaries and explicit offline-to-server reconciliation.
++1. Provision the reviewed session staging package on an agreed server/domain, verify public HTTPS, then test the installed Unity transport and protected recovery state together on Android. Android packaging/storage interruption checks passed on Android 16; additional devices remain open. Add account linking and a user-visible recovery/deletion policy; device-bound renewal alone is not cross-device recovery. Production purchases must wait for these account boundaries and explicit offline-to-server reconciliation.
+ 2. Server-authoritative attempts and continuation entitlements, then same-attempt playable resume. The local Unity reservation journal is recovery infrastructure, not server authority.
+ 3. RuStore Pay Android SDK integration, approved app/product catalog, server credential rotation, acknowledgement retry/reconciliation and refund processing. Verify real sandbox purchases and lifecycle interruption on Android before enabling offers. Rewarded-ad provider remains a separate decision.
+-4. Hosting with HTTPS, a production WSGI server, account/request rate limits, backups/restore and operational monitoring; evaluate PostgreSQL for multi-instance deployment. The current SQLite schema is version 2 and rejects unknown newer versions. Only disposable test databases have been created for this delivery.
++4. Extend the locally verified staging deployment with actual hosting, account-wide abuse limits, scheduled off-host backups/restore drills, certificate renewal and operational monitoring; evaluate PostgreSQL for multi-instance deployment. The current SQLite schema is version 2 and rejects unknown newer versions. Only disposable test databases have been created for this delivery.
+ 
+ The release gates above are unfinished work, not configuration already installed. No external deployment, public endpoint, live purchase, store signing change or ad-provider activation has occurred.
+--- a/Backend/LegendsOfRusService/service.py
++++ b/Backend/LegendsOfRusService/service.py
+@@ -173,7 +173,7 @@
+             length = int(environ.get("CONTENT_LENGTH") or "0")
+             if not 0 <= length <= 16384:
+                 raise ApiError(413, "request_too_large")
+-            data = json.loads(environ["wsgi.input"].read(length)) if length else {}
++            data = json.loads(environ["wsgi.input"].read(length), object_pairs_hook=self.unique_fields) if length else {}
+             if not isinstance(data, dict):
+                 raise ApiError(400, "invalid_request")
+             if (method, path) == ("GET", "/health"):
+@@ -205,7 +205,7 @@
+                     raise ApiError(404, "not_found")
+         except ApiError as error:
+             result, status = {"error": error.code}, error.status
+-        except (ValueError, TypeError, KeyError):
++        except (ValueError, TypeError, KeyError, RecursionError):
+             result, status = {"error": "invalid_request"}, 400
+         except (sqlite3.Error, OSError):
+             result, status = {"error": "storage_unavailable"}, 503
+@@ -215,6 +215,15 @@
+         return [body]
+ 
+     @staticmethod
++    def unique_fields(pairs):
++        result = {}
++        for key, value in pairs:
++            if key in result:
++                raise ValueError("Duplicate JSON field")
++            result[key] = value
++        return result
++
++    @staticmethod
+     def fields(data, allowed):
+         if set(data) != allowed or any(not isinstance(value, str) or len(value) > 256 for value in data.values()):
+             raise ApiError(400, "invalid_request")
+--- a/Backend/LegendsOfRusService/tests/test_sessions.py
++++ b/Backend/LegendsOfRusService/tests/test_sessions.py
+@@ -1,4 +1,5 @@
+ import concurrent.futures
++from contextlib import closing
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -147,7 +148,7 @@
+     def test_v1_migration_preserves_legacy_session_wallet_and_schema(self):
+         # Independent actual v1 schema fixture, not a version-2 database with a changed flag.
+         legacy_path = Path(self.temp.name) / 'legacy.db'
+-        with sqlite3.connect(legacy_path) as db:
++        with closing(sqlite3.connect(legacy_path)) as db, db:
+             db.executescript('''PRAGMA user_version=1;
+                 CREATE TABLE schema_info(version INTEGER PRIMARY KEY CHECK(version=1)); INSERT INTO schema_info VALUES(1);
+                 CREATE TABLE players(id TEXT PRIMARY KEY,gems INTEGER NOT NULL);
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/README.md
+@@ -0,0 +1,55 @@
++# Isolated HTTPS session staging
++
++This package deploys the existing backend on one Linux host using nginx, Gunicorn and SQLite. It is **session staging only**: no real purchases, imported saves, ads, social accounts or commercial wallet grants. The game remains unconfigured. A server/domain has not yet been supplied; nothing has been publicly deployed.
++
++The WSGI entry is `staging:create_app()`. It accepts bootstrap, refresh, player, logout, health and readiness only. The legacy guest and all commerce/continuation routes are closed. The provider is fixed to an unconfigured sandbox and no provider secrets are consumed. Use a separate staging hostname/database, never a production database or real customer accounts.
++
++## Host preparation
++
++Use a supported Linux host with systemd, Python 3.10+ and a maintained nginx supporting `ssl_reject_handshake` (1.19.4+). This package was tested locally with Python 3.14.6, Gunicorn 26.2.0 and Ubuntu nginx 1.28.3. Host distribution selection, provisioning, DNS, firewall, public certificate issuance/renewal and operational ownership remain to be completed.
++
++1. Create the unprivileged `lor-staging` service account. Put only this backend directory at `/opt/lor-staging/current`, owned by the deployment administrator and read-only to the service. Do not upload the Unity project, player saves or local QA data.
++2. Create `/opt/lor-staging/venv`; install `deploy/requirements.txt` using `pip install --require-hashes --only-binary=:all: -r deploy/requirements.txt`. The version and wheel hash are pinned. Review updates separately.
++3. Create `/etc/lor-staging/config` with **only these non-secret settings**, substituting the actual hostname:
++
++   ```text
++   LOR_API_HOST=api-staging.example.com
++   LOR_DATABASE=/var/lib/lor-staging/state.db
++   ```
++
++   Do not use that example hostname as a live endpoint. systemd creates `/var/lib/lor-staging` owned by the service with mode 0700. Existing state directories must have that owner/mode. The application refuses missing/private-directory misconfiguration and database symlinks.
++4. Install `lor-staging.service` in `/etc/systemd/system/`. Run `systemd-analyze verify` **on that host after paths exist**, then daemon-reload and start the service. Gunicorn binds only 127.0.0.1:8097, with one process/four threads and a private umask. Do not expose 8097 or use multiple hosts sharing this SQLite file.
++5. Point the actual staging DNS name to the host and provision its trusted TLS certificate using the host's approved certificate workflow. Private keys stay on the host. This repository does not generate or distribute production certificates.
++6. Install `lor-staging-proxy.conf` as `/etc/nginx/snippets/lor-staging-proxy.conf`. Render `nginx.conf.template` with the actual `API_HOST` and absolute `CERT_DIRECTORY` holding `fullchain.pem` and `privkey.pem`. Include it under nginx `http {}`. This template assumes a **dedicated** host: reconcile existing default listeners first; do not overwrite other sites.
++7. Run `nginx -t` before reload. Open only the required HTTPS port plus restricted administration. The example port-80 listener returns 404, **never redirects credential-bearing requests**. For HTTP-01 certificate renewal, explicitly arrange the ACME challenge location; otherwise use DNS-based issuance. Monitor expiry/renewal. The template currently binds IPv4 only; do not publish an AAAA record without an explicitly tested IPv6 configuration.
++
++nginx buffers requests, limits bodies to 16 KiB, overwrites forwarded headers and applies per-IP limits: authentication 10 requests/minute with burst 10, other allowed routes 5/second with burst 20, eight simultaneous connections. These are conservative **staging** limits and need real-user/shared-NAT tuning and monitoring. No account-wide quotas or distributed abuse protection are claimed. Only nginx on the same trusted host should reach Gunicorn. The app enforces the exact configured host and HTTPS scheme. Query strings and arbitrary routes are rejected. Rate limits return 429; the client must retain its pending recovery request and retry later, never create a new identity to evade limits.
++
++Access logging is disabled; do not enable request-body/header/response-body or debug logging on the host, proxy, load balancer or monitoring agent. Application errors are generic. Supervise process health and aggregate status codes separately from credentials. The local verification checked synthetic credentials were absent from logs; this is not a review of a future hosting provider's logging configuration.
++
++## Verification and rollback
++
++`GET https://<actual-host>/health` is liveness; `/ready` verifies a read-only connection, known database schema and session table. Readiness does not prove write capacity, backups, disk space or provider availability. Monitor those separately. Public tests must use normal TLS validation, with no Android cleartext permission or trust bypass. Review deployment before configuring the game or creating a disposable Android staging account.
++
++For a local integration rehearsal without installing system services:
++
++```sh
++python -m unittest discover -s tests -v
++python tests/verify_staging_stack.py --nginx /path/to/nginx --output /tmp/lor-stack-result.json
++```
++
++Run the latter with the pinned Gunicorn environment. It binds only loopback high ports, creates a one-day fixture certificate trusted only by its own test client, starts real nginx/Gunicorn, checks recovery after a server-process restart, and deletes its fixtures/processes. No system/device trust store changes. It exports only named check results, never tokens. This does not replace a public certificate or physical Android session test.
++
++Before deployment changes, create a verified snapshot with the service account:
++
++```sh
++python snapshot_database.py /var/lib/lor-staging/state.db /private-backups/unique-snapshot.db
++```
++
++The destination directory must already exist with mode 0700. The tool uses SQLite's online backup API, includes committed WAL data, validates schema/integrity/foreign keys and publishes a new 0600 file without overwriting an existing file or journal. Backups contain private account state; retain/encrypt/transfer them only through the host's approved backup system. No off-host backup schedule, encryption key management or retention automation is supplied yet.
++
++For a restore drill, use the same command with the backup as source and a **new** destination path, then run the staging service against that restored copy. Never overwrite an open database or copy only its main file while WAL is active. A live rollback requires stopping the service and ensuring no other writer exists, a fresh pre-rollback snapshot, and a reviewed switch of `LOR_DATABASE`. Restoring older state can lose later grants/revocations and invalidate device recovery credentials; do not treat it as a safe commercial rollback. Keep the prior code release and current database untouched until acceptance. Schema-changing code rollback needs its own migration plan.
++
++Next: select/provide the host and domain, provision and validate public TLS, then implement explicit Android staging-session entry and run bootstrap → app restart → renewal → interrupted response recovery on the connected phone. Account linking/deletion, offline reconciliation, server round authority and RuStore sandbox commerce follow separately.
++
++Sources checked 2026-09-30: [Gunicorn deployment](https://gunicorn.org/deploy/), [Gunicorn settings](https://gunicorn.org/reference/settings/), [nginx request limits](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html), [nginx proxy buffering](https://nginx.org/en/docs/http/ngx_http_proxy_module.html), [Python SQLite backup](https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.backup).
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/gunicorn.conf.py
+@@ -0,0 +1,21 @@
++# One host / one worker for the current SQLite staging service.
++bind = "127.0.0.1:8097"
++workers = 1
++worker_class = "gthread"
++threads = 4
++timeout = 30
++graceful_timeout = 30
++keepalive = 2
++max_requests = 2000
++max_requests_jitter = 200
++limit_request_line = 2048
++limit_request_fields = 32
++limit_request_field_size = 4096
++forwarded_allow_ips = "127.0.0.1"
++secure_scheme_headers = {"X-FORWARDED-PROTO": "https"}
++accesslog = None
++errorlog = "-"
++loglevel = "warning"
++capture_output = False
++umask = 0o077
++preload_app = False
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/lor-staging-proxy.conf
+@@ -0,0 +1,13 @@
++proxy_pass http://127.0.0.1:8097;
++proxy_http_version 1.1;
++proxy_set_header Host $host;
++proxy_set_header X-Forwarded-Proto https;
++proxy_set_header X-Forwarded-For $remote_addr;
++proxy_set_header Connection "";
++proxy_request_buffering on;
++proxy_buffering on;
++proxy_max_temp_file_size 0;
++proxy_connect_timeout 2s;
++proxy_read_timeout 8s;
++proxy_send_timeout 8s;
++proxy_next_upstream off;
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/lor-staging.service
+@@ -0,0 +1,32 @@
++[Unit]
++Description=Legends of Rus isolated session staging
++After=network.target
++
++[Service]
++User=lor-staging
++Group=lor-staging
++WorkingDirectory=/opt/lor-staging/current
++Environment=PYTHONDONTWRITEBYTECODE=1
++EnvironmentFile=/etc/lor-staging/config
++StateDirectory=lor-staging
++StateDirectoryMode=0700
++UMask=0077
++ExecStart=/opt/lor-staging/venv/bin/gunicorn --config deploy/gunicorn.conf.py staging:create_app()
++Restart=on-failure
++RestartSec=5
++TimeoutStopSec=40
++NoNewPrivileges=true
++PrivateTmp=true
++PrivateDevices=true
++ProtectSystem=strict
++ProtectHome=true
++ProtectKernelTunables=true
++ProtectKernelModules=true
++ProtectControlGroups=true
++RestrictSUIDSGID=true
++RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
++CapabilityBoundingSet=
++ReadWritePaths=/var/lib/lor-staging
++
++[Install]
++WantedBy=multi-user.target
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/nginx.conf.template
+@@ -0,0 +1,53 @@
++# Included inside nginx's http {}. Replace API_HOST and CERT_DIRECTORY after DNS/TLS setup.
++# Dedicated staging host directly behind nginx; do not enable real_ip trust indiscriminately.
++limit_req_zone $binary_remote_addr zone=lor_auth:10m rate=10r/m;
++limit_req_zone $binary_remote_addr zone=lor_api:10m rate=5r/s;
++limit_conn_zone $binary_remote_addr zone=lor_connections:10m;
++
++server {
++    listen 80 default_server;
++    server_name _;
++    access_log off;
++    return 404;
++}
++server {
++    listen 443 ssl default_server;
++    ssl_reject_handshake on;
++    server_name _;
++    access_log off;
++}
++server {
++    listen 443 ssl;
++    server_name API_HOST;
++    ssl_certificate CERT_DIRECTORY/fullchain.pem;
++    ssl_certificate_key CERT_DIRECTORY/privkey.pem;
++    ssl_protocols TLSv1.2 TLSv1.3;
++    server_tokens off;
++    access_log off;
++    # No debug/request/header/body logs. Restrict operational log retention.
++    error_log /var/log/nginx/lor-staging-error.log crit;
++    client_max_body_size 16k;
++    client_body_buffer_size 32k;
++    client_header_timeout 10s;
++    client_body_timeout 10s;
++    send_timeout 10s;
++    keepalive_timeout 10s;
++    limit_conn lor_connections 8;
++    limit_req_status 429;
++    limit_conn_status 429;
++    add_header Cache-Control no-store always;
++    add_header X-Content-Type-Options nosniff always;
++    add_header Strict-Transport-Security "max-age=86400" always;
++
++    # Never forward query credentials or arbitrary routes; auth gets a tighter bucket.
++    if ($args != "") { return 400; }
++    location ~ ^/v1/auth/(bootstrap|refresh)$ {
++        limit_req zone=lor_auth burst=10 nodelay;
++        include /etc/nginx/snippets/lor-staging-proxy.conf;
++    }
++    location ~ ^/(health|ready|v1/player|v1/session)$ {
++        limit_req zone=lor_api burst=20 nodelay;
++        include /etc/nginx/snippets/lor-staging-proxy.conf;
++    }
++    location / { return 404; }
++}
+--- /dev/null
++++ b/Backend/LegendsOfRusService/deploy/requirements.txt
+@@ -0,0 +1,2 @@
++# Dependency and wheel digest from PyPI, verified 2026-09-30. Staging only.
++gunicorn==26.2.0 --hash=sha256:bd249d0b3f7972f7432f0a6b6ff3b3ee2d129f70cd1ff6c09a9dd9e29a2b88e3
+--- /dev/null
++++ b/Backend/LegendsOfRusService/snapshot_database.py
+@@ -0,0 +1,64 @@
++"""Private SQLite online snapshot / restore-to-new-path; never replace a live DB."""
++import argparse
++from contextlib import closing
++import os
++from pathlib import Path
++import sqlite3
++import tempfile
++
++
++def validate(db):
++    if db.execute("PRAGMA user_version").fetchone()[0] != 2:
++        raise ValueError("Unsupported snapshot schema")
++    if db.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
++        raise ValueError("Snapshot integrity failed")
++    if db.execute("PRAGMA foreign_key_check").fetchone() is not None:
++        raise ValueError("Snapshot references failed")
++    for table in ("players", "sessions", "orders", "grants", "auth_families", "refresh_credentials"):
++        db.execute('SELECT 1 FROM "' + table + '" LIMIT 1').fetchone()
++
++
++def snapshot(source, destination):
++    source, destination = Path(source), Path(destination)
++    if not source.is_absolute() or not source.is_file() or source.is_symlink():
++        raise ValueError("Existing absolute source required")
++    if not destination.is_absolute() or not destination.parent.is_dir():
++        raise ValueError("Existing private absolute destination directory required")
++    if destination.parent.stat().st_mode & 0o077:
++        raise ValueError("Destination directory must be private (0700)")
++    if any(Path(str(destination) + suffix).exists() or Path(str(destination) + suffix).is_symlink()
++           for suffix in ("", "-wal", "-shm", "-journal")):
++        raise ValueError("Destination and journals must not exist")
++    fd, temporary = tempfile.mkstemp(prefix=".lor-snapshot-", dir=destination.parent)
++    os.close(fd)
++    try:
++        # backup() includes committed WAL data; copying the main DB file does not.
++        with closing(sqlite3.connect(source.as_uri() + "?mode=ro", uri=True, timeout=5)) as original:
++            validate(original)
++            with closing(sqlite3.connect(temporary)) as output:
++                original.backup(output)
++                output.execute("PRAGMA journal_mode=DELETE")
++                validate(output)
++        with open(temporary, "rb") as stream:
++            os.fsync(stream.fileno())
++        # Atomic no-clobber publication, same filesystem. Fails if target appeared meanwhile.
++        os.link(temporary, destination)
++        directory = os.open(destination.parent, os.O_RDONLY | os.O_DIRECTORY)
++        try:
++            os.fsync(directory)
++        finally:
++            os.close(directory)
++    finally:
++        os.unlink(temporary)
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("source")
++    parser.add_argument("destination")
++    args = parser.parse_args()
++    try:
++        snapshot(args.source, args.destination)
++    except (OSError, sqlite3.Error, ValueError):
++        parser.exit(1, "Snapshot failed; no source modified. Inspect permissions/schema offline.\n")
++    print("Snapshot verified and published; source unchanged.")
+--- /dev/null
++++ b/Backend/LegendsOfRusService/staging.py
+@@ -0,0 +1,80 @@
++"""HTTPS-proxy entry point for isolated session staging, never live commerce."""
++from http import HTTPStatus
++from contextlib import closing
++import json
++import os
++from pathlib import Path
++import re
++import sqlite3
++
++from rustore import RuStoreVerifier
++from service import Application, Service
++
++
++class StagingApplication:
++    routes = {
++        ("GET", "/health"), ("GET", "/ready"),
++        ("POST", "/v1/auth/bootstrap"), ("POST", "/v1/auth/refresh"),
++        ("GET", "/v1/player"), ("DELETE", "/v1/session"),
++    }
++
++    def __init__(self, service, host):
++        self.service, self.host = service, host
++        self.application = Application(service)
++
++    @staticmethod
++    def reply(start_response, status, result):
++        body = json.dumps(result).encode()
++        start_response(f"{status} {HTTPStatus(status).phrase}", [
++            ("Content-Type", "application/json"), ("Content-Length", str(len(body))),
++            ("Cache-Control", "no-store"), ("X-Content-Type-Options", "nosniff")])
++        return [body]
++
++    def __call__(self, environ, start_response):
++        # Gunicorn accepts forwarded HTTPS only from the local reverse proxy.
++        # Never trust an arbitrary X-Forwarded-Host or query-string credential.
++        if environ.get("wsgi.url_scheme") != "https":
++            return self.reply(start_response, 400, {"error": "https_required"})
++        if environ.get("HTTP_HOST") != self.host:
++            return self.reply(start_response, 400, {"error": "invalid_host"})
++        if environ.get("QUERY_STRING"):
++            return self.reply(start_response, 400, {"error": "query_not_supported"})
++        method, path = environ.get("REQUEST_METHOD"), environ.get("PATH_INFO")
++        if (method, path) not in self.routes:
++            return self.reply(start_response, 404, {"error": "not_found"})
++        if method == "POST":
++            if environ.get("CONTENT_TYPE", "").split(";", 1)[0].strip().lower() != "application/json":
++                return self.reply(start_response, 415, {"error": "json_required"})
++            if not environ.get("CONTENT_LENGTH"):
++                return self.reply(start_response, 411, {"error": "length_required"})
++        if path == "/ready":
++            try:
++                # mode=ro must not silently recreate a lost/deleted database.
++                uri = Path(self.service.database).as_uri() + "?mode=ro"
++                with closing(sqlite3.connect(uri, uri=True, timeout=2)) as db:
++                    if db.execute("PRAGMA user_version").fetchone()[0] != 2:
++                        raise sqlite3.DatabaseError()
++                    db.execute("SELECT id FROM auth_families LIMIT 1").fetchone()
++                return self.reply(start_response, 200, {"status": "ready"})
++            except (sqlite3.Error, OSError):
++                return self.reply(start_response, 503, {"error": "storage_unavailable"})
++        try:
++            return self.application(environ, start_response)
++        except Exception:
++            # No traceback/locals/request body containing credentials in logs.
++            return self.reply(start_response, 500, {"error": "internal_error"})
++
++
++def create_app():
++    host = os.environ.get("LOR_API_HOST", "")
++    if (len(host) > 253 or "." not in host or
++            not all(re.fullmatch(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", p) for p in host.split("."))):
++        raise ValueError("Configure a lowercase API hostname without scheme or port")
++    path = Path(os.environ.get("LOR_DATABASE", ""))
++    if not path.is_absolute() or not path.parent.is_dir() or path.is_symlink():
++        raise ValueError("Configure an absolute database in an existing private directory")
++    if path.parent.stat().st_mode & 0o077:
++        raise ValueError("Database directory must be private (0700)")
++    # This staging entry deliberately does not consume provider credentials.
++    # No transient guest endpoint, commercial catalog, continuation or provider calls.
++    return StagingApplication(Service(path, RuStoreVerifier("", "sandbox", lambda: "")), host)
+--- /dev/null
++++ b/Backend/LegendsOfRusService/tests/test_staging.py
+@@ -0,0 +1,156 @@
++import io
++import json
++import os
++from pathlib import Path
++import secrets
++import sqlite3
++import tempfile
++import unittest
++from unittest.mock import patch
++import uuid
++
++from errors import ApiError
++from service import Service
++from snapshot_database import snapshot
++from staging import create_app
++
++
++class StagingTests(unittest.TestCase):
++    def setUp(self):
++        self.temp = tempfile.TemporaryDirectory()
++        self.root = Path(self.temp.name)
++        self.database = self.root / "state.db"
++        self.settings = {"LOR_DATABASE": str(self.database), "LOR_API_HOST": "api.example.test"}
++        with patch.dict(os.environ, self.settings):
++            self.app = create_app()
++
++    def tearDown(self):
++        self.temp.cleanup()
++
++    def call(self, path="/health", method="GET", body=b"", **changes):
++        environ = {"REQUEST_METHOD": method, "PATH_INFO": path, "QUERY_STRING": "",
++                   "wsgi.url_scheme": "https", "HTTP_HOST": "api.example.test",
++                   "CONTENT_TYPE": "application/json", "CONTENT_LENGTH": str(len(body)),
++                   "wsgi.input": io.BytesIO(body)}
++        environ.update(changes)
++        status = []
++        headers = []
++        result = b"".join(self.app(environ, lambda s, h: (status.append(int(s.split()[0])), headers.extend(h))))
++        self.assertIn(("Cache-Control", "no-store"), headers)
++        return status[0], json.loads(result)
++
++    def test_factory_rejects_missing_or_ambiguous_host(self):
++        for host in ("", "localhost", "https://api.example.test", "api.example.test:443", "a..test", "*.test", "a.test/path"):
++            with self.subTest(host=host), patch.dict(os.environ, {**self.settings, "LOR_API_HOST": host}):
++                with self.assertRaises(ValueError):
++                    create_app()
++
++    def test_factory_rejects_relative_missing_directory_and_shared_directory(self):
++        for path in ("state.db", str(self.root / "missing" / "state.db")):
++            with patch.dict(os.environ, {**self.settings, "LOR_DATABASE": path}):
++                with self.assertRaises(ValueError):
++                    create_app()
++        self.root.chmod(0o755)
++        try:
++            with patch.dict(os.environ, self.settings), self.assertRaises(ValueError):
++                create_app()
++        finally:
++            self.root.chmod(0o700)
++
++    def test_https_host_query_enforced_without_header_spoofing(self):
++        for changes in ({"wsgi.url_scheme": "http", "HTTP_X_FORWARDED_PROTO": "https"},
++                        {"HTTP_HOST": "evil.test", "HTTP_X_FORWARDED_HOST": "api.example.test"},
++                        {"QUERY_STRING": "token=synthetic"}):
++            self.assertEqual(400, self.call(**changes)[0])
++
++    def test_staging_does_not_expose_commerce_or_transient_guests(self):
++        for path in ("/v1/auth/guest", "/v1/rustore/orders", "/v1/rustore/fulfill", "/v1/continuations", "/unknown"):
++            self.assertEqual(404, self.call(path, "POST", b"{}")[0])
++
++    def test_json_length_and_content_type_required(self):
++        self.assertEqual(415, self.call("/v1/auth/bootstrap", "POST", b"{}", CONTENT_TYPE="text/plain")[0])
++        self.assertEqual(411, self.call("/v1/auth/bootstrap", "POST", CONTENT_LENGTH="")[0])
++        self.assertEqual(413, self.call("/v1/auth/bootstrap", "POST", CONTENT_LENGTH="16385")[0])
++
++    def test_duplicate_deep_invalid_utf8_and_malformed_json_rejected(self):
++        for body in (b'{"refresh_token":"x","refresh_token":"y","request_id":"z"}',
++                     b'[' * 2000 + b']' * 2000, b'\xff', b'{', b'[]'):
++            self.assertEqual(400, self.call("/v1/auth/bootstrap", "POST", body)[0])
++
++    def test_readiness_checks_database_without_recreating_it(self):
++        self.assertEqual((200, {"status": "ready"}), self.call("/ready"))
++        self.database.rename(self.root / "saved.db")
++        self.assertEqual(503, self.call("/ready")[0])
++        self.assertFalse(self.database.exists())
++
++    def test_readiness_rejects_unknown_schema(self):
++        with self.app.service.connect() as db:
++            db.execute("PRAGMA user_version=99")
++        self.assertEqual(503, self.call("/ready")[0])
++
++    def test_unexpected_error_is_redacted(self):
++        with patch.object(self.app.service, "bootstrap_session", side_effect=RuntimeError("fixture-not-for-response")):
++            code, body = self.call("/v1/auth/bootstrap", "POST", json.dumps({"refresh_token": "x", "request_id": "y"}).encode())
++        self.assertEqual((500, {"error": "internal_error"}), (code, body))
++
++    def test_snapshot_includes_wal_and_restores_session_identity(self):
++        secret, request = secrets.token_hex(32), str(uuid.uuid4())
++        first = self.app.service.bootstrap_session(secret, request)
++        # Keep a connection open so committed data still resides in WAL during backup.
++        with self.app.service.connect() as held:
++            held.execute("UPDATE players SET gems=731")
++            self.assertGreater(Path(str(self.database) + "-wal").stat().st_size, 0)
++            backup = self.root / "backup.db"
++            snapshot(self.database, backup)
++        self.assertEqual(0o600, backup.stat().st_mode & 0o777)
++        restored_path = self.root / "restored.db"
++        snapshot(backup, restored_path)
++        restored = Service(restored_path, self.app.service.verifier)
++        self.assertEqual(first, restored.bootstrap_session(secret, request))
++        self.assertEqual(731, restored.player(first["player_id"])["gems"])
++        rotated = restored.refresh_session(secret, secrets.token_hex(32), str(uuid.uuid4()))
++        restored.revoke(rotated["access_token"])
++        with self.assertRaises(ApiError):
++            restored.authenticate(rotated["access_token"])
++        # Restored fixture is independent of the original running service.
++        self.assertEqual(first["player_id"], self.app.service.authenticate(first["access_token"]))
++
++    def test_snapshot_refuses_existing_destination_and_journal(self):
++        destination = self.root / "copy.db"
++        for suffix in ("", "-wal", "-shm", "-journal"):
++            marker = Path(str(destination) + suffix)
++            marker.write_bytes(b"preserve")
++            with self.assertRaises(ValueError):
++                snapshot(self.database, destination)
++            self.assertEqual(b"preserve", marker.read_bytes())
++            marker.unlink()
++
++    def test_snapshot_rejects_bad_schema_and_corruption_without_publishing(self):
++        for payload in (b"not-a-database", b""):
++            source = self.root / "invalid.db"
++            source.write_bytes(payload)
++            destination = self.root / "rejected.db"
++            with self.assertRaises((ValueError, sqlite3.Error)):
++                snapshot(source, destination)
++            self.assertFalse(destination.exists())
++            self.assertEqual([], list(self.root.glob(".lor-snapshot-*")))
++
++    def test_snapshot_rejects_symlinks_and_shared_destination(self):
++        link = self.root / "link.db"
++        link.symlink_to(self.database)
++        with self.assertRaises(ValueError):
++            snapshot(link, self.root / "copy.db")
++        destination = self.root / "dangling.db"
++        destination.symlink_to(self.root / "absent.db")
++        with self.assertRaises(ValueError):
++            snapshot(self.database, destination)
++        self.root.chmod(0o755)
++        try:
++            with self.assertRaises(ValueError):
++                snapshot(self.database, self.root / "copy.db")
++        finally:
++            self.root.chmod(0o700)
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ b/Backend/LegendsOfRusService/tests/verify_staging_stack.py
+@@ -0,0 +1,179 @@
++"""Opt-in real nginx/TLS/Gunicorn test. Disposable data, loopback listeners only.
++
++Run with a Python environment containing deploy/requirements.txt:
++python tests/verify_staging_stack.py --nginx /path/to/nginx --output /path/to/report.json
++The fixture certificate is trusted only by this process; no system/device trust change.
++"""
++import argparse
++import http.client
++import json
++import os
++from pathlib import Path
++import secrets
++import socket
++import ssl
++import subprocess
++import sys
++import tempfile
++import time
++import uuid
++
++
++def port():
++    with socket.socket() as listener:
++        listener.bind(("127.0.0.1", 0))
++        return listener.getsockname()[1]
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--nginx", required=True)
++    parser.add_argument("--output", required=True)
++    args = parser.parse_args()
++    root = Path(__file__).resolve().parents[1]
++    checks = []
++    def check(name, condition):
++        if not condition:
++            raise RuntimeError("Failed check: " + name)
++        checks.append(name)
++    def stop(process):
++        if process and process.poll() is None:
++            process.terminate()
++            try:
++                process.wait(timeout=35)
++            except subprocess.TimeoutExpired:
++                process.kill()
++                process.wait(timeout=5)
++    with tempfile.TemporaryDirectory(prefix="lor-staging-stack-") as folder:
++        temp = Path(folder)
++        backend_port, https_port, http_port = port(), port(), port()
++        env = {"PATH": os.environ["PATH"], "LANG": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1",
++               "LOR_API_HOST": "api.example.test", "LOR_DATABASE": str(temp / "state.db")}
++        subprocess.run(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "1",
++                        "-subj", "/CN=api.example.test", "-addext", "subjectAltName=DNS:api.example.test",
++                        "-keyout", str(temp / "privkey.pem"), "-out", str(temp / "fullchain.pem")],
++                       check=True, capture_output=True, timeout=30)
++        (temp / "privkey.pem").chmod(0o600)
++        proxy = (root / "deploy/lor-staging-proxy.conf").read_text().replace("127.0.0.1:8097", f"127.0.0.1:{backend_port}")
++        (temp / "proxy.conf").write_text(proxy)
++        config = (root / "deploy/nginx.conf.template").read_text()
++        config = config.replace("listen 80", f"listen 127.0.0.1:{http_port}")
++        config = config.replace("listen 443", f"listen 127.0.0.1:{https_port}")
++        config = config.replace("API_HOST", "api.example.test").replace("CERT_DIRECTORY", str(temp))
++        config = config.replace("/etc/nginx/snippets/lor-staging-proxy.conf", str(temp / "proxy.conf"))
++        config = config.replace("/var/log/nginx/lor-staging-error.log", str(temp / "nginx-error.log"))
++        full = (f"pid {temp}/nginx.pid; error_log {temp}/nginx-master.log crit;\n"
++                f"events {{ worker_connections 128; }}\nhttp {{ access_log off; client_body_temp_path {temp}/body; "
++                f"proxy_temp_path {temp}/proxy; fastcgi_temp_path {temp}/fastcgi; "
++                f"uwsgi_temp_path {temp}/uwsgi; scgi_temp_path {temp}/scgi;\n{config}\n}}\n")
++        (temp / "nginx.conf").write_text(full)
++        nginx_command = [args.nginx, "-p", str(temp), "-c", str(temp / "nginx.conf")]
++        validated = subprocess.run(nginx_command + ["-t"], capture_output=True, timeout=10)
++        if validated.returncode:
++            # Validation occurs before any requests or credentials exist.
++            print(validated.stderr.decode(), file=sys.stderr)
++        check("nginx_configuration_valid", validated.returncode == 0)
++        context = ssl.create_default_context(cafile=str(temp / "fullchain.pem"))
++
++        def request(path, method="GET", payload=None, token=None, host="api.example.test", raw=None):
++            connection = http.client.HTTPConnection("127.0.0.1", https_port, timeout=10)
++            sock = socket.create_connection(("127.0.0.1", https_port), timeout=10)
++            connection.sock = context.wrap_socket(sock, server_hostname="api.example.test")
++            headers = {"Host": host, "Content-Type": "application/json"}
++            if token:
++                headers["Authorization"] = "Bearer " + token
++            body = raw if raw is not None else json.dumps(payload).encode() if payload is not None else None
++            try:
++                connection.request(method, path, body=body, headers=headers)
++                response = connection.getresponse()
++                data = response.read(65537)
++                return response.status, data, response.getheader("Cache-Control", "")
++            finally:
++                connection.close()
++
++        log = (temp / "gunicorn.log").open("w+")
++        def start():
++            return subprocess.Popen([sys.executable, "-m", "gunicorn", "--config", "deploy/gunicorn.conf.py",
++                                     "--bind", f"127.0.0.1:{backend_port}", "staging:create_app()"],
++                                    cwd=root, env=env, stdout=log, stderr=log)
++        server = proxy_process = None
++        try:
++            server = start()
++            proxy_process = subprocess.Popen(nginx_command + ["-g", "daemon off;"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
++            def ready():
++                deadline = time.monotonic() + 15
++                while time.monotonic() < deadline:
++                    try:
++                        if request("/ready")[0] == 200:
++                            return
++                    except (OSError, http.client.HTTPException):
++                        pass
++                    time.sleep(0.3)
++                raise RuntimeError("Staging stack did not become ready")
++            ready()
++            check("https_readiness", request("/ready")[0] == 200)
++            check("responses_not_cached", "no-store" in request("/health")[2])
++            with socket.create_connection(("127.0.0.1", https_port)) as sock:
++                try:
++                    ssl.create_default_context().wrap_socket(sock, server_hostname="api.example.test")
++                    rejected = False
++                except ssl.SSLCertVerificationError:
++                    rejected = True
++            check("untrusted_certificate_rejected", rejected)
++            with socket.create_connection(("127.0.0.1", https_port)) as sock:
++                try:
++                    context.wrap_socket(sock, server_hostname="wrong.example.test")
++                    rejected = False
++                except ssl.SSLError:
++                    rejected = True
++            check("unknown_tls_hostname_rejected", rejected)
++            plain = http.client.HTTPConnection("127.0.0.1", http_port, timeout=5)
++            plain.request("GET", "/health", headers={"Host": "api.example.test"})
++            response = plain.getresponse()
++            check("plaintext_no_redirect_or_api", response.status == 404)
++            response.read(); plain.close()
++            check("query_rejected", request("/health?token=fixture")[0] == 400)
++            check("oversized_body_rejected", request("/v1/auth/bootstrap", "POST", raw=b"x" * 16385)[0] == 413)
++            check("commerce_closed", request("/v1/rustore/orders", "POST", {})[0] == 404)
++            check("transient_guest_closed", request("/v1/auth/guest", "POST", {})[0] == 404)
++            secret, next_secret = secrets.token_hex(32), secrets.token_hex(32)
++            bootstrap = {"refresh_token": secret, "request_id": str(uuid.uuid4())}
++            code, data, _ = request("/v1/auth/bootstrap", "POST", bootstrap)
++            check("bootstrap_over_tls", code == 200)
++            initial = json.loads(data)
++            code, data, _ = request("/v1/auth/bootstrap", "POST", bootstrap)
++            check("bootstrap_retry_same_account", code == 200 and json.loads(data) == initial)
++            code, data, _ = request("/v1/player", token=initial["access_token"])
++            check("authenticated_zero_wallet", code == 200 and json.loads(data) == {"id": initial["player_id"], "gems": 0})
++            rotate = {"refresh_token": secret, "next_refresh_token": next_secret, "request_id": str(uuid.uuid4())}
++            code, data, _ = request("/v1/auth/refresh", "POST", rotate)
++            check("rotation", code == 200)
++            rotated = json.loads(data)
++            stop(server); server = start(); ready()
++            code, data, _ = request("/v1/auth/refresh", "POST", rotate)
++            check("lost_response_retry_after_process_restart", code == 200 and json.loads(data) == rotated)
++            check("old_access_revoked", request("/v1/player", token=initial["access_token"])[0] == 401)
++            check("new_access_after_restart", request("/v1/player", token=rotated["access_token"])[0] == 200)
++            check("logout", request("/v1/session", "DELETE", token=rotated["access_token"])[0] == 200)
++            check("logout_revokes_access", request("/v1/player", token=rotated["access_token"])[0] == 401)
++            check("logout_revokes_recovery", request("/v1/auth/refresh", "POST", rotate)[0] == 401)
++            statuses = [request("/v1/auth/bootstrap", "POST", {})[0] for _ in range(18)]
++            check("auth_rate_limit_429", 429 in statuses)
++            stop(server); server = None
++            check("readiness_fails_when_backend_down", request("/ready")[0] == 502)
++            log.flush()
++            # Only synthetic credentials exist here. Test absence; never output them or raw logs.
++            logs = (temp / "gunicorn.log").read_text() + "".join(p.read_text() for p in temp.glob("nginx-*.log"))
++            check("no_fixture_credentials_in_logs", not any(value in logs for value in
++                  [secret, next_secret, initial["access_token"], rotated["access_token"]]))
++        finally:
++            stop(proxy_process); stop(server); log.close()
++    report = {"passed": len(checks), "failed": 0, "checks": checks,
++              "scope": "Local loopback nginx TLS + Gunicorn; disposable certificate and database",
++              "publicDeployment": False, "androidSessionTested": False, "credentialValuesExported": False}
++    Path(args.output).write_text(json.dumps(report, indent=2) + "\n")
++    print(json.dumps(report))
++
++
++if __name__ == "__main__":
++    main()

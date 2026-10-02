@@ -1,0 +1,966 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 10
++  Revision: 11
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -196,7 +196,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 86.12766, y: 86.12766}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5388466675718031288
+ CanvasRenderer:
+@@ -307,7 +307,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 125, y: -377}
+-  m_SizeDelta: {x: 691, y: 240}
++  m_SizeDelta: {x: 691, y: 243.58994}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4169084695282232845
+ CanvasRenderer:
+@@ -330,16 +330,16 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.8392157, g: 0.8392157, b: 0.8392157, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 3c0765cfef1f492a898d6b07fb903428, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 994e1baa8477450393a8b64c97303016, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -354,7 +354,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 119599552146708432}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -661,7 +661,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 353336538394900050}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+   m_Name: 
+@@ -981,8 +981,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -18}
+-  m_SizeDelta: {x: 140, y: 140}
++  m_AnchoredPosition: {x: 5, y: -6}
++  m_SizeDelta: {x: 184, y: 178.12766}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9178243374362987699
+ CanvasRenderer:
+@@ -1005,14 +1005,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.88235295, g: 0.88235295, b: 0.88235295, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 9a655b6966df17cf7ba9a5c185b8c5aa, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 351fd200fdf84343b91de29988c3123c, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -1101,8 +1101,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_AnchoredPosition: {x: 123, y: -137}
++  m_SizeDelta: {x: 44, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3605856994039849150
+ CanvasRenderer:
+@@ -1119,7 +1119,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 626133614446493492}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 1adc8a794a1894c9aa474021652506b2, type: 3}
+   m_Name: 
+@@ -1293,9 +1293,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -1310,7 +1310,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 876297217436610808}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -1430,7 +1430,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 88, y: 88}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4009362458328076807
+ CanvasRenderer:
+@@ -1522,7 +1522,7 @@
+   m_Icon: {fileID: 0}
+   m_NavMeshLayer: 0
+   m_StaticEditorFlags: 0
+-  m_IsActive: 1
++  m_IsActive: 0
+ --- !u!224 &1648150746998647299
+ RectTransform:
+   m_ObjectHideFlags: 0
+@@ -1721,7 +1721,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
++  m_Sprite: {fileID: 21300000, guid: a49a534b83174c6fa76878c81ed320ee, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -1763,7 +1763,7 @@
+   m_Icon: {fileID: 0}
+   m_NavMeshLayer: 0
+   m_StaticEditorFlags: 0
+-  m_IsActive: 1
++  m_IsActive: 0
+ --- !u!224 &2582810809864293706
+ RectTransform:
+   m_ObjectHideFlags: 0
+@@ -1880,7 +1880,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -3056,7 +3056,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 87.053764, y: 87.053764}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7316388311408035597
+ CanvasRenderer:
+@@ -3462,7 +3462,7 @@
+   m_Icon: {fileID: 0}
+   m_NavMeshLayer: 0
+   m_StaticEditorFlags: 0
+-  m_IsActive: 1
++  m_IsActive: 0
+ --- !u!224 &3736982563486676109
+ RectTransform:
+   m_ObjectHideFlags: 0
+@@ -3579,14 +3579,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.7254902, g: 0.70980394, b: 0.6627451, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 3db7bbe8de134aebac3ebd18ce3bbaf9, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -3722,8 +3722,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 140, y: -97}
+-  m_SizeDelta: {x: 88, y: 72}
++  m_AnchoredPosition: {x: 138, y: -91}
++  m_SizeDelta: {x: 86, y: 72}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5456759259171582905
+ CanvasRenderer:
+@@ -3740,7 +3740,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 3636376486749164295}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+   m_Name: 
+@@ -3766,7 +3766,7 @@
+     m_HorizontalOverflow: 1
+     m_VerticalOverflow: 1
+     m_LineSpacing: 1
+-  m_Text: "\u25B6"
++  m_Text: 
+ --- !u!114 &1984193518298353294
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -3985,7 +3985,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 35, y: -22.63375}
++  m_AnchoredPosition: {x: 35, y: -26.458004}
+   m_SizeDelta: {x: 1110, y: 120}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &737200152408505394
+@@ -4132,7 +4132,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 98, y: 98}
++  m_SizeDelta: {x: 85.67196, y: 85.67196}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1967846936057239464
+ CanvasRenderer:
+@@ -4246,8 +4246,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 512, y: -999}
+-  m_SizeDelta: {x: 324, y: 140}
++  m_AnchoredPosition: {x: 512, y: -992}
++  m_SizeDelta: {x: 324, y: 146.73557}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7581123159915034496
+ CanvasRenderer:
+@@ -4277,9 +4277,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: ef4df53120384dfcbaae6821a9be3adf, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 755114349b33412db90055b0cdbf6efb, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -4338,7 +4338,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4155715940150218782}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -4631,8 +4631,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -18}
+-  m_SizeDelta: {x: 140, y: 140}
++  m_AnchoredPosition: {x: 5, y: -6}
++  m_SizeDelta: {x: 184, y: 182}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4782480108259549477
+ CanvasRenderer:
+@@ -4655,14 +4655,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.88235295, g: 0.88235295, b: 0.88235295, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 8739c10fe076699dca3d45646c296228, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 18c60052f505406e97ab82e83266c9ee, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -4751,8 +4751,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_AnchoredPosition: {x: 117.55319, y: -134.21277}
++  m_SizeDelta: {x: 43.06383, y: 43.06383}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &378955669684832923
+ CanvasRenderer:
+@@ -4769,7 +4769,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4392266894761627010}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 1adc8a794a1894c9aa474021652506b2, type: 3}
+   m_Name: 
+@@ -4823,8 +4823,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 105, y: -999}
+-  m_SizeDelta: {x: 324, y: 140}
++  m_AnchoredPosition: {x: 105, y: -992}
++  m_SizeDelta: {x: 324, y: 147.18292}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5590398645453770370
+ CanvasRenderer:
+@@ -4854,9 +4854,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2e6bf8890c1749f290e4915e4f9bca32, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 91c19a9e9ade4e9fa63755b1ca245052, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -4915,7 +4915,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4472017785673375143}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -5111,8 +5111,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 42, y: -61}
+-  m_SizeDelta: {x: 480, y: 48}
++  m_AnchoredPosition: {x: 42, y: -56}
++  m_SizeDelta: {x: 480, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8207354783645223317
+ CanvasRenderer:
+@@ -5144,7 +5144,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -5221,8 +5221,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 110, y: -98}
+-  m_SizeDelta: {x: 34, y: 34}
++  m_AnchoredPosition: {x: 110, y: -90}
++  m_SizeDelta: {x: 43, y: 43}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2623364927183477300
+ CanvasRenderer:
+@@ -5239,7 +5239,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4865032346803570510}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+   m_Name: 
+@@ -5409,8 +5409,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_AnchoredPosition: {x: 124.74603, y: -133.5344}
++  m_SizeDelta: {x: 42.83598, y: 42.83598}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2969360148757361740
+ CanvasRenderer:
+@@ -5427,7 +5427,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 4942301430477662850}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 1adc8a794a1894c9aa474021652506b2, type: 3}
+   m_Name: 
+@@ -6568,8 +6568,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -18}
+-  m_SizeDelta: {x: 140, y: 140}
++  m_AnchoredPosition: {x: 5, y: -6}
++  m_SizeDelta: {x: 184, y: 180.04301}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8033513977026840974
+ CanvasRenderer:
+@@ -6592,14 +6592,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.88235295, g: 0.88235295, b: 0.88235295, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 2a443fedc39aaec72a2ec48ff170e84b, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 778553394a564d45bcf182237d712903, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -6719,9 +6719,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -6736,7 +6736,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 6028754315651924443}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -6810,9 +6810,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -6827,7 +6827,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 6322581650060253251}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -7268,8 +7268,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -12}
+-  m_SizeDelta: {x: 552, y: 74}
++  m_AnchoredPosition: {x: 42, y: -16}
++  m_SizeDelta: {x: 430, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2525319068280211376
+ CanvasRenderer:
+@@ -7301,7 +7301,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 60
++    m_FontSize: 56
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -7597,9 +7597,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 5821f355c36c4f6f92dedabc089ae821, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 2e0fea6312824d03abdcb7e97972c30c, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -7614,7 +7614,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 7038049917118423444}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -7769,8 +7769,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -130}
+-  m_SizeDelta: {x: 49, y: 49}
++  m_AnchoredPosition: {x: 119.752686, y: -135.5914}
++  m_SizeDelta: {x: 43.526882, y: 43.526882}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7755711264260632837
+ CanvasRenderer:
+@@ -7787,7 +7787,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 7425094678510285438}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: 1adc8a794a1894c9aa474021652506b2, type: 3}
+   m_Name: 
+@@ -8246,7 +8246,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 3db7bbe8de134aebac3ebd18ce3bbaf9, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -8713,8 +8713,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 27, y: -18}
+-  m_SizeDelta: {x: 140, y: 140}
++  m_AnchoredPosition: {x: 5, y: -6}
++  m_SizeDelta: {x: 184, y: 177.18518}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6552961067771450850
+ CanvasRenderer:
+@@ -8737,14 +8737,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.88235295, g: 0.88235295, b: 0.88235295, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4a0806693c5c985e7a47ecd2d4c36836, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 877529dad5904afd872a21017565292d, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -8928,7 +8928,7 @@
+   m_Icon: {fileID: 0}
+   m_NavMeshLayer: 0
+   m_StaticEditorFlags: 0
+-  m_IsActive: 1
++  m_IsActive: 0
+ --- !u!224 &2166850891363435404
+ RectTransform:
+   m_ObjectHideFlags: 0
+@@ -9023,7 +9023,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 158, y: -877}
+-  m_SizeDelta: {x: 625, y: 105.2675}
++  m_SizeDelta: {x: 625, y: 112.91601}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4733299478114508104
+ CanvasRenderer:
+@@ -9053,7 +9053,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 668e5ec964d6444e893b1a5236720583, type: 3}
++  m_Sprite: {fileID: 21300000, guid: db89c1818e47461884978ce116a03082, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -9166,16 +9166,16 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.8627451, g: 0.8627451, b: 0.8627451, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: fd49388aaea749f7b627e0e84751f8eb, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 3db7bbe8de134aebac3ebd18ce3bbaf9, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -9190,7 +9190,7 @@
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 8589662677592774760}
+-  m_Enabled: 1
++  m_Enabled: 0
+   m_EditorHideFlags: 0
+   m_Script: {fileID: 11500000, guid: eef4f9d37b3e4268806abaf6c59051c8, type: 3}
+   m_Name: 
+@@ -9234,8 +9234,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 42, y: -50}
+-  m_SizeDelta: {x: 480, y: 48}
++  m_AnchoredPosition: {x: 42, y: -53}
++  m_SizeDelta: {x: 480, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4645430481062124632
+ CanvasRenderer:
+@@ -9267,7 +9267,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 38
++    m_FontSize: 36
+     m_FontStyle: 1
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -9346,8 +9346,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 151, y: -97}
+-  m_SizeDelta: {x: 120, y: 72}
++  m_AnchoredPosition: {x: 161, y: -92}
++  m_SizeDelta: {x: 96, y: 72}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2679999608740035958
+ CanvasRenderer:
+@@ -9592,8 +9592,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -10}
+-  m_SizeDelta: {x: 552, y: 94}
++  m_AnchoredPosition: {x: 35, y: -12}
++  m_SizeDelta: {x: 508, y: 86}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5260431335434088739
+ CanvasRenderer:
+@@ -9625,7 +9625,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 44
++    m_FontSize: 42
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,8 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R10 uses independent Scenario scene, hero and carved panels; offer/booster art remains R9 pending generation.
++            // R11 imports isolated reference UI using Scenario alpha and bounded live-label repairs.
++            // Retain the independently generated R10 scene/hero/main panel and all existing object IDs.
+             // Reference captions retain existing functions; live data and routes remain intact.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -6,7 +6,8 @@
+     public static class ProductionFailRuntime
+     {
+         public const string ContentName="FAIL_ALIGNED_CONTENT",ArtRoot="ProductionUI/FailAligned/";
+-        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10"};
++        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10","title_r11","retry_r11","paid_r11","ad_r11","nameplate_r11","goals_r11","heading_r11","mace_r11","firebird_r11","shield_r11","potion_r11"};
++        public static readonly string[] ReferenceBoosters={"mace_r11","firebird_r11","shield_r11","potion_r11"};
+         public const float SceneTop=-35;
+         public static void BuildInto(RectTransform root)
+         {
+@@ -82,22 +83,21 @@
+             SetPanel(v,"MainPanel","panel_r10",25,510,891,1005,true);
+             // Reference plaque spans approximately x125..816 and y527..767,
+             // including its top crest. Preserve carved ends while fitting the face.
+-            SetPanel(v,"FailureTitlePanel","title_r10",125,377,691,240,true);
+-            var titleFit=v.Body.Find("FailureTitlePanel").GetComponent<ProductionFailPanelFit>();
+-            titleFit.TopProtectedFraction=.35f;titleFit.BottomProtectedFraction=.07f;
++            SetPanel(v,"FailureTitlePanel","title_r11",125,377,691,691f*245/695,false);
++            var titleArt=v.Body.Find("FailureTitlePanel").GetComponent<Image>();titleArt.preserveAspect=true;titleArt.color=Color.white;
+             ProductionVictoryView.PlaceText(v.Title,153,451,635,92,76);
+             ProductionVictoryView.PlaceText(v.Subtitle,149,542,643,45,34);
+             v.Title.fontStyle=FontStyle.Bold;
+             Gold(v.Title,1.1f);Gold(v.Subtitle,.65f);
+             // Enclose the heading and inset separately, behind all live goal content.
+-            SetPanel(v,"GoalsOuterPanel","goals_r10",149,648,643,221,true);
++            SetPanel(v,"GoalsOuterPanel","goals_r11",149,648,643,221,true);
+             v.Body.Find("GoalsOuterPanel").SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
+             var outer=v.Body.Find("GoalsOuterPanel").GetComponent<Image>();
+-            outer.color=new Color32(185,181,169,255);
++            outer.color=Color.white;
+             outer.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.5f;
+-            SetPanel(v,"GoalsPanel","goals_r10",169,680,603,179,true);
+-            v.Body.Find("GoalsPanel").GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.78f;
+-            SetPanel(v,"GoalsHeadingPlaque","nameplate_r10",185.5f,632,570,44,true);
++            SetPanel(v,"GoalsPanel","goals_r11",169,680,603,179,false);
++            var inset=v.Body.Find("GoalsPanel").GetComponent<Image>();inset.preserveAspect=true;inset.color=Color.white;
++            SetPanel(v,"GoalsHeadingPlaque","heading_r11",185.5f,632,570,44,true);
+             var plaque=v.Body.Find("GoalsHeadingPlaque");
+             plaque.SetAsLastSibling();
+             plaque.SetSiblingIndex(v.GoalsHeading.transform.GetSiblingIndex());
+@@ -109,7 +109,7 @@
+             v.Score.gameObject.SetActive(false);
+             foreach(var goal in v.Goals)
+                 ProductionVictoryView.PlaceText(goal.Count,0,100,190,40,31);
+-            var retrySprite=Load(ArtRoot+"retry_r2");v.Retry.GetComponent<Image>().sprite=retrySprite;
++            var retrySprite=Load(ArtRoot+"retry_r11");v.Retry.GetComponent<Image>().sprite=retrySprite;
+             float retryWidth=625,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
+             ProductionVictoryView.Place((RectTransform)v.Retry.transform,(941-retryWidth)*.5f,877,retryWidth,retryHeight);
+             ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,36);Gold(v.RetryText,.8f);
+@@ -120,23 +120,30 @@
+             ProductionVictoryView.PlaceText(v.Reaction,104,1158,518,49,18);
+             v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
+             v.Reaction.gameObject.SetActive(false);
+-            SetPanel(v,"BoostersPanel","goals_r10",72,1145,797,300,true);
++            SetPanel(v,"BoostersPanel","goals_r11",72,1145,797,300,true);
+             ProductionVictoryView.PlaceText(v.BoostersHeading,104,1160,518,40,26);
+             for(int i=0;i<4;i++)
+             {
+                 var group=v.Body.Find("Booster_"+i) as RectTransform;
+                 ProductionVictoryView.Place(group,83+i*194,1210,194,234);
+                 var frame=EnsureArt(group,"Medallion",Load(ArtRoot+"medallion_r2"),9,0,176,176);frame.transform.SetAsFirstSibling();
+-                frame.preserveAspect=true;frame.gameObject.SetActive(true);
++                frame.preserveAspect=true;frame.gameObject.SetActive(false);
+                 frame.color=new Color32(205,199,184,255);
+                 // Keep a generous interactive rectangle while preserving the whole booster illustration.
+                 var art=v.BoosterButtons[i].GetComponent<Image>();
+-                art.sprite=ProductionGameplayArt.Booster(i);
+-                ProductionVictoryView.Place(art.rectTransform,27,18,140,140);art.preserveAspect=true;art.color=new Color32(225,225,225,255);
+-                ProductionVictoryView.Place(group.Find("StockBadge") as RectTransform,132,130,49,49);
+-                ProductionVictoryView.PlaceText(v.BoosterCounts[i],0,0,49,49,28);
+-                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r10"),0,178,194,56);
+-                var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit==null)plate.gameObject.AddComponent<ProductionFailPanelFit>();
++                art.sprite=Load(ArtRoot+ReferenceBoosters[i]);
++                float scale=184/art.sprite.rect.width;
++                ProductionVictoryView.Place(art.rectTransform,5,6,184,art.sprite.rect.height*scale);art.preserveAspect=true;art.color=Color.white;
++                // Original medallion includes its gold/green badge surface. Render only
++                // the live quantity above it, retaining existing serialized bindings.
++                var badge=group.Find("StockBadge") as RectTransform;
++                badge.GetComponent<ProductionPreLevelBadge>().enabled=false;
++                float[] badgeCenterX={137,138,140,145};
++                ProductionVictoryView.Place(badge,5+(badgeCenterX[i]-22)*scale,6+131*scale,44*scale,44*scale);
++                ProductionVictoryView.PlaceText(v.BoosterCounts[i],0,0,44*scale,44*scale,28);
++                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r11"),0,178,194,56);
++                var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit!=null)fit.enabled=false;
++                plate.preserveAspect=true;plate.color=Color.white;
+                 plate.transform.SetSiblingIndex(1);
+                 ProductionVictoryView.PlaceText(v.BoosterLabels[i],10,182,174,48,20);
+                 ClearLabel(v.BoosterLabels[i],false);
+@@ -146,15 +153,15 @@
+         internal static void ApplyOffers(ProductionFailView v)
+         {
+             if(v.Body==null)return;
+-            // Whole isolated card sprites: preserve corner/green-face detail at uniform
+-            // scale and fit only the plain upper spans to the shared reference height.
+-            var paidSprite=Load(ArtRoot+"paid_r9");var adSprite=Load(ArtRoot+"ad_r9");
+-            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,999,324,140);
+-            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,999,324,140);
++            // Source-extracted whole cards retain native proportions; baked labels were
++            // repaired locally, original gem/lightning/play artwork stays in each sprite.
++            var paidSprite=Load(ArtRoot+"paid_r11");var adSprite=Load(ArtRoot+"ad_r11");
++            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,992,324,324f*149/328);
++            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,992,324,324f*149/329);
+             foreach(var card in new[]{paid,ad})
+             {
+                 var fit=card.GetComponent<ProductionFailPanelFit>()??card.gameObject.AddComponent<ProductionFailPanelFit>();
+-                fit.TopProtectedFraction=.2f;fit.BottomProtectedFraction=.45f;fit.ProtectedDetailScale=1;
++                fit.enabled=false;card.color=Color.white;
+             }
+             v.PaidOffer=paid.GetComponent<Button>()??Button(paid);
+             v.AdOffer=ad.GetComponent<Button>()??Button(ad);
+@@ -162,18 +169,18 @@
+             {
+                 b.interactable=false;b.navigation=new Navigation{mode=Navigation.Mode.None};
+                 var colors=b.colors;colors.disabledColor=new Color(.82f,.82f,.82f,1);b.colors=colors;
+-                b.GetComponent<Image>().preserveAspect=false;b.GetComponent<Image>().raycastTarget=true;
+-            }
+-            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,12,276,37,30);
+-            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,10,276,47,22);
++                b.GetComponent<Image>().preserveAspect=true;b.GetComponent<Image>().raycastTarget=true;
++            }
++            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",42,16,215,33,28);
++            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",35,12,254,43,21);
+             v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
+-            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,24,19);
+-            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),110,98,34,34);gem.preserveAspect=true;
+-            EnsureLabel(v,paid.transform,"Price",151,97,60,36,28).text="—";
+-            var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;
+-            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,61,240,24,19);
++            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,53,240,22,18);
++            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),110,90,43,43);gem.preserveAspect=true;gem.enabled=false;
++            EnsureLabel(v,paid.transform,"Price",161,92,48,36,28).text="—";
++            var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;lightning.enabled=false;
++            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,56,240,22,18);
+             ClearLabel(v.PaidOfferStatus,true);ClearLabel(v.AdOfferStatus,true);
+-            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,97,44,36,32);play.text="▶";
++            var play=EnsureLabel(v,ad.transform,"PlaySymbol",138,91,43,36,32);play.text="";play.enabled=false;
+             v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);
+         }
+         static Text EnsureLabel(ProductionFailView v,Transform parent,string name,float x,float y,float w,float h,int size)
+@@ -235,7 +242,7 @@
+         static void SetPanel(ProductionFailView v,string name,string asset,float x,float y,float w,float h,bool fitted)
+         {
+             var image=EnsureArt(v.Body,name,Load(ArtRoot+asset),x,y,w,h);
+-            if(name=="MainPanel")image.color=Color.white;
++            if(name=="MainPanel")image.color=new Color32(200,200,200,255);
+             else if(name=="FailureTitlePanel")image.color=new Color32(214,214,214,255);
+             else if(name=="GoalsPanel"||name=="BoostersPanel")image.color=new Color32(220,220,220,255);
+             var fit=image.GetComponent<ProductionFailPanelFit>();if(fit==null&&fitted)fit=image.gameObject.AddComponent<ProductionFailPanelFit>();
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=10;
++        public const int CurrentRevision=11;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs
+@@ -271,31 +271,26 @@
+             Assert.That(exit.yMin,Is.GreaterThan(mainPanel.yMin+mainPanel.height*.09f),"Chapter-map action covers footer carving.");
+             Assert.That(exit.Overlaps(heading),Is.False,"Return action overlaps booster heading.");
+             foreach(var button in v.BoosterButtons)Assert.That(exit.Overlaps(Bounds((RectTransform)button.transform,camera)),Is.False);
+-            // R9 resizes only plain spans. These source landmarks sit entirely in
+-            // the protected top/bottom bands and keep uniform scale from card width.
+-            float paidScale=paid.width/998,adScale=ad.width/990;
+-            float paidFace=paid.yMax-27*paidScale,adFace=ad.yMax-24*adScale;
+-            float paidGreen=paid.yMin+(345-268)*paidScale,adGreen=ad.yMin+(394-318)*adScale;
++            // Native source pixels: green faces share their original y=87..139 band.
++            float paidScale=paid.width/328,adScale=ad.width/329;
++            float paidFace=paid.yMax-6*paidScale,adFace=ad.yMax-6*adScale;
++            float paidGreen=paid.yMax-112*paidScale,adGreen=ad.yMax-112*adScale;
+             float tolerance=paid.width/324*3;
+             Assert.That(Mathf.Abs(paidFace-adFace),Is.LessThan(tolerance),"Offer upper painted faces misaligned.");
+             Assert.That(Mathf.Abs(paidGreen-adGreen),Is.LessThan(tolerance),"Offer green faces misaligned.");
+             var price=(RectTransform)v.PaidOffer.transform.Find("Price");
+-            var currency=(RectTransform)v.PaidOffer.transform.Find("Currency");
+-            var play=(RectTransform)v.AdOffer.transform.Find("PlaySymbol");
+-            Rect paidInner=new Rect(paid.xMin+185*paidScale,paid.yMin+(345-329)*paidScale,615*paidScale,124*paidScale);
+-            Rect adInner=new Rect(ad.xMin+178*adScale,ad.yMin+(394-379)*adScale,630*adScale,124*adScale);
+-            foreach(var item in new[]{price,currency})
+-            {
+-                var bounds=Bounds(item,camera);
+-                Assert.That(paidInner.Contains(bounds.min)&&paidInner.Contains(bounds.max),Is.True,"Currency/price must fit within green face.");
+-            }
+-            Rect playBounds=Bounds(play,camera);
+-            Assert.That(adInner.Contains(playBounds.min)&&adInner.Contains(playBounds.max),Is.True,"Play symbol must fit within green face.");
++            Rect paidInner=new Rect(paid.xMin+79*paidScale,paid.yMax-139*paidScale,179*paidScale,52*paidScale);
++            Rect priceBounds=Bounds(price,camera);
++            Assert.That(paidInner.Contains(priceBounds.min)&&paidInner.Contains(priceBounds.max),Is.True,"Live price must fit within original green face.");
++            Assert.That(v.PaidOffer.transform.Find("Currency").GetComponent<Image>().enabled,Is.False,"No duplicate of original embedded gem.");
++            Assert.That(v.PaidOffer.transform.Find("MovesSymbol").GetComponent<Image>().enabled,Is.False,"No duplicate lightning.");
++            Assert.That(v.AdOffer.transform.Find("PlaySymbol").GetComponent<Text>().enabled,Is.False,"No duplicate play triangle.");
+             foreach(var offer in new[]{v.PaidOffer,v.AdOffer})
+             {
+-                var fit=offer.GetComponent<ProductionFailPanelFit>();Assert.That(fit,Is.Not.Null);
+-                Assert.That(fit.enabled,Is.True);
+-                Assert.That(offer.GetComponent<Image>().preserveAspect,Is.False,"Card uses protected mesh fitting, not whole-image distortion.");
++                var image=offer.GetComponent<Image>();var bounds=Bounds((RectTransform)offer.transform,camera);
++                Assert.That(offer.GetComponent<ProductionFailPanelFit>().enabled,Is.False);
++                Assert.That(image.preserveAspect,Is.True);
++                Assert.That(bounds.width/bounds.height,Is.EqualTo(image.sprite.rect.width/image.sprite.rect.height).Within(.001f),"Source card cannot stretch.");
+             }
+             Assert.That(Bounds(v.AdOfferTitle.rectTransform,camera).Overlaps(Bounds(v.AdOfferStatus.rectTransform,camera)),Is.False,"Ad title/status need separate lines.");
+             Rect plaque=Bounds(v.Body.Find("GoalsHeadingPlaque") as RectTransform,camera);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(10));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(11));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+@@ -20,17 +20,19 @@
+             foreach(string dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
+             Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_r10")));
+             Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_r10")));
+-            Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"retry_r2")));
++            Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"retry_r11")));
+             Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_r10")));
+-            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r10")));
++            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r11")));
+             Assert.That(v.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+             for(int index=0;index<4;index++)
+             {
+                 var group=v.Body.Find("Booster_"+index);
+                 Assert.That(group.Find("Medallion").GetComponent<Image>().raycastTarget,Is.False);
+-                Assert.That(group.Find("Medallion").gameObject.activeSelf,Is.True);
+-                Assert.That(v.BoosterButtons[index].GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Booster(index)));
++                Assert.That(group.Find("Medallion").gameObject.activeSelf,Is.False);
++                Assert.That(v.BoosterButtons[index].GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+ProductionFailRuntime.ReferenceBoosters[index])));
+                 Assert.That(group.Find("Nameplate").GetComponent<Image>().raycastTarget,Is.False);
++                Assert.That(group.Find("StockBadge").GetComponent<ProductionPreLevelBadge>().enabled,Is.False,"Use original badge face once, keeping the live count child.");
++                Assert.That(v.BoosterCounts[index].enabled,Is.True);
+             }
+             Assert.That(v.Hud.Find("GoldResource/Icon").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"coin_r3")));
+             Assert.That(v.PaidOffer.interactable||v.AdOffer.interactable,Is.False);

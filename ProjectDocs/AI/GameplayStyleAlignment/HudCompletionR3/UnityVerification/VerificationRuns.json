@@ -1,0 +1,160 @@
+{
+  "unityVersion": "6000.5.9f1",
+  "runs": [
+    {
+      "run": "import1",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/import1/unity.log",
+      "rawLogSha256": "61025ef8cdc902dac635610d2370ce887f988077bff822f4b940488fa8e433d1",
+      "compilerErrorCount": 0,
+      "ownerReadback": [
+        "Gameplay alignment serialized prefab saved and read back at revision 3."
+      ]
+    },
+    {
+      "run": "focused1/EditMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/focused1/EditMode/unity.log",
+      "rawLogSha256": "bd35871b0db3a87084d3c9a4ef32f2ad69bb74ade7efe2240decd59f095d79d5",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "4",
+        "passed": "4",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "focused1/PlayMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/focused1/PlayMode/unity.log",
+      "rawLogSha256": "9d5a5e2b97874283ced34f4e73b4ebfcf18587b9b11603fac7c5f337ebe310fa",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "5",
+        "passed": "5",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "final/Import",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final/Import/unity.log",
+      "rawLogSha256": "40e3172b96a3d8e5015962fc8b3423ec36263c649a3a0bceb379af27f7de4db6",
+      "compilerErrorCount": 0,
+      "ownerReadback": [
+        "Gameplay alignment serialized prefab saved and read back at revision 3."
+      ]
+    },
+    {
+      "run": "final/EditMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final/EditMode/unity.log",
+      "rawLogSha256": "dbd0ce60da179bc5ec74699f27025280d8ebade13c295f9cf9140e4196a46f95",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "4",
+        "passed": "4",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "final/PlayMode",
+      "exitCode": 2,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final/PlayMode/unity.log",
+      "rawLogSha256": "8a6bc4a21016c5456417f85aba3e85c2a022f70e4031035c20f1dd24fe890ee7",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Failed(Child)",
+        "total": "5",
+        "passed": "4",
+        "failed": "1",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": [
+        {
+          "test": "NativePauseKeepsTheSameBoardAndBlocksBoosterInput",
+          "message": "  Pause silently disarms the booster, so its instruction must clear.\n  Expected: False\n  But was:  True\n"
+        }
+      ]
+    },
+    {
+      "run": "final2/EditMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final2/EditMode/unity.log",
+      "rawLogSha256": "357ebc08bb3d7bd1e7b8a99d8be79f6fd3ab14dc30320146b95827ecb42c2b81",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "4",
+        "passed": "4",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "final2/PlayMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final2/PlayMode/unity.log",
+      "rawLogSha256": "c3edceb62dcb185d27c04462ce8f86cf27bb1e566ad11940a4861c567c006721",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "5",
+        "passed": "5",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "final3/PlayMode",
+      "exitCode": 0,
+      "rawLogPath": "/tmp/lor-gameplay-hud-r3/final3/PlayMode/unity.log",
+      "rawLogSha256": "d0af0840c8f27cba6c529330b1e4abd12684cf62e159bff222c94b7fbdfcbcb2",
+      "compilerErrorCount": 0,
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "5",
+        "passed": "5",
+        "failed": "0",
+        "skipped": "0",
+        "inconclusive": "0"
+      },
+      "failures": []
+    }
+  ],
+  "finalEditMode": "final2/EditMode",
+  "finalPlayMode": "final3/PlayMode",
+  "finalOwnerImport": "final/Import",
+  "finalCaptureCount": 15,
+  "rawEditorLogsNotDistributed": true,
+  "iterationNotes": [
+    "Initial 4/4 Edit Mode and 5/5 Play Mode passed, but direct visual inspection found an off-center moves image. Corrected its aspect/placement and added a centering assertion.",
+    "The next Play Mode run passed 4/5. The new Pause expectation was incorrect: the existing Pause behavior preserves booster targeting. Restored the idle Pause test and tested the real silent-cancel method separately; no gameplay rule changes.",
+    "Corrected tests then passed 4/4 Edit Mode and 5/5 Play Mode, including legacy Home toast fallback.",
+    "Final Play Mode 5/5 rerun replaced an injected long-message preview with the real Living Light button, so captures show matching armed state and instruction."
+  ]
+}

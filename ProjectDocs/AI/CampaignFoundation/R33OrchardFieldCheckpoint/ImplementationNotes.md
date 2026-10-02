@@ -1,0 +1,9 @@
+# R33 implementation
+
+Four existing CampaignActive JSONs match Chapter01Sector04R33 byte-for-byte. Ten boards, ten bilingual names, twenty outcome reactions and the orchard_field_paths scene/milestone are appended. First190 records and all prior story/locales are preserved. Existing definition/revision, resource metas/GUIDs, runtime services, routing, matching rules, UI/art and settings are unchanged.
+
+Four existing test files are updated: ActiveCampaignIntegrationTests adds191–200 replay cases and190-save migration, checks prior190 preservation/new candidate parity, and plays190/191/195/198/200 through actual board/control APIs. CampaignBoardIntegrationTests and LevelSystemRuntimePlayModeTests expect200 records. CampaignCheckpointLifecycleTests adds200 unread/failure-retry coverage,27 pending milestones and unavailable201 bounds, retaining earlier cases. Prior progress and explicit failed outcomes are fixtures, not complete manual-play evidence.
+
+Sources preserves task-start SHA/content/test/linker snapshots and TestChanges.patch. PrepareBriefs contains reviewed geometry. PrepareImplementation transforms pre-task scripts/tests once; do not reapply to edited files. AuthorAndInstall uses saved pre-task JSONs plus RoundBriefs. CheckContent/AuditContent verify preservation/parity, objective counts, localization/story references, economy and default manual exports. Verify runs serial suites in isolated stores using prior approved process-only Vulkan/descriptor4096. Summaries derive from actual XML/replays; CleanAndAudit restores the generated linker and removes only new temporary test scenes before hashing project files.
+
+No live save changes, new service, graphics/package change, commit, Android build or effects work. These tests do not establish human difficulty, device/visual acceptance, recap UX or literary quality. After200, review remaining evidence before creating another sector. See TestResults.md.

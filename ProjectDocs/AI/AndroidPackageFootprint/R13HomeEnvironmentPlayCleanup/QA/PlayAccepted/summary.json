@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.HomeLoadingPreparationPlayModeTests;LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.SplashResponsivePlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/AndroidPackageFootprint/R13HomeEnvironmentPlayCleanup/QA/PlayAccepted/results.xml",
+    "-logFile",
+    "/tmp/lor-home-environment-play-cleanup-r13/PlayAccepted/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 57.240426778793335,
+  "isolatedConfig": "/tmp/lor-home-environment-play-cleanup-r13/PlayAccepted/config",
+  "graphics": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "37",
+    "result": "Failed(Child)",
+    "total": "37",
+    "passed": "36",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 13:31:12Z",
+    "end-time": "2026-10-01 13:31:45Z",
+    "duration": "33.2403332"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.BoosterGuideBackAndHudRoutesRemainNativeAndInventoryIsNotSpent",
+      "result": "Failed",
+      "message": "  String lengths are both 1011. Strings differ at index 98.\n  Expected: \"...astEnergyUtcTicks\":639264583005256430,\"chapter\":1,\"level\":...\"\n  But was:  \"...astEnergyUtcTicks\":639264583007915350,\"chapter\":1,\"level\":...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

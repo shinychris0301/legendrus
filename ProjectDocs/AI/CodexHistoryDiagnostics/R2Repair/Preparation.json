@@ -1,0 +1,119 @@
+{
+  "preparedAt": "2026-10-02T13:49:39.807644-04:00",
+  "state": "repair_prepared_waiting_for_writers",
+  "userAuthorizedRepair": true,
+  "liveRepairApplied": false,
+  "initialBackupVerified": true,
+  "initialBackupQuiescent": false,
+  "freshQuiescentBackupRequiredBeforeInstall": true,
+  "privateBackup": "/home/k2/.local/state/codex-history-repair/20261002T132807/InitialBackup",
+  "databaseSnapshotHashes": {
+    "state_5.sqlite": "01193e6d71f177b88f0e66024c9a912bcd276759a25765c47f2a16efd52f24ba",
+    "thread_history_1.sqlite": "2b8f5ed4832a7fc01fe14e1fc61d267517444c4328a1d35ad9759bec92f0ae0d"
+  },
+  "privateDirectoryMode": "0700",
+  "privateFilesMode": "0600",
+  "credentialsAndConfigExcluded": true,
+  "liveWritersAtPreparation": [
+    {
+      "pid": 10822,
+      "executable": "/home/k2/.vscode/extensions/openai.chatgpt-26.930.21537-linux-x64/bin/linux-x86_64/codex"
+    },
+    {
+      "pid": 20112,
+      "executable": "/home/k2/.vscode/extensions/openai.chatgpt-26.930.21537-linux-x64/bin/linux-x86_64/codex"
+    },
+    {
+      "pid": 125025,
+      "executable": "/home/k2/.vscode/extensions/openai.chatgpt-26.930.21537-linux-x64/bin/linux-x86_64/codex"
+    },
+    {
+      "pid": 310341,
+      "executable": "/home/k2/.vscode/extensions/openai.chatgpt-26.930.21537-linux-x64/bin/linux-x86_64/codex"
+    },
+    {
+      "threadLock": "01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8.lock",
+      "pid": 310341
+    },
+    {
+      "threadLock": "01a09624-160e-7f10-a32e-7cc91172628e.lock",
+      "pid": 310341
+    },
+    {
+      "threadLock": "01a0f76b-31a1-7390-848f-876b84122a88.lock",
+      "pid": 310341
+    }
+  ],
+  "nativeCloneRestartVerification": {
+    "retention": {
+      "rawChatItemsRecovered": 314,
+      "rawUserMessagesRecovered": 36,
+      "rawAgentMessagesRecovered": 278,
+      "rawUserAndAgentTextExact": true,
+      "existingIndexedItemsPreserved": 498,
+      "rawChatTextAvailableViaNativeApi": true
+    },
+    "legacyResumeAdapterDropWarnings": 29,
+    "label": "RestartVerified",
+    "turnsVisibleViaNativeApi": 41,
+    "itemsVisibleViaNativeApi": 3242,
+    "nativeItemTypes": {
+      "userMessage": 44,
+      "agentMessage": 338,
+      "commandExecution": 1359,
+      "subAgentActivity": 16,
+      "reasoning": 1162,
+      "imageView": 131,
+      "contextCompaction": 13,
+      "fileChange": 152,
+      "sleep": 23,
+      "webSearch": 4
+    },
+    "primaryListed": true,
+    "projectionNextByteOffset": 248990801,
+    "projectionNextOrdinal": 97054,
+    "indexedRows": {
+      "thread_turns": 41,
+      "thread_items": 3242,
+      "thread_realtime_items": 0
+    },
+    "userMessagesByUtcDate": [
+      [
+        "2026-09-23",
+        4
+      ],
+      [
+        "2026-09-30",
+        4
+      ],
+      [
+        "2026-10-01",
+        23
+      ],
+      [
+        "2026-10-02",
+        13
+      ]
+    ],
+    "sqliteQuickCheck": "ok",
+    "ordinalSkipWarning": false,
+    "isolatedNativeResumeWithoutModelTurn": true
+  },
+  "installationFixturePassed": true,
+  "fullWorkerFixturePassed": true,
+  "fullWorkerFixtureClosureSimulated": true,
+  "actualVSCodeUiReopenVerified": false,
+  "repairScope": "One project thread, canonical file naming/ordinal offset and its history rows; prior raw file relocated into private quarantine; unrelated history preserved.",
+  "legacyResumeAdapterWarningLimit": "29 historical transient-item warnings remain in isolated resume adapters; all identified raw user/assistant messages and their exact text are available via paginated native history APIs.",
+  "sourceSyntaxChecksPassed": true,
+  "initialTrialValidatorIssuesRetained": true,
+  "workerStatusFile": "/home/k2/.local/state/codex-history-repair/20261002T132807/Status.json",
+  "toolHashes": {
+    "repair_lib.py": "f1f2223bd3ae1128212fe34afc5eb47d0dcd0ff0f54eb2ce3dd3120fca8fe0fd",
+    "reconstruct.py": "881330424261b64e890e1b60798b2e7d82fe352faebc47d73a07c98cb743009c",
+    "install.py": "66bd487b6b4c3c3f6b62ea010e071a467f1e4080ace6e2f48b66facb61c948ba",
+    "offline_worker.py": "ed870d1770a698150122c70930311320672e54c9d3753563e2cc2539564e62ae"
+  },
+  "initialWorkerStatusMisclassifiedFixtureResultCorrected": true,
+  "statusBoundaryChecksPassed": 3
+}

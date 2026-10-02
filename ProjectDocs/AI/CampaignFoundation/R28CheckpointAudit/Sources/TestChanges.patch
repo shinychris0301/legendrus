@@ -1,0 +1,45 @@
+--- before/CampaignCheckpointLifecycleTests.cs
++++ after/CampaignCheckpointLifecycleTests.cs
+@@ -108,6 +108,42 @@
+             Assert.That(NonStoryState(), Is.EqualTo(before));
+         }
+ 
++        [TestCase(50)][TestCase(100)][TestCase(150)]
++        public void FailedCheckpointAndRetryPersistWithoutRewardsUnlockOrStory(int round)
++        {
++            // Service-level loss fixture; this does not simulate board input or assess difficulty.
++            PrepareCompletedFixture(round - 1, true);
++            Assert.That(State.SelectLevel(1, round), Is.True);
++            var level = ChapterLevelCatalog.Find(1, round);
++            string expectedScene = StoryCatalog.LoadChapter1().milestones.Single(m => m.afterLevelId == round).sceneId;
++            string before = StateWithoutLevelProgress();
++            for (int attempt = 1; attempt <= 2; attempt++) {
++                Assert.That(State.RegisterLevelAttempt(level), Is.EqualTo(attempt));
++                State.RecordLevelFailure(level, 100 * attempt);
++                Reload();
++                var progress = State.GetLevelProgress(1, round);
++                Assert.That(progress.attempts, Is.EqualTo(attempt));
++                Assert.That(progress.retries, Is.EqualTo(attempt - 1));
++                Assert.That(progress.failures, Is.EqualTo(attempt));
++                Assert.That(progress.bestScore, Is.EqualTo(100 * attempt));
++                Assert.That(progress.completions, Is.Zero);
++                Assert.That(progress.bestStars, Is.Zero);
++                Assert.That(progress.rewardClaimed, Is.False);
++                Assert.That(State.Save.highestUnlockedLevel, Is.EqualTo(round));
++                Assert.That(State.HasCompletedStoryScene(expectedScene), Is.False);
++                Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.False);
++                Assert.That(StoryService.ShouldShowChapterComplete(), Is.False);
++                Assert.That(StateWithoutLevelProgress(), Is.EqualTo(before));
++            }
++        }
++
++        string StateWithoutLevelProgress()
++        {
++            var clone = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(State.Save));
++            clone.levelProgress.Clear();
++            return JsonUtility.ToJson(clone);
++        }
++
+         [Test] public void ReturningPlayerReceivesAllTwentyTwoMilestonesInOrderWithoutExtraRewards()
+         {
+             PrepareCompletedFixture(150, false);

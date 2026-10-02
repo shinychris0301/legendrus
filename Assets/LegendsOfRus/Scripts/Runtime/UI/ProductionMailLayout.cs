@@ -1,0 +1,32 @@
+using UnityEngine;
+namespace LegendsOfRus
+{
+    [ExecuteAlways,DisallowMultipleComponent]
+    public sealed class ProductionMailLayout:MonoBehaviour
+    {
+        public ProductionMailView View;readonly Vector3[] corners=new Vector3[4];bool applying;
+        void OnEnable(){Canvas.preWillRenderCanvases+=ApplyNow;ApplyNow();}
+        void OnDisable(){Canvas.preWillRenderCanvases-=ApplyNow;}
+        void OnRectTransformDimensionsChange(){ApplyNow();}
+        static void Move(Transform t,float x,float y,float bottom){((RectTransform)t).anchoredPosition=new Vector2(x,-y+bottom);}
+        public void ApplyNow()
+        {
+            if(applying||View==null||!View.HasRequiredBindings)return;var canvas=GetComponentInParent<Canvas>();if(canvas==null)return;
+            var whole=(RectTransform)canvas.rootCanvas.transform;var fitter=GetComponentInParent<SafeAreaFitter>();var safe=fitter!=null?(RectTransform)fitter.transform:whole;applying=true;
+            try{
+                var content=View.Content;safe.GetWorldCorners(corners);var low=content.InverseTransformPoint(corners[0]);var high=content.InverseTransformPoint(corners[2]);
+                float scale=Mathf.Max(.1f,Mathf.Min((high.x-low.x)/941,(high.y-low.y)/1672));View.Body.localScale=Vector3.one*scale;
+                View.Body.anchoredPosition=new Vector2((low.x+high.x-941*scale)*.5f-content.rect.xMin,high.y-content.rect.yMax);
+                safe.GetWorldCorners(corners);var safeLow=View.Body.InverseTransformPoint(corners[0]);var safeHigh=View.Body.InverseTransformPoint(corners[2]);float bottom=safeLow.y-View.Body.rect.yMin;
+                Move(View.BackButton.transform,View.DetailOpen?13:20,View.DetailOpen?1488:1492,bottom);Move(View.ComposeButton.transform,163,1502,bottom);Move(View.EnvelopeButton.transform,View.DetailOpen?760:675,View.DetailOpen?1488:1502,bottom);Move(View.DeleteButton.transform,800,1492,bottom);
+                Move(View.ClaimAllButton.transform,277,1480,bottom);Move(View.Counter.transform,View.DetailOpen?205:170,View.DetailOpen?1562:1623,bottom);var footer=(RectTransform)View.Body.Find("CarvedFooter");Move(footer,0,View.DetailOpen?1532:1486,bottom);footer.sizeDelta=new Vector2(941,View.DetailOpen?140:186);
+                var paper=View.DynamicRoot.Find("LetterParchment") as RectTransform;if(paper)paper.sizeDelta=new Vector2(View.DetailOpen?921:850,(View.DetailOpen?1236:447)-bottom);
+                var attachments=View.DynamicRoot.Find("AttachmentGroup");if(attachments)Move(attachments,0,0,bottom);
+                Move(View.InfoPanel.transform,0,0,bottom*.5f);var shield=(RectTransform)View.InfoPanel.transform.Find("InputShield");shield.anchoredPosition=new Vector2(0,-bottom*.5f);shield.sizeDelta=new Vector2(941,safeHigh.y-safeLow.y);
+                whole.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);Vector2 dimensions=View.Environment.sprite.rect.size;
+                float cover=Mathf.Max((high.x-low.x)/dimensions.x,(high.y-low.y)/dimensions.y);var background=View.Environment.rectTransform;
+                background.sizeDelta=dimensions*cover;background.anchoredPosition=new Vector2((low.x+high.x-background.sizeDelta.x)*.5f-content.rect.xMin,(low.y+high.y+background.sizeDelta.y)*.5f-content.rect.yMax);
+            }finally{applying=false;}
+        }
+    }
+}

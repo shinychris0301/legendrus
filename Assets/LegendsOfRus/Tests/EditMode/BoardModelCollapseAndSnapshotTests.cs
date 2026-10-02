@@ -50,8 +50,11 @@ namespace LegendsOfRus.Tests
 
             model.CollapseAndRefill();
 
-            Assert.AreEqual(1, model.GetTile(new BoardPosition(1, 3)));
-            Assert.AreEqual(SpecialGemKind.Column, model.GetSpecial(new BoardPosition(1, 3)));
+            // The existing bottom 0 stays in place; the special falls onto row 2.
+            Assert.AreEqual(0, model.GetTile(new BoardPosition(1, 3)));
+            Assert.AreEqual(SpecialGemKind.None, model.GetSpecial(new BoardPosition(1, 3)));
+            Assert.AreEqual(1, model.GetTile(new BoardPosition(1, 2)));
+            Assert.AreEqual(SpecialGemKind.Column, model.GetSpecial(new BoardPosition(1, 2)));
         }
 
         [Test]

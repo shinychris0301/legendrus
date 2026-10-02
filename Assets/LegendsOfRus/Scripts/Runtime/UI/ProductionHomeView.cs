@@ -10,8 +10,9 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionHomeView : MonoBehaviour
     {
-        public const int CurrentRevision = 14;
+        public const int CurrentRevision = 22;
         public int Revision = CurrentRevision;
+        public ProductionPlayerHeader Header;
         public SplashTitleTypography Typography;
         public Image Environment;
         public ProductionHomeBackdropShade BackgroundShade;
@@ -70,90 +71,54 @@ namespace LegendsOfRus
         public Button CharactersButton;
         public Button MailButton;
         public Button DailyRewardButton;
+        public Button RankingButton, TeamButton, FriendsButton;
+        public Text RankingText, TeamText, FriendsText;
+
+        public Image SourcePlay;
+        public Image[] SourceNavigation;
+        public Sprite SourceRussianPlay, SourceBlankPlay, SourceRussianQuest, SourceBlankQuest;
+        public Sprite[] SourceRussianCards, SourceBlankCards;
+        public Font ReferenceBodyFont, ReferenceTitleFont;
 
         public bool ActionsBound { get; private set; }
         public string ActiveFontSource { get; private set; }
-        public bool HasRequiredBindings => Revision == CurrentRevision && Typography != null &&
+        public bool HasRequiredBindings => Revision == CurrentRevision && Header!=null && Header.HasBindings && Typography != null &&
             Environment != null && Environment.sprite != null && Logo != null && Logo.sprite != null &&
             Ivan != null && Ivan.sprite != null && Firebird != null && !Firebird.gameObject.activeSelf && Firebird.sprite == null &&
-            Environment.color == ProductionHomeRuntime.EnvironmentTone && Ivan.color == ProductionHomeRuntime.HeroTone &&
+            Environment.color == Color.white && Ivan.color == Color.white &&
             LowerShade != null && LowerShade.GetComponent<CanvasRenderer>() != null &&
             HeroName != null && LevelText != null && GoldText != null && GemsText != null &&
             EnergyText != null && PlayText != null && WorldMapText != null && ShopText != null &&
             EventsText != null && CharactersText != null && QuestText != null &&
             ProfileButton != null && SettingsButton != null && PlayButton != null &&
             WorldMapButton != null && ShopButton != null && EventsButton != null &&
+            RankingButton != null && TeamButton != null && FriendsButton != null &&
+            RankingText != null && TeamText != null && FriendsText != null &&
             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
-            HasGeneratedControlBindings && HasReferenceForegroundBindings && HasReferenceBackdropBindings && HasSceneLightingBindings;
+            ProductionHomeSourceComposition.Valid(this);
 
-        public bool HasSceneLightingBindings => HasSceneLighting(Ivan, "home_hero_lighting", 0) &&
-            HasSceneLighting(MapFoliage, "home_foliage_lighting", 1);
+        // Current source art does not use the historical lighting effects or foliage overlay.
+        public bool HasSceneLightingBindings => HasRequiredBindings &&
+            HasDisabledLighting(Ivan) && HasDisabledLighting(MapFoliage);
 
-        static bool HasSceneLighting(Image image, string materialName, int profile)
+        static bool HasDisabledLighting(Image image)
         {
-            if (image == null || image.material == null || image.material.name != materialName ||
-                image.material.shader.name != ProductionHomeRuntime.SceneLightingShader ||
-                image.material.GetFloat("_Profile") != profile) return false;
-            ProductionHomeSceneLighting lighting = image.GetComponent<ProductionHomeSceneLighting>();
-            return lighting != null && lighting.enabled && lighting.Strength == 1f && lighting.Padding == .03f;
+            var lighting = image != null ? image.GetComponent<ProductionHomeSceneLighting>() : null;
+            return lighting != null && !lighting.enabled;
         }
 
-        public bool HasReferenceBackdropBindings =>
-            Environment != null && Ivan != null && Environment.transform.parent == Ivan.transform.parent &&
-            Environment.transform.GetSiblingIndex() < Ivan.transform.GetSiblingIndex() &&
-            BackgroundShade != null && BackgroundShade.enabled && BackgroundShade.gameObject.activeSelf &&
-            BackgroundShade.GetComponent<CanvasRenderer>() != null && !BackgroundShade.raycastTarget &&
-            BackgroundShade.transform.parent == Environment.transform &&
-            BackgroundShade.rectTransform.anchorMin == Vector2.zero && BackgroundShade.rectTransform.anchorMax == Vector2.one &&
-            BackgroundShade.rectTransform.offsetMin == Vector2.zero && BackgroundShade.rectTransform.offsetMax == Vector2.zero &&
-            HasArtwork(MapFoliage, "home_map_foliage") && MapFoliage.enabled && MapFoliage.gameObject.activeSelf && !MapFoliage.raycastTarget &&
-            WorldMapButton != null && MapFoliage.transform.parent == WorldMapButton.transform.parent &&
-            MapFoliage.transform.parent != null && MapFoliage.transform.parent.parent == Ivan.transform.parent &&
-            MapFoliage.transform.parent.GetSiblingIndex() > Ivan.transform.GetSiblingIndex() &&
-            MapFoliage.transform.GetSiblingIndex() == 0;
+        public bool HasReferenceBackdropBindings => HasRequiredBindings &&
+            BackgroundShade != null && !BackgroundShade.enabled &&
+            MapFoliage != null && !MapFoliage.enabled && MapFoliage.sprite == null;
 
-        public bool HasGeneratedControlBindings =>
-            HasArtwork(HudFrame, "hud_frame") && HasArtwork(AvatarFrame, "avatar_ring") &&
-            ProfileButton != null && ProfileButton.targetGraphic == AvatarFrame &&
-            HasArtwork(GoldCapsule, "resource_capsule") && HasArtwork(GemsCapsule, "resource_capsule") &&
-            HasArtwork(EnergyCapsule, "resource_capsule") && HasArtwork(GoldIcon, "coin_icon") &&
-            HasArtwork(GemsIcon, "gems_icon") && HasArtwork(EnergyIcon, "energy_icon") &&
-            HasArtwork(QuestFrame, "quest_panel") && HasArtwork(FooterBase, "footer_base_generated") &&
-            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings_medallion") &&
-            HasButtonArtwork(WorldMapButton, "nav_map_generated") && HasButtonArtwork(ShopButton, "nav_shop_generated") &&
-            HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
-            HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
+        // The historical control diagnostic now validates the installed source composition.
+        public bool HasGeneratedControlBindings => HasRequiredBindings;
 
-        public bool HasReferenceForegroundBindings =>
-            HasArtwork(Logo, "home_logo") && HasArtwork(Ivan, "home_hero_firebird") &&
-            HasButtonArtwork(PlayButton, "home_play_button") &&
-            HasReferencePortrait && Ivan.GetComponent<SplashTitleCharacterFade>() != null &&
-            Ivan.GetComponent<SplashTitleCharacterFade>().enabled &&
-            PlayText != null && PlayText.GetComponent<SplashTitleTextGeometry>() != null &&
-            PlayText.GetComponent<ProductionHomeGoldText>() != null && PlayText.GetComponent<ProductionHomeGoldText>().enabled &&
-            PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace &&
-            PlayText.material != null && PlayText.material.shader.name == "LegendsOfRus/UI/HomePlayGold" &&
-            HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
-            HasArtwork(QuestProgressFrame, "progress_frame") && HasArtwork(QuestProgressFill, "progress_fill") &&
-            HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
-            HasButtonArtwork(GoldPlusButton, "resource_plus") && HasButtonArtwork(GemsPlusButton, "resource_plus") &&
-            HasButtonArtwork(EnergyPlusButton, "resource_plus") && QuestProgressText != null &&
-            QuestRewardText != null && DailyRewardBadge != null && DailyRewardBadgeText != null &&
-            EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget &&
-            EventsBadge.RaisedBadge && DailyRewardBadge.RaisedBadge && !DailyRewardBadge.raycastTarget;
+        // Keep the historical diagnostic aligned with the current source composition.
+        public bool HasReferenceForegroundBindings => HasRequiredBindings;
 
-        bool HasReferencePortrait => ProfileButton != null &&
-            ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait") != null &&
-            HasArtwork(ProfileButton.transform.Find("PortraitClip/ApprovedIvanPortrait").GetComponent<Image>(), "avatar_portrait");
-
-        static bool HasArtwork(Image image, string expectedName) =>
-            image != null && image.sprite != null && image.sprite.name == expectedName;
-
-        static bool HasButtonArtwork(Button button, string expectedName) =>
-            button != null && HasArtwork(button.targetGraphic as Image, expectedName);
-
-        readonly Button[] boundButtons = new Button[12];
-        readonly UnityAction[] ownedListeners = new UnityAction[12];
+        readonly Button[] boundButtons = new Button[15];
+        readonly UnityAction[] ownedListeners = new UnityAction[15];
         GameState subscribedState;
         string lastLanguage;
         string lastRewardDay;
@@ -198,6 +163,7 @@ namespace LegendsOfRus
 
         public void RefreshContent()
         {
+            // This page now owns the extracted original header; shared navigation remains for other pages.
             lastLanguage = DemoFeatureState.LanguageCode;
             bool en = lastLanguage == "en";
             SetText(HeroName, en ? "Ivan" : "Иван");
@@ -229,6 +195,7 @@ namespace LegendsOfRus
                     PlayText.raycastTarget = false;
                 }
             }
+            ProductionHomeSourceComposition.Refresh(this);
             RefreshState();
         }
 
@@ -244,15 +211,6 @@ namespace LegendsOfRus
                 if (state != null && state.Save != null && Application.isPlaying)
                     state.RefreshEnergyFromClock();
                 PlayerSaveData save = state != null ? state.Save : null;
-                SetText(GoldText, save != null ? FormatAmount(save.gold) : "—");
-                SetText(GemsText, save != null ? FormatAmount(save.gems) : "—");
-                SetText(EnergyText, save != null
-                    ? save.energy.ToString(CultureInfo.InvariantCulture) + "/" +
-                        save.energyMax.ToString(CultureInfo.InvariantCulture)
-                    : "—");
-                string level = save != null ? save.level.ToString(CultureInfo.InvariantCulture) : "—";
-                SetText(LevelText, (DemoFeatureState.LanguageCode == "en" ? "Level " : "Уровень ") + level);
-                SetText(ProfileProgressText, "—");
                 SetText(QuestProgressText, "— / —");
                 SetText(QuestRewardText, "—");
                 if (QuestProgressFill != null)
@@ -262,17 +220,12 @@ namespace LegendsOfRus
                 }
                 // This mirrors GameState.ClaimDailyReward's actual persisted UTC rule.
                 lastRewardDay = DateTime.UtcNow.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
-                bool dailyAvailable = save != null && save.lastDailyRewardUtc != lastRewardDay;
+                bool dailyAvailable = DailyRewardSchedule.CanClaim(save, DateTime.UtcNow);
                 if (DailyRewardBadge != null) DailyRewardBadge.gameObject.SetActive(dailyAvailable);
                 SetText(DailyRewardBadgeText, dailyAvailable ? "1" : string.Empty);
+                ProductionHomeSourceComposition.FitBalances(this);
             }
             finally { refreshingState = false; }
-        }
-
-        static string FormatAmount(int value)
-        {
-            // Stable grouping on both Russian and English devices, matching the existing HUD.
-            return value.ToString("N0", CultureInfo.InvariantCulture).Replace(",", " ");
         }
 
         static void SetText(Text label, string value)
@@ -288,7 +241,8 @@ namespace LegendsOfRus
             Button[] buttons = Buttons();
             ScreenId[] destinations = { ScreenId.Profile, ScreenId.Settings, ScreenId.ChapterMap,
                 ScreenId.WorldMap, ScreenId.Shop, ScreenId.Events, ScreenId.Characters,
-                ScreenId.Mail, ScreenId.DailyReward, ScreenId.Shop, ScreenId.Shop, ScreenId.Shop };
+                ScreenId.Mail, ScreenId.DailyReward, ScreenId.Shop, ScreenId.Shop, ScreenId.Shop,
+                ScreenId.IndividualRanking, ScreenId.TeamHub, ScreenId.FriendsList };
             navigationCommitted = false;
             for (int i = 0; i < buttons.Length; i++)
             {
@@ -325,6 +279,6 @@ namespace LegendsOfRus
         }
 
         public Button[] Buttons() => new[] { ProfileButton, SettingsButton, PlayButton, WorldMapButton,
-            ShopButton, EventsButton, CharactersButton, MailButton, DailyRewardButton, GoldPlusButton, GemsPlusButton, EnergyPlusButton };
+            ShopButton, EventsButton, CharactersButton, MailButton, DailyRewardButton, GoldPlusButton, GemsPlusButton, EnergyPlusButton, RankingButton, TeamButton, FriendsButton };
     }
 }

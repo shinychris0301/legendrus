@@ -1,0 +1,147 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs
+@@ -207,8 +207,12 @@
+             Capture("ChapterMap_LockedNotice_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             view.Notice.Hide();
+             view.Scroller.JumpToLevel(500);
++            string saved = JsonUtility.ToJson(GameState.Instance.Save);
++            Assert.That(ChapterLevelCatalog.Find(1,500),Is.Not.Null,"Round 500 is published in Chapter 1.");
+             view.Nodes.First(n=>n.LevelId==500).Button.onClick.Invoke();
+-            Assert.That(view.Notice.Message.text,Does.Contain("скоро"));
++            Assert.That(view.Notice.Message.text,Does.Contain("предыдущий"));
++            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
++            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(saved));
+             Assert.That(view.GetComponentsInChildren<ProductionMapNotice>(true).Length,Is.EqualTo(1));
+             yield return new WaitForSecondsRealtime(3.8f);
+             Assert.That(view.Notice.Group.alpha,Is.Zero);
+--- a/Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsCausalAnimationTests.cs
++++ b/Assets/LegendsOfRus/Tests/CampaignPlayMode/MechanicsCausalAnimationTests.cs
+@@ -13,10 +13,24 @@
+  {
+   bool sawCarriedPayload;
+   GameObject root; readonly List<GameplayMotionEvent> events=new List<GameplayMotionEvent>();readonly List<float> times=new List<float>();
++  readonly List<float> frameDurations=new List<float>();readonly List<int> frames=new List<int>();
++  float conversionScheduleGap;
+   [UnityTearDown] public IEnumerator Cleanup(){if(root)UnityEngine.Object.Destroy(root);yield return null;}
+   MechanicsSandbox Open(){root=new GameObject("CausalAnimation",typeof(RectTransform),typeof(Canvas));return MechanicsSandbox.Open((RectTransform)root.transform,()=>{},true);}
+   static BoardModel Board(){var b=new BoardModel(8,7,6,new SeededBoardRandom(3));for(int y=0;y<7;y++)for(int x=0;x<8;x++)b.SetCell(new BoardPosition(x,y),new BoardCellData((x+2*y)%5));return b;}
+-  void Track(Match3Board b){events.Clear();times.Clear();b.MotionEventPublished+=m=>{events.Add(m);times.Add(Time.unscaledTime);};}
++  void Track(Match3Board b)
++  {
++   events.Clear();times.Clear();frameDurations.Clear();frames.Clear();conversionScheduleGap=float.NaN;
++   b.MotionEventPublished+=m=>
++   {
++    events.Add(m);times.Add(Time.unscaledTime);frameDurations.Add(Time.unscaledDeltaTime);frames.Add(Time.frameCount);
++    if(m.Kind==GameplayMotionKind.SpecialConversionStarted&&float.IsNaN(conversionScheduleGap))
++    {
++     var timeline=b.LastPresentationTimeline;
++     conversionScheduleGap=timeline.ActivationTimes.Where((at,i)=>timeline.Converted[i]).Min()-.22f;
++    }
++   };
++  }
+   void Capture(string name)=>MechanicsSandboxPlayModeTests.Capture(root,"CausalR13_"+name,576,1280);
+   IEnumerator Observe(Match3Board b,string label)
+   {
+@@ -49,7 +63,11 @@
+   [UnityTest] public IEnumerator RainbowShowsConversionsBeforeDirectionalRelease()
+   {
+    var s=Open();s.Reset(0,GameplayRuleVersion.PrototypeR4);yield return null;var b=Board();b.SetCell(new BoardPosition(3,3),new BoardCellData(5,SpecialGemKind.Color));b.SetCell(new BoardPosition(4,3),new BoardCellData(5,SpecialGemKind.Row));s.Board.LoadSnapshotForTesting(b.CreateSnapshot());Track(s.Board);Capture("Conversion_Before");Assert.That(s.Board.SwipeCell(3,3,Vector2Int.right),Is.True);yield return Observe(s.Board,"Conversion");
+-   int convert=events.FindIndex(e=>e.Kind==GameplayMotionKind.SpecialConversionStarted),release=events.FindIndex(e=>e.Kind==GameplayMotionKind.SpecialActivationStarted&&e.SpecialKind==SpecialGemKind.Row);Assert.That(convert,Is.GreaterThanOrEqualTo(0));Assert.That(release,Is.GreaterThan(convert));Assert.That(times[release]-times[convert],Is.GreaterThanOrEqualTo(.07f));
++   int convert=events.FindIndex(e=>e.Kind==GameplayMotionKind.SpecialConversionStarted),release=events.FindIndex(e=>e.Kind==GameplayMotionKind.SpecialActivationStarted&&e.SpecialKind==SpecialGemKind.Row);Assert.That(convert,Is.GreaterThanOrEqualTo(0));Assert.That(release,Is.GreaterThan(convert));// Conversion is sampled on the first frame after its scheduled time. PNG capture
++   // can delay that frame, shortening the measured gap by up to one frame.
++   Assert.That(conversionScheduleGap,Is.GreaterThanOrEqualTo(.07f),"Scheduled conversion lead-in must remain intact.");
++   Assert.That(frames[release],Is.GreaterThan(frames[convert]),"Converted art must be visible before release.");
++   Assert.That(times[release]-times[convert]+frameDurations[convert],Is.GreaterThanOrEqualTo(conversionScheduleGap-.001f));
+    var convertedCells=new HashSet<BoardPosition>(events.Where(e=>e.Kind==GameplayMotionKind.SpecialConversionStarted&&e.ComboIndex==1).Select(e=>e.Secondary));
+    var visibleClears=events.Where(e=>e.Kind==GameplayMotionKind.CellsImpacted&&e.ComboIndex==1).SelectMany(e=>e.ClearedCells).Where(c=>convertedCells.Contains(c.Position)).ToArray();
+    Assert.That(visibleClears.Length,Is.EqualTo(convertedCells.Count));Assert.That(visibleClears.All(c=>c.Cell.Special==SpecialGemKind.Row),Is.True,"converted line items must not emit hidden ordinary-gem fragments");
+--- a/Assets/LegendsOfRus/Tests/CompliancePlayMode/PrivacySupportFoundationPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/CompliancePlayMode/PrivacySupportFoundationPlayModeTests.cs
+@@ -1,4 +1,6 @@
+ using System.Collections;
++using System.Collections.Generic;
++using System.Reflection;
+ using LegendsOfRus.Compliance;
+ using NUnit.Framework;
+ using UnityEngine;
+@@ -10,20 +12,45 @@
+     {
+         const string StoreKey = "LegendsOfRus_Compliance_v1";
+ 
++        static readonly PropertyInfo Singleton = typeof(PrivacySupportService).GetProperty("Instance");
++        readonly List<GameObject> ownedHosts = new List<GameObject>();
++        PrivacySupportService previousService;
++        ComplianceStateSnapshot previousState;
++        bool captured, hadStore;
++        string previousStore;
++
+         [SetUp]
+         public void SetUp()
+         {
++            string isolated = System.Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            Assert.That(isolated, Does.StartWith("/tmp/"));
++            Assert.That(Application.persistentDataPath, Does.StartWith(isolated + "/"));
++            previousService = PrivacySupportService.Instance;
++            previousState = previousService != null ? previousService.State : null;
++            hadStore = PlayerPrefs.HasKey(StoreKey);
++            previousStore = PlayerPrefs.GetString(StoreKey);
++            captured = true;
++            // Temporarily bind the singleton to owned fixture services. Preserve the
++            // original component and state on the shared runtime root exactly.
++            Singleton.SetValue(null, null);
+             PlayerPrefs.DeleteKey(StoreKey);
+             PlayerPrefs.Save();
+-            DestroyExisting();
+         }
+ 
+         [TearDown]
+         public void TearDown()
+         {
+-            DestroyExisting();
+-            PlayerPrefs.DeleteKey(StoreKey);
++            if (!captured) return;
++            foreach (var host in ownedHosts)
++                if (host != null) Object.DestroyImmediate(host);
++            ownedHosts.Clear();
++            Singleton.SetValue(null, previousService);
++            if (hadStore) PlayerPrefs.SetString(StoreKey, previousStore);
++            else PlayerPrefs.DeleteKey(StoreKey);
+             PlayerPrefs.Save();
++            captured = false;
++            Assert.That(PrivacySupportService.Instance, Is.SameAs(previousService));
++            if (previousService != null) Assert.That(previousService.State, Is.SameAs(previousState));
+         }
+ 
+         [UnityTest]
+@@ -150,29 +177,11 @@
+                 Is.EqualTo(ComplianceActionStatus.UiNotApproved));
+         }
+ 
+-        static PrivacySupportService CreateService()
++        PrivacySupportService CreateService()
+         {
+             GameObject host = new GameObject("PrivacySupportService_Test");
++            ownedHosts.Add(host);
+             return host.AddComponent<PrivacySupportService>();
+-        }
+-
+-        static void DestroyExisting()
+-        {
+-            // Never destroy the shared persistent runtime root just because the
+-            // service is attached to it; other PlayMode fixtures may share that
+-            // root in the same Test Runner session.
+-            for (int i = 0; i < 8; i++)
+-            {
+-                PrivacySupportService existing =
+-                    Object.FindAnyObjectByType<PrivacySupportService>();
+-                if (existing == null)
+-                    return;
+-
+-                if (existing.gameObject.name == "PrivacySupportService_Test")
+-                    Object.DestroyImmediate(existing.gameObject);
+-                else
+-                    Object.DestroyImmediate(existing);
+-            }
+         }
+     }
+ }

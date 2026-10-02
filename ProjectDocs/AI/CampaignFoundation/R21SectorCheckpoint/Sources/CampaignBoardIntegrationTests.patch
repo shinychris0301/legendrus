@@ -1,0 +1,11 @@
+--- CampaignBoardIntegrationTests.before
++++ Assets/LegendsOfRus/Tests/CampaignPlayMode/CampaignBoardIntegrationTests.cs
+@@ -44,7 +44,7 @@
+         }
+         [Test] public void AdoptedRulesGeneratePlayableBoardsForAllAuthoredRounds()
+         {
+-            var levels=ChapterLevelCatalog.LoadChapter1().levels;Assert.That(levels.Length,Is.EqualTo(90));
++            var levels=ChapterLevelCatalog.LoadChapter1().levels;Assert.That(levels.Length,Is.EqualTo(100));
+             Assert.That(Match3Board.CurrentGameplayRules,Is.EqualTo(GameplayRuleVersion.PrototypeR4));
+             foreach(var level in levels)for(int attempt=1;attempt<=3;attempt++)
+             {

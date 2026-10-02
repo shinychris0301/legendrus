@@ -1,0 +1,190 @@
+[
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs",
+    "guard": "[UnitySetUp] public IEnumerator SetUp(){string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");Assert.That(Environment.GetEnvironmentVariable(\"XDG_CONFIG_HOME\"),Is.EqualTo(isolated));Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar),Is.True);yield return SceneManager.LoadSceneAsync(\"Bootstrap\",LoadSceneMode.Single);router=ScreenRouter.Instance;previousLanguage=DemoFeatureState.LanguageCode;DemoFeatureState.SetLanguage(\"ru\");GameState.Instance.ResetProgress();StoryService.ResetRuntime();Assert.That(StoryService.TryBeginChapterIntro(),Is.True);router.Show(ScreenId.Dialogue);Settle();yield return null;}"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/EventDetailAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundRestartPlayModeTests.cs",
+    "guard": "if (Environment.GetEnvironmentVariable(\"LOR_PERSISTENCE_PHASE\") != phase) Assert.Ignore(\"Requires the named isolated restart phase.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/OutOfEnergyAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Run navigation checks with isolated XDG_CONFIG_HOME and LOR_LOADING_TEST_CONFIG_ROOT.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/FunctionalDemoNavigationPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Run the isolated persistence audit writer/reader phases separately.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/FailAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ContinuationRestartPlayModeTests.cs",
+    "guard": "if(Environment.GetEnvironmentVariable(\"LOR_PERSISTENCE_PHASE\")!=phase)Assert.Ignore(\"Requires isolated continuation restart phase.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/DailyRewardAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/EventsAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/LoadingAlignmentPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Launch with matching XDG_CONFIG_HOME and LOR_LOADING_TEST_CONFIG_ROOT test directories.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/LoadingAlignmentPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Set LOR_LOADING_CAPTURE_DIR to retain actual Unity layout captures.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/TeamHubAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/MaintenanceAlignmentPlayModeTests.cs",
+    "guard": "[UnitySetUp] public IEnumerator SetUp(){string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");Assert.That(Environment.GetEnvironmentVariable(\"XDG_CONFIG_HOME\"),Is.EqualTo(isolated));Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar),Is.True);yield return SceneManager.LoadSceneAsync(\"Bootstrap\",LoadSceneMode.Single);router=ScreenRouter.Instance;previousLanguage=DemoFeatureState.LanguageCode;DemoFeatureState.SetLanguage(\"ru\");router.Show(ScreenId.MaintenanceState);Settle();yield return null;}"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/InventoryAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/CharactersAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/PauseAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/SpecialOfferAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/SplashResponsivePlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Use an isolated matching XDG_CONFIG_HOME and LOR_LOADING_TEST_CONFIG_ROOT.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/SplashResponsivePlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Set LOR_SPLASH_CAPTURE_DIR to retain actual Unity screenshots and geometry evidence.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ErrorDialogAlignmentPlayModeTests.cs",
+    "guard": "[UnitySetUp] public IEnumerator SetUp(){string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");Assert.That(Environment.GetEnvironmentVariable(\"XDG_CONFIG_HOME\"),Is.EqualTo(isolated));Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar),Is.True);yield return SceneManager.LoadSceneAsync(\"Bootstrap\",LoadSceneMode.Single);router=ScreenRouter.Instance;previousLanguage=DemoFeatureState.LanguageCode;DemoFeatureState.SetLanguage(\"ru\");router.Show(ScreenId.Home);Settle();yield return null;Assert.That(router.ShowErrorDialog(),Is.True);Settle();yield return null;}"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/LoginAlignmentPlayModeTests.cs",
+    "guard": "string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ShopAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/MailAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/OfflineAlignmentPlayModeTests.cs",
+    "guard": "[UnitySetUp] public IEnumerator SetUp(){string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");Assert.That(Environment.GetEnvironmentVariable(\"XDG_CONFIG_HOME\"),Is.EqualTo(isolated));Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar),Is.True);yield return SceneManager.LoadSceneAsync(\"Bootstrap\",LoadSceneMode.Single);router=ScreenRouter.Instance;previousLanguage=DemoFeatureState.LanguageCode;DemoFeatureState.SetLanguage(\"ru\");router.Show(ScreenId.OfflineState);Settle();yield return null;}"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/LanguageSelectAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/IndividualRankingAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/LanguagePreferenceRestartPlayModeTests.cs",
+    "guard": "if(string.IsNullOrEmpty(isolated)||string.IsNullOrEmpty(phase))Assert.Ignore(\"Requires dedicated isolated two-process check.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Use matching isolated XDG_CONFIG_HOME and LOR_LOADING_TEST_CONFIG_ROOT directories.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/HomeAlignmentPlayModeTests.cs",
+    "guard": "Assert.Ignore(\"Set LOR_HOME_CAPTURE_DIR to retain actual Unity screenshots and geometry.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ChapterCompleteAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/TeamRankingAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/FriendsListAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/ProfileAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/TeamChatAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/RewardReceivedAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/BoosterSelectionAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/BackendSessionRestartPlayModeTests.cs",
+    "guard": "if(Environment.GetEnvironmentVariable(\"LOR_BACKEND_SESSION_PHASE\")!=\"write\")Assert.Ignore(\"Separate-process writer only\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/BackendSessionRestartPlayModeTests.cs",
+    "guard": "if(Environment.GetEnvironmentVariable(\"LOR_BACKEND_SESSION_PHASE\")!=\"read\")Assert.Ignore(\"Separate-process reader only\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/TutorialAlignmentPlayModeTests.cs",
+    "guard": "[UnitySetUp] public IEnumerator SetUp(){string isolated=Environment.GetEnvironmentVariable(\"LOR_LOADING_TEST_CONFIG_ROOT\");if(string.IsNullOrEmpty(isolated))Assert.Ignore(\"Requires isolated storage.\");Assert.That(Environment.GetEnvironmentVariable(\"XDG_CONFIG_HOME\"),Is.EqualTo(isolated));Assert.That(Path.GetFullPath(Application.persistentDataPath).StartsWith(Path.GetFullPath(isolated)+Path.DirectorySeparatorChar),Is.True);yield return SceneManager.LoadSceneAsync(\"Bootstrap\",LoadSceneMode.Single);router=ScreenRouter.Instance;previousLanguage=DemoFeatureState.LanguageCode;DemoFeatureState.SetLanguage(\"ru\");router.Show(ScreenId.SplashTitle);Settle();router.Show(ScreenId.TutorialOverlay);Settle();yield return null;}"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/SettingsAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/BackendSessionPlayModeTests.cs",
+    "guard": "if(string.IsNullOrEmpty(origin))Assert.Ignore(\"Requires isolated loopback backend verification runner\");"
+  },
+  {
+    "file": "Assets/LegendsOfRus/Tests/PlayMode/WorldMapAlignmentPlayModeTests.cs",
+    "guard": "if (string.IsNullOrEmpty(isolated)) Assert.Ignore(\"Requires isolated test storage.\");"
+  }
+]

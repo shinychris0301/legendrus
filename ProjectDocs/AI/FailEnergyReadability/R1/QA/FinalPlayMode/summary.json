@@ -1,0 +1,56 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailEnergyReadability/R1/QA/FinalPlayMode/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailEnergyReadability/R1/QA/FinalPlayMode/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 24.71517539024353,
+  "isolatedConfig": "/tmp/lor-fail-energy-r1/FinalPlayMode/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "11",
+    "result": "Failed(Child)",
+    "total": "11",
+    "passed": "8",
+    "failed": "3",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 16:58:41Z",
+    "end-time": "2026-09-30 16:58:46Z",
+    "duration": "5.1456195"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ActualClockRussianEnglishAndPortraitSafeAreas",
+      "result": "Failed",
+      "message": "  Offer details need their own line\n  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.RegeneratedEnergyAndFullCapacityUpdateWithoutAutomaticLevelStart",
+      "result": "Failed",
+      "message": "  Offer details need their own line\n  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ResourceHeaderKeepsStandaloneRouteAndCloseReturnsSafely",
+      "result": "Failed",
+      "message": "  Offer details need their own line\n  Expected: False\n  But was:  True\n"
+    }
+  ]
+}

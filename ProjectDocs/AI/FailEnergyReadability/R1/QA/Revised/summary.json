@@ -1,0 +1,66 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailEnergyReadability/R1/QA/Revised/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailEnergyReadability/R1/QA/Revised/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 19.86886692047119,
+  "isolatedConfig": "/tmp/lor-fail-energy-r1/Revised/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "11",
+    "result": "Failed(Child)",
+    "total": "11",
+    "passed": "6",
+    "failed": "5",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-30 16:54:53Z",
+    "end-time": "2026-09-30 16:54:57Z",
+    "duration": "3.6755841"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.ActualProgressAndStockRenderInBothLanguagesAndSafeAreas",
+      "result": "Failed",
+      "message": "  Label width\n  Expected: less than or equal to 822.0f\n  But was:  887.0f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.RetryExitAndBoosterGuidePreserveExistingTransactions",
+      "result": "Failed",
+      "message": "  Label width\n  Expected: less than or equal to 822.0f\n  But was:  887.0f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.ThreeGoalsCompletedGoalFilteringAndMissingResultAreTruthful",
+      "result": "Failed",
+      "message": "  Label width\n  Expected: less than or equal to 822.0f\n  But was:  887.0f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ActualClockRussianEnglishAndPortraitSafeAreas",
+      "result": "Failed",
+      "message": "  EnergyPanel/Message text height\n  Expected: less than or equal to 90.0f\n  But was:  108.0f\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ResourceHeaderKeepsStandaloneRouteAndCloseReturnsSafely",
+      "result": "Failed",
+      "message": "  EnergyPanel/Message text height\n  Expected: less than or equal to 90.0f\n  But was:  108.0f\n"
+    }
+  ]
+}

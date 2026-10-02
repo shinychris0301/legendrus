@@ -28,6 +28,7 @@ namespace LegendsOfRus
 
     public sealed class LevelCompletionResult
     {
+        public int Score { get; }
         public LevelData Level { get; }
         public int Stars { get; }
         public int GoldReward { get; }
@@ -39,7 +40,8 @@ namespace LegendsOfRus
             int stars,
             int goldReward,
             int gemReward,
-            bool firstClearRewardGranted
+            bool firstClearRewardGranted,
+            int score = 0
         )
         {
             Level = level;
@@ -47,6 +49,7 @@ namespace LegendsOfRus
             GoldReward = goldReward;
             GemReward = gemReward;
             FirstClearRewardGranted = firstClearRewardGranted;
+            Score = Mathf.Max(0, score);
         }
     }
 
@@ -122,14 +125,20 @@ namespace LegendsOfRus
         public int boosterSeaPearl = 10;
 
         public string lastDailyRewardUtc = "";
+        public int dailyRewardCycleDay;
+        public string dailyRewardMonthUtc = "";
+        public int dailyRewardMonthClaims;
 
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
         public bool notifications = true;
+        // Optional v6 extension with its own schema; legacy saves simply have no retained attempt.
+        public RetainedRoundData retainedRound;
+        public List<ContinuationTransactionData> continuationTransactions = new List<ContinuationTransactionData>();
     }
 
-    public sealed class GameState : MonoBehaviour
+    public sealed partial class GameState : MonoBehaviour
     {
         public static GameState Instance { get; private set; }
 
@@ -139,6 +148,9 @@ namespace LegendsOfRus
         public event Action Changed;
 
         public PlayerSaveLoadResult LastLoadResult { get; private set; }
+        // Current-session outcome, distinct from the saved personal best on replays.
+        public LevelCompletionResult LastCompletionResult { get; private set; }
+        public LevelFailureResult LastFailureResult { get; private set; }
         public PlayerSaveWriteResult LastWriteResult { get; private set; }
         public bool CanPersist
         {
@@ -208,6 +220,9 @@ namespace LegendsOfRus
                 return;
             }
             Save = migration.Data;
+            // Migration clones through Unity JSON, which may materialize an empty optional object.
+            if (Save.retainedRound != null && string.IsNullOrEmpty(Save.retainedRound.attemptId))
+                Save.retainedRound = null;
 
             NormalizeLevelProgress();
             NormalizeTutorialProgress();
@@ -463,6 +478,8 @@ namespace LegendsOfRus
 
         public bool SelectLevel(int chapterId, int levelId)
         {
+            if (ContinuationBlocksNewAttempt()) return false;
+            if (TryGetRetainedRound(out var retained) && (retained.chapter != chapterId || retained.level != levelId)) return false;
             if (!IsLevelUnlocked(chapterId, levelId)) return false;
             if (ChapterLevelCatalog.Find(chapterId, levelId) == null) return false;
 
@@ -514,6 +531,10 @@ namespace LegendsOfRus
         public int RegisterLevelAttempt(LevelData levelData)
         {
             if (levelData == null) return 0;
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Resolve or recover the continuation reservation before starting another round.");
+            if (TryGetRetainedRound(out _)) throw new InvalidOperationException("Resolve the retained attempt before starting another round.");
+            Save.retainedRound = null; // Reject stale/incompatible optional checkpoints without resetting progress.
+            unsavedRetainedRound = null;
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
                 return 0;
 
@@ -532,8 +553,9 @@ namespace LegendsOfRus
             return progress.attempts;
         }
 
-        public void RecordLevelFailure(LevelData levelData, int score)
+        public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
         {
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Finalize the retained continuation transaction first.");
             if (levelData == null) return;
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
                 return;
@@ -545,6 +567,7 @@ namespace LegendsOfRus
             );
             if (progress.attempts == 0)
                 progress.attempts = 1;
+            LastFailureResult = new LevelFailureResult(levelData, score, goalProgress);
             progress.failures++;
             progress.bestScore = Mathf.Max(progress.bestScore, score);
             Persist();
@@ -552,6 +575,7 @@ namespace LegendsOfRus
 
         public LevelCompletionResult CompleteLevel(LevelData levelData, int score)
         {
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Continuation consumption is not integrated yet.");
             if (levelData == null)
                 throw new ArgumentNullException(nameof(levelData));
             if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
@@ -621,15 +645,16 @@ namespace LegendsOfRus
             Save.chapter = Save.selectedChapter;
             Save.level = Save.highestUnlockedLevel;
             Save.stars = CalculateTotalStars();
-            Persist();
-
-            return new LevelCompletionResult(
+            LastCompletionResult = new LevelCompletionResult(
                 levelData,
                 earnedStars,
                 grantedGold,
                 grantedGems,
-                grantReward
+                grantReward,
+                score
             );
+            Persist();
+            return LastCompletionResult;
         }
 
         public bool TryDoubleLastLevelGoldReward()
@@ -740,17 +765,27 @@ namespace LegendsOfRus
             }
         }
 
-        public bool ClaimDailyReward()
-        {
-            string today = DateTime.UtcNow.ToString("yyyyMMdd");
-            if (Save.lastDailyRewardUtc == today)
-                return false;
+        public bool ClaimDailyReward() => ClaimDailyReward(out _);
 
-            Save.lastDailyRewardUtc = today;
-            Save.gold += 500;
-            Save.gems += 20;
-            Save.energy = Mathf.Min(Save.energyMax, Save.energy + 1);
-            Persist();
+        // A receipt contains only committed balance deltas, including capped energy.
+        // The confirmation UI never applies this receipt to the save a second time.
+        public bool ClaimDailyReward(out DailyRewardGrant granted)
+        {
+            granted = default;
+            DateTime now = DateTime.UtcNow;
+            if (!canPersist || !DailyRewardSchedule.CanClaim(Save, now)) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (!DailyRewardSchedule.TryApply(candidate, now)) return false;
+            PlayerSaveWriteResult result;
+            bool written = SaveService.TrySave(candidate, out result);
+            LastWriteResult = result;
+            if (!written) { canPersist = false; return false; }
+            granted = new DailyRewardGrant(candidate.gold-Save.gold, candidate.gems-Save.gems,
+                candidate.energy-Save.energy, candidate.boosterMace-Save.boosterMace,
+                candidate.boosterFirebird-Save.boosterFirebird, candidate.boosterLivingLight-Save.boosterLivingLight,
+                candidate.boosterSeaPearl-Save.boosterSeaPearl);
+            Save = candidate;
+            Changed?.Invoke();
             return true;
         }
 
@@ -915,6 +950,9 @@ namespace LegendsOfRus
             }
 
             StoryService.ResetRuntime();
+            LastCompletionResult = null;
+            LastFailureResult = null;
+            unsavedRetainedRound = null;
             Save = reset;
             canPersist = writeCompleted;
             if (!writeCompleted)

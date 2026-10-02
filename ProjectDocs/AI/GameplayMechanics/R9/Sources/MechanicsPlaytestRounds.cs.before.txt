@@ -1,0 +1,60 @@
+using System;
+using LegendsOfRus.GameplayCore;
+namespace LegendsOfRus
+{
+    // Disposable authored playtest slice. Never registered with the campaign catalog.
+    public sealed class MechanicsPlaytestRound
+    {
+        public string Title {get;}
+        public string Instruction {get;}
+        public LevelData Level {get;}
+        public BoardSnapshot Snapshot {get;}
+        public MechanicsPlaytestRound(string title,string instruction,LevelData level,BoardSnapshot snapshot)
+        {Title=title;Instruction=instruction;Level=level;Snapshot=snapshot;}
+    }
+    public static class MechanicsPlaytestRounds
+    {
+        public const int Count=5;
+        public static MechanicsPlaytestRound Create(int index)
+        {
+            if(index<0||index>=Count)throw new ArgumentOutOfRangeException(nameof(index));
+            var b=new BoardModel(8,7,6,new SeededBoardRandom(41+index)){SquareMatches=true};
+            for(int y=0;y<7;y++)for(int x=0;x<8;x++)b.SetCell(new BoardPosition(x,y),new BoardCellData((x+2*y)%6));
+            void Gem(int x,int y,int color,SpecialGemKind special=SpecialGemKind.None)=>b.SetCell(new BoardPosition(x,y),new BoardCellData(color,special));
+            void Special(int x,int y,SpecialGemKind kind){var p=new BoardPosition(x,y);b.SetCell(p,new BoardCellData(b.GetTile(p),kind));}
+            void Obstacle(int x,int y,BoardObstacleKind kind,int layers)=>b.SetObstacle(new BoardPosition(x,y),new BoardObstacleData(kind,layers));
+            LevelGoalData Goal(string type,int target)=>new LevelGoalData{type=LevelGoalTypes.ClearObstacle,obstacleType=type,target=target};
+            string title,instruction;int moves;LevelGoalData[] goals;
+            switch(index)
+            {
+                case 0:
+                    title="Ледяная тропа";instruction="Соберите четыре в ряд. Направьте взрыв на лёд.";moves=4;
+                    Gem(3,3,2);for(int x=1;x<=4;x++)Gem(x,2,x==3?3:2);
+                    Obstacle(3,4,BoardObstacleKind.Ice,1);Obstacle(3,5,BoardObstacleKind.Ice,1);
+                    goals=new[]{Goal(LevelObstacleTypes.Ice,2)};break;
+                case 1:
+                    title="Под ледяной коркой";instruction="Два слоя льда требуют повторного попадания.";moves=5;
+                    b.GeneratePlayableBoard();Special(3,3,SpecialGemKind.Burst);Special(3,1,SpecialGemKind.Burst);
+                    Obstacle(2,4,BoardObstacleKind.Ice,2);Obstacle(4,4,BoardObstacleKind.Ice,2);Obstacle(5,3,BoardObstacleKind.Crate,1);
+                    goals=new[]{Goal(LevelObstacleTypes.Ice,2),Goal(LevelObstacleTypes.Crate,1)};break;
+                case 2:
+                    title="Полет искры";instruction="Соберите квадрат из четырёх. Искра найдёт преграду.";moves=4;
+                    Gem(3,3,3);Gem(4,2,4);foreach(var p in new[]{new BoardPosition(2,2),new BoardPosition(3,2),new BoardPosition(2,3),new BoardPosition(4,3)})Gem(p.X,p.Y,2);
+                    Obstacle(6,1,BoardObstacleKind.Crate,1);goals=new[]{Goal(LevelObstacleTypes.Crate,1)};break;
+                case 3:
+                    title="Рунные врата";instruction="Обычные совпадения не снимут печать. Попадите дважды.";moves=5;
+                    Gem(3,3,1,SpecialGemKind.Row);Gem(3,2,4,SpecialGemKind.Row);Obstacle(5,3,BoardObstacleKind.RunicSeal,2);
+                    goals=new[]{Goal(LevelObstacleTypes.RunicSeal,1)};break;
+                default:
+                    title="Испытание мастера";instruction="Соединяйте усиления и добейте оставшиеся преграды.";moves=10;
+                    b.GeneratePlayableBoard();Special(3,3,SpecialGemKind.Row);Special(4,3,SpecialGemKind.Burst);Special(1,5,SpecialGemKind.Spark);
+                    Obstacle(5,3,BoardObstacleKind.RunicSeal,2);Obstacle(2,4,BoardObstacleKind.Ice,2);Obstacle(6,4,BoardObstacleKind.Crate,1);
+                    Obstacle(6,1,BoardObstacleKind.Ice,2);Obstacle(1,2,BoardObstacleKind.Crate,1);Obstacle(6,5,BoardObstacleKind.RunicSeal,2);
+                    goals=new[]{Goal(LevelObstacleTypes.Ice,2),Goal(LevelObstacleTypes.Crate,2),Goal(LevelObstacleTypes.RunicSeal,2)};break;
+            }
+            if(b.HasAnyMatches()||!b.HasLegalMove())throw new InvalidOperationException("Playtest board must start stable and playable: "+index);
+            var level=new LevelData{id="mechanics.playtest."+(index+1),levelId=index+1,displayName=title,moveLimit=moves,goals=goals,boardSeed=41+index};
+            return new MechanicsPlaytestRound(title,instruction,level,b.CreateSnapshot());
+        }
+    }
+}

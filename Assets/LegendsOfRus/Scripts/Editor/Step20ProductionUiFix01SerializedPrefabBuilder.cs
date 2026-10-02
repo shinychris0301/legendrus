@@ -20,7 +20,7 @@ namespace LegendsOfRus.Editor
         public const string LockPath = "Assets/LegendsOfRus/Resources/ProductionUI/FIX01_SERIALIZED_DELIVERY.lock";
         public const int RequiredPageCount = 10;
         // Original Home reference is composition provenance only; no screenshot is a runtime asset.
-        public const string HomeAlignmentReferenceSha256 = "7509bdd1fee910207eb5287a1eb69700c6ac44f816fd4f209e524d56be2b64e8";
+        public const string HomeAlignmentReferenceSha256 = "10228eea0eeec2d042e80ab32b3c2dd9b13ecc9956dc776d53cdc533e4ba19ac";
 
         static readonly ScreenId[] RequiredPages =
         {
@@ -136,6 +136,27 @@ namespace LegendsOfRus.Editor
                 var layout=prefab.GetComponent<ProductionGameplayLayout>();
                 return gameplayView==null||!gameplayView.HasRequiredBindings||layout==null||layout.View!=gameplayView||prefab.transform.Find(ProductionGameplayRuntime.ContentName)==null;
             }
+            if(id==ScreenId.ChapterComplete)
+            {
+                var v=prefab.GetComponent<ProductionChapterCompleteView>();var layout=prefab.GetComponent<ProductionChapterCompleteLayout>();
+                return v==null||!v.HasRequiredBindings||layout==null||layout.View!=v||prefab.transform.Find(ProductionChapterCompleteRuntime.ContentName)==null;
+            }
+            if(id==ScreenId.Pause)
+            {
+                var v=prefab.GetComponent<ProductionPauseView>();var layout=prefab.GetComponent<ProductionPauseLayout>();
+                return v==null||!v.HasRequiredBindings||layout==null||layout.View!=v||prefab.transform.Find(ProductionPauseRuntime.ContentName)==null;
+            }
+            if(id==ScreenId.Fail)
+            {
+                var failView=prefab.GetComponent<ProductionFailView>();var failLayout=prefab.GetComponent<ProductionFailLayout>();
+                return failView==null||!failView.HasRequiredBindings||failLayout==null||failLayout.View!=failView||prefab.transform.Find(ProductionFailRuntime.ContentName)==null;
+            }
+            if (id == ScreenId.Victory)
+            {
+                var victory=prefab.GetComponent<ProductionVictoryView>();
+                var victoryLayout=prefab.GetComponent<ProductionVictoryLayout>();
+                return victory==null||!victory.HasRequiredBindings||victoryLayout==null||victoryLayout.View!=victory||prefab.transform.Find(ProductionVictoryRuntime.ContentName)==null;
+            }
             if (id == ScreenId.PreLevel)
             {
                 ProductionPreLevelView map = prefab.GetComponent<ProductionPreLevelView>();
@@ -183,6 +204,13 @@ namespace LegendsOfRus.Editor
             Debug.Log("Loading alignment serialized prefab saved and read back at revision " + ProductionLoadingView.CurrentRevision + ".");
         }
 
+        [MenuItem("Legends of Rus/Production UI/Rebuild Shared Home and World Map Header")]
+        public static void RebuildSharedPlayerHeader()
+        {
+            RebuildHomeAlignment();
+            RebuildWorldMapAlignment();
+        }
+
         [MenuItem("Legends of Rus/Production UI/Home Alignment/Build or Repair Home Only")]
         public static void RebuildHomeAlignment()
         {
@@ -193,7 +221,7 @@ namespace LegendsOfRus.Editor
             AssetDatabase.ImportAsset(PageRoot + "/Home.prefab", ImportAssetOptions.ForceSynchronousImport);
             if (PageNeedsBuild(ScreenId.Home))
                 throw new InvalidOperationException("Saved Home alignment prefab failed the revision/binding read-back check.");
-            Debug.Log("Home alignment serialized prefab saved and read back at revision " + ProductionHomeView.CurrentRevision + ".");
+            Debug.Log("Home safe-edge header/footer with preserved source artwork and social shortcuts saved and read back at revision " + ProductionHomeView.CurrentRevision + ".");
         }
 
         static void RequireEditorIdle()
@@ -212,7 +240,7 @@ namespace LegendsOfRus.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.ImportAsset(PageRoot + "/WorldMap.prefab",ImportAssetOptions.ForceSynchronousImport);
             if(PageNeedsBuild(ScreenId.WorldMap)) throw new InvalidOperationException("World Map save/readback failed.");
-            Debug.Log("World Map alignment serialized prefab saved and read back at revision " + ProductionWorldMapView.CurrentRevision + ".");
+            Debug.Log("World Map safe-edge navigation and expanding chapter viewport saved and read back at revision " + ProductionWorldMapView.CurrentRevision + ".");
         }
 
         [MenuItem("Legends of Rus/Production UI/Rebuild Chapter Map Alignment")]
@@ -279,6 +307,16 @@ namespace LegendsOfRus.Editor
                     var view=prefab.GetComponent<ProductionGameplayView>();
                     if(view==null||!view.HasRequiredBindings)failures.Add(path+": Gameplay native bindings incomplete.");
                     continue;
+                }
+                if(id==ScreenId.Fail)
+                {
+                    var view=prefab.GetComponent<ProductionFailView>();
+                    if(view==null||!view.HasRequiredBindings)failures.Add(path+": Failure native bindings incomplete.");
+                }
+                if(id==ScreenId.Victory)
+                {
+                    var view=prefab.GetComponent<ProductionVictoryView>();
+                    if(view==null||!view.HasRequiredBindings)failures.Add(path+": Victory native bindings incomplete.");
                 }
                 if (id == ScreenId.PreLevel)
                 {
@@ -351,10 +389,26 @@ namespace LegendsOfRus.Editor
         static void BuildPage(ScreenId id)
         {
             RequireEditorIdle();
+            if (id == ScreenId.ChapterComplete) { BuildChapterCompletePage(); return; }
+            if (id == ScreenId.Pause) { BuildPausePage(); return; }
+            if (id == ScreenId.Fail) { BuildFailPage(); return; }
+            if (id == ScreenId.Victory) { BuildVictoryPage(); return; }
             if (id == ScreenId.Gameplay) { BuildGameplayPage(); return; }
             if (id == ScreenId.PreLevel) { BuildPreLevelPage(); return; }
             if (id == ScreenId.ChapterMap) { BuildChapterMapPage(); return; }
             if (id == ScreenId.WorldMap) { BuildWorldMapPage(); return; }
+            if (id == ScreenId.Loading)
+            {
+                foreach (string artPath in Directory.GetFiles("Assets/LegendsOfRus/Resources/"+ProductionLoadingRuntime.ArtRoot,"*.png"))
+                {
+                    var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                    if(importer==null)throw new InvalidOperationException("Loading reference asset not imported: "+artPath);
+                    importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;
+                    importer.alphaIsTransparency=true;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
+                    importer.npotScale=TextureImporterNPOTScale.None;importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;
+                    importer.wrapMode=TextureWrapMode.Clamp;importer.spritePixelsPerUnit=100;importer.spriteBorder=Vector4.zero;importer.SaveAndReimport();
+                }
+            }
             if (id == ScreenId.Loading && File.Exists(PageRoot + "/Loading.prefab"))
             {
                 string loadingPath = PageRoot + "/Loading.prefab";
@@ -428,6 +482,7 @@ namespace LegendsOfRus.Editor
 
         static void BuildWorldMapPage()
         {
+            WorldMapReferenceArtImporter.Import();
             foreach(string name in ProductionWorldMapRuntime.ArtNames)
             {
                 string artPath="Assets/LegendsOfRus/Resources/"+ProductionWorldMapRuntime.ArtRoot+name+".png";
@@ -454,6 +509,17 @@ namespace LegendsOfRus.Editor
 
         static void BuildChapterMapPage()
         {
+            foreach(string name in ProductionChapterMapSourceControls.ArtNames)
+            {
+                string artPath="Assets/LegendsOfRus/Resources/"+ProductionChapterMapSourceControls.ArtRoot+name+".png";
+                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing source Chapter Map art: "+artPath);
+                importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;
+                importer.alphaIsTransparency=true;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
+                importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;importer.wrapMode=TextureWrapMode.Clamp;
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteMeshType=SpriteMeshType.FullRect;importer.SetTextureSettings(settings);
+                importer.SaveAndReimport();
+            }
             foreach(string name in ProductionChapterMapRuntime.ArtNames)
             {
                 string artPath="Assets/LegendsOfRus/Resources/"+ProductionChapterMapRuntime.ArtRoot+name+".png";
@@ -480,6 +546,20 @@ namespace LegendsOfRus.Editor
 
         static void BuildGameplayPage()
         {
+            foreach(string name in ProductionGameplaySourceControls.ArtNames)
+            {
+                string artPath=ProductionGameplaySourceControls.AssetPath(name);
+                AssetDatabase.ImportAsset(artPath,ImportAssetOptions.ForceSynchronousImport);
+                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing original Gameplay art: "+artPath);
+                importer.textureShape=TextureImporterShape.Texture2D;importer.textureType=TextureImporterType.Sprite;
+                importer.spriteImportMode=SpriteImportMode.Single;importer.alphaIsTransparency=true;
+                importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
+                importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;importer.wrapMode=TextureWrapMode.Clamp;
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteMeshType=SpriteMeshType.FullRect;
+                importer.SetTextureSettings(settings);importer.SaveAndReimport();
+            }
+
             foreach(string name in ProductionGameplayArt.Files)
             {
                 string artPath="Assets/LegendsOfRus/Resources/"+ProductionGameplayArt.Root+name+".png";
@@ -495,15 +575,162 @@ namespace LegendsOfRus.Editor
                 rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
                 ProductionGameplayRuntime.BuildInto(rect);
                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.Gameplay,
-                    "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800",
-                    "gameplay-frame-polish-r2-native-ornament-live-board-and-hud",7,true,false);
+                    "bfa56b2fe39373e958afa963fff554c74263374bc184958594c5c4646f0e675a",
+                    "gameplay-source-grid-r11",8,true,false);
                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
+            }
+            finally{PrefabUtility.UnloadPrefabContents(root);}
+        }
+
+        [MenuItem("Legends of Rus/Production UI/Victory Alignment/Rebuild Victory Only")]
+        public static void RebuildVictoryAlignment()
+        {
+            RequireEditorIdle();BuildPage(ScreenId.Victory);AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(PageRoot+"/Victory.prefab",ImportAssetOptions.ForceSynchronousImport);
+            if(PageNeedsBuild(ScreenId.Victory))throw new InvalidOperationException("Victory save/readback failed.");
+            Debug.Log("Victory alignment saved and read back at revision "+ProductionVictoryView.CurrentRevision+".");
+        }
+        [MenuItem("Legends of Rus/Production UI/Failure Alignment/Build or Repair Failure Only")]
+        public static void RebuildFailAlignment()
+        {
+            RequireEditorIdle();BuildPage(ScreenId.Fail);AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(PageRoot+"/Fail.prefab",ImportAssetOptions.ForceSynchronousImport);
+            if(PageNeedsBuild(ScreenId.Fail))throw new InvalidOperationException("Failure save/readback failed.");
+            Debug.Log("Failure alignment saved and read back at revision "+ProductionFailView.CurrentRevision+".");
+        }
+        [MenuItem("Legends of Rus/Production UI/ChapterComplete Alignment/Rebuild ChapterComplete Only")]
+        public static void RebuildChapterCompleteAlignment()
+        {
+            RequireEditorIdle();BuildPage(ScreenId.ChapterComplete);AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(PageRoot+"/ChapterComplete.prefab",ImportAssetOptions.ForceSynchronousImport);
+            if(PageNeedsBuild(ScreenId.ChapterComplete))throw new InvalidOperationException("ChapterComplete save/readback failed.");
+            Debug.Log("ChapterComplete alignment saved and read back at revision "+ProductionChapterCompleteView.CurrentRevision+".");
+        }
+        static void BuildChapterCompletePage()
+        {
+            // Preserve approved artwork; configure the footer border for larger live captions.
+            foreach(string name in ProductionChapterCompleteRuntime.ArtNames)
+            {
+                var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionChapterCompleteRuntime.ArtRoot+name+".png") as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing ChapterComplete sprite: "+name);
+                LockedDesignImporter.ConfigureChapterCompleteTexture(importer);importer.SaveAndReimport();
+            }
+            string path=PageRoot+"/ChapterComplete.prefab";var root=PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
+                var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
+                ProductionChapterCompleteRuntime.UpgradeSerializedForEditor(rect);
+                ProductionChapterCompleteRuntime.BuildInto(rect);
+                var view=root.GetComponent<ProductionChapterCompleteView>();
+                if(!view.HasRequiredBindings||view.SceneRailLeft.raycastTarget||view.SceneRailRight.raycastTarget)
+                    throw new InvalidOperationException("ChapterComplete scene rails must be bound and non-interactive.");
+                var footer=view.Body.Find("CarvedWoodFooter").GetComponent<UnityEngine.UI.Image>();
+                if(footer.type!=UnityEngine.UI.Image.Type.Sliced||footer.raycastTarget||footer.sprite==null||footer.sprite.border!=new Vector4(80,80,80,80))
+                    throw new InvalidOperationException("ChapterComplete reward frame must preserve sliced corners and remain non-interactive.");
+                var scene=view.Body.Find("VillageScene").GetComponent<UnityEngine.UI.Image>();
+                if(scene.sprite==null||scene.sprite!=view.Environment.sprite||scene.raycastTarget)
+                    throw new InvalidOperationException("ChapterComplete must use the same clean scenery plate in both background layers.");
+                if(view.TeaserTitle.fontSize<=view.TeaserDescription.fontSize||view.TeaserTitle.raycastTarget||view.TeaserDescription.raycastTarget)
+                    throw new InvalidOperationException("ChapterComplete live teaser requires a clear, non-interactive title hierarchy.");
+                bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save ChapterComplete.");
+            }
+            finally{PrefabUtility.UnloadPrefabContents(root);}
+        }
+
+        [MenuItem("Legends of Rus/Production UI/Pause Alignment/Rebuild Pause Only")]
+        public static void RebuildPauseAlignment()
+        {
+            RequireEditorIdle();BuildPage(ScreenId.Pause);AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(PageRoot+"/Pause.prefab",ImportAssetOptions.ForceSynchronousImport);
+            if(PageNeedsBuild(ScreenId.Pause))throw new InvalidOperationException("Pause save/readback failed.");
+            Debug.Log("Pause alignment saved and read back at revision "+ProductionPauseView.CurrentRevision+".");
+        }
+        static void BuildPausePage()
+        {
+            // R2 imports the isolated source frames/captions and repaired navy face.
+            foreach(string name in ProductionPauseRuntime.ArtNames)
+            {
+                var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionPauseRuntime.ArtRoot+name+".png") as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing Pause sprite: "+name);
+                LockedDesignImporter.ConfigureFailTexture(importer);importer.SaveAndReimport();
+            }
+            string path=PageRoot+"/Pause.prefab";var root=PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
+                var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
+                ProductionPauseRuntime.BuildInto(rect);
+                bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Pause.");
+            }
+            finally{PrefabUtility.UnloadPrefabContents(root);}
+        }
+
+        static void BuildFailPage()
+        {
+            // R13 adds source character/frame/scenery and binds the shared player header.
+            // Runtime restores live English/no-result labels; quantities and controls remain live.
+            // Retain the independently generated R10 scene/hero/main panel and all existing object IDs.
+            // Reference captions retain existing functions; live data and routes remain intact.
+            foreach(string name in ProductionFailRuntime.ArtNames)
+            {
+                var importer=AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionFailRuntime.ArtRoot+name+".png") as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing Failure sprite: "+name);
+                LockedDesignImporter.ConfigureFailTexture(importer);importer.SaveAndReimport();
+            }
+            string path=PageRoot+"/Fail.prefab";var root=PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
+                var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
+                ProductionFailRuntime.BuildInto(rect);
+                bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Failure.");
+            }
+            finally{PrefabUtility.UnloadPrefabContents(root);}
+        }
+
+        static void BuildVictoryPage()
+        {
+            foreach(string name in ProductionVictoryRuntime.ArtNames)
+            {
+                string artPath="Assets/LegendsOfRus/Resources/"+ProductionVictoryRuntime.ArtRoot+name+".png";
+                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing Victory artwork: "+artPath);
+                LockedDesignImporter.ConfigureWorldMapTexture(importer,name=="environment_r3"?"environment":name);importer.SaveAndReimport();
+            }
+            foreach(string name in ProductionVictoryReferenceStyle.ArtNames)
+            {
+                string artPath="Assets/LegendsOfRus/Resources/"+ProductionVictoryReferenceStyle.Root+name+".png";
+                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing Victory source artwork: "+artPath);
+                LockedDesignImporter.ConfigureVictoryReferenceTexture(importer);
+                importer.SaveAndReimport();
+            }
+            string path=PageRoot+"/Victory.prefab";var root=PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var legacy=root.transform.Find("FIX01_CONTENT");if(legacy!=null)UnityEngine.Object.DestroyImmediate(legacy.gameObject);
+                var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
+                // Upgrade to the selected original composition in place; retain object IDs and actions.
+                ProductionVictoryRuntime.BuildInto(rect);
+                bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Victory.");
             }
             finally{PrefabUtility.UnloadPrefabContents(root);}
         }
 
         static void BuildPreLevelPage()
         {
+            foreach(string name in ProductionPreLevelSourceControls.ArtNames)
+            {
+                string artPath="Assets/LegendsOfRus/Resources/"+ProductionPreLevelSourceControls.ArtRoot+name+".png";
+                var importer=AssetImporter.GetAtPath(artPath) as TextureImporter;
+                if(importer==null)throw new InvalidOperationException("Missing original Pre-Level art: "+artPath);
+                importer.textureShape=TextureImporterShape.Texture2D;importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;
+                importer.alphaIsTransparency=true;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
+                importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;importer.wrapMode=TextureWrapMode.Clamp;
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);settings.spriteMeshType=SpriteMeshType.FullRect;importer.SetTextureSettings(settings);
+                importer.SaveAndReimport();
+            }
             foreach(string name in ProductionPreLevelRuntime.ArtNames)
             {
                 string artPath="Assets/LegendsOfRus/Resources/"+ProductionPreLevelRuntime.ArtRoot+name+".png";
@@ -520,10 +747,11 @@ namespace LegendsOfRus.Editor
                 root.layer=5;
                 var rect=(RectTransform)root.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);
                 rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(941,1672);
+                // Retains the inline guide and adds its native Booster Selection entry.
                 ProductionPreLevelRuntime.BuildInto(rect);
                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.PreLevel,
                     "32e05c72c56f403ea065a327aea0ee9bdef33b8bb22330807baff117c0b40195",
-                    "pre-level-alignment-r1-whole-assets-live-data",8,false,false);
+                    "pre-level-reference-rebuild-r1",8,false,false);
                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);
                 if(!saved)throw new IOException("Could not save aligned Pre-Level.");
             }
@@ -610,7 +838,7 @@ namespace LegendsOfRus.Editor
             // and legacy currency glyph importers remain untouched.
             foreach (string key in ProductionHomeRuntime.GetTextureResourceKeys())
             {
-                if (!key.StartsWith(ProductionHomeRuntime.ArtRoot, StringComparison.Ordinal)) continue;
+                if (!key.StartsWith(ProductionHomeSourceComposition.ArtRoot, StringComparison.Ordinal)) continue;
                 string path = "Assets/LegendsOfRus/Resources/" + key + ".png";
                 string name = Path.GetFileNameWithoutExtension(path);
                 if (!File.Exists(path)) throw new FileNotFoundException("Missing reviewed Home layer.", path);
@@ -618,6 +846,8 @@ namespace LegendsOfRus.Editor
                 TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
                 if (importer == null) throw new InvalidOperationException("Home layer has no texture importer: " + path);
                 LockedDesignImporter.ConfigureHomeAlignmentTexture(importer, name);
+                importer.mipmapEnabled = false;
+                importer.filterMode = FilterMode.Bilinear;
                 importer.SaveAndReimport();
             }
         }

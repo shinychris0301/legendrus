@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="17" result="Failed(Child)" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.1792517">
+  <test-suite type="TestSuite" id="2399" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1261" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.179252" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2393" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="472" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.155992" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="506637" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2394" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="472" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.148568" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2395" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="472" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.127379" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2396" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="472" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.110351" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2253" name="RetainedRoundPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" testcasecount="17" result="Failed" site="Child" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:15Z" duration="1.088634" total="17" passed="16" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2256" name="DeclineIsDurableAndIdempotentWithoutRewardsOrEnergyCharge" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.DeclineIsDurableAndIdempotentWithoutRewardsOrEnergyCharge" methodname="DeclineIsDurableAndIdempotentWithoutRewardsOrEnergyCharge" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="2036920640" result="Failed" start-time="2026-09-29 20:00:13Z" end-time="2026-09-29 20:00:14Z" duration="0.076448" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: null
+  But was:  <LegendsOfRus.RetainedRoundData>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.DeclineIsDurableAndIdempotentWithoutRewardsOrEnergyCharge () [0x000a1] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundPlayModeTests.cs:82
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="2255" name="DuplicateAndForeignCallbacksCannotOverwriteAttempt" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.DuplicateAndForeignCallbacksCannotOverwriteAttempt" methodname="DuplicateAndForeignCallbacksCannotOverwriteAttempt" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1446321327" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.023662" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2257" name="FailedWritesKeepMemoryCopyAndDoNotFinalizeLoss" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.FailedWritesKeepMemoryCopyAndDoNotFinalizeLoss" methodname="FailedWritesKeepMemoryCopyAndDoNotFinalizeLoss" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="174831233" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.016293" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2270" name="FutureResolutionDependsOnSnapshotAndActionNotRandomCursor" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.FutureResolutionDependsOnSnapshotAndActionNotRandomCursor" methodname="FutureResolutionDependsOnSnapshotAndActionNotRandomCursor" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1057042775" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.076464" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2271" name="HomeRecoveryAndRetryUseSavedFailureThenOneNewAttempt" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.HomeRecoveryAndRetryUseSavedFailureThenOneNewAttempt" methodname="HomeRecoveryAndRetryUseSavedFailureThenOneNewAttempt" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="533591164" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.700683" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=chapter01.round031, attempt=2, board=8x7, seed=512502, hash=3CDC5880E1928DCB
+]]></output>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="2268" name="IncompatibleOptionalCheckpointDoesNotResetProgress" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.090308" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="2259" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;schema&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;schema&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="864216587" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.008051" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2260" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;rules&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;rules&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1827165806" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.007076" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2261" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;fingerprint&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;fingerprint&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="976166467" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.010940" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2262" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;hash&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;hash&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1884075216" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.009959" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2263" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;length&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;length&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="718453726" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.006887" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2264" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;goal&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;goal&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1725299701" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.006962" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2265" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;enum&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;enum&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1503540925" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.006946" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2266" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;layers&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;layers&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="469471040" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.014271" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2267" name="IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;identity&quot;)" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.IncompatibleOptionalCheckpointDoesNotResetProgress(&quot;identity&quot;)" methodname="IncompatibleOptionalCheckpointDoesNotResetProgress" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1126244381" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.012213" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="2254" name="JournalRoundTripPreservesAttemptBoardGoalsAndInventory" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.JournalRoundTripPreservesAttemptBoardGoalsAndInventory" methodname="JournalRoundTripPreservesAttemptBoardGoalsAndInventory" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="700780750" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.008186" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2258" name="ResetClearsUnsavedAttempt" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.ResetClearsUnsavedAttempt" methodname="ResetClearsUnsavedAttempt" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="400826865" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:14Z" duration="0.007413" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2269" name="RestoredBoardIsLockedAndDoesNotSpendOrRegisterAgain" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.RestoredBoardIsLockedAndDoesNotSpendOrRegisterAgain" methodname="RestoredBoardIsLockedAndDoesNotSpendOrRegisterAgain" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="1788840937" result="Passed" start-time="2026-09-29 20:00:14Z" end-time="2026-09-29 20:00:15Z" duration="0.063296" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Gameplay phase: Idle -> Failed
+Legends of Rus level=chapter01.round031, attempt=1, board=8x7, seed=512501, hash=7287D98DC84A7402
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FailedRoundRecovery/R1/QA/Focused02/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

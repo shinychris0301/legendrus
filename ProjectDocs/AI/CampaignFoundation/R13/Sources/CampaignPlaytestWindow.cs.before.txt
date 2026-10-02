@@ -1,0 +1,50 @@
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+namespace LegendsOfRus.Editor
+{
+    // Editor-only feedback; leaves the approved game pages and touch areas intact.
+    public sealed class CampaignPlaytestWindow : EditorWindow
+    {
+        [MenuItem("Legends of Rus/Development/Campaign Playtest Monitor")]
+        public static void ShowMonitor()=>GetWindow<CampaignPlaytestWindow>("Campaign playtest");
+        void OnInspectorUpdate()=>Repaint();
+        void OnGUI()
+        {
+            EditorGUILayout.LabelField("Rounds 11–20 · local playtest",EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox("Start from Home: Development → Campaign Playtest 11-20 R12 Tuning (Recorded). The original R9 menu remains available. Test energy: 30; starting boosters: 0. Progress is disposable; recordings survive Play Mode.",MessageType.Info);
+            var recorder=Object.FindFirstObjectByType<CampaignPlaytestRecorder>();
+            if(!recorder){EditorGUILayout.LabelField("No active campaign recording.");if(GUILayout.Button("Open recordings folder"))EditorUtility.RevealInFinder(CampaignPlaytestRecorder.DefaultDirectory);return;}
+            var a=recorder.Log.Current;
+            EditorGUILayout.LabelField(recorder.ContentVersion,EditorStyles.wordWrappedLabel);
+            var ui=recorder.GetComponent<CampaignDevelopmentUI>();
+            if(ui && ui.PlaytestComplete)
+            {
+                EditorGUILayout.HelpBox("PLAYTEST COMPLETE. Save or reveal the recording below. Round 21 is unavailable. Replay is optional and will be recorded separately.",MessageType.Info);
+                if(GUILayout.Button("Replay round 20 (optional)"))ui.ReplayCompletedPlaytest();
+                if(GUILayout.Button("Exit playtest")){ui.ExitCompletedPlaytest();return;}
+            }
+            EditorGUILayout.LabelField(recorder.SaveStatus??"Waiting");
+            EditorGUILayout.SelectableLabel(recorder.CheckpointPath??"",EditorStyles.wordWrappedLabel,GUILayout.Height(58));
+            if(a!=null)
+            {
+                EditorGUILayout.LabelField($"Round {a.round} · attempt {a.committedAttempt} · {a.outcome}");
+                EditorGUILayout.LabelField($"Moves: {a.movesRemaining}/{a.moveBudget} · boosters used: {a.inventoryBoostersUsed}");
+                EditorGUILayout.HelpBox("Rate after the round and before Continue/Retry. For special opportunities, rate whether you understood how to create the line item or bomb (especially rounds 12 and 18).",MessageType.None);
+                Choice(recorder,"Difficulty","difficulty",a.difficulty,new[]{"unrated","easy","fair","hard"});
+                Choice(recorder,"Goal clarity","goals",a.goalClarity,new[]{"unrated","clear","unclear"});
+                Choice(recorder,"Special opportunity","specials",a.specialClarity,new[]{"unrated","clear","unclear"});
+            }
+            if(GUILayout.Button("Save now"))recorder.SaveNow();
+            if(GUILayout.Button("Copy recording path"))GUIUtility.systemCopyBuffer=recorder.CheckpointPath;
+            if(GUILayout.Button("Show recording"))EditorUtility.RevealInFinder(recorder.CheckpointPath);
+            EditorGUILayout.LabelField("Stop Play Mode when finished. No upload is automatic.",EditorStyles.wordWrappedLabel);
+        }
+        static void Choice(CampaignPlaytestRecorder r,string title,string field,string current,string[] values)
+        {
+            int selected=System.Array.IndexOf(values,current),next=EditorGUILayout.Popup(title,Mathf.Max(0,selected),values);
+            if(next!=selected)r.Rate(field,values[next]);
+        }
+    }
+}
+#endif

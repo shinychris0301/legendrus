@@ -1,0 +1,68 @@
+{
+  "note": "Source-based diagnosis; remaining tests are not waived or marked passing. Follow-up must assert current behavior or explicitly use legacy fixtures.",
+  "groups": {
+    "Save assertion includes live energy-clock timestamp": [
+      "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures"
+    ],
+    "8\u00d79 QA preset bound to current 8\u00d77 board": [
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousDrag_WaitsForDominantAxisBeforeCommit",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousRelease_CancelsWithoutSwapOrTapSelection",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ApplicationPause_ReleasesOwnershipForNextGesture",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CancelledPointer_ReleasesOwnershipForNextGesture",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ForeignPointer_CannotStealBoardGestureOwnership",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FourGemMatch_EmitsSpecialCreationHook",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InputRemainsLockedForEveryResolvedMotionHook",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InvalidSwap_EmitsForwardAndReturnTimeline",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MultiWavePlan_EmitsCascadeHookWithIncreasingDepth",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SamePreset_ProducesSameSemanticMotionTrace",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SpecialCombination_EmitsOrderedActivationWaveAndFallHooks",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingLegacyBoardObserver_CannotStallResolvedSwap",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingMotionObserver_CannotStallRejectedSwap",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsDownCorrectly",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsLeftCorrectly",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsRightCorrectly",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsUpCorrectly",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.InvalidBoosterTarget_DoesNotConsumeInventory",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpecialCombination_VerifiesEveryRuntimeWaveHash",
+      "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ValidBoosterTarget_ConsumesExactlyOne"
+    ],
+    "Legacy VFX assertions against current effects pipeline": [
+      "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.FixedPool_IsPrewarmedAndBoundedUnderBurstLoad",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.NativeFacetsRingsAndTrails_RenderThenReturnToPool",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.PoolReuse_DoesNotCreateObjectsAfterRelease",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.Recovery_ClearsBoosterVfxSuppressesCompletionAndRefundsOnce",
+      "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.ResetPresetAndDisable_CleanEffectsAndRestoreSubscription"
+    ],
+    "Old round-10 finale cast assumption": [
+      "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute"
+    ],
+    "Missing required journey-capture environment in broad runner": [
+      "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.LifecycleCallbacksPreserveBoardAndReleaseInterruptedTouch",
+      "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyFailsRetriesAndExitsHome",
+      "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyWinsAndReturnsHome",
+      "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.TextClarityRepresentativePages"
+    ],
+    "Superseded obstacle-number/special-art assumptions": [
+      "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState",
+      "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments"
+    ],
+    "Old round-10 chapter-completion assumption": [
+      "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates"
+    ],
+    "Legacy ten-round validator applied to current catalog": [
+      "LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds"
+    ],
+    "Old World Map invisible hotspot expected": [
+      "LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking"
+    ],
+    "Fixture only unlocks ten rounds before testing all 200": [
+      "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave"
+    ],
+    "Old 30-star capacity instead of current 600": [
+      "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress"
+    ]
+  }
+}

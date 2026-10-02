@@ -1,0 +1,763 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -103,7 +103,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 23
++  Revision: 24
+   SourceControls: 1
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+@@ -458,6 +458,78 @@
+   m_AnchoredPosition: {x: 68, y: -486}
+   m_SizeDelta: {x: 808, y: 748}
+   m_Pivot: {x: 0, y: 1}
++--- !u!1 &302533157655765949
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 6222439772279917575}
++  - component: {fileID: 6171000293392550288}
++  - component: {fileID: 5676293213773542065}
++  m_Layer: 5
++  m_Name: WideStockBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &6222439772279917575
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 302533157655765949}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 6728665183223279658}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: -114, y: -58}
++  m_SizeDelta: {x: 174, y: 52}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6171000293392550288
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 302533157655765949}
++  m_CullTransparentMesh: 1
++--- !u!114 &5676293213773542065
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 302533157655765949}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 26
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
++  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &492414717815005089
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -533,6 +605,150 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 4
++--- !u!1 &549804474068002223
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 8654809379399415672}
++  - component: {fileID: 908777453427109734}
++  - component: {fileID: 8292951495074114463}
++  m_Layer: 5
++  m_Name: WideStockBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &8654809379399415672
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 549804474068002223}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5241344649840255527}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: -114, y: -58}
++  m_SizeDelta: {x: 174, y: 52}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &908777453427109734
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 549804474068002223}
++  m_CullTransparentMesh: 1
++--- !u!114 &8292951495074114463
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 549804474068002223}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 26
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
++  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
++--- !u!1 &802148701495139601
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 349927321796055584}
++  - component: {fileID: 1517981321579570270}
++  - component: {fileID: 8458775160850566447}
++  m_Layer: 5
++  m_Name: WideStockBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &349927321796055584
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 802148701495139601}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 9168653241091263462}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: -114, y: -58}
++  m_SizeDelta: {x: 174, y: 52}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &1517981321579570270
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 802148701495139601}
++  m_CullTransparentMesh: 1
++--- !u!114 &8458775160850566447
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 802148701495139601}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 26
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
++  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &866661266614901959
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1310,6 +1526,7 @@
+   - component: {fileID: 4393046011490916118}
+   - component: {fileID: 2572310240496527333}
+   - component: {fileID: 673020983486301163}
++  - component: {fileID: 5505154675267870487}
+   m_Layer: 5
+   m_Name: Count
+   m_TagString: Untagged
+@@ -1440,6 +1657,20 @@
+   m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
++--- !u!114 &5505154675267870487
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1853616936855418490}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
++  Badge: {fileID: 5102696969158774155}
++  WideBacking: {fileID: 5676293213773542065}
+ --- !u!1 &2203545207524067242
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1602,6 +1833,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 349927321796055584}
+   - {fileID: 2319858930439044965}
+   m_Father: {fileID: 4701323611185058877}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+@@ -1653,6 +1885,7 @@
+   - component: {fileID: 440774437338950415}
+   - component: {fileID: 6279542873079479353}
+   - component: {fileID: 3626210904602896867}
++  - component: {fileID: 3132524883690584237}
+   m_Layer: 5
+   m_Name: Count
+   m_TagString: Untagged
+@@ -1783,6 +2016,20 @@
+   m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
++--- !u!114 &3132524883690584237
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2470634682538560117}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
++  Badge: {fileID: 675255309419209302}
++  WideBacking: {fileID: 8458775160850566447}
+ --- !u!1 &2492076895419065837
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2640,6 +2887,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 8654809379399415672}
+   - {fileID: 4296078980593445230}
+   m_Father: {fileID: 1448291901246882471}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+@@ -3691,6 +3939,7 @@
+   - component: {fileID: 5392787233640194332}
+   - component: {fileID: 4396179250278559514}
+   - component: {fileID: 4838768814734474686}
++  - component: {fileID: 4528186998498552013}
+   m_Layer: 5
+   m_Name: Count
+   m_TagString: Untagged
+@@ -3821,6 +4070,20 @@
+   m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
++--- !u!114 &4528186998498552013
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4434765733803639987}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
++  Badge: {fileID: 103913310117980662}
++  WideBacking: {fileID: 1944858769599913576}
+ --- !u!1 &4535446675957033144
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4024,6 +4287,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 7828930970097788638}
+   - {fileID: 5326955694407331561}
+   m_Father: {fileID: 9211076187924112702}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+@@ -4330,6 +4594,78 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &4832215636254648934
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 7828930970097788638}
++  - component: {fileID: 6582076239190860448}
++  - component: {fileID: 1944858769599913576}
++  m_Layer: 5
++  m_Name: WideStockBacking
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &7828930970097788638
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4832215636254648934}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5440304680423997586}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: -114, y: -58}
++  m_SizeDelta: {x: 174, y: 52}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &6582076239190860448
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4832215636254648934}
++  m_CullTransparentMesh: 1
++--- !u!114 &1944858769599913576
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4832215636254648934}
++  m_Enabled: 0
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fa95fe49a46f4c8dbdd6dceedb382bc5, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionHomePanel
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  Radius: 26
++  Frame: 1
++  CornerJewels: 0
++  RaisedBadge: 0
++  LeftColor: {r: 0.02745098, g: 0.18039216, b: 0.09803922, a: 1}
++  RightColor: {r: 0.011764706, g: 0.09803922, b: 0.05882353, a: 1}
++  BorderColor: {r: 0.6901961, g: 0.54901963, b: 0.3137255, a: 1}
+ --- !u!1 &4894203515461639103
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4490,6 +4826,7 @@
+   - component: {fileID: 500789203954675208}
+   - component: {fileID: 5425935848808318827}
+   - component: {fileID: 4615879530700962955}
++  - component: {fileID: 727578925896694807}
+   m_Layer: 5
+   m_Name: Count
+   m_TagString: Untagged
+@@ -4620,6 +4957,20 @@
+   m_Script: {fileID: 11500000, guid: f1d8754c910670e70ade3a008cb97db0, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayNumberFit
++--- !u!114 &727578925896694807
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4998615616993476611}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: eef0e64a1417416590d9d9599deea0fd, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStockLayout
++  Badge: {fileID: 2994095314511030431}
++  WideBacking: {fileID: 8292951495074114463}
+ --- !u!1 &5077722709790342179
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -7389,6 +7740,7 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 6222439772279917575}
+   - {fileID: 4296720808036516261}
+   m_Father: {fileID: 5938433476754378070}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplaySourceControls.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplaySourceControls.cs
+@@ -79,6 +79,23 @@
+                 count.resizeTextMinSize = 12;
+                 var fit = count.GetComponent<ProductionGameplayNumberFit>() ?? count.gameObject.AddComponent<ProductionGameplayNumberFit>();
+                 fit.enabled = true;
++                var badge = count.transform.parent.GetComponent<ProductionPreLevelBadge>();
++                var found = badge.transform.Find("WideStockBacking");
++                var backing = found != null ? found.GetComponent<ProductionHomePanel>()
++                    : ProductionGameplayRuntime.Rect(badge.transform, "WideStockBacking", -114, 58, 174, 52)
++                        .gameObject.AddComponent<ProductionHomePanel>();
++                Place(backing.rectTransform, -114, 58, 174, 52);
++                backing.Radius = 26;
++                backing.Frame = true;
++                backing.LeftColor = new Color32(7, 46, 25, 255);
++                backing.RightColor = new Color32(3, 25, 15, 255);
++                backing.raycastTarget = false;
++                backing.transform.SetAsFirstSibling();
++                var stock = count.GetComponent<ProductionGameplayStockLayout>()
++                    ?? count.gameObject.AddComponent<ProductionGameplayStockLayout>();
++                stock.Badge = badge;
++                stock.WideBacking = backing;
++                stock.ApplyNow();
+             }
+         }
+         public static void ApplyCaptionReadability(ProductionGameplayView v)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=23;
++        public const int CurrentRevision=24;
+         public int Revision=CurrentRevision;
+         public bool SourceControls;
+         public SplashTitleTypography Typography;
+@@ -124,7 +124,11 @@
+             int stars=0;
+             if(Board!=null&&thresholds!=null)foreach(int threshold in thresholds)if(score>=threshold)stars++;
+             for(int i=0;i<3;i++){bool dim=i>=stars;if(Stars[i].Dimmed!=dim){Stars[i].Dimmed=dim;Stars[i].SetAllDirty();}}
+-            for(int i=0;i<4;i++)BoosterCounts[i].text=Balance(Count(ProductionPreLevelRuntime.Boosters[i]));
++            for(int i=0;i<4;i++)
++            {
++                BoosterCounts[i].text=Balance(Count(ProductionPreLevelRuntime.Boosters[i]));
++                BoosterCounts[i].GetComponent<ProductionGameplayStockLayout>()?.ApplyNow();
++            }
+             RefreshAvailability();
+         }
+         void RefreshAvailability()
+--- a/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -72,6 +72,100 @@
+         }
+ 
+         [UnityTest]
++        public IEnumerator ExactLargeStocksFitTheirOwnCardWellInBothLanguages()
++        {
++            var view=Root().GetComponentInChildren<ProductionGameplayView>();
++            string board=view.Board.BoardStateHash;
++            var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));save.lastEnergyUtcTicks=0;
++            foreach(string language in new[]{"ru","en"})
++            {
++                DemoFeatureState.SetLanguage(language);yield return null;yield return null;
++                foreach(string quantity in new[]{"0","999","1 000","9 999","999 999","2 147 483 647"})
++                {
++                    foreach(var count in view.BoosterCounts){count.text=quantity;count.GetComponent<ProductionGameplayStockLayout>().ApplyNow();}
++                    if(language=="ru"&&(quantity=="9 999"||quantity=="2 147 483 647"))
++                    {
++                        try
++                        {
++                            foreach(var count in view.BoosterCounts)
++                            {
++                                var stock=count.GetComponent<ProductionGameplayStockLayout>();stock.enabled=false;
++                                stock.Badge.enabled=true;stock.WideBacking.enabled=false;
++                                ProductionPreLevelBadge.AlignCount(count,stock.Badge.rectTransform);
++                                count.horizontalOverflow=HorizontalWrapMode.Overflow;count.resizeTextMinSize=12;
++                                count.GetComponent<ProductionGameplayNumberFit>().enabled=true;
++                            }
++                            string control="Stock_PreviousCircular_"+quantity.Replace(" ","");
++                            Capture(control,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
++                            {
++                                var rows=new List<CoreCaptionAssertions.Row>();foreach(var count in view.BoosterCounts)rows.Add(CoreCaptionAssertions.Check(count,camera,0));
++                                CoreCaptionAssertions.Save(control,rows);
++                            });
++                        }
++                        finally
++                        {
++                            foreach(var count in view.BoosterCounts){var stock=count.GetComponent<ProductionGameplayStockLayout>();stock.enabled=true;stock.ApplyNow();}
++                        }
++                    }
++                    foreach(var size in new[]{new Vector2Int(360,640),new Vector2Int(576,1280),new Vector2Int(941,1672),new Vector2Int(1080,2400)})
++                    {
++                        Rect safe=size.x==360?new Rect(0,20,360,600):size.x==576?new Rect(0,48,576,1172):size.x==941?new Rect(0,0,941,1672):new Rect(45,100,990,2160);
++                        string name="Stock_"+quantity.Replace(" ","")+"_"+language+"_"+size.x;
++                        Capture(name,size,safe,camera=>
++                        {
++                            var rows=new List<CoreCaptionAssertions.Row>();
++                            for(int i=0;i<4;i++)
++                            {
++                                var count=view.BoosterCounts[i];var stock=count.GetComponent<ProductionGameplayStockLayout>();
++                                Assert.That(count.text,Is.EqualTo(quantity));
++                                var row=CoreCaptionAssertions.Check(count,camera,quantity.Length>3?8f:4f);
++                                Assert.That(row.lines,Is.EqualTo(1));rows.Add(row);
++                                if(quantity.Length>3)
++                                {
++                                    Assert.That(row.glyphBounds.height,Is.GreaterThanOrEqualTo(7.5f),"Measure actual ink after numeric mesh fitting, not only nominal font size");
++                                    Rect face=Bounds(stock.WideBacking.rectTransform,camera);
++                                    Rect card=Bounds(stock.Badge.transform.parent.GetComponent<RectTransform>(),camera);
++                                    CoreCaptionAssertions.Inside(face,card,"Full stock stays on its own wooden card");
++                                    CoreCaptionAssertions.Inside(row.glyphBounds,face,"All exact stock ink stays on its face");
++                                    Assert.That(face.Overlaps(Bounds(view.BoosterButtons[i].GetComponent<RectTransform>(),camera)),Is.False,"Full stock must not cover its booster icon");
++                                    Assert.That(face.Overlaps(Bounds(view.Footer.Find("BoosterCard_"+i+"/CaptionBacking").GetComponent<RectTransform>(),camera)),Is.False);
++                                }
++                            }
++                            CoreCaptionAssertions.Save(name,rows);
++                        });
++                    }
++                }
++            }
++            Assert.That(view.Board.BoardStateHash,Is.EqualTo(board));
++            var after=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));after.lastEnergyUtcTicks=0;
++            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(save)));
++        }
++
++        [UnityTest]
++        public IEnumerator StockCrossingOneThousandUsesNativeInputAndExistingConsumption()
++        {
++            var view=Root().GetComponentInChildren<ProductionGameplayView>();var state=GameState.Instance;
++            state.Save.boosterSeaPearl=1000;view.RefreshContent();yield return null;
++            var stock=view.BoosterCounts[3].GetComponent<ProductionGameplayStockLayout>();
++            Assert.That(view.BoosterCounts[3].text,Is.EqualTo("1 000"));Assert.That(stock.WideBacking.enabled,Is.True);
++            GameObject target=null;string board=view.Board.BoardStateHash;int moves=view.Board.Moves;
++            Capture("Stock_NativeInput_1000",new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
++            {
++                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=Bounds(stock.WideBacking.rectTransform,camera).center},hits);
++                Assert.That(hits,Is.Not.Empty);Assert.That(hits[0].gameObject.GetComponent<ProductionGameplayBoosterCard>().Target,Is.SameAs(view.BoosterButtons[3]));target=hits[0].gameObject;
++            });
++            CoreOutcomeTouchAssertions.Click(target);
++            Assert.That(view.Board.HasActiveCommand,Is.True,"Sea Pearl starts immediately without target arming");
++            CoreOutcomeTouchAssertions.Click(target);
++            float until=Time.realtimeSinceStartup+12;while(view.Board.HasActiveCommand&&Time.realtimeSinceStartup<until)yield return null;
++            Assert.That(view.Board.HasActiveCommand,Is.False);Assert.That(view.Board.Moves,Is.EqualTo(moves+5));
++            Assert.That(state.Save.boosterSeaPearl,Is.EqualTo(999));Assert.That(view.BoosterCounts[3].text,Is.EqualTo("999"));
++            Assert.That(view.Board.BoardStateHash,Is.EqualTo(board),"Sea Pearl adds moves without changing gem contents");
++            Assert.That(stock.Badge.enabled,Is.True);Assert.That(stock.WideBacking.enabled,Is.False);
++            Capture("Stock_NativeInput_999",new Vector2Int(360,640),new Rect(0,20,360,600));
++        }
++
++        [UnityTest]
+         public IEnumerator SmallPortraitPausePaddingAndFourDigitStockPreserveTheRound()
+         {
+             var v=Root().GetComponentInChildren<ProductionGameplayView>();string board=v.Board.BoardStateHash;
+@@ -80,7 +174,7 @@
+             foreach(var lang in new[]{"ru","en"})
+             {
+                 DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
+-                foreach(var count in v.BoosterCounts)count.text="9 999";
++                foreach(var count in v.BoosterCounts){count.text="9 999";count.GetComponent<ProductionGameplayStockLayout>().ApplyNow();}
+                 Capture("Gameplay_TouchAndStock_360_"+lang,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                 {
+                     tap=CoreOutcomeTouchAssertions.Check(v.PauseButton,camera,new Rect(0,20,360,600),"Gameplay","360");
+@@ -755,7 +849,15 @@
+             }
+             Assert.That(cellInputs.Count,Is.EqualTo(56));
+             foreach(var star in view.Stars)Assert.That(star.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
+-            foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())Assert.That(badge.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(100));
++            foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())
++            {
++                if(badge.enabled)Assert.That(badge.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(100));
++                else
++                {
++                    var stock=badge.GetComponentInChildren<ProductionGameplayStockLayout>();Assert.That(stock,Is.Not.Null);
++                    Assert.That(stock.WideBacking.enabled,Is.True);Assert.That(stock.WideBacking.canvasRenderer.GetMesh().vertexCount,Is.GreaterThan(0));
++                }
++            }
+             var layout=view.GetComponent<ProductionGameplayLayout>();Vector2 old=view.BoardArea.anchoredPosition;layout.ApplyNow();Canvas.ForceUpdateCanvases();Assert.That(Vector2.Distance(old,view.BoardArea.anchoredPosition),Is.LessThan(.01f));
+         }
+     }
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayStockLayout.cs
+@@ -0,0 +1,47 @@
++using UnityEngine;
++using UnityEngine.UI;
++
++namespace LegendsOfRus
++{
++    /// <summary>Uses the existing lower card well for exact inventory values that outgrow its circular badge.</summary>
++    [RequireComponent(typeof(Text)), DisallowMultipleComponent]
++    public sealed class ProductionGameplayStockLayout : MonoBehaviour
++    {
++        public ProductionPreLevelBadge Badge;
++        public ProductionHomePanel WideBacking;
++        Text label;
++        string observed;
++
++        void OnEnable() { ApplyNow(); }
++        void LateUpdate()
++        {
++            if (label == null) label = GetComponent<Text>();
++            if (label.text != observed) ApplyNow();
++        }
++
++        public void ApplyNow()
++        {
++            if (Badge == null || WideBacking == null) return;
++            if (label == null) label = GetComponent<Text>();
++            observed = label.text;
++            int digits = 0;
++            foreach (char c in observed) if (c >= '0' && c <= '9') digits++;
++            bool wide = digits > 3;
++            Badge.enabled = !wide;
++            WideBacking.enabled = wide;
++            var rect = label.rectTransform;
++            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1);
++            rect.localScale = new Vector3(.5f, .5f, 1);
++            rect.localRotation = Quaternion.identity;
++            rect.anchoredPosition = wide ? new Vector2(-108, -58) : new Vector2(7.28f, 0);
++            rect.sizeDelta = wide ? new Vector2(324, 104) : new Vector2(74.88f, 104);
++            label.horizontalOverflow = HorizontalWrapMode.Overflow;
++            label.verticalOverflow = VerticalWrapMode.Truncate;
++            label.resizeTextForBestFit = true;
++            label.resizeTextMinSize = 12;
++            label.resizeTextMaxSize = label.fontSize = 73;
++            label.raycastTarget = false;
++            label.SetVerticesDirty();
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayStockLayout.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: eef0e64a1417416590d9d9599deea0fd
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayStockLayoutEditModeTests.cs
+@@ -0,0 +1,53 @@
++#if UNITY_EDITOR
++using System.Linq;
++using NUnit.Framework;
++using UnityEditor;
++using UnityEngine;
++
++namespace LegendsOfRus.Tests.ProductionCoreLoopUi
++{
++    public sealed class GameplayStockLayoutEditModeTests
++    {
++        [TestCase(true)] [TestCase(false)]
++        public void FreshAndInstalledOwnersRetainIdentityAndExactCountsAcrossStockTransitions(bool fresh)
++        {
++            var root = fresh ? new GameObject("StockOwner", typeof(RectTransform))
++                : Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab"));
++            try
++            {
++                ProductionGameplayRuntime.BuildInto((RectTransform)root.transform);
++                var v = root.GetComponent<ProductionGameplayView>();
++                var components = root.GetComponentsInChildren<Component>(true);
++                var buttons = v.BoosterButtons.ToArray();
++                var fonts = v.BoosterCounts.Select(c => c.font).ToArray();
++                foreach (string value in new[] { "999", "1 000", "9 999", "2 147 483 647", "0" })
++                {
++                    for (int i = 0; i < 4; i++)
++                    {
++                        var count = v.BoosterCounts[i];
++                        var stock = count.GetComponent<ProductionGameplayStockLayout>();
++                        Assert.That(stock, Is.Not.Null);
++                        count.text = value; stock.ApplyNow();
++                        bool wide = value.Length > 3;
++                        Assert.That(stock.Badge.enabled, Is.EqualTo(!wide));
++                        Assert.That(stock.WideBacking.enabled, Is.EqualTo(wide));
++                        Assert.That(stock.WideBacking.raycastTarget, Is.False);
++                        Assert.That(count.text, Is.EqualTo(value), "Presentation must never abbreviate or round inventory.");
++                        Assert.That(count.font, Is.SameAs(fonts[i]));
++                        Assert.That(count.transform.parent, Is.SameAs(stock.Badge.transform));
++                        Assert.That(stock.Badge.GetComponentsInChildren<ProductionGameplayStockLayout>(true).Length, Is.EqualTo(1));
++                    }
++                    ProductionGameplaySourceControls.ApplyReadability(v);
++                    CollectionAssert.AreEquivalent(components, root.GetComponentsInChildren<Component>(true));
++                    CollectionAssert.AreEqual(buttons, v.BoosterButtons);
++                }
++                ProductionGameplayRuntime.BuildInto((RectTransform)root.transform);
++                CollectionAssert.AreEquivalent(components, root.GetComponentsInChildren<Component>(true));
++                Assert.That(v.HasRequiredBindings, Is.True);
++                Assert.That(v.Revision, Is.EqualTo(24));
++            }
++            finally { Object.DestroyImmediate(root); }
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayStockLayoutEditModeTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 9709e463399b427c9e83b3ed77c354a3

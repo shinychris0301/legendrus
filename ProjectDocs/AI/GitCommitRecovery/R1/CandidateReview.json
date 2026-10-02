@@ -1,0 +1,31 @@
+{
+  "status": "publishing_all_evidence_on_separate_recovery_branch",
+  "original_source": "ccedef751bd5cb12d9522ddf8be621a9fc44425d",
+  "candidate_ref": "refs/heads/repair/full-evidence-batches-20261002T181726Z",
+  "candidate_tip": "8e74fe0d10ab59d08a46d7913ca8943b5d50cab5",
+  "original_unpublished_commit_count": 6,
+  "replacement_batch_count": 55,
+  "exact_final_file_tree_preserved": true,
+  "all_original_source_trees_blobs_and_versions_preserved": true,
+  "max_batch_new_object_bytes": 537037894,
+  "first_batch_actual_wire_pack_bytes": 505323915,
+  "first_batch_wire_pack_exit": 0,
+  "original_ready_for_upload_backup_ref": "refs/backup/git-push-repair/20261002T181726Z/original-ready-for-upload",
+  "private_backup_directory": "/home/k2/.local/state/legendrus-git-repair/20261002T181726Z",
+  "force_push_required": false,
+  "live_remote_changes": false,
+  "source_commit_map": [
+    "583d93314617816309e0478aafdea0fa285b36ae",
+    "d30468a8c0ee237a62e4af0a1e6e574c0003c71a",
+    "96710c69586d1a32a9a9a79e8b888f021acd4834",
+    "8b2696639a232849a214917c376974fb616895bd",
+    "674a8741d8c4f131bbd562404f4ae44f8204b73c",
+    "ccedef751bd5cb12d9522ddf8be621a9fc44425d"
+  ],
+  "reason_for_approval": "Only unpublished commit IDs change. Normal Git final upload of the original disconnected history still produces an oversized pack despite identical object closure in the bridge.",
+  "publication_branch": "repair/full-evidence-batches-20261002T181726Z",
+  "original_local_main_preserved": "ccedef751bd5cb12d9522ddf8be621a9fc44425d",
+  "remote_main_will_remain_unchanged": true,
+  "history_split_approval_not_required_for_original_main": true,
+  "publication_strategy": "Separate recovery branch; original main and its six commits are preserved. Upload scope explicitly authorized by user."
+}

@@ -6,8 +6,12 @@ using UnityEngine.TestTools;
 
 namespace LegendsOfRus.Tests.PlayMode
 {
+    [Category("LegacyTenRoundFixture")]
     public sealed class StoryMilestoneReactionPlayModeTests
     {
+        LegacyChapterTestFixture legacyFixture;
+        [TearDown] public void RestoreActiveContent() { legacyFixture?.Dispose(); }
+
         static readonly string[] PersistedSaveKeys =
         {
             "LegendsOfRus_Save_v1",
@@ -25,6 +29,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [UnitySetUp]
         public IEnumerator SetUp()
         {
+            legacyFixture = new LegacyChapterTestFixture();
             SnapshotAndClearSaveJournal();
             yield return null;
             if (GameState.Instance == null)
@@ -41,8 +46,8 @@ namespace LegendsOfRus.Tests.PlayMode
 
             GameState.Instance.ResetProgress();
             StoryService.ResetRuntime();
-            StoryCatalog.LoadChapter1(forceReload: true);
-            StoryCatalog.LoadRussian(forceReload: true);
+            LegacyChapterTestFixture.Story();
+            LegacyChapterTestFixture.Russian();
         }
 
         [UnityTearDown]
@@ -61,11 +66,11 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void CatalogV3_ValidatesMilestonesAndReactionCoverage()
         {
-            ChapterStoryCatalogData story = StoryCatalog.LoadChapter1();
+            ChapterStoryCatalogData story = LegacyChapterTestFixture.Story();
             StoryValidationReport report = StoryCatalog.Validate(
                 story,
-                StoryCatalog.LoadRussian(),
-                ChapterLevelCatalog.LoadChapter1(forceReload: true)
+                LegacyChapterTestFixture.Russian(),
+                LegacyChapterTestFixture.Levels()
             );
 
             Assert.That(report.Errors, Is.Empty);
@@ -106,7 +111,7 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void MajorMilestones_AreExactlyLevelsOneThreeSixAndTen()
         {
-            ChapterStoryCatalogData story = StoryCatalog.LoadChapter1();
+            ChapterStoryCatalogData story = LegacyChapterTestFixture.Story();
             var major = new List<int>();
             for (int i = 0; i < story.milestones.Length; i++)
                 if (story.milestones[i].major)
@@ -234,9 +239,9 @@ namespace LegendsOfRus.Tests.PlayMode
         [Test]
         public void Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch()
         {
-            ChapterStoryCatalogData source = StoryCatalog.LoadChapter1();
-            StoryLocalizationData russian = StoryCatalog.LoadRussian();
-            ChapterLevelCatalogData levels = ChapterLevelCatalog.LoadChapter1();
+            ChapterStoryCatalogData source = LegacyChapterTestFixture.Story();
+            StoryLocalizationData russian = LegacyChapterTestFixture.Russian();
+            ChapterLevelCatalogData levels = LegacyChapterTestFixture.Levels();
 
             ChapterStoryCatalogData duplicate = JsonUtility.FromJson<ChapterStoryCatalogData>(
                 JsonUtility.ToJson(source)

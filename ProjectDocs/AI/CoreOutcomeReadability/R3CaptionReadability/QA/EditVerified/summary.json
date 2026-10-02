@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "EditMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.ProductionCoreLoopUi.CoreCaptionReadabilityEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.CoreOutcomeTouchEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.GameplayAlignmentEditModeTests;LegendsOfRus.Tests.ProductionCoreLoopUi.VictoryAlignmentEditModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R3CaptionReadability/QA/EditVerified/results.xml",
+    "-logFile",
+    "/tmp/lor-core-caption-readability-r3/EditVerified/unity.log",
+    "-nographics"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 20.271419286727905,
+  "isolatedConfig": "/tmp/lor-core-caption-readability-r3/EditVerified/config",
+  "graphics": false,
+  "result": {
+    "id": "2",
+    "testcasecount": "19",
+    "result": "Failed(Child)",
+    "total": "19",
+    "passed": "18",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-01 20:19:53Z",
+    "end-time": "2026-10-01 20:19:54Z",
+    "duration": "1.0506014"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.ProductionCoreLoopUi.VictoryAlignmentEditModeTests.CanonicalPageHasWholeSpritesLiveTextAndNativeControls",
+      "result": "Failed",
+      "message": "  Expected: same as <panel_ru (UnityEngine.Sprite)>\n  But was:  <panel (UnityEngine.Sprite)>\n"
+    }
+  ]
+}

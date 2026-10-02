@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public enum EventsCategory{Active,Upcoming,Completed}
+    [DisallowMultipleComponent]
+    public sealed class ProductionEventsView:MonoBehaviour
+    {
+        public const int CurrentRevision=9;
+        public int Revision=CurrentRevision;
+        public SplashTitleTypography Typography;
+        public ProductionPlayerHeader Header;
+        public RectTransform Content,Body,Hud;
+        public Image Environment,Title;
+        public Text Heading,HeroName,LevelText,GoldText,GemsText,EnergyText,Footer,EmptyText;
+        public Button ProfileButton,SettingsButton,BackButton;
+        public Button[] PlusButtons,Tabs,DetailsButtons;
+        public Text[] TabLabels,Names,Descriptions,Statuses,Rewards,ActionLabels;
+        public RectTransform[] Cards;
+        public GameObject EmptyPanel;
+        public EventsCategory Category{get;private set;}=EventsCategory.Upcoming;
+        public bool ActionsBound{get;private set;}
+        // Reference concepts have no live dates or authoritative reward recipes yet.
+        public bool CanParticipate(int index)=>false;
+        public bool CanPreview(int index)=>index==0;
+        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography&&Content&&Body&&Hud&&Environment&&Environment.sprite&&Title&&Title.sprite&&Heading&&HeroName&&LevelText&&GoldText&&GemsText&&EnergyText&&Footer&&EmptyText&&ProfileButton&&SettingsButton&&BackButton&&EmptyPanel&&Valid(PlusButtons,3)&&Valid(Tabs,3)&&Valid(TabLabels,3)&&Valid(DetailsButtons,4)&&Valid(Names,4)&&Valid(Descriptions,4)&&Valid(Statuses,4)&&Valid(Rewards,4)&&Valid(ActionLabels,4)&&Valid(Cards,4);
+        static bool Valid<T>(T[] a,int count)where T:UnityEngine.Object=>a!=null&&a.Length==count&&Array.TrueForAll(a,x=>x!=null);
+        readonly List<Button> bound=new List<Button>();readonly List<UnityAction> listeners=new List<UnityAction>();
+        GameState observed;string language;bool committed;
+        void OnEnable(){Observe();RefreshContent();}
+        void Update(){if(observed!=GameState.Instance){Observe();RefreshState();}if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
+        void OnDisable(){if(observed!=null)observed.Changed-=RefreshState;observed=null;Unbind();}
+        void Observe(){if(observed!=null)observed.Changed-=RefreshState;observed=GameState.Instance;if(isActiveAndEnabled&&observed!=null)observed.Changed+=RefreshState;}
+        void Unbind(){for(int i=0;i<bound.Count;i++)if(bound[i])bound[i].onClick.RemoveListener(listeners[i]);bound.Clear();listeners.Clear();ActionsBound=false;}
+        void Listen(Button button,Action action,bool route=false)
+        {
+            UnityAction listener=()=>{var router=ScreenRouter.Instance;if(!ActionsBound||committed||!isActiveAndEnabled||!button.IsInteractable()||router!=null&&(router.HasActiveModalBlocker||router.IsScreenTransitioning))return;if(route)committed=true;action?.Invoke();};
+            button.onClick.AddListener(listener);bound.Add(button);listeners.Add(listener);
+        }
+        public void Bind(Action<ScreenId> show,Action back)
+        {
+            Unbind();committed=false;Listen(ProfileButton,()=>show(ScreenId.Profile),true);Listen(SettingsButton,()=>show(ScreenId.Settings),true);Listen(BackButton,back,true);
+            for(int i=0;i<3;i++){int index=i;Listen(PlusButtons[i],()=>show(index==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);Listen(Tabs[i],()=>SelectCategory((EventsCategory)index));}
+            for(int i=0;i<4;i++){int index=i;Listen(DetailsButtons[i],()=>{if(CanPreview(index))show(ScreenId.EventDetail);},CanPreview(index));}
+            ActionsBound=true;RefreshContent();
+        }
+        public void SelectCategory(EventsCategory category)
+        {if(!Enum.IsDefined(typeof(EventsCategory),category))throw new ArgumentOutOfRangeException(nameof(category));Category=category;RefreshContent();}
+        public void RefreshContent()
+        {
+            if(!HasRequiredBindings)return;language=DemoFeatureState.LanguageCode;bool en=language=="en";string source;
+            var font=Application.isPlaying?Typography.Resolve(false,out source):Typography.RegularFont;foreach(var text in GetComponentsInChildren<Text>(true))text.font=font;
+            Title.sprite=ProductionEventsRuntime.Load(en?"title_blank_r4":"title_original_r4");Heading.enabled=en;
+            Heading.text=en?"EVENTS":"СОБЫТИЯ";HeroName.text=en?"Ivan":"Иван";
+            string[] tabs=en?new[]{"ACTIVE","UPCOMING","COMPLETED"}:new[]{"АКТИВНЫЕ","СКОРО","ЗАВЕРШЁННЫЕ"};
+            for(int i=0;i<3;i++)
+            {
+                bool selected=(int)Category==i;TabLabels[i].text=tabs[i];
+                TabLabels[i].enabled=en;
+                Tabs[i].image.sprite=ProductionEventsRuntime.Load(en?(selected?"tab_selected_r7":"tab_r3"):("tab_lettered_"+i+"_"+(selected?"selected":"normal")+"_r9"));
+                Tabs[i].image.color=Color.white;
+                TabLabels[i].color=selected?new Color32(255,239,181,255):new Color32(220,188,123,255);
+            }
+            string[] names=en?new[]{"Firebird Festival","Baba Yaga's Trials","Merchants' Treasures","Ice Tournament"}:new[]{"Фестиваль\nЖар-Птицы","Испытания\nБабы Яги","Сокровища Купцов","Ледяной Турнир"};
+            string[] descriptions=en?new[]{"Discover the Firebird festival.\nA preview is available.","Trials in an enchanted forest.\nThe event is coming soon.","Discover the merchants' treasures.\nThe event is coming soon.","A tournament in the frozen realm.\nThe event is coming soon."}:new[]{"Познакомьтесь с фестивалем.\nДоступен предварительный просмотр.","Испытания в зачарованном лесу.\nСобытие готовится к открытию.","Откройте сокровища купцов.\nСобытие готовится к открытию.","Турнир в ледяном царстве.\nСобытие готовится к открытию."};
+            for(int i=0;i<4;i++)
+            {
+                Cards[i].gameObject.SetActive(Category==EventsCategory.Upcoming);Names[i].text=names[i];Descriptions[i].text=descriptions[i];
+                Statuses[i].text=en?"Date to be announced":"Дата будет объявлена";Rewards[i].text=en?"To be announced":"Будут объявлены";
+                Cards[i].Find("RewardHeading").GetComponent<Text>().text=en?"Reward examples:":"Пример наград:";
+                ActionLabels[i].enabled=en;
+                ActionLabels[i].text=en?new[]{"PARTICIPATE","START","OPEN","TO BATTLE"}[i]:new[]{"УЧАСТВОВАТЬ","НАЧАТЬ","ОТКРЫТЬ","В БОЙ"}[i];
+                DetailsButtons[i].image.sprite=ProductionEventsRuntime.Load(en?"action_r3":"action_lettered_"+i+"_r9");
+                Cards[i].Find("ActionAvailability").GetComponent<Text>().text=CanPreview(i)?(en?"Preview only":"Только предпросмотр"):(en?"Unavailable":"Недоступно");
+                DetailsButtons[i].interactable=ActionsBound&&!committed&&CanPreview(i)&&Category==EventsCategory.Upcoming;
+            }
+            EmptyPanel.SetActive(Category!=EventsCategory.Upcoming);
+            EmptyText.text=Category==EventsCategory.Active?(en?"There are no active events.\nExplore the Upcoming tab.":"Сейчас нет активных событий.\nЗагляните во вкладку «Скоро»."):(en?"There are no completed events yet.":"Завершённых событий пока нет.");
+            if(Header!=null)Header.ApplyPresentation();
+            Footer.text=en?"Event dates and rewards will be announced later.":"Даты событий и награды появятся позже.";RefreshState();
+        }
+        public void RefreshState()
+        {
+            if(!HasRequiredBindings)return;var save=GameState.Instance!=null?GameState.Instance.Save:null;
+            GoldText.text=save==null?"—":Balance(save.gold);GemsText.text=save==null?"—":Balance(save.gems);EnergyText.text=save==null?"—":save.energy+"/"+save.energyMax;
+            LevelText.text=(DemoFeatureState.LanguageCode=="en"?"Level ":"Уровень ")+(save==null?"—":save.level.ToString());
+            if(Header!=null)Header.RefreshValues();
+        }
+        static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
+    }
+}

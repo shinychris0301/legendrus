@@ -1,0 +1,868 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/LanguageSelectCutoverState.txt
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/LanguageSelectCutoverState.txt
+@@ -1,5 +1,5 @@
+ {
+   "enabled": true,
+   "magic": "v1.20-step10.3-meta-page-development-cutover:LanguageSelect",
+-  "revision": 3
++  "revision": 4
+ }
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/SettingsCutoverState.txt
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/SettingsCutoverState.txt
+@@ -1,6 +1,6 @@
+ {
+   "enabled": true,
+   "magic": "v1.20-step10.3-meta-page-development-cutover:Settings",
+-  "revision": 4,
++  "revision": 5,
+   "cloudAccountService": "unavailable"
+ }
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/LanguageSelect.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/LanguageSelect.prefab
+@@ -446,7 +446,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: -3, y: 0, z: -3, w: 0}
++  m_RaycastPadding: {x: -12, y: -10, z: -12, w: -10}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -837,7 +837,7 @@
+   m_Script: {fileID: 11500000, guid: e76cd962d1f088cdb8eca13dfb5fac57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionLanguageSelectView
+-  Revision: 3
++  Revision: 4
+   Body: {fileID: 4440956540224302288}
+   Shield: {fileID: 3847751666744478854}
+   Panel: {fileID: 3640541716016019897}
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Settings.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Settings.prefab
+@@ -36,8 +36,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 380, y: -1477}
+-  m_SizeDelta: {x: 180, y: 168}
++  m_AnchoredPosition: {x: 395, y: -1504}
++  m_SizeDelta: {x: 151, y: 141}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4253683548672095629
+ CanvasRenderer:
+@@ -1369,7 +1369,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 249, y: -392}
++  m_AnchoredPosition: {x: 249, y: -345}
+   m_SizeDelta: {x: 398, y: 60}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7892559535743111285
+@@ -1405,8 +1405,8 @@
+     m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 26
+-    m_MaxSize: 36
++    m_MinSize: 32
++    m_MaxSize: 40
+     m_Alignment: 3
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -1448,7 +1448,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 133, y: -570}
++  m_AnchoredPosition: {x: 133, y: -575}
+   m_SizeDelta: {x: 103, y: 105}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2860897581471475934
+@@ -1734,7 +1734,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 658, y: -389}
++  m_AnchoredPosition: {x: 658, y: -342}
+   m_SizeDelta: {x: 147, y: 69}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &36500249205594051
+@@ -1760,7 +1760,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: 0, y: -4, z: 0, w: -4}
++  m_RaycastPadding: {x: 0, y: -27, z: 0, w: -27}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -1938,7 +1938,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 145, y: -76}
+-  m_SizeDelta: {x: 482, y: 29}
++  m_SizeDelta: {x: 482, y: 34}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3860391701853185034
+ CanvasRenderer:
+@@ -1973,8 +1973,8 @@
+     m_FontSize: 24
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 18
+-    m_MaxSize: 24
++    m_MinSize: 24
++    m_MaxSize: 28
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -2018,7 +2018,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 658, y: -683}
++  m_AnchoredPosition: {x: 658, y: -714}
+   m_SizeDelta: {x: 147, y: 69}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5327148377073540087
+@@ -2044,7 +2044,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: 0, y: -4, z: 0, w: -4}
++  m_RaycastPadding: {x: 0, y: -27, z: 0, w: -27}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -2222,8 +2222,8 @@
+     m_FontSize: 22
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 16
+-    m_MaxSize: 22
++    m_MinSize: 22
++    m_MaxSize: 30
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -2421,7 +2421,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -900}
++  m_AnchoredPosition: {x: 104, y: -929}
+   m_SizeDelta: {x: 732, y: 109}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5967096284121350007
+@@ -2627,8 +2627,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 24, y: -16}
+-  m_SizeDelta: {x: 349, y: 56}
++  m_AnchoredPosition: {x: 40, y: -29}
++  m_SizeDelta: {x: 440, y: 66}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8538353317684555164
+ CanvasRenderer:
+@@ -2660,7 +2660,7 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 12800000, guid: 0d1840af9515a75089c5c81fd52eca83, type: 3}
+-    m_FontSize: 33
++    m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+@@ -2770,7 +2770,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 246, y: -661}
++  m_AnchoredPosition: {x: 246, y: -680}
+   m_SizeDelta: {x: 548, y: 14}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7820337005849877585
+@@ -2851,7 +2851,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -789}
++  m_AnchoredPosition: {x: 104, y: -818}
+   m_SizeDelta: {x: 732, y: 109}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5479276716616563006
+@@ -3063,7 +3063,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -1344}
++  m_AnchoredPosition: {x: 104, y: -1373}
+   m_SizeDelta: {x: 732, y: 124}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &833444360117954641
+@@ -3194,7 +3194,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 246, y: -563}
++  m_AnchoredPosition: {x: 246, y: -556}
+   m_SizeDelta: {x: 548, y: 14}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7187221699373707059
+@@ -3269,7 +3269,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 249, y: -490}
++  m_AnchoredPosition: {x: 249, y: -469}
+   m_SizeDelta: {x: 398, y: 60}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3760947868144885553
+@@ -3305,8 +3305,8 @@
+     m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 26
+-    m_MaxSize: 36
++    m_MinSize: 32
++    m_MaxSize: 40
+     m_Alignment: 3
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -3348,7 +3348,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 133, y: -472}
++  m_AnchoredPosition: {x: 133, y: -451}
+   m_SizeDelta: {x: 103, y: 105}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7352252718551885255
+@@ -3637,7 +3637,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 658, y: -487}
++  m_AnchoredPosition: {x: 658, y: -466}
+   m_SizeDelta: {x: 147, y: 69}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3278689111240052225
+@@ -3663,7 +3663,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: 0, y: -4, z: 0, w: -4}
++  m_RaycastPadding: {x: 0, y: -27, z: 0, w: -27}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -3924,7 +3924,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 658, y: -585}
++  m_AnchoredPosition: {x: 658, y: -590}
+   m_SizeDelta: {x: 147, y: 69}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2061060189660190994
+@@ -3950,7 +3950,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: 0, y: -4, z: 0, w: -4}
++  m_RaycastPadding: {x: 0, y: -27, z: 0, w: -27}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -4162,7 +4162,7 @@
+   m_Material: {fileID: 0}
+   m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 1
+-  m_RaycastPadding: {x: -3, y: 0, z: -3, w: 0}
++  m_RaycastPadding: {x: -12, y: -10, z: -12, w: -10}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+@@ -4267,7 +4267,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 246, y: -465}
++  m_AnchoredPosition: {x: 246, y: -432}
+   m_SizeDelta: {x: 548, y: 14}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &670434794270335133
+@@ -4421,7 +4421,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 249, y: -588}
++  m_AnchoredPosition: {x: 249, y: -593}
+   m_SizeDelta: {x: 398, y: 60}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5466500336021467400
+@@ -4457,8 +4457,8 @@
+     m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 26
+-    m_MaxSize: 36
++    m_MinSize: 32
++    m_MaxSize: 40
+     m_Alignment: 3
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -4501,7 +4501,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 145, y: -22}
+-  m_SizeDelta: {x: 255, y: 68}
++  m_SizeDelta: {x: 220, y: 68}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &9023533426472783334
+ CanvasRenderer:
+@@ -4844,8 +4844,8 @@
+     m_FontSize: 33
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 24
+-    m_MaxSize: 33
++    m_MinSize: 28
++    m_MaxSize: 36
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -4966,7 +4966,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 133, y: -668}
++  m_AnchoredPosition: {x: 133, y: -699}
+   m_SizeDelta: {x: 103, y: 105}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2527076775281021624
+@@ -5041,8 +5041,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 115, y: -115}
+-  m_SizeDelta: {x: 709, y: 232}
++  m_AnchoredPosition: {x: 160, y: -110}
++  m_SizeDelta: {x: 620, y: 203}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1118024066797383079
+ CanvasRenderer:
+@@ -5411,8 +5411,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 235, y: -203}
+-  m_SizeDelta: {x: 472, y: 87}
++  m_AnchoredPosition: {x: 265, y: -185}
++  m_SizeDelta: {x: 412, y: 76}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &657761206240027674
+ CanvasRenderer:
+@@ -5631,7 +5631,7 @@
+   m_GameObject: {fileID: 7081107159528392168}
+   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+   m_LocalPosition: {x: 0, y: 0, z: 0}
+-  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_LocalScale: {x: 1.35, y: 1.35, z: 1.35}
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 6240696223621113776}
+@@ -5643,7 +5643,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: 0}
++  m_AnchoredPosition: {x: -164.67499, y: 292.59998}
+   m_SizeDelta: {x: 941, y: 1672}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &7092546749521432315
+@@ -5685,7 +5685,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -1233}
++  m_AnchoredPosition: {x: 104, y: -1262}
+   m_SizeDelta: {x: 732, y: 109}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5875223091946636506
+@@ -5944,7 +5944,7 @@
+   m_Script: {fileID: 11500000, guid: 44178a80e1866a7ecb0a58f950a76737, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionSettingsView
+-  Revision: 4
++  Revision: 5
+   Content: {fileID: 3204162655711104212}
+   Body: {fileID: 1640227450225584402}
+   Hud: {fileID: 4337176980829541137}
+@@ -6057,7 +6057,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 249, y: -686}
++  m_AnchoredPosition: {x: 249, y: -717}
+   m_SizeDelta: {x: 398, y: 60}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &6823644126991890564
+@@ -6093,8 +6093,8 @@
+     m_FontSize: 36
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 26
+-    m_MaxSize: 36
++    m_MinSize: 32
++    m_MaxSize: 40
+     m_Alignment: 3
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -6293,8 +6293,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 272, y: -1040}
+-  m_SizeDelta: {x: 397, y: 87}
++  m_AnchoredPosition: {x: 210, y: -1020}
++  m_SizeDelta: {x: 520, y: 124}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &187064997536207108
+ CanvasRenderer:
+@@ -6558,8 +6558,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 102, y: -346}
+-  m_SizeDelta: {x: 733, y: 443}
++  m_AnchoredPosition: {x: 102, y: -310}
++  m_SizeDelta: {x: 733, y: 503}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &4103549613091419360
+ CanvasRenderer:
+@@ -6590,15 +6590,15 @@
+     m_PersistentCalls:
+       m_Calls: []
+   m_Sprite: {fileID: 21300000, guid: 4046e3ca0ce9e5ae285c535d7c36afde, type: 3}
+-  m_Type: 0
+-  m_PreserveAspect: 1
++  m_Type: 1
++  m_PreserveAspect: 0
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+   m_FillClockwise: 1
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+-  m_PixelsPerUnitMultiplier: 1
++  m_PixelsPerUnitMultiplier: 2
+ --- !u!1 &7527767800047225098
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -7000,7 +7000,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 133, y: -374}
++  m_AnchoredPosition: {x: 133, y: -327}
+   m_SizeDelta: {x: 103, y: 105}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1445544740844248471
+@@ -7229,8 +7229,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -638}
+-  m_SizeDelta: {x: 677, y: 246}
++  m_AnchoredPosition: {x: 132, y: -628}
++  m_SizeDelta: {x: 677, y: 290}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8407068906045417381
+ CanvasRenderer:
+@@ -7265,8 +7265,8 @@
+     m_FontSize: 32
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 23
+-    m_MaxSize: 32
++    m_MinSize: 30
++    m_MaxSize: 36
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -7315,7 +7315,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -1122}
++  m_AnchoredPosition: {x: 104, y: -1151}
+   m_SizeDelta: {x: 732, y: 109}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7194992723002465372
+@@ -7446,8 +7446,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 418, y: -22}
+-  m_SizeDelta: {x: 212, y: 68}
++  m_AnchoredPosition: {x: 375, y: -34}
++  m_SizeDelta: {x: 255, y: 44}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2153356048660486232
+ CanvasRenderer:
+@@ -7482,8 +7482,8 @@
+     m_FontSize: 27
+     m_FontStyle: 0
+     m_BestFit: 1
+-    m_MinSize: 20
+-    m_MaxSize: 27
++    m_MinSize: 27
++    m_MaxSize: 33
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+@@ -7530,7 +7530,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 104, y: -1011}
++  m_AnchoredPosition: {x: 104, y: -1040}
+   m_SizeDelta: {x: 732, y: 109}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8096027853741693497
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/SettingsAligned/paper.png.meta
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/SettingsAligned/paper.png.meta
+@@ -49,7 +49,7 @@
+   alignment: 0
+   spritePivot: {x: 0.5, y: 0.5}
+   spritePixelsToUnits: 100
+-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteBorder: {x: 120, y: 100, z: 120, w: 100}
+   spriteGenerateFallbackPhysicsShape: 1
+   alphaUsage: 1
+   alphaIsTransparency: 1
+--- a/Assets/LegendsOfRus/Scripts/Editor/ProductionLanguageSelectPrefabBuilder.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/ProductionLanguageSelectPrefabBuilder.cs
+@@ -20,20 +20,14 @@
+                 r.anchorMin = Vector2.zero; r.anchorMax = Vector2.one; r.offsetMin = r.offsetMax = Vector2.zero;
+                 var marker = root.GetComponent<ProductionCoreLoopPageMarker>() ?? root.AddComponent<ProductionCoreLoopPageMarker>(); marker.Configure(ScreenId.LanguageSelect);
+                 var old=root.GetComponent<ProductionLanguageSelectView>();
+-                if(old){
+-                    var layout=root.GetComponent<ProductionLanguageSelectLayout>();if(layout)UnityEngine.Object.DestroyImmediate(layout);
+-                    if(old.Body)UnityEngine.Object.DestroyImmediate(old.Body.gameObject);
+-                    if(old.Shield)UnityEngine.Object.DestroyImmediate(old.Shield.gameObject);
+-                    if(old.Backdrop)UnityEngine.Object.DestroyImmediate(old.Backdrop.gameObject);
+-                    UnityEngine.Object.DestroyImmediate(old);
+-                }
++                if(old)old.Revision=ProductionLanguageSelectView.CurrentRevision;
+                 ProductionLanguageSelectRuntime.BuildInto(r);
+                 if (!root.GetComponent<ProductionLanguageSelectView>().HasRequiredBindings) throw new InvalidOperationException("Incomplete Language Select.");
+                 PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
+             }
+             finally { if (existing) PrefabUtility.UnloadPrefabContents(root); else UnityEngine.Object.DestroyImmediate(root); }
+             string state = "Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/LanguageSelectCutoverState.txt";
+-            File.WriteAllText(state, "{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:LanguageSelect\",\n  \"revision\": 3\n}\n");
++            File.WriteAllText(state, "{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:LanguageSelect\",\n  \"revision\": 4\n}\n");
+             AssetDatabase.ImportAsset(state); AssetDatabase.SaveAssets();
+             var saved = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+             if (!saved.GetComponent<ProductionLanguageSelectView>().HasRequiredBindings) throw new InvalidOperationException("Language Select readback failed.");
+--- a/Assets/LegendsOfRus/Scripts/Editor/ProductionSettingsPrefabBuilder.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/ProductionSettingsPrefabBuilder.cs
+@@ -15,18 +15,18 @@
+             AssetDatabase.Refresh();
+             foreach(string file in Directory.GetFiles("Assets/LegendsOfRus/Resources/ProductionUI/SettingsAligned","*.png")){
+                 var importer=(TextureImporter)AssetImporter.GetAtPath(file);importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.alphaIsTransparency=true;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;importer.npotScale=TextureImporterNPOTScale.None;importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;importer.wrapMode=TextureWrapMode.Clamp;importer.spritePixelsPerUnit=100;
+-                importer.spriteBorder=Path.GetFileNameWithoutExtension(file)=="frame"?new Vector4(60,220,60,90):Path.GetFileNameWithoutExtension(file).EndsWith("_frame")?new Vector4(54,54,54,54):Vector4.zero;importer.SaveAndReimport();
++                importer.spriteBorder=Path.GetFileNameWithoutExtension(file)=="paper"?new Vector4(120,100,120,100):Path.GetFileNameWithoutExtension(file)=="frame"?new Vector4(60,220,60,90):Path.GetFileNameWithoutExtension(file).EndsWith("_frame")?new Vector4(54,54,54,54):Vector4.zero;importer.SaveAndReimport();
+             }
+             bool existing=File.Exists(PrefabPath);GameObject root=existing?PrefabUtility.LoadPrefabContents(PrefabPath):new GameObject("Settings",typeof(RectTransform));
+             try{
+                 var rect=(RectTransform)root.transform;rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;root.layer=5;
+                 var marker=root.GetComponent<ProductionCoreLoopPageMarker>()??root.AddComponent<ProductionCoreLoopPageMarker>();marker.Configure(ScreenId.Settings);
+                 var oldView=root.GetComponent<ProductionSettingsView>();
+-                if(oldView){var oldLayout=root.GetComponent<ProductionSettingsLayout>();if(oldLayout)UnityEngine.Object.DestroyImmediate(oldLayout);if(oldView.Content)UnityEngine.Object.DestroyImmediate(oldView.Content.gameObject);UnityEngine.Object.DestroyImmediate(oldView);}
++                if(oldView)oldView.Revision=ProductionSettingsView.CurrentRevision;
+                 ProductionSettingsRuntime.BuildInto(rect);var view=root.GetComponent<ProductionSettingsView>();view.RefreshContent();if(!view.HasRequiredBindings)throw new InvalidOperationException("Settings bindings incomplete.");PrefabUtility.SaveAsPrefabAsset(root,PrefabPath);
+             }finally{if(existing)PrefabUtility.UnloadPrefabContents(root);else UnityEngine.Object.DestroyImmediate(root);}
+             string state="Assets/LegendsOfRus/Resources/ProductionUI/CutoverState/SettingsCutoverState.txt";
+-            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Settings\",\n  \"revision\": 4,\n  \"cloudAccountService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
++            File.WriteAllText(state,"{\n  \"enabled\": true,\n  \"magic\": \"v1.20-step10.3-meta-page-development-cutover:Settings\",\n  \"revision\": 5,\n  \"cloudAccountService\": \"unavailable\"\n}\n");AssetDatabase.ImportAsset(state);AssetDatabase.SaveAssets();
+             var saved=AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);if(!saved||!saved.GetComponent<ProductionSettingsView>().HasRequiredBindings)throw new InvalidOperationException("Settings prefab readback failed.");Debug.Log("SETTINGS_REFERENCE_R1_REBUILD_PASS: native page and cutover readback.");
+         }
+     }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectLayout.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectLayout.cs
+@@ -23,7 +23,7 @@
+             {
+                 safe.GetWorldCorners(corners);
+                 var low = root.InverseTransformPoint(corners[0]); var high = root.InverseTransformPoint(corners[2]);
+-                float scale = Mathf.Max(.1f, Mathf.Min((high.x-low.x)/941, (high.y-low.y)/1672));
++                float scale = Mathf.Max(.1f, Mathf.Min(1.35f, (high.x-low.x-32)/621, (high.y-low.y-48)/500));
+                 View.Body.localScale = Vector3.one * scale;
+                 View.Body.anchoredPosition = new Vector2((low.x+high.x-941*scale)*.5f-root.rect.xMin, (low.y+high.y+1672*scale)*.5f-root.rect.yMax);
+                 whole.GetWorldCorners(corners);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectRuntime.cs
+@@ -11,7 +11,7 @@
+             if (existing)
+             {
+                 if (!existing.HasRequiredBindings) throw new InvalidOperationException("Repair Language Select outside Play Mode.");
+-                existing.Refresh(); return;
++                existing.Close.image.raycastPadding=new Vector4(-12,-10,-12,-10); existing.Refresh(); return;
+             }
+             // Reuse actual approved resources, never a screenshot backdrop.
+             var splash = Resources.Load<GameObject>("ProductionUI/Pages/SplashTitle");
+@@ -35,7 +35,7 @@
+             v.English = v.Body.Find("Language_1").GetComponent<Button>();
+             v.Close = v.Body.Find("CloseLanguage").GetComponent<Button>();
+             // Keep the standalone modal target consistent with Settings, without resizing the source art.
+-            v.Close.image.raycastPadding = new Vector4(-3,0,-3,0);
++            v.Close.image.raycastPadding = new Vector4(-12,-10,-12,-10);
+             v.TitleFont = settings.TitleFont;
+             foreach(var button in new[]{v.Russian,v.English,v.Close}){
+                 button.transition=Selectable.Transition.None;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionLanguageSelectView.cs
+@@ -6,7 +6,7 @@
+ {
+     public sealed class ProductionLanguageSelectView : MonoBehaviour
+     {
+-        public const int CurrentRevision = 3;
++        public const int CurrentRevision = 4;
+         public int Revision = CurrentRevision;
+         public RectTransform Body, Shield;
+         public Image Panel;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsLayout.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsLayout.cs
+@@ -21,7 +21,7 @@
+                 float top=safeHigh.y-View.Body.rect.yMax,bottom=safeLow.y-View.Body.rect.yMin;
+                 View.Hud.anchoredPosition=new Vector2(0,top);
+                 ((RectTransform)View.Body.Find("CarvedFrame")).sizeDelta=new Vector2(822,1363-bottom);
+-                ((RectTransform)View.BackButton.transform).anchoredPosition=new Vector2(380,-1477+bottom);
++                ((RectTransform)View.BackButton.transform).anchoredPosition=new Vector2(395,-1504+bottom);
+                 View.VersionText.rectTransform.anchoredPosition=new Vector2(636,-1573+bottom);
+                 var shield=(RectTransform)View.InfoPanel.transform.Find("InputShield");shield.anchoredPosition=new Vector2(0,top);shield.sizeDelta=new Vector2(941,safeHigh.y-safeLow.y);
+                 whole.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);Vector2 dimensions=View.Environment.sprite.rect.size;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsRuntime.cs
+@@ -9,7 +9,7 @@
+         public static Sprite Shared(string key)=>Resources.Load<Sprite>("ProductionUI/IndividualRankingAligned/"+key);
+         public static void BuildInto(RectTransform root)
+         {
+-            var existing=root.GetComponent<ProductionSettingsView>();if(existing!=null){if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Settings outside Play Mode.");existing.RefreshContent();return;}
++            var existing=root.GetComponent<ProductionSettingsView>();if(existing!=null){if(!existing.HasRequiredBindings)throw new InvalidOperationException("Repair Settings outside Play Mode.");ApplyReadability(existing);existing.RefreshContent();return;}
+             var v=root.gameObject.AddComponent<ProductionSettingsView>();
+             var shop=Resources.Load<GameObject>("ProductionUI/Pages/Shop").GetComponent<ProductionShopView>();if(!shop||!shop.HasRequiredBindings)throw new InvalidOperationException("Settings needs the approved navigation header.");
+             v.BodyFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");v.TitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
+@@ -46,7 +46,7 @@
+             v.SignOutNote=Label(v,v.Rows[5].transform,"Availability",145,76,482,29,24);Fit(v.SignOutNote,18,24);
+             v.BackButton=Button(Art(v.Body,"Back",Load("back"),380,1477,180,168));
+             v.VersionText=Label(v,v.Body,"Version",636,1573,266,45,22);Fit(v.VersionText,16,22);
+-            BuildInfo(v);UpgradeLanguageModal(v);var layout=root.gameObject.AddComponent<ProductionSettingsLayout>();layout.View=v;v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings)throw new InvalidOperationException("Settings bindings incomplete.");
++            BuildInfo(v);UpgradeLanguageModal(v);ApplyReadability(v);var layout=root.gameObject.AddComponent<ProductionSettingsLayout>();layout.View=v;v.RefreshContent();layout.ApplyNow();if(!v.HasRequiredBindings)throw new InvalidOperationException("Settings bindings incomplete.");
+         }
+         static void BuildInfo(ProductionSettingsView v)
+         {
+@@ -78,6 +78,37 @@
+             v.CloseLanguageButton.image.raycastPadding=new Vector4(-3,0,-3,0);
+             v.Revision=ProductionSettingsView.CurrentRevision;
+         }
++        // Shared with the owning builder so serialized and runtime presentations stay in agreement.
++        public static void ApplyReadability(ProductionSettingsView v)
++        {
++            Place(v.Title.rectTransform,160,110,620,203);
++            Place(v.Heading.rectTransform,265,185,412,76);
++            Place((RectTransform)v.Body.Find("PreferencesPaper"),102,310,733,503);
++            var paper=v.Body.Find("PreferencesPaper").GetComponent<Image>();paper.type=Image.Type.Sliced;paper.preserveAspect=false;paper.pixelsPerUnitMultiplier=2;
++            string[] icons={"music","sfx","vibration","notifications"};
++            for(int i=0;i<4;i++)
++            {
++                Place((RectTransform)v.Body.Find("Icon_"+icons[i]),133,327+i*124,103,105);
++                Place(v.SwitchLabels[i].rectTransform,249,345+i*124,398,60);Fit(v.SwitchLabels[i],32,40);
++                Place((RectTransform)v.SwitchButtons[i].transform,658,342+i*124,147,69);
++                v.SwitchButtons[i].image.raycastPadding=new Vector4(0,-27,0,-27);
++                if(i<3)Place((RectTransform)v.Body.Find("Divider_"+i),246,432+i*124,548,14);
++            }
++            for(int i=0;i<6;i++)((RectTransform)v.Rows[i].transform).anchoredPosition=new Vector2(104,-(818+i*111));
++            Place(v.RowLabels[1].rectTransform,145,22,220,68);
++            Place(v.CloudValue.rectTransform,375,34,255,44);Fit(v.CloudValue,28,33);Fit(v.LanguageValue,28,36);
++            Place(v.SignOutNote.rectTransform,145,76,482,34);Fit(v.SignOutNote,26,28);
++            Place((RectTransform)v.BackButton.transform,395,1504,151,141);
++            Fit(v.VersionText,24,30);
++            Place(v.InfoDescription.rectTransform,132,628,677,290);Fit(v.InfoDescription,30,36);
++            Place((RectTransform)v.CloseInfoButton.transform,210,1020,520,124);
++            Place(v.CloseInfoLabel.rectTransform,40,29,440,66);v.CloseInfoLabel.fontSize=36;
++            var choices=(RectTransform)v.LanguageChoices.transform;
++            choices.localScale=Vector3.one*1.35f;
++            choices.anchoredPosition=new Vector2((941-941*1.35f)*.5f,(1672*1.35f-1672)*.5f);
++            v.CloseLanguageButton.image.raycastPadding=new Vector4(-12,-10,-12,-10);
++        }
++        static void Place(RectTransform r,float x,float y,float w,float h){r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);}
+         static void Fit(Text t,int min,int max){t.resizeTextForBestFit=true;t.resizeTextMinSize=min;t.resizeTextMaxSize=max;}
+         static Transform Clone(Transform t,Transform p){var c=UnityEngine.Object.Instantiate(t,p,false);c.name=t.name;return c;}
+         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h){var go=new GameObject(n,typeof(RectTransform));go.layer=5;go.transform.SetParent(p,false);var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);return r;}
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionSettingsView : MonoBehaviour
+     {
+-        public const int CurrentRevision=4;
++        public const int CurrentRevision=5;
+         public int Revision=CurrentRevision;
+         public RectTransform Content, Body, Hud;
+         public Image Environment, Title;
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LanguageSelectAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LanguageSelectAlignmentPlayModeTests.cs
+@@ -41,6 +41,7 @@
+             string save=StableSave(); int generation=router.RouteGeneration;
+             yield return WaitForNormalButtonColors();
+             Capture("LanguageSelect_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("LanguageSelect_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Capture("LanguageSelect_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Capture("LanguageSelect_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+             ExecuteEvents.Execute(v.English.gameObject,new PointerEventData(EventSystem.current){button=PointerEventData.InputButton.Left},ExecuteEvents.pointerClickHandler);
+@@ -49,6 +50,7 @@
+             Assert.That(v.Russian.image.sprite.name,Is.EqualTo("language_unselected"));
+             yield return null;yield return WaitForNormalButtonColors();
+             Capture("LanguageSelect_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("LanguageSelect_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Capture("LanguageSelect_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Assert.That(StableSave(),Is.EqualTo(save));Assert.That(router.RouteGeneration,Is.EqualTo(generation));
+         }
+@@ -111,7 +113,7 @@
+                 router.Show(ScreenId.LanguageSelect);Settle();yield return null;
+                 yield return WaitForNormalButtonColors();
+                 var v=View();int generation=router.RouteGeneration;
+-                Capture("LanguageSelect_Tall_"+origin+"_"+language,new Vector2Int(1080,2400),new Rect(45,100,990,2160),camera=>
++                Capture("LanguageSelect_SmallOrigin_"+origin+"_"+language,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
+                     Click(language=="ru"?v.English:v.Russian,camera));
+                 string selected=language=="ru"?"en":"ru";
+                 Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo(selected));
+--- a/Assets/LegendsOfRus/Tests/PlayMode/SettingsAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/SettingsAlignmentPlayModeTests.cs
+@@ -65,11 +65,13 @@
+             GameState.Instance.AddGold(17);yield return null;Assert.That(v.GoldText.text,Is.EqualTo(ProductionInventoryView.Number(GameState.Instance.Save.gold)));
+             Assert.That(v.VersionText.text,Does.Contain(Application.version));string save=StableSave();
+             yield return WaitForNormalButtonColors();Capture("Settings_941x1672_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Capture("Settings_576x1280_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Capture("Settings_1080x2400_safe_RU",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+             DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return WaitForNormalButtonColors();
+             Capture("Settings_1080x2400_safe_EN",new Vector2Int(1080,2400),new Rect(45,100,990,2160));
+             Capture("Settings_941x1672_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Capture("Settings_576x1280_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));Assert.That(StableSave(),Is.EqualTo(save));
+         }
+         [UnityTest] public IEnumerator PreferencesPersistIndependentlyAndRefreshOnReturn()
+@@ -92,10 +94,12 @@
+             var v=View();string save=StableSave();var consent=typeof(PrivacySupportService).GetProperty("State").GetValue(PrivacySupportService.Instance);int generation=router.RouteGeneration;
+             v.Rows[0].onClick.Invoke();Assert.That(v.InfoPanel.activeSelf&&v.LanguageChoices.activeSelf,Is.True);v.SwitchButtons[0].onClick.Invoke();Assert.That(v.Preference(0),Is.True);
+             yield return WaitForNormalButtonColors();Capture("Settings_Language_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_Language_360_RU",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Capture("Settings_Language_safe_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             v.LanguageButtons[1].onClick.Invoke();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("en"));Assert.That(v.LanguageValue.text,Is.EqualTo("English"));
+             yield return WaitForNormalButtonColors();Capture("Settings_Language_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+             Capture("Settings_Language_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_Language_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Assert.That(v.LanguageButtons[1].image.sprite.name,Is.EqualTo("language_selected"));Assert.That(v.LanguageButtons[0].image.sprite.name,Is.EqualTo("language_unselected"));
+             v.CloseLanguageButton.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.False);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Settings));
+             v.Rows[0].onClick.Invoke();v.LanguageButtons[0].onClick.Invoke();Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));
+@@ -124,9 +128,11 @@
+             v.SwitchButtons[0].onClick.Invoke();Assert.That(v.Preference(0),Is.False);
+             v.Rows[0].onClick.Invoke();v.LanguageButtons[1].onClick.Invoke();
+             yield return WaitForNormalButtonColors();Capture("Settings_Language_FromPause_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_Language_FromPause_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+             v.CloseLanguageButton.onClick.Invoke();Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.Settings));Assert.That(v.InfoPanel.activeSelf,Is.False);
+             v.ProfileButton.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.True);router.NavigateBack();
+             yield return WaitForNormalButtonColors();Capture("Settings_FromPause_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++            Capture("Settings_FromPause_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
+             Assert.That(board.CanAcceptPointerInput,Is.False);v.BackButton.onClick.Invoke();v.BackButton.onClick.Invoke();Settle();yield return null;
+             Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.Pause));Assert.That(game.Board,Is.SameAs(board));Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(board.Moves,Is.EqualTo(moves));Assert.That(board.Score,Is.EqualTo(score));
+             router.Viewport.GetComponentInChildren<ProductionPauseView>().Actions[0].onClick.Invoke();Settle();yield return null;Assert.That(board.CanAcceptPointerInput,Is.True);
+@@ -189,6 +195,31 @@
+             }
+             Assert.That(StableSave(),Is.EqualTo(save));
+         }
++        [UnityTest] public IEnumerator SmallPortraitExplanationsKeepTextInsideTheirPanel()
++        {
++            string save=StableSave();
++            foreach(string language in new[]{"ru","en"})
++            {
++                DemoFeatureState.SetLanguage(language);View().RefreshContent();
++                foreach(int kind in new[]{1,2,3,4,5,6})
++                {
++                    View().ShowInfo(kind);yield return WaitForNormalButtonColors();
++                    Capture("Settings_Info_"+kind+"_360_"+language,new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
++                    {
++                        var v=View();Rect panel=Bounds((RectTransform)v.GeneralInfoContent.transform.Find("Frame"),camera);
++                        foreach(var text in new[]{v.InfoHeading,v.InfoDescription,v.CloseInfoLabel})
++                        {
++                            foreach(Vector3 vertex in text.canvasRenderer.GetMesh().vertices)
++                                Assert.That(panel.Contains(RectTransformUtility.WorldToScreenPoint(camera,text.transform.TransformPoint(vertex))),Is.True,text.name+" outside explanation panel");
++                        }
++                        Assert.That(Bounds(v.InfoDescription.rectTransform,camera).Overlaps(Bounds(v.CloseInfoButton.image.rectTransform,camera)),Is.False);
++                        Click(v.CloseInfoButton,camera);
++                    });
++                    Assert.That(View().InfoPanel.activeSelf,Is.False);
++                }
++            }
++            Assert.That(StableSave(),Is.EqualTo(save));
++        }
+         static void Click(Button button,Camera camera,Vector2? point=null)
+         {
+             var pointer=new PointerEventData(EventSystem.current){position=point??Bounds((RectTransform)button.transform,camera).center};
+@@ -198,7 +229,7 @@
+         }
+         static Rect TouchBounds(Button button,Camera camera,float scale)
+         {
+-            Rect art=Bounds(button.image.rectTransform,camera);Vector4 p=button.image.raycastPadding;
++            Rect art=Bounds(button.image.rectTransform,camera);scale=art.width/button.image.rectTransform.rect.width;Vector4 p=button.image.raycastPadding;
+             return Rect.MinMaxRect(art.xMin+p.x*scale,art.yMin+p.y*scale,art.xMax-p.z*scale,art.yMax-p.w*scale);
+         }
+ 
+@@ -298,17 +329,25 @@
+         {
+             Assert.That(v.HasRequiredBindings,Is.True);
+             var hud=Bounds(v.Hud,camera);Assert.That(hud.yMax,Is.EqualTo(safeArea.yMax).Within(1),"Shared header follows safe top edge.");
+-            float bodyScale=Bounds((RectTransform)v.BackButton.transform,camera).width/180f;
++            float bodyScale=Bounds((RectTransform)v.BackButton.transform,camera).width/151f;
+             Assert.That(Bounds((RectTransform)v.BackButton.transform,camera).yMin,Is.EqualTo(safeArea.yMin+27*bodyScale).Within(1),"Back follows safe bottom edge.");
+             Assert.That(Bounds(v.VersionText.rectTransform,camera).yMin,Is.GreaterThanOrEqualTo(safeArea.yMin));
++            var paperImage=v.Body.Find("PreferencesPaper").GetComponent<Image>();
++            Assert.That(paperImage.type,Is.EqualTo(Image.Type.Sliced));Assert.That(paperImage.preserveAspect,Is.False);
++            Rect paper=Bounds(paperImage.rectTransform,camera);
++            for(int i=0;i<4;i++)
++            {
++                foreach(var rect in new[]{Bounds(v.SwitchLabels[i].rectTransform,camera),Bounds(v.SwitchButtons[i].image.rectTransform,camera)})
++                    Assert.That(paper.Contains(rect.min)&&paper.Contains(rect.max),Is.True,"Preference rows must stay on the parchment surface");
++            }
+             var targets=new List<Button>();targets.AddRange(v.SwitchButtons);
+-            if(v.LanguageChoices.activeInHierarchy)targets.Add(v.CloseLanguageButton);
++            if(v.LanguageChoices.activeInHierarchy){targets.Add(v.CloseLanguageButton);targets.AddRange(v.LanguageButtons);}
+             foreach(var button in targets)
+             {
+                 Rect target=TouchBounds(button,camera,bodyScale);
+                 Assert.That(Mathf.Min(target.width,target.height),Is.GreaterThanOrEqualTo(44),button.name+" touch target at tested phone size");
+                 Assert.That(safeArea.Contains(target.min)&&safeArea.Contains(target.max),Is.True);
+-                if(!v.InfoPanel.activeSelf||button==v.CloseLanguageButton)
++                if(!v.InfoPanel.activeSelf||button.transform.IsChildOf(v.LanguageChoices.transform))
+                 {
+                     var points=button==v.CloseLanguageButton?new[]{new Vector2(target.xMin+1,target.center.y),new Vector2(target.xMax-1,target.center.y)}:new[]{new Vector2(target.center.x,target.yMin+1),new Vector2(target.center.x,target.yMax-1)};
+                     foreach(var point in points)
+@@ -368,6 +407,12 @@
+                     }
+                     Assert.That(height,Is.LessThanOrEqualTo(text.rectTransform.rect.height+2),text.transform.parent.name+"/"+text.name+" actual fitted text height");
+                 }
++            foreach(var label in new[]{v.CloudValue,v.SignOutNote,v.VersionText,v.InfoDescription})
++                if(label.gameObject.activeInHierarchy)
++                {
++                    float used=label.resizeTextForBestFit?label.cachedTextGenerator.fontSizeUsedForBestFit/label.pixelsPerUnit:label.fontSize;
++                    Assert.That(used*Bounds(label.rectTransform,camera).height/label.rectTransform.rect.height,Is.GreaterThanOrEqualTo(9.2f),label.name+" small-portrait caption font");
++                }
+             Assert.That(v.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+         }
+     }

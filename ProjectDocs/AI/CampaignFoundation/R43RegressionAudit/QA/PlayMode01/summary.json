@@ -1,0 +1,1440 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CampaignFoundation/R43RegressionAudit/QA/PlayMode01/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CampaignFoundation/R43RegressionAudit/QA/PlayMode01/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 892.082756280899,
+  "isolatedConfig": "/tmp/lor-regression-r43/PlayMode01/config",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "897",
+    "result": "Failed(Child)",
+    "total": "897",
+    "passed": "617",
+    "failed": "277",
+    "inconclusive": "0",
+    "skipped": "3",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 14:37:06Z",
+    "end-time": "2026-09-29 14:51:36Z",
+    "duration": "869.8424481"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary",
+      "result": "Failed",
+      "message": "  Expected: String containing \"31\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 21\u201330 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 30.\"\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary",
+      "result": "Failed",
+      "message": "  Expected: String containing \"41\"\n  But was:  \"\u0420\u0430\u0443\u043d\u0434\u044b 31\u201340 \u043f\u0440\u043e\u0439\u0434\u0435\u043d\u044b.\n\u0417\u0430\u043f\u0438\u0441\u044c \u2014 \u0432 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0435 \u0442\u0435\u0441\u0442\u0430.\n\u041f\u043e\u0432\u0442\u043e\u0440 \u043f\u043e \u0436\u0435\u043b\u0430\u043d\u0438\u044e.\n\u042d\u0442\u043e\u0442 \u0442\u0435\u0441\u0442 \u0437\u0430\u043a\u0430\u043d\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043d\u0430 \u0440\u0430\u0443\u043d\u0434\u0435 40.\"\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries",
+      "result": "Failed",
+      "message": "  Expected: 10\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.CommercialRuntime.PlayMode.CommercialRuntimeWiringPlayModeTests.AnalyticsFacade_MapsEveryScreenIdExactlyToAllowlistedSchema",
+      "result": "Failed",
+      "message": "  Screen mapping rejected: SplashTitle\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.EmptyStockCanBeInspectedButNeverEquippedOrConsumed",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.GuideEntryInspectionCloseAndReopenPreserveInventory",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.LiveInventoryRussianEnglishAndPortraitSafeAreas",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.NoEnergyOpensExistingGateAndAllowsReturnToGuide",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.PlaySpendsOneEnergyAndNoBoosters",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.RepeatedBindingInvokesPlayOnlyOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.BoosterSelectionAlignmentPlayModeTests.StandaloneRouteHasNativeBackgroundAndBack",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.IncompleteChapterNeverShowsSampleRewardsOrFalseVictory",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.NativeActionsAcknowledgeExactlyOnceWithoutRewardDuplication",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.FiveHundredSlotsRecycleWithoutUnlockingOrStaleCallbacks",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.LevelSelectionStarsAndLockedTapsUseActualSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PlayPreservesIntroAndPreLevelRoutingAndHudActions",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PressFeedbackNoticeAndDragCancellation",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.CurrentHeroOutlineAndLockedCardsScrollIndependently",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.InfoBlocksUnderlyingInputAndBackDismisses",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.NativeFiltersPreviewInfoAndRelocalizationPreserveCurrentHero",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.NativeHeaderFooterAndBackCommitOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.NavigationUsesRealRoutesAndCommitsOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.OriginalLetteringSwitchesWithLocaleAndSelectedTab",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.PressCancellationPreservesHeroAndDisabledActions",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.PreviewFiltersAndActionsNeverGrantOwnership",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.RebindingAndDisableRemoveOwnedCallbacks",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CharactersAlignmentPlayModeTests.SafeEdgesResizeCollectionAndModalWithoutChangingPreview",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousDrag_WaitsForDominantAxisBeforeCommit",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousRelease_CancelsWithoutSwapOrTapSelection",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ApplicationPause_ReleasesOwnershipForNextGesture",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CancelledPointer_ReleasesOwnershipForNextGesture",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ForeignPointer_CannotStealBoardGestureOwnership",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FourGemMatch_EmitsSpecialCreationHook",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InputRemainsLockedForEveryResolvedMotionHook",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InvalidSwap_EmitsForwardAndReturnTimeline",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MultiWavePlan_EmitsCascadeHookWithIncreasingDepth",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SamePreset_ProducesSameSemanticMotionTrace",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SpecialCombination_EmitsOrderedActivationWaveAndFallHooks",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingLegacyBoardObserver_CannotStallResolvedSwap",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingMotionObserver_CannotStallRejectedSwap",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.FixedPool_IsPrewarmedAndBoundedUnderBurstLoad",
+      "result": "Failed",
+      "message": "  Expected: 33\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.NativeFacetsRingsAndTrails_RenderThenReturnToPool",
+      "result": "Failed",
+      "message": "  MatchWaveStarted\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.PoolReuse_DoesNotCreateObjectsAfterRelease",
+      "result": "Failed",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.Recovery_ClearsBoosterVfxSuppressesCompletionAndRefundsOnce",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.ResetPresetAndDisable_CleanEffectsAndRestoreSubscription",
+      "result": "Failed",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.ClaimPersistsOnceAndReopenKeepsClaimedState",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.DaySevenIsAvailableAndNavigationRemainsSingle",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.EveryNextRewardDescriptionFitsInBothLanguages",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.FailedSaveDoesNotGrantOrConsumeAReward",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.LiveBalancesLocalizationAndSafeAreaCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.MonthlyBadgeProgressAndSourceRewardsReflectSavedCount",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.OriginalButtonsFollowEachAvailableDayAndConfirmDoesNotClaim",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.NativeContinueAdvancesOnceAndCompletesIntroBeforePreLevel",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.NativeInactiveStoryCannotAdvanceInEitherLanguage",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.NativeIntroEdgesAndRelocalizationPreservePositionUntilContinue",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.PortraitsAndLanguageSwitchPreserveStoryPosition",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.PressAndCancelDoesNotAdvanceAndInactiveStoryClearsSourceName",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.CloseAndSystemBackPreserveUnderlyingHomeInstance",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.GenericDialogIsHonestLocalizedAndFitsPortraitDisplays",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.ModalBlocksUnderlyingInputAndRejectsDuplicateRequests",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.NativeDisabledActionsShadeAndClosePreserveUnderlyingPage",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.NativeRetryEdgeRunsOnceAfterDismissalInBothLanguages",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.OriginalLetteringAndFeedbackRespectDisabledActions",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.RetryRunsOnceAfterCloseAndCanNavigate",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ErrorDialogAlignmentPlayModeTests.RouteChangeCancelsPendingRetry",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.EventsPreviewAndNativeBackPreserveState",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.LiveHudLocalizationAndResponsiveCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.MaximumBalancesRemainReadable",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.NativeHeaderNavigationRoutesOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.PreviewDoesNotClaimRewardsAndRepeatedBindingRoutesOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventDetailAlignmentPlayModeTests.TallFooterLanguageChangesAndNativeReturnKeepPreviewState",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.CategoriesAndUnavailableControlsNeverGrantOrRequestParticipation",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.HomeEntryAndDemoDetailPreviewPreserveBalancesAndClaimState",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.LiveHudLocalizationAndResponsiveCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.MaximumBalancesRemainVisibleAndDoNotChangePageAvailability",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.NativeHeaderNavigationRoutesOnceAndKeepsHomeReturn",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.EventsAlignmentPlayModeTests.TallCategoryTransitionsAndExpandedBackTarget",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.ActualProgressAndStockRenderInBothLanguagesAndSafeAreas",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.LocalizedReactionDoesNotReplaceBoosterHelp",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.RegisteredGameplayFailureCallbackCopiesGoalsBeforeBoardRetirement",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.RetryExitAndBoosterGuidePreserveExistingTransactions",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.SharedHeaderKeepsLiveBalancesAndAllExistingRoutes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FailAlignmentPlayModeTests.ThreeGoalsCompletedGoalFilteringAndMissingResultAreTruthful",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.FooterRoutesAndRepeatedBindCommitOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.SearchSortAndTabStatesRemainReadOnly",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.SocialActionsAreHonestAndOverlayBlocksRoutes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FriendsListAlignmentPlayModeTests.TeamHubEntryAndMaximumBalances",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.EnergyClockCatchupIsCappedAndNotRepeated",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.LifecycleCallbacksPreserveBoardAndReleaseInterruptedTouch",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyFailsRetriesAndExitsHome",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.NativeJourneyWinsAndReturnsHome",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceReaderRestoresWithoutDuplicateReward",
+      "result": "Skipped",
+      "message": "Run the isolated persistence audit writer/reader phases separately."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.PersistenceWriterCompletesAndSaves",
+      "result": "Skipped",
+      "message": "Run the isolated persistence audit writer/reader phases separately."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.FunctionalDemoNavigationPlayModeTests.TextClarityRepresentativePages",
+      "result": "Failed",
+      "message": "System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AutomaticReshuffleMovesGemsLocksInputAndPreservesPlannedResult",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.GameplayStatusReplacesLocalizesAndLeavesTheBoardAndControlsClear",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.GridRemainsVisibleAfterTwelveResolvedMovesAt438Pixels",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LargeHudValuesAndThreeMissionsStayReadableInBothLanguages",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LiveInventoryAndMovesUseTheExistingBoosterTransaction",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.NativePauseKeepsTheSameBoardAndBlocksBoosterInput",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.PortraitLowerBandDoesNotDarkenExposedScenery",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.HomePortraits_RenderLivePageAndKeepControlsInsideSafeArea",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Language_RefreshesLiveLabelsWithoutChangingSaveOrArt",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.LiveHud_RefreshesFromServiceChangesAndReentry",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.NativeOriginalControls_HaveIndependentRaycastGraphics",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalForeground_UsesUntintedSourceAndCleanEnvironment",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalLettering_SwitchesToLiveEnglishAndBack",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalSubjects_AreNotRedrawnByLegacyLightingEffects",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.PreparedHome_IsSerializedAndUsesCurrentResourceContract",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.QuestUnavailableAndDailyRewardBadgeReflectRealPersistedState",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.SocialShortcutsReturnHomeAndTeamFriendsRetainsItsParent",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.SplashLoadingHome_EndsAtAlignedBoundPageWithoutDuplicateRoutes",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.VisibleControls_RouteAllActionsAndSocialShortcutsOnceFromTallSafeArea",
+      "result": "Failed",
+      "message": "SetUp :   Use the existing production RuntimeBootstrap.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.LiveHeaderLocalizationAndPortraitCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.MaximumBalancesStayVisibleWithoutBecomingRankScores",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.NativeHeaderRoutesOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.ProfileShortcutAndNativeBackKeepExistingDestinations",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.RulesOverlayBlocksUnderlyingControlsAndBackClosesItFirst",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.TabsAndRepeatedBindingsKeepPreviewReadOnly",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.IndividualRankingAlignmentPlayModeTests.TallPeriodChangesAndRulesNativeClosePreservePreview",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.DetailsAndVipBlockUnderlyingInputAndBackDismisses",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.EveryReferenceItemAndCategoryIsAnHonestPreview",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.MaximumBalancesAndRepeatedBind",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.NativeTabsFooterAndTallDetailsPreserveStockAndRoutes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.OriginalLetteringAndLocalizedTabStates",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.RealBoosterQuantitiesRefreshWithoutConsumption",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.RoutesCommitOnceAndShopCategoriesArePreserved",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.InventoryAlignmentPlayModeTests.SelectionAndSharedArtworkRemainIsolated",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguagePreferenceRestartPlayModeTests.DevicePreferenceSurvivesFreshUnityProcess",
+      "result": "Skipped",
+      "message": "Requires dedicated isolated two-process check."
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests.CloseBackAndRepeatedBindingReturnToOrigin",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests.CurrentBackdropAndModalPressFeedbackStayIsolated",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests.LocalizedPortraitsAndPointerSelection",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests.NativeSelectionExpandedCloseAndOriginsPreserveSave",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LanguageSelectAlignmentPlayModeTests.PreferenceReloadAndSettingsShareSelectionWithoutChangingProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StoryRouting_UsesCompletedLevelTriggers",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests.LoadingError_RouterRetryCompletesRealWorkAndNavigatesOnce",
+      "result": "Failed",
+      "message": "SetUp :   RuntimeBootstrap must create the production router.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests.LoadingPortraits_RenderActualPageWithExplicitLayoutFixture",
+      "result": "Failed",
+      "message": "SetUp :   RuntimeBootstrap must create the production router.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests.LoadingRetry_UsesLiveErrorStateAndRejectsRepeatedTap",
+      "result": "Failed",
+      "message": "SetUp :   RuntimeBootstrap must create the production router.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoadingAlignmentPlayModeTests.SplashStart_UsesMeasuredLoadingAndEntersHomeExactlyOnce",
+      "result": "Failed",
+      "message": "SetUp :   RuntimeBootstrap must create the production router.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.ButtonPressRestoresAndDoesNotSubmitCredentials",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.FormVisibilityUnavailableActionsAndLegalState",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.GuestCommitsOnceAndDoesNotResetProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.LocalizedLayoutsPreserveProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.NativeSmallControlsLegalPanelsAndReturn",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LoginAlignmentPlayModeTests.SplashAccountAndSettingsReturnToTheirOrigins",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.AllLettersOpenAndBackReturnsToInbox",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.ClaimsAndMailActionsFailClosedAndModalBlocksInput",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.FooterSurvivesTallLetterAndInboxTransitions",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.MaximumBalancesAndRepeatedBind",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MailAlignmentPlayModeTests.TabsShowInboxEmptySentAndSystemWithoutSaveChanges",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MaintenanceAlignmentPlayModeTests.NativeDisabledRelocalizedAndEdgeReturnPreserveProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MaintenanceAlignmentPlayModeTests.RebindingRepeatedClicksAndDisabledStateProtectExit",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MaintenanceAlignmentPlayModeTests.ReferencePageLocalizesWithoutCountdownOrRewardGrant",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MaintenanceAlignmentPlayModeTests.SourceLetteringAndPressFeedbackPreserveStatusAndSave",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MaintenanceAlignmentPlayModeTests.UnderstoodAndSystemBackReturnHomeWithoutChangingSave",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsDownCorrectly",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsLeftCorrectly",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsRightCorrectly",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsUpCorrectly",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.InvalidBoosterTarget_DoesNotConsumeInventory",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpecialCombination_VerifiesEveryRuntimeWaveHash",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ValidBoosterTarget_ConsumesExactlyOne",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking",
+      "result": "Failed",
+      "message": "  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.BackAndSystemBackReturnHome",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.FocusRefreshAndLanguageChangesKeepAvailabilityTruthful",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.HeaderShowsSavedBalancesAndRoutesToExistingPages",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.NativeHeaderTargetsRouteToCorrectDestinations",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.NativeRetryRelocalizationAndHomePreserveSave",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.RebindingAndRepeatedClicksCannotDuplicateExit",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.RetryChecksNetworkWithoutClaimingServiceSuccessOrChangingSave",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OfflineAlignmentPlayModeTests.SharedHeaderLetteringAndPressFeedbackFollowState",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ActualClockRussianEnglishAndPortraitSafeAreas",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.EnergyGateUsesNativeModalAndCloseDoesNotSpendOrLeavePreparation",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.RegeneratedEnergyAndFullCapacityUpdateWithoutAutomaticLevelStart",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.ResourceHeaderKeepsStandaloneRouteAndCloseReturnsSafely",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.OutOfEnergyAlignmentPlayModeTests.UnavailableOffersAndRepeatedBindingCannotGrantOrCallServices",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PauseAlignmentPlayModeTests.ReferenceAndTallLayoutsKeepLiveRoundAndLocalizedControls",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PauseAlignmentPlayModeTests.RestartAndExitUseExistingRoutesAndPreventDoubleActions",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PauseAlignmentPlayModeTests.ThreeGoalsAndSettingsReturnPreserveThePausedRound",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.BoosterGuideBackAndHudRoutesRemainNativeAndInventoryIsNotSpent",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.BoosterGuideExplainsEachToolInBothLanguagesAndDoesNotSpendInventory",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.EnergyGateCanCloseAndPlayAgainWithoutDoubleSpendingOrConsumingBoosters",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.StockBadgesRemainLegibleForEmptyAndMultiDigitInventory",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.ChapterProgressDisplaysEmptyPartialAndCompleteWithoutMutation",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.CollectionsAndOwnedItemsNeverGrantPreviewRewards",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.HistoryBoundaryControlsAreDisabledAndDoNotRebuild",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.HistoryStatisticsStayReadableWithMaximumValues",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.IdentityExplanationBlocksUnderlyingInputAndBackDismisses",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.MaximumBalancesAndRepeatedBind",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.NativeSectionsExpandedActionsAndTallModalPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.PressFeedbackRestoresWithoutMovingOrActivatingControls",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.RealProgressMilestonesAndPagedHistory",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.RelicSelectionRemainsDistinctAcrossLanguagesAndLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ProfileAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RewardReceivedAlignmentPlayModeTests.DailyClaimOpensReceiptAndConfirmationNeverRegrants",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RewardReceivedAlignmentPlayModeTests.DaySevenLiveReceiptFitsRussianEnglishAndPhoneSafeAreas",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RewardReceivedAlignmentPlayModeTests.EnergyReceiptUsesActualCappedDelta",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RewardReceivedAlignmentPlayModeTests.FailedPersistenceDoesNotOpenOrInventAReceipt",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RewardReceivedAlignmentPlayModeTests.SevenTypePresentationAndRepeatedBindingDoNotAwardAnything",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.BackReturnsToOriginAndHeaderRoutesCommitOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.LanguageAndUnavailableServicesPreserveProgress",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.NativeExpandedControlsTallModalsAndOriginReturn",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.PausedBoardSurvivesSettingsLanguageAndBack",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.PreferencesPersistIndependentlyAndRefreshOnReturn",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SharedHeaderAndPressFeedbackPreservePreferences",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ShopAlignmentPlayModeTests.CategoriesAndUnverifiedPurchaseControlsAreTruthful",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ShopAlignmentPlayModeTests.LiveHudLocalizationAndResponsiveCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ShopAlignmentPlayModeTests.NativeNavigationRoutesOnceAndKeepsHomeReturn",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SpecialOfferAlignmentPlayModeTests.LiveBalancesLocalizationAndSafeAreaCaptures",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SpecialOfferAlignmentPlayModeTests.ShopEntryAndCloseNavigateExactlyOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SpecialOfferAlignmentPlayModeTests.UnavailableOfferCannotPurchaseOrGrantThroughRepeatedBindings",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SplashResponsivePlayModeTests.SplashPortraits_PreserveReferenceCompositionAndSafeControls",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SplashResponsivePlayModeTests.SplashStart_VisibleSourceButtonReceivesPointerAndNavigatesOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.LocalComposerSendsOncePreservesLiteralTextAndSession",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.LocalHistoryLimitAndLongTextScroll",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.NativeFooterAndComposerKeepLocalSessionAndReturnRoute",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.PreviewActionsBlockBackgroundAndBackClosesFirst",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamChatAlignmentPlayModeTests.TeamHubEntryAndMaximumBalances",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamHubAlignmentPlayModeTests.ExpandedInfoTargetAndTallModalKeepFriendsRouteAndSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamHubAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamHubAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamHubAlignmentPlayModeTests.UnavailableActionsExplainPreviewAndDoNotSpend",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamHubAlignmentPlayModeTests.WorldMapEntryAndMaximumBalances",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.DetailsPreviewBlocksBackgroundAndBackClosesFirst",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.FiltersKeepExamplesReadOnlyAndBindingsDoNotDuplicate",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.LiveHeaderAndLocalizedPhoneLayouts",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.RoutesCommitOnceAndPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.TallFiltersDetailsAndExpandedBackPreserveSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TeamRankingAlignmentPlayModeTests.TeamHubEntryAndMaximumBalances",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.HelpReturnsToSamePausedRound",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.NativeExpandedHeaderTargetsRouteWithoutChangingProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.NativeLessonsScrollAndFooterReturn",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.NextPreviousAndDoneReturnToOrigin",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.OriginalOverviewUsesGameplayGemsAndFirstLevelRoute",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.RebindingDoesNotDuplicateActions",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.SectionsAndLocalizedCapturesDoNotMutateProgress",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.SharedArtworkAndPressFeedbackPreserveReadOnlyGuide",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.SharedHeaderRoutesToMatchingResourceCategory",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.SplashHelpCloseAndSystemBack",
+      "result": "Failed",
+      "message": "SetUp : System.NullReferenceException : Object reference not set to an instance of an object"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.AllAuthoredRewardsAndCurrentRoundScoreUseTheCompletionResult",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.CaptionsRemainReadableAcrossLanguagesAndPhoneSizes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.HeaderRefillTimeReadsExistingEnergyClockWithoutChangingTheSave",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LegacyOutcomeOverlayUpdatesExistingTextOnLanguageChange",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LocalizedTitleKeepsRenderedGlyphsStableAcrossRefreshes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.OutcomeReactionSwitchesLanguageWithoutNewRewards",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.RealBoardWinCallbackOpensNativeVictoryWithTheFinalScore",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.ReferenceAndPhonePortraitsRetainNativeInputLiveTextAndSafeAreas",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.VerifiedRewardDomainOperationUpdatesGoldOnlyAndOnlyOnce",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.AuthoredChapterAndLockedNodesUseRealStateAndRoutes",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ChapterCardsShowPressFeedbackAndStyledNotice",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.HudTasksAndGuildRespondWithoutInventingProgress",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ResizingPreservesChapterScrollProgressAndOrder",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.SharedHeaderValuesAndFittingAgreeAcrossPages",
+      "result": "Failed",
+      "message": "SetUp :   Expected: not null\n  But was:  null\n"
+    }
+  ]
+}

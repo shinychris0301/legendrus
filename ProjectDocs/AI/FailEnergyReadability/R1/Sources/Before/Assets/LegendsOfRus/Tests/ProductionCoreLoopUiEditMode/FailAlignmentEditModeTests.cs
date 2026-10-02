@@ -1,0 +1,81 @@
+#if UNITY_EDITOR
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus.Tests.ProductionCoreLoopUi
+{
+    public sealed class FailAlignmentEditModeTests
+    {
+        const string Path="Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab";
+        [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+        {
+            var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(13));
+            Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+            Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+            Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+            Assert.That(root.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(13));
+            Assert.That(root.transform.Find("FIX01_CONTENT"),Is.Null);
+            foreach(string dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
+            Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_source_r13")));
+            Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_source_r13")));
+            Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+(v.RetryText.enabled?"retry_r11":"retry_ru_r12"))));
+            Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_source_r13")));
+            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r11")));
+            Assert.That(v.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+            for(int index=0;index<4;index++)
+            {
+                var group=v.Body.Find("Booster_"+index);
+                Assert.That(group.Find("Medallion").GetComponent<Image>().raycastTarget,Is.False);
+                Assert.That(group.Find("Medallion").gameObject.activeSelf,Is.False);
+                Assert.That(v.BoosterButtons[index].GetComponent<Image>().sprite,Is.SameAs(ProductionBoosterArt.Icon(index,true)));
+                Assert.That(group.Find("Nameplate").GetComponent<Image>().raycastTarget,Is.False);
+                Assert.That(group.Find("StockBadge").GetComponent<ProductionPreLevelBadge>().enabled,Is.True,"Shared art has no baked stock badge; render the live native badge.");
+                Assert.That(v.BoosterCounts[index].enabled,Is.True);
+            }
+            Assert.That(v.HudBacking.gameObject.activeSelf,Is.False);
+            Assert.That(root.GetComponentsInChildren<ProductionPlayerHeader>(true).Length,Is.EqualTo(1));
+            Assert.That(v.Header,Is.Not.Null);Assert.That(v.Header.HasBindings,Is.True);
+            Assert.That(v.Header.Backing.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionHomeSourceComposition.ArtRoot+"source_header")));
+            Assert.That(v.Header.Balances,Is.EqualTo(v.Resources));Assert.That(v.Header.Plus,Is.EqualTo(v.Plus));
+            Assert.That(v.PaidOffer.interactable||v.AdOffer.interactable,Is.False);
+            foreach(var t in root.GetComponentsInChildren<Text>(true))Assert.That(t.raycastTarget,Is.False,t.name);
+        }
+        [Test]public void NewArtRetainsNativePixelsAndTransparentSpriteImport()
+        {
+            foreach(string n in ProductionFailRuntime.ArtNames)
+            {
+                var i=(TextureImporter)AssetImporter.GetAtPath("Assets/LegendsOfRus/Resources/"+ProductionFailRuntime.ArtRoot+n+".png");
+                i.GetSourceTextureWidthAndHeight(out int w,out int h);var sprite=Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+n);
+                Assert.That(sprite.rect,Is.EqualTo(new Rect(0,0,w,h)));Assert.That(i.alphaIsTransparency,Is.True);Assert.That(i.textureCompression,Is.EqualTo(TextureImporterCompression.Uncompressed));
+                Assert.That(i.GetPlatformTextureSettings("Android").format,Is.EqualTo(TextureImporterFormat.RGBA32));
+            }
+        }
+        [Test]public void ReusingCanonicalPageDoesNotDuplicateObjectsOrListeners()
+        {
+            var instance=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(Path));
+            try
+            {
+                int n=instance.GetComponentsInChildren<Transform>(true).Length;
+                for(int pass=0;pass<3;pass++)
+                {
+                    ProductionFailRuntime.BuildInto((RectTransform)instance.transform);
+                    var view=instance.GetComponent<ProductionFailView>();
+                    Assert.That(instance.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(n));
+                    Assert.That(view.Body.Find("GoalsHeadingPlaque").GetSiblingIndex(),Is.LessThan(view.GoalsHeading.transform.GetSiblingIndex()),"Plaque must remain behind live heading on repeated refresh.");
+                    Assert.That(view.Body.Find("BoostersPanel").GetSiblingIndex(),Is.LessThan(view.BoostersHeading.transform.GetSiblingIndex()),"Panel cannot cover live booster heading on repeated refresh.");
+                }
+            }
+            finally{Object.DestroyImmediate(instance);}
+        }
+        [Test]public void FailureSnapshotCopiesAndClampsProgressWithoutInventingUnknownValues()
+        {
+            var level=ChapterLevelCatalog.Find(1,2);var values=new int[level.goals.Length];values[0]=level.goals[0].target+4;values[1]=-10;
+            var snapshot=new LevelFailureResult(level,123,values);values[0]=0;
+            Assert.That(snapshot.CurrentAt(0),Is.EqualTo(level.goals[0].target));Assert.That(snapshot.CurrentAt(1),Is.Zero);Assert.That(snapshot.Score,Is.EqualTo(123));
+            var missing=new LevelFailureResult(level,123,null);Assert.That(missing.HasGoalProgress,Is.False);Assert.That(missing.CurrentAt(0),Is.EqualTo(-1));
+        }
+    }
+}
+#endif

@@ -808,6 +808,44 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [Test]
+        public void AdaptiveCanvasScaler_RefreshesFixedTextOnlyWhenActualScaleChanges()
+        {
+            GameObject host = CreateObject("TextScaleCanvas", typeof(RectTransform),
+                typeof(Canvas), typeof(CanvasScaler), typeof(AdaptiveCanvasScaler));
+            var canvas = host.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            var adaptive = host.GetComponent<AdaptiveCanvasScaler>();
+            GameObject child = CreateObject("FixedSizeLabel", typeof(RectTransform), typeof(Text));
+            child.transform.SetParent(host.transform, false);
+            var label = child.GetComponent<Text>();
+            label.font = Resources.Load<Font>("ProductionUI/IndividualRankingFonts/PlayerNames");
+            label.text = "Настройки / Settings";
+            label.fontSize = 36;
+            label.rectTransform.sizeDelta = new Vector2(400, 60);
+            canvas.scaleFactor = .3f;
+            adaptive.SendMessage("LateUpdate");
+            Canvas.ForceUpdateCanvases();
+            int refreshes = 0;
+            label.RegisterDirtyVerticesCallback(() => refreshes++);
+
+            // Same rect size, different raster density. Do not rely on a layout resize.
+            canvas.scaleFactor = .8f;
+            refreshes = 0;
+            adaptive.SendMessage("LateUpdate");
+            Assert.That(refreshes, Is.EqualTo(1));
+            Assert.That(label.GetGenerationSettings(label.rectTransform.rect.size).scaleFactor,
+                Is.EqualTo(.8f).Within(.0001f));
+            Assert.That(label.rectTransform.sizeDelta, Is.EqualTo(new Vector2(400, 60)));
+            adaptive.SendMessage("LateUpdate");
+            Assert.That(refreshes, Is.EqualTo(1), "Stable frames must not rebuild all text");
+
+            canvas.scaleFactor = .3f;
+            refreshes = 0;
+            adaptive.SendMessage("LateUpdate");
+            Assert.That(refreshes, Is.EqualTo(1), "Shrinking must also refresh the glyph mesh");
+        }
+
+        [Test]
         public void QACaptureService_AllowsOnlyOnePendingRequestWithoutCapturing()
         {
             GameObject host = CreateObject(

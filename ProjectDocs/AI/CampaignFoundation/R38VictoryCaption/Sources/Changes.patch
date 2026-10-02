@@ -1,0 +1,450 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Victory.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: a42b554f130b44d3c8eb1726a91daf3a, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionVictoryView
+-  Revision: 10
++  Revision: 11
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 8872949891654648113}
+   Hud: {fileID: 3265037020903500840}
+@@ -507,12 +507,12 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 982819598382460395}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 132, y: -285}
+-  m_SizeDelta: {x: 677, y: 21}
++  m_Father: {fileID: 5874831100340630663}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 112, y: -4}
++  m_SizeDelta: {x: 717, y: 120}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3364593151783538176
+ CanvasRenderer:
+@@ -535,7 +535,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0, g: 0, b: 0, a: 0}
++  m_Color: {r: 0.02745098, g: 0.0627451, b: 0.105882354, a: 0.92156863}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -1147,12 +1147,12 @@
+   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+   m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 982819598382460395}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 142, y: -286}
+-  m_SizeDelta: {x: 1314, y: 38}
++  m_Father: {fileID: 5874831100340630663}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 128, y: -8}
++  m_SizeDelta: {x: 1370, y: 224}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5444705890505778430
+ CanvasRenderer:
+@@ -1175,7 +1175,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.98039216, g: 0.88235295, b: 0.67058825, a: 1}
++  m_Color: {r: 1, g: 0.92941177, b: 0.78039217, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -1184,16 +1184,16 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 28
++    m_FontSize: 68
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 44
++    m_MaxSize: 68
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+-    m_VerticalOverflow: 1
++    m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: 
+ --- !u!114 &5204568439160991622
+@@ -3540,7 +3540,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 317, y: -252}
++  m_AnchoredPosition: {x: 317, y: -380}
+   m_SizeDelta: {x: 308, y: 60}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7698665232546895522
+@@ -3617,7 +3617,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 94, y: -121}
++  m_AnchoredPosition: {x: 94, y: -253}
+   m_SizeDelta: {x: 752, y: 142}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1878464589675153923
+@@ -3731,9 +3731,7 @@
+   m_ConstrainProportionsScale: 0
+   m_Children:
+   - {fileID: 3168130137583359153}
+-  - {fileID: 1759267079154602874}
+   - {fileID: 2113843890928932901}
+-  - {fileID: 7854019157933437068}
+   - {fileID: 6519279181126237043}
+   - {fileID: 8131449606056914149}
+   - {fileID: 2756784235177624639}
+@@ -3741,8 +3739,6 @@
+   - {fileID: 2939534697257153469}
+   - {fileID: 2869109159453365032}
+   - {fileID: 6702939689990309043}
+-  - {fileID: 1583577371694876279}
+-  - {fileID: 3115144155232796750}
+   - {fileID: 8467116067298705743}
+   - {fileID: 1456054905598995208}
+   - {fileID: 7449019668888246291}
+@@ -4636,12 +4632,12 @@
+   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+   m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 982819598382460395}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 142, y: -286}
+-  m_SizeDelta: {x: 1314, y: 38}
++  m_Father: {fileID: 5874831100340630663}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 128, y: -8}
++  m_SizeDelta: {x: 1370, y: 224}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7760252393327402195
+ CanvasRenderer:
+@@ -4664,7 +4660,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.98039216, g: 0.88235295, b: 0.67058825, a: 1}
++  m_Color: {r: 1, g: 0.92941177, b: 0.78039217, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -4673,16 +4669,16 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 28
++    m_FontSize: 68
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 44
++    m_MaxSize: 68
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+     m_HorizontalOverflow: 0
+-    m_VerticalOverflow: 1
++    m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: 
+ --- !u!114 &7059607192086944446
+@@ -4752,7 +4748,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 157, y: -0}
++  m_AnchoredPosition: {x: 157, y: -128}
+   m_SizeDelta: {x: 629, y: 121}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &2231001307994009156
+@@ -4869,12 +4865,12 @@
+   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+   m_ConstrainProportionsScale: 0
+   m_Children: []
+-  m_Father: {fileID: 982819598382460395}
+-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+-  m_AnchorMin: {x: 0, y: 1}
+-  m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 141, y: -285}
+-  m_SizeDelta: {x: 1320, y: 40}
++  m_Father: {fileID: 5874831100340630663}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 128, y: -8}
++  m_SizeDelta: {x: 1370, y: 224}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3050008694549308557
+ CanvasRenderer:
+@@ -4897,7 +4893,7 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.98039216, g: 0.88235295, b: 0.67058825, a: 1}
++  m_Color: {r: 1, g: 0.92941177, b: 0.78039217, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+@@ -4906,16 +4902,16 @@
+       m_Calls: []
+   m_FontData:
+     m_Font: {fileID: 0}
+-    m_FontSize: 28
++    m_FontSize: 68
+     m_FontStyle: 0
+     m_BestFit: 0
+     m_MinSize: 10
+-    m_MaxSize: 40
++    m_MaxSize: 68
+     m_Alignment: 4
+     m_AlignByGeometry: 0
+     m_RichText: 1
+-    m_HorizontalOverflow: 1
+-    m_VerticalOverflow: 1
++    m_HorizontalOverflow: 0
++    m_VerticalOverflow: 0
+     m_LineSpacing: 1
+   m_Text: 
+ --- !u!114 &1026746737338512241
+@@ -5809,15 +5805,19 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 1759267079154602874}
+   - {fileID: 2255296291521212197}
+   - {fileID: 2627411206850958834}
+   - {fileID: 1422785400271252220}
++  - {fileID: 7854019157933437068}
++  - {fileID: 1583577371694876279}
++  - {fileID: 3115144155232796750}
+   m_Father: {fileID: 8872949891654648113}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: -1340}
+-  m_SizeDelta: {x: 941, y: 312}
++  m_SizeDelta: {x: 941, y: 440}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!1 &7674807268863090064
+ GameObject:
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryReferenceStyle.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryReferenceStyle.cs
+@@ -5,6 +5,7 @@
+     /// <summary>Source-derived Victory composition; existing completion services own all values.</summary>
+     public static class ProductionVictoryReferenceStyle
+     {
++        const float CaptionHeight=128f, CompositionHeight=1672f+CaptionHeight;
+         public const string Root="ProductionUI/VictoryReferenceR1/";
+         public static readonly string[] ArtNames={"environment","title","firebird","star","star_empty","panel","card","resource_card","coin","gem","continue","video","footer","title_ru","continue_ru","panel_ru","video_ru","firebird_glow"};
+         public static Sprite Load(string name)=>Resources.Load<Sprite>(Root+name);
+@@ -41,21 +42,33 @@
+             v.RewardsPanel.sprite=Load("panel");v.RewardsPanel.GetComponent<ProductionVictoryPanelFit>().enabled=false;
+             v.RewardsPanel.type=Image.Type.Simple;
+             Text(v.Score,235,47,471,80,82);GoldScore(v);Text(v.RewardsHeading,300,142,341,35,28);
+-            Text(v.RewardStatus,141,285,660,20,14);
++
+             var scoreHeading=Label(v,"ScoreHeading");Text(scoreHeading,310,22,321,32,27);
+             var boosterHeading=Label(v,"BoosterHeading");Text(boosterHeading,270,306,401,28,26);
+             var empty=Label(v,"BoosterEmpty");Text(empty,190,370,561,82,23);empty.horizontalOverflow=HorizontalWrapMode.Wrap;
+             foreach(var card in v.RewardCards)
+             {card.GetComponent<ProductionVictoryPanelFit>().enabled=false;card.GetComponent<Image>().type=Image.Type.Sliced;}
+-            Place(v.MessageInset.rectTransform,132,285,677,21);v.MessageInset.color=Color.clear;
+-            Text(v.Reaction,142,286,657,19,14);Text(v.Status,142,286,657,19,14);
+-            v.Footer.sizeDelta=new Vector2(941,312);
++            // Reserve a separate writing area instead of shrinking text into the reward separator.
++            v.MessageInset.transform.SetParent(v.Footer,false);
++            Place(v.MessageInset.rectTransform,112,4,717,120);
++            v.MessageInset.color=new Color32(7,16,27,235);
++            v.MessageInset.transform.SetAsFirstSibling();
++            foreach(var caption in new[]{v.Reaction,v.Status,v.RewardStatus})
++            {
++                caption.transform.SetParent(v.Footer,false);
++                Text(caption,128,8,685,112,34);
++                caption.horizontalOverflow=HorizontalWrapMode.Wrap;
++                caption.verticalOverflow=VerticalWrapMode.Truncate;
++                caption.resizeTextForBestFit=false;
++                caption.color=new Color32(255,237,199,255);
++            }
++            v.Footer.sizeDelta=new Vector2(941,312+CaptionHeight);
+             var button=v.ContinueButton.GetComponent<Image>();button.sprite=Load("continue");button.preserveAspect=true;
+-            Place(button.rectTransform,157,0,629,121);Text(v.ContinueText,55,28,519,66,54);
++            Place(button.rectTransform,157,CaptionHeight,629,121);Text(v.ContinueText,55,28,519,66,54);
+             v.ContinueText.fontStyle=FontStyle.Normal;
+             var video=v.DoubleButton.GetComponent<Image>();video.sprite=Load("video");video.preserveAspect=true;
+-            Place(video.rectTransform,94,121,752,142);Text(v.DoubleText,208,25,460,92,32);v.DoubleText.color=new Color32(255,226,166,255);
+-            v.FooterOrnament.sprite=Load("footer");Place(v.FooterOrnament.rectTransform,317,252,308,60);
++            Place(video.rectTransform,94,125+CaptionHeight,752,142);Text(v.DoubleText,208,25,460,92,32);v.DoubleText.color=new Color32(255,226,166,255);
++            v.FooterOrnament.sprite=Load("footer");Place(v.FooterOrnament.rectTransform,317,252+CaptionHeight,308,60);
+         }
+         static void GoldScore(ProductionVictoryView v)
+         {
+@@ -92,7 +105,7 @@
+             var empty=v.RewardsArea.Find("BoosterEmpty").GetComponent<Text>();empty.gameObject.SetActive(count==2);
+             empty.text=en?"No boosters awarded this round":"В этом раунде бустеры не начислены";
+             v.RewardIcons[0].sprite=Load("coin");v.RewardIcons[1].sprite=Load("gem");
+-            // Share the narrow feedback line; never place the story over lower gold carving.
++            // Existing mutually exclusive messages share the larger footer writing area.
+             bool explainBonus=v.DoubleButton.interactable&&string.IsNullOrEmpty(v.Status.text);
+             v.RewardStatus.gameObject.SetActive(explainBonus||!v.MessageInset.enabled);
+             if(explainBonus)
+@@ -100,6 +113,9 @@
+                 v.RewardStatus.text=en?"Video bonus doubles coins only":"Видеобонус удваивает только монеты";
+                 v.Reaction.gameObject.SetActive(false);
+             }
++            v.MessageInset.enabled=!string.IsNullOrEmpty(v.Status.text)
++                ||(v.Reaction.gameObject.activeSelf&&!string.IsNullOrEmpty(v.Reaction.text))
++                ||(v.RewardStatus.gameObject.activeSelf&&!string.IsNullOrEmpty(v.RewardStatus.text));
+             int boosters=count-2;
+             for(int i=0;i<count;i++)
+             {
+@@ -124,10 +140,10 @@
+         }
+         public static void Layout(ProductionVictoryView v,float top,float bottom)
+         {
+-            float scale=Mathf.Min(1,(top-bottom)/1672f);
++            float scale=Mathf.Min(1,(top-bottom)/CompositionHeight);
+             float x=941*(1-scale)*.5f;
+             v.Body.localScale=v.Footer.localScale=Vector3.one*scale;
+-            float extra=Mathf.Max(0,top-bottom-1672*scale);
++            float extra=Mathf.Max(0,top-bottom-CompositionHeight*scale);
+             float groupTop=top-extra*.5f;
+             v.Body.anchoredPosition=new Vector2(x,groupTop);
+             v.Footer.anchoredPosition=new Vector2(x,groupTop-1360*scale);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryRuntime.cs
+@@ -94,7 +94,7 @@
+             ProductionVictoryView.PlaceText(view.RewardStatus,120,135,701,24,19);
+             view.Reaction.transform.SetParent(view.RewardsArea,false);
+             view.Status.transform.SetParent(view.RewardsArea,false);
+-            var inset=view.RewardsArea.Find("MessageInset");
++            var inset=view.MessageInset!=null?view.MessageInset.transform:view.RewardsArea.Find("MessageInset");
+             view.MessageInset=inset!=null?inset.GetComponent<Image>():Rect(view.RewardsArea,"MessageInset",102,389,737,52).gameObject.AddComponent<Image>();
+             ProductionVictoryView.Place(view.MessageInset.rectTransform,102,389,737,52);
+             view.MessageInset.color=new Color32(20,13,8,245);view.MessageInset.raycastTarget=false;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionVictoryView.cs
+@@ -11,7 +11,7 @@
+     public sealed class ProductionVictoryView : MonoBehaviour
+     {
+         public Func<CampaignPlayerSave> CampaignSaveProvider;
+-        public const int CurrentRevision=10;
++        public const int CurrentRevision=11;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Body,Footer,RewardsArea;
+--- a/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
+@@ -80,6 +80,39 @@
+             Capture("Outcome51_RU_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+             Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+         }
++        [UnityTest] public IEnumerator CaptionsRemainReadableAcrossLanguagesAndPhoneSizes()
++        {
++            var state=GameState.Instance;
++            state.Save.highestUnlockedLevel=51;
++            for(int n=1;n<51;n++) state.Save.levelProgress.Add(new LevelProgressData { chapterId=1,levelId=n,completions=1,rewardClaimed=true,bestStars=1 });
++            Win(51,3500);Win(51,3500);
++            yield return new WaitForSecondsRealtime(1);
++            var v=View();string before=OutcomeStateWithoutClock();
++            foreach(string lang in new[]{"en","ru"})
++            {
++                DemoFeatureState.SetLanguage(lang);yield return null;yield return null;
++                foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
++                {
++                    var reaction=StoryService.GetLocalizedReaction(level,StoryReactionOutcomes.Victory,lang);
++                    if(reaction==null)continue;
++                    v.Reaction.text=reaction.Speaker+": "+reaction.Text;
++                    Canvas.ForceUpdateCanvases();
++                    Assert.That(v.Reaction.preferredHeight,Is.LessThanOrEqualTo(v.Reaction.rectTransform.rect.height),lang+" round "+level.levelId);
++                }
++                v.RefreshState();
++                Capture("Caption_"+lang+"_360",new Vector2Int(360,640),new Rect(0,20,360,600),camera=>
++                {
++                    float pixels=Bounds(v.Reaction.rectTransform,camera).height/v.Reaction.rectTransform.rect.height*v.Reaction.fontSize;
++                    Assert.That(pixels,Is.GreaterThanOrEqualTo(11),"Caption must retain readable type at the smallest verified viewport.");
++                });
++                Capture("Caption_"+lang+"_576",new Vector2Int(576,1280),new Rect(0,48,576,1172));
++                Capture("Caption_"+lang+"_941",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++                v.SetStatus("Видео с наградой недоступно");
++                Capture("Caption_Status_"+lang+"_360",new Vector2Int(360,640),new Rect(0,20,360,600));
++                Assert.That(v.Reaction.gameObject.activeSelf,Is.False);
++            }
++            Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
++        }
+         static string OutcomeStateWithoutClock()
+         {
+             var save=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
+@@ -139,8 +172,11 @@
+                 if(level.levelId==2||level.levelId==10)
+                 {yield return new WaitForSecondsRealtime(1);Capture("Victory_Level"+level.levelId+"_Rewards_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));}
+             }
+-            DemoFeatureState.SetLanguage("en");View().RefreshContent();yield return null;
+-            Capture("Victory_Level10_Rewards_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
++            DemoFeatureState.SetLanguage("en");View().RefreshContent();
++            // The installed chapter now ends at 200, not 10. Wait for that page's reveal before capture.
++            float deadline=Time.realtimeSinceStartup+3f;
++            while(Array.Exists(View().StarGlows,g=>g.color.a<.63f)&&Time.realtimeSinceStartup<deadline)yield return null;
++            Capture("Victory_LastAuthoredRound_Rewards_576_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+         }
+         [UnityTest]
+         public IEnumerator ReplayShowsLowerCurrentScoreAndNoDuplicateFirstClearRewards()
+@@ -444,7 +480,7 @@
+                     Assert.That(value.yMin-card.yMin,Is.GreaterThan(card.height*.075f),"Booster count must clear the lower carving.");
+                 }
+             }
+-            foreach(Text text in new[]{view.Score,view.RewardsHeading,view.RewardStatus})
++            foreach(Text text in new[]{view.Score,view.RewardsHeading})
+             {
+                 Rect bounds=Bounds(text.rectTransform,camera);
+                 Assert.That(panel.Contains(bounds.min)&&panel.Contains(bounds.max),Is.True,text.name+" must stay inside the reward board.");
+@@ -466,7 +502,7 @@
+             Assert.That(primary.Contains(label.min)&&primary.Contains(label.max),Is.True,"Continue lettering must fit the source button.");
+             Assert.That(primary.Overlaps(panel),Is.False,"Actions must clear the reward frame.");
+             Assert.That(primary.Overlaps(Bounds(view.DoubleButton.transform as RectTransform,camera)),Is.False);
+-            foreach(Text message in new[]{view.Reaction,view.Status})
++            foreach(Text message in new[]{view.Reaction,view.Status,view.RewardStatus})
+             {
+                 if(!message.gameObject.activeSelf||string.IsNullOrEmpty(message.text))continue;
+                 Rect bounds=Bounds(message.rectTransform,camera),inset=Bounds(view.MessageInset.rectTransform,camera);
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/VictoryAlignmentEditModeTests.cs
+@@ -13,14 +13,14 @@
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Victory),Is.EqualTo("ProductionUI/Pages/Victory"));
+             var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var view=prefab.GetComponent<ProductionVictoryView>();
+             Assert.That(view,Is.Not.Null);Assert.That(view.HasRequiredBindings,Is.True);
+-            Assert.That(view.Revision,Is.EqualTo(10));
++            Assert.That(view.Revision,Is.EqualTo(11));
+             Assert.That(view.Hud.gameObject.activeSelf,Is.False);
+             Assert.That(view.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+             Assert.That(view.ContinueButton.GetComponent<Image>().sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("continue_ru")));
+             Assert.That(view.DoubleButton.GetComponent<Image>().sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("video")));
+             Assert.That(view.FooterOrnament.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("footer")));
+-            Assert.That(view.Reaction.transform.parent,Is.SameAs(view.RewardsArea));
+-            Assert.That(view.Status.transform.parent,Is.SameAs(view.RewardsArea));
++            Assert.That(view.Reaction.transform.parent,Is.SameAs(view.Footer));
++            Assert.That(view.Status.transform.parent,Is.SameAs(view.Footer));
+             Assert.That(view.ResourceHeader.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionVictoryRuntime.ArtRoot+"resource_header_r3")));
+             Assert.That(view.Firebird.sprite,Is.SameAs(ProductionVictoryReferenceStyle.Load("firebird")));
+             Assert.That(view.EnergyTimer.raycastTarget,Is.False);

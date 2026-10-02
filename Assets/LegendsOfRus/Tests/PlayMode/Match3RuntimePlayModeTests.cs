@@ -86,7 +86,18 @@ namespace LegendsOfRus.Tests.PlayMode
             boardRect.sizeDelta = new Vector2(786f, 942f);
 
             board = boardObject.AddComponent<Match3Board>();
-            board.Initialize(null, null);
+            // QA presets are 8x9; do not inherit dimensions/tutorials from the selected campaign level.
+            // Use the normal initializer so gestures, inventory and planning exercise current rules.
+            board.Initialize(new LevelData
+            {
+                id = "qa.input-motion",
+                columns = BoardQAPresetFactory.Width,
+                rows = BoardQAPresetFactory.Height,
+                tileTypes = BoardQAPresetFactory.TileTypes,
+                moveLimit = 50,
+                goals = new[] { new LevelGoalData { target = 999, tileType = 0 } }
+            }, null, null);
+            Assert.That(board.RuleVersion, Is.EqualTo(Match3Board.CurrentGameplayRules));
             Canvas.ForceUpdateCanvases();
             yield return null;
         }

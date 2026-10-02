@@ -49,7 +49,7 @@ namespace LegendsOfRus
             sequence = new LevelTutorialSequence(remaining.ToArray());
             previousMoves = board != null ? board.Moves : 0;
             previousGoalOne = board != null ? board.GoalSlot1Remaining : 0;
-            previousGoalTwo = board != null ? board.GoalSlot2Remaining : 0;
+            previousGoalTwo = board != null ? board.GoalSlot2Remaining + (board.GetGoalSlot(2)?.Remaining ?? 0) : 0;
 
             if (board == null || remaining.Count == 0) return;
 
@@ -100,6 +100,7 @@ namespace LegendsOfRus
 
         void OnGoalSlotsChanged(int first, int second)
         {
+            second += board != null ? board.GetGoalSlot(2)?.Remaining ?? 0 : 0;
             if (first < previousGoalOne || second < previousGoalTwo)
                 sequence?.Signal(LevelTutorialTriggerTypes.FirstGoalProgress);
             previousGoalOne = first;

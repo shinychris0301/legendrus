@@ -1,0 +1,80 @@
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs:34:            ProductionPlayerHeader.Attach(v);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs:18:            v.Hud.Find("GoalProgressFrame").gameObject.SetActive(false);v.GoalProgress.gameObject.SetActive(false);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs:40:            Place(v.Hud.Find("StarProgressFrame").GetComponent<RectTransform>(),745,168,161,22);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs:41:            Place(v.StarProgress.rectTransform,751,174,149,10);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs:42:            v.StarProgress.gameObject.SetActive(false);v.Hud.Find("StarProgressFrame").gameObject.SetActive(false);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:34:        public Image ProfileProgressFrame;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:85:        public bool HasRequiredBindings => Revision == CurrentRevision && Header!=null && Header.HasBindings && Typography != null &&
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:138:        public bool HasReferenceForegroundBindings =>
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs:147:            HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:33:            view.Header=h; h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:57:            h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:74:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:91:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:107:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:126:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:146:            view.PlayerHeader=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:162:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:177:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:192:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:207:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:222:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:237:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:252:            view.Header=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:272:            view.PlayerHeader=h;h.ApplyPresentation();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs:279:        public void ApplyPresentation()
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:24:            if (existing != null && existing.HasRequiredBindings) { existing.RefreshContent(); AlignPresentation(existing); return; }
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:33:            var homePrefab = Resources.Load<GameObject>("ProductionUI/Pages/Home");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:35:            if (home == null || !home.HasRequiredBindings) throw new InvalidOperationException("World Map requires the accepted Home HUD.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:62:            view.HudBacking = Clone(home.GetComponent<ProductionHomeLayout>().HudBacking,content,"HudOpaqueNavyBacking");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:63:            view.Hud = Clone(home.GetComponent<ProductionHomeLayout>().Hud,content,"WorldMapHud");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs:106:            if (!view.HasRequiredBindings) throw new InvalidOperationException("World Map composition bindings are incomplete.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:21:        public Image Environment,GoalProgress,StarProgress;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:32:        public bool HasRequiredBindings=>Revision==CurrentRevision&&SourceControls&&HasCoreBindings&&Array.TrueForAll(Stars,s=>s.StarEmptyArt!=null&&s.StarFilledArt!=null)&&HasFramePolishBindings&&Status!=null&&Status.HasRequiredBindings&&ScoreFrame!=null&&ScoreMeter!=null&&Array.TrueForAll(Goals,g=>g.Symbol!=null);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:34:            Environment!=null&&Environment.sprite!=null&&GoalProgress!=null&&StarProgress!=null&&HeroName!=null&&LevelText!=null&&MovesHeading!=null&&MovesValue!=null&&GoalsHeading!=null&&ScoreHeading!=null&&ScoreValue!=null&&
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:78:            if(!HasRequiredBindings)return;language=DemoFeatureState.LanguageCode;bool en=language=="en";
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:89:            if(!HasRequiredBindings)return;bool en=DemoFeatureState.LanguageCode=="en";
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:118:            GoalProgress.fillAmount=slots>0?progress/slots:0;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:120:            StarProgress.fillAmount=thresholds!=null&&thresholds.Length==3?Mathf.Clamp01(score/(float)Mathf.Max(1,thresholds[2])):0;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs:121:            ScoreMeter.SetFraction(StarProgress.fillAmount);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:19:                if(!old.HasRequiredBindings)throw new InvalidOperationException("Repair Failure bindings outside Play Mode.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:20:                ApplyPresentation(old);old.RefreshContent();return;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:23:            var source=Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:60:            v.HudBacking=Clone(source.HudBacking,v.Content,"HudBacking");v.Hud=Clone(source.Hud,v.Content,"FailureHud");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:66:            var layout=root.gameObject.AddComponent<ProductionFailLayout>();layout.View=v;ApplyPresentation(v);v.RefreshContent();layout.ApplyNow();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:67:            if(!v.HasRequiredBindings)throw new InvalidOperationException("Failure native bindings incomplete.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:69:        static void ApplyPresentation(ProductionFailView v)
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:208:            ProductionPlayerHeader.Attach(v);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs:235:            var home=Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:48:            if (existing != null && existing.HasRequiredBindings) { ProductionChapterMapSourceControls.Apply(existing); return; }
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:53:            var homePrefab = Resources.Load<GameObject>("ProductionUI/Pages/Home");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:55:            if (home == null || !home.HasRequiredBindings) throw new InvalidOperationException("Chapter Map requires the accepted Home HUD.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:68:            view.HudBacking = Clone(home.GetComponent<ProductionHomeLayout>().HudBacking,content,"HudOpaqueNavyBacking");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:69:            view.Hud = Clone(home.GetComponent<ProductionHomeLayout>().Hud,content,"ChapterMapHud");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapRuntime.cs:100:            if (!view.HasRequiredBindings) throw new InvalidOperationException("Chapter Map composition bindings are incomplete.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:25:            Art(v.Hud,"IvanPortrait",Home("avatar_portrait"),26,15,174,174).preserveAspect=true;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:26:            Art(v.Hud,"IvanFrame",Home("avatar_ring"),0,-9,224,224).preserveAspect=true;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:30:            Art(v.Hud,"GoalProgressFrame",Home("progress_frame"),228,111,175,22);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:31:            v.GoalProgress=Art(v.Hud,"GoalProgress",Home("progress_fill"),235,117,161,10);Fill(v.GoalProgress);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:32:            Art(v.Hud,"StarProgressFrame",Home("progress_frame"),405,47,179,24);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:33:            v.StarProgress=Art(v.Hud,"StarProgress",Home("progress_fill"),412,53,165,12);Fill(v.StarProgress);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:65:            if(!v.HasRequiredBindings)throw new InvalidOperationException("Incomplete Gameplay composition.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs:133:        static Sprite Home(string n)=>Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+n);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:22:        static readonly string[] TextureNames = {
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:32:        public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:39:            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) return;
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:45:            Dictionary<string, Sprite> sprites = LoadSprites(loadSprite);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:98:        public static void UpgradeReferenceForeground(ProductionHomeView view, Func<string, Sprite> loadSprite)
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:106:                if (!view.HasRequiredBindings) throw new InvalidOperationException("Home source migration produced incomplete bindings.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:109:            AlignReferenceComposition(view, LoadSprites(loadSprite));
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:110:            if (!view.HasRequiredBindings) throw new InvalidOperationException("Home reference migration produced incomplete bindings.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:152:            view.ProfileProgressFrame = EnsureArt(profile, "ProfileProgressFrame", sprites["progress_frame"], 169, 87, 164, 54.6667f);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:153:            view.ProfileProgressText = EnsureLabel(view.ProfileProgressFrame.rectTransform, "UnavailableExperience", "—", 24, 17, 116, 20, 18, view.Typography);
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:427:        static Dictionary<string, Sprite> LoadSprites(Func<string, Sprite> loadSprite)
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs:430:            foreach (string name in TextureNames)
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:22:            var source = Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>();
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:23:            if (source == null || !source.HasRequiredBindings) throw new InvalidOperationException("Pre-Level requires the accepted Chapter Map.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:78:            view.HudBacking=Clone(source.HudBacking,view.Content,"HudOpaqueNavyBacking");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:79:            view.Hud=Clone(source.Hud,view.Content,"PreLevelHud");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:89:            if(!view.HasRequiredBindings)throw new InvalidOperationException("Pre-Level composition is incomplete.");
+Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPreLevelRuntime.cs:137:            Color scenery=Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>().Environment.color;

@@ -56,6 +56,54 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator SharedHeaderValuesAndFittingAgreeAcrossPages()
+        {
+            var save=GameState.Instance.Save;save.gold=int.MaxValue;save.gems=int.MaxValue;save.energy=3;save.level=28;
+            foreach(string language in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(language);
+                router.Show(ScreenId.WorldMap);Settle();yield return null;
+                var map=Root().GetComponentInChildren<ProductionWorldMapView>();map.RefreshContent();
+                string[] values=Array.ConvertAll(map.Header.Balances,t=>t.text);
+                int[] sizes=Array.ConvertAll(map.Header.Balances,t=>t.fontSize);
+                string name=map.Header.PlayerName.text,level=map.Header.Level.text;
+                foreach(var label in map.Header.Balances)Assert.That(label.preferredWidth,Is.LessThanOrEqualTo(label.rectTransform.rect.width-20));
+                Capture("WorldMap_MaxBalances_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
+                router.Show(ScreenId.Home);Settle();yield return null;
+                var home=router.Viewport.GetComponentInChildren<ProductionHomeView>();home.RefreshContent();
+                CollectionAssert.AreEqual(values,Array.ConvertAll(home.Header.Balances,t=>t.text));
+                CollectionAssert.AreEqual(sizes,Array.ConvertAll(home.Header.Balances,t=>t.fontSize));
+                Assert.That(home.Header.PlayerName.text,Is.EqualTo(name));Assert.That(home.Header.Level.text,Is.EqualTo(level));
+                Assert.That(home.Header.Backing.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionHomeSourceComposition.ArtRoot+"source_header")));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator ChapterCardsShowPressFeedbackAndStyledNotice()
+        {
+            var view=Root().GetComponentInChildren<ProductionWorldMapView>();
+            foreach(var b in view.GetComponentsInChildren<Button>(true))
+                Assert.That(b.GetComponent<ProductionMapButtonFeedback>(),Is.Not.Null,b.name);
+            var card=view.Cards[0];var feedback=card.Button.GetComponent<ProductionMapButtonFeedback>();
+            Color normal=card.Terrain.canvasRenderer.GetColor();
+            var e=new PointerEventData(EventSystem.current){pointerId=17,button=PointerEventData.InputButton.Left};
+            ExecuteEvents.Execute(card.Button.gameObject,e,ExecuteEvents.pointerDownHandler);
+            Assert.That(feedback.IsPressed,Is.True);
+            Assert.That(card.Terrain.canvasRenderer.GetColor().r,Is.LessThan(normal.r*.8f));
+            Capture("WorldMap_Pressed_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            ExecuteEvents.Execute(card.Button.gameObject,e,ExecuteEvents.pointerUpHandler);
+            yield return new WaitForSecondsRealtime(.2f);
+            Assert.That(card.Terrain.canvasRenderer.GetColor(),Is.EqualTo(normal));
+            view.Cards[1].Button.onClick.Invoke();
+            Assert.That(view.Notice.Group.alpha,Is.EqualTo(1));
+            Assert.That(view.Notice.Message.text,Does.Contain("2"));
+            Assert.That(view.Notice.Group.blocksRaycasts,Is.False);
+            Capture("WorldMap_LockedNotice_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            router.Show(ScreenId.Home);Settle();
+            Assert.That(view.Notice.Group.alpha,Is.Zero);
+        }
+
+        [UnityTest]
         public IEnumerator AuthoredChapterAndLockedNodesUseRealStateAndRoutes()
         {
             var view=Root().GetComponentInChildren<ProductionWorldMapView>();
@@ -63,16 +111,16 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(Root().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
             Assert.That(Root().transform.Find("DynamicHUD"),Is.Null);
             string save=JsonUtility.ToJson(GameState.Instance.Save);
-            for(int i=1;i<15;i++)
+            for(int i=1;i<20;i++)
             {
                 Assert.That(view.ChapterAvailable(i+1),Is.False);
-                Assert.That(view.Nodes[i].Lock.gameObject.activeSelf,Is.True);
-                view.Nodes[i].Button.onClick.Invoke();
+                Assert.That(view.Cards[i].Lock.gameObject.activeSelf,Is.True);
+                view.Cards[i].Button.onClick.Invoke();
                 Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
             }
             Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save));
-            Assert.That(view.Nodes[0].Lock.gameObject.activeSelf,Is.False);
-            view.Nodes[0].Button.onClick.Invoke();Settle();
+            Assert.That(view.Cards[0].Lock.gameObject.activeSelf,Is.False);
+            view.Cards[0].Button.onClick.Invoke();Settle();
             Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
             router.NavigateBack();Settle();
             view=Root().GetComponentInChildren<ProductionWorldMapView>();view.BackButton.onClick.Invoke();Settle();
@@ -93,10 +141,10 @@ namespace LegendsOfRus.Tests.PlayMode
             for(int i=0;i<catalog.levels.Length;i++)
             {
                 LevelData level=catalog.levels[i];GameState.Instance.CompleteLevel(level,level.starScoreThresholds[2]);
-                if(i<catalog.levels.Length-1)Assert.That(view.Nodes[0].Stars[2].Dimmed,Is.True,"Three chapter stars require every available level star.");
+                if(i<catalog.levels.Length-1)Assert.That(view.Cards[0].Completed,Is.False,"Completion needs every authored level.");
             }
             Assert.That(view.TaskCopy.text,Does.Contain(catalog.levels.Length+" / "+catalog.levels.Length));
-            foreach(var star in view.Nodes[0].Stars)Assert.That(star.Dimmed,Is.False);
+            Assert.That(view.Cards[0].Completed,Is.True);Assert.That(view.Cards[0].Progress.text,Is.EqualTo((catalog.levels.Length*3)+"/"+(catalog.levels.Length*3)));
             Assert.That(view.ChapterAvailable(2),Is.False,"A completed chapter must not unlock missing authored data.");
             router.NavigateBack();Assert.That(view.TaskPanel.activeSelf,Is.False);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
             view.NavButtons[2].onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.TeamHub));
@@ -111,6 +159,52 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator ScrollHighlightAndLocalizationPreserveRealProgress()
+        {
+            var view=Root().GetComponentInChildren<ProductionWorldMapView>();
+            Assert.That(view.Cards.Length,Is.EqualTo(20));
+            var first=view.Cards[0];Assert.That(first.Current,Is.True);
+            Assert.That(ChapterLevelCatalog.LoadChapter1().levels.Length,Is.EqualTo(500));
+            Assert.That(first.Progress.text,Is.EqualTo("0/1500"));
+            Assert.That(first.BorderGlow.gameObject.activeSelf,Is.True);
+            Assert.That(first.Surface.color,Is.EqualTo(Color.white));
+            Assert.That(first.Terrain.color,Is.EqualTo(Color.white));
+            Assert.That(first.Frame.color,Is.EqualTo(Color.white));
+            Assert.That(first.Button.transition,Is.EqualTo(Selectable.Transition.None));
+            for(int i=1;i<20;i++)
+            {
+                Assert.That(view.Cards[i].BorderGlow.gameObject.activeSelf,Is.False);
+                Assert.That(view.Cards[i].Progress.text,Is.EqualTo("—"));
+                Assert.That(view.Cards[i].Terrain.color.r,Is.LessThan(1));
+            }
+            string save=JsonUtility.ToJson(GameState.Instance.Save);
+            var scroll=view.ChapterScroll;Canvas.ForceUpdateCanvases();
+            float before=scroll.content.anchoredPosition.y;
+            Vector2 center=RectTransformUtility.WorldToScreenPoint(null,scroll.viewport.TransformPoint(scroll.viewport.rect.center));
+            var pointer=new PointerEventData(EventSystem.current){position=center,pressPosition=center,button=PointerEventData.InputButton.Left};
+            scroll.OnInitializePotentialDrag(pointer);scroll.OnBeginDrag(pointer);
+            pointer.position=center+Vector2.down*160;scroll.OnDrag(pointer);scroll.OnEndDrag(pointer);scroll.StopMovement();
+            Assert.That(scroll.content.anchoredPosition.y,Is.LessThan(before),"Dragging down brings later chapters from above.");
+            Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(save));
+            scroll.verticalNormalizedPosition=1;yield return null;
+            Capture("WorldMap_LastChapters_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            DemoFeatureState.SetLanguage("en");yield return null;yield return null;
+            Assert.That(view.TitleText.enabled,Is.True);Assert.That(view.TitlePlaque.sprite.name,Does.EndWith("_blank"));
+            Assert.That(view.Cards[0].Name.text,Is.EqualTo(view.Cards[0].EnglishName.ToUpperInvariant()));
+            DemoFeatureState.SetLanguage("ru");yield return null;yield return null;
+            Assert.That(view.TitleText.enabled,Is.False);Assert.That(view.TitlePlaque.sprite.name,Is.EqualTo("chapter_title"));
+            scroll.verticalNormalizedPosition=0;Canvas.ForceUpdateCanvases();
+            first.BorderGlow.gameObject.SetActive(false);
+            Capture("WorldMap_BorderGlow_Off",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            first.BorderGlow.gameObject.SetActive(true);
+            Capture("WorldMap_BorderGlow_On",new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            // Additional reference navigation slots keep their actual routes.
+            view.NavButtons[4].onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Shop));
+            router.Show(ScreenId.WorldMap);Settle();view=Root().GetComponentInChildren<ProductionWorldMapView>();
+            view.NavButtons[3].onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Home));
+        }
+
+        [UnityTest]
         public IEnumerator CaptureReferenceAndPhonePortraits()
         {
             Capture("WorldMap_941x1672_RU", new Vector2Int(941,1672), new Rect(0,0,941,1672));
@@ -118,6 +212,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Capture("WorldMap_1080x2400_safearea_RU", new Vector2Int(1080,2400), new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("en"); yield return null; yield return null;
             Capture("WorldMap_941x1672_EN", new Vector2Int(941,1672), new Rect(0,0,941,1672));
+            Capture("WorldMap_1080x2400_safearea_EN", new Vector2Int(1080,2400), new Rect(45,100,990,2160));
             DemoFeatureState.SetLanguage("ru"); yield return null; yield return null;
             Capture("WorldMap_941x1672_RU_roundtrip", new Vector2Int(941,1672), new Rect(0,0,941,1672));
             var view=Root().GetComponentInChildren<ProductionWorldMapView>();
@@ -128,6 +223,28 @@ namespace LegendsOfRus.Tests.PlayMode
             DemoFeatureState.SetLanguage("en");yield return null;yield return null;
             Capture("WorldMap_Tasks_941x1672_EN", new Vector2Int(941,1672), new Rect(0,0,941,1672));
             view.NavButtons[0].onClick.Invoke();Assert.That(view.TaskPanel.activeSelf,Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator ResizingPreservesChapterScrollProgressAndOrder()
+        {
+            var view = Root().GetComponentInChildren<ProductionWorldMapView>();
+            foreach (float progress in new[] { 0f, .5f, 1f })
+            {
+                view.ChapterScroll.verticalNormalizedPosition = progress;
+                view.ChapterScroll.StopMovement();
+                yield return null;
+                Capture("WorldMap_Resize_" + Mathf.RoundToInt(progress * 100),
+                    new Vector2Int(1080,2400), new Rect(45,100,990,2160), camera =>
+                    {
+                        Assert.That(view.ChapterScroll.verticalNormalizedPosition,
+                            Is.EqualTo(progress).Within(.001f), "Keep scroll progress during resize");
+                        Assert.That(view.Cards[19].Root.anchoredPosition.y,
+                            Is.GreaterThan(view.Cards[0].Root.anchoredPosition.y), "Later chapters remain above");
+                    });
+                Assert.That(view.ChapterScroll.verticalNormalizedPosition,
+                    Is.EqualTo(progress).Within(.001f), "Keep scroll progress after restoring display");
+            }
         }
 
         GameObject Root()
@@ -246,6 +363,15 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(mesh,Is.Not.Null,graphic.name);
                 Assert.That(mesh.vertexCount,Is.GreaterThan(0),graphic.name+" must have rendered geometry");
             }
+            Rect hud = Bounds(view.Hud, camera), footer = Bounds(view.Footer, camera);
+            Rect viewport = Bounds(view.MapArea, camera), title = Bounds(view.TitleArea, camera);
+            Rect action = Bounds((RectTransform)view.ChapterAction.transform, camera);
+            float scale = footer.width / 941f;
+            Assert.That(hud.yMax, Is.EqualTo(safe.yMax).Within(1f), "Shared header at safe top");
+            Assert.That(footer.yMin, Is.EqualTo(safe.yMin).Within(1f), "Navigation at safe bottom");
+            Assert.That(title.yMin - viewport.yMax, Is.EqualTo(6 * scale).Within(1f), "Title/viewport clearance");
+            Assert.That(viewport.yMin - action.yMax, Is.EqualTo(-scale).Within(1f), "Original scroll/action join");
+            Assert.That(viewport.height, Is.EqualTo(safe.height - 666 * scale).Within(1f), "Viewport uses extra height");
             Rect environment=Bounds(view.Environment.rectTransform,camera);
             Assert.That(environment.xMin,Is.LessThanOrEqualTo(1));Assert.That(environment.yMin,Is.LessThanOrEqualTo(1));
             Assert.That(environment.xMax,Is.GreaterThanOrEqualTo(size.x-1));Assert.That(environment.yMax,Is.GreaterThanOrEqualTo(size.y-1));
@@ -253,6 +379,10 @@ namespace LegendsOfRus.Tests.PlayMode
             {
                 if(!button.gameObject.activeInHierarchy)continue;
                 Rect rect=Bounds(button.transform as RectTransform,camera);
+                if(button.transform.IsChildOf(view.ChapterScroll.content))
+                {
+                    if(!viewport.Contains(rect.center))continue;
+                }
                 Assert.That(rect.xMin,Is.GreaterThanOrEqualTo(safe.xMin-1),button.name);
                 Assert.That(rect.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1),button.name);
                 Assert.That(rect.xMax,Is.LessThanOrEqualTo(safe.xMax+1),button.name);
@@ -263,9 +393,9 @@ namespace LegendsOfRus.Tests.PlayMode
                 Assert.That(results[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" is obscured");
             }
             var layout=view.GetComponent<ProductionWorldMapLayout>();
-            Vector2 old=view.Nodes[0].Root.anchoredPosition;
+            Vector2 old=view.Cards[0].Root.anchoredPosition;
             layout.ApplyNow();Canvas.ForceUpdateCanvases();
-            Assert.That(Vector2.Distance(old,view.Nodes[0].Root.anchoredPosition),Is.LessThan(.01f));
+            Assert.That(Vector2.Distance(old,view.Cards[0].Root.anchoredPosition),Is.LessThan(.01f));
         }
     }
 }

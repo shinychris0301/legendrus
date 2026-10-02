@@ -20,8 +20,17 @@ namespace LegendsOfRus
 
         public static void BuildInto(RectTransform root)
         {
+            // The source composition retains its original Home HUD as an inactive child.
+            var legacyProgress = root.Find(ContentName + "/WorldMapHud/ProfileButton/ProfileProgressFrame");
+            if (legacyProgress != null) legacyProgress.GetComponent<Image>().sprite = null;
             var existing = root.GetComponent<ProductionWorldMapView>();
-            if (existing != null && existing.HasRequiredBindings) { AlignPresentation(existing); return; }
+            if (existing != null && existing.HasRequiredBindings) { ClearDormantFooterArtwork(existing); existing.RefreshContent(); AlignPresentation(existing); return; }
+            if(existing != null && existing.Content != null && !Application.isPlaying)
+            {
+                ProductionWorldMapSourceComposition.Apply(existing);
+                existing.GetComponent<ProductionWorldMapLayout>().View=existing;
+                existing.RefreshContent();AlignPresentation(existing);return;
+            }
             if (root.Find(ContentName) != null)
                 throw new InvalidOperationException("World Map bindings need repair outside Play Mode.");
             var homePrefab = Resources.Load<GameObject>("ProductionUI/Pages/Home");
@@ -55,15 +64,19 @@ namespace LegendsOfRus
             }
             view.HudBacking = Clone(home.GetComponent<ProductionHomeLayout>().HudBacking,content,"HudOpaqueNavyBacking");
             view.Hud = Clone(home.GetComponent<ProductionHomeLayout>().Hud,content,"WorldMapHud");
-            view.ProfileButton = view.Hud.Find("ProfileButton").GetComponent<Button>();
-            view.SettingsButton = view.Hud.Find("SettingsButton").GetComponent<Button>();
-            view.HeroName = view.ProfileButton.transform.Find("HeroName").GetComponent<Text>();
-            view.LevelText = view.ProfileButton.transform.Find("SavedLevel").GetComponent<Text>();
-            view.GoldText = view.Hud.Find("GoldResource/GoldValue").GetComponent<Text>();
-            view.GemsText = view.Hud.Find("GemsResource/GemsValue").GetComponent<Text>();
-            view.EnergyText = view.Hud.Find("EnergyResource/EnergyValue").GetComponent<Text>();
-            view.PlusButtons = new[] { view.Hud.Find("GoldResource/ResourcePlus").GetComponent<Button>(),
-                view.Hud.Find("GemsResource/ResourcePlus").GetComponent<Button>(),view.Hud.Find("EnergyResource/ResourcePlus").GetComponent<Button>() };
+            // Instantiate remaps the shared header's serialized references to this clone.
+            // Home's current capsules no longer live at the historical GoldResource paths.
+            var header = view.Hud.GetComponent<ProductionPlayerHeader>();
+            if (header == null || !header.HasBindings)
+                throw new InvalidOperationException("Cloned Home HUD requires complete shared header bindings.");
+            view.ProfileButton = header.Profile;
+            view.SettingsButton = header.Settings;
+            view.HeroName = header.PlayerName;
+            view.LevelText = header.Level;
+            view.GoldText = header.Balances[0];
+            view.GemsText = header.Balances[1];
+            view.EnergyText = header.Balances[2];
+            view.PlusButtons = (Button[])header.Plus.Clone();
             view.TitleArea = Rect(content,"TitleArea",0,130,941,170);
             view.TitlePlaque = Art(view.TitleArea,"TitlePlaque",Load("title"),176,-4,620,176);
             view.TitleText = Label(view.TitleArea,"Title","КАРТА МИРА",242,34,496,82,53,view.Typography);
@@ -73,7 +86,7 @@ namespace LegendsOfRus
             var backHit = Art(view.TitleArea,"Back",null,10,146,104,104); backHit.color = Color.clear;
             view.BackButton = Button(backHit); Graphic(backHit.rectTransform,"BackArrow",WorldMapGraphicKind.Back,18,18,68,68);
             view.Footer = Rect(content,"Navigation",0,1352,941,320);
-            view.FooterOrnament = Art(content,"FooterOrnament",home.FooterBase.sprite,-2,1540,945,323);
+            view.FooterOrnament = Art(content,"FooterOrnament",null,-2,1540,945,323);
             view.FooterOrnament.transform.SetSiblingIndex(view.Footer.GetSiblingIndex());
             view.NavButtons = new Button[3]; view.NavLabels = new Text[3];
             string[] names = {"map","tasks","guild"}; string[] labels = {"КАРТА","ЗАДАНИЯ","ГИЛЬДИЯ"};
@@ -94,14 +107,24 @@ namespace LegendsOfRus
             view.TaskPanel.SetActive(false);
             var layout = root.GetComponent<ProductionWorldMapLayout>() ?? root.gameObject.AddComponent<ProductionWorldMapLayout>();
             layout.View = view;
+            ProductionWorldMapSourceComposition.Apply(view);
             view.Revision = ProductionWorldMapView.CurrentRevision;
             view.RefreshContent(); layout.ApplyNow();
             if (!view.HasRequiredBindings) throw new InvalidOperationException("World Map composition bindings are incomplete.");
             AlignPresentation(view);
         }
 
+        // The original footer object survives alongside the current source footer.
+        internal static void ClearDormantFooterArtwork(ProductionWorldMapView view)
+        {
+            var old = view.transform.Find(ContentName + "/FooterOrnament");
+            var image = old != null ? old.GetComponent<Image>() : null;
+            if (image != null && image != view.FooterOrnament) image.sprite = null;
+        }
+
         public static void AlignPresentation(ProductionWorldMapView view)
         {
+            if(view.SourceComposition)return;
             foreach (var graphic in view.GetComponentsInChildren<ProductionWorldMapGraphic>(true))
                 if (graphic.GetComponent<CanvasRenderer>() == null) graphic.gameObject.AddComponent<CanvasRenderer>();
             // Node positions stretch with the safe-area height. Avoid a one-pixel glyph jump
@@ -110,6 +133,7 @@ namespace LegendsOfRus
                 node.Number.GetComponent<SplashTitleTextGeometry>().SnapToScreenPixels = false;
             view.TitleText.rectTransform.anchoredPosition = new Vector2(242,-42);
             foreach (var label in view.NavLabels) label.rectTransform.anchoredPosition = new Vector2(38,-218);
+            ProductionNavigationStyle.Apply(view);
         }
 
         static Sprite Load(string name) => Resources.Load<Sprite>(ArtRoot+name) ?? throw new InvalidOperationException("Missing World Map artwork: "+name);

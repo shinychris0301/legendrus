@@ -55,17 +55,17 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [Test]
-        public void Chapter1Catalog_LoadsTenValidatedRecords()
+        public void Chapter1Catalog_LoadsFiveHundredValidatedRecords()
         {
             ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1(
                 forceReload: true
             );
-            LevelValidationReport report = LevelDataValidator.ValidateCatalog(catalog);
+            LevelValidationReport report = LevelDataValidator.ValidateCampaignCatalog(catalog);
 
             Assert.That(report.Errors, Is.Empty);
-            Assert.That(catalog.levels, Has.Length.EqualTo(10));
+            Assert.That(catalog.levels, Has.Length.EqualTo(500));
             Assert.That(catalog.levels[0].id, Is.EqualTo("chapter01.level01"));
-            Assert.That(catalog.levels[9].HasStoryTrigger("chapter.complete"), Is.True);
+            Assert.That(catalog.levels[9].HasStoryTrigger("chapter.complete"), Is.False);
             Assert.That(catalog.schemaVersion, Is.EqualTo(3));
             for (int i = 0; i < catalog.levels.Length; i++)
             {
@@ -122,7 +122,7 @@ namespace LegendsOfRus.Tests.PlayMode
             };
             catalog.levels[0] = level;
 
-            LevelValidationReport report = LevelDataValidator.ValidateCatalog(catalog);
+            LevelValidationReport report = LevelDataValidator.ValidateCampaignCatalog(catalog);
             Assert.That(report.Errors, Is.Empty);
 
             BoardModel board = LevelBoardFactory.Create(level, level.boardSeed);
@@ -162,7 +162,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 }
             };
 
-            LevelValidationReport report = LevelDataValidator.ValidateCatalog(catalog);
+            LevelValidationReport report = LevelDataValidator.ValidateCampaignCatalog(catalog);
             Assert.That(report.Errors, Is.Empty);
         }
 
@@ -187,7 +187,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 }
             };
 
-            LevelValidationReport report = LevelDataValidator.ValidateCatalog(catalog);
+            LevelValidationReport report = LevelDataValidator.ValidateCampaignCatalog(catalog);
             Assert.That(report.IsValid, Is.False);
             Assert.That(
                 string.Join("\n", report.Errors),
@@ -356,7 +356,7 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(StoryService.ShouldShowDialogueAfterVictory(), Is.True);
             Assert.That(StoryService.ShouldShowChapterComplete(), Is.False);
             Assert.That(StoryService.TryBeginPostVictoryDialogue(), Is.True);
-            Assert.That(StoryService.ActiveSceneId, Is.EqualTo("chapter01.finale"));
+            Assert.That(StoryService.ActiveSceneId, Is.EqualTo("campaign.chapter01.hearth_secured"));
 
             StoryAdvanceResult result;
             do
@@ -365,8 +365,9 @@ namespace LegendsOfRus.Tests.PlayMode
             }
             while (result == StoryAdvanceResult.MoreLines);
 
-            Assert.That(result, Is.EqualTo(StoryAdvanceResult.ChapterComplete));
-            Assert.That(StoryService.ShouldShowChapterComplete(), Is.True);
+            Assert.That(result, Is.EqualTo(StoryAdvanceResult.ChapterMap));
+            Assert.That(StoryService.ShouldShowChapterComplete(), Is.False);
+            Assert.That(state.Save.highestUnlockedLevel, Is.EqualTo(11));
         }
 
         void SnapshotAndClearSaveJournal()

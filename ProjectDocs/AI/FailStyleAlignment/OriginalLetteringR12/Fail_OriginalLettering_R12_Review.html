@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Failure original Russian lettering R12</title>
+  <style>
+    body{margin:0;background:#08111a;color:#ead7ac;font:16px Georgia,serif}
+    main{max-width:740px;margin:24px auto;padding:0 16px}
+    h1{font-size:24px}
+    p{line-height:1.5}
+    a{color:#ebc67b}
+    nav{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0}
+    select{box-sizing:border-box;width:100%;padding:12px;background:#122333;color:#f7e6bd;border:1px solid #9b7943;border-radius:4px;font:inherit}
+    figure{margin:18px auto;max-width:520px}
+    img{display:block;width:100%;height:auto}
+    figcaption{font-size:14px;margin:10px 0;line-height:1.5}
+  </style>
+</head>
+<body><main>
+<h1>Page 09 — «Поражение» · R12 — original Russian lettering</h1>
+<p>Original Russian text stays with the title, retry button and each booster nameplate, preserving its source font, shading and placement. English uses the existing live labels; quantities, goals, price and availability stay live. The no-failed-round state retains its truthful live subtitle.</p>
+<nav><a href="ImplementationReport.md">Implementation and checks</a><a href="ReferenceComparison.md">Reference comparison</a><a href="QA/SourceAudit.json">Preservation check</a><a href="../../DevelopmentSchedule.md">Feature schedule</a></nav>
+<label for="capture">Portrait</label><select id="capture">
+<option value="UnityVerification/Fail/Fail_941x1672_RU.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Reference size · RU</option>
+<option value="UnityVerification/Fail/Fail_941x1672_EN.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Reference size · EN</option>
+<option value="UnityVerification/Fail/Fail_576x1280_safe_RU.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">576 × 1280 safe area · RU</option>
+<option value="UnityVerification/Fail/Fail_1080x2400_safe_RU.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">1080 × 2400 safe area · RU</option>
+<option value="UnityVerification/Fail/Fail_Level10_ThreeGoals_RU.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Three unfinished goals · RU</option>
+<option value="UnityVerification/Fail/Fail_Level10_ThreeGoals_576_EN.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Three goals · 576 px · EN</option>
+<option value="UnityVerification/Fail/Fail_CompletedGoalFiltered_EN.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Completed goal filtered · EN</option>
+<option value="UnityVerification/Fail/Fail_BoosterGuide_RU.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">Booster explanation · RU</option>
+<option value="UnityVerification/Fail/Fail_NoResult_EN.png" data-note="Actual Unity 6000.5.9f1 Play Mode capture · simulated display/safe area · isolated test save">No failed round · EN</option>
+<option value="UnityVerification/Fail/Fail_NoResult_RU.png" data-note="Actual Unity capture: live Russian no-result subtitle, no baked out-of-moves claim">No failed round · RU</option>
+<option value="../SourceExtractionR11/UnityVerification/Fail/Fail_941x1672_RU.png" data-note="Earlier R11 actual Unity capture">Before · R11 RU</option>
+<option value="../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Fail.png" data-note="Original design reference only; not runtime UI">Original reference</option>
+</select><figure><img id="portrait" src="UnityVerification/Fail/Fail_941x1672_RU.png" alt="Failure screen, Russian"><figcaption id="note">Actual Unity 6000.5.9f1 capture</figcaption></figure>
+<p>One portrait at a time. Runtime uses isolated language-specific sprites, live dynamic text and native controls; no full-screen reference or scenery-contaminated rectangles. Six new assets reuse existing masks; no new Scenario generation or credits. The two offers are disabled design controls, not active transactions. Their labels are live/localizable, and the price remains unknown. Retry and chapter-map actions work. FAIL-CONT-01 will connect these designs to real continuation after the UI stage. Visual acceptance and exact reference fidelity are not assumed. No physical Android test.</p>
+</main><script>
+const select=document.querySelector('#capture');
+function show(){const item=select.selectedOptions[0];document.querySelector('#portrait').src=item.value;document.querySelector('#portrait').alt=item.textContent;document.querySelector('#note').textContent=item.dataset.note;}
+select.addEventListener('change',show);show();
+</script></body></html>

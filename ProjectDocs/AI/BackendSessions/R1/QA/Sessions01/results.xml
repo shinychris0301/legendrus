@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="20" result="Failed(Child)" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 23:56:11Z" end-time="2026-09-29 23:56:13Z" duration="1.3806622">
+  <test-suite type="TestSuite" id="2468" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1321" result="Failed" site="Child" start-time="2026-09-29 23:56:11Z" end-time="2026-09-29 23:56:13Z" duration="1.380662" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2462" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="1.336348" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1095016" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2463" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="1.327336" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2464" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="1.311512" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2465" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="532" result="Failed" site="Child" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="1.294921" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1886" name="BackendSessionPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" testcasecount="20" result="Failed" site="Child" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="1.270265" total="20" passed="17" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1887" name="BootstrapPersistsBeforeRequestAndKeepsWalletSeparate" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.BootstrapPersistsBeforeRequestAndKeepsWalletSeparate" methodname="BootstrapPersistsBeforeRequestAndKeepsWalletSeparate" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1085075130" result="Failed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.081950" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: null
+  But was:  <string.Empty>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests+<BootstrapPersistsBeforeRequestAndKeepsWalletSeparate>d__8.MoveNext () [0x00161] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/BackendSessionPlayModeTests.cs:47
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1906" name="BootstrapServiceIsPresentButDoesNotConnectOrChangeLogin" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.BootstrapServiceIsPresentButDoesNotConnectOrChangeLogin" methodname="BootstrapServiceIsPresentButDoesNotConnectOrChangeLogin" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1922434509" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.034207" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1899" name="ConcurrentReadReturnsBusyAndUsesOneBootstrap" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.ConcurrentReadReturnsBusyAndUsesOneBootstrap" methodname="ConcurrentReadReturnsBusyAndUsesOneBootstrap" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="10705942" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.083411" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1897" name="ExpiredRecoveredBootstrapRenewsBeforeReadingWallet" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.ExpiredRecoveredBootstrapRenewsBeforeReadingWallet" methodname="ExpiredRecoveredBootstrapRenewsBeforeReadingWallet" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1372418049" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.083374" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1891" name="FailedBootstrapCommitRecoversSameIdentity" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.FailedBootstrapCommitRecoversSameIdentity" methodname="FailedBootstrapCommitRecoversSameIdentity" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1032627054" result="Failed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.049991" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: null
+  But was:  <string.Empty>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests+<FailedBootstrapCommitRecoversSameIdentity>d__12.MoveNext () [0x00104] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/BackendSessionPlayModeTests.cs:76
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1888" name="FailedCredentialLoadNeverCreatesNewAccount" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.FailedCredentialLoadNeverCreatesNewAccount" methodname="FailedCredentialLoadNeverCreatesNewAccount" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="696110149" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.049568" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1889" name="FailedPreRequestWriteMakesNoNetworkRequest" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.FailedPreRequestWriteMakesNoNetworkRequest" methodname="FailedPreRequestWriteMakesNoNetworkRequest" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1173841205" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.049971" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1898" name="InvalidPayloadAndWalletRejected" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.InvalidPayloadAndWalletRejected" methodname="InvalidPayloadAndWalletRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1837230202" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.182951" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1890" name="LostBootstrapResponseReusesExactRequestAfterClientRestart" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.LostBootstrapResponseReusesExactRequestAfterClientRestart" methodname="LostBootstrapResponseReusesExactRequestAfterClientRestart" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="731860116" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.083311" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1892" name="LostRefreshAndFailedCommitKeepDurablePendingRotation" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.LostRefreshAndFailedCommitKeepDurablePendingRotation" methodname="LostRefreshAndFailedCommitKeepDurablePendingRotation" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1581843583" result="Failed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.083592" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: null
+  But was:  <string.Empty>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests+<LostRefreshAndFailedCommitKeepDurablePendingRotation>d__13.MoveNext () [0x00251] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/BackendSessionPlayModeTests.cs:89
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1894" name="MismatchedIdentityCannotReplaceStoredPlayer" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.MismatchedIdentityCannotReplaceStoredPlayer" methodname="MismatchedIdentityCannotReplaceStoredPlayer" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="309792307" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.049565" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1895" name="OriginAndSchemaMismatchFailBeforeNetwork" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.OriginAndSchemaMismatchFailBeforeNetwork" methodname="OriginAndSchemaMismatchFailBeforeNetwork" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="433652035" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:12Z" duration="0.066401" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1907" name="RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation" methodname="RealHttpBootstrapAndRefreshKeepIdentityAcrossClientRecreation" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1370844657" result="Passed" start-time="2026-09-29 23:56:12Z" end-time="2026-09-29 23:56:13Z" duration="0.181149" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1893" name="RejectedRefreshDoesNotFallbackToNewGuest" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.RejectedRefreshDoesNotFallbackToNewGuest" methodname="RejectedRefreshDoesNotFallbackToNewGuest" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="25544444" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.049735" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1896" name="UnauthorizedWalletRenewsOnceWithoutChangingIdentity" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnauthorizedWalletRenewsOnceWithoutChangingIdentity" methodname="UnauthorizedWalletRenewsOnceWithoutChangingIdentity" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="396197995" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.100023" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1905" name="UnsafeEndpointRejected" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.022609" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1900" name="UnsafeEndpointRejected(&quot;http://backend.example.test&quot;)" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected(&quot;http://backend.example.test&quot;)" methodname="UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1719500619" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.004504" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1901" name="UnsafeEndpointRejected(&quot;https://user:password@backend.example.test&quot;)" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected(&quot;https://user:password@backend.example.test&quot;)" methodname="UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="1708650268" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.000226" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1902" name="UnsafeEndpointRejected(&quot;https://backend.example.test/path&quot;)" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected(&quot;https://backend.example.test/path&quot;)" methodname="UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="124157931" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.000117" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1903" name="UnsafeEndpointRejected(&quot;https://backend.example.test/?query=1&quot;)" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected(&quot;https://backend.example.test/?query=1&quot;)" methodname="UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="2113714509" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.000072" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1904" name="UnsafeEndpointRejected(&quot;https://backend.example.test/#fragment&quot;)" fullname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests.UnsafeEndpointRejected(&quot;https://backend.example.test/#fragment&quot;)" methodname="UnsafeEndpointRejected" classname="LegendsOfRus.Tests.PlayMode.BackendSessionPlayModeTests" runstate="Runnable" seed="173873300" result="Passed" start-time="2026-09-29 23:56:13Z" end-time="2026-09-29 23:56:13Z" duration="0.000057" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/BackendSessions/R1/QA/Sessions01/results.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

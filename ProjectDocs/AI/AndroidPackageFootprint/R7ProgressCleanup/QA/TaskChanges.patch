@@ -1,0 +1,300 @@
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterMap.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/ChapterMap.prefab
+@@ -14682,7 +14682,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -2051,7 +2051,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -335,7 +335,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 50ba28375a9a4edb1be246997041faea, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 3
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -410,7 +410,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -807,7 +807,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -6252,7 +6252,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 50ba28375a9a4edb1be246997041faea, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 3
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Home.prefab
+@@ -4441,7 +4441,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+@@ -6834,7 +6834,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 50ba28375a9a4edb1be246997041faea, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 3
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -7901,7 +7901,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/PreLevel.prefab
+@@ -1306,7 +1306,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Resources/ProductionUI/Pages/WorldMap.prefab
++++ b/Assets/LegendsOfRus/Resources/ProductionUI/Pages/WorldMap.prefab
+@@ -24424,7 +24424,7 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 4585318c279622051a6d988eb18e05e3, type: 3}
++  m_Sprite: {fileID: 0}
+   m_Type: 0
+   m_PreserveAspect: 1
+   m_FillCenter: 1
+--- a/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
++++ b/Assets/LegendsOfRus/Scripts/Editor/LockedDesignImporter.cs
+@@ -11,6 +11,14 @@
+             if (!assetPath.StartsWith("Assets/LegendsOfRus/")) return;
+ 
+             var ti = (TextureImporter)assetImporter;
++            // Archived controls retain their original import contract and GUIDs, outside Resources.
++            if (assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_fill.png" ||
++                assetPath == "Assets/LegendsOfRus/Art/ReferenceOnly/RetiredProgress/progress_frame.png")
++            {
++                ConfigureHomeAlignmentTexture(ti, System.IO.Path.GetFileNameWithoutExtension(assetPath));
++                return;
++            }
++
+             ti.textureType = TextureImporterType.Sprite;
+             ti.spriteImportMode = SpriteImportMode.Single;
+             ti.alphaIsTransparency = true;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
+@@ -7,6 +7,10 @@
+     {
+         public static void Apply(ProductionGameplayView v)
+         {
++            // Keep hidden Image components: RefreshState still uses their fillAmount values.
++            v.GoalProgress.sprite = null; v.StarProgress.sprite = null;
++            v.Hud.Find("GoalProgressFrame").GetComponent<Image>().sprite = null;
++            v.Hud.Find("StarProgressFrame").GetComponent<Image>().sprite = null;
+             // Retain old objects and IDs; the new composition uses independent panel sprites.
+             v.Hud.Find("HudPanel").gameObject.SetActive(false);
+             Image oldScore=v.Footer.Find("ScorePanel").GetComponent<Image>();oldScore.enabled=false;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
+@@ -27,10 +27,10 @@
+             Art(v.Hud,"IvanCrest",ProductionGameplayArt.Load("shield"),82,173,62,82).preserveAspect=true;
+             v.HeroName=Label(v,v.Hud,"HeroName","Иван",228,22,155,45,33);v.HeroName.alignment=TextAnchor.MiddleLeft;
+             v.LevelText=Label(v,v.Hud,"SelectedLevel","Уровень 1",228,70,165,38,23);v.LevelText.alignment=TextAnchor.MiddleLeft;
+-            Art(v.Hud,"GoalProgressFrame",Home("progress_frame"),228,111,175,22);
+-            v.GoalProgress=Art(v.Hud,"GoalProgress",Home("progress_fill"),235,117,161,10);Fill(v.GoalProgress);
+-            Art(v.Hud,"StarProgressFrame",Home("progress_frame"),405,47,179,24);
+-            v.StarProgress=Art(v.Hud,"StarProgress",Home("progress_fill"),412,53,165,12);Fill(v.StarProgress);
++            Art(v.Hud,"GoalProgressFrame",null,228,111,175,22);
++            v.GoalProgress=Art(v.Hud,"GoalProgress",null,235,117,161,10);Fill(v.GoalProgress);
++            Art(v.Hud,"StarProgressFrame",null,405,47,179,24);
++            v.StarProgress=Art(v.Hud,"StarProgress",null,412,53,165,12);Fill(v.StarProgress);
+             v.Stars=new ProductionWorldMapGraphic[3];
+             for(int i=0;i<3;i++){v.Stars[i]=Rect(v.Hud,"Star_"+i,395+i*76,26,47,47).gameObject.AddComponent<ProductionWorldMapGraphic>();v.Stars[i].Kind=WorldMapGraphicKind.Star;v.Stars[i].raycastTarget=false;}
+             Art(v.Hud,"MovesMedallion",Resources.Load<Sprite>(ProductionChapterMapRuntime.ArtRoot+"node"),371,72,240,220);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeRuntime.cs
+@@ -24,7 +24,7 @@
+             "nav_characters_generated", "mail_medallion_generated", "reward_medallion_generated",
+             "home_hero_firebird", "home_logo", "home_play_button", "avatar_portrait", "hud_frame", "avatar_ring",
+             "resource_capsule", "quest_panel", "coin_icon", "gems_icon", "energy_icon", "settings_medallion",
+-            "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
++            "resource_plus", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
+             "home_map_foliage"
+         };
+         static readonly string[] TextureKeys = Array.ConvertAll(ProductionHomeSourceComposition.Names,
+@@ -36,7 +36,7 @@
+         {
+             ProductionHomeView existing = root.GetComponent<ProductionHomeView>();
+             ProductionHomeLayout oldLayout = root.GetComponent<ProductionHomeLayout>();
+-            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) return;
++            if (existing != null && existing.HasRequiredBindings && oldLayout != null && oldLayout.HasRequiredBindings) { ClearDormantProgress(existing); return; }
+             if (root.Find(ContentName) != null)
+                 throw new InvalidOperationException("Home aligned bindings are incomplete; repair the existing Home prefab outside Play Mode.");
+             if (loadSprite == null) loadSprite = Resources.Load<Sprite>;
+@@ -149,7 +149,7 @@
+             AlignReferencePortrait(view, sprites["avatar_portrait"]);
+             SetLabel(view.HeroName, 172, 28, 145, 42, 34, TextAnchor.MiddleLeft);
+             SetLabel(view.LevelText, 172, 71, 145, 29, 24, TextAnchor.MiddleLeft);
+-            view.ProfileProgressFrame = EnsureArt(profile, "ProfileProgressFrame", sprites["progress_frame"], 169, 87, 164, 54.6667f);
++            view.ProfileProgressFrame = EnsureArt(profile, "ProfileProgressFrame", null, 169, 87, 164, 54.6667f);
+             view.ProfileProgressText = EnsureLabel(view.ProfileProgressFrame.rectTransform, "UnavailableExperience", "—", 24, 17, 116, 20, 18, view.Typography);
+             EnsureBacking(content, "HudOpaqueNavyBacking", 5, 5, 931, 117, 0, hud.GetSiblingIndex());
+             layout.HudBacking = content.Find("HudOpaqueNavyBacking") as RectTransform;
+@@ -230,10 +230,10 @@
+             view.QuestText.fontStyle = FontStyle.Bold;
+             view.QuestText.color = new Color32(231, 223, 197, 255);
+             RectTransform quest = view.QuestFrame.rectTransform;
+-            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", sprites["progress_frame"], 224 - questX, 67 - questY, 377, 126);
++            view.QuestProgressFrame = EnsureArt(quest, "QuestProgressFrame", null, 224 - questX, 67 - questY, 377, 126);
+             EnsureBacking(quest, "ProgressOpaqueTroughBacking", 253 - questX, 118 - questY, 320, 20, 3,
+                 view.QuestProgressFrame.transform.GetSiblingIndex(), new Color32(19, 12, 4, 255));
+-            view.QuestProgressFill = EnsureArt(view.QuestProgressFrame.rectTransform, "MeasuredFill", sprites["progress_fill"], 17, 6, 343, 114.3333f);
++            view.QuestProgressFill = EnsureArt(view.QuestProgressFrame.rectTransform, "MeasuredFill", null, 17, 6, 343, 114.3333f);
+             view.QuestProgressFill.preserveAspect = false; view.QuestProgressFill.type = Image.Type.Filled;
+             view.QuestProgressFill.fillMethod = Image.FillMethod.Horizontal; view.QuestProgressFill.fillOrigin = 0;
+             view.QuestProgressFill.fillAmount = 0; view.QuestProgressFill.gameObject.SetActive(false);
+@@ -424,6 +424,14 @@
+             SetArt(image, sprite, (size - artSize) * .5f, gift ? -2 : 2, artSize, artSize);
+             button.targetGraphic = image;
+         }
++        // Retain the serialized containers and live text bindings, without loading retired art.
++        internal static void ClearDormantProgress(ProductionHomeView view)
++        {
++            if (view.ProfileProgressFrame != null) view.ProfileProgressFrame.sprite = null;
++            if (view.QuestProgressFrame != null) view.QuestProgressFrame.sprite = null;
++            if (view.QuestProgressFill != null) view.QuestProgressFill.sprite = null;
++        }
++
+         static Dictionary<string, Sprite> LoadSprites(Func<string, Sprite> loadSprite)
+         {
+             var result = new Dictionary<string, Sprite>();
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeSourceComposition.cs
+@@ -22,6 +22,7 @@
+         };
+         public static void Apply(ProductionHomeView v)
+         {
++            ProductionHomeRuntime.ClearDormantProgress(v);
+             var layout = v.GetComponent<ProductionHomeLayout>();
+             var content = layout.Content;
+             // Retain serialized objects and native action ownership while retiring the old approximation.
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionHomeView.cs
+@@ -144,8 +144,8 @@
+             PlayText.GetComponent<ProductionHomeGoldText>() != null && PlayText.GetComponent<ProductionHomeGoldText>().enabled &&
+             PlayText.GetComponent<ProductionHomeGoldText>().BeveledFace &&
+             PlayText.material != null && PlayText.material.shader.name == "LegendsOfRus/UI/HomePlayGold" &&
+-            HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
+-            HasArtwork(QuestProgressFrame, "progress_frame") && HasArtwork(QuestProgressFill, "progress_fill") &&
++            ProfileProgressFrame != null && ProfileProgressFrame.sprite == null && ProfileProgressText != null &&
++            QuestProgressFrame != null && QuestProgressFrame.sprite == null && QuestProgressFill != null && QuestProgressFill.sprite == null &&
+             HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
+             HasButtonArtwork(GoldPlusButton, "plus") && HasButtonArtwork(GemsPlusButton, "plus") &&
+             HasButtonArtwork(EnergyPlusButton, "plus") && QuestProgressText != null &&
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionPlayerHeader.cs
+@@ -278,6 +278,9 @@
+         }
+         public void ApplyPresentation()
+         {
++            // Old cloned headers keep this container for serialized identity only.
++            var legacyProgress = Profile.transform.Find("ProfileProgressFrame");
++            if (legacyProgress != null) legacyProgress.GetComponent<Image>().sprite = null;
+             Place((RectTransform)transform,transform.parent,0,0,941,140);
+             Art(Backing,transform,"source_header",0,0,941,140);Backing.transform.SetAsFirstSibling();
+             Place((RectTransform)Profile.transform,transform,0,0,337,140);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionWorldMapRuntime.cs
+@@ -20,6 +20,9 @@
+ 
+         public static void BuildInto(RectTransform root)
+         {
++            // The source composition retains its original Home HUD as an inactive child.
++            var legacyProgress = root.Find(ContentName + "/WorldMapHud/ProfileButton/ProfileProgressFrame");
++            if (legacyProgress != null) legacyProgress.GetComponent<Image>().sprite = null;
+             var existing = root.GetComponent<ProductionWorldMapView>();
+             if (existing != null && existing.HasRequiredBindings) { existing.RefreshContent(); AlignPresentation(existing); return; }
+             if(existing != null && existing.Content != null && !Application.isPlaying)
+--- a/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -631,6 +631,17 @@
+             Assert.That(board.width/board.height,Is.EqualTo(808f/748).Within(.001f),"The 8×7 board uses slightly taller cells to match the reference proportions.");
+             Assert.That(board.xMin,Is.GreaterThanOrEqualTo(safe.xMin-1));Assert.That(board.xMax,Is.LessThanOrEqualTo(safe.xMax+1));
+             Assert.That(board.yMin,Is.GreaterThanOrEqualTo(safe.yMin-1));Assert.That(board.yMax,Is.LessThanOrEqualTo(safe.yMax+1));
++            Assert.That(view.GoalProgress.sprite,Is.Null);Assert.That(view.StarProgress.sprite,Is.Null);
++            Assert.That(view.GoalProgress.gameObject.activeSelf,Is.False);Assert.That(view.StarProgress.gameObject.activeSelf,Is.False);
++            float expectedGoalProgress=0;
++            for(int i=0;i<view.Board.GoalCount;i++)
++            {
++                var goal=view.Board.GetGoalSlot(i);
++                expectedGoalProgress+=1-Mathf.Clamp01(goal.Remaining/(float)goal.Target);
++            }
++            Assert.That(view.GoalProgress.fillAmount,Is.EqualTo(expectedGoalProgress/view.Board.GoalCount).Within(.0001f));
++            var targetScore=view.Board.CurrentLevel.starScoreThresholds[2];
++            Assert.That(view.StarProgress.fillAmount,Is.EqualTo(Mathf.Clamp01(view.Board.Score/(float)targetScore)).Within(.0001f));
+             Assert.That(view.ScoreMeter.Fraction,Is.EqualTo(view.StarProgress.fillAmount).Within(.0001f));
+             Assert.That(view.ScoreMeter.canvasRenderer.GetMesh().vertexCount,Is.GreaterThanOrEqualTo(18));
+             VerifyBoosterCards(view,camera,safe);
+--- a/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
+@@ -60,8 +60,14 @@
+             {
+                 Assert.That(path,Does.Not.Contain("ReferenceOnly"));Assert.That(path,Does.Not.Contain("DesignScreens"));Assert.That(path,Does.Not.Contain("/Assets/Fix01/"));
+             }
++            var retired=new[]{view.GoalProgress,view.StarProgress,
++                view.Hud.Find("GoalProgressFrame").GetComponent<Image>(),view.Hud.Find("StarProgressFrame").GetComponent<Image>()};
+             foreach(var image in prefab.GetComponentsInChildren<Image>(true))
+-                if(!(image is ProductionGameplayCell))Assert.That(image.sprite,Is.Not.Null,image.name);
++            {
++                if(retired.Contains(image))
++                { Assert.That(image.sprite,Is.Null,image.name);Assert.That(image.gameObject.activeSelf,Is.False,image.name); }
++                else if(!(image is ProductionGameplayCell))Assert.That(image.sprite,Is.Not.Null,image.name);
++            }
+             var clip=prefab.transform.Find(ProductionGameplayRuntime.ContentName+"/GameplayHud/PortraitClip");Assert.That(clip.GetComponent<Mask>(),Is.Not.Null);
+         }
+         [Test] public void SourceStarsUseDistinctTexturesAndKeepOtherPagesNative()

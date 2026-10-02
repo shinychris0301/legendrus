@@ -6,7 +6,7 @@
   "art": [
     {
       "name": "BackgroundEnvironment",
-      "file": "ProductionUI/HomeAligned/home_environment_generated.png",
+      "file": "ProductionUI/SplashReferenceAligned/clean_environment.png",
       "rect": [
         0,
         0,
@@ -15,9 +15,9 @@
       ],
       "fadeBottom": 0,
       "color": [
-        0.9215686274509803,
-        0.9215686274509803,
-        0.9215686274509803,
+        1,
+        1,
+        1,
         1
       ]
     },
@@ -36,22 +36,23 @@
         0.9490196078431372,
         0.9490196078431372,
         1
-      ]
+      ],
+      "hidden": true
     },
     {
       "name": "Ivan",
-      "file": "ProductionUI/FrontEndHomeAligned/ivan_splash_dusk.png",
+      "file": "ProductionUI/SplashReferenceAligned/source_ivan_firebird.png",
       "rect": [
-        -203,
-        421,
-        738,
-        1107
+        16,
+        644,
+        910,
+        1010
       ],
-      "fadeBottom": 0.13,
+      "fadeBottom": 0,
       "color": [
-        0.9490196078431372,
-        0.9490196078431372,
-        0.9490196078431372,
+        1,
+        1,
+        1,
         1
       ]
     },
@@ -70,16 +71,40 @@
         0.9490196078431372,
         0.9490196078431372,
         1
-      ]
+      ],
+      "hidden": true
     },
     {
       "name": "Logo",
-      "file": "ProductionUI/HomeAligned/home_logo.png",
+      "file": "ProductionUI/SplashReferenceAligned/source_logo.png",
       "rect": [
-        284,
-        70,
-        640,
-        440.92653871608206
+        66,
+        88,
+        806,
+        601
+      ],
+      "fadeBottom": 0,
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "SourceOuterFrame",
+      "file": "ProductionUI/SplashReferenceAligned/source_outer_frame.png",
+      "rect": [
+        0,
+        0,
+        941,
+        1672
+      ],
+      "color": [
+        1,
+        1,
+        1,
+        1
       ],
       "fadeBottom": 0
     }
@@ -99,22 +124,23 @@
         -3,
         248,
         82.67
-      ]
+      ],
+      "hidden": true
     },
     {
       "name": "StartButton",
-      "file": "ProductionUI/HomeAligned/home_play_button.png",
+      "file": "ProductionUI/SplashReferenceAligned/source_start_lettered_ru.png",
       "rect": [
-        171,
-        1120,
-        604,
-        202
+        159,
+        1356,
+        629,
+        198
       ],
       "artRect": [
-        171,
-        1087,
-        604,
-        279.7473684210526
+        159,
+        1356,
+        629,
+        198
       ]
     },
     {
@@ -131,7 +157,8 @@
         1344.75,
         126.5,
         126.5
-      ]
+      ],
+      "hidden": true
     },
     {
       "name": "AccountButton",
@@ -147,7 +174,8 @@
         1344.75,
         126.5,
         126.5
-      ]
+      ],
+      "hidden": true
     },
     {
       "name": "HelpButton",
@@ -163,7 +191,8 @@
         1344.75,
         126.5,
         126.5
-      ]
+      ],
+      "hidden": true
     }
   ],
   "texts": [
@@ -171,15 +200,15 @@
       "name": "VersionText",
       "parent": "",
       "rect": [
-        24,
-        19,
-        155,
-        34
+        414,
+        1570,
+        113,
+        38
       ],
       "size": 26,
       "text": "v1.20.0",
       "startFont": false,
-      "alignment": 3,
+      "alignment": 4,
       "color": [
         1,
         0.944,
@@ -194,7 +223,7 @@
         0
       ],
       "centerVertically": true,
-      "centerHorizontally": false,
+      "centerHorizontally": true,
       "pixelSnap": true
     },
     {
@@ -225,19 +254,20 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     },
     {
       "name": "StartText",
       "parent": "StartButton",
       "rect": [
-        277,
-        1172,
-        392,
-        106
+        229,
+        1435,
+        493,
+        49
       ],
-      "size": 80,
-      "text": "Начать",
+      "size": 31,
+      "text": "НАЖМИТЕ, ЧТОБЫ НАЧАТЬ",
       "startFont": true,
       "alignment": 4,
       "color": [
@@ -246,7 +276,7 @@
         0.39215686274509803,
         1
       ],
-      "fontStyle": 1,
+      "fontStyle": 0,
       "shadow": true,
       "rasterScale": 2,
       "opticalOffset": [
@@ -285,7 +315,8 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     },
     {
       "name": "AccountText",
@@ -315,7 +346,8 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     },
     {
       "name": "HelpText",
@@ -345,7 +377,8 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     },
     {
       "name": "TaglineText",
@@ -375,7 +408,8 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     },
     {
       "name": "LegalText",
@@ -405,10 +439,11 @@
       ],
       "centerVertically": true,
       "centerHorizontally": true,
-      "pixelSnap": true
+      "pixelSnap": true,
+      "hidden": true
     }
   ],
-  "implementationRevision": "HomeStyleAlignment-R1",
+  "implementationRevision": "SplashOriginalLettering-R2",
   "footerShade": {
     "rect": [
       0,
@@ -417,10 +452,10 @@
       366
     ],
     "color": [
-      0.016,
-      0.039,
-      0.082,
-      0.62
+      0,
+      0,
+      0,
+      0
     ]
   }
 }

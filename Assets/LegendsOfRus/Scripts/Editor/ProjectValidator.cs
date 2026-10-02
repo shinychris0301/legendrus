@@ -207,6 +207,9 @@ namespace LegendsOfRus.Editor
                 }
             }
 
+            try { ActiveCampaignContent.Load(forceReload: true); }
+            catch (System.Exception exception) { missing.Add("Active campaign: " + exception.Message); }
+
             if (missing.Count == 0)
                 Debug.Log(
                     "Legends of Rus v1.14 Step 4 project-structure and static " +

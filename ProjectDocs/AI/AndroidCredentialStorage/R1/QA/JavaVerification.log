@@ -1,0 +1,24 @@
+warning: [options] bootstrap class path not set in conjunction with -source 8
+1 warning
+
+warning: [options] bootstrap class path not set in conjunction with -source 8
+1 warning
+
+PASS pristine_read_creates_no_key
+PASS ciphertext_round_trip_and_reopen
+PASS fresh_nonce_every_write
+PASS tampered_ciphertext_rejected_without_overwrite
+PASS tampered_header_rejected
+PASS truncated_and_oversized_records_rejected
+PASS package_domain_bound_by_gcm
+PASS wrong_key_rejected
+PASS missing_key_never_regenerated
+PASS missing_record_does_not_create_new_identity
+PASS failed_first_write_is_unavailable_not_empty
+PASS failure_before_commit_preserves_previous
+PASS failure_after_commit_preserves_retryable_pending
+PASS silent_write_failure_detected_by_readback
+PASS payload_bounds_before_key_creation
+PASS maximum_payload_round_trip
+PASS authenticated_tag_tamper_rejected
+Passed 17 host tests; Android device execution not performed.

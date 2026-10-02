@@ -1,0 +1,1081 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -85,8 +85,8 @@
+   screenId: 5
+   referenceMatchVersion: v1.20-step03.3R3
+   referenceSha256: d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800
+-  proofScope: gameplay-alignment-r1-user-atlases-live-board-and-hud
+-  productionComponentCount: 6
++  proofScope: gameplay-frame-polish-r2-native-ornament-live-board-and-hud
++  productionComponentCount: 7
+   fullScreenScreenshotDependency: 0
+   preservesLiveGameplayBoard: 1
+   overlaysLiveGameplayForPause: 0
+@@ -102,7 +102,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 1
++  Revision: 2
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+   Hud: {fileID: 8217009214204697501}
+@@ -237,6 +237,8 @@
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
+   FrameOnly: 1
++  InsetPanel: 0
++  BronzeSurface: 0
+ --- !u!1 &72526431287213204
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -415,8 +417,9 @@
+   m_LocalScale: {x: 1, y: 1, z: 1}
+   m_ConstrainProportionsScale: 0
+   m_Children:
++  - {fileID: 4570122687412065697}
++  - {fileID: 3198361034854920477}
+   - {fileID: 2085298007730886872}
+-  - {fileID: 3198361034854920477}
+   m_Father: {fileID: 9173441830046244190}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+@@ -644,6 +647,7 @@
+   - component: {fileID: 6894187107335854941}
+   - component: {fileID: 3667850655957278971}
+   - component: {fileID: 4218575239078500843}
++  - component: {fileID: 5851207604855051405}
+   m_Layer: 5
+   m_Name: Star_1
+   m_TagString: Untagged
+@@ -700,6 +704,18 @@
+       m_Calls: []
+   Kind: 1
+   Dimmed: 1
++--- !u!114 &5851207604855051405
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 1104190245925188083}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 4c5b61a32dda433e8591e1b055872201, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStarPolish
+ --- !u!1 &1510069999573144126
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -736,7 +752,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 401, y: -117}
++  m_AnchoredPosition: {x: 401, y: -108}
+   m_SizeDelta: {x: 360, y: 78}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1245608029100351506
+@@ -1527,6 +1543,7 @@
+   - component: {fileID: 8677890717523168164}
+   - component: {fileID: 3823148493678464184}
+   - component: {fileID: 1863727417906388802}
++  - component: {fileID: 1664107673818062517}
+   m_Layer: 5
+   m_Name: Star_0
+   m_TagString: Untagged
+@@ -1583,6 +1600,93 @@
+       m_Calls: []
+   Kind: 1
+   Dimmed: 1
++--- !u!114 &1664107673818062517
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2772060515633453950}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 4c5b61a32dda433e8591e1b055872201, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStarPolish
++--- !u!1 &2800308228014224441
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4570122687412065697}
++  - component: {fileID: 2356042256953010720}
++  - component: {fileID: 8429920429911035796}
++  m_Layer: 5
++  m_Name: BoardLacquer
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &4570122687412065697
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2800308228014224441}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 3917723589328396355}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 0, y: 0}
++  m_SizeDelta: {x: 786, y: 942}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &2356042256953010720
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2800308228014224441}
++  m_CullTransparentMesh: 1
++--- !u!114 &8429920429911035796
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 2800308228014224441}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 89ca29eb9ed0a9714bcb8fbaf98fa225, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
+ --- !u!1 &2837997110262006073
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -1687,6 +1791,7 @@
+   - {fileID: 3865632607170423115}
+   - {fileID: 1625340881803658204}
+   - {fileID: 8953668719317748886}
++  - {fileID: 5281039190436704942}
+   - {fileID: 321161227473910148}
+   - {fileID: 2820033030082699044}
+   m_Father: {fileID: 9173441830046244190}
+@@ -2137,7 +2242,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 400, y: -145}
++  m_AnchoredPosition: {x: 400, y: -137}
+   m_SizeDelta: {x: 364, y: 194}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8770870471706732737
+@@ -2295,6 +2400,7 @@
+   - component: {fileID: 8982005165721925474}
+   - component: {fileID: 4761574962422593523}
+   - component: {fileID: 112157486018559703}
++  - component: {fileID: 2122361073159621067}
+   m_Layer: 5
+   m_Name: Star_2
+   m_TagString: Untagged
+@@ -2351,6 +2457,18 @@
+       m_Calls: []
+   Kind: 1
+   Dimmed: 1
++--- !u!114 &2122361073159621067
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3746738279053142945}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 4c5b61a32dda433e8591e1b055872201, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayStarPolish
+ --- !u!1 &4434765733803639987
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -2818,7 +2936,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 260, y: -257}
++  m_AnchoredPosition: {x: 260, y: -248}
+   m_SizeDelta: {x: 842, y: 124}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1920259074547614588
+@@ -3613,8 +3731,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 371, y: -72}
+-  m_SizeDelta: {x: 240, y: 220}
++  m_AnchoredPosition: {x: 365, y: -70}
++  m_SizeDelta: {x: 252, y: 216}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8123673172259941983
+ CanvasRenderer:
+@@ -3644,9 +3762,9 @@
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 90a433b078c04b7f86e7a7381792e1de, type: 3}
++  m_Sprite: {fileID: 21300000, guid: e2867f97cb7d5cebc87c0b0d5833b55d, type: 3}
+   m_Type: 0
+-  m_PreserveAspect: 0
++  m_PreserveAspect: 1
+   m_FillCenter: 1
+   m_FillMethod: 4
+   m_FillAmount: 1
+@@ -3729,6 +3847,84 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &5971234860952059825
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5281039190436704942}
++  - component: {fileID: 8983224249732054671}
++  - component: {fileID: 4579620092337938792}
++  m_Layer: 5
++  m_Name: ScoreInset
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5281039190436704942
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5971234860952059825}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 5101551253853299248}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 184, y: -247}
++  m_SizeDelta: {x: 573, y: 65}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &8983224249732054671
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5971234860952059825}
++  m_CullTransparentMesh: 1
++--- !u!114 &4579620092337938792
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5971234860952059825}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: b0ff7bda264c2a4539a3aef2e06672a2, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayCell
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 0}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++  FrameOnly: 0
++  InsetPanel: 1
++  BronzeSurface: 1
+ --- !u!1 &6535895487988659186
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4423,6 +4619,8 @@
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
+   FrameOnly: 0
++  InsetPanel: 1
++  BronzeSurface: 0
+ --- !u!1 &8356209022218806649
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -4489,6 +4687,81 @@
+     m_PersistentCalls:
+       m_Calls: []
+   m_Sprite: {fileID: 21300000, guid: d4201cfb39ca23ca5aab644f0b6684fd, type: 3}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &8531671368383803605
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 1732326179906220576}
++  - component: {fileID: 4530728496300333825}
++  - component: {fileID: 5247423233301350120}
++  m_Layer: 5
++  m_Name: GoalLacquer
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &1732326179906220576
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8531671368383803605}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 8217009214204697501}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 627, y: -72}
++  m_SizeDelta: {x: 262, y: 118}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &4530728496300333825
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8531671368383803605}
++  m_CullTransparentMesh: 1
++--- !u!114 &5247423233301350120
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 8531671368383803605}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
++  m_RaycastTarget: 0
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 21300000, guid: 89ca29eb9ed0a9714bcb8fbaf98fa225, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+@@ -4603,10 +4876,10 @@
+   m_Children:
+   - {fileID: 1263600026867695768}
+   - {fileID: 2046308562972280413}
++  - {fileID: 8681459086211531613}
+   - {fileID: 5446839482811941757}
+-  - {fileID: 8681459086211531613}
++  - {fileID: 1552182209835045933}
+   - {fileID: 7013470336829781469}
+-  - {fileID: 1552182209835045933}
+   - {fileID: 2103061254545501734}
+   - {fileID: 6142832957684411750}
+   - {fileID: 2165671807438562337}
+@@ -4618,6 +4891,7 @@
+   - {fileID: 5546372066297179303}
+   - {fileID: 2025166198612947581}
+   - {fileID: 4509355948746218223}
++  - {fileID: 1732326179906220576}
+   - {fileID: 5961585591966638298}
+   - {fileID: 9049847966201723819}
+   - {fileID: 6640507850411923941}
+@@ -4731,7 +5005,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 305, y: -220}
++  m_AnchoredPosition: {x: 305, y: -214}
+   m_SizeDelta: {x: 662, y: 76}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7788360181983344087
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -496,7 +496,7 @@
+                 ProductionGameplayRuntime.BuildInto(rect);
+                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.Gameplay,
+                     "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800",
+-                    "gameplay-alignment-r1-user-atlases-live-board-and-hud",6,true,false);
++                    "gameplay-frame-polish-r2-native-ornament-live-board-and-hud",7,true,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
+             }
+             finally{PrefabUtility.UnloadPrefabContents(root);}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayArt.cs
+@@ -9,7 +9,7 @@
+     public static class ProductionGameplayArt
+     {
+         public const string Root="ProductionUI/GameplayAligned/";
+-        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color"};
++        public static readonly string[] Files={"environment","panel","chain","gems","boosters","obstacles","isolated_seapearl","isolated_feather","isolated_column","isolated_color","moves_frame","cell_lacquer"};
+         public readonly struct Region
+         {
+             public readonly string Sheet,Name;
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCell.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayCell.cs
+@@ -2,40 +2,101 @@
+ using UnityEngine.UI;
+ namespace LegendsOfRus
+ {
+-    /// <summary>A thin shared gold grid with a shaded lacquer face. Input remains on the full cell root.</summary>
++    /// <summary>Gameplay metal joints and recessed surfaces; input stays on the full cell root.</summary>
+     [RequireComponent(typeof(CanvasRenderer))]
+     public sealed class ProductionGameplayCell : Image
+     {
+-        public bool FrameOnly;
++        public bool FrameOnly, InsetPanel, BronzeSurface;
++        static readonly Color Light=new Color32(239,207,140,255),Gold=new Color32(186,136,65,255),Dark=new Color32(62,39,20,255);
+         protected override void OnPopulateMesh(VertexHelper vh)
+         {
+             vh.Clear();Rect r=GetPixelAdjustedRect();if(r.width<=0||r.height<=0)return;
+-            if(!FrameOnly)Quad(vh,r,new Color32(12,26,36,251),new Color32(3,10,17,251));
+-            float t=FrameOnly?4:1.1f;
+-            Border(vh,r,t,new Color32(82,49,17,255));
+-            r=Inset(r,t);Border(vh,r,FrameOnly?1.6f:.65f,new Color32(222,174,91,255));
+-            r=Inset(r,FrameOnly?1.6f:.65f);Border(vh,r,.7f,new Color32(42,25,13,255));
+-            if(!FrameOnly)
++            if(FrameOnly){BoardRim(vh,r);return;}
++            // Continuous independent lacquer lies under the translucent cell faces.
++            Quad(vh,r,BronzeSurface?new Color32(28,23,16,255):new Color32(12,24,31,115),
++                BronzeSurface?new Color32(12,12,10,255):new Color32(3,10,17,175));
++            Border(vh,r,1.15f,Dark);r=Inset(r,1.15f);Border(vh,r,.65f,Gold);
++            r=Inset(r,.65f);Border(vh,r,.55f,new Color32(32,23,15,255));
++            float radius=InsetPanel?5.1f:2.65f;
++            Joint(vh,new Vector2(r.xMin,r.yMin),radius);Joint(vh,new Vector2(r.xMax,r.yMin),radius);
++            Joint(vh,new Vector2(r.xMin,r.yMax),radius);Joint(vh,new Vector2(r.xMax,r.yMax),radius);
++            if(InsetPanel)
+             {
+-                Diamond(vh,new Vector2(r.xMin,r.yMin),2.5f);Diamond(vh,new Vector2(r.xMax,r.yMin),2.5f);
+-                Diamond(vh,new Vector2(r.xMin,r.yMax),2.5f);Diamond(vh,new Vector2(r.xMax,r.yMax),2.5f);
++                Curl(vh,new Vector2(r.xMin+8,r.yMax-3),new Vector2(1,-1),5);
++                Curl(vh,new Vector2(r.xMax-8,r.yMax-3),new Vector2(-1,-1),5);
++                Curl(vh,new Vector2(r.xMin+8,r.yMin+3),new Vector2(1,1),5);
++                Curl(vh,new Vector2(r.xMax-8,r.yMin+3),new Vector2(-1,1),5);
++                Line(vh,new Vector2(r.xMin+13,r.yMax-1.5f),new Vector2(r.xMax-13,r.yMax-1.5f),1.1f,new Color32(0,0,0,160));
+             }
+         }
++        void BoardRim(VertexHelper vh,Rect r)
++        {
++            Chamfer(vh,Inset(r,1),8,3.1f,new Color32(25,19,13,255));
++            Chamfer(vh,Inset(r,2.2f),7.3f,1.7f,Gold);Chamfer(vh,Inset(r,3.6f),6.7f,.6f,Light);Chamfer(vh,Inset(r,5),5.5f,1,Dark);
++            Joint(vh,new Vector2(r.xMin+7,r.yMax-7),4);Joint(vh,new Vector2(r.xMax-7,r.yMax-7),4);
++            Joint(vh,new Vector2(r.xMin+7,r.yMin+7),4);Joint(vh,new Vector2(r.xMax-7,r.yMin+7),4);
++            Vector2 top=new Vector2(r.center.x,r.yMax-4);Jewel(vh,top,7,10);
++            Curl(vh,top+new Vector2(-10,0),new Vector2(-1,-1),7);Curl(vh,top+new Vector2(10,0),new Vector2(1,-1),7);
++            Jewel(vh,new Vector2(r.xMin+2.2f,r.center.y),3.3f,5);Jewel(vh,new Vector2(r.xMax-2.2f,r.center.y),3.3f,5);
++        }
+         static Rect Inset(Rect r,float p)=>Rect.MinMaxRect(r.xMin+p,r.yMin+p,r.xMax-p,r.yMax-p);
++        void Chamfer(VertexHelper vh,Rect r,float cut,float width,Color c)
++        {
++            Vector2[] p={new Vector2(r.xMin+cut,r.yMax),new Vector2(r.xMax-cut,r.yMax),new Vector2(r.xMax,r.yMax-cut),new Vector2(r.xMax,r.yMin+cut),
++                new Vector2(r.xMax-cut,r.yMin),new Vector2(r.xMin+cut,r.yMin),new Vector2(r.xMin,r.yMin+cut),new Vector2(r.xMin,r.yMax-cut)};
++            for(int i=0;i<p.Length;i++)Line(vh,p[i],p[(i+1)%p.Length],width,Color.Lerp(c,new Color(c.r*.52f,c.g*.52f,c.b*.52f,c.a),i>=2&&i<=5?.45f:0));
++        }
+         void Border(VertexHelper vh,Rect r,float w,Color c)
+         {
+-            Quad(vh,new Rect(r.xMin,r.yMin,r.width,w),c*.7f,c*.7f);Quad(vh,new Rect(r.xMin,r.yMax-w,r.width,w),c,c);
+-            Quad(vh,new Rect(r.xMin,r.yMin,w,r.height),c,c*.7f);Quad(vh,new Rect(r.xMax-w,r.yMin,w,r.height),c*.8f,c*.6f);
++            Color low=new Color(c.r*.6f,c.g*.6f,c.b*.6f,c.a);
++            Quad(vh,new Rect(r.xMin,r.yMin,r.width,w),low,low);Quad(vh,new Rect(r.xMin,r.yMax-w,r.width,w),c,c);
++            Quad(vh,new Rect(r.xMin,r.yMin,w,r.height),c,low);Quad(vh,new Rect(r.xMax-w,r.yMin,w,r.height),low,low);
+         }
+         void Quad(VertexHelper vh,Rect r,Color top,Color bottom)
+         {
+-            int i=vh.currentVertCount;vh.AddVert(new Vector3(r.xMin,r.yMin),bottom*color,Vector2.zero);vh.AddVert(new Vector3(r.xMin,r.yMax),top*color,Vector2.zero);
+-            vh.AddVert(new Vector3(r.xMax,r.yMax),top*color,Vector2.zero);vh.AddVert(new Vector3(r.xMax,r.yMin),bottom*color,Vector2.zero);vh.AddTriangle(i,i+1,i+2);vh.AddTriangle(i,i+2,i+3);
++            Tri(vh,new Vector2(r.xMin,r.yMin),new Vector2(r.xMin,r.yMax),new Vector2(r.xMax,r.yMax),bottom,top,top);
++            Tri(vh,new Vector2(r.xMax,r.yMax),new Vector2(r.xMax,r.yMin),new Vector2(r.xMin,r.yMin),top,bottom,bottom);
+         }
+-        void Diamond(VertexHelper vh,Vector2 c,float d)
++        void Tri(VertexHelper vh,Vector2 a,Vector2 b,Vector2 c,Color ca,Color cb,Color cc)
+         {
+-            int i=vh.currentVertCount;Color light=new Color32(252,217,146,255),dark=new Color32(97,60,24,255);
+-            vh.AddVert(c+Vector2.up*d,light*color,Vector2.zero);vh.AddVert(c+Vector2.right*d,dark*color,Vector2.zero);vh.AddVert(c+Vector2.down*d,dark*color,Vector2.zero);vh.AddVert(c+Vector2.left*d,light*color,Vector2.zero);vh.AddTriangle(i,i+1,i+2);vh.AddTriangle(i,i+2,i+3);
++            int n=vh.currentVertCount;vh.AddVert(a,ca*color,Vector2.zero);vh.AddVert(b,cb*color,Vector2.zero);vh.AddVert(c,cc*color,Vector2.zero);vh.AddTriangle(n,n+1,n+2);
++        }
++        void Line(VertexHelper vh,Vector2 a,Vector2 b,float width,Color c)
++        {
++            Vector2 d=(b-a).normalized,n=new Vector2(-d.y,d.x)*width*.5f;
++            Tri(vh,a+n,b+n,b-n,c,c,c);Tri(vh,b-n,a-n,a+n,c,c,c);
++        }
++        void Joint(VertexHelper vh,Vector2 center,float radius)
++        {
++            Vector2 previous=Vector2.zero;const int count=16;
++            for(int i=0;i<=count;i++)
++            {
++                float angle=i*Mathf.PI*2/count,r=radius*(.78f+.22f*Mathf.Cos(angle*4));
++                Vector2 p=center+new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*r;
++                if(i>0)Line(vh,previous,p,.65f,i>count/2?Gold:Light);previous=p;
++            }
++            Jewel(vh,center,radius*.36f,radius*.46f,false);
++        }
++        void Curl(VertexHelper vh,Vector2 origin,Vector2 direction,float size)
++        {
++            Vector2 previous=origin;
++            for(int i=1;i<=18;i++)
++            {
++                float t=i/18f,angle=t*Mathf.PI*2.2f,radius=size*(1-t)*.45f;
++                Vector2 p=origin+Vector2.Scale(new Vector2(size*t+Mathf.Sin(angle)*radius,(1-Mathf.Cos(angle))*radius),direction);
++                Line(vh,previous,p,.7f,i<9?Light:Gold);previous=p;
++            }
++        }
++        void Jewel(VertexHelper vh,Vector2 c,float x,float y,bool sapphire=true)
++        {
++            Vector2 up=c+Vector2.up*y,right=c+Vector2.right*x,down=c+Vector2.down*y,left=c+Vector2.left*x;
++            Tri(vh,up,right,down,Light,Gold,Dark);Tri(vh,down,left,up,Dark,Gold,Light);
++            Color blue=sapphire?new Color32(12,86,141,255):Gold,lit=sapphire?new Color32(108,185,218,255):Light,shade=sapphire?new Color32(3,20,49,255):Dark;
++            const float inner=.64f;
++            Tri(vh,c,Vector2.Lerp(c,up,inner),Vector2.Lerp(c,right,inner),blue,lit,shade);
++            Tri(vh,c,Vector2.Lerp(c,right,inner),Vector2.Lerp(c,down,inner),blue,shade,shade);
++            Tri(vh,c,Vector2.Lerp(c,down,inner),Vector2.Lerp(c,left,inner),blue,shade,blue);
++            Tri(vh,c,Vector2.Lerp(c,left,inner),Vector2.Lerp(c,up,inner),blue,lit,lit);
+         }
+     }
+ }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayRuntime.cs
+@@ -10,7 +10,7 @@
+         public static void BuildInto(RectTransform root)
+         {
+             var existing=root.GetComponent<ProductionGameplayView>();
+-            if(existing!=null&&existing.HasRequiredBindings){AlignPresentation(existing);existing.RefreshContent();return;}
++            if(existing!=null&&existing.HasCoreBindings){AlignPresentation(existing);ApplyFramePolish(existing);existing.RefreshContent();return;}
+             if(root.Find(ContentName)!=null)throw new InvalidOperationException("Gameplay bindings need repair outside Play Mode.");
+             var v=existing??root.gameObject.AddComponent<ProductionGameplayView>();
+             v.Typography=Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
+@@ -61,8 +61,47 @@
+             v.ScoreHeading=Label(v,v.Footer,"ScoreHeading","СЧЁТ",305,220,331,38,29);
+             v.ScoreValue=Label(v,v.Footer,"ScoreDynamic","0",260,257,421,62,52);
+             var layout=root.GetComponent<ProductionGameplayLayout>()??root.gameObject.AddComponent<ProductionGameplayLayout>();layout.View=v;
+-            v.Revision=ProductionGameplayView.CurrentRevision;AlignPresentation(v);v.RefreshContent();layout.ApplyNow();
++            AlignPresentation(v);ApplyFramePolish(v);v.RefreshContent();layout.ApplyNow();
+             if(!v.HasRequiredBindings)throw new InvalidOperationException("Incomplete Gameplay composition.");
++        }
++        static void ApplyFramePolish(ProductionGameplayView v)
++        {
++            // Upgrade the existing serialized hierarchy in place, retaining its object IDs and bindings.
++            var lacquer=EnsureArt(v.BoardArea,"BoardLacquer","cell_lacquer",0,0,786,942);
++            lacquer.transform.SetAsFirstSibling();
++            v.BoardArea.Find("BoardFrame").SetAsLastSibling();
++            var moves=v.Hud.Find("MovesMedallion").GetComponent<Image>();
++            moves.sprite=ProductionGameplayArt.Load("moves_frame");moves.preserveAspect=true;
++            moves.rectTransform.anchoredPosition=new Vector2(365,-70);moves.rectTransform.sizeDelta=new Vector2(252,216);
++            v.MovesHeading.rectTransform.anchoredPosition=new Vector2(401,-108);
++            v.MovesValue.rectTransform.anchoredPosition=new Vector2(400,-137);
++            var goal=v.Hud.Find("GoalPanel").GetComponent<ProductionGameplayCell>();
++            goal.InsetPanel=true;goal.SetVerticesDirty();
++            var goalLacquer=EnsureArt(v.Hud,"GoalLacquer","cell_lacquer",627,72,262,118);
++            PutBefore(goalLacquer.transform,goal.transform);
++            var found=v.Footer.Find("ScoreInset");
++            var inset=found!=null?found.GetComponent<ProductionGameplayCell>():Rect(v.Footer,"ScoreInset",184,247,573,65).gameObject.AddComponent<ProductionGameplayCell>();
++            inset.InsetPanel=true;inset.BronzeSurface=true;inset.raycastTarget=false;inset.SetVerticesDirty();
++            PutBefore(inset.transform,v.ScoreHeading.transform);
++            v.ScoreHeading.rectTransform.anchoredPosition=new Vector2(305,-214);
++            v.ScoreValue.rectTransform.anchoredPosition=new Vector2(260,-248);
++            foreach(var star in v.Stars)
++            {
++                if(star.GetComponent<ProductionGameplayStarPolish>()==null)star.gameObject.AddComponent<ProductionGameplayStarPolish>();
++                star.SetVerticesDirty();
++            }
++            v.Revision=ProductionGameplayView.CurrentRevision;
++        }
++        static Image EnsureArt(Transform parent,string name,string resource,float x,float y,float w,float h)
++        {
++            var found=parent.Find(name);
++            return found!=null?found.GetComponent<Image>():Art(parent,name,ProductionGameplayArt.Load(resource),x,y,w,h);
++        }
++        static void PutBefore(Transform item,Transform target)
++        {
++            int index=target.GetSiblingIndex();
++            if(item.GetSiblingIndex()<index)index--;
++            item.SetSiblingIndex(index);
+         }
+         static void AlignPresentation(ProductionGameplayView v)
+         {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=1;
++        public const int CurrentRevision=2;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Footer,BoardArea,BoardMount;
+@@ -25,9 +25,12 @@
+         public Button PauseButton;
+         public Match3Board Board{get;private set;}
+         public bool ActionsBound{get;private set;}
+-        public bool HasRequiredBindings=>Revision==CurrentRevision&&Typography!=null&&Content!=null&&Hud!=null&&Footer!=null&&BoardArea!=null&&BoardMount!=null&&
++        public bool HasRequiredBindings=>Revision==CurrentRevision&&HasCoreBindings&&HasFramePolishBindings;
++        internal bool HasCoreBindings=>Typography!=null&&Content!=null&&Hud!=null&&Footer!=null&&BoardArea!=null&&BoardMount!=null&&
+             Environment!=null&&Environment.sprite!=null&&GoalProgress!=null&&StarProgress!=null&&HeroName!=null&&LevelText!=null&&MovesHeading!=null&&MovesValue!=null&&GoalsHeading!=null&&ScoreHeading!=null&&ScoreValue!=null&&
+             Valid(BoosterButtons,4)&&Valid(BoosterCounts,4)&&Valid(Stars,3)&&Valid(ArmedMarkers,4)&&PauseButton!=null&&Goals!=null&&Goals.Length==2&&Array.TrueForAll(Goals,g=>g!=null&&g.Root!=null&&g.Icon!=null&&g.Count!=null&&g.Description!=null);
++        public bool HasFramePolishBindings=>BoardArea!=null&&BoardArea.Find("BoardLacquer")!=null&&Hud!=null&&Hud.Find("GoalLacquer")!=null&&
++            Footer!=null&&Footer.Find("ScoreInset")!=null&&Valid(Stars,3)&&Array.TrueForAll(Stars,s=>s.GetComponent<ProductionGameplayStarPolish>()!=null);
+         static bool Valid<T>(T[] a,int length)where T:UnityEngine.Object=>a!=null&&a.Length==length&&Array.TrueForAll(a,x=>x!=null);
+         string language;GameState state;Action pause;
+         readonly UnityAction[] boosterActions=new UnityAction[4];UnityAction pauseAction;
+--- before/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -252,6 +252,21 @@
+         void VerifyLayoutAndInput(ProductionGameplayView view,Camera camera,Vector2Int size,Rect safe)
+         {
+             Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.ActionsBound,Is.True);
++            foreach(var star in view.Stars)
++            {
++                Assert.That(star.GetComponent<ProductionGameplayStarPolish>(),Is.Not.Null);
++                var mesh=star.canvasRenderer.GetMesh();Assert.That(mesh.vertexCount,Is.GreaterThan(0));
++                if(star.Dimmed)
++                {
++                    var center=star.rectTransform.rect.center;var vertices=mesh.vertices;var colors=mesh.colors32;int darkCenters=0;
++                    for(int i=0;i<vertices.Length;i++)
++                    {
++                        Assert.That(float.IsNaN(vertices[i].x)||float.IsNaN(vertices[i].y),Is.False);
++                        if(Vector2.Distance(vertices[i],center)<.1f&&colors[i].r<12&&colors[i].g<20&&colors[i].b<25)darkCenters++;
++                    }
++                    Assert.That(darkCenters,Is.GreaterThanOrEqualTo(10),"Unearned Gameplay stars need dark centres inside the gold outlines.");
++                }
++            }
+             Assert.That(view.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(5));
+             Assert.That(Root().GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+             Assert.That(Root().transform.Find("DynamicHUD"),Is.Null);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
+@@ -11,6 +11,31 @@
+     public sealed class GameplayAlignmentEditModeTests
+     {
+         const string Path="Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab";
++        [Test] public void FramePolishReapplicationPreservesControlsAndCreatesNoDuplicateLayers()
++        {
++            var instance=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(Path));
++            try
++            {
++                var view=instance.GetComponent<ProductionGameplayView>();
++                var controls=view.BoosterButtons.ToArray();var boardMount=view.BoardMount;
++                var transforms=instance.GetComponentsInChildren<Transform>(true);
++                ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
++                ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
++                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(2));
++                Assert.That(view.BoosterButtons,Is.EqualTo(controls));Assert.That(view.BoardMount,Is.SameAs(boardMount));
++                Assert.That(instance.GetComponentsInChildren<Transform>(true),Is.EquivalentTo(transforms));
++                Assert.That(view.BoardArea.GetChild(0).name,Is.EqualTo("BoardLacquer"));
++                Assert.That(view.BoardArea.GetChild(view.BoardArea.childCount-1).name,Is.EqualTo("BoardFrame"));
++                Assert.That(view.Hud.Find("MovesMedallion").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Load("moves_frame")));
++                var inset=view.Footer.Find("ScoreInset").GetComponent<ProductionGameplayCell>();
++                Assert.That(inset.BronzeSurface&&inset.InsetPanel,Is.True);Assert.That(inset.raycastTarget,Is.False);
++                Assert.That(inset.transform.GetSiblingIndex(),Is.LessThan(view.ScoreValue.transform.GetSiblingIndex()));
++                Assert.That(instance.GetComponentsInChildren<ProductionGameplayStarPolish>(true).Length,Is.EqualTo(3));
++                foreach(var page in new[]{"Home","SplashTitle","Loading","WorldMap","ChapterMap","PreLevel"})
++                    Assert.That(Resources.Load<GameObject>("ProductionUI/Pages/"+page).GetComponentsInChildren<ProductionGameplayStarPolish>(true),Is.Empty,page);
++            }
++            finally{Object.DestroyImmediate(instance);}
++        }
+         [Test] public void CanonicalGameplayHasFiveNativeControlsAndNoReferenceScreenDependencies()
+         {
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Gameplay),Is.EqualTo("ProductionUI/Pages/Gameplay"));
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/cell_lacquer.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: 89ca29eb9ed0a9714bcb8fbaf98fa225
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/GameplayAligned/moves_frame.png.meta
+@@ -0,0 +1,143 @@
++fileFormatVersion: 2
++guid: e2867f97cb7d5cebc87c0b0d5833b55d
++TextureImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 13
++  mipmaps:
++    mipMapMode: 0
++    enableMipMap: 1
++    sRGBTexture: 1
++    linearTexture: 0
++    fadeOut: 0
++    borderMipMap: 0
++    mipMapsPreserveCoverage: 0
++    alphaTestReferenceValue: 0.5
++    mipMapFadeDistanceStart: 1
++    mipMapFadeDistanceEnd: 3
++  bumpmap:
++    convertToNormalMap: 0
++    externalNormalMap: 0
++    heightScale: 0.25
++    normalMapFilter: 0
++    flipGreenChannel: 0
++  isReadable: 0
++  streamingMipmaps: 0
++  streamingMipmapsPriority: 0
++  vTOnly: 0
++  ignoreMipmapLimit: 0
++  grayScaleToAlpha: 0
++  generateCubemap: 6
++  cubemapConvolution: 0
++  seamlessCubemap: 0
++  textureFormat: 1
++  maxTextureSize: 2048
++  textureSettings:
++    serializedVersion: 2
++    filterMode: 2
++    aniso: 1
++    mipBias: 0
++    wrapU: 1
++    wrapV: 1
++    wrapW: 1
++  nPOTScale: 0
++  lightmap: 0
++  compressionQuality: 50
++  spriteMode: 1
++  spriteExtrude: 1
++  spriteMeshType: 0
++  alignment: 0
++  spritePivot: {x: 0.5, y: 0.5}
++  spritePixelsToUnits: 100
++  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
++  spriteGenerateFallbackPhysicsShape: 0
++  alphaUsage: 1
++  alphaIsTransparency: 1
++  spriteTessellationDetail: -1
++  textureType: 8
++  textureShape: 1
++  singleChannelComponent: 0
++  flipbookRows: 1
++  flipbookColumns: 1
++  maxTextureSizeSet: 0
++  compressionQualitySet: 0
++  textureFormatSet: 0
++  ignorePngGamma: 0
++  applyGammaDecoding: 0
++  swizzle: 50462976
++  cookieLightType: 0
++  platformSettings:
++  - serializedVersion: 4
++    buildTarget: DefaultTexturePlatform
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Standalone
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: Android
++    maxTextureSize: 4096
++    resizeAlgorithm: 0
++    textureFormat: 4
++    textureCompression: 0
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 1
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  - serializedVersion: 4
++    buildTarget: WebGL
++    maxTextureSize: 2048
++    resizeAlgorithm: 0
++    textureFormat: -1
++    textureCompression: 1
++    compressionQuality: 50
++    crunchedCompression: 0
++    allowsAlphaSplitting: 0
++    overridden: 0
++    ignorePlatformSupport: 0
++    androidETC2FallbackOverride: 0
++    forceMaximumCompressionQuality_BC6H_BC7: 0
++  spriteSheet:
++    serializedVersion: 2
++    sprites: []
++    outline: []
++    customData: 
++    physicsShape: []
++    bones: []
++    spriteID: 5e97eb03825dee720800000000000000
++    internalID: 0
++    vertices: []
++    indices: 
++    edges: []
++    weights: []
++    secondaryTextures: []
++    spriteCustomMetadata:
++      entries: []
++    nameFileIdTable: {}
++  mipmapLimitGroupName: 
++  pSDRemoveMatte: 0
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayStarPolish.cs
+@@ -0,0 +1,33 @@
++using UnityEngine;
++using UnityEngine.UI;
++namespace LegendsOfRus
++{
++    /// <summary>Gameplay-only unearned outline; shared World Map rendering and earned facets are untouched.</summary>
++    [DisallowMultipleComponent]
++    public sealed class ProductionGameplayStarPolish : BaseMeshEffect
++    {
++        public override void ModifyMesh(VertexHelper vh)
++        {
++            var star=graphic as ProductionWorldMapGraphic;
++            if(!IsActive()||star==null||star.Kind!=WorldMapGraphicKind.Star||!star.Dimmed)return;
++            vh.Clear();Rect r=star.GetPixelAdjustedRect();Vector2 center=r.center;float radius=Mathf.Min(r.width,r.height)*.5f;
++            Color dark=new Color32(4,11,17,255),gold=new Color32(179,122,45,255),light=new Color32(250,209,121,255);
++            for(int i=0;i<10;i++)
++            {
++                Vector2 a=Point(i,radius),b=Point((i+1)%10,radius);
++                Color ca=Color.Lerp(gold,light,Mathf.Clamp01(.5f+(-a.x+a.y)/Mathf.Max(1,radius)*.35f));
++                Color cb=Color.Lerp(gold,light,Mathf.Clamp01(.5f+(-b.x+b.y)/Mathf.Max(1,radius)*.35f));
++                Tri(vh,center,center+a*.84f,center+b*.84f,dark,dark,dark);
++                Tri(vh,center+a,center+b,center+b*.84f,ca,cb,gold);Tri(vh,center+b*.84f,center+a*.84f,center+a,gold,gold,ca);
++            }
++        }
++        static Vector2 Point(int i,float radius)
++        {
++            float angle=Mathf.PI*.5f+i*Mathf.PI/5;return new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*radius*(i%2==0?1:.44f);
++        }
++        static void Tri(VertexHelper vh,Vector2 a,Vector2 b,Vector2 c,Color ca,Color cb,Color cc)
++        {
++            int n=vh.currentVertCount;vh.AddVert(a,ca,Vector2.zero);vh.AddVert(b,cb,Vector2.zero);vh.AddVert(c,cc,Vector2.zero);vh.AddTriangle(n,n+1,n+2);
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayStarPolish.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 4c5b61a32dda433e8591e1b055872201

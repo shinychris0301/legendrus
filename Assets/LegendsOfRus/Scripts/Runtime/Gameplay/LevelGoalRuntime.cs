@@ -94,7 +94,7 @@ namespace LegendsOfRus
     }
 
     /// <summary>
-    /// Deterministic progress tracker for the one-or-two goal contract used by
+    /// Deterministic progress tracker for the one-to-three goal contract used by
     /// level data and the approved gameplay HUD.
     /// </summary>
     public sealed class LevelGoalRuntime
@@ -130,7 +130,8 @@ namespace LegendsOfRus
                 return;
             }
 
-            int count = Math.Min(2, goals.Count);
+            if (goals.Count > 3) throw new ArgumentException("At most three goals are supported.", nameof(goals));
+            int count = goals.Count;
             var valid = new List<LevelGoalProgress>(count);
             for (int i = 0; i < count; i++)
             {

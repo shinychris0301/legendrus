@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="21" result="Failed(Child)" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.9138804">
+  <test-suite type="TestSuite" id="1525" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="427" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.913880" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1519" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="389" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.905360" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2285937" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1520" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="389" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.891890" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1521" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="389" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.875901" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1522" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="389" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:40Z" duration="11.859079" total="21" passed="18" failed="3" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1129" name="ChapterMapAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:30Z" duration="1.342997" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1132" name="CaptureReferenceAndPhonePortraits" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits" methodname="CaptureReferenceAndPhonePortraits" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="71563974" result="Failed" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:28Z" duration="0.236187" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Lock
+  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionChapterMapView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x0005a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:274
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00250] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:235
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests+<CaptureReferenceAndPhonePortraits>d__10.MoveNext () [0x00031] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:122
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1133" name="FiveHundredSlotsRecycleWithoutUnlockingOrStaleCallbacks" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.FiveHundredSlotsRecycleWithoutUnlockingOrStaleCallbacks" methodname="FiveHundredSlotsRecycleWithoutUnlockingOrStaleCallbacks" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="1346642567" result="Failed" start-time="2026-09-20 17:21:28Z" end-time="2026-09-20 17:21:29Z" duration="0.258219" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Lock
+  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionChapterMapView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x0005a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:274
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00250] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:235
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests+<FiveHundredSlotsRecycleWithoutUnlockingOrStaleCallbacks>d__11.MoveNext () [0x00176] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:146
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1130" name="LevelSelectionStarsAndLockedTapsUseActualSave" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.LevelSelectionStarsAndLockedTapsUseActualSave" methodname="LevelSelectionStarsAndLockedTapsUseActualSave" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="686979838" result="Failed" start-time="2026-09-20 17:21:29Z" end-time="2026-09-20 17:21:29Z" duration="0.318430" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Lock
+  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionChapterMapView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x0005a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:274
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00250] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:235
+at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests+<LevelSelectionStarsAndLockedTapsUseActualSave>d__8.MoveNext () [0x0039b] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:92
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1131" name="PlayPreservesIntroAndPreLevelRoutingAndHudActions" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.PlayPreservesIntroAndPreLevelRoutingAndHudActions" methodname="PlayPreservesIntroAndPreLevelRoutingAndHudActions" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="2074104621" result="Passed" start-time="2026-09-20 17:21:29Z" end-time="2026-09-20 17:21:30Z" duration="0.509551" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1272" name="HomeAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-20 17:21:30Z" end-time="2026-09-20 17:21:37Z" duration="7.130154" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1284" name="HomePortraits_RenderLivePageAndKeepControlsInsideSafeArea" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.HomePortraits_RenderLivePageAndKeepControlsInsideSafeArea" methodname="HomePortraits_RenderLivePageAndKeepControlsInsideSafeArea" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="1929330569" result="Passed" start-time="2026-09-20 17:21:30Z" end-time="2026-09-20 17:21:32Z" duration="2.014314" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1280" name="Language_RefreshesLiveLabelsWithoutChangingSaveOrArt" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Language_RefreshesLiveLabelsWithoutChangingSaveOrArt" methodname="Language_RefreshesLiveLabelsWithoutChangingSaveOrArt" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="1446127536" result="Passed" start-time="2026-09-20 17:21:32Z" end-time="2026-09-20 17:21:32Z" duration="0.267010" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1274" name="LiveHud_RefreshesFromServiceChangesAndReentry" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.LiveHud_RefreshesFromServiceChangesAndReentry" methodname="LiveHud_RefreshesFromServiceChangesAndReentry" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="727871970" result="Passed" start-time="2026-09-20 17:21:32Z" end-time="2026-09-20 17:21:32Z" duration="0.482955" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1277" name="NativeOriginalControls_HaveIndependentRaycastGraphics" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.NativeOriginalControls_HaveIndependentRaycastGraphics" methodname="NativeOriginalControls_HaveIndependentRaycastGraphics" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="1365301362" result="Passed" start-time="2026-09-20 17:21:32Z" end-time="2026-09-20 17:21:33Z" duration="0.201203" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1276" name="OriginalForeground_UsesUntintedSourceAndCleanEnvironment" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalForeground_UsesUntintedSourceAndCleanEnvironment" methodname="OriginalForeground_UsesUntintedSourceAndCleanEnvironment" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="86537626" result="Passed" start-time="2026-09-20 17:21:33Z" end-time="2026-09-20 17:21:33Z" duration="0.204108" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1275" name="OriginalLettering_SwitchesToLiveEnglishAndBack" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalLettering_SwitchesToLiveEnglishAndBack" methodname="OriginalLettering_SwitchesToLiveEnglishAndBack" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="295580908" result="Passed" start-time="2026-09-20 17:21:33Z" end-time="2026-09-20 17:21:33Z" duration="0.270551" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus EDITOR memory observation: allocated=201 MiB, reserved=645 MiB, managed=22 MiB. Exceeded guardrails: reserved >= 640 MiB (warning). Comparison band=Warning. Editor measurements are not an Android Player budget verdict. Profile a Development Build on the target device. Evidence remains local and bounded.
+]]></output>
+              </test-case>
+              <test-case id="1278" name="OriginalSubjects_AreNotRedrawnByLegacyLightingEffects" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.OriginalSubjects_AreNotRedrawnByLegacyLightingEffects" methodname="OriginalSubjects_AreNotRedrawnByLegacyLightingEffects" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="738496122" result="Passed" start-time="2026-09-20 17:21:33Z" end-time="2026-09-20 17:21:33Z" duration="0.202552" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1282" name="Play_PreservesPendingStoryAndChapterCompletionGates" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates" methodname="Play_PreservesPendingStoryAndChapterCompletionGates" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="1809572245" result="Passed" start-time="2026-09-20 17:21:33Z" end-time="2026-09-20 17:21:33Z" duration="0.273456" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1273" name="PreparedHome_IsSerializedAndUsesCurrentResourceContract" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.PreparedHome_IsSerializedAndUsesCurrentResourceContract" methodname="PreparedHome_IsSerializedAndUsesCurrentResourceContract" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="868347121" result="Passed" start-time="2026-09-20 17:21:33Z" end-time="2026-09-20 17:21:34Z" duration="0.661151" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1279" name="QuestUnavailableAndDailyRewardBadgeReflectRealPersistedState" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.QuestUnavailableAndDailyRewardBadgeReflectRealPersistedState" methodname="QuestUnavailableAndDailyRewardBadgeReflectRealPersistedState" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="471806158" result="Passed" start-time="2026-09-20 17:21:34Z" end-time="2026-09-20 17:21:35Z" duration="0.877505" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1283" name="SplashLoadingHome_EndsAtAlignedBoundPageWithoutDuplicateRoutes" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.SplashLoadingHome_EndsAtAlignedBoundPageWithoutDuplicateRoutes" methodname="SplashLoadingHome_EndsAtAlignedBoundPageWithoutDuplicateRoutes" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="1237903853" result="Passed" start-time="2026-09-20 17:21:35Z" end-time="2026-09-20 17:21:36Z" duration="0.812428" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1281" name="VisibleControls_RouteNineActionsAndThreeResourceButtonsOnceFromTallSafeArea" fullname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.VisibleControls_RouteNineActionsAndThreeResourceButtonsOnceFromTallSafeArea" methodname="VisibleControls_RouteNineActionsAndThreeResourceButtonsOnceFromTallSafeArea" classname="LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests" runstate="Runnable" seed="953544084" result="Passed" start-time="2026-09-20 17:21:36Z" end-time="2026-09-20 17:21:37Z" duration="0.846480" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1513" name="WorldMapAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-20 17:21:37Z" end-time="2026-09-20 17:21:40Z" duration="3.362993" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1515" name="AuthoredChapterAndLockedNodesUseRealStateAndRoutes" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.AuthoredChapterAndLockedNodesUseRealStateAndRoutes" methodname="AuthoredChapterAndLockedNodesUseRealStateAndRoutes" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" seed="296354408" result="Passed" start-time="2026-09-20 17:21:37Z" end-time="2026-09-20 17:21:37Z" duration="0.266562" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1518" name="CaptureReferenceAndPhonePortraits" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.CaptureReferenceAndPhonePortraits" methodname="CaptureReferenceAndPhonePortraits" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" seed="1019859657" result="Passed" start-time="2026-09-20 17:21:37Z" end-time="2026-09-20 17:21:38Z" duration="1.273519" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1516" name="HudTasksAndGuildRespondWithoutInventingProgress" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.HudTasksAndGuildRespondWithoutInventingProgress" methodname="HudTasksAndGuildRespondWithoutInventingProgress" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" seed="1127825946" result="Passed" start-time="2026-09-20 17:21:38Z" end-time="2026-09-20 17:21:39Z" duration="0.486890" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1517" name="ScrollHighlightAndLocalizationPreserveRealProgress" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress" methodname="ScrollHighlightAndLocalizationPreserveRealProgress" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" seed="539766767" result="Passed" start-time="2026-09-20 17:21:39Z" end-time="2026-09-20 17:21:40Z" duration="0.779193" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1514" name="SharedHeaderValuesAndFittingAgreeAcrossPages" fullname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.SharedHeaderValuesAndFittingAgreeAcrossPages" methodname="SharedHeaderValuesAndFittingAgreeAcrossPages" classname="LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests" runstate="Runnable" seed="1426600355" result="Passed" start-time="2026-09-20 17:21:40Z" end-time="2026-09-20 17:21:40Z" duration="0.539904" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /tmp/lor-chapter-scroll-r2/Verify02/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

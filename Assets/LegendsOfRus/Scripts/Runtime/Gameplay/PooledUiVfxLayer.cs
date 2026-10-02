@@ -15,6 +15,7 @@ namespace LegendsOfRus
             public GameObject GameObject;
             public RectTransform RectTransform;
             public Image Image;
+            public CoreLoopEffectGraphic Effect;
             public bool Active;
             public CoreLoopVfxCue Cue;
             public CoreLoopVfxStyle Style;
@@ -67,6 +68,15 @@ namespace LegendsOfRus
             }
         }
 
+        void PlaceBelowPersistentGrid()
+        {
+            root.SetAsLastSibling();
+            // Cell intersections remain legible during full-board washes and clear feedback.
+            var grid = root.parent.Find("SharedGrid");
+            if (grid != null && grid.GetComponent<ProductionGameplayCell>() != null)
+                grid.SetAsLastSibling();
+        }
+
         public void Initialize(RectTransform parent, int requestedCapacity)
         {
             if (parent == null)
@@ -76,7 +86,7 @@ namespace LegendsOfRus
             {
                 root.SetParent(parent, false);
                 Stretch(root);
-                root.SetAsLastSibling();
+                PlaceBelowPersistentGrid();
                 ResetEffects();
                 return;
             }
@@ -96,7 +106,7 @@ namespace LegendsOfRus
             rootObject.transform.SetParent(parent, false);
             root = rootObject.GetComponent<RectTransform>();
             Stretch(root);
-            root.SetAsLastSibling();
+            PlaceBelowPersistentGrid();
 
             canvasGroup = rootObject.GetComponent<CanvasGroup>();
             canvasGroup.alpha = 1f;
@@ -111,7 +121,7 @@ namespace LegendsOfRus
                     $"PooledVfx_{i:00}",
                     typeof(RectTransform),
                     typeof(CanvasRenderer),
-                    typeof(Image)
+                    typeof(CoreLoopEffectGraphic)
                 );
                 effectObject.transform.SetParent(root, false);
 
@@ -133,7 +143,8 @@ namespace LegendsOfRus
                 {
                     GameObject = effectObject,
                     RectTransform = effectRect,
-                    Image = image
+                    Image = image,
+                    Effect = effectObject.GetComponent<CoreLoopEffectGraphic>()
                 };
             }
         }
@@ -141,7 +152,7 @@ namespace LegendsOfRus
         public void BringToFront()
         {
             if (root != null)
-                root.SetAsLastSibling();
+                PlaceBelowPersistentGrid();
         }
 
         public bool Emit(
@@ -177,6 +188,7 @@ namespace LegendsOfRus
 
             slot.Active = true;
             slot.Cue = cue;
+            slot.Effect.SetFrame(cue,0);
             slot.Style = style;
             slot.StartBounds = ClampBounds(startBounds);
             slot.EndBounds = ClampBounds(endBounds);
@@ -259,6 +271,7 @@ namespace LegendsOfRus
                     color.a *= Mathf.Lerp(0.72f, 1f, envelope);
                 }
                 slot.Image.color = color;
+                slot.Effect.SetFrame(slot.Cue,normalized);
 
                 if (normalized >= 1f)
                     Release(slot);

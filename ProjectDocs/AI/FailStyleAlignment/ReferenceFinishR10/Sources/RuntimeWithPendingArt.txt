@@ -1,0 +1,282 @@
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+namespace LegendsOfRus
+{
+    public static class ProductionFailRuntime
+    {
+        public const string ContentName="FAIL_ALIGNED_CONTENT",ArtRoot="ProductionUI/FailAligned/";
+        public static readonly string[] ArtNames={"environment_r2","ivan_r2","panel_r2","title_r2","goals_r2","retry_r2","nameplate_r2","medallion_r2","coin_r3","title_r4","panel_r4","paid_r4","ad_r4","paid_r9","ad_r9","environment_r10","ivan_r10","panel_r10","title_r10","goals_r10","nameplate_r10","paid_r10","ad_r10","mace_r10","firebird_r10","shield_r10","potion_r10"};
+        public const float SceneTop=-35;
+        public static readonly string[] BoosterArt={"mace_r10","firebird_r10","shield_r10","potion_r10"};
+        public static void BuildInto(RectTransform root)
+        {
+            var old=root.GetComponent<ProductionFailView>();
+            if(old!=null)
+            {
+                if(!Application.isPlaying){old.Revision=ProductionFailView.CurrentRevision;ApplyOffers(old);}
+                if(!old.HasRequiredBindings)throw new InvalidOperationException("Repair Failure bindings outside Play Mode.");
+                ApplyPresentation(old);old.RefreshContent();return;
+            }
+            if(root.Find(ContentName)!=null||root.Find("FIX01_CONTENT")!=null)throw new InvalidOperationException("Repair Failure bindings outside Play Mode.");
+            var source=Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>();
+            var v=root.gameObject.AddComponent<ProductionFailView>();v.Typography=source.Typography;
+            v.Content=Rect(root,ContentName,0,0,941,1672);
+            v.Environment=Art(v.Content,"Environment",Load(ArtRoot+"environment_r1"),0,0,941,1672);
+            v.Body=Rect(v.Content,"FailureBody",0,150,941,1515);
+            v.Hero=Art(v.Body,"Ivan",Load(ArtRoot+"ivan_r1"),190,0,561,660);v.Hero.preserveAspect=true;
+            Panel(v.Body,"MainPanel",30,445,881,1060);
+            Panel(v.Body,"FailureTitlePanel",80,440,781,185);
+            v.Title=Label(v,v.Body,"Title","",115,474,711,75,62);
+            v.Subtitle=Label(v,v.Body,"Subtitle","",135,554,671,42,31);
+            Panel(v.Body,"GoalsPanel",120,638,701,250);
+            v.GoalsHeading=Label(v,v.Body,"GoalsHeading","",160,660,621,38,29);
+            v.Score=Label(v,v.Body,"RoundScore","",165,702,611,28,21);
+            v.Goals=new PreLevelGoalView[3];
+            for(int i=0;i<3;i++)
+            {
+                var slot=Rect(v.Body,"Goal_"+i,185+i*190,738,190,140);
+                v.Goals[i]=new PreLevelGoalView{Root=slot,Icon=Art(slot,"Icon",ProductionGameplayArt.Gem(i),48,0,94,94),Count=Label(v,slot,"Progress","",0,100,190,36,29),Description=Label(v,slot,"Description","",0,0,190,20,18)};
+                v.Goals[i].Description.gameObject.SetActive(false);v.Goals[i].Icon.preserveAspect=true;
+            }
+            var retrySprite=Load("ProductionUI/VictoryAligned/continue_r7");
+            float retryW=621,retryH=retryW*retrySprite.rect.height/retrySprite.rect.width;
+            v.Retry=Button(Art(v.Body,"Retry",retrySprite,(941-retryW)*.5f,886,retryW,retryH));v.Retry.GetComponent<Image>().preserveAspect=true;
+            v.RetryText=Label(v,v.Retry.transform,"Label","",55,55,retryW-110,68,35);
+            v.Exit=Button(Panel(v.Body,"Exit",220,1074,501,76));
+            v.ExitText=Label(v,v.Exit.transform,"Label","",45,18,411,39,28);
+            v.Reaction=Label(v,v.Body,"Reaction","",115,1153,711,55,21);v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
+            v.BoostersHeading=Label(v,v.Body,"BoostersHeading","",110,1214,721,38,28);
+            v.BoosterCounts=new Text[4];v.BoosterLabels=new Text[4];v.BoosterButtons=new Button[4];
+            for(int i=0;i<4;i++)
+            {
+                var group=Rect(v.Body,"Booster_"+i,102+i*185,1260,182,204);
+                var art=Art(group,"Art",ProductionGameplayArt.Booster(i),12,0,140,140);Fit(art,82,70,140,140);v.BoosterButtons[i]=Button(art);
+                var badge=Rect(group,"StockBadge",124,107,50,50).gameObject.AddComponent<ProductionPreLevelBadge>();badge.raycastTarget=false;
+                v.BoosterCounts[i]=Label(v,badge.transform,"Count","",0,0,50,50,27);
+                v.BoosterLabels[i]=Label(v,group,"Name","",0,161,182,44,18);v.BoosterLabels[i].horizontalOverflow=HorizontalWrapMode.Wrap;
+            }
+            v.HudBacking=Clone(source.HudBacking,v.Content,"HudBacking");v.Hud=Clone(source.Hud,v.Content,"FailureHud");
+            v.Profile=v.Hud.Find("ProfileButton").GetComponent<Button>();v.Settings=v.Hud.Find("SettingsButton").GetComponent<Button>();
+            v.HeroName=v.Profile.transform.Find("HeroName").GetComponent<Text>();v.Level=v.Profile.transform.Find("SavedLevel").GetComponent<Text>();
+            v.Resources=new[]{v.Hud.Find("GoldResource/GoldValue").GetComponent<Text>(),v.Hud.Find("GemsResource/GemsValue").GetComponent<Text>(),v.Hud.Find("EnergyResource/EnergyValue").GetComponent<Text>()};
+            v.Plus=new[]{v.Hud.Find("GoldResource/ResourcePlus").GetComponent<Button>(),v.Hud.Find("GemsResource/ResourcePlus").GetComponent<Button>(),v.Hud.Find("EnergyResource/ResourcePlus").GetComponent<Button>()};
+            foreach(var text in v.Hud.GetComponentsInChildren<Text>(true))text.raycastTarget=false;
+            var layout=root.gameObject.AddComponent<ProductionFailLayout>();layout.View=v;ApplyPresentation(v);v.RefreshContent();layout.ApplyNow();
+            if(!v.HasRequiredBindings)throw new InvalidOperationException("Failure native bindings incomplete.");
+        }
+        static void ApplyPresentation(ProductionFailView v)
+        {
+            ApplyHeader(v);ApplyOffers(v);
+            v.Environment.sprite=Load(ArtRoot+"environment_r10");
+            v.Hero.sprite=Load(ArtRoot+"ivan_r10");
+            v.Hero.color=new Color32(219,219,219,255);
+            ProductionVictoryView.Place(v.Hero.rectTransform,175,-36,591,588);
+            v.Hero.preserveAspect=true;
+            // A focal window on the independent environment plate places the fortress and
+            // burning houses behind Ivan; the full cover plate still fills every aspect ratio.
+            var scenery=v.Body.Find("SceneWindow") as RectTransform;
+            if(scenery==null){scenery=Rect(v.Body,"SceneWindow",0,-22,941,555);scenery.gameObject.AddComponent<RectMask2D>();scenery.SetAsFirstSibling();}
+            var detail=EnsureArt(scenery,"Scene",v.Environment.sprite,0,SceneTop,941,941*v.Environment.sprite.rect.height/v.Environment.sprite.rect.width);
+            detail.raycastTarget=false;
+            if(detail.GetComponent<ProductionFailSceneBlend>()==null)detail.gameObject.AddComponent<ProductionFailSceneBlend>();
+            SetPanel(v,"MainPanel","panel_r10",25,510,891,1005,true);
+            // Reference plaque spans approximately x125..816 and y527..767,
+            // including its top crest. Preserve carved ends while fitting the face.
+            SetPanel(v,"FailureTitlePanel","title_r10",125,377,691,240,true);
+            var titleFit=v.Body.Find("FailureTitlePanel").GetComponent<ProductionFailPanelFit>();
+            titleFit.TopProtectedFraction=.35f;titleFit.BottomProtectedFraction=.07f;
+            ProductionVictoryView.PlaceText(v.Title,153,451,635,92,76);
+            ProductionVictoryView.PlaceText(v.Subtitle,149,542,643,45,34);
+            v.Title.fontStyle=FontStyle.Bold;
+            Gold(v.Title,1.1f);Gold(v.Subtitle,.65f);
+            // Enclose the heading and inset separately, behind all live goal content.
+            SetPanel(v,"GoalsOuterPanel","goals_r10",149,648,643,221,true);
+            v.Body.Find("GoalsOuterPanel").SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
+            var outer=v.Body.Find("GoalsOuterPanel").GetComponent<Image>();
+            outer.color=new Color32(185,181,169,255);
+            outer.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.5f;
+            SetPanel(v,"GoalsPanel","goals_r10",169,680,603,179,true);
+            v.Body.Find("GoalsPanel").GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.78f;
+            SetPanel(v,"GoalsHeadingPlaque","nameplate_r10",185.5f,632,570,44,true);
+            var plaque=v.Body.Find("GoalsHeadingPlaque");
+            plaque.SetAsLastSibling();
+            plaque.SetSiblingIndex(v.GoalsHeading.transform.GetSiblingIndex());
+            plaque.GetComponent<ProductionFailPanelFit>().ProtectedDetailScale=.65f;
+            ProductionVictoryView.PlaceText(v.GoalsHeading,198,635,545,38,28);
+            ClearLabel(v.GoalsHeading,true);
+            // Retain the live round score as metadata, but the reference's hierarchy gives
+            // this space to the failed-goal icons. It is not a decorative sample score.
+            v.Score.gameObject.SetActive(false);
+            foreach(var goal in v.Goals)
+                ProductionVictoryView.PlaceText(goal.Count,0,100,190,40,31);
+            var retrySprite=Load(ArtRoot+"retry_r2");v.Retry.GetComponent<Image>().sprite=retrySprite;
+            float retryWidth=625,retryHeight=retryWidth*retrySprite.rect.height/retrySprite.rect.width;
+            ProductionVictoryView.Place((RectTransform)v.Retry.transform,(941-retryWidth)*.5f,877,retryWidth,retryHeight);
+            ProductionVictoryView.PlaceText(v.RetryText,35,(retryHeight-60)*.5f,retryWidth-70,60,36);Gold(v.RetryText,.8f);
+            var exit=v.Exit.GetComponent<Image>();exit.sprite=Load(ArtRoot+"goals_r10");
+            ProductionVictoryView.Place((RectTransform)v.Exit.transform,642,1158,200,56);
+            ProductionVictoryView.PlaceText(v.ExitText,10,5,180,46,19);
+            v.ExitText.horizontalOverflow=HorizontalWrapMode.Wrap;
+            ProductionVictoryView.PlaceText(v.Reaction,104,1158,518,49,18);
+            v.Reaction.horizontalOverflow=HorizontalWrapMode.Wrap;
+            v.Reaction.gameObject.SetActive(false);
+            SetPanel(v,"BoostersPanel","goals_r10",72,1145,797,300,true);
+            ProductionVictoryView.PlaceText(v.BoostersHeading,104,1160,518,40,26);
+            for(int i=0;i<4;i++)
+            {
+                var group=v.Body.Find("Booster_"+i) as RectTransform;
+                ProductionVictoryView.Place(group,83+i*194,1210,194,234);
+                var frame=EnsureArt(group,"Medallion",Load(ArtRoot+"medallion_r2"),9,0,176,176);frame.transform.SetAsFirstSibling();
+                frame.preserveAspect=true;frame.gameObject.SetActive(false);
+                frame.color=new Color32(205,199,184,255);
+                // Keep a generous interactive rectangle while preserving the whole booster illustration.
+                var art=v.BoosterButtons[i].GetComponent<Image>();
+                art.sprite=Load(ArtRoot+BoosterArt[i]);
+                ProductionVictoryView.Place(art.rectTransform,10,6,174,174);art.preserveAspect=true;art.color=new Color32(225,225,225,255);
+                ProductionVictoryView.Place(group.Find("StockBadge") as RectTransform,132,130,49,49);
+                ProductionVictoryView.PlaceText(v.BoosterCounts[i],0,0,49,49,28);
+                var plate=EnsureArt(group,"Nameplate",Load(ArtRoot+"nameplate_r10"),0,178,194,56);
+                var fit=plate.GetComponent<ProductionFailPanelFit>();if(fit==null)plate.gameObject.AddComponent<ProductionFailPanelFit>();
+                plate.transform.SetSiblingIndex(1);
+                ProductionVictoryView.PlaceText(v.BoosterLabels[i],3,182,188,48,21);
+                ClearLabel(v.BoosterLabels[i],false);
+                v.BoosterLabels[i].transform.SetAsLastSibling();
+            }
+        }
+        internal static void ApplyOffers(ProductionFailView v)
+        {
+            if(v.Body==null)return;
+            // Whole isolated card sprites: preserve corner/green-face detail at uniform
+            // scale and fit only the plain upper spans to the shared reference height.
+            var paidSprite=Load(ArtRoot+"paid_r10");var adSprite=Load(ArtRoot+"ad_r10");
+            var paid=EnsureArt(v.Body,"PaidMovesOffer",paidSprite,105,999,324,140);
+            var ad=EnsureArt(v.Body,"RewardedContinueOffer",adSprite,512,999,324,140);
+            foreach(var card in new[]{paid,ad})
+            {
+                var fit=card.GetComponent<ProductionFailPanelFit>()??card.gameObject.AddComponent<ProductionFailPanelFit>();
+                fit.TopProtectedFraction=.2f;fit.BottomProtectedFraction=.45f;fit.ProtectedDetailScale=1;
+            }
+            v.PaidOffer=paid.GetComponent<Button>()??Button(paid);
+            v.AdOffer=ad.GetComponent<Button>()??Button(ad);
+            foreach(var b in new[]{v.PaidOffer,v.AdOffer})
+            {
+                b.interactable=false;b.navigation=new Navigation{mode=Navigation.Mode.None};
+                var colors=b.colors;colors.disabledColor=new Color(.82f,.82f,.82f,1);b.colors=colors;
+                b.GetComponent<Image>().preserveAspect=false;b.GetComponent<Image>().raycastTarget=true;
+            }
+            v.PaidOfferTitle=EnsureLabel(v,paid.transform,"Title",24,12,276,37,30);
+            v.AdOfferTitle=EnsureLabel(v,ad.transform,"Title",24,10,276,47,22);
+            v.AdOfferTitle.horizontalOverflow=HorizontalWrapMode.Wrap;
+            v.PaidOfferStatus=EnsureLabel(v,paid.transform,"Availability",42,50,240,24,19);
+            var gem=EnsureArt(paid.transform,"Currency",ProductionGameplayArt.Gem(2),110,98,34,34);gem.preserveAspect=true;
+            EnsureLabel(v,paid.transform,"Price",151,97,60,36,28).text="—";
+            var lightning=EnsureArt(paid.transform,"MovesSymbol",Load(ProductionHomeRuntime.ArtRoot+"energy_icon"),256,12,40,40);lightning.preserveAspect=true;
+            v.AdOfferStatus=EnsureLabel(v,ad.transform,"Availability",42,61,240,24,19);
+            ClearLabel(v.PaidOfferStatus,true);ClearLabel(v.AdOfferStatus,true);
+            var play=EnsureLabel(v,ad.transform,"PlaySymbol",140,97,44,36,32);play.text="▶";
+            v.OfferSeparator=EnsureLabel(v,v.Body,"OffersSeparator",435,1044,71,40,24);
+        }
+        static Text EnsureLabel(ProductionFailView v,Transform parent,string name,float x,float y,float w,float h,int size)
+        {
+            var found=parent.Find(name);var text=found!=null?found.GetComponent<Text>():Label(v,parent,name,"",x,y,w,h,size);
+            ProductionVictoryView.PlaceText(text,x,y,w,h,size);return text;
+        }
+        static void ApplyHeader(ProductionFailView v)
+        {
+            // Failure-only overrides on the cloned HUD: shared Home/Pre-Level art and
+            // controls stay intact. Reference coordinates use the941px portrait.
+            var profile=(RectTransform)v.Profile.transform;
+            var ring=profile.Find("PortraitFrame").GetComponent<Image>();
+            ProductionVictoryView.Place(ring.rectTransform,-18,-2,204,204f*1425/1104);
+            ring.color=new Color32(230,225,214,255);
+            var clip=profile.Find("PortraitClip") as RectTransform;
+            ProductionVictoryView.Place(clip,11,26,142,142);
+            clip.GetComponent<ProductionHomePanel>().Radius=71;
+            ProductionVictoryView.Place(clip.Find("ApprovedIvanPortrait") as RectTransform,0,0,142,142);
+            ProductionVictoryView.PlaceText(v.HeroName,170,31,147,43,34);
+            ProductionVictoryView.PlaceText(v.Level,170,73,147,31,24);
+            v.HeroName.alignment=v.Level.alignment=TextAnchor.MiddleLeft;
+            var track=profile.Find("ProfileProgressFrame").GetComponent<Image>();
+            track.enabled=true;track.gameObject.SetActive(true);track.color=Color.white;
+            track.rectTransform.SetAsLastSibling();
+            ProductionVictoryView.Place(track.rectTransform,164,89,172,172f/3);
+            // No experience model exists yet. Keep an empty rail and a truthful dash,
+            // never paint the reference's sample70% as actual saved progress.
+            var unavailable=track.transform.Find("UnavailableExperience").GetComponent<Text>();
+            ProductionVictoryView.PlaceText(unavailable,24,19,124,19,14);
+            unavailable.text="—";
+            var frame=v.Hud.Find("ReferenceArtwork").GetComponent<Image>();
+            frame.color=new Color32(222,217,205,255);
+            string[] names={"Gold","Gems","Energy"};
+            float[] left={346,532,711},width={176,161,143};
+            for(int i=0;i<3;i++)
+            {
+                var group=v.Hud.Find(names[i]+"Resource") as RectTransform;
+                ProductionVictoryView.Place(group,left[i],44,width[i],53);
+                group.Find("CapsuleArtwork").GetComponent<Image>().color=new Color32(211,210,196,255);
+                var icon=group.Find("Icon").GetComponent<Image>();
+                if(i==0){icon.sprite=Load(ArtRoot+"coin_r3");ProductionVictoryView.Place(icon.rectTransform,-2,-4,59,59);icon.preserveAspect=true;}
+                else if(i==1)ProductionVictoryView.Place(icon.rectTransform,-1,-5,54,64);
+                ProductionVictoryView.PlaceText(v.Resources[i],i==0?54:55,6,width[i]-(i==0?98:99),39,26);
+                v.Resources[i].resizeTextForBestFit=true;v.Resources[i].resizeTextMinSize=34;v.Resources[i].resizeTextMaxSize=52;
+                v.Resources[i].color=new Color32(255,235,189,255);
+                ProductionVictoryView.Place((RectTransform)v.Plus[i].transform,width[i]-43,4,43,43);
+                var backing=v.Hud.Find(names[i]+"OpaqueNavyBacking") as RectTransform;
+                ProductionVictoryView.Place(backing,left[i]+8,54,width[i]-16,33);
+            }
+            ProductionVictoryView.Place((RectTransform)v.Settings.transform,852,28,87,87);
+            v.Settings.GetComponent<Image>().color=new Color32(230,223,202,255);
+        }
+        static Image EnsureArt(Transform parent,string name,Sprite sprite,float x,float y,float w,float h)
+        {
+            var found=parent.Find(name);var image=found!=null?found.GetComponent<Image>():Art(parent,name,sprite,x,y,w,h);
+            image.sprite=sprite;image.raycastTarget=false;ProductionVictoryView.Place(image.rectTransform,x,y,w,h);return image;
+        }
+        static void SetPanel(ProductionFailView v,string name,string asset,float x,float y,float w,float h,bool fitted)
+        {
+            var image=EnsureArt(v.Body,name,Load(ArtRoot+asset),x,y,w,h);
+            if(name=="MainPanel")image.color=Color.white;
+            else if(name=="FailureTitlePanel")image.color=new Color32(214,214,214,255);
+            else if(name=="GoalsPanel"||name=="BoostersPanel")image.color=new Color32(220,220,220,255);
+            var fit=image.GetComponent<ProductionFailPanelFit>();if(fit==null&&fitted)fit=image.gameObject.AddComponent<ProductionFailPanelFit>();
+            if(fit!=null)fit.enabled=fitted;
+            if(name=="BoostersPanel")image.transform.SetSiblingIndex(v.Body.Find("MainPanel").GetSiblingIndex()+1);
+        }
+        static void ClearLabel(Text text,bool bold)
+        {
+            text.fontStyle=bold?FontStyle.Bold:FontStyle.Normal;
+            text.color=new Color32(255,236,192,255);
+            // A compact dark edge supports small live glyphs without a broad glow.
+            var shadow=text.GetComponent<Shadow>();
+            if(shadow!=null){shadow.enabled=true;shadow.effectColor=new Color32(5,9,14,255);shadow.effectDistance=new Vector2(.6f,-.6f);}
+        }
+        static void Gold(Text text,float bevel)
+        {
+            var home=Resources.Load<GameObject>("ProductionUI/Pages/Home").GetComponent<ProductionHomeView>();
+            text.material=home.PlayText.material;
+            var shadow=text.GetComponent<Shadow>();if(shadow!=null)shadow.enabled=false;
+            var gold=text.GetComponent<ProductionVictoryTitleLettering>();if(gold==null)gold=text.gameObject.AddComponent<ProductionVictoryTitleLettering>();
+            gold.ArcHeight=0;gold.BevelWidth=bevel;gold.ShadowDistance=new Vector2(1.6f,-2.4f);gold.ExtrusionDistance=new Vector2(.7f,-1);
+            gold.BottomColor=new Color32(152,91,21,255);gold.BodyColor=new Color32(217,167,67,255);
+            gold.HighlightColor=new Color32(255,235,174,255);gold.TopColor=new Color32(235,198,111,255);gold.Refresh();
+        }
+        public static void Fit(Image image,float centerX,float centerY,float width,float height)
+        {
+            Vector2 n=image.sprite.rect.size;float scale=Mathf.Min(width/n.x,height/n.y);
+            image.rectTransform.anchoredPosition=new Vector2(centerX-n.x*scale*.5f,-centerY+n.y*scale*.5f);image.rectTransform.sizeDelta=n*scale;
+        }
+        static Sprite Load(string path)=>Resources.Load<Sprite>(path)??throw new InvalidOperationException("Missing Failure sprite: "+path);
+        static RectTransform Rect(Transform p,string n,float x,float y,float w,float h)=>ProductionChapterMapRuntime.Rect(p,n,x,y,w,h);
+        static RectTransform Clone(RectTransform r,Transform p,string name){var clone=UnityEngine.Object.Instantiate(r,p,false);clone.name=name;return clone;}
+        static Image Art(Transform p,string n,Sprite sprite,float x,float y,float w,float h){var a=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();a.sprite=sprite;a.raycastTarget=false;return a;}
+        static Image Panel(Transform p,string n,float x,float y,float w,float h){var a=Art(p,n,Load(ProductionPreLevelRuntime.ArtRoot+"panel_wide"),x,y,w,h);a.gameObject.AddComponent<ProductionFailPanelFit>();return a;}
+        static Button Button(Image image){image.raycastTarget=true;var b=image.gameObject.AddComponent<Button>();b.targetGraphic=image;b.navigation=new Navigation{mode=Navigation.Mode.None};return b;}
+        static Text Label(ProductionFailView v,Transform p,string n,string value,float x,float y,float w,float h,int size)
+        {
+            var t=Rect(p,n,x,y,w*2,h*2).gameObject.AddComponent<Text>();t.rectTransform.localScale=Vector3.one*.5f;t.font=v.Typography.RegularFont;t.fontSize=size*2;t.text=value;
+            t.color=new Color32(255,226,162,255);t.alignment=TextAnchor.MiddleCenter;t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Overflow;t.verticalOverflow=VerticalWrapMode.Overflow;
+            t.gameObject.AddComponent<SplashTitleTextGeometry>().SnapToScreenPixels=true;var shadow=t.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color32(10,6,2,220);shadow.effectDistance=new Vector2(1,-1);return t;
+        }
+    }
+}

@@ -1,0 +1,101 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Fail.prefab
+@@ -81,7 +81,7 @@
+   m_Script: {fileID: 11500000, guid: e6c158b044f64e11adf61fd1762a7937, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionFailView
+-  Revision: 4
++  Revision: 5
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 3688516977877512775}
+   Body: {fileID: 5447443005004833745}
+@@ -1759,8 +1759,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 40, y: -510}
+-  m_SizeDelta: {x: 861, y: 1005}
++  m_AnchoredPosition: {x: 25, y: -510}
++  m_SizeDelta: {x: 891, y: 1005}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &5401880583854556613
+ CanvasRenderer:
+@@ -1783,14 +1783,14 @@
+   m_Name: 
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+-  m_Color: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 1}
++  m_Color: {r: 1, g: 1, b: 1, a: 1}
+   m_RaycastTarget: 0
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+   m_OnCullStateChanged:
+     m_PersistentCalls:
+       m_Calls: []
+-  m_Sprite: {fileID: 21300000, guid: 1fb9a8268c9f307888b82f09c71d7d51, type: 3}
++  m_Sprite: {fileID: 21300000, guid: 894107e73f7d66e40b6631a5374efc26, type: 3}
+   m_Type: 0
+   m_PreserveAspect: 0
+   m_FillCenter: 1
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -543,7 +543,7 @@
+         }
+         static void BuildFailPage()
+         {
+-            // R4 adds inactive offer designs and aligns panel content on existing objects; independent Scenario
++            // R5 restores the original outer panel, keeping only title-side scrolls removed; independent Scenario
+             // surfaces and live lettering retain all prior actions and references.
+             foreach(string name in ProductionFailRuntime.ArtNames)
+             {
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailRuntime.cs
+@@ -78,7 +78,7 @@
+             var detail=EnsureArt(scenery,"Scene",v.Environment.sprite,0,-300,941,941*v.Environment.sprite.rect.height/v.Environment.sprite.rect.width);
+             detail.raycastTarget=false;
+             if(detail.GetComponent<ProductionFailSceneBlend>()==null)detail.gameObject.AddComponent<ProductionFailSceneBlend>();
+-            SetPanel(v,"MainPanel","panel_r4",40,510,861,1005,true);
++            SetPanel(v,"MainPanel","panel_r2",25,510,891,1005,true);
+             var titleSprite=Load(ArtRoot+"title_r4");
+             SetPanel(v,"FailureTitlePanel","title_r4",40,378,861,861*titleSprite.rect.height/titleSprite.rect.width,false);
+             ProductionVictoryView.PlaceText(v.Title,153,460,635,92,76);
+@@ -204,7 +204,7 @@
+         static void SetPanel(ProductionFailView v,string name,string asset,float x,float y,float w,float h,bool fitted)
+         {
+             var image=EnsureArt(v.Body,name,Load(ArtRoot+asset),x,y,w,h);
+-            if(name=="MainPanel")image.color=new Color32(178,178,178,255);
++            if(name=="MainPanel")image.color=Color.white;
+             else if(name=="FailureTitlePanel")image.color=new Color32(214,214,214,255);
+             else if(name=="GoalsPanel"||name=="BoostersPanel")image.color=new Color32(220,220,220,255);
+             var fit=image.GetComponent<ProductionFailPanelFit>();if(fit==null&&fitted)fit=image.gameObject.AddComponent<ProductionFailPanelFit>();
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionFailView.cs
+@@ -8,7 +8,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionFailView:MonoBehaviour
+     {
+-        public const int CurrentRevision=4;
++        public const int CurrentRevision=5;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Body,Hud,HudBacking;
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/FailAlignmentEditModeTests.cs
+@@ -11,7 +11,7 @@
+         [Test]public void CanonicalFailureHasWholeArtLiveLabelsAndNativeActions()
+         {
+             var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);var v=root.GetComponent<ProductionFailView>();
+-            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(4));
++            Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.Revision,Is.EqualTo(5));
+             Assert.That(ProductionCoreLoopPageRegistry.ResourceKey(ScreenId.Fail),Is.EqualTo("ProductionUI/Pages/Fail"));
+             Assert.That(root.GetComponent<ProductionFailLayout>().View,Is.SameAs(v));
+             Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+@@ -21,6 +21,8 @@
+             Assert.That(v.Environment.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"environment_r2")));
+             Assert.That(v.Hero.sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"ivan_r2")));
+             Assert.That(v.Retry.GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"retry_r2")));
++            Assert.That(v.Body.Find("MainPanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"panel_r2")));
++            Assert.That(v.Body.Find("FailureTitlePanel").GetComponent<Image>().sprite,Is.SameAs(Resources.Load<Sprite>(ProductionFailRuntime.ArtRoot+"title_r4")));
+             Assert.That(v.Title.GetComponent<ProductionVictoryTitleLettering>().ArcHeight,Is.Zero);
+             for(int index=0;index<4;index++)
+             {

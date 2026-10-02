@@ -1,0 +1,38 @@
+"""Package actual Unity evidence and a standalone portrait review. Run from project root."""
+from pathlib import Path
+import hashlib,html,json,shutil,sys
+import xml.etree.ElementTree as ET
+
+b=Path(__file__).resolve().parents[1]
+run=Path('/tmp/lor-team-chat-reference-r1')/sys.argv[1]
+captures=b/'UnityCaptures';captures.mkdir(exist_ok=True)
+for p in (run/'TeamChat').glob('*'):shutil.copy2(p,captures/p.name)
+shutil.copytree(run/'TeamRanking',b/'QA/RegressionTeamRanking',dirs_exist_ok=True)
+shutil.copytree(run/'TeamHub',b/'QA/RegressionTeamHub',dirs_exist_ok=True)
+for old in run.parent.glob('Verify*'):
+    for mode in ('Import','EditMode','PlayMode'):
+        if (old/mode).exists():shutil.copytree(old/mode,b/'QA'/old.name/mode,dirs_exist_ok=True)
+previous=Path('ProjectDocs/AI/TeamChatStyleAlignment/R1/UnityVerification/TeamChat/TeamChat_941x1672_RU.png')
+shutil.copy2(previous,b/'Sources/PreviousTeamChat.png')
+choices=[('UnityCaptures/TeamChat_941x1672_RU.png','Current — Russian, 941 × 1672')]
+choices += [('UnityCaptures/'+p.name,p.stem.replace('TeamChat_','')) for p in sorted(captures.glob('*.png')) if p.name!='TeamChat_941x1672_RU.png']
+choices += [('Sources/OriginalReference.png','Original reference'),('Sources/PreviousTeamChat.png','Before — Initial Alignment R1')]
+options=''.join(f'<option value="{p}">{html.escape(label)}</option>' for p,label in choices)
+page='''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Team Chat — Reference Rebuild R1</title><style>body{background:#0a101a;color:#eeddb5;font:16px/1.5 system-ui;margin:24px auto;max-width:960px;padding:0 16px}h1{font-size:26px}a{color:#9bcded}select{max-width:100%;padding:10px;background:#14263a;color:#f6e4b6;border:1px solid #90713f;font:inherit}.page{display:block;width:min(100%,471px);height:auto;margin:20px auto;border:1px solid #78603b}.note{color:#c3c9d0}button{font:inherit;padding:8px;background:#213146;color:#ffe8b6;border:1px solid #89704a;cursor:pointer}</style><h1>Team Chat — Reference Rebuild R1</h1><p>Shared Home header, proportional sample chest progress, original Russian Send/footer lettering and safe-edge controls. Existing source portraits, parchment and native local composer are preserved.</p><p class="note">Actual Unity captures below. Chat history, presence and chest progress are examples. Typed messages remain in this local session; nothing is sent to other players. Header routes and Back are functional. English uses live localized text. Fonts, repaired surfaces and reused footer/scenery differ from the original.</p><label>View <select id="view">OPTIONS</select></label> <button id="original">Compare with original</button><img id="page" class="page" src="UnityCaptures/TeamChat_941x1672_RU.png" alt="Team Chat portrait page"><p id="caption" class="note">Actual Unity Play Mode capture, isolated save and simulated screen/safe area.</p><p><a href="ImplementationReport.md">Implementation and checks</a> · <a href="QA/ReferenceFidelityReview.md">Remaining differences</a> · <a href="QA/AssetAlpha.png">Alpha inspection</a></p><script>const picker=document.querySelector('#view'),page=document.querySelector('#page'),caption=document.querySelector('#caption');let previous=picker.value;function show(){page.src=picker.value;caption.textContent=picker.value.includes('OriginalReference')?'Original Team Chat reference.':picker.value.includes('PreviousTeamChat')?'Historical Initial Alignment R1 native capture.':'Actual Unity Play Mode capture, isolated save and simulated screen/safe area.';}picker.onchange=show;document.querySelector('#original').onclick=()=>{if(picker.value.includes('OriginalReference'))picker.value=previous;else{previous=picker.value;picker.value='Sources/OriginalReference.png';}show();};</script></html>'''.replace('OPTIONS',options)
+(b/'TeamChat_ReferenceRebuild_R1_Review.html').write_text(page)
+before=json.loads((b/'Sources/BeforeAssetsHashes.json').read_text())
+after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('Assets').rglob('*') if p.is_file()}
+record={'modified':sorted(p for p in before.keys()&after.keys() if before[p]!=after[p]),'added':sorted(after.keys()-before.keys()),'deleted':sorted(before.keys()-after.keys()),'checks':{},'finalRun':str(run)}
+for mode in ('EditMode','PlayMode'):
+    r=ET.parse(run/mode/'results.xml').getroot();record['checks'][mode]={k:r.get(k) for k in ('result','passed','failed','skipped','total')}
+(b/'QA/ScopeAndVerification.json').write_text(json.dumps(record,indent=2)+'\n')
+changed=set(record['modified'])|set(record['deleted'])
+preserved={
+    'existingPNGAndMetas':not any(p.endswith(('.png','.meta')) for p in changed),
+    'otherPagePrefabs':not any('/Pages/' in p and p.endswith('.prefab') and not p.endswith('/TeamChat.prefab') for p in changed),
+    'fonts':not any(p.endswith(('.ttf','.otf')) for p in changed),
+    'priorEventDetailChanges':not any('EventDetail' in p for p in changed),
+}
+assert all(preserved.values()),preserved
+(b/'QA/PreservationChecks.json').write_text(json.dumps(preserved,indent=2)+'\n')
+print(json.dumps(record,indent=2))

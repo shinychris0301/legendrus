@@ -1,0 +1,30 @@
+/* R2: shared Home navigation, complete title, borderless ascending regions. */
+#stage{background:linear-gradient(#07132144,#07132199),url('Assets/clean_environment.png') center/cover}
+.header{background:transparent;z-index:7}
+.heroName{top:30px}.heroLevel{top:75px}
+.title-backdrop{top:138px;height:206px;border:0;background:linear-gradient(#08111bdd,#08111b77),url('Assets/footer_backing.png') center/cover;mask-image:linear-gradient(transparent,#000 16%,#000 80%,transparent)}
+.title{top:150px;left:190px;width:561px;height:184px;z-index:8}
+.scrollHint{top:316px;right:0;width:100%;text-align:center;font-size:18px;color:#e0c591;z-index:9}
+.map-window{top:352px;height:984px;left:0;right:0;border:0;scrollbar-width:none;background:#111c20;cursor:grab;mask-image:linear-gradient(transparent,#000 3%,#000 97%,transparent)}
+.map-window:active{cursor:grabbing}
+.region{height:310px;overflow:visible;background:transparent;isolation:auto;border:0;user-select:none;-webkit-user-select:none}
+.terrain{inset:-45px 0 auto;height:400px;z-index:0;pointer-events:none;mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent)}
+.shade{z-index:1;inset:35% 0 0;background:radial-gradient(ellipse at 45% 90%,#030b16e8,transparent 74%);pointer-events:none}
+.region.locked .shade{background:radial-gradient(ellipse at 45% 90%,#030b16eb,transparent 74%)}
+.region.active:after{display:none}
+.region.locked .terrain{filter:saturate(.3) brightness(.62)}
+.region.active .terrain{filter:saturate(.48) brightness(.73)}
+.number{z-index:2;left:30px;bottom:27px;width:106px;height:106px;border:0;border-radius:0;background:url('Assets/number_medallion.png') center/contain no-repeat;box-shadow:none;font:43px Numbers;color:#f4d390;text-shadow:0 2px 3px #000}
+.active .number,.locked .number{border:0;box-shadow:none;background:url('Assets/number_medallion.png') center/contain no-repeat}
+.locked .number{filter:saturate(.45) brightness(.8)}
+.copy{z-index:2;left:154px;right:112px;bottom:29px;text-shadow:0 2px 4px #000}
+.chapter{font-size:17px;letter-spacing:3px;color:#c4b498}.name{font-size:35px;font-weight:normal;line-height:1.08;margin:3px 0 8px}
+.status{font-size:21px}.active .status{color:#c4c9c6}.locked .status{color:#a8afa9}.completed .status{color:#d3dbc1}
+.lock,.check{z-index:2}.lock{right:37px;bottom:46px;filter:brightness(.86) drop-shadow(0 2px 3px #000)}
+.footer{height:336px;background:linear-gradient(#06101b55,#070d15aa),url('Assets/footer_backing.png') center/cover;border:0;box-shadow:0 -8px 25px #07101955}
+.footer-carving{left:0;bottom:0;width:941px;height:218px;z-index:0}
+.nav{top:0;height:236px;z-index:1;filter:drop-shadow(0 7px 7px #0008)}
+.nav img{object-fit:contain}.nav[data-nav=map]{left:52px;width:208px}.nav[data-nav=shop]{left:263px;width:205px}.nav[data-nav=events]{left:472px;width:201px}.nav[data-nav=characters]{left:677px;width:207px}
+.back{left:26px;top:auto;bottom:18px;width:88px;height:88px;z-index:8}
+.footer-direction{position:absolute;bottom:55px;left:145px;right:115px;text-align:center;font-size:24px;color:#cab184}
+.compact .region{height:242px}.compact .terrain{height:332px}.compact .name{font-size:32px}.compact .copy{bottom:22px}.compact .number{bottom:15px}

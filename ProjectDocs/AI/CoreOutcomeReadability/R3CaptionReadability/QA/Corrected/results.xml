@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="7.0511654">
+  <test-suite type="TestSuite" id="2497" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1345" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="7.051165" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2491" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="7.003564" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1477731" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2492" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="6.990832" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2493" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="6.978104" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2494" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="556" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:25Z" duration="6.957989" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2164" name="GameplayAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:19Z" duration="0.632275" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2176" name="LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" fullname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" methodname="LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput" classname="LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests" runstate="Runnable" seed="1984525694" result="Failed" start-time="2026-10-01 20:13:18Z" end-time="2026-10-01 20:13:19Z" duration="0.605264" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Larger names must not silently shrink back into the old well.
+  Expected: greater than or equal to 0.980000019f
+  But was:  0.948925555f
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.VerifyBoosterCards (LegendsOfRus.ProductionGameplayView view, UnityEngine.Camera camera, UnityEngine.Rect safe) [0x001f1] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs:610
+at LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.VerifyLayoutAndInput (LegendsOfRus.ProductionGameplayView view, UnityEngine.Camera camera, UnityEngine.Vector2Int size, UnityEngine.Rect safe) [0x004d4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs:699
+at LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.Capture (System.String name, UnityEngine.Vector2Int size, UnityEngine.Rect safeArea, System.Action`1[T] inspect) [0x00243] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs:487
+at LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests+<LargerBoosterNamesPreserveTheBoardAndForwardCaptionInput>d__29.MoveNext () [0x002db] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs:573
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=chapter01.level01, attempt=1, board=8x7, seed=508541, hash=63C4330589EABDB4
+Legends of Rus level=chapter01.level01, attempt=2, board=8x7, seed=508542, hash=E431630E82D49A08
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2469" name="VictoryAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-01 20:13:19Z" end-time="2026-10-01 20:13:25Z" duration="6.275449" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2482" name="LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" fullname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" methodname="LiveBilingualRewardCaptionsRetainAmountsAndUnavailableSemantics" classname="LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests" runstate="Runnable" seed="529940466" result="Passed" start-time="2026-10-01 20:13:19Z" end-time="2026-10-01 20:13:25Z" duration="6.252869" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Legends of Rus EDITOR memory observation: allocated=349 MiB, reserved=707 MiB, managed=39 MiB. Exceeded guardrails: reserved >= 640 MiB (warning). Comparison band=Warning. Editor measurements are not an Android Player budget verdict. Profile a Development Build on the target device. Evidence remains local and bounded.
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CoreOutcomeReadability/R3CaptionReadability/QA/Corrected/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

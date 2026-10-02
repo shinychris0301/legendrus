@@ -1,0 +1,70 @@
+{
+  "note": "R43 historical failures overlaid with R2 Combined. Remaining cases have not been rerun, not freshly confirmed defects. Not a full-project acceptance claim.",
+  "historicalFailureCount": 40,
+  "nowPassedCount": 35,
+  "remainingUnrerunCount": 5,
+  "nowPassed": [
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignGranaryCandidateTests.AnimatedTwentyOneAndThirtyCompleteWithStoryAndRecordingBoundary",
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignRiverbankCandidateTests.AnimatedThirtyOneAndFortyCompleteWithStoryAndRecordingBoundary",
+    "LegendsOfRus.Tests.CampaignPlayMode.CampaignSectorCandidateTests.CandidatePreservesLegacyBoardsRewardsAndKeepsBothFinaleBoundaries",
+    "LegendsOfRus.Tests.PlayMode.ChapterCompleteAlignmentPlayModeTests.LiveCompletionRewardsLocalizationAndResponsiveCaptures",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousDrag_WaitsForDominantAxisBeforeCommit",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.AmbiguousRelease_CancelsWithoutSwapOrTapSelection",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ApplicationPause_ReleasesOwnershipForNextGesture",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.BlockedSwap_EmitsOneRejectionAndSettlesWithoutMutation",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.CancelledPointer_ReleasesOwnershipForNextGesture",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ForeignPointer_CannotStealBoardGestureOwnership",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.FourGemMatch_EmitsSpecialCreationHook",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.GestureStartedDuringResolution_CanCommitAfterBoardReturnsIdle",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InputRemainsLockedForEveryResolvedMotionHook",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.InvalidSwap_EmitsForwardAndReturnTimeline",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.MultiWavePlan_EmitsCascadeHookWithIncreasingDepth",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SamePreset_ProducesSameSemanticMotionTrace",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.SpecialCombination_EmitsOrderedActivationWaveAndFallHooks",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingLegacyBoardObserver_CannotStallResolvedSwap",
+    "LegendsOfRus.Tests.PlayMode.CoreLoopMotionFeedbackPlayModeTests.ThrowingMotionObserver_CannotStallRejectedSwap",
+    "LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute",
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.AuthoredGoalsObstaclesAndFeathersUseTheirActualState",
+    "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpecialColorsUseWholeOrientedObjectsWithoutCompanionFragments",
+    "LegendsOfRus.Tests.PlayMode.HomeAlignmentPlayModeTests.Play_PreservesPendingStoryAndChapterCompletionGates",
+    "LegendsOfRus.Tests.PlayMode.LevelGoalRuntimeTests.StagedChapterBoardsRemainPlayableAcrossSeeds",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsDownCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsLeftCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsRightCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ActualCellGesture_MapsUpCorrectly",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.BlockedSwap_ReleasesInputWithoutMutationOrMoveSpend",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.InvalidBoosterTarget_DoesNotConsumeInventory",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpecialCombination_VerifiesEveryRuntimeWaveHash",
+    "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.ValidBoosterTarget_ConsumesExactlyOne",
+    "LegendsOfRus.Tests.PlayMode.MetaUiMotionTransitionPolishPlayModeTests.PublicRouterFlow_WiresMapMotionAndAtomicModalBlocking",
+    "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.AllAuthoredGoalsRewardsAndInventoryReflectTheSelectedLevelWithoutWritingSave",
+    "LegendsOfRus.Tests.PlayMode.WorldMapAlignmentPlayModeTests.ScrollHighlightAndLocalizationPreserveRealProgress"
+  ],
+  "remainingHistoricalFailures": {
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.FixedPool_IsPrewarmedAndBoundedUnderBurstLoad": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: 33\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.NativeFacetsRingsAndTrails_RenderThenReturnToPool": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  MatchWaveStarted\n  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.PoolReuse_DoesNotCreateObjectsAfterRelease": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.Recovery_ClearsBoosterVfxSuppressesCompletionAndRefundsOnce": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    "LegendsOfRus.Tests.PlayMode.CoreLoopVfxBoosterFeedbackPlayModeTests.ResetPresetAndDisable_CleanEffectsAndRestoreSubscription": {
+      "result": "Failed",
+      "run": "RuntimeIsolated01",
+      "message": "  Expected: greater than 0\n  But was:  0\n"
+    }
+  }
+}

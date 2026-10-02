@@ -1,0 +1,51 @@
+{
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "EditMode",
+    "-testFilter",
+    "LegendsOfRus.",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CampaignFoundation/R43RegressionAudit/QA/EditMode02/results.xml",
+    "-logFile",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/CampaignFoundation/R43RegressionAudit/QA/EditMode02/unity.log",
+    "-force-vulkan"
+  ],
+  "exitCode": 2,
+  "durationSeconds": 31.967172622680664,
+  "isolatedConfig": "/tmp/lor-regression-r43/EditMode02/config",
+  "processOnlyVulkan": true,
+  "phaseOverrides": {},
+  "result": {
+    "id": "2",
+    "testcasecount": "1915",
+    "result": "Failed(Child)",
+    "total": "1915",
+    "passed": "1913",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-09-29 14:54:11Z",
+    "end-time": "2026-09-29 14:54:27Z",
+    "duration": "16.1809011"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.BalanceReview.Tests.BalanceTelemetryTutorialFunnelEditModeTests.AggregateComputesWinningMoveMargin",
+      "result": "Failed",
+      "message": "  Expected: 0.25f +/- 0.00100000005f\n  But was:  0.75f\n"
+    },
+    {
+      "name": "LegendsOfRus.BalanceReview.Tests.BalanceTelemetryTutorialFunnelEditModeTests.ReviewFlagsLowWinningMoveMargin",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    }
+  ]
+}

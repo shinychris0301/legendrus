@@ -1,0 +1,105 @@
+{
+  "operation": "Source RGB under Scenario alpha, bounded support repairs; no generated RGB",
+  "source": {
+    "file": "Inbox.png",
+    "sha256": "f1e9c6625013eedebd02a876eccf46ac57530d127041e4a350a388518cd7bda7"
+  },
+  "bounds": {
+    "tabs_joined_r2": {
+      "source": [
+        30,
+        262,
+        911,
+        351
+      ],
+      "sheet": [
+        29,
+        20,
+        1791,
+        198
+      ]
+    },
+    "preview_portrait_r2": {
+      "source": [
+        74,
+        1049,
+        276,
+        1288
+      ],
+      "sheet": [
+        700,
+        240,
+        1104,
+        718
+      ]
+    },
+    "repairs": "Tab captions and inactive/selected faces use approved navy. Badge occlusion repaired with mirrored same-tab left rails. Portrait plaque caption footprint uses approved navy. RGB never generated.",
+    "navy": "TeamRankingAligned/table_panel_r4.png",
+    "selected": "FriendsListAligned/tab_0_active_r2.png"
+  },
+  "artifacts": {
+    "tabs_joined_r2": {
+      "size": [
+        1762,
+        178
+      ],
+      "sha256": "fd694e1b670254d5377707f064ee5a6856d18e56aac62f06f0abdac4663c45e4"
+    },
+    "preview_portrait_r2": {
+      "size": [
+        404,
+        478
+      ],
+      "sha256": "35f3280fd57eb10a85816cd952a72b425553354326fa84697456478334cc49b1"
+    },
+    "preview_nameplate_r2": {
+      "size": [
+        404,
+        156
+      ],
+      "sha256": "a7588190ba157345fd64910625118c531a3bd69914ca6c1eb2a1f0b07352fe86"
+    },
+    "tab_face_r2": {
+      "size": [
+        488,
+        104
+      ],
+      "sha256": "b37e1a4fa95c90ba86abf9fd2457b611e2abaf1cd9a494f11acc0f4bfef87da1"
+    },
+    "tab_face_active_r2": {
+      "size": [
+        488,
+        104
+      ],
+      "sha256": "4063690e0d660c3f41c8f3b5a6e3fe907d3e580cd9c9e5f84ed2a1267e1de89c"
+    },
+    "preview_divider_r2": {
+      "size": [
+        408,
+        57
+      ],
+      "sha256": "5b459cff9577bfbd8f230722e789b55eec2544d6db97afda2bf9504811d045b3"
+    },
+    "preview_rule_r2": {
+      "size": [
+        1656,
+        24
+      ],
+      "sha256": "c488b577cee9cd33fa9c02b3b25837e460c550382974021fc1a73229f587cd0f"
+    },
+    "preview_paper_r2": {
+      "size": [
+        2538,
+        1332
+      ],
+      "sha256": "922c044d4030ed471d63d68316e424e1d28e1e36c7c4b9f1afcbf17b984b6e2e"
+    }
+  },
+  "limitations": "Obscured tab badge rails mirrored; captions hidden surfaces use existing lacquer. Portrait contour traced conservatively. Font identity unverified. Upsampling adds no source detail.",
+  "finalRefinements": [
+    "Scenario retained staging rectangles; local traced silhouettes remove exterior parchment/scenery without another request.",
+    "Disconnected exterior foliage removed; first-tab blue outline neutralized for inactive state.",
+    "Selected texture: approved IndividualRankingAligned/tab_active.png crop(90,48,210,148).",
+    "Existing parchment residual reward edge repaired under PaperRepairMask.png using neighboring rail; alpha unchanged."
+  ]
+}

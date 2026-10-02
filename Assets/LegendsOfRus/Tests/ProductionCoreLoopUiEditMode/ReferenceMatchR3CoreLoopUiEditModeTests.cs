@@ -115,7 +115,8 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         {
             string text = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
             StringAssert.Contains("typeof(RectTransform), typeof(Match3Board)", text);
-            StringAssert.Contains("SetPixelRect(rt, 79, 357, 786, 942);", text);
+            StringAssert.Contains("boardGo.transform.SetParent(view.BoardMount, false);", text);
+            StringAssert.Contains("view.Bind(activeBoard, ShowPause);", text);
         }
 
         [Test]
@@ -128,13 +129,17 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         }
 
         [Test]
-        public void CorrectedInteractionHotspotsMatchR3Geometry()
+        public void NativePreparationAndPauseExposeBoundInteractiveControls()
         {
-            string text = File.ReadAllText("Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs");
-            StringAssert.Contains("Hotspot(parent, \"Boosters\", 110, 850, 720, 285", text);
-            StringAssert.Contains("Hotspot(parent, \"StartLevel\", 205, 1435, 535, 190", text);
-            StringAssert.Contains("Hotspot(parent, \"Resume\", 235, 910, 470, 105", text);
-            StringAssert.Contains("Hotspot(parent, \"Exit\", 235, 1255, 470, 105", text);
+            var preparation = Resources.Load<GameObject>("ProductionUI/Pages/PreLevel").GetComponent<ProductionPreLevelView>();
+            var pause = Resources.Load<GameObject>("ProductionUI/Pages/Pause").GetComponent<ProductionPauseView>();
+            Assert.That(preparation.HasRequiredBindings, Is.True);
+            Assert.That(pause.HasRequiredBindings, Is.True);
+            Assert.That(preparation.PlayButton.targetGraphic.raycastTarget, Is.True);
+            foreach (var button in preparation.BoosterButtons)
+                Assert.That(button.targetGraphic.raycastTarget, Is.True);
+            foreach (var button in pause.Actions)
+                Assert.That(button.targetGraphic.raycastTarget, Is.True);
         }
 
         [Test]
@@ -155,15 +160,14 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
             StringAssert.Contains("ReferenceMatchR3", text);
         }
 
-        [TestCase(ScreenId.PreLevel, 12, false, false)]
-        [TestCase(ScreenId.Gameplay, 5, true, false)]
+        [TestCase(ScreenId.PreLevel, 8, false, false)]
+        [TestCase(ScreenId.Gameplay, 8, true, false)]
         [TestCase(ScreenId.Pause, 7, false, true)]
         public void GeneratedR3PrefabUsesExpectedLiveRuntimeBoundary(ScreenId id, int componentCount, bool preserveBoard, bool liveGameplayBehindPause)
         {
             string path = PageRoot + "/" + id + ".prefab";
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (prefab == null)
-                Assert.Ignore("R3 deterministic prefab build has not run yet in this editor session.");
+            Assert.That(prefab, Is.Not.Null, path);
 
             ProductionReferenceMatchR3PageMarker marker = prefab.GetComponent<ProductionReferenceMatchR3PageMarker>();
             Assert.That(marker, Is.Not.Null);

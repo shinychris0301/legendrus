@@ -1,0 +1,13 @@
+{
+  "onlySettingsChanges": "Remote catalog build/load IDs now reference existing Remote.BuildPath and Remote.LoadPath entries",
+  "remoteCatalogEnabled": false,
+  "remoteLoadValue": "<undefined> (unchanged; hosting not configured)",
+  "profileValuesAndGroupMembershipUnchanged": true,
+  "priorBuildEmptyIdWarnings": 1,
+  "currentBuildEmptyIdWarnings": 0,
+  "addressableBuildSucceeded": true,
+  "foundationValidatorPassed": true,
+  "packageSourceChanged": false,
+  "phoneExecution": false,
+  "diagnosis": "BuildLayoutGenerationTask.GenerateBuildLayout evaluates RemoteCatalogBuildPath even when BuildRemoteCatalog is false. Serialized empty IDs bypass the installed package getter null check."
+}
