@@ -1,3 +1,35 @@
+# 2026-10-02 — GitHub Sync/Push recovery: full-evidence batch upload
+
+Local commits work; VS Code Sync/Push fails with HTTP500/disconnect. Four unpublished commits contain27.5GB of new file contents, mostly QA images; an oversized aggregate upload is the likely cause (GitHub limit2GiB per push). Existing identity/index/permissions pass, no merge conflict or stale index lock. Remote main verified at13f8316e via existing VS Code authentication.
+
+The user explicitly chose **upload all evidence through smaller batches**. Private backup/index and original-main/staged snapshot refs preserve pre-repair state. Pending491-file fixed-preset change committed as674a8741. A verified private-index uploader constructs bounded512MiB bridge snapshots, keeps original commit IDs and all file contents, resumes acknowledged batches and only fast-forwards main after every batch. No force push/history rewrite, file removal, new exclusions or credential export. [Repair report/tools](GitCommitRecovery/R1/README.md) · [Diagnosis](GitCommitRecovery/R1/Diagnosis.json) · [Fixture checks](GitCommitRecovery/R1/FixtureResults.json). Live progress is in private `/home/k2/.local/state/legendrus-git-repair/20261002T181726Z/UploadStatus.json`; transfer is not yet claimed complete.
+
+Game source/art/prefabs/GUIDs/metas/settings/APK and approved Splash unchanged by Git repair. No Unity test/build/device/hosting action; next game milestone remains the guarded fixed-preset APK refresh, with human201–210 parallel and phone/hosting/effects deferrals retained.
+
+# 2026-10-02 — Codex history repair applied after writer closure
+
+The authorized offline worker waited for every detected Codex process/writer lock to close, made a fresh quiescent backup, then rebuilt and installed only the affected project thread. Original raw file is retained privately outside the scan directory. Existing indexed records retained; unrelated history rows/other thread metadata preserved. Live target rows match the reconstructed copy verified through two native Codex resumes. Actual VS Code UI reopening remains to be confirmed. See [completion evidence](CodexHistoryDiagnostics/R2Repair/CompletedRepair.json).
+
+Game source/art/prefabs/APK untouched; next game milestone remains the guarded APK refresh, with phone/hosting deferred and effects last.
+
+# 2026-10-02 — Codex history repair prepared; worker awaits closure
+
+The user authorized repair after backup and closing all Codex writers. A verified initial private backup holds consistent SQLite snapshots and complete saved-record prefixes; the worker will make a fresh quiescent backup after closure. Detached worker is armed and verified waiting on four Codex processes, including this session. **No live repair has been applied yet.** Close all VS Code/Codex sessions, wait for private `Status.json` to say `completed`, then reopen.
+
+Isolated native reconstruction and two resumes expose41turns/3242history items. All314raw user/assistant messages retain exact text;498existing indexed items preserved. Narrow installation leaves unrelated history unchanged and retains the original raw file in private quarantine. Full worker fixture passes with simulated closure and actual isolated reconstruction/installation. Three status-boundary checks pass after correcting a test result initially mistaken for live installation; only the owned waiting worker was stopped/rearmed, no Codex process or live store changed. Initial validator assumptions were corrected and retained.29legacy transient-item adapter warnings remain, while all identified chat text is available through paginated APIs; actual VS Code UI reopening remains unverified.
+
+[Preparation](CodexHistoryDiagnostics/R2Repair/Preparation.json) · [installation fixture](CodexHistoryDiagnostics/R2Repair/InstallationFixtureResults.json) · [worker fixture](CodexHistoryDiagnostics/R2Repair/WorkerFixtureResults.json) · [waiting guard](CodexHistoryDiagnostics/R2Repair/WaitingGuardVerified.json). Private backup/job directory: `/home/k2/.local/state/codex-history-repair/20261002T132807/`; status lives at `Status.json`. Pinned source tools copied there survive VS Code closure. Worker waits for all detected Codex processes/locks, backs up again, rebuilds/verifies in isolation, then changes only this thread’s rows/file reference. Completion evidence/continuity append only after successful installation; errors retain backups for review.
+
+Chat data/databases stay in private0700/0600storage outside the repository; authentication/configuration files excluded. Game source/art/prefabs/APK untouched. Next game milestone remains the guarded APK refresh, parallel human201–210, phone/hosting deferred and effects last.
+
+# 2026-10-02 — Codex chat-history diagnosis
+
+The user requested the cause of Codex history disappearing after closing/restarting VS Code. Read-only inspection confirms an inconsistent local paginated-history projection: the current project chat JSONL remains present with sequential ordinals around8,000, but the persisted/logged projection expects88,958 and repeatedly skips recent entries as duplicate/regressed. Both SQLite quick checks pass; this is a logical reconstruction/index mismatch, not proof of file deletion. One separate native resume fails because another Codex writer owns that thread; the active kernel lock is confirmed. Initial trigger (update/migration/manual rewrite/crash) and exact historical-loss/recovery extent remain unproven.
+
+[Sanitized diagnosis and exact evidence](CodexHistoryDiagnostics/R1Diagnosis.json). Extension openai.chatgpt26.930.21537. No message bodies/credentials exported, live database/session modification, process termination, restart or repair. User asked diagnosis; repair remains a separate action requiring all writers closed and a durable backup first. Source/art/prefab/APK unchanged.
+
+**Next game milestone remains:** the guarded development APK refresh documented below. Phone/hosting deferrals, parallel human201–210 and effects-last unchanged.
+
 # 2026-10-02 — Fixed disposable presets R4 complete
 
 Installed six bounded cold-launch presets in the existing development profile: stock 999/1 000/9 999/Int32.MaxValue and synthetic early/fully acknowledged finale story. New presets reject present foreign/empty ownership before mutation, prepare from validated active content, commit through the existing QA journal before publishing ownership and remain blocked on failure. Original fresh/resume/empty-energy/no-command semantics and Android development/package/debuggable guards preserved; factory excluded from release source compilation.

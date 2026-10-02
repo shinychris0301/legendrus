@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-10-02T13:10:24.113829-04:00",
+  "extension": "openai.chatgpt",
+  "extensionVersion": "26.930.21537",
+  "projectThreadId": "01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8",
+  "projectionThreadIdLogged": "01a0f294-8d96-7501-8df9-b16f2f7fe00a",
+  "diagnosis": "Saved JSONL records and persisted paginated history projection are inconsistent. Resume/history reconstruction skips recent records below the projection ordinal. A separate duplicate-writer conflict blocks an observed resume.",
+  "savedFile": {
+    "path": "/home/k2/.codex/sessions/2026/09/30/rollout-2026-09-30T09-50-16-01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8_01a0f294-8d96-7501-8df9-b16f2f7fe00a.jsonl",
+    "bytesAtInspection": 248698312,
+    "completeRecordsParsed": 8035,
+    "lastRecord": {
+      "ordinal": 8034,
+      "timestamp": "2026-10-02T17:10:23.788Z"
+    },
+    "invalidJsonLines": 0,
+    "nonIncreasingOrdinals": 0,
+    "recordsByUtcDate": {
+      "2026-09-30": 1,
+      "2026-10-01": 4973,
+      "2026-10-02": 3061
+    }
+  },
+  "persistedProjection": {
+    "threadId": "01a0f294-8d96-7501-8df9-b16f2f7fe00a",
+    "nextRolloutByteOffset": 248698312,
+    "nextRolloutOrdinal": 88958
+  },
+  "logicalMismatchConfirmed": true,
+  "rawRecordsStillPresent": true,
+  "sqliteQuickChecks": {
+    "state": "ok",
+    "history": "ok"
+  },
+  "historyProjectionLogs": [
+    {
+      "path": "/home/k2/.config/Code/logs/20261002T103550/window3/exthost/openai.chatgpt/Codex.log",
+      "firstLine": 34,
+      "lastLine": 823,
+      "warningCount": 524,
+      "expectedOrdinals": [
+        88958
+      ],
+      "skippedOrdinalRange": [
+        7368,
+        7926
+      ]
+    },
+    {
+      "path": "/home/k2/.config/Code/logs/20261002T103550/window6/exthost/openai.chatgpt/Codex.log",
+      "firstLine": 32,
+      "lastLine": 266,
+      "warningCount": 108,
+      "expectedOrdinals": [
+        88958
+      ],
+      "skippedOrdinalRange": [
+        7927,
+        8034
+      ]
+    }
+  ],
+  "resumeConflict": {
+    "path": "/home/k2/.config/Code/logs/20261002T103550/window4/exthost/openai.chatgpt/Codex.log",
+    "lines": [
+      70,
+      72,
+      74
+    ],
+    "message": "thread 01a0d00e-5c8c-7e31-9fcb-a9d58d9cf1c8 already has an active writer",
+    "observedKernelLock": [
+      "82: FLOCK  ADVISORY  WRITE 310341 103:06:2765447 0 EOF"
+    ]
+  },
+  "establishedUnderlyingMechanism": "History projection cursor is ahead of current file ordinals; raw records are skipped during materialization.",
+  "initialTriggerUnproven": "No claim that a specific update, migration, manual file rewrite or crash originally caused the cursor mismatch.",
+  "notEstablished": "Full recovery completeness, exact lost-message extent, or successful restart after repair.",
+  "actionsTaken": [
+    "Read-only local storage/log/extension-code inspection",
+    "SQLite quick_check on both databases",
+    "Parsed ordinal/timestamp metadata without exporting message contents",
+    "Recorded diagnosis in project continuity docs"
+  ],
+  "repairApplied": false,
+  "liveDatabasesOrSessionFilesModified": false,
+  "processesKilledOrVSCodeRestarted": false,
+  "gameDevelopmentScheduleUnchanged": true,
+  "recommendedNextAction": "Back up and repair the affected history projection against the actual saved records after all Codex writers are closed; verify restoration before resuming the same chat. Avoid concurrent windows owning the same thread.",
+  "officialDocumentation": "https://learn.chatgpt.com/docs/app-server"
+}
