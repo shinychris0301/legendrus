@@ -54,10 +54,28 @@ namespace LegendsOfRus
                 }
 #endif
                 if (string.IsNullOrEmpty(command)) { initialized = true; return; }
-                if (command != "fresh" && command != "resume" && command != "empty-energy")
+                bool preset = false;
+#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
+                preset = DevelopmentGameplayFixtures.IsPreset(command);
+#endif
+                if (command != "fresh" && command != "resume" && command != "empty-energy" && !preset)
                     throw new InvalidOperationException("Unknown gameplay QA command");
                 if (command == "resume" && PlayerPrefs.GetString(Marker, "") != Owner)
                     throw new InvalidOperationException("Create a gameplay QA profile before resuming");
+                if (preset && PlayerPrefs.HasKey(Marker) && PlayerPrefs.GetString(Marker, "") != Owner)
+                    throw new InvalidOperationException("Gameplay QA preset requires its own namespace");
+
+                // Prepare bounded state before deleting any owned slot. The factory
+                // reads installed content only; it never creates a service or reads saves.
+                PlayerSaveData fixture = null;
+                if (command != "resume")
+                {
+#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
+                    if (preset) fixture = DevelopmentGameplayFixtures.Create(command, DateTime.UtcNow.Ticks);
+#endif
+                    if (fixture == null) fixture = new PlayerSaveData { lastEnergyUtcTicks = DateTime.UtcNow.Ticks };
+                    if (command == "empty-energy") fixture.energy = 0;
+                }
 
                 active = true;
                 initialized = true; // Recursive SaveService calls below remain in QA.
@@ -69,8 +87,6 @@ namespace LegendsOfRus
                         PlayerPrefs.DeleteKey(Prefix + key);
                     PlayerPrefs.DeleteKey(Marker);
                     PlayerPrefs.Save();
-                    var fixture = new PlayerSaveData { lastEnergyUtcTicks = DateTime.UtcNow.Ticks };
-                    if (command == "empty-energy") fixture.energy = 0;
                     if (!SaveService.TryReplaceHistory(fixture, out var result) || !result.Success)
                         throw new InvalidOperationException("Gameplay QA fixture could not be committed");
                     PlayerPrefs.SetString(Marker, Owner);

@@ -1,0 +1,555 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/DevelopmentGameplayProfile.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/DevelopmentGameplayProfile.cs
+@@ -54,10 +54,28 @@
+                 }
+ #endif
+                 if (string.IsNullOrEmpty(command)) { initialized = true; return; }
+-                if (command != "fresh" && command != "resume" && command != "empty-energy")
++                bool preset = false;
++#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
++                preset = DevelopmentGameplayFixtures.IsPreset(command);
++#endif
++                if (command != "fresh" && command != "resume" && command != "empty-energy" && !preset)
+                     throw new InvalidOperationException("Unknown gameplay QA command");
+                 if (command == "resume" && PlayerPrefs.GetString(Marker, "") != Owner)
+                     throw new InvalidOperationException("Create a gameplay QA profile before resuming");
++                if (preset && PlayerPrefs.HasKey(Marker) && PlayerPrefs.GetString(Marker, "") != Owner)
++                    throw new InvalidOperationException("Gameplay QA preset requires its own namespace");
++
++                // Prepare bounded state before deleting any owned slot. The factory
++                // reads installed content only; it never creates a service or reads saves.
++                PlayerSaveData fixture = null;
++                if (command != "resume")
++                {
++#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
++                    if (preset) fixture = DevelopmentGameplayFixtures.Create(command, DateTime.UtcNow.Ticks);
++#endif
++                    if (fixture == null) fixture = new PlayerSaveData { lastEnergyUtcTicks = DateTime.UtcNow.Ticks };
++                    if (command == "empty-energy") fixture.energy = 0;
++                }
+ 
+                 active = true;
+                 initialized = true; // Recursive SaveService calls below remain in QA.
+@@ -69,8 +87,6 @@
+                         PlayerPrefs.DeleteKey(Prefix + key);
+                     PlayerPrefs.DeleteKey(Marker);
+                     PlayerPrefs.Save();
+-                    var fixture = new PlayerSaveData { lastEnergyUtcTicks = DateTime.UtcNow.Ticks };
+-                    if (command == "empty-energy") fixture.energy = 0;
+                     if (!SaveService.TryReplaceHistory(fixture, out var result) || !result.Success)
+                         throw new InvalidOperationException("Gameplay QA fixture could not be committed");
+                     PlayerPrefs.SetString(Marker, Owner);
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
+@@ -59,3 +59,9 @@
+ ### 2026-10-02 fixture preparation update
+ 
+ [Fixed fixture scope and Editor rehearsal](../../AndroidGameplayProfile/R3FixturePreparation/TestResults.md) now defines the stock boundaries, eight-round/three-scene early recap and fully acknowledged 500-round finale. Fourteen isolated Unity process checks and 34 fake-JNI entry checks pass. The current APK has no new selectors and reference DTOs have no supported import route. STOCK-01/02/03 and RECAP-02/03 still require selector/factory implementation, a separately verified APK refresh and resumed physical execution. Every device row remains pending. This preparation does not turn service-level synthetic completions into earned phone evidence.
++
++### 2026-10-02 fixed preset implementation R4
++
++[Six bounded presets R4](../../AndroidGameplayProfile/R4FixedPresets/TestResults.md) are now installed and verified in Editor/source. Stock names are `stock-999`, `stock-1000`, `stock-9999`, `stock-max`; story names are `story-early` (eight rounds/three acknowledged scenes) and `story-finale` (500 rounds/58 scenes/Chapter1 acknowledged). New preset foreign/empty owners are rejected before mutation, and failed preparation/commit cannot fall back to normal saves. Presets are synthetic QA state, not earned human/phone outcomes. `stock-max` permits display/consumption only because normal first-clear booster additions lack overflow protection.
++
++The current R3 APK/hash above is unchanged and excludes these selectors. Earlier fixture-dependency statements describe that packaged artifact; R4 closes source implementation only. STOCK-01/02/03 and RECAP-02/03 still await a separately verified guarded APK refresh and resumed device execution. Do not send new selectors to the old APK. After refresh, cold-launch one exact supported preset and use `resume` for subsequent persistence checks. All 18 physical rows remain pending; no ADB/device/install/launch or normal-save action occurred in R4.
+--- a/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
++++ b/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
+@@ -4,20 +4,23 @@
+ 
+ ## Commands
+ 
+-Select one command at **cold process launch**, before any game state loads:
++Select one command at **cold process launch**, before any game state loads. The installed Editor/source now supports the six fixed presets below; the current R3 APK still supports only `fresh`, `resume` and `empty-energy` until the separate guarded refresh.
+ 
+ | Command | Result |
+ |---|---|
+ | `fresh` | Replace only the five owned QA preference slots with a fresh round-1 profile: default balances, energy and boosters; Russian language; fresh consent state. First-attempt board and rules are the ordinary campaign's. |
+ | `resume` | Continue the owned QA journal. Requires a previously created profile. It does not restore an arbitrary unfinished round; supported retained Failure behaves as in normal gameplay. |
+ | `empty-energy` | Reset QA as above with zero energy and a new clock timestamp. Used to exercise the normal Out of Energy gate. |
++| `stock-999`, `stock-1000`, `stock-9999`, `stock-max` | Replace owned QA state with round 1/default balances, energy 4 and exactly 999, 1 000, 9 999 or 2 147 483 647 of each of the four boosters. Installed Editor/source only until APK refresh. |
++| `story-early` | Eight synthetically completed rounds, 24 stars, intro and two acknowledged milestone scenes; selected/unlocked round 9, energy 4. Installed Editor/source only until APK refresh. |
++| `story-finale` | All 500 rounds synthetically completed, 1 500 stars, all 58 scenes and Chapter 1 acknowledged; selected/unlocked round 500, energy 4. Chapter 2 remains unavailable. Installed Editor/source only until APK refresh. |
+ | No command | Normal player profile. The QA save remains available for a later explicit `resume`. |
+ 
+-There is no runtime switch or in-game destructive reset control. To repeat a fixture, end the QA process and explicitly launch `fresh` again. To verify persistence, launch `resume`, **not** `fresh`. Invalid commands and missing resume ownership block initialization; they must not silently load normal data. A corrupt QA journal uses the existing recovery/write-lock policy, never the normal save. `fresh` deliberately replaces the QA journal, including its recovery slots.
++There is no runtime switch or in-game destructive reset control. To repeat a fixture, end the QA process and explicitly launch its reset command again. To verify persistence, launch `resume`, **not** `fresh`. Invalid commands and missing resume ownership block initialization; they must not silently load normal data. A corrupt QA journal uses the existing recovery/write-lock policy, never the normal save. `fresh` deliberately replaces the QA journal, including its recovery slots.
+ 
+ ## Editor
+ 
+-`LOR_GAMEPLAY_QA=fresh`, `resume` or `empty-energy` is read when entering Play Mode. The value is locked for that session. Ordinary Editor runs without the variable use normal data. Automated verification additionally requires isolated `XDG_CONFIG_HOME` and `LOR_LOADING_TEST_CONFIG_ROOT`; see `Sources/Verify.py` and the phase options. Those tests use synthetic normal data under `/tmp`, not the developer's personal player save.
++`LOR_GAMEPLAY_QA` accepts `fresh`, `resume`, `empty-energy` and the six exact preset names above when entering Play Mode. The value is locked for that session. Ordinary Editor runs without the variable use normal data. Automated verification additionally requires isolated `XDG_CONFIG_HOME` and `LOR_LOADING_TEST_CONFIG_ROOT`; see `Sources/Verify.py` and the phase options. Those tests use synthetic normal data under `/tmp`, not the developer's personal player save.
+ 
+ `Sources/RunFinalPhases.py` uses fresh output directories and must not overwrite an earlier run. To repeat it, copy the run names/options to new names and a new isolated config directory. The phases share that one disposable config directory to verify real restart behavior.
+ 
+@@ -38,21 +41,25 @@
+ 3. **Pause/settings:** `fresh`; start a round, pause, open Settings, change language, return and resume. The same board/moves and inventory remain. No duplicate energy charge.
+ 4. **Energy gate:** `empty-energy`; reach PreLevel and attempt Play. The standard energy dialog must block starting. This is a zero-energy fixture, not a time-regeneration simulation.
+ 5. **Booster accounting:** `fresh`; use each available booster, also cancel targeting and try unavailable inventory. Accepted use charges once; cancellation does not charge. Final effect quality remains deferred.
+-6. **Durability:** `resume` after completing actions. Verify durable balances, settings, progress and supported retained Failure; then launch without an extra to return to normal data. Only `fresh`/`empty-energy` resets QA data.
++6. **Durability:** `resume` after completing actions. Verify durable balances, settings, progress and supported retained Failure; then launch without an extra to return to normal data. The reset commands (`fresh`, `empty-energy` and the six fixed presets) replace QA data; `resume` preserves it.
+ 
+ The existing automated native win/fail journeys execute legal swaps on the ordinary deterministic round-1 boards; they are not a forced win/fail gameplay override. Phone touch accuracy, Android lifecycle, human pacing, frame time and readability still require physical testing. QA debug labeling itself adds rendering overhead that must be noted in performance measurements.
+ 
+ ## Large-stock limits
+ 
+-The packaged command set has no stock-quantity, campaign-unlock or arbitrary save-import extra. `fresh` seeds ordinary default stock; it does not supply 1 000 / 9 999 / Int32.MaxValue. The [current device matrix](../../AndroidGameplayJourney/R1/DeviceChecklist.md) records these revision-24 scenarios as pending a separately reviewed disposable fixture. R5's synthetic stock Editor tests are historical runtime evidence, not on-device setup or acceptance. Keep exact-count readability and 1 000→999 input accounting separate from general profile activation.
++The current R3 APK has no fixed-stock presets yet. Installed Editor/source now supports the four exact stock names, with no arbitrary quantity, JSON, path or save-import command. Use `stock-1000` for the native 1 000→999 Sea Pearl boundary, then `resume` to check durability. Stock fixtures have no completed rounds or acknowledged scenes. All presets reset language/consent as fresh QA state; ordinary language controls remain available.
++
++`stock-max` is restricted to display/consumption testing. Existing ordinary first-clear reward additions do not guard booster overflow; avoid reward-producing actions with this maximum fixture. This implementation does not change the normal economy or introduce a stock-cap policy. Exact-count Editor rendering/input tests and cold persistence do not establish physical legibility or Android activation.
+ 
+ ## Storage boundary
+ 
+ Only `LegendsOfRus_GameplayQA_v1_` keys are reset: the primary/backup/staging save journal, language and compliance keys, plus the profile's own ownership marker. No preference enumeration or `DeleteAll` is used. Normal progress/preferences and Android credentials are not imported or reset. Account configuration and the credential probe are blocked in QA; optional analytics and monetization calls are blocked too. Current content delivery remains locally configured. This is gameplay-state isolation, not a separate Android OS user, install or security boundary; ordinary debug capture/export files retain their existing destinations.
+ 
+ 
+-Optional recap is reached through Profile → History → Story. Eligible scenes must already be acknowledged through the normal story flow; milestone scenes also need their completed round. These Android commands do not seed arbitrary story acknowledgements or the finale. Existing [pending device rows](../../AndroidGameplayJourney/R1/DeviceChecklist.md) separate naturally earned intro/early scenes from a reviewed disposable finale fixture. Packaging and preceding Editor tests do not establish phone input, readability or lifecycle acceptance.
++Optional recap is reached through Profile → History → Story. Eligible scenes must be acknowledged and milestone eligibility requires its completed round. Installed `story-early` and `story-finale` create bounded synthetic ledgers matching the independently rehearsed R3 service outcomes, including ordinary first-clear balances/stock and claimed rewards; replay cannot claim those grants again. These are synthetic QA completions, not human play or earned phone evidence. The current APK cannot use these selectors until refreshed.
+ 
+-## Fixed fixtures — Editor preparation only
++## Fixed fixtures — installed Editor/source, APK refresh next
+ 
+-[Fixture preparation R3](../R3FixturePreparation/TestResults.md) supplies six rehearsed reference DTOs and a [bounded implementation scope](../R3FixturePreparation/FixtureScope.md): four stock sizes and early/fully acknowledged finale story. All six proposed names are rejected by the current entry logic; the APK still accepts only fresh/resume/empty-energy. Do not pass proposed selectors as supported extras or import the DTOs. Selector/factory implementation and a later guarded APK refresh remain prerequisites. Physical rows stay pending; normal saves are never a fixture source.
++[Implementation and checks R4](../R4FixedPresets/TestResults.md) installs the six bounded selectors in the existing profile. Candidates are prepared from validated active Chapter 1 content before owned-slot deletion. New presets reject a present foreign or empty ownership marker before mutation; no marker or the exact existing owner is allowed. The candidate commits through the existing QA SaveService journal before publishing ownership. Content/commit failures remain blocked for that process and never read normal data. Existing `fresh`, `resume`, `empty-energy` and no-command behavior is preserved, including the older fresh reset semantics.
++
++The factory is compiled only for Editor or Android development builds. Android intent/package/debuggable guards and cold-process selection remain unchanged. Current reference DTO exports have no supported import route. A separately verified APK refresh and resumed device execution are still prerequisites for Android preset use; all physical rows remain pending.
+--- a/ProjectDocs/AI/ConversationHandoff.md
++++ b/ProjectDocs/AI/ConversationHandoff.md
+@@ -4,7 +4,17 @@
+ 
+ The original handoff below is historical. Resume from the newest entries in [CurrentTask](CurrentTask.md), [DevelopmentSchedule](DevelopmentSchedule.md) and [SessionLog](SessionLog.md), verified against local files. Core-first work supersedes the old Loading-only and backend-first next steps. Chapter 1 rounds1–500 and finale are installed; R5 recorded1,334 distinct runtime passes with3 deferred backend cases. These are prior results, not a new runtime acceptance claim.
+ 
+-Latest completed task: [Disposable fixture preparation R3](AndroidGameplayProfile/R3FixturePreparation/TestResults.md), 2026-10-02.
++Latest completed task: [Fixed disposable presets R4](AndroidGameplayProfile/R4FixedPresets/TestResults.md), 2026-10-02.
++
++Installed six bounded cold-launch presets in the existing development profile: stock 999/1 000/9 999/Int32.MaxValue and synthetic early/fully acknowledged finale story. New presets reject present foreign/empty ownership before mutation, prepare from validated active content, commit through the existing QA journal before publishing ownership and remain blocked on failure. Original fresh/resume/empty-energy/no-command semantics and Android development/package/debuggable guards preserved; factory excluded from release source compilation.
++
++**50 Edit Mode checks, eight native Play Mode checks and all 19 separate cold-process phase checks passed**, zero final failures/skips; **120 actual-source compiled entry-guard checks passed** with fake JNI/content/preferences. Unity6000.5.9f1, all21 final launchers exit0. These are 60 distinct test cases /77 successful executions, targeted coverage rather than a new full sweep or Android run. Initial49/50 Edit fixture reflection-overflow expectation failure retained, corrected at the test boundary; product correctly rejected overflow. Six full DTOs match independent R3 references apart from clock; exact resume, five synthetic normal fingerprints, page2/native recap save/journal preservation and replay grant rejection pass. Existing native RU/EN large-stock/pointer consumption and recap lifecycle covered. 61 actual Unity captures, two standalone portraits inspected; no physical/visual acceptance inferred.
++
++[Results](AndroidGameplayProfile/R4FixedPresets/TestResults.md) · [Implementation](AndroidGameplayProfile/R4FixedPresets/ImplementationNotes.md) · [Reconciliation](AndroidGameplayProfile/R4FixedPresets/QA/Reconciliation.json) · [Final validation](AndroidGameplayProfile/R4FixedPresets/QA/FinalValidation.json). Active v6 payload remains separate from v9 campaign development saves. Stock-max is display/consumption only; ordinary reward overflow policy is unchanged.
++
++7,832 of7,833 inherited project inputs unchanged; one existing profile source changed, three C# sources/three unique metadata files added, none deleted. All existing metadata/GUIDs/art/fonts/prefabs/builders/approved Splash/settings/packages/backend and other services/tests preserved. Six existing docs updated plus task tools/evidence. Current R3 APK/sidecar unchanged at766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e and **excludes the new presets**. Five normal manual exports unchanged; isolated product test stores only. No Android build/device/ADB/install/normal personal journal/credentials/hosting/deployment/commit.
++
++Previous completed task: [Disposable fixture preparation R3](AndroidGameplayProfile/R3FixturePreparation/TestResults.md), 2026-10-02.
+ 
+ Prepared six bounded Editor reference fixtures: stock 999/1 000/9 999/Int32.MaxValue, early acknowledged story and fully acknowledged round500 finale. **14 separate Unity process checks passed**, zero runtime failures/skips; **34 compiled entry-guard checks passed** with fake JNI/preferences. These are phase executions of two methods, not a full sweep or phone evidence. Initial temporary NUnit API compile failure retained and corrected; every final launcher exited 0.
+ 
+@@ -48,7 +58,7 @@
+ 
+ Only MechanicsSpectacleTests.cs and AndroidInputCompatibilityPlayModeTests.cs changed;7,819 other Assets/Packages/ProjectSettings/Backend inputs unchanged, zero added/deleted. Production runtime/services/rules/art/fonts/prefabs/GUIDs/metadata/approved Splash/settings/packages/backend/guards and prior user changes preserved. Current R4 APK remains765,772,146bytes/SHA256 `924ecabcdbdb58f30512e6e2b134db4246be22c8f9ecc6b6086551e4ad937eff`, sidecar matches, includes R3 captions (revisions23/12). No new Edit suite, APK, phone test, hosting, deployment or commit.
+ 
+-Next independent scheduled action: Implement the six bounded preset selectors and a pure fixture factory in the existing DevelopmentGameplayProfile, including foreign-owner rejection and failed-commit isolation. Preserve the current fresh/resume/empty-energy behavior and development/release guards; verify normal saves, cold resume, native stock and recap before a separate guarded APK refresh. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last. Preserve historical decisions below.
++Next independent scheduled action: Refresh the guarded development APK with the six verified fixed QA presets. Preserve/verify the current R3 APK and sidecar first; rerun current Android policy/content guards and review signing, identity, permissions, ZIP/ELF/JNI, compiled factory inclusion and packed membership. Keep release exclusion and existing approval guards. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last. Preserve historical decisions below.
+ 
+ Prepared 2026-09-12. Source: the current user/assistant conversation and supplied project artifacts. This is a focused decision summary, not a verbatim transcript or an independently verified local Unity audit.
+ 
+--- a/ProjectDocs/AI/CurrentTask.md
++++ b/ProjectDocs/AI/CurrentTask.md
+@@ -1,3 +1,15 @@
++# 2026-10-02 — Fixed disposable presets R4 complete
++
++Installed six bounded cold-launch presets in the existing development profile: stock 999/1 000/9 999/Int32.MaxValue and synthetic early/fully acknowledged finale story. New presets reject present foreign/empty ownership before mutation, prepare from validated active content, commit through the existing QA journal before publishing ownership and remain blocked on failure. Original fresh/resume/empty-energy/no-command semantics and Android development/package/debuggable guards preserved; factory excluded from release source compilation.
++
++**50 Edit Mode checks, eight native Play Mode checks and all 19 separate cold-process phase checks passed**, zero final failures/skips; **120 actual-source compiled entry-guard checks passed** with fake JNI/content/preferences. Unity6000.5.9f1, all21 final launchers exit0. These are 60 distinct test cases /77 successful executions, targeted coverage rather than a new full sweep or Android run. Initial49/50 Edit fixture reflection-overflow expectation failure retained, corrected at the test boundary; product correctly rejected overflow. Six full DTOs match independent R3 references apart from clock; exact resume, five synthetic normal fingerprints, page2/native recap save/journal preservation and replay grant rejection pass. Existing native RU/EN large-stock/pointer consumption and recap lifecycle covered. 61 actual Unity captures, two standalone portraits inspected; no physical/visual acceptance inferred.
++
++[Results](AndroidGameplayProfile/R4FixedPresets/TestResults.md) · [Implementation](AndroidGameplayProfile/R4FixedPresets/ImplementationNotes.md) · [Reconciliation](AndroidGameplayProfile/R4FixedPresets/QA/Reconciliation.json) · [Final validation](AndroidGameplayProfile/R4FixedPresets/QA/FinalValidation.json). Active v6 payload remains separate from v9 campaign development saves. Stock-max is display/consumption only; ordinary reward overflow policy is unchanged.
++
++7,832 of7,833 inherited project inputs unchanged; one existing profile source changed, three C# sources/three unique metadata files added, none deleted. All existing metadata/GUIDs/art/fonts/prefabs/builders/approved Splash/settings/packages/backend and other services/tests preserved. Six existing docs updated plus task tools/evidence. Current R3 APK/sidecar unchanged at766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e and **excludes the new presets**. Five normal manual exports unchanged; isolated product test stores only. No Android build/device/ADB/install/normal personal journal/credentials/hosting/deployment/commit.
++
++**Next:** Refresh the guarded development APK with the six verified fixed QA presets. Preserve/verify the current R3 APK and sidecar first; rerun current Android policy/content guards and review signing, identity, permissions, ZIP/ELF/JNI, compiled factory inclusion and packed membership. Keep release exclusion and existing approval guards. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last.
++
+ # 2026-10-02 — Disposable fixed-fixture preparation R3 complete
+ 
+ Prepared six bounded Editor reference fixtures: stock 999/1 000/9 999/Int32.MaxValue, early acknowledged story and fully acknowledged round500 finale. **14 separate Unity process checks passed**, zero runtime failures/skips; **34 compiled entry-guard checks passed** with fake JNI/preferences. These are phase executions of two methods, not a full sweep or phone evidence. Initial temporary NUnit API compile failure retained and corrected; every final launcher exited 0.
+--- a/ProjectDocs/AI/DevelopmentSchedule.md
++++ b/ProjectDocs/AI/DevelopmentSchedule.md
+@@ -77,7 +77,7 @@
+ 
+ **2026-10-02 recap APK refresh completed:** [R3](ReturningPlayerRecap/R3AndroidRefresh/TestResults.md) packages Profile13/recap with unchanged Dialogue2/Gameplay24/Victory12.130policy/content Edit Mode cases pass; Unityexit0/BuildReportSucceeded160.37s. APK766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e; R6/sidecar archived. Identity/signing/ZIP/ELF/JNI checks pass, exactly two recap MonoScripts added and all existing packed membership retained.40offline boundaries/current preflight pass without device calls. Current checklist/profile/tools pinR3; three new recap rows/all18phone rows pending. All7,833project inputs/five recordings preserved. Prior49native/model checks are historical; no Play Mode/device/hosting/commit.
+ 
+-**Immediate next action:** Implement the six bounded preset selectors and a pure fixture factory in the existing DevelopmentGameplayProfile, including foreign-owner rejection and failed-commit isolation. Preserve the current fresh/resume/empty-energy behavior and development/release guards; verify normal saves, cold resume, native stock and recap before a separate guarded APK refresh. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last.
++**Immediate next action:** Refresh the guarded development APK with the six verified fixed QA presets. Preserve/verify the current R3 APK and sidecar first; rerun current Android policy/content guards and review signing, identity, permissions, ZIP/ELF/JNI, compiled factory inclusion and packed membership. Keep release exclusion and existing approval guards. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last.
+ 
+ Evidence reviewed for this reprioritization: [R43 regression audit](CampaignFoundation/R43RegressionAudit/TestResults.md), [R44 Chapter 1 implementation](CampaignFoundation/R44ChapterOneCompletion/TestResults.md), [failed-round recovery](FailedRoundRecovery/R1/TestResults.md), [continuation transaction foundation](ContinuationTransactions/R1/TestResults.md), [Android storage verification](AndroidCredentialStorage/R5DeviceExecution/TestResults.md), [local HTTPS staging verification](BackendHttpsStaging/R1/TestResults.md). No tests were rerun during this planning update; prior counts remain historical.
+ 
+@@ -177,3 +177,6 @@
+ **2026-10-02 current core regression:** [R7 after recap](CoreGameplayRegression/R7RecapIntegration/TestResults.md) completes the current eight-assembly sweep plus17 isolated restart/profile processes, fresh-QA recap and27targeted Edit cases.1,377distinct pass/zero failed/three backend deferred. Broad1,339/0/14; completed XML/Unity exit0 recovered after interruption, launcher status unknown. One staged QA test precondition added before broad; production inputs/current R3 APK and five manual exports preserved. All1500replay witnesses within moves; 1779native captures/six portraits inspected. Human/physical acceptance remains open; effects-last and phone/hosting deferrals retained.
+ 
+ **2026-10-02 fixed disposable fixture preparation:** [R3 scope and rehearsal](AndroidGameplayProfile/R3FixturePreparation/TestResults.md) verifies four stock sizes and early/finale references through 14 separate Unity processes; 34 actual-source entry-guard checks pass with fake JNI/preferences. All 7,833 project inputs and current APK remain unchanged; no new player selectors are installed. Native History page2/recap return and normal-key fingerprints pass; synthetic service completions are not human acceptance. Next implement the bounded factory/selectors and owner/commit guards before a separate APK refresh. Phone/hosting and effects-last deferrals remain.
++
++
++**2026-10-02 fixed disposable presets implemented:** [R4 results](AndroidGameplayProfile/R4FixedPresets/TestResults.md) installs six bounded selectors/pure factory with foreign-owner rejection and sticky failed-commit isolation.50Edit+8native+19cold phase checks pass (60distinct/77executions);120compiled development/release guard checks pass with fake JNI/content/preferences. Initial reflection-overflow test expectation corrected, product unchanged. Six exact independent reference payloads/resume/native recap journal and normal fingerprints verified; existing stock pointer/consumption suite passes. One existing source/three source-meta pairs added; all original artwork/prefabs/settings/other sources preserved. Current R3 APK/sidecar unchanged and excludes presets, all18phone rows pending. Next separate guarded APK refresh; human201–210, phone/hosting deferrals and effects-last preserved.
+--- a/ProjectDocs/AI/SessionLog.md
++++ b/ProjectDocs/AI/SessionLog.md
+@@ -6056,3 +6056,20 @@
+ 
+ **Next:** Implement the six bounded preset selectors and a pure fixture factory in the existing DevelopmentGameplayProfile, including foreign-owner rejection and failed-commit isolation. Preserve the current fresh/resume/empty-energy behavior and development/release guards; verify normal saves, cold resume, native stock and recap before a separate guarded APK refresh. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last.
+ 
++
++
++# 2026-10-02 — Fixed disposable presets R4
++
++User approval to go next authorized the R3 bounded implementation milestone; no phone or build work selected.
++
++Installed six bounded cold-launch presets in the existing development profile: stock 999/1 000/9 999/Int32.MaxValue and synthetic early/fully acknowledged finale story. New presets reject present foreign/empty ownership before mutation, prepare from validated active content, commit through the existing QA journal before publishing ownership and remain blocked on failure. Original fresh/resume/empty-energy/no-command semantics and Android development/package/debuggable guards preserved; factory excluded from release source compilation.
++
++**50 Edit Mode checks, eight native Play Mode checks and all 19 separate cold-process phase checks passed**, zero final failures/skips; **120 actual-source compiled entry-guard checks passed** with fake JNI/content/preferences. Unity6000.5.9f1, all21 final launchers exit0. These are 60 distinct test cases /77 successful executions, targeted coverage rather than a new full sweep or Android run. Initial49/50 Edit fixture reflection-overflow expectation failure retained, corrected at the test boundary; product correctly rejected overflow. Six full DTOs match independent R3 references apart from clock; exact resume, five synthetic normal fingerprints, page2/native recap save/journal preservation and replay grant rejection pass. Existing native RU/EN large-stock/pointer consumption and recap lifecycle covered. 61 actual Unity captures, two standalone portraits inspected; no physical/visual acceptance inferred.
++
++[Results](AndroidGameplayProfile/R4FixedPresets/TestResults.md) · [Implementation](AndroidGameplayProfile/R4FixedPresets/ImplementationNotes.md) · [Reconciliation](AndroidGameplayProfile/R4FixedPresets/QA/Reconciliation.json) · [Final validation](AndroidGameplayProfile/R4FixedPresets/QA/FinalValidation.json). Active v6 payload remains separate from v9 campaign development saves. Stock-max is display/consumption only; ordinary reward overflow policy is unchanged.
++
++7,832 of7,833 inherited project inputs unchanged; one existing profile source changed, three C# sources/three unique metadata files added, none deleted. All existing metadata/GUIDs/art/fonts/prefabs/builders/approved Splash/settings/packages/backend and other services/tests preserved. Six existing docs updated plus task tools/evidence. Current R3 APK/sidecar unchanged at766,017,314bytes/SHA2562302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e and **excludes the new presets**. Five normal manual exports unchanged; isolated product test stores only. No Android build/device/ADB/install/normal personal journal/credentials/hosting/deployment/commit.
++
++Changed existing project source: `Assets/LegendsOfRus/Scripts/Runtime/Services/DevelopmentGameplayProfile.cs`. Added source/meta pairs: `DevelopmentGameplayFixtures.cs`, `DevelopmentGameplayFixtureEditModeTests.cs`, `DevelopmentGameplayFixturePlayModeTests.cs` (exact paths/GUIDs in scope). Existing docs: CurrentTask, SessionLog, ConversationHandoff, DevelopmentSchedule, AndroidGameplayProfile/R1/Usage and AndroidGameplayJourney/R1/DeviceChecklist. Historical approvals retained.
++
++**Next:** Refresh the guarded development APK with the six verified fixed QA presets. Preserve/verify the current R3 APK and sidecar first; rerun current Android policy/content guards and review signing, identity, permissions, ZIP/ELF/JNI, compiled factory inclusion and packed membership. Keep release exclusion and existing approval guards. Human rounds 201–210 remain the parallel acceptance action. Phone execution and hosting remain deferred; final gameplay effects stay last.
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/DevelopmentGameplayFixtures.cs
+@@ -0,0 +1,105 @@
++#if UNITY_EDITOR || (UNITY_ANDROID && DEVELOPMENT_BUILD)
++using System;
++using System.Linq;
++using UnityEngine;
++
++namespace LegendsOfRus
++{
++    // Fixed synthetic v6 profiles only. No preferences, file imports, GameState
++    // instance, progression service or configurable quantity is accessed here.
++    internal static class DevelopmentGameplayFixtures
++    {
++        internal static bool IsPreset(string command)
++        {
++            switch (command)
++            {
++                case "stock-999": case "stock-1000": case "stock-9999": case "stock-max":
++                case "story-early": case "story-finale": return true;
++                default: return false;
++            }
++        }
++
++        internal static PlayerSaveData Create(string command, long utcTicks)
++        {
++            if (!IsPreset(command)) throw new ArgumentException("Unknown gameplay QA preset", nameof(command));
++            // Direct validated active content avoids the normal level fallback.
++            var catalog = ActiveCampaignContent.Load();
++            return Create(command, utcTicks, catalog.LoadChapter(1), catalog.LoadStory(1));
++        }
++
++        internal static PlayerSaveData Create(string command, long utcTicks,
++            ChapterLevelCatalogData levels, ChapterStoryCatalogData story)
++        {
++            if (!IsPreset(command)) throw new ArgumentException("Unknown gameplay QA preset", nameof(command));
++            if (utcTicks <= 0 || utcTicks > DateTime.MaxValue.Ticks) throw new ArgumentOutOfRangeException(nameof(utcTicks));
++            if (levels?.levels == null || levels.chapterId != 1 || levels.levels.Length != 500 ||
++                levels.levels.Where((level, index) => level == null || level.chapterId != 1 || level.levelId != index + 1).Any() ||
++                story?.scenes == null || story.chapterId != 1 || story.scenes.Length != 58 ||
++                story.milestones == null || story.milestones.Length != 57 || story.milestones.Any(m => m == null) || story.completion == null ||
++                story.completion.finalLevelId != 500 || story.milestones.Last().afterLevelId != 500 ||
++                story.milestones.Last().sceneId != story.completion.finaleSceneId)
++                throw new InvalidOperationException("Gameplay QA presets require the installed complete Chapter 1");
++            var ids = story.scenes.Select(scene => scene?.id).ToArray();
++            if (ids.Any(string.IsNullOrWhiteSpace) || ids.Distinct(StringComparer.Ordinal).Count() != 58 ||
++                !ids.Contains(story.introSceneId) || story.scenes.Any(scene => scene.lines == null || scene.lines.Length == 0))
++                throw new InvalidOperationException("Gameplay QA story catalogue is incomplete");
++            int previous = 0;
++            foreach (var milestone in story.milestones)
++            {
++                if (milestone == null || milestone.afterLevelId <= previous || milestone.afterLevelId > 500 ||
++                    !ids.Contains(milestone.sceneId)) throw new InvalidOperationException("Gameplay QA milestones are invalid");
++                var scene = story.scenes.Single(entry => entry.id == milestone.sceneId);
++                if (!levels.levels[milestone.afterLevelId - 1].HasStoryTrigger(scene.trigger))
++                    throw new InvalidOperationException("Gameplay QA story and levels do not agree");
++                previous = milestone.afterLevelId;
++            }
++
++            var player = new PlayerSaveData { energy = 4, lastEnergyUtcTicks = utcTicks };
++            int quantity;
++            switch (command)
++            {
++                case "stock-999": quantity = 999; break;
++                case "stock-1000": quantity = 1000; break;
++                case "stock-9999": quantity = 9999; break;
++                case "stock-max": quantity = int.MaxValue; break;
++                default: quantity = -1; break;
++            }
++            if (quantity >= 0)
++            {
++                // stock-max is a display/consumption fixture, not a reward-cap override.
++                player.boosterMace = player.boosterFirebird = player.boosterLivingLight = player.boosterSeaPearl = quantity;
++                return player;
++            }
++
++            bool finale = command == "story-finale";
++            int completed = finale ? 500 : 8;
++            if (!finale && story.milestones[1].afterLevelId > completed)
++                throw new InvalidOperationException("Gameplay QA early scenes require completed rounds");
++            checked
++            {
++                foreach (var level in levels.levels.Take(completed))
++                {
++                    int stars = level.EvaluateStars(int.MaxValue);
++                    if (stars != 3) throw new InvalidOperationException("Gameplay QA star thresholds are invalid");
++                    player.levelProgress.Add(new LevelProgressData { chapterId = 1, levelId = level.levelId,
++                        bestScore = int.MaxValue, bestStars = stars, attempts = 1, completions = 1, rewardClaimed = true });
++                    var reward = level.rewards ?? new LevelRewardData();
++                    player.gold += Math.Max(0, reward.gold); player.gems += Math.Max(0, reward.gems);
++                    player.boosterMace += Math.Max(0, reward.boosterMace); player.boosterFirebird += Math.Max(0, reward.boosterFirebird);
++                    player.boosterLivingLight += Math.Max(0, reward.boosterLivingLight); player.boosterSeaPearl += Math.Max(0, reward.boosterSeaPearl);
++                    player.stars += stars;
++                    player.lastCompletedChapter = 1; player.lastCompletedLevel = level.levelId;
++                    player.lastRewardGold = Math.Max(0, reward.gold); player.lastRewardGems = Math.Max(0, reward.gems);
++                    player.lastRewardEligibleForDouble = player.lastRewardGold > 0;
++                }
++            }
++            player.storyStage = completed;
++            player.selectedLevel = player.highestUnlockedLevel = player.level = Math.Min(500, completed + 1);
++            player.completedStoryScenes.Add(story.introSceneId);
++            foreach (var milestone in story.milestones.Take(finale ? 57 : 2)) player.completedStoryScenes.Add(milestone.sceneId);
++            if (finale) player.acknowledgedChapterCompletions.Add(1);
++            return player;
++        }
++    }
++}
++#endif
+--- /dev/null
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/DevelopmentGameplayFixtures.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 8206fe8f11114c78b4916a297d2809ec
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/DevelopmentGameplayFixturePlayModeTests.cs
+@@ -0,0 +1,156 @@
++// Cold-launch preset verification against the independently rehearsed service fixtures.
++using System;
++using System.Collections;
++using System.IO;
++using System.Linq;
++using System.Security.Cryptography;
++using System.Text;
++using NUnit.Framework;
++using UnityEngine;
++using UnityEngine.SceneManagement;
++using UnityEngine.TestTools;
++using UnityEngine.UI;
++
++namespace LegendsOfRus.Tests.PlayMode
++{
++    public sealed class DevelopmentGameplayFixturePlayModeTests
++    {
++        static readonly string[] Keys = { "LegendsOfRus_Save_v1", "LegendsOfRus_Save_v1_Backup",
++            "LegendsOfRus_Save_v1_Staging", LanguagePreference.Key, "LegendsOfRus_Compliance_v1" };
++        static readonly string[] Cases = { "stock-999", "stock-1000", "stock-9999", "stock-max", "story-early", "story-finale" };
++        [Serializable] sealed class Fingerprint { public string[] hashes; }
++        [Serializable] sealed class Evidence
++        {
++            public string fixture, stage;
++            public int completedRounds, acknowledgedScenes, recapScenes, selectedRound, unlockedRound, stars;
++            public int gold, gems, mace, firebird, light, pearl, energy;
++            public string chapterPhase;
++            public bool normalFingerprintsPreserved, restoredPayloadExactly, nativeRecapPreservesJournal, replayGrantRejected;
++        }
++
++        [UnityTest]
++        public IEnumerator PresetColdLaunchAndResumePreserveNormalData()
++        {
++            string stage = Environment.GetEnvironmentVariable("LOR_QA_FIXTURE_STAGE");
++            if (string.IsNullOrEmpty(stage)) Assert.Ignore("Requires the explicit isolated fixture writer/reader process.");
++            string name = Environment.GetEnvironmentVariable("LOR_QA_FIXTURE_CASE");
++            string config = Environment.GetEnvironmentVariable("LOR_LOADING_TEST_CONFIG_ROOT");
++            string output = Environment.GetEnvironmentVariable("LOR_QA_FIXTURE_OUTPUT");
++            Assert.That(new[] { "write", "read" }.Contains(stage), Is.True);
++            Assert.That(Cases.Contains(name), Is.True);
++            Assert.That(config, Does.StartWith("/tmp/lor-gameplay-profile-r1/fixture-r4/"));
++            Assert.That(Environment.GetEnvironmentVariable("XDG_CONFIG_HOME"), Is.EqualTo(config));
++            Assert.That(Environment.GetEnvironmentVariable("LOR_GAMEPLAY_QA"), Is.EqualTo(stage == "write" ? name : "resume"));
++            Assert.That(output, Does.EndWith("/AndroidGameplayProfile/R4FixedPresets/QA/Fixtures"));
++            Assert.That(DevelopmentGameplayProfile.Active, Is.True);
++            Assert.That(Path.GetFullPath(Application.persistentDataPath), Does.StartWith(config + "/"));
++            var baseline = JsonUtility.FromJson<Fingerprint>(File.ReadAllText(Path.Combine(config, "normal-key-fingerprints.json")));
++            Assert.That(Snapshot().hashes, Is.EqualTo(baseline.hashes));
++            yield return SceneManager.LoadSceneAsync("Bootstrap", LoadSceneMode.Single);
++            var state = GameState.Instance;
++            Assert.That(state.CanPersist, Is.True);
++            Directory.CreateDirectory(output);
++            string payloadPath = Path.Combine(output, name + ".player.json");
++            if (stage == "write")
++            {
++                // No test seeding/reset: the cold-launch production selector must
++                // have committed this exact bounded state before any GameState read.
++                string reference = Path.Combine(Application.dataPath,
++                    "../ProjectDocs/AI/AndroidGameplayProfile/R3FixturePreparation/QA/Fixtures", name + ".player.json");
++                var expected = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(reference));
++                expected.lastEnergyUtcTicks = state.Save.lastEnergyUtcTicks;
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++                File.WriteAllText(payloadPath, JsonUtility.ToJson(state.Save));
++            }
++            else
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(File.ReadAllText(payloadPath)), "Cold-process restoration changed the prepared payload.");
++
++            Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(state.Save)));
++            var evidence = Inspect(name, stage, state);
++            if (stage == "read" && name.StartsWith("story-", StringComparison.Ordinal))
++            {
++                var router = ScreenRouter.Instance;
++                router.Show(ScreenId.Profile); Settle(router); yield return null;
++                var profile = router.Viewport.GetComponentInChildren<ProductionProfileView>();
++                profile.SelectSection(ProfileSection.History); profile.ChangeHistoryPage(1);
++                Assert.That(profile.HistoryPage, Is.EqualTo(1));
++                string save = JsonUtility.ToJson(state.Save), journal = QaJournal();
++                profile.DynamicRoot.Find("StoryRecap").GetComponent<Button>().onClick.Invoke(); Settle(router); yield return null;
++                var reader = router.Viewport.GetComponentInChildren<ProductionStoryRecapView>();
++                Assert.That(reader, Is.Not.Null);
++                Assert.That(reader.SceneIndex, Is.EqualTo(name == "story-early" ? 2 : 57));
++                if (name == "story-early") reader.Back.onClick.Invoke();
++                else
++                {
++                    int lines = StoryCatalog.FindScene(StoryCatalog.LoadChapter1().completion.finaleSceneId).lines.Length;
++                    for (int i = 0; i < lines; i++)
++                    { reader.Dialogue.Continue.onClick.Invoke(); Settle(router); yield return null; }
++                }
++                Settle(router); yield return null;
++                Assert.That(router.ActiveModal, Is.Null);
++                Assert.That(router.CurrentScreen, Is.EqualTo(ScreenId.Profile));
++                Assert.That(profile.HistoryPage, Is.EqualTo(1));
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(save));
++                Assert.That(QaJournal(), Is.EqualTo(journal));
++                evidence.nativeRecapPreservesJournal = true;
++                int gold = state.Save.gold, gems = state.Save.gems;
++                var stock = new[] { state.Save.boosterMace, state.Save.boosterFirebird, state.Save.boosterLivingLight, state.Save.boosterSeaPearl };
++                Assert.That(state.CompleteLevel(ChapterLevelCatalog.Find(1, 1), int.MaxValue).FirstClearRewardGranted, Is.False);
++                Assert.That(state.Save.gold, Is.EqualTo(gold)); Assert.That(state.Save.gems, Is.EqualTo(gems));
++                Assert.That(new[] { state.Save.boosterMace, state.Save.boosterFirebird, state.Save.boosterLivingLight, state.Save.boosterSeaPearl }, Is.EqualTo(stock));
++                evidence.replayGrantRejected = true;
++            }
++            Assert.That(Snapshot().hashes, Is.EqualTo(baseline.hashes));
++            evidence.normalFingerprintsPreserved = true;
++            File.WriteAllText(Path.Combine(output, name + "." + stage + ".json"), JsonUtility.ToJson(evidence, true));
++            yield return null;
++        }
++
++        static Evidence Inspect(string name, string stage, GameState state)
++        {
++            var p = state.Save; var recap = StoryRecap.Read(p);
++            bool stock = name.StartsWith("stock-", StringComparison.Ordinal);
++            int completed = stock ? 0 : name == "story-early" ? 8 : 500;
++            int scenes = stock ? 0 : name == "story-early" ? 3 : 58;
++            Assert.That(p.levelProgress.Count, Is.EqualTo(completed));
++            Assert.That(p.levelProgress.All(r => r.attempts == 1 && r.completions == 1 && r.rewardClaimed && r.bestStars == 3), Is.True);
++            Assert.That(p.completedStoryScenes.Count, Is.EqualTo(scenes)); Assert.That(recap.Count, Is.EqualTo(scenes));
++            Assert.That(p.selectedChapter, Is.EqualTo(1)); Assert.That(p.selectedLevel, Is.EqualTo(Math.Min(500, completed + 1)));
++            Assert.That(p.highestUnlockedLevel, Is.EqualTo(Math.Min(500, completed + 1)));
++            Assert.That(p.stars, Is.EqualTo(completed * 3)); Assert.That(p.energy, Is.EqualTo(4));
++            Assert.That(ChapterLevelCatalog.Find(2, 1), Is.Null);
++            if (stock)
++            {
++                int count = name == "stock-max" ? int.MaxValue : int.Parse(name.Substring(6));
++                Assert.That(new[] { p.boosterMace, p.boosterFirebird, p.boosterLivingLight, p.boosterSeaPearl }, Is.All.EqualTo(count));
++                Assert.That(p.gold, Is.EqualTo(12540)); Assert.That(p.gems, Is.EqualTo(350));
++            }
++            else if (name == "story-finale")
++            {
++                Assert.That(state.GetChapterCompletionPhase(1), Is.EqualTo(ChapterCompletionPhase.Acknowledged));
++                Assert.That(p.acknowledgedChapterCompletions, Is.EqualTo(new[] { 1 }));
++                Assert.That(recap.Last().Scene.id, Is.EqualTo(StoryCatalog.LoadChapter1().completion.finaleSceneId));
++            }
++            else Assert.That(p.acknowledgedChapterCompletions, Is.Empty);
++            return new Evidence { fixture = name, stage = stage, completedRounds = completed, acknowledgedScenes = scenes,
++                recapScenes = recap.Count, selectedRound = p.selectedLevel, unlockedRound = p.highestUnlockedLevel,
++                stars = p.stars, gold = p.gold, gems = p.gems, mace = p.boosterMace, firebird = p.boosterFirebird,
++                light = p.boosterLivingLight, pearl = p.boosterSeaPearl, energy = p.energy,
++                chapterPhase = state.GetChapterCompletionPhase(1).ToString(), restoredPayloadExactly = stage == "read" };
++        }
++        static void FinishNormalStory()
++        {
++            int remaining = 100;
++            while (StoryService.AdvanceDialogue() == StoryAdvanceResult.MoreLines)
++                Assert.That(--remaining, Is.GreaterThan(0));
++        }
++        static void Settle(ScreenRouter router)
++        { for (int i = 0; i < 24; i++) router.MotionPresenter.TickForTesting(MetaUiMotionProfile.MaximumTickSeconds); Canvas.ForceUpdateCanvases(); }
++        static string QaJournal() => string.Join("|", Keys.Take(3).Select(key => PlayerPrefs.GetString(DevelopmentGameplayProfile.Prefix + key, "absent")));
++        static Fingerprint Snapshot()
++        {
++            using (var hash = SHA256.Create()) return new Fingerprint { hashes = Keys.Select(key => PlayerPrefs.HasKey(key)
++                ? Convert.ToBase64String(hash.ComputeHash(Encoding.UTF8.GetBytes(PlayerPrefs.GetString(key)))) : "absent").ToArray() };
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/PlayMode/DevelopmentGameplayFixturePlayModeTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 109951e6814e4f8ea18cb00b95b1756f
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/DevelopmentGameplayFixtureEditModeTests.cs
+@@ -0,0 +1,68 @@
++using System;
++using System.IO;
++using System.Linq;
++using System.Reflection;
++using NUnit.Framework;
++using UnityEngine;
++
++namespace LegendsOfRus.Tests.ProductionCoreLoopUi
++{
++    public sealed class DevelopmentGameplayFixtureEditModeTests
++    {
++        static readonly Type Factory = typeof(GameState).Assembly.GetType("LegendsOfRus.DevelopmentGameplayFixtures", true);
++        static readonly MethodInfo Build = Factory.GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic,
++            null, new[] { typeof(string), typeof(long), typeof(ChapterLevelCatalogData), typeof(ChapterStoryCatalogData) }, null);
++        static PlayerSaveData Create(string name, long ticks, ChapterLevelCatalogData levels, ChapterStoryCatalogData story)
++        {
++            try { return (PlayerSaveData)Build.Invoke(null, new object[] { name, ticks, levels, story }); }
++            catch (TargetInvocationException error) when (error.InnerException != null) { throw error.InnerException; }
++        }
++        static T Clone<T>(T source) => JsonUtility.FromJson<T>(JsonUtility.ToJson(source));
++
++        [TestCase("stock-999")][TestCase("stock-1000")][TestCase("stock-9999")][TestCase("stock-max")]
++        [TestCase("story-early")][TestCase("story-finale")]
++        public void PresetsMatchIndependentlyRehearsedServiceOutcomes(string name)
++        {
++            var levels = ChapterLevelCatalog.LoadChapter1(); var story = StoryCatalog.LoadChapter1();
++            string beforeLevels = JsonUtility.ToJson(levels), beforeStory = JsonUtility.ToJson(story);
++            string path = Path.Combine(Application.dataPath, "../ProjectDocs/AI/AndroidGameplayProfile/R3FixturePreparation/QA/Fixtures", name + ".player.json");
++            var expected = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(path));
++            expected.lastEnergyUtcTicks = 123456789;
++            var actual = Create(name, expected.lastEnergyUtcTicks, levels, story);
++            Assert.That(JsonUtility.ToJson(actual), Is.EqualTo(JsonUtility.ToJson(expected)));
++            Assert.That(JsonUtility.ToJson(levels), Is.EqualTo(beforeLevels));
++            Assert.That(JsonUtility.ToJson(story), Is.EqualTo(beforeStory));
++            actual.levelProgress.Clear(); actual.completedStoryScenes.Clear();
++            Assert.That(JsonUtility.ToJson(Create(name, expected.lastEnergyUtcTicks, levels, story)), Is.EqualTo(JsonUtility.ToJson(expected)), "Candidates must not share mutable lists.");
++        }
++
++        [TestCase(null)][TestCase("")][TestCase("stock-1001")][TestCase("Stock-1000")][TestCase("story-finale ")][TestCase("fresh")]
++        public void FactoryRejectsUnboundedOrExistingNonPresetCommands(string command)
++        {
++            Assert.Throws<ArgumentException>(() => Create(command, 1, ChapterLevelCatalog.LoadChapter1(), StoryCatalog.LoadChapter1()));
++        }
++
++        [TestCase(0L)][TestCase(-1L)][TestCase(long.MaxValue)]
++        public void FactoryRejectsInvalidClockValues(long ticks)
++        {
++            Assert.Throws<ArgumentOutOfRangeException>(() => Create("story-finale", ticks, ChapterLevelCatalog.LoadChapter1(), StoryCatalog.LoadChapter1()));
++        }
++
++        [TestCase("fallback")][TestCase("null-level")][TestCase("wrong-chapter")][TestCase("missing-scene")]
++        [TestCase("null-milestone")][TestCase("wrong-finale")][TestCase("trigger")][TestCase("overflow")]
++        public void InvalidOrIncompatibleInstalledContentCannotProduceCandidate(string defect)
++        {
++            var levels = Clone(ChapterLevelCatalog.LoadChapter1()); var story = Clone(StoryCatalog.LoadChapter1());
++            if (defect == "fallback") levels.levels = levels.levels.Take(1).ToArray();
++            if (defect == "null-level") levels.levels[0] = null;
++            if (defect == "wrong-chapter") levels.chapterId = 2;
++            if (defect == "missing-scene") story.scenes[0].id = "missing-intro";
++            if (defect == "null-milestone") story.milestones[0] = null;
++            if (defect == "wrong-finale") story.completion.finaleSceneId = "unknown";
++            if (defect == "trigger") story.scenes.First(s => s.id == story.milestones[0].sceneId).trigger = "missing-trigger";
++            if (defect == "overflow") levels.levels[0].rewards.gold = int.MaxValue;
++            if (defect == "overflow") Assert.Throws<OverflowException>(() => Create("story-finale", 1, levels, story));
++            else Assert.Throws<InvalidOperationException>(() => Create("story-finale", 1, levels, story));
++        }
++    }
++}
+--- /dev/null
++++ b/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/DevelopmentGameplayFixtureEditModeTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 3f34cb208ebc48a7b7c88280c8e2cff1
