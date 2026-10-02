@@ -19,7 +19,7 @@ AUTH_KEYS = (
 )
 
 
-def auth_environment():
+def auth_environment(socket=None):
     env = os.environ.copy()
     env["GIT_TERMINAL_PROMPT"] = "0"
     if all(k.decode() in env for k in AUTH_KEYS):
@@ -37,6 +37,15 @@ def auth_environment():
                 break
         except (OSError, ValueError):
             continue
+    if not all(k.decode() in env for k in AUTH_KEYS):
+        candidates = sorted((Path("/run/user") / str(os.getuid())).glob("vscode-git-*.sock"),
+                            key=lambda p: p.stat().st_mtime, reverse=True)
+        handle = Path(socket) if socket and Path(socket).exists() else (candidates[0] if candidates else None)
+        if handle:
+            env.update(GIT_ASKPASS="/usr/share/code/resources/app/extensions/git/dist/askpass.sh",
+                       VSCODE_GIT_ASKPASS_NODE="/usr/share/code/code",
+                       VSCODE_GIT_ASKPASS_MAIN="/usr/share/code/resources/app/extensions/git/dist/askpass-main.js",
+                       VSCODE_GIT_IPC_HANDLE=str(handle))
     return env
 
 
@@ -144,7 +153,7 @@ def prepare(directory, base, source, budget):
 
 def remote_refs(plan):
     rows = git("ls-remote", plan["remote"], plan["target_ref"],
-               plan["temporary_ref"], env=auth_environment()).decode().splitlines()
+               plan["temporary_ref"], env=auth_environment(plan.get("git_auth_socket"))).decode().splitlines()
     return {row.split("\t", 1)[1]: row.split("\t", 1)[0] for row in rows}
 
 
@@ -187,7 +196,7 @@ def upload(directory, approved_split=False):
             log.flush()
             process = subprocess.Popen(["git", "-c", "pack.threads=2", "-c", "pack.window=0",
                                         "push", "--progress", plan["remote"],
-                                        oid + ":" + ref], env=auth_environment(),
+                                        oid + ":" + ref], env=auth_environment(plan.get("git_auth_socket")),
                                        stdout=log, stderr=log)
             status["git_pid"] = process.pid
             while process.poll() is None:
@@ -232,7 +241,7 @@ def upload(directory, approved_split=False):
             try:
                 git("push", plan["remote"], "--delete",
                     plan["temporary_ref"].removeprefix("refs/heads/"),
-                    env=auth_environment())
+                    env=auth_environment(plan.get("git_auth_socket")))
             except RuntimeError:
                 status["temporary_branch_cleanup_pending"] = True
         status.update(phase="completed", completed_batches=len(plan["batches"]),
