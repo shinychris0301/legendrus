@@ -1,5 +1,7 @@
 # Visual Page 07 — Gameplay R1
 
+> R2 implements the first recommended frame/panel refinement. [Current actual Unity review](../FramePolishR2/Gameplay_FramePolish_R2_Review.html). This document retains the R1 record.
+
 > Follow-up design audit: alignment is partial. [Confirmed missing styling and evidence](QA/DesignAudit/DesignImplementationAudit.md). This historical implementation report does not establish visual acceptance.
 
 Gameplay is implemented in the existing Unity project using the supplied gem and booster artwork, live board state and a native responsive HUD. Pre-Level R1 is accepted by the user’s instruction to proceed; Gameplay R1 is ready for review and has not yet been accepted.

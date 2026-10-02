@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gameplay R6 — design review</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1018;color:#eee3cd;font:15px/1.55 system-ui,sans-serif}main{max-width:780px;margin:auto;padding:20px 16px 40px}h1{font-size:24px;line-height:1.2}a{color:#b4d7ff}nav{display:flex;gap:14px;flex-wrap:wrap}label{display:block;margin:18px 0 5px}select{font:inherit;width:100%;background:#172332;color:#fff0ce;border:1px solid #756142;border-radius:5px;padding:10px}.status{color:#c8b58d}figure{margin:18px auto;width:100%;max-width:560px}img{display:block;width:100%;height:auto;background:#050a10}li{margin:7px 0}#note{min-height:4em;color:#cbd0d8}details{border:1px solid #4b4437;padding:12px;margin:18px 0}summary{cursor:pointer;font-weight:600}ul{padding-left:22px}
+</style>
+<main>
+<h1>Gameplay R6 — design review</h1>
+<p class="status">Existing Unity captures · Review only · No new implementation</p>
+<p>The 8×7 structure and staged missions are in place. The next refinement needs closer gem silhouettes and facets, a stronger carved board frame, isolated booster objects on wood cards, and better-fitting header ornament.</p>
+<nav><a href="ReviewReport.md">Full findings and priorities</a><a href="QA/PreservationChecks.json">Preservation checks</a><a href="../CalmerReferenceR6/Gameplay_CalmerReference_R6_Review.html">Complete R6 viewer</a><a id="openCapture" href="../CalmerReferenceR6/UnityVerification/Gameplay/Gameplay_941x1672_RU.png" target="_blank" rel="noopener">Full-resolution capture</a></nav>
+<details><summary>What to look for</summary><ul>
+<li><strong>Gems and board:</strong> large raised emblems, narrow blue crystals, tall green stones and minimal space within the thin frame.</li>
+<li><strong>Booster cards:</strong> circular blue/gold medallions compete with wood frames; long labels crowd the lower curls. The circular rim is baked into the sprite.</li>
+<li><strong>Header:</strong> differently stretched panel ornament, light parchment, simple score bar and inconsistent mission icon weight.</li>
+<li><strong>Later rounds:</strong> old bright specials, tiny detached identity gems and busy ice remain.</li>
+<li><strong>Tall phone:</strong> the same small footer lettering and large scenery gaps deserve a layout pass.</li>
+</ul></details>
+<p>The comparison target is the newer night-village reference attached in the conversation. It has no verified local source copy here; the older Gameplay reference is a different design. No pixel-exact comparison or fresh Unity run is claimed.</p>
+<label for="capture">Existing capture</label><select id="capture"></select>
+<p id="note" aria-live="polite"></p>
+<figure><img id="portrait" alt="Existing actual Unity Gameplay R6 capture" width="941" height="1672"></figure>
+<p>Recommended next work: refine the six gems and board at actual cell size; remove booster medallion backings while retaining central artwork and actions; finish the card label wells and header materials. Existing Ivan, live counters and two/three-mission progression remain the constraints.</p>
+</main>
+<script>
+const base='../CalmerReferenceR6/UnityVerification/Gameplay/';
+const views={
+ Gameplay_941x1672_RU:{label:'R6 — Russian, 941 × 1672',note:'Existing actual Unity R6 capture, two missions. Inspect gem size, thin board frame, stretched name/round plaques and crowded Russian card labels.'},
+ Gameplay_576x1280_safearea_RU:{label:'R6 — Russian, simulated 576 × 1280 safe area',note:'Existing Unity capture with a simulated phone display and safe area, not a physical-phone test. Inspect small footer text and the scenery gaps around the board.'},
+ Gameplay_Level06_RU:{label:'R6 — round 6, three missions, Russian',note:'Existing actual Unity capture with three authored missions. Compare crate, score and gem objective weight; note the older bright burst special and its tiny identity gem.'},
+ Gameplay_Level10_EN:{label:'R6 — round 10, three missions, English',note:'Existing actual Unity capture with crates, chains, ice and a rainbow special. Inspect obstacle finish, detached identity gem and the two-line English card labels.'}
+};
+const select=document.querySelector('#capture'),portrait=document.querySelector('#portrait');
+for(const [key,v] of Object.entries(views)){const option=document.createElement('option');option.value=key;option.textContent=v.label;select.append(option);}
+function show(key){const v=views[key];const src=base+key+'.png';document.querySelector('#note').textContent=v.note;document.querySelector('#openCapture').href=src;portrait.alt=v.label+' — unchanged actual Unity capture';window.viewReady=new Promise((resolve,reject)=>{portrait.onload=()=>{portrait.width=portrait.naturalWidth;portrait.height=portrait.naturalHeight;resolve(true)};portrait.onerror=()=>reject(new Error('Capture failed to load'));portrait.src=src;});return window.viewReady;}
+select.addEventListener('change',()=>show(select.value));window.previewReady=show(select.value);
+</script>
+</html>

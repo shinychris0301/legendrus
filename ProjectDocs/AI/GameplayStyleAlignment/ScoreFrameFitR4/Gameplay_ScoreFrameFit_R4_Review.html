@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gameplay — score-frame fit R4</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a1018;color:#eee3cd;font:15px/1.5 system-ui,sans-serif}main{max-width:780px;margin:0 auto;padding:20px 16px 40px}h1{font-size:23px;line-height:1.25;margin:0 0 10px}p{margin:10px 0}a{color:#b4d7ff}label{display:block;margin:16px 0 5px}select{font:inherit;width:100%;background:#172332;color:#fff0ce;border:1px solid #756142;border-radius:5px;padding:10px}button{font:inherit;background:#203148;color:#fff0ce;border:1px solid #756142;padding:7px 12px;border-radius:4px;cursor:pointer}.switches{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}figure{margin:18px auto 0;width:100%;max-width:560px}img{display:block;width:100%;height:auto;background:#050a10}#note{font-size:14px;color:#c5cbd5;min-height:4em}nav{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}.tag{color:#c8b58d;font-size:13px;margin-top:0}
+</style>
+<main>
+<h1>Gameplay — score-frame fit R4</h1><p class="tag">Actual Unity revision 4 · Ready for visual review</p>
+<p>Corrected the stretched score-panel decorations and added edge clearance. Compare R4 with the previous R3 frame using one unedited Unity portrait at a time.</p>
+<nav><a href="ImplementationReport.md">Correction and checks</a><a href="UnityVerification/PlayMode.xml">Unity capture test</a><a href="../HudCompletionR3/Gameplay_HudCompletion_R3_Review.html">Previous R3 review</a></nav>
+<label for="capture">View</label><select id="capture"></select><div class="switches"><button type="button" data-view="Gameplay_941x1672_RU">Corrected R4</button><button type="button" data-view="reference">Gameplay reference</button><button type="button" data-view="before">Previous R3</button></div>
+<p id="note" aria-live="polite"></p><figure><img id="portrait" alt="Gameplay capture" width="941" height="1672"></figure>
+</main><script>
+const views={
+  "Gameplay_941x1672_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_RU.png",
+    "label": "R4 — Russian, reference portrait",
+    "note": "Actual Unity 6000.5.9f1 Play Mode capture, isolated save. The score artwork is unchanged; native UI mapping keeps the carved ends and center jewels proportional. Safe-area views use simulated displays, not a phone build."
+  },
+  "Gameplay_941x1672_EN": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_EN.png",
+    "label": "R4 — English, reference portrait",
+    "note": "Actual Unity 6000.5.9f1 Play Mode capture, isolated save. The score artwork is unchanged; native UI mapping keeps the carved ends and center jewels proportional. Safe-area views use simulated displays, not a phone build."
+  },
+  "Gameplay_576x1280_safearea_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_576x1280_safearea_RU.png",
+    "label": "R4 — Russian, 576 × 1280 safe area",
+    "note": "Actual Unity 6000.5.9f1 Play Mode capture, isolated save. The score artwork is unchanged; native UI mapping keeps the carved ends and center jewels proportional. Safe-area views use simulated displays, not a phone build."
+  },
+  "Gameplay_1080x2400_safearea_RU": {
+    "src": "UnityVerification/Gameplay/Gameplay_1080x2400_safearea_RU.png",
+    "label": "R4 — Russian, 1080 × 2400 safe area",
+    "note": "Actual Unity 6000.5.9f1 Play Mode capture, isolated save. The score artwork is unchanged; native UI mapping keeps the carved ends and center jewels proportional. Safe-area views use simulated displays, not a phone build."
+  },
+  "Gameplay_941x1672_RU_roundtrip": {
+    "src": "UnityVerification/Gameplay/Gameplay_941x1672_RU_roundtrip.png",
+    "label": "R4 — Russian after language roundtrip",
+    "note": "Actual Unity 6000.5.9f1 Play Mode capture, isolated save. The score artwork is unchanged; native UI mapping keeps the carved ends and center jewels proportional. Safe-area views use simulated displays, not a phone build."
+  },
+  "before": {
+    "src": "../HudCompletionR3/UnityVerification/Gameplay/Gameplay_941x1672_RU.png",
+    "label": "Previous R3 — stretched score frame",
+    "note": "Historical Unity R3 capture. The 1501 × 489 texture was drawn as one stretched 941 × 194 quad; the ornament was flattened and reached both screen edges."
+  },
+  "reference": {
+    "src": "../../../../Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Gameplay.png",
+    "label": "Gameplay reference — design guidance",
+    "note": "Reference image, not a Unity implementation. It shows a special activation. Sample numbers, scenery and extra tile drawings do not establish gameplay rules; exact ornament and font identity remain unverified."
+  }
+};
+const select=document.querySelector('#capture'),portrait=document.querySelector('#portrait'),note=document.querySelector('#note');
+for(const [key,view] of Object.entries(views)){const o=document.createElement('option');o.value=key;o.textContent=view.label;select.append(o)}
+function show(){const view=views[select.value];note.textContent=view.note;portrait.alt=view.label;window.viewReady=new Promise((resolve,reject)=>{portrait.onload=resolve;portrait.onerror=()=>reject(new Error('Could not load '+view.src));portrait.src=view.src;});return window.viewReady;}
+select.addEventListener('change',show);document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{select.value=b.dataset.view;show()}));
+window.previewReady=show();
+</script></html>

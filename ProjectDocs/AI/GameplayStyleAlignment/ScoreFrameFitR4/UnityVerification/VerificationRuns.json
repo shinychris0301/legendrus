@@ -1,0 +1,64 @@
+{
+  "runs": [
+    {
+      "run": "run1/Import",
+      "exitCode": 0,
+      "logPath": "/tmp/lor-gameplay-score-r4/run1/Import/unity.log",
+      "logSHA256": "70d811a2acb03ddb5151db2de7a68493843064a3540c31ce6a8613b58a9ebbce",
+      "ownerReadback": [
+        "Gameplay alignment serialized prefab saved and read back at revision 4."
+      ]
+    },
+    {
+      "run": "run1/EditMode",
+      "exitCode": 2,
+      "logPath": "/tmp/lor-gameplay-score-r4/run1/EditMode/unity.log",
+      "logSHA256": "74c4d757ba9a853273ecda4d5f7c4b291b3b980b738fdbf73b4a5ecba15e8039",
+      "ownerReadback": [],
+      "tests": {
+        "result": "Failed(Child)",
+        "total": "4",
+        "passed": "3",
+        "failed": "1",
+        "skipped": "0"
+      },
+      "failures": [
+        {
+          "test": "FramePolishReapplicationPreservesControlsAndCreatesNoDuplicateLayers",
+          "message": "  Expected: 3\n  But was:  4\n"
+        }
+      ]
+    },
+    {
+      "run": "run2/EditMode",
+      "exitCode": 0,
+      "logPath": "/tmp/lor-gameplay-score-r4/run2/EditMode/unity.log",
+      "logSHA256": "637772b3988974dd892c8f37f77ce553cccfc21dbb0d78c758e12d8dc9436a74",
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "4",
+        "passed": "4",
+        "failed": "0",
+        "skipped": "0"
+      },
+      "failures": []
+    },
+    {
+      "run": "run2/PlayMode",
+      "exitCode": 0,
+      "logPath": "/tmp/lor-gameplay-score-r4/run2/PlayMode/unity.log",
+      "logSHA256": "edcac59dfab01bc590f9d361e686f507ef33b1cc0af8fcccb66af99546f6c46c",
+      "ownerReadback": [],
+      "tests": {
+        "result": "Passed",
+        "total": "1",
+        "passed": "1",
+        "failed": "0",
+        "skipped": "0"
+      },
+      "failures": []
+    }
+  ],
+  "note": "The first Edit Mode run retained its old revision-3 assertion. Updated it to revision 4 and reran. No new test cases; final Play Mode ran only CaptureReferenceAndPhonePortraits."
+}

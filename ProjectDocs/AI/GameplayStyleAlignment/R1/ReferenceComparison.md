@@ -1,5 +1,7 @@
 # Gameplay R1 — comparison with the supplied material
 
+> R2 implements the first recommended frame/panel refinement. [Current actual Unity review](../FramePolishR2/Gameplay_FramePolish_R2_Review.html). This document retains the R1 record.
+
 > Follow-up design audit: alignment is partial. [Confirmed missing styling and evidence](QA/DesignAudit/DesignImplementationAudit.md). This historical implementation report does not establish visual acceptance.
 
 The reference is `Assets/LegendsOfRus/Art/ReferenceOnly/ApprovedScreens/Gameplay.png` (941×1672). The user’s five 1448×1086 sheets were found locally, visually matched to the attachments and preserved under `Sources/`; exact paths and hashes are in `UserAssetProvenance.json`.

@@ -1,0 +1,228 @@
+--- before/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
++++ after/Assets/LegendsOfRus/Resources/ProductionUI/Pages/Gameplay.prefab
+@@ -86,7 +86,7 @@
+   screenId: 5
+   referenceMatchVersion: v1.20-step03.3R3
+   referenceSha256: d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800
+-  proofScope: gameplay-hud-completion-r3-distinct-frames-live-counters-single-status
++  proofScope: gameplay-score-fit-r4-preserved-ornament-aspect
+   productionComponentCount: 7
+   fullScreenScreenshotDependency: 0
+   preservesLiveGameplayBoard: 1
+@@ -103,7 +103,7 @@
+   m_Script: {fileID: 11500000, guid: 4841b133b1b9bf2e6bbe81cd349a8e57, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayView
+-  Revision: 3
++  Revision: 4
+   Typography: {fileID: 11400000, guid: 0ff4e6ea93888b4a8bce1cf6a21419e9, type: 2}
+   Content: {fileID: 9173441830046244190}
+   Hud: {fileID: 8217009214204697501}
+@@ -152,6 +152,7 @@
+     Symbol: {fileID: 4543624733105098314}
+   PauseButton: {fileID: 316611331344704638}
+   Status: {fileID: 6358459469777152220}
++  ScoreFrame: {fileID: 508218643313303320}
+ --- !u!114 &3477799986359191031
+ MonoBehaviour:
+   m_ObjectHideFlags: 0
+@@ -3222,7 +3223,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 245, y: -257}
++  m_AnchoredPosition: {x: 245, y: -260}
+   m_SizeDelta: {x: 902, y: 122}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &1920259074547614588
+@@ -3997,6 +3998,7 @@
+   - component: {fileID: 8953668719317748886}
+   - component: {fileID: 8924053828833766534}
+   - component: {fileID: 736587051274685800}
++  - component: {fileID: 508218643313303320}
+   m_Layer: 5
+   m_Name: ScorePanel
+   m_TagString: Untagged
+@@ -4020,8 +4022,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 0, y: -170}
+-  m_SizeDelta: {x: 941, y: 194}
++  m_AnchoredPosition: {x: 32, y: -178}
++  m_SizeDelta: {x: 877, y: 181}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &8924053828833766534
+ CanvasRenderer:
+@@ -4061,6 +4063,18 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!114 &508218643313303320
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 5303330449355006571}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 0d049d989896f90dd9d56396c212700a, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: LegendsOfRus.Runtime::LegendsOfRus.ProductionGameplayScoreFrame
+ --- !u!1 &5347849253323586113
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -5530,10 +5544,10 @@
+   - {fileID: 8681459086211531613}
+   - {fileID: 1552182209835045933}
+   - {fileID: 2103061254545501734}
++  - {fileID: 6142832957684411750}
+   - {fileID: 5446839482811941757}
+-  - {fileID: 6142832957684411750}
++  - {fileID: 2165671807438562337}
+   - {fileID: 7013470336829781469}
+-  - {fileID: 2165671807438562337}
+   - {fileID: 8074530572069647273}
+   - {fileID: 8677890717523168164}
+   - {fileID: 6894187107335854941}
+@@ -5658,7 +5672,7 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+-  m_AnchoredPosition: {x: 305, y: -216}
++  m_AnchoredPosition: {x: 305, y: -223}
+   m_SizeDelta: {x: 662, y: 70}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &7788360181983344087
+--- before/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
++++ after/Assets/LegendsOfRus/Scripts/Editor/Step20ProductionUiFix01SerializedPrefabBuilder.cs
+@@ -496,7 +496,7 @@
+                 ProductionGameplayRuntime.BuildInto(rect);
+                 root.GetComponent<ProductionReferenceMatchR3PageMarker>().Configure(ScreenId.Gameplay,
+                     "d8e73bb76006bd0b4c6428196657ddce47193d3056362562a68d571b74c1d800",
+-                    "gameplay-hud-completion-r3-distinct-frames-live-counters-single-status",7,true,false);
++                    "gameplay-score-fit-r4-preserved-ornament-aspect",7,true,false);
+                 bool saved;PrefabUtility.SaveAsPrefabAsset(root,path,out saved);if(!saved)throw new IOException("Could not save Gameplay.");
+             }
+             finally{PrefabUtility.UnloadPrefabContents(root);}
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayHudStyle.cs
+@@ -2,7 +2,7 @@
+ using UnityEngine.UI;
+ namespace LegendsOfRus
+ {
+-    /// <summary>R3 upgrade of the existing serialized HUD; all controls and board mounts retain identity.</summary>
++    /// <summary>Upgrades the existing serialized HUD; all controls and board mounts retain identity.</summary>
+     public static class ProductionGameplayHudStyle
+     {
+         public static void Apply(ProductionGameplayView v)
+@@ -10,7 +10,8 @@
+             Image header=v.Hud.Find("HudPanel").GetComponent<Image>();
+             header.sprite=ProductionGameplayArt.Load("hud_header_r3"); Place(header.rectTransform,0,-24,941,268);
+             Image footer=v.Footer.Find("ScorePanel").GetComponent<Image>();
+-            footer.sprite=ProductionGameplayArt.Load("score_panel_r3"); Place(footer.rectTransform,0,170,941,194);
++            footer.sprite=ProductionGameplayArt.Load("score_panel_r3"); Place(footer.rectTransform,32,178,877,181);
++            v.ScoreFrame=footer.GetComponent<ProductionGameplayScoreFrame>()??footer.gameObject.AddComponent<ProductionGameplayScoreFrame>();
+             // The generated footer includes its intentionally opaque, recessed score well.
+             v.Footer.Find("ScoreInset").GetComponent<ProductionGameplayCell>().enabled=false;
+             var portraitFrame=v.Hud.Find("IvanFrame").GetComponent<RectTransform>();Place(portraitFrame,0,-4,238,284);
+@@ -47,8 +48,8 @@
+             }
+             v.PauseButton.GetComponent<Image>().sprite=ProductionGameplayArt.Load("pause_gear_r3");
+             Place(v.PauseButton.GetComponent<RectTransform>(),835,65,95,100);
+-            Text(v.ScoreHeading,305,216,331,35,28,false);
+-            Text(v.ScoreValue,245,257,451,61,51,false);
++            Text(v.ScoreHeading,305,223,331,35,28,false);
++            Text(v.ScoreValue,245,260,451,61,51,false);
+             EnsureStatus(v);
+             v.Revision=ProductionGameplayView.CurrentRevision;
+         }
+--- before/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayView.cs
+@@ -13,7 +13,7 @@
+     [DisallowMultipleComponent]
+     public sealed class ProductionGameplayView : MonoBehaviour
+     {
+-        public const int CurrentRevision=3;
++        public const int CurrentRevision=4;
+         public int Revision=CurrentRevision;
+         public SplashTitleTypography Typography;
+         public RectTransform Content,Hud,Footer,BoardArea,BoardMount;
+@@ -24,9 +24,10 @@
+         public GameplayGoalView[] Goals;
+         public Button PauseButton;
+         public ProductionGameplayStatus Status;
++        public ProductionGameplayScoreFrame ScoreFrame;
+         public Match3Board Board{get;private set;}
+         public bool ActionsBound{get;private set;}
+-        public bool HasRequiredBindings=>Revision==CurrentRevision&&HasCoreBindings&&HasFramePolishBindings&&Status!=null&&Status.HasRequiredBindings&&Array.TrueForAll(Goals,g=>g.Symbol!=null);
++        public bool HasRequiredBindings=>Revision==CurrentRevision&&HasCoreBindings&&HasFramePolishBindings&&Status!=null&&Status.HasRequiredBindings&&ScoreFrame!=null&&Array.TrueForAll(Goals,g=>g.Symbol!=null);
+         internal bool HasCoreBindings=>Typography!=null&&Content!=null&&Hud!=null&&Footer!=null&&BoardArea!=null&&BoardMount!=null&&
+             Environment!=null&&Environment.sprite!=null&&GoalProgress!=null&&StarProgress!=null&&HeroName!=null&&LevelText!=null&&MovesHeading!=null&&MovesValue!=null&&GoalsHeading!=null&&ScoreHeading!=null&&ScoreValue!=null&&
+             Valid(BoosterButtons,4)&&Valid(BoosterCounts,4)&&Valid(Stars,3)&&Valid(ArmedMarkers,4)&&PauseButton!=null&&Goals!=null&&Goals.Length==2&&Array.TrueForAll(Goals,g=>g!=null&&g.Root!=null&&g.Icon!=null&&g.Count!=null&&g.Description!=null);
+--- before/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
++++ after/Assets/LegendsOfRus/Tests/ProductionCoreLoopUiEditMode/GameplayAlignmentEditModeTests.cs
+@@ -21,7 +21,7 @@
+                 var transforms=instance.GetComponentsInChildren<Transform>(true);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+                 ProductionGameplayRuntime.BuildInto((RectTransform)instance.transform);
+-                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(3));
++                Assert.That(view.HasRequiredBindings,Is.True);Assert.That(view.Revision,Is.EqualTo(4));
+                 Assert.That(view.BoosterButtons,Is.EqualTo(controls));Assert.That(view.BoardMount,Is.SameAs(boardMount));
+                 Assert.That(instance.GetComponentsInChildren<Transform>(true),Is.EquivalentTo(transforms));
+                 Assert.That(view.Hud.Find("HudPanel").GetComponent<Image>().sprite,Is.SameAs(ProductionGameplayArt.Load("hud_header_r3")));
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayScoreFrame.cs
+@@ -0,0 +1,46 @@
++using UnityEngine;
++using UnityEngine.Sprites;
++using UnityEngine.UI;
++
++namespace LegendsOfRus
++{
++    /// <summary>Extends only the score plaque's plain rails; carved ends and center jewels keep their aspect.</summary>
++    [DisallowMultipleComponent, RequireComponent(typeof(Image))]
++    public sealed class ProductionGameplayScoreFrame : BaseMeshEffect
++    {
++        // Boundaries between complete ornaments and plain surfaces in score_panel_r3.png (1501 x 489).
++        static readonly float[] SourceX = { 0, 340, 590, 911, 1161, 1501 };
++
++        public override void ModifyMesh(VertexHelper vh)
++        {
++            var image = graphic as Image;
++            if (!IsActive() || image == null || image.sprite == null) return;
++
++            Rect rect = image.GetPixelAdjustedRect();
++            if (rect.width <= 0 || rect.height <= 0) return;
++            // Fit ornaments by height. The two remaining strips contain straight rails and blank wells.
++            float scale = Mathf.Min(rect.height / 489f, rect.width / 1501f);
++            float end = 340 * scale, center = 321 * scale;
++            float rail = (rect.width - end * 2 - center) * .5f;
++            float height = 489 * scale;
++            float bottom = rect.center.y - height * .5f;
++            Vector4 uv = DataUtility.GetOuterUV(image.sprite);
++            vh.Clear();
++            float left = rect.xMin;
++            for (int strip = 0; strip < 5; strip++)
++            {
++                float width = strip == 0 || strip == 4 ? end : strip == 2 ? center : rail;
++                float u0 = Mathf.Lerp(uv.x, uv.z, SourceX[strip] / 1501f);
++                float u1 = Mathf.Lerp(uv.x, uv.z, SourceX[strip + 1] / 1501f);
++                int vertex = vh.currentVertCount;
++                vh.AddVert(new Vector3(left, bottom, 0), image.color, new Vector2(u0, uv.y));
++                vh.AddVert(new Vector3(left, bottom + height, 0), image.color, new Vector2(u0, uv.w));
++                vh.AddVert(new Vector3(left + width, bottom + height, 0), image.color, new Vector2(u1, uv.w));
++                vh.AddVert(new Vector3(left + width, bottom, 0), image.color, new Vector2(u1, uv.y));
++                vh.AddTriangle(vertex, vertex + 1, vertex + 2);
++                vh.AddTriangle(vertex + 2, vertex + 3, vertex);
++                left += width;
++            }
++        }
++    }
++}
+--- /dev/null
++++ after/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionGameplayScoreFrame.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 0d049d989896f90dd9d56396c212700a
