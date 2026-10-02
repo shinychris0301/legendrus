@@ -17,9 +17,17 @@
   "backup_directory": "/home/k2/.local/state/legendrus-git-repair/20261002T181726Z",
   "original_main_backup_ref": "refs/backup/git-push-repair/20261002T181726Z/original-main",
   "original_staged_backup_ref": "refs/backup/git-push-repair/20261002T181726Z/original-staged",
-  "upload_strategy": "Private-index bridge snapshots, at most512MiB new blob contents per batch; temporary remote branch; original commits pushed to main after all batches; no history rewrite or force push",
+  "upload_strategy": "Publish bounded snapshots on a separate recovery branch, preserving original local and remote main. No main history rewrite, forced push or file exclusion.",
   "remote_read_verified_via_VS_Code_authentication": true,
   "working_files_removed": 0,
   "runtime_source_or_art_changes_for_git_repair": 0,
-  "status": "batch_upload_preparing"
+  "status": "new_branch_upload_preparing",
+  "actual_batch_count": 55,
+  "source_commit": "ccedef751bd5cb12d9522ddf8be621a9fc44425d",
+  "candidate_tip": "8e74fe0d10ab59d08a46d7913ca8943b5d50cab5",
+  "original_ready_for_upload_backup_ref": "refs/backup/git-push-repair/20261002T181726Z/original-ready-for-upload",
+  "original_commit_ids_preserved_on_main": true,
+  "original_commit_ids_preserved_in_local_backup_refs": true,
+  "first_batch_actual_wire_pack_bytes": 505323915,
+  "publication_branch": "repair/full-evidence-batches-20261002T181726Z"
 }

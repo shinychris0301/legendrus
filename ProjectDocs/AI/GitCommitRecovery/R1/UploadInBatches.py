@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Transfer large unpublished histories without rewriting their commits.
+"""Transfer large unpublished histories in bounded batches.
 
-Preparation creates local bridge commits using a private index. Upload explicitly
-publishes those snapshots to a temporary branch, then fast-forwards main using
-the original commits. No checkout, reset, force push, or file removal is used.
+Preparation creates local commits using a private index. With explicit approval,
+upload backs up and splits only unpublished history, publishes the snapshots to
+a temporary branch, then fast-forwards remote main. Every original source tree
+and blob is preserved. No checkout, reset, force push, or file removal is used.
 """
 import argparse
 import json
@@ -147,9 +148,33 @@ def remote_refs(plan):
     return {row.split("\t", 1)[1]: row.split("\t", 1)[0] for row in rows}
 
 
-def upload(directory):
+def upload(directory, approved_split=False):
     plan = json.loads((directory / "UploadPlan.json").read_text())
     os.chdir(plan["repository"])
+    tip = plan["batches"][-1]["commit"]
+    if approved_split and not plan.get("split_authorized"):
+        original = plan["source"]
+        assert git("rev-parse", original + "^{tree}") == git("rev-parse", tip + "^{tree}")
+        assert git("rev-parse", "HEAD").decode().strip() == original, "Local HEAD changed"
+        assert git("symbolic-ref", "HEAD").decode().strip() == plan["target_ref"], "Active branch changed"
+        backup_ref = plan["local_bridge_ref"].removesuffix("upload-bridge") + "original-before-split"
+        git("update-ref", backup_ref, original, "0" * 40)
+        plan.update(original_source=original, source=tip,
+                    original_backup_ref=backup_ref, split_authorized=True)
+        save(directory / "UploadPlan.json", plan)
+    new_branch = plan.get("publication_mode") == "new_branch"
+    if not new_branch and not plan.get("split_authorized"):
+        raise RuntimeError("Unpublished history split needs explicit approval; use --approved-split after approval")
+    local_head = git("rev-parse", "HEAD").decode().strip()
+    if new_branch:
+        assert plan["target_ref"] != "refs/heads/main", "New-branch mode cannot replace main"
+        assert local_head == tip, "Recovery branch changed; review before upload"
+        assert git("symbolic-ref", "HEAD").decode().strip() == plan["target_ref"], "Active recovery branch changed"
+    elif local_head == plan["original_source"]:
+        assert git("symbolic-ref", "HEAD").decode().strip() == plan["target_ref"], "Active branch changed"
+        git("update-ref", plan["target_ref"], tip, plan["original_source"])
+    else:
+        assert local_head == tip, "Local main changed; review before upload"
     status_path = directory / "UploadStatus.json"
     status = {"phase": "checking_remote", "pid": os.getpid(),
               "total_batches": len(plan["batches"]), "completed_batches": 0,
@@ -160,7 +185,8 @@ def upload(directory):
         with (directory / "Push.log").open("ab") as log:
             log.write(("\nPUSH " + oid + ":" + ref + "\n").encode())
             log.flush()
-            process = subprocess.Popen(["git", "push", "--progress", plan["remote"],
+            process = subprocess.Popen(["git", "-c", "pack.threads=2", "-c", "pack.window=0",
+                                        "push", "--progress", plan["remote"],
                                         oid + ":" + ref], env=auth_environment(),
                                        stdout=log, stderr=log)
             status["git_pid"] = process.pid
@@ -178,7 +204,7 @@ def upload(directory):
         if refs.get(plan["target_ref"]) == plan["source"]:
             completed = len(plan["batches"])
         else:
-            assert refs.get(plan["target_ref"]) == plan["base"], "Remote main changed; review before upload"
+            assert refs.get(plan["target_ref"]) == plan.get("initial_target", plan["base"]), "Remote target changed; review before upload"
             commits = [b["commit"] for b in plan["batches"]]
             tip = refs.get(plan["temporary_ref"])
             assert tip is None or tip in commits, "Temporary branch has unexpected history"
@@ -192,11 +218,15 @@ def upload(directory):
                 status["completed_batches"] = number
                 save(status_path, status)
             assert git("rev-parse", "HEAD").decode().strip() == plan["source"], "Local main changed; review before final upload"
-            assert remote_refs(plan).get(plan["target_ref"]) == plan["base"], "Remote main changed; review before final upload"
-            status.update(phase="updating_main", completed_batches=len(commits))
+            assert remote_refs(plan).get(plan["target_ref"]) == plan.get("initial_target", plan["base"]), "Remote target changed; review before final upload"
+            status.update(phase="publishing_target", completed_batches=len(commits))
             save(status_path, status)
             push(plan["source"], plan["target_ref"])
-        assert remote_refs(plan).get(plan["target_ref"]) == plan["source"], "Remote main verification failed"
+        assert remote_refs(plan).get(plan["target_ref"]) == plan["source"], "Remote target verification failed"
+        if new_branch:
+            name = plan["target_ref"].removeprefix("refs/heads/")
+            git("config", "branch." + name + ".remote", plan["remote"])
+            git("config", "branch." + name + ".merge", plan["target_ref"])
         tip = remote_refs(plan).get(plan["temporary_ref"])
         if tip == plan["batches"][-1]["commit"]:
             try:
@@ -206,7 +236,7 @@ def upload(directory):
             except RuntimeError:
                 status["temporary_branch_cleanup_pending"] = True
         status.update(phase="completed", completed_batches=len(plan["batches"]),
-                      verified_remote_main=plan["source"],
+                      verified_remote_target=plan["source"], target_ref=plan["target_ref"],
                       completed_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
         save(status_path, status)
     except Exception as error:
@@ -222,6 +252,8 @@ def main():
     parser.add_argument("--base")
     parser.add_argument("--source")
     parser.add_argument("--budget-mib", type=int, default=512)
+    parser.add_argument("--approved-split", action="store_true",
+                        help="Explicitly authorize splitting backed-up unpublished history")
     args = parser.parse_args()
     if args.action == "prepare":
         if not args.base or not args.source:
@@ -230,7 +262,7 @@ def main():
             parser.error("budget must be 1–512 MiB")
         prepare(args.directory.resolve(), args.base, args.source, args.budget_mib * 1024 * 1024)
     else:
-        upload(args.directory.resolve())
+        upload(args.directory.resolve(), approved_split=args.approved_split)
 
 
 if __name__ == "__main__":
