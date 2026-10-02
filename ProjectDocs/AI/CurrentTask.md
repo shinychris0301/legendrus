@@ -1,3 +1,9 @@
+# 2026-10-02 — Full-evidence GitHub recovery branch verified
+
+All 57 bounded batches are accepted by GitHub. Recovery branch `repair/full-evidence-batches-20261002T181726Z` publishes the complete pinned project/evidence snapshot `e4f2c51ec53c1fdc3c281d1a688e2e6e0f699840`; upstream configured and temporary upload branch cleaned unless separately flagged in private status. Original local main/its six commits retained; GitHub main remains 13f8316efd170009968cfec72ad5b41316730dfa. No exclusions, file removal, force push or credential export. Production Assets/GUIDs/metas/prefabs/settings/packages/backend/tools match original main; Git connectivity and new-branch resume/preservation fixtures pass. No Unity test/build/device or hosting action for Git repair. [Completion evidence](GitCommitRecovery/R1/Completion.json).
+
+Normal commits and Sync/Push use the recovery branch. Next game milestone remains the guarded fixed-preset APK refresh; human201–210 parallel and phone/hosting/effects deferrals retained.
+
 # 2026-10-02 — Full-evidence Git upload on a separate recovery branch
 
 The user repeated the request to resolve Git failure; their explicit choice to upload **all evidence through smaller batches** persists. Local commits pass. The oversized27.5GB Sync/Push payload is handled using `repair/full-evidence-batches-20261002T181726Z`. Original local main/its six commits (ccedef75) and remote main (13f8316e) remain unchanged; backups/index snapshots retained. This supersedes the earlier main-history replacement question.
