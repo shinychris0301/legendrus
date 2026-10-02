@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="19" result="Failed(Child)" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.1954285">
+  <test-suite type="TestSuite" id="1515" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="418" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.195429" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1509" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="380" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.172298" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="899084" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1510" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="380" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.161353" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1511" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="380" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.145867" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1512" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="380" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="4.129157" total="19" passed="17" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1210" name="DialogueAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:30Z" duration="3.538277" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1213" name="EveryMilestoneRendersAndReturnsToItsEstablishedRoute" fullname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.EveryMilestoneRendersAndReturnsToItsEstablishedRoute" methodname="EveryMilestoneRendersAndReturnsToItsEstablishedRoute" classname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" runstate="Runnable" seed="1477057745" result="Failed" label="Error" start-time="2026-09-18 16:28:26Z" end-time="2026-09-18 16:28:29Z" duration="2.312405" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[System.InvalidOperationException : Cannot complete locked level 1:3.]]></message>
+                  <stack-trace><![CDATA[  at LegendsOfRus.GameState.CompleteLevel (LegendsOfRus.LevelData levelData, System.Int32 score) [0x00300] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:643 
+  at LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests+<EveryMilestoneRendersAndReturnsToItsEstablishedRoute>d__11.MoveNext () [0x000a4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs:40 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="1212" name="NativeContinueAdvancesOnceAndCompletesIntroBeforePreLevel" fullname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.NativeContinueAdvancesOnceAndCompletesIntroBeforePreLevel" methodname="NativeContinueAdvancesOnceAndCompletesIntroBeforePreLevel" classname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" runstate="Runnable" seed="1097917738" result="Passed" start-time="2026-09-18 16:28:29Z" end-time="2026-09-18 16:28:29Z" duration="0.279723" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1211" name="PortraitsAndLanguageSwitchPreserveStoryPosition" fullname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.PortraitsAndLanguageSwitchPreserveStoryPosition" methodname="PortraitsAndLanguageSwitchPreserveStoryPosition" classname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" runstate="Runnable" seed="386405440" result="Passed" start-time="2026-09-18 16:28:29Z" end-time="2026-09-18 16:28:30Z" duration="0.744825" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1214" name="RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions" fullname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests.RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions" methodname="RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions" classname="LegendsOfRus.Tests.PlayMode.DialogueAlignmentPlayModeTests" runstate="Runnable" seed="1898806919" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.186862" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1456" name="StoryDataRuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.181953" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1457" name="Chapter01StoryCatalog_ValidatesAgainstEveryDialogueTrigger" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests.Chapter01StoryCatalog_ValidatesAgainstEveryDialogueTrigger" methodname="Chapter01StoryCatalog_ValidatesAgainstEveryDialogueTrigger" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" seed="1162427828" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.028268" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1461" name="FinaleDialogue_ReturnsToChapterComplete" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests.FinaleDialogue_ReturnsToChapterComplete" methodname="FinaleDialogue_ReturnsToChapterComplete" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" seed="1601200403" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.038116" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1460" name="FirstLaunchIntro_CompletesToPreLevelAndDoesNotRepeat" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests.FirstLaunchIntro_CompletesToPreLevelAndDoesNotRepeat" methodname="FirstLaunchIntro_CompletesToPreLevelAndDoesNotRepeat" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" seed="1765245325" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033251" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1458" name="IntroSequence_ResolvesLocalizedLinesInStableOrder" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests.IntroSequence_ResolvesLocalizedLinesInStableOrder" methodname="IntroSequence_ResolvesLocalizedLinesInStableOrder" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" seed="1928034056" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033213" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1459" name="StoryProgress_NormalizesAndCompletesEachSceneOnlyOnce" fullname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests.StoryProgress_NormalizesAndCompletesEachSceneOnlyOnce" methodname="StoryProgress_NormalizesAndCompletesEachSceneOnlyOnce" classname="LegendsOfRus.Tests.PlayMode.StoryDataRuntimePlayModeTests" runstate="Runnable" seed="160857623" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033276" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1462" name="StoryMilestoneReactionPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.349931" total="10" passed="9" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1471" name="ActiveScene_CannotBeOverwrittenByDifferentPendingMilestone" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.ActiveScene_CannotBeOverwrittenByDifferentPendingMilestone" methodname="ActiveScene_CannotBeOverwrittenByDifferentPendingMilestone" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="527231560" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.037516" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1463" name="CatalogV3_ValidatesMilestonesAndReactionCoverage" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.CatalogV3_ValidatesMilestonesAndReactionCoverage" methodname="CatalogV3_ValidatesMilestonesAndReactionCoverage" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="79806628" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.028951" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1469" name="CompletedMilestone_IsSuppressedWhileCompatibilityPredicateStaysPure" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.CompletedMilestone_IsSuppressedWhileCompatibilityPredicateStaysPure" methodname="CompletedMilestone_IsSuppressedWhileCompatibilityPredicateStaysPure" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="822182209" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033175" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1465" name="MajorMilestones_AreExactlyLevelsOneThreeSixAndTen" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.MajorMilestones_AreExactlyLevelsOneThreeSixAndTen" methodname="MajorMilestones_AreExactlyLevelsOneThreeSixAndTen" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="2056048498" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033136" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1468" name="OutcomeLookup_UsesCapturedLevelInsteadOfAdvancedOrStaleSaveState" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.OutcomeLookup_UsesCapturedLevelInsteadOfAdvancedOrStaleSaveState" methodname="OutcomeLookup_UsesCapturedLevelInsteadOfAdvancedOrStaleSaveState" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="1793697616" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033213" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1466" name="OutcomeReactions_CoverAndLocalizeBothOutcomesForAllLevels" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.OutcomeReactions_CoverAndLocalizeBothOutcomesForAllLevels" methodname="OutcomeReactions_CoverAndLocalizeBothOutcomesForAllLevels" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="436112850" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033231" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1470" name="PendingMilestone_RecoversAfterRuntimeResetBeforeNextLevel" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.PendingMilestone_RecoversAfterRuntimeResetBeforeNextLevel" methodname="PendingMilestone_RecoversAfterRuntimeResetBeforeNextLevel" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="1312251496" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033247" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1464" name="PostVictoryLookup_MapsExactReleasedLevels" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.PostVictoryLookup_MapsExactReleasedLevels" methodname="PostVictoryLookup_MapsExactReleasedLevels" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="465353209" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033278" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1467" name="ReactionLookup_IsRepeatableAndDoesNotMutateStoryProgress" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.ReactionLookup_IsRepeatableAndDoesNotMutateStoryProgress" methodname="ReactionLookup_IsRepeatableAndDoesNotMutateStoryProgress" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="1344402674" result="Passed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033281" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1472" name="Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch" fullname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch" methodname="Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch" classname="LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests" runstate="Runnable" seed="373371455" result="Failed" start-time="2026-09-18 16:28:30Z" end-time="2026-09-18 16:28:30Z" duration="0.033207" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: No Exception to be thrown
+  But was:  <System.ArgumentNullException: Value cannot be null.
+Parameter name: key
+  at System.Collections.Generic.Dictionary`2[TKey,TValue].FindEntry (TKey key) [0x00008] in <94b103fb80364239bfc0542bee09d001>:0 
+  at System.Collections.Generic.Dictionary`2[TKey,TValue].TryGetValue (TKey key, TValue& value) [0x00000] in <94b103fb80364239bfc0542bee09d001>:0 
+  at LegendsOfRus.StoryCatalog.Validate (LegendsOfRus.ChapterStoryCatalogData catalog, LegendsOfRus.StoryLocalizationData localization, LegendsOfRus.ChapterLevelCatalogData levels) [0x0050c] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Services/StoryData.cs:508 
+  at LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests+<>c__DisplayClass18_0.<Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch>b__0 () [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/StoryMilestoneReactionPlayModeTests.cs:274 
+  at NUnit.Framework.Constraints.ThrowsConstraint+VoidInvocationDescriptor.Invoke () [0x00001] in <8b63e8ac0a4746599ed207982825ae6c>:0 
+  at NUnit.Framework.Constraints.ThrowsConstraint+ExceptionInterceptor.Intercept (System.Object invocation) [0x00050] in <8b63e8ac0a4746599ed207982825ae6c>:0 >
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.StoryMilestoneReactionPlayModeTests.Validator_RejectsDuplicateReactionAndMilestoneTriggerMismatch () [0x0010c] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/StoryMilestoneReactionPlayModeTests.cs:273
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /tmp/lor-dialogue-r1/Verify01/PlayMode/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
