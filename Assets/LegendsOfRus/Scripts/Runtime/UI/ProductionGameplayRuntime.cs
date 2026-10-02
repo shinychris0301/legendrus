@@ -10,7 +10,8 @@ namespace LegendsOfRus
         public static void BuildInto(RectTransform root)
         {
             var existing=root.GetComponent<ProductionGameplayView>();
-            if(existing!=null&&existing.HasCoreBindings){AlignPresentation(existing);ApplyFramePolish(existing);existing.RefreshContent();return;}
+            if(existing!=null) EnsureGoalCapacity(existing);
+            if(existing!=null&&existing.HasCoreBindings){AlignPresentation(existing);ApplyFramePolish(existing);ProductionGameplayHudStyle.Apply(existing);existing.RefreshContent();return;}
             if(root.Find(ContentName)!=null)throw new InvalidOperationException("Gameplay bindings need repair outside Play Mode.");
             var v=existing??root.gameObject.AddComponent<ProductionGameplayView>();
             v.Typography=Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
@@ -37,8 +38,8 @@ namespace LegendsOfRus
             v.MovesValue=Label(v,v.Hud,"MovesDynamic","28",400,145,182,97,77);
             v.GoalsHeading=Label(v,v.Hud,"GoalsHeading","ЦЕЛИ",634,23,249,43,32);
             var goalFrame=Rect(v.Hud,"GoalPanel",627,72,262,118).gameObject.AddComponent<ProductionGameplayCell>();goalFrame.raycastTarget=false;
-            v.Goals=new GameplayGoalView[2];
-            for(int i=0;i<2;i++)
+            v.Goals=new GameplayGoalView[3];
+            for(int i=0;i<3;i++)
             {
                 var g=Rect(v.Hud,"Goal_"+i,637+i*128,75,116,113);
                 v.Goals[i]=new GameplayGoalView{Root=g,Icon=Art(g,"Icon",ProductionGameplayArt.Gem(i),14,0,77,83),
@@ -47,11 +48,10 @@ namespace LegendsOfRus
             }
             v.Footer=Rect(v.Content,"GameplayFooter",0,1308,941,364);
             v.BoosterButtons=new Button[4];v.BoosterCounts=new Text[4];v.ArmedMarkers=new ProductionWorldMapGraphic[4];
-            string[] names={"mace","firebird","livinglight","seapearl"};
             for(int i=0;i<4;i++)
             {
                 var marker=Rect(v.Footer,"Armed_"+i,39+i*197,-4,196,196).gameObject.AddComponent<ProductionWorldMapGraphic>();marker.Kind=WorldMapGraphicKind.Halo;marker.raycastTarget=false;marker.gameObject.SetActive(false);v.ArmedMarkers[i]=marker;
-                var face=Art(v.Footer,"Booster_"+ProductionPreLevelRuntime.Boosters[i],ProductionGameplayArt.Load(names[i]),43+i*197,2,188,188);face.preserveAspect=true;
+                var face=Art(v.Footer,"Booster_"+ProductionPreLevelRuntime.Boosters[i],ProductionGameplayArt.Booster(i),43+i*197,2,188,188);face.preserveAspect=true;
                 v.BoosterButtons[i]=Button(face);
                 var badge=Rect(face.transform,"StockBadge",130,138,54,54).gameObject.AddComponent<ProductionPreLevelBadge>();badge.raycastTarget=false;
                 v.BoosterCounts[i]=Label(v,badge.transform,"Count","0",0,0,54,54,30);v.BoosterCounts[i].resizeTextForBestFit=true;v.BoosterCounts[i].resizeTextMinSize=30;v.BoosterCounts[i].resizeTextMaxSize=60;
@@ -61,8 +61,16 @@ namespace LegendsOfRus
             v.ScoreHeading=Label(v,v.Footer,"ScoreHeading","СЧЁТ",305,220,331,38,29);
             v.ScoreValue=Label(v,v.Footer,"ScoreDynamic","0",260,257,421,62,52);
             var layout=root.GetComponent<ProductionGameplayLayout>()??root.gameObject.AddComponent<ProductionGameplayLayout>();layout.View=v;
-            AlignPresentation(v);ApplyFramePolish(v);v.RefreshContent();layout.ApplyNow();
+            AlignPresentation(v);ApplyFramePolish(v);ProductionGameplayHudStyle.Apply(v);v.RefreshContent();layout.ApplyNow();
             if(!v.HasRequiredBindings)throw new InvalidOperationException("Incomplete Gameplay composition.");
+        }
+        static void EnsureGoalCapacity(ProductionGameplayView view)
+        {
+            if(view.Goals==null||view.Goals.Length!=2)return;
+            var clone=UnityEngine.Object.Instantiate(view.Goals[1].Root,view.Hud,false);
+            clone.name="Goal_2";
+            Array.Resize(ref view.Goals,3);
+            view.Goals[2]=new GameplayGoalView{Root=clone,Icon=clone.Find("Icon").GetComponent<Image>(),Count=clone.Find("Count").GetComponent<Text>(),Description=clone.Find("Description").GetComponent<Text>(),Symbol=clone.GetComponentInChildren<ProductionGameplayGoalSymbol>(true)};
         }
         static void ApplyFramePolish(ProductionGameplayView v)
         {
@@ -105,9 +113,9 @@ namespace LegendsOfRus
         }
         static void AlignPresentation(ProductionGameplayView v)
         {
-            v.Environment.color=new Color32(174,182,208,255);
-            string[] boosterArt={"mace","firebird","livinglight","seapearl"};
-            for(int i=0;i<4;i++)v.BoosterButtons[i].GetComponent<Image>().sprite=ProductionGameplayArt.Load(boosterArt[i]);
+            v.Environment.sprite=ProductionGameplayArt.Load("environment_r6");
+            v.Environment.color=new Color32(210,211,220,255);
+            for(int i=0;i<4;i++)v.BoosterButtons[i].GetComponent<Image>().sprite=ProductionGameplayArt.Booster(i);
             var frame=(RectTransform)v.Hud.Find("IvanFrame");frame.anchoredPosition=new Vector2(-8,8);frame.sizeDelta=new Vector2(231,231f*1425/1104);
             frame.GetComponent<Image>().preserveAspect=false;
             // Reuse Home's whole portrait and the same circular stencil construction.

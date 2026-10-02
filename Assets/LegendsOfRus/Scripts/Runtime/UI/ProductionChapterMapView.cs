@@ -9,19 +9,26 @@ namespace LegendsOfRus
 {
     [Serializable] public sealed class ChapterMapNode
     {
+        public int LevelId;
         public RectTransform Root;
         public Button Button;
         public Image Face;
         public ProductionWorldMapGraphic Halo, Lock;
         public Text Number;
         public ProductionWorldMapGraphic[] Stars;
+        public Image[] SourceStars;
     }
 
     [DisallowMultipleComponent]
     public sealed class ProductionChapterMapView : MonoBehaviour
     {
-        public const int CurrentRevision = 1;
+        public const int CurrentRevision = 5;
         public int Revision = CurrentRevision;
+        public ProductionMapNotice Notice;
+        public ProductionPlayerHeader Header;
+        public ProductionChapterMapScroller Scroller;
+        public bool SourceControls;
+        public Image SourcePlay, SourceBack, EnvironmentMargins;
         public SplashTitleTypography Typography;
         public RectTransform Content, Hud, HudBacking, MapArea, TitleArea, Footer;
         public Image Environment, TitlePlaque, FooterOrnament;
@@ -30,16 +37,16 @@ namespace LegendsOfRus
         public Button[] PlusButtons;
         public ChapterMapNode[] Nodes;
         public bool ActionsBound { get; private set; }
-        public bool HasRequiredBindings => Revision==CurrentRevision && Typography!=null && Content!=null &&
+        public bool HasRequiredBindings => Revision==CurrentRevision && Scroller!=null && Scroller.HasBindings && SourceControls && Header!=null && Header.HasBindings && SourcePlay!=null && SourceBack!=null && EnvironmentMargins!=null && Typography!=null && Content!=null &&
             Hud!=null && HudBacking!=null && MapArea!=null && TitleArea!=null && Footer!=null &&
             Environment!=null && Environment.sprite!=null && TitlePlaque!=null && TitlePlaque.sprite!=null &&
             FooterOrnament!=null && FooterOrnament.sprite!=null && TitleText!=null && ChapterText!=null && PlayText!=null &&
             HeroName!=null && LevelText!=null && GoldText!=null && GemsText!=null && EnergyText!=null &&
             ProfileButton!=null && SettingsButton!=null && BackButton!=null && PlayButton!=null &&
             PlusButtons!=null && PlusButtons.Length==3 && Array.TrueForAll(PlusButtons,x=>x!=null) &&
-            Nodes!=null && Nodes.Length==ProductionChapterMapRuntime.NodeCenters.Length && Array.TrueForAll(Nodes,x=>x!=null &&
+            Nodes!=null && Nodes.Length==ProductionChapterMapRuntime.NodePoolSize && Array.TrueForAll(Nodes,x=>x!=null &&
                 x.Root!=null && x.Button!=null && x.Face!=null && x.Face.sprite!=null && x.Halo!=null && x.Lock!=null &&
-                x.Number!=null && x.Stars!=null && x.Stars.Length==3 && Array.TrueForAll(x.Stars,t=>t!=null));
+                x.SourceStars!=null && x.SourceStars.Length==3 && Array.TrueForAll(x.SourceStars,t=>t!=null) && x.Number!=null && x.Stars!=null && x.Stars.Length==3 && Array.TrueForAll(x.Stars,t=>t!=null));
 
         GameState subscribed;
         string language;
@@ -65,8 +72,10 @@ namespace LegendsOfRus
         }
         public void RefreshContent()
         {
+            ProductionNavigationStyle.Apply(this);
             if (!HasRequiredBindings) return;
             language=DemoFeatureState.LanguageCode; bool en=language=="en";
+            if(SourceControls){ProductionChapterMapSourceControls.RefreshLanguage(this);RefreshState();return;}
             HeroName.text=en?"Ivan":"Иван";
             ChapterText.text=en?"CHAPTER 1":"ГЛАВА 1";
             TitleText.text=en?"NATIVE VILLAGE":"РОДНАЯ ДЕРЕВНЯ";
@@ -90,16 +99,17 @@ namespace LegendsOfRus
             LevelText.text=(en?"Level ":"Уровень ")+(save!=null?save.level.ToString():"—");
             for(int i=0;i<Nodes.Length;i++)
             {
-                ChapterMapNode node=Nodes[i];bool available=save!=null&&LevelAvailable(i+1);
-                var progress=GameState.Instance!=null?GameState.Instance.GetLevelProgress(1,i+1):null;
+                ChapterMapNode node=Nodes[i];int level=node.LevelId;bool available=save!=null&&LevelAvailable(level);
+                var progress=GameState.Instance!=null?GameState.Instance.GetLevelProgress(1,level):null;
                 int stars=progress!=null?Mathf.Clamp(progress.bestStars,0,3):0;
                 node.Face.color=available?Color.white:new Color(.76f,.77f,.79f,1);
-                node.Number.text=(i+1).ToString();node.Number.color=available?new Color32(245,215,155,255):new Color32(174,165,144,255);
-                node.Halo.gameObject.SetActive(available&&save.selectedLevel==i+1);
+                node.Number.text=level.ToString();node.Number.fontSize=level>=100?62:86;node.Number.color=available?new Color32(245,215,155,255):new Color32(174,165,144,255);
+                node.Halo.gameObject.SetActive(available&&save.selectedLevel==level);
                 node.Lock.gameObject.SetActive(!available);
                 for(int j=0;j<3;j++){node.Stars[j].Dimmed=j>=stars;node.Stars[j].SetVerticesDirty();}
             }
             PlayButton.interactable=save!=null&&LevelAvailable(save.selectedLevel);
+            if(SourceControls){Header.RefreshValues();ProductionChapterMapSourceControls.RefreshStars(this);Scroller.RefreshLabels();}
         }
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
 
@@ -109,17 +119,22 @@ namespace LegendsOfRus
             Bind(ProfileButton,()=>show(ScreenId.Profile),true);Bind(SettingsButton,()=>show(ScreenId.Settings),true);
             Bind(BackButton,back,true);
             Bind(PlayButton,openSelectedLevel,true);
+            Bind(Scroller.CurrentButton,Scroller.JumpToCurrent,false);
             for(int i=0;i<3;i++){int resource=i;Bind(PlusButtons[i],()=>show(resource==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);}
             for(int i=0;i<Nodes.Length;i++)
             {
-                int level=i+1;
-                Bind(Nodes[i].Button,()=>
+                var node=Nodes[i];
+                Bind(node.Button,()=>
                 {
+                    if(Scroller.IsDragging)return;
+                    int level=node.LevelId;
                     if(!LevelAvailable(level))
                     {
-                        notify(DemoFeatureState.LanguageCode=="en"?"Complete the previous level to unlock this one.":"Пройдите предыдущий уровень, чтобы открыть этот.");return;
+                        bool published=ChapterLevelCatalog.Find(1,level)!=null;
+                        notify(published?(DemoFeatureState.LanguageCode=="en"?"Complete the previous level to unlock this one.":"Пройдите предыдущий уровень, чтобы открыть этот."):(DemoFeatureState.LanguageCode=="en"?"This level is coming soon.":"Этот уровень скоро появится."));return;
                     }
                     GameState.Instance.SelectLevel(1,level);
+                    committed=true;openSelectedLevel();
                 },false);
             }
             ActionsBound=true;

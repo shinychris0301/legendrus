@@ -21,6 +21,19 @@ namespace LegendsOfRus
             try
             {
                 RectTransform content=View.Content;
+                if(View.SourceComposition)
+                {
+                    // All foreground layers retain the approved safe 941x1672 registration.
+                    canvasRect.GetWorldCorners(corners);
+                    Vector3 lo=content.InverseTransformPoint(corners[0]),hi=content.InverseTransformPoint(corners[2]);
+                    Vector2 sourceNative=View.Environment.sprite.rect.size;
+                    float cover=Mathf.Max((hi.x-lo.x)/sourceNative.x,(hi.y-lo.y)/sourceNative.y);
+                    Vector2 dimensions=sourceNative*cover;
+                    Position(View.Environment.rectTransform,(lo.x+hi.x-dimensions.x)*.5f-content.rect.xMin,
+                        (lo.y+hi.y+dimensions.y)*.5f-content.rect.yMax);
+                    Size(View.Environment.rectTransform,dimensions);
+                    return;
+                }
                 safeRect.GetWorldCorners(corners);
                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin;

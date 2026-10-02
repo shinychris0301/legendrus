@@ -16,6 +16,10 @@ namespace LegendsOfRus
         public static LocalizedStoryLine CurrentLine => activeSequence?.CurrentLine;
         public static string ActiveSceneId => activeSequence?.Scene?.id ?? string.Empty;
 
+        public static string CurrentSpeakerKey => activeSequence?.CurrentSpeakerKey ?? string.Empty;
+        public static LocalizedStoryLine CurrentLineForLanguage(string language) =>
+            activeSequence?.LocalizeCurrentLine(StoryCatalog.LoadDialogueLanguage(language));
+
         public static void ResetRuntime()
         {
             activeSequence = null;

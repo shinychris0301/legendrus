@@ -68,13 +68,13 @@ namespace LegendsOfRus.Tests.PlayMode
                 state.SelectLevel(1,level.levelId);string before=JsonUtility.ToJson(state.Save);view.RefreshContent();
                 Assert.That(view.SelectedLevel.text,Is.EqualTo("УРОВЕНЬ "+level.levelId));
                 Assert.That(view.MovesValue.text,Is.EqualTo(level.moveLimit.ToString()));
-                for(int i=0;i<2;i++)
+                for(int i=0;i<level.goals.Length;i++)
                 {
                     Assert.That(view.Goals[i].Count.text.Replace(" ",""),Is.EqualTo(level.goals[i].target.ToString()));
                     if(level.goals[i].type!=LevelGoalTypes.CollectTile)
                     {
-                        Assert.That(view.Goals[i].Icon.sprite,Is.SameAs(view.GoalMedallion));
-                        Assert.That(view.Goals[i].Description.text,Is.Not.Empty);
+                        Assert.That(view.Goals[i].Icon.sprite,Is.Not.Null);
+                        Assert.That(view.Goals[i].Icon.sprite,Is.Not.SameAs(view.GoalMedallion));
                     }
                 }
                 Assert.That(view.RewardGold.text,Is.EqualTo(level.rewards.gold.ToString()));
@@ -122,15 +122,17 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator BoosterModalBackAndHudRoutesRemainNativeAndInventoryIsNotSpent()
+        public IEnumerator BoosterGuideBackAndHudRoutesRemainNativeAndInventoryIsNotSpent()
         {
             for(int i=0;i<4;i++)
             {
                 var view=Root().GetComponentInChildren<ProductionPreLevelView>();string before=JsonUtility.ToJson(GameState.Instance.Save);
                 view.BoosterButtons[i].onClick.Invoke();Settle();yield return null;yield return null;
-                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.BoosterSelect));Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+                Assert.That(router.ActiveModal,Is.Null);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+                Assert.That(view.InspectedBoosterIndex,Is.EqualTo(i));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.True);
                 Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(before));
-                CloseVisibleModal();Settle();yield return null;yield return null;
+                view.BoosterDetailsBack.onClick.Invoke();Settle();yield return null;yield return null;
+                Assert.That(view.InspectedBoosterIndex,Is.EqualTo(-1));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
             }
             Root().GetComponentInChildren<ProductionPreLevelView>().BackButton.onClick.Invoke();Settle();
             Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));
@@ -142,6 +144,102 @@ namespace LegendsOfRus.Tests.PlayMode
                 button.onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(targets[i]));
             }
             yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator BoosterGuideExplainsEachToolInBothLanguagesAndDoesNotSpendInventory()
+        {
+            var state=GameState.Instance;var view=Root().GetComponentInChildren<ProductionPreLevelView>();
+            string before=JsonUtility.ToJson(state.Save);
+            string[] ru={"ряд","3×3","этого цвета","5 ходов"};
+            string[] en={"row","3×3","that color","5 moves"};
+            foreach(string language in new[]{"ru","en"})
+            {
+                DemoFeatureState.SetLanguage(language);view.RefreshContent();
+                for(int i=0;i<4;i++)
+                {
+                    view.BoosterButtons[i].onClick.Invoke();yield return null;
+                    Assert.That(view.BoosterDetailText.text,Does.Contain(language=="en"?en[i]:ru[i]));
+                    Assert.That(view.BoosterDetailText.text,Does.Contain(state.BoosterCount(ProductionPreLevelRuntime.Boosters[i]).ToString()));
+                    Assert.That(view.BoosterDetailIcon.sprite,Is.SameAs(view.BoosterButtons[i].GetComponent<Image>().sprite));
+                    Assert.That(router.ActiveModal,Is.Null);
+                    // The existing five-second energy clock updates its timestamp at full
+                    // energy. Compare a copy, keeping every balance/inventory assertion.
+                    var actual=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
+                    actual.lastEnergyUtcTicks=JsonUtility.FromJson<PlayerSaveData>(before).lastEnergyUtcTicks;
+                    Assert.That(JsonUtility.ToJson(actual),Is.EqualTo(before));
+                    Capture("PreLevel_Booster_"+i+"_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672),camera=>VerifyBoosterGuideText(view,camera));
+                    view.BoosterDetailsBack.onClick.Invoke();yield return null;
+                }
+            }
+            // Details refresh in place on language/inventory changes; zero stock remains inspectable.
+            state.Save.boosterSeaPearl=0;
+            view.BoosterButtons[3].onClick.Invoke();DemoFeatureState.SetLanguage("ru");view.RefreshContent();
+            Assert.That(view.BoosterDetailText.text,Does.StartWith("В игре • В запасе: 0"));
+            yield return null;
+            Capture("PreLevel_Pearl_Empty_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672),camera=>VerifyBoosterGuideText(view,camera));
+            state.AddBooster(BoosterType.SeaPearl,2);
+            yield return null;
+            Assert.That(view.BoosterDetailText.text,Does.StartWith("В игре • В запасе: 2"));
+            Capture("PreLevel_Pearl_576x1280_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>VerifyBoosterGuideText(view,camera));
+            int stock=state.BoosterCount(BoosterType.SeaPearl),energy=state.Save.energy;
+            view.PlayButton.onClick.Invoke();view.PlayButton.onClick.Invoke();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));
+            Assert.That(state.Save.energy,Is.EqualTo(energy-1));Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(stock));
+            var board=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(board,Is.Not.Null);
+            Assert.That(board.Moves,Is.EqualTo(ChapterLevelCatalog.ResolveSelected(state.Save).moveLimit));
+            Assert.That(board.IsBoosterArmed,Is.False,"Inspecting a booster must not arm it on the board.");
+            router.Show(ScreenId.PreLevel);Settle();view=Root().GetComponentInChildren<ProductionPreLevelView>();
+            Assert.That(view.InspectedBoosterIndex,Is.EqualTo(-1));Assert.That(view.BoosterDetailsRoot.gameObject.activeSelf,Is.False);
+        }
+
+        static void VerifyBoosterGuideText(ProductionPreLevelView view,Camera camera)
+        {
+            Rect panel=Bounds(view.BoostersArea,camera);
+            foreach(Text text in new[]{view.BoostersHeading,view.BoosterDetailText,view.BoosterDetailsBackText})
+            {
+                Assert.That(text.cachedTextGenerator.characterCountVisible,Is.GreaterThan(0),text.name);
+                Assert.That(text.preferredHeight,Is.LessThanOrEqualTo(text.rectTransform.rect.height+1),text.name+" vertical overflow");
+                var mesh=text.canvasRenderer.GetMesh();Assert.That(mesh,Is.Not.Null);Assert.That(mesh.vertexCount,Is.GreaterThan(0));
+                foreach(Vector3 vertex in mesh.vertices)
+                {
+                    Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,text.transform.TransformPoint(vertex));
+                    Assert.That(panel.Contains(point),Is.True,text.name+" outside booster panel");
+                }
+            }
+            Rect back=Bounds(view.BoosterDetailsBack.transform as RectTransform,camera);
+            foreach(Vector3 vertex in view.BoosterDetailsBackText.canvasRenderer.GetMesh().vertices)
+            {
+                Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,view.BoosterDetailsBackText.transform.TransformPoint(vertex));
+                Assert.That(Mathf.Abs(point.x-back.center.x),Is.LessThan(back.width*.25f),"Back lettering must clear the ornamental ends.");
+            }
+            Assert.That(view.BoosterDetailText.cachedTextGenerator.lineCount,Is.EqualTo(3));
+            Assert.That(Bounds(view.BoosterDetailText.rectTransform,camera).Overlaps(Bounds(view.BoosterDetailsBack.transform as RectTransform,camera)),Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator StockBadgesRemainLegibleForEmptyAndMultiDigitInventory()
+        {
+            var state=GameState.Instance;var view=Root().GetComponentInChildren<ProductionPreLevelView>();
+            state.Save.boosterMace=0;state.Save.boosterFirebird=7;state.Save.boosterLivingLight=10;state.Save.boosterSeaPearl=999;
+            view.RefreshState();yield return null;
+            string[] expected={"0","7","10","999"};
+            Capture("PreLevel_StockReadability_576_RU",new Vector2Int(576,1280),new Rect(0,48,576,1172),camera=>
+            {
+                for(int i=0;i<4;i++)
+                {
+                    Text count=view.BoosterCounts[i];Assert.That(count.text,Is.EqualTo(expected[i]));
+                    Assert.That(count.cachedTextGenerator.lineCount,Is.EqualTo(1),"Keep each stock count on one line.");
+                    Rect badge=Bounds(count.transform.parent as RectTransform,camera);
+                    Assert.That(badge.width,Is.GreaterThan(34),"Badge must remain legible at the narrow phone size.");
+                    var mesh=count.canvasRenderer.GetMesh();Assert.That(mesh.vertexCount,Is.GreaterThan(0));
+                    foreach(Vector3 vertex in mesh.vertices)
+                    {
+                        Vector2 point=RectTransformUtility.WorldToScreenPoint(camera,count.transform.TransformPoint(vertex));
+                        Assert.That(Vector2.Distance(point,badge.center),Is.LessThan(badge.width*.46f),"Stock text crosses the raised rim: "+expected[i]);
+                    }
+                }
+            });
         }
 
         [UnityTest]
@@ -159,12 +257,9 @@ namespace LegendsOfRus.Tests.PlayMode
 
         void CloseVisibleModal()
         {
-            AnimatedHotspot close=null;
-            foreach(var hotspot in router.GameCanvas.GetComponentsInChildren<AnimatedHotspot>())
-                if(hotspot.name=="Hotspot_Close"&&hotspot.isActiveAndEnabled)close=hotspot;
-            Assert.That(close,Is.Not.Null);
-            var pointer=new PointerEventData(EventSystem.current){pointerId=704,position=new Vector2(100,100)};
-            close.OnPointerDown(pointer);close.OnPointerUp(pointer);close.OnPointerClick(pointer);
+            var energy=router.GameCanvas.GetComponentInChildren<ProductionOutOfEnergyView>();
+            Assert.That(energy,Is.Not.Null);Assert.That(energy.Close.IsInteractable(),Is.True);
+            energy.Close.onClick.Invoke();
         }
 
         GameObject Root()
@@ -296,7 +391,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 var results=new List<RaycastResult>();
                 EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=rect.center},results);
                 Assert.That(results.Count,Is.GreaterThan(0),button.name);
-                Assert.That(results[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" is obscured");
+                Assert.That(results[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(button),button.name+" is obscured by "+results[0].gameObject.name);
             }
             foreach(var badge in view.GetComponentsInChildren<ProductionPreLevelBadge>())
             {

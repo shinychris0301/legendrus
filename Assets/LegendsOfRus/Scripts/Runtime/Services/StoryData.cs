@@ -215,6 +215,18 @@ namespace LegendsOfRus
             return cachedRussian;
         }
 
+        static StoryLocalizationData cachedEnglish;
+        public static StoryLocalizationData LoadDialogueLanguage(string language)
+        {
+            if (language != "en") return LoadRussian();
+            if (cachedEnglish == null)
+            {
+                var asset = Resources.Load<TextAsset>("Localization/story_en");
+                if (asset != null) cachedEnglish = JsonUtility.FromJson<StoryLocalizationData>(asset.text);
+            }
+            return cachedEnglish ?? LoadRussian();
+        }
+
         public static StorySceneData FindScene(string sceneId)
         {
             ChapterStoryCatalogData catalog = LoadChapter1();
@@ -494,6 +506,7 @@ namespace LegendsOfRus
                                 report.Errors.Add($"Level {level.levelId} dialogue trigger '{trigger}' has no deterministic milestone mapping.");
                             }
                             else if (
+                                string.IsNullOrWhiteSpace(milestone.sceneId) ||
                                 !scenesById.TryGetValue(milestone.sceneId, out StorySceneData mappedScene) ||
                                 !string.Equals(mappedScene.trigger, trigger, StringComparison.Ordinal)
                             )
@@ -837,6 +850,19 @@ namespace LegendsOfRus
                         StoryCatalog.Localize(line.textKey, localization)
                     );
             }
+        }
+
+        public string CurrentSpeakerKey => IsComplete || scene?.lines == null || lineIndex >= scene.lines.Length
+            ? string.Empty : scene.lines[lineIndex]?.speakerKey ?? string.Empty;
+
+        public LocalizedStoryLine LocalizeCurrentLine(StoryLocalizationData requested)
+        {
+            if (CurrentLine == null) return null;
+            var line = scene.lines[lineIndex];
+            string speaker = StoryCatalog.Localize(line.speakerKey, requested);
+            string body = StoryCatalog.Localize(line.textKey, requested);
+            return string.IsNullOrEmpty(speaker) || string.IsNullOrEmpty(body)
+                ? CurrentLine : new LocalizedStoryLine(speaker, body);
         }
 
         public StorySequenceRuntime(StorySceneData scene, StoryLocalizationData localization)

@@ -12,6 +12,7 @@ namespace LegendsOfRus
         public ProductionHomeShade Shade;
         readonly Vector3[] corners = new Vector3[4];
         bool applying;
+        public bool SourceComposition;
         public bool HasRequiredBindings => HasBaseBindings && HudBacking != null && FooterBase != null && FooterBacking != null;
         // Older serialized revisions predate the backing and footer bindings. The Editor migration
         // uses this base contract so upgrading never destroys an otherwise complete page.
@@ -34,6 +35,20 @@ namespace LegendsOfRus
             applying = true;
             try
             {
+                if (SourceComposition)
+                {
+                    // The whole source composition stays on the existing safe 941x1672 stage.
+                    // Extend only the clean environment, never separate overlapping extracted layers.
+                    canvasRect.GetWorldCorners(corners);
+                    Vector3 low=Content.InverseTransformPoint(corners[0]), high=Content.InverseTransformPoint(corners[2]);
+                    Vector2 nativeSize=Environment.sprite.rect.size;
+                    float cover=Mathf.Max((high.x-low.x)/nativeSize.x,(high.y-low.y)/nativeSize.y);
+                    Vector2 dimensions=nativeSize*cover;
+                    Position(Environment.rectTransform,(low.x+high.x-dimensions.x)*.5f-Content.rect.xMin,
+                        (low.y+high.y+dimensions.y)*.5f-Content.rect.yMax);
+                    Size(Environment.rectTransform,dimensions);
+                    return;
+                }
                 safeRect.GetWorldCorners(corners);
                 Vector3 safeLo = Content.InverseTransformPoint(corners[0]), safeHi = Content.InverseTransformPoint(corners[2]);
                 float top = safeHi.y - Content.rect.yMax, bottom = safeLo.y - Content.rect.yMin;

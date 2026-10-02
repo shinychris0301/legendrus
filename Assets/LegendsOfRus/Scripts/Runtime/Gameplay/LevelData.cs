@@ -52,10 +52,10 @@ namespace LegendsOfRus
         public int levelId = 1;
         public string displayName = "Первый огонь";
         public int columns = 8;
-        public int rows = 9;
+        public int rows = 7;
         public int tileTypes = 6;
         public int moveLimit = 28;
-        public int startingScore = 12540;
+        public int startingScore = 0;
         public int boardSeed = 1101;
         public string difficulty = "tutorial";
         public int difficultyRating = 1;
@@ -64,7 +64,7 @@ namespace LegendsOfRus
         public LevelObstacleData[] obstacles = Array.Empty<LevelObstacleData>();
         public LevelBoardItemData[] boardItems = Array.Empty<LevelBoardItemData>();
         public LevelRewardData rewards = new LevelRewardData();
-        public int[] starScoreThresholds = { 13000, 13600, 14400 };
+        public int[] starScoreThresholds = { 460, 1060, 1860 };
         public string[] storyTriggers = Array.Empty<string>();
         public LevelTutorialStepData[] tutorialSteps = Array.Empty<LevelTutorialStepData>();
 
@@ -262,9 +262,9 @@ namespace LegendsOfRus
             LevelValidationReport report
         )
         {
-            if (level.goals == null || level.goals.Length < 1 || level.goals.Length > 2)
+            if (level.goals == null || level.goals.Length < 1 || level.goals.Length > 3)
             {
-                report.Errors.Add($"{prefix}.goals must contain one or two goals for the approved HUD.");
+                report.Errors.Add($"{prefix}.goals must contain one to three goals.");
                 return;
             }
 
@@ -774,10 +774,10 @@ namespace LegendsOfRus
                 levelId = 1,
                 displayName = "Первый огонь",
                 columns = 8,
-                rows = 9,
+                rows = 7,
                 tileTypes = 6,
                 moveLimit = 28,
-                startingScore = 12540,
+                startingScore = 0,
                 boardSeed = 1101,
                 difficulty = "tutorial",
                 difficultyRating = 1,
@@ -790,7 +790,7 @@ namespace LegendsOfRus
                 obstacles = Array.Empty<LevelObstacleData>(),
                 boardItems = Array.Empty<LevelBoardItemData>(),
                 rewards = new LevelRewardData { gold = 120 },
-                starScoreThresholds = new[] { 13000, 13600, 14400 },
+                starScoreThresholds = new[] { 460, 1060, 1860 },
                 storyTriggers = new[] { "dialogue.firebird_found" },
                 tutorialSteps = new[]
                 {

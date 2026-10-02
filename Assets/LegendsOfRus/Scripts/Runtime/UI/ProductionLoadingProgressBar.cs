@@ -9,6 +9,8 @@ namespace LegendsOfRus
     {
         [SerializeField, Range(0f, 1f)] float progress;
         [SerializeField] bool indeterminate = true;
+        public Sprite SourceFill;
+        public override Texture mainTexture => SourceFill != null ? SourceFill.texture : base.mainTexture;
 
         public float Progress => progress;
         public bool IsIndeterminate => indeterminate;
@@ -30,6 +32,19 @@ namespace LegendsOfRus
         {
             vh.Clear();
             Rect r = GetPixelAdjustedRect();
+            if (SourceFill != null)
+            {
+                float width = r.width * (indeterminate ? .28f : progress);
+                float start = indeterminate ? (r.width-width) * (Application.isPlaying ? .5f+.5f*Mathf.Sin(Time.unscaledTime*2f) : .5f) : 0;
+                if (width <= .001f) return;
+                Vector4 uv = UnityEngine.Sprites.DataUtility.GetOuterUV(SourceFill);
+                vh.AddVert(new Vector3(r.xMin+start,r.yMin),Color.white,new Vector2(uv.x,uv.y));
+                vh.AddVert(new Vector3(r.xMin+start,r.yMax),Color.white,new Vector2(uv.x,uv.w));
+                vh.AddVert(new Vector3(r.xMin+start+width,r.yMax),Color.white,new Vector2(Mathf.Lerp(uv.x,uv.z,width/r.width),uv.w));
+                vh.AddVert(new Vector3(r.xMin+start+width,r.yMin),Color.white,new Vector2(Mathf.Lerp(uv.x,uv.z,width/r.width),uv.y));
+                vh.AddTriangle(0,1,2);vh.AddTriangle(2,3,0);
+                return;
+            }
             DrawCapsule(vh, r, new Color32(155, 115, 58, 255), new Color32(180, 140, 70, 255));
             Rect track = Inset(r, 2f);
             DrawCapsule(vh, track, new Color32(23, 41, 61, 255), new Color32(8, 15, 26, 255));

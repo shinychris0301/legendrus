@@ -176,6 +176,48 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(runtime.AllComplete, Is.False);
         }
 
+        [Test]
+        public void ThirdGoalGatesCompletionAndRestoresWithCommandSnapshot()
+        {
+            var runtime=new LevelGoalRuntime(new[]{
+                new LevelGoalData{type=LevelGoalTypes.CollectTile,tileType=0,target=3},
+                new LevelGoalData{type=LevelGoalTypes.Score,target=100},
+                new LevelGoalData{type=LevelGoalTypes.CollectTile,tileType=2,target=4}},0);
+            runtime.ApplyWave(CreateWave(new[]{3,0,1}),100);
+            Assert.That(runtime.SlotCount,Is.EqualTo(3));
+            Assert.That(runtime.GetSlot(0).IsComplete&&runtime.GetSlot(1).IsComplete,Is.True);
+            Assert.That(runtime.AllComplete,Is.False,"The unfinished third mission must prevent victory.");
+            var before=runtime.CaptureSnapshot();
+            runtime.ApplyWave(CreateWave(new[]{0,0,3}),120);
+            Assert.That(runtime.AllComplete,Is.True);
+            runtime.RestoreSnapshot(before);
+            Assert.That(runtime.AllComplete,Is.False);Assert.That(runtime.RemainingAt(2),Is.EqualTo(3));
+        }
+
+        [Test]
+        public void StagedChapterBoardsRemainPlayableAcrossSeeds()
+        {
+            var catalog=ChapterLevelCatalog.LoadChapter1();
+            Assert.That(LevelDataValidator.ValidateCatalog(catalog).IsValid,Is.True);
+            Assert.That(Chapter01ProgressionValidator.Validate(catalog).IsValid,Is.True);
+            foreach(var level in catalog.levels)
+            {
+                Assert.That(level.columns,Is.EqualTo(8));Assert.That(level.rows,Is.EqualTo(7));
+                Assert.That(level.goals.Length,Is.EqualTo(level.levelId<6?2:3));
+                for(int offset=0;offset<12;offset++)
+                {
+                    var board=LevelBoardFactory.Create(level,level.boardSeed+offset);
+                    Assert.That(board.HasAnyMatches(),Is.False,level.id);Assert.That(board.HasLegalMove(),Is.True,level.id);
+                    foreach(var cell in level.fixedCells)
+                    {
+                        var position=new BoardPosition(cell.x,cell.y);
+                        Assert.That(board.GetTile(position),Is.EqualTo(cell.tileType));
+                        Assert.That((int)board.GetSpecial(position),Is.EqualTo(cell.special));
+                    }
+                }
+            }
+        }
+
         static BoardResolutionWave CreateWave(
             IReadOnlyList<int> clearedByType,
             IReadOnlyList<BoardObstacleInteractionInstruction> interactions = null,

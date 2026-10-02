@@ -20,10 +20,10 @@ namespace LegendsOfRus
                 var content=View.Content;safeRect.GetWorldCorners(corners);
                 Vector3 low=content.InverseTransformPoint(corners[0]),high=content.InverseTransformPoint(corners[2]);
                 float top=high.y-content.rect.yMax,bottom=low.y-content.rect.yMin,height=high.y-low.y;
-                Position(View.Hud,0,top);Position(View.Footer,0,bottom-1308);
-                float boardScale=Mathf.Min(1,Mathf.Max(.1f,(height-650)/942));
+                Position(View.Hud,0,top);Position(View.Footer,0,bottom-1335);
+                float boardScale=Mathf.Min(1,Mathf.Max(.1f,(height-890)/748));
                 float extra=Mathf.Max(0,height-1672);
-                Position(View.BoardArea,79+(786-786*boardScale)*.5f,top-357-extra*.5f);
+                Position(View.BoardArea,68+(808-808*boardScale)*.5f,top-486-extra*.5f);
                 View.BoardArea.localScale=Vector3.one*boardScale;
                 canvasRect.GetWorldCorners(corners);low=content.InverseTransformPoint(corners[0]);high=content.InverseTransformPoint(corners[2]);
                 Vector2 native=View.Environment.sprite.rect.size;float scale=Mathf.Max((high.x-low.x)/native.x,(high.y-low.y)/native.y);Vector2 size=native*scale;

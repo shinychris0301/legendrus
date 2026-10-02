@@ -68,34 +68,29 @@ namespace LegendsOfRus.Tests.ProductionCoreLoopUi
         }
 
         [Test]
-        public void SplashAndLoadingShareExactHomeBrandingWithSeparateDuskCharacters()
+        public void SplashUsesOriginalLetteredStartAndLoadingHasSourceArtwork()
         {
-            const string resources = "Assets/LegendsOfRus/Resources/";
-            GameObject splashRoot = LoadCanonicalPrefab();
-            SplashTitleView splash = splashRoot.GetComponent<SplashTitleView>();
-            ProductionHomeView home = AssetDatabase.LoadAssetAtPath<GameObject>(resources +
-                "ProductionUI/Pages/Home.prefab").GetComponent<ProductionHomeView>();
-            ProductionLoadingView loading = AssetDatabase.LoadAssetAtPath<GameObject>(resources +
-                "ProductionUI/Pages/Loading.prefab").GetComponent<ProductionLoadingView>();
-            Assert.That(splash.HasRequiredBindings && loading.HasRequiredBindings, Is.True);
-            Assert.That(splashRoot.transform.Find("Logo").GetComponent<Image>().sprite, Is.SameAs(home.Logo.sprite));
-            Assert.That(loading.Logo.sprite, Is.SameAs(home.Logo.sprite));
-            Assert.That((splash.StartButton.targetGraphic as Image).sprite, Is.SameAs((home.PlayButton.targetGraphic as Image).sprite));
-            Assert.That(splash.StartText.material, Is.SameAs(home.PlayText.material));
-            Assert.That(splash.StartText.GetComponent<ProductionHomeGoldText>().BeveledFace, Is.True);
-            Assert.That(splash.StartText.text, Is.EqualTo("Начать"));
-            Assert.That(splashRoot.transform.Find("BackgroundEnvironment").GetComponent<Image>().sprite, Is.SameAs(home.Environment.sprite));
-            foreach (string name in new[] { "Ivan", "Masha" })
-            {
-                Image character = splashRoot.transform.Find(name).GetComponent<Image>();
-                Assert.That(character.color, Is.EqualTo(ProductionHomeRuntime.HeroTone));
-                Assert.That(character.raycastTarget, Is.False);
-                Assert.That(character.GetComponent<SplashTitleCharacterFade>().BottomFraction, Is.EqualTo(.13f));
-            }
-            Assert.That(loading.Environment.sprite.name, Is.EqualTo("loading_environment_dusk"));
-            Assert.That(loading.Ivan.sprite.name, Is.EqualTo("ivan_loading_dusk"));
-            Assert.That(loading.Environment.color, Is.EqualTo(ProductionHomeRuntime.EnvironmentTone));
-            Assert.That(loading.Ivan.color, Is.EqualTo(ProductionHomeRuntime.HeroTone));
+            const string resources="Assets/LegendsOfRus/Resources/";
+            GameObject splashRoot=LoadCanonicalPrefab();var splash=splashRoot.GetComponent<SplashTitleView>();
+            var home=AssetDatabase.LoadAssetAtPath<GameObject>(resources+"ProductionUI/Pages/Home.prefab").GetComponent<ProductionHomeView>();
+            var loading=AssetDatabase.LoadAssetAtPath<GameObject>(resources+"ProductionUI/Pages/Loading.prefab").GetComponent<ProductionLoadingView>();
+            Assert.That(splash.HasRequiredBindings&&loading.HasRequiredBindings,Is.True);
+            Assert.That(splashRoot.transform.Find("Logo").GetComponent<Image>().sprite.name,Is.EqualTo("source_logo"));
+            Assert.That(splashRoot.transform.Find("Ivan").GetComponent<Image>().sprite.name,Is.EqualTo("source_ivan_firebird"));
+            Assert.That(splashRoot.transform.Find("SourceOuterFrame").GetComponent<Image>().raycastTarget,Is.False);
+            Assert.That(splashRoot.transform.Find("Masha").gameObject.activeSelf,Is.False);
+            Assert.That(splashRoot.transform.Find("Firebird").gameObject.activeSelf,Is.False);
+            Assert.That(splash.StartButton.targetGraphic.GetComponent<Image>().sprite.name,Is.EqualTo("source_start_lettered_ru"));
+            Assert.That(splash.StartText.GetComponent<ProductionHomeGoldText>().BeveledFace,Is.True);
+            Assert.That(splash.StartText.text,Is.EqualTo("НАЖМИТЕ, ЧТОБЫ НАЧАТЬ"));
+            Assert.That(splash.ReferenceTitleFont,Is.Not.Null);Assert.That(splash.ReferenceVersionFont,Is.Not.Null);
+            foreach(var button in new[]{splash.LanguageButton,splash.SettingsButton,splash.AccountButton,splash.HelpButton})Assert.That(button.gameObject.activeSelf,Is.False,"Selected source exposes only Start; auxiliary routes remain elsewhere");
+            Assert.That(loading.Logo.sprite.name,Is.EqualTo("source_logo"));
+            Assert.That(loading.Logo.sprite,Is.Not.SameAs(home.Logo.sprite));
+            Assert.That(loading.SourceTipRussian.name,Is.EqualTo("source_tip_ru"));
+            Assert.That(loading.ProgressBar.SourceFill,Is.Not.Null);
+            Assert.That(loading.Environment.sprite.name,Is.EqualTo("clean_environment"));
+            Assert.That(loading.Ivan.sprite.name,Is.EqualTo("source_ivan"));
         }
 
         [TestCase("masha_dusk", true)]

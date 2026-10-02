@@ -96,7 +96,7 @@ namespace LegendsOfRus.Editor
                 GameObject contents = PrefabUtility.LoadPrefabContents(PrefabPath);
                 try
                 {
-                    ApplyHomeStyle(contents);
+                    ApplyReferenceStyle(contents);
                     BindResponsiveLayout(contents);
                     SplashTitleView view = contents.GetComponent<SplashTitleView>();
                     view.Revision = SplashTitleView.CurrentRevision;
@@ -109,13 +109,14 @@ namespace LegendsOfRus.Editor
                 AssetDatabase.ImportAsset(PrefabPath, ImportAssetOptions.ForceSynchronousImport);
                 SplashTitleView repaired = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath).GetComponent<SplashTitleView>();
                 if (!repaired.HasRequiredBindings) throw new InvalidOperationException(repaired.GetValidationFailure());
-                Debug.Log("Splash Home-style alignment saved and read back at revision " + repaired.Revision +
-                    "; existing object identities and control rectangles preserved.");
+                Debug.Log("Splash original-reference alignment saved and read back at revision " + repaired.Revision +
+                    "; existing object identities preserved; source composition applied.");
                 return;
             }
             if (!File.Exists(LayoutPath)) throw new FileNotFoundException("Missing authoritative layout",LayoutPath);
             LayoutDoc doc = JsonUtility.FromJson<LayoutDoc>(File.ReadAllText(LayoutPath));
             if (doc == null || doc.schemaVersion != 4) throw new InvalidOperationException("Unsupported Splash layout schema.");
+            AssetDatabase.Refresh();
             foreach (ArtSpec item in doc.art) RequireSprite(item.file);
             foreach (ButtonSpec item in doc.buttons) RequireSprite(item.file);
 
@@ -210,7 +211,7 @@ namespace LegendsOfRus.Editor
                      case "AccountText":view.AccountText=text;break;case "HelpText":view.HelpText=text;break;
                      case "TaglineText":view.TaglineText=text;break;case "LegalText":view.LegalText=text;break;}
                 }
-                ApplyHomeStyle(root);
+                ApplyReferenceStyle(root);
                 BindResponsiveLayout(root);
                 if(!view.HasRequiredBindings)throw new InvalidOperationException("New Splash prefab has incomplete bindings.");
                 bool savedSuccessfully;
@@ -228,47 +229,71 @@ namespace LegendsOfRus.Editor
             }
             finally { UnityEngine.Object.DestroyImmediate(root); }
         }
-        static void ApplyHomeStyle(GameObject root)
+        static void ApplyReferenceStyle(GameObject root)
         {
-            LayoutDoc doc = JsonUtility.FromJson<LayoutDoc>(File.ReadAllText(LayoutPath));
-            if (doc == null || doc.schemaVersion != 4) throw new InvalidOperationException("Unsupported Splash layout schema.");
-            foreach (ArtSpec item in doc.art)
-            {
-                Image image = root.transform.Find(item.name).GetComponent<Image>();
-                image.sprite = RequireSprite(item.file);
-                Rect r = RectOf(item.rect);
-                image.rectTransform.anchoredPosition = new Vector2(r.x, -r.y);
-                image.rectTransform.sizeDelta = r.size;
-                image.color = item.color != null && item.color.Length == 4
-                    ? new Color(item.color[0], item.color[1], item.color[2], item.color[3]) : Color.white;
+            const string referenceArt="Assets/LegendsOfRus/Resources/ProductionUI/SplashReferenceAligned/";
+            foreach(string file in Directory.GetFiles(referenceArt,"*.png")) {
+                var importer=(TextureImporter)AssetImporter.GetAtPath(file);
+                importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;
+                importer.alphaIsTransparency=true;importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
+                importer.npotScale=TextureImporterNPOTScale.None;importer.maxTextureSize=2048;importer.filterMode=FilterMode.Bilinear;
+                importer.wrapMode=TextureWrapMode.Clamp;importer.spritePixelsPerUnit=100;importer.spriteBorder=Vector4.zero;importer.SaveAndReimport();
             }
-            SplashTitleView view = root.GetComponent<SplashTitleView>();
-            foreach (ButtonSpec item in doc.buttons)
-            {
-                if (item.name != "StartButton") continue;
-                Image artwork = view.StartButton.targetGraphic as Image;
-                artwork.sprite = RequireSprite(item.file);
-                Rect r = RectOf(item.artRect), parent = RectOf(item.rect);
-                artwork.rectTransform.anchoredPosition = new Vector2(r.x - parent.x, -(r.y - parent.y));
-                artwork.rectTransform.sizeDelta = r.size;
-                artwork.preserveAspect = false; // Same complete artwork proportions as Home.
+            LayoutDoc doc=JsonUtility.FromJson<LayoutDoc>(File.ReadAllText(LayoutPath));
+            if(doc==null||doc.schemaVersion!=4)throw new InvalidOperationException("Unsupported Splash layout schema.");
+            Rect whole=new Rect(0,0,doc.referenceWidth,doc.referenceHeight);
+            var rootRect=(RectTransform)root.transform;
+            foreach(ArtSpec item in doc.art) {
+                var child=root.transform.Find(item.name);
+                Image image=child?child.GetComponent<Image>():MakeImage(rootRect,item.name,RequireSprite(item.file),RectOf(item.rect),whole,false);
+                image.sprite=RequireSprite(item.file);ApplyRect(image.rectTransform,RectOf(item.rect),whole,1);image.preserveAspect=true;
+                image.color=item.color!=null&&item.color.Length==4?new Color(item.color[0],item.color[1],item.color[2],item.color[3]):Color.white;
+                image.raycastTarget=false;image.gameObject.SetActive(!item.hidden);
+                var fade=image.GetComponent<SplashTitleCharacterFade>();if(fade){fade.BottomFraction=item.fadeBottom;fade.enabled=item.fadeBottom>0;}
             }
-            view.StartText.color = new Color32(244, 199, 100, 255);
-            view.StartText.material = AssetDatabase.LoadAssetAtPath<Material>(
-                "Assets/LegendsOfRus/Resources/" + ProductionHomeRuntime.PlayGoldMaterialResource + ".mat");
-            if (view.StartText.material == null) throw new InvalidOperationException("Missing shared Home gold lettering material.");
-            Shadow shadow = view.StartText.GetComponent<Shadow>();
-            shadow.effectColor = new Color32(34, 15, 2, 230);
-            shadow.effectDistance = new Vector2(0, -2);
-            ProductionHomeGoldText gold = view.StartText.GetComponent<ProductionHomeGoldText>();
-            if (gold == null) gold = view.StartText.gameObject.AddComponent<ProductionHomeGoldText>();
-            gold.enabled = true; gold.BeveledFace = true;
+            var view=root.GetComponent<SplashTitleView>();
+            foreach(ButtonSpec item in doc.buttons) {
+                var tr=(RectTransform)root.transform.Find(item.name);Rect bounds=RectOf(item.rect);ApplyRect(tr,bounds,whole,1);
+                var image=tr.Find("Artwork").GetComponent<Image>();image.sprite=RequireSprite(item.file);
+                ApplyRect(image.rectTransform,RectOf(item.artRect),bounds,1);image.preserveAspect=true;tr.gameObject.SetActive(!item.hidden);
+            }
+            foreach(TextSpec item in doc.texts) {
+                var parent=string.IsNullOrEmpty(item.parent)?root.transform:root.transform.Find(item.parent);
+                var text=parent.Find(item.name).GetComponent<Text>();Rect parentBounds=whole;
+                foreach(ButtonSpec button in doc.buttons)if(button.name==item.parent)parentBounds=RectOf(button.rect);
+                int density=Mathf.Clamp(item.rasterScale,1,3);ApplyRect(text.rectTransform,RectOf(item.rect),parentBounds,density);
+                text.fontSize=item.size*density;text.fontStyle=(FontStyle)item.fontStyle;text.alignment=(TextAnchor)item.alignment;
+                text.text=item.text;text.raycastTarget=false;text.gameObject.SetActive(!item.hidden);
+                var geometry=text.GetComponent<SplashTitleTextGeometry>();geometry.CenterHorizontally=item.centerHorizontally;
+                geometry.CenterVertically=item.centerVertically;geometry.OpticalOffset=new Vector2(item.opticalOffset[0],item.opticalOffset[1])*density;
+            }
+            view.ReferenceVersionFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/RankNumbers");
+            view.ReferenceTitleFont=Resources.Load<Font>("ProductionUI/IndividualRankingFonts/Title");
+            view.ReferenceStartRussian=RequireSprite("ProductionUI/SplashReferenceAligned/source_start_lettered_ru.png");
+            view.ReferenceStartBlank=RequireSprite("ProductionUI/SplashReferenceAligned/source_start_blank.png");
+            view.StartText.enabled=false;
+            // These are the existing selected fonts, not an assertion of exact source-font identity.
+            if(!view.ReferenceVersionFont||!view.ReferenceTitleFont)throw new InvalidOperationException("Missing embedded Cyrillic fonts.");
+
+            view.StartText.color=new Color32(244,199,100,255);
+            view.StartText.material=AssetDatabase.LoadAssetAtPath<Material>("Assets/LegendsOfRus/Resources/"+ProductionHomeRuntime.PlayGoldMaterialResource+".mat");
+            var gold=view.StartText.GetComponent<ProductionHomeGoldText>()??view.StartText.gameObject.AddComponent<ProductionHomeGoldText>();gold.enabled=true;gold.BeveledFace=true;
+            var shadow=view.StartText.GetComponent<Shadow>()??view.StartText.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color32(34,15,2,230);shadow.effectDistance=new Vector2(0,-2);
+            root.transform.Find("FooterContrast").GetComponent<SplashTitleFooterShade>().color=Color.clear;
+            root.transform.Find("TaglineDivider").gameObject.SetActive(false);
+            root.transform.Find("SourceOuterFrame").SetAsLastSibling();view.StartButton.transform.SetAsLastSibling();view.VersionText.transform.SetAsLastSibling();
+        }
+        static void ApplyRect(RectTransform tr,Rect r,Rect parent,int density)
+        {
+            tr.anchorMin=tr.anchorMax=tr.pivot=new Vector2(0,1);tr.anchoredPosition=new Vector2(r.x-parent.x,-(r.y-parent.y));
+            tr.sizeDelta=r.size*density;tr.localScale=new Vector3(1f/density,1f/density,1);
         }
 
         static void BindResponsiveLayout(GameObject root)
         {
             SplashTitleForegroundLayout layout = root.GetComponent<SplashTitleForegroundLayout>();
             if (layout == null) layout = root.AddComponent<SplashTitleForegroundLayout>();
+            layout.ReferenceComposition = true;
             layout.Logo = root.transform.Find("Logo") as RectTransform;
             layout.Version = root.transform.Find("VersionText") as RectTransform;
             layout.Language = root.transform.Find("LanguageSelector") as RectTransform;
@@ -300,14 +325,14 @@ namespace LegendsOfRus.Editor
         }
         [Serializable] public class LayoutDoc
         {public int schemaVersion;public float referenceWidth;public float referenceHeight;public ArtSpec[] art;public ButtonSpec[] buttons;public TextSpec[] texts;public ShadeSpec footerShade;}
-        [Serializable] public class ArtSpec {public string name;public string file;public float[] rect,color;public float fadeBottom;}
-        [Serializable] public class ButtonSpec {public string name;public string file;public float[] rect;public float[] artRect;}
+        [Serializable] public class ArtSpec {public string name;public string file;public float[] rect,color;public float fadeBottom;public bool hidden;}
+        [Serializable] public class ButtonSpec {public string name;public string file;public float[] rect;public float[] artRect;public bool hidden;}
         [Serializable] public class ShadeSpec {public float[] rect;public float[] color;}
         [Serializable] public class TextSpec
         {
             public string name,parent,text;public float[] rect,color,opticalOffset;
             public int size,alignment,fontStyle,rasterScale;
-            public bool startFont,centerHorizontally,centerVertically,pixelSnap,shadow;
+            public bool hidden;public bool startFont,centerHorizontally,centerVertically,pixelSnap,shadow;
         }
     }
     /// <summary>Asset imports and domain reloads can finish after InitializeOnLoad.</summary>

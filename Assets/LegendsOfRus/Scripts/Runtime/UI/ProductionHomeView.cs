@@ -10,8 +10,9 @@ namespace LegendsOfRus
     [DisallowMultipleComponent]
     public sealed class ProductionHomeView : MonoBehaviour
     {
-        public const int CurrentRevision = 14;
+        public const int CurrentRevision = 18;
         public int Revision = CurrentRevision;
+        public ProductionPlayerHeader Header;
         public SplashTitleTypography Typography;
         public Image Environment;
         public ProductionHomeBackdropShade BackgroundShade;
@@ -71,12 +72,18 @@ namespace LegendsOfRus
         public Button MailButton;
         public Button DailyRewardButton;
 
+        public Image SourcePlay;
+        public Image[] SourceNavigation;
+        public Sprite SourceRussianPlay, SourceBlankPlay, SourceRussianQuest, SourceBlankQuest;
+        public Sprite[] SourceRussianCards, SourceBlankCards;
+        public Font ReferenceBodyFont, ReferenceTitleFont;
+
         public bool ActionsBound { get; private set; }
         public string ActiveFontSource { get; private set; }
-        public bool HasRequiredBindings => Revision == CurrentRevision && Typography != null &&
+        public bool HasRequiredBindings => Revision == CurrentRevision && Header!=null && Header.HasBindings && Typography != null &&
             Environment != null && Environment.sprite != null && Logo != null && Logo.sprite != null &&
             Ivan != null && Ivan.sprite != null && Firebird != null && !Firebird.gameObject.activeSelf && Firebird.sprite == null &&
-            Environment.color == ProductionHomeRuntime.EnvironmentTone && Ivan.color == ProductionHomeRuntime.HeroTone &&
+            Environment.color == Color.white && Ivan.color == Color.white &&
             LowerShade != null && LowerShade.GetComponent<CanvasRenderer>() != null &&
             HeroName != null && LevelText != null && GoldText != null && GemsText != null &&
             EnergyText != null && PlayText != null && WorldMapText != null && ShopText != null &&
@@ -84,7 +91,7 @@ namespace LegendsOfRus
             ProfileButton != null && SettingsButton != null && PlayButton != null &&
             WorldMapButton != null && ShopButton != null && EventsButton != null &&
             CharactersButton != null && MailButton != null && DailyRewardButton != null &&
-            HasGeneratedControlBindings && HasReferenceForegroundBindings && HasReferenceBackdropBindings && HasSceneLightingBindings;
+            ProductionHomeSourceComposition.Valid(this);
 
         public bool HasSceneLightingBindings => HasSceneLighting(Ivan, "home_hero_lighting", 0) &&
             HasSceneLighting(MapFoliage, "home_foliage_lighting", 1);
@@ -113,13 +120,13 @@ namespace LegendsOfRus
             MapFoliage.transform.GetSiblingIndex() == 0;
 
         public bool HasGeneratedControlBindings =>
-            HasArtwork(HudFrame, "hud_frame") && HasArtwork(AvatarFrame, "avatar_ring") &&
+            HasArtwork(HudFrame, "header") && HasArtwork(AvatarFrame, "avatar_ring") &&
             ProfileButton != null && ProfileButton.targetGraphic == AvatarFrame &&
-            HasArtwork(GoldCapsule, "resource_capsule") && HasArtwork(GemsCapsule, "resource_capsule") &&
-            HasArtwork(EnergyCapsule, "resource_capsule") && HasArtwork(GoldIcon, "coin_icon") &&
-            HasArtwork(GemsIcon, "gems_icon") && HasArtwork(EnergyIcon, "energy_icon") &&
+            HasArtwork(GoldCapsule, "capsule") && HasArtwork(GemsCapsule, "capsule") &&
+            HasArtwork(EnergyCapsule, "capsule") && HasArtwork(GoldIcon, "coin") &&
+            HasArtwork(GemsIcon, "gem") && HasArtwork(EnergyIcon, "energy") &&
             HasArtwork(QuestFrame, "quest_panel") && HasArtwork(FooterBase, "footer_base_generated") &&
-            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings_medallion") &&
+            !FooterBase.raycastTarget && HasButtonArtwork(SettingsButton, "settings") &&
             HasButtonArtwork(WorldMapButton, "nav_map_generated") && HasButtonArtwork(ShopButton, "nav_shop_generated") &&
             HasButtonArtwork(EventsButton, "nav_events_generated") && HasButtonArtwork(CharactersButton, "nav_characters_generated") &&
             HasButtonArtwork(MailButton, "mail_medallion_generated") && HasButtonArtwork(DailyRewardButton, "reward_medallion_generated");
@@ -136,8 +143,8 @@ namespace LegendsOfRus
             HasArtwork(ProfileProgressFrame, "progress_frame") && ProfileProgressText != null &&
             HasArtwork(QuestProgressFrame, "progress_frame") && HasArtwork(QuestProgressFill, "progress_fill") &&
             HasArtwork(QuestRewardFrame, "quest_reward_frame") && HasArtwork(QuestRewardIcon, "quest_reward_gem") &&
-            HasButtonArtwork(GoldPlusButton, "resource_plus") && HasButtonArtwork(GemsPlusButton, "resource_plus") &&
-            HasButtonArtwork(EnergyPlusButton, "resource_plus") && QuestProgressText != null &&
+            HasButtonArtwork(GoldPlusButton, "plus") && HasButtonArtwork(GemsPlusButton, "plus") &&
+            HasButtonArtwork(EnergyPlusButton, "plus") && QuestProgressText != null &&
             QuestRewardText != null && DailyRewardBadge != null && DailyRewardBadgeText != null &&
             EventsBadge != null && EventsBadgeText != null && !EventsBadge.raycastTarget &&
             EventsBadge.RaisedBadge && DailyRewardBadge.RaisedBadge && !DailyRewardBadge.raycastTarget;
@@ -198,6 +205,7 @@ namespace LegendsOfRus
 
         public void RefreshContent()
         {
+            // This page now owns the extracted original header; shared navigation remains for other pages.
             lastLanguage = DemoFeatureState.LanguageCode;
             bool en = lastLanguage == "en";
             SetText(HeroName, en ? "Ivan" : "Иван");
@@ -229,6 +237,7 @@ namespace LegendsOfRus
                     PlayText.raycastTarget = false;
                 }
             }
+            ProductionHomeSourceComposition.Refresh(this);
             RefreshState();
         }
 
@@ -244,15 +253,6 @@ namespace LegendsOfRus
                 if (state != null && state.Save != null && Application.isPlaying)
                     state.RefreshEnergyFromClock();
                 PlayerSaveData save = state != null ? state.Save : null;
-                SetText(GoldText, save != null ? FormatAmount(save.gold) : "—");
-                SetText(GemsText, save != null ? FormatAmount(save.gems) : "—");
-                SetText(EnergyText, save != null
-                    ? save.energy.ToString(CultureInfo.InvariantCulture) + "/" +
-                        save.energyMax.ToString(CultureInfo.InvariantCulture)
-                    : "—");
-                string level = save != null ? save.level.ToString(CultureInfo.InvariantCulture) : "—";
-                SetText(LevelText, (DemoFeatureState.LanguageCode == "en" ? "Level " : "Уровень ") + level);
-                SetText(ProfileProgressText, "—");
                 SetText(QuestProgressText, "— / —");
                 SetText(QuestRewardText, "—");
                 if (QuestProgressFill != null)
@@ -262,17 +262,12 @@ namespace LegendsOfRus
                 }
                 // This mirrors GameState.ClaimDailyReward's actual persisted UTC rule.
                 lastRewardDay = DateTime.UtcNow.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
-                bool dailyAvailable = save != null && save.lastDailyRewardUtc != lastRewardDay;
+                bool dailyAvailable = DailyRewardSchedule.CanClaim(save, DateTime.UtcNow);
                 if (DailyRewardBadge != null) DailyRewardBadge.gameObject.SetActive(dailyAvailable);
                 SetText(DailyRewardBadgeText, dailyAvailable ? "1" : string.Empty);
+                ProductionHomeSourceComposition.FitBalances(this);
             }
             finally { refreshingState = false; }
-        }
-
-        static string FormatAmount(int value)
-        {
-            // Stable grouping on both Russian and English devices, matching the existing HUD.
-            return value.ToString("N0", CultureInfo.InvariantCulture).Replace(",", " ");
         }
 
         static void SetText(Text label, string value)

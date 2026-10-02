@@ -24,6 +24,7 @@ namespace LegendsOfRus
         // This small transient parent override keeps Back returning to Splash without replacing
         // the deterministic navigation policy used everywhere else.
         ScreenId? splashAuxiliaryRoot;
+        ScreenId? tutorialReturnPage;
 
         public ScreenId CurrentScreen => current;
         public ScreenId? ActiveModal => activeModalId;
@@ -64,6 +65,8 @@ namespace LegendsOfRus
         GameObject modalRoot;
         GameObject modalVisualRoot;
         ScreenId? activeModalId;
+        DailyRewardGrant? pendingRewardReceipt;
+        int pendingRewardDay;
         ScreenId? pendingModalId;
 
         MetaUiMotionPresenter motionPresenter;
@@ -76,6 +79,9 @@ namespace LegendsOfRus
 
         ScreenId current;
         bool settingsReturnToPause;
+        ScreenId? settingsReturnPage;
+        ScreenId? languageReturnPage;
+        ScreenId? loginReturnPage;
         Match3Board activeBoard;
         string activeAnalyticsLevelId = string.Empty;
         int activeAnalyticsAttemptNumber;
@@ -131,10 +137,9 @@ namespace LegendsOfRus
                 {
                     ResumeGameplayFromPause();
                 }
-                else if (activeModalId == ScreenId.Settings && settingsReturnToPause)
+                else if (activeModalId == ScreenId.Settings)
                 {
-                    settingsReturnToPause = false;
-                    ShowModal(ScreenId.Pause);
+                    NavigateBack();
                 }
                 else
                 {
@@ -181,6 +186,73 @@ namespace LegendsOfRus
 
         public void NavigateBack()
         {
+            if(activeModalId==ScreenId.EmptyErrorState){if(!IsModalTransitioning)CloseModal();return;}
+            if(current==ScreenId.TutorialOverlay){Show(tutorialReturnPage ?? ScreenId.SplashTitle);return;}
+            if (current == ScreenId.Login && contentRoot != null)
+            {
+                var login = contentRoot.GetComponentInChildren<ProductionLoginView>();
+                if (login != null && login.TryDismiss()) return;
+                Show(loginReturnPage ?? ScreenId.SplashTitle);
+                return;
+            }
+            if (current == ScreenId.LanguageSelect)
+            {
+                Show(languageReturnPage ?? ScreenId.SplashTitle);
+                return;
+            }
+            if (activeModalId == ScreenId.Settings)
+            {
+                if (IsModalTransitioning) return;
+                var settings=modalVisualRoot.GetComponentInChildren<ProductionSettingsView>();
+                if (settings!=null && settings.TryDismiss()) return;
+                if (settingsReturnToPause) { settingsReturnToPause=false; ShowModal(ScreenId.Pause); }
+                else CloseModal();
+                return;
+            }
+            if (current==ScreenId.Settings && contentRoot!=null)
+            {
+                var settings=contentRoot.GetComponentInChildren<ProductionSettingsView>();
+                if (settings!=null && settings.TryDismiss()) return;
+                Show(settingsReturnPage ?? ScreenId.Home);
+                return;
+            }
+            if(current==ScreenId.Characters&&contentRoot!=null){var characters=contentRoot.GetComponentInChildren<ProductionCharactersView>();if(characters!=null&&characters.TryDismiss())return;}
+            if(current==ScreenId.Inventory&&contentRoot!=null){var inventory=contentRoot.GetComponentInChildren<ProductionInventoryView>();if(inventory!=null&&inventory.TryDismiss())return;}
+            if(current==ScreenId.Profile&&contentRoot!=null)
+            {
+                var profile=contentRoot.GetComponentInChildren<ProductionProfileView>();
+                if(profile!=null&&profile.TryDismiss())return;
+            }
+            if(current==ScreenId.Mail&&contentRoot!=null)
+            {
+                var mail=contentRoot.GetComponentInChildren<ProductionMailView>();
+                if(mail!=null&&mail.TryDismiss())return;
+            }
+            if(current==ScreenId.FriendsList&&contentRoot!=null)
+            {
+                var friends=contentRoot.GetComponentInChildren<ProductionFriendsListView>();
+                if(friends!=null&&friends.InfoPanel.activeSelf){friends.CloseInfo();return;}
+            }
+            if(current==ScreenId.TeamChat&&contentRoot!=null)
+            {
+                var chat=contentRoot.GetComponentInChildren<ProductionTeamChatView>();
+                if(chat!=null&&chat.InfoPanel.activeSelf){chat.CloseInfo();return;}
+            }
+            if(current==ScreenId.TeamRanking&&contentRoot!=null)
+            {
+                var ranking=contentRoot.GetComponentInChildren<ProductionTeamRankingView>();
+                if(ranking!=null&&ranking.InfoPanel.activeSelf){ranking.CloseInfo();return;}
+            }
+            if(current==ScreenId.TeamHub&&contentRoot!=null)
+            {
+                var team=contentRoot.GetComponentInChildren<ProductionTeamHubView>();
+                if(team!=null&&team.InfoPanel.activeSelf){team.CloseInfo();return;}
+            }
+            if(current==ScreenId.IndividualRanking&&contentRoot!=null)
+            {
+                var ranking=contentRoot.GetComponentInChildren<ProductionIndividualRankingView>();
+                if(ranking!=null&&ranking.RulesPanel.activeSelf){ranking.CloseRules();return;}
+            }
             if (current == ScreenId.WorldMap && contentRoot != null)
             {
                 ProductionWorldMapView map = contentRoot.GetComponentInChildren<ProductionWorldMapView>();
@@ -320,6 +392,15 @@ namespace LegendsOfRus
 
         public void Show(ScreenId id)
         {
+            if(id==ScreenId.EmptyErrorState){ShowErrorDialog();return;}
+            if(id==ScreenId.TutorialOverlay&&current!=id)tutorialReturnPage=current;
+            else if(id!=ScreenId.TutorialOverlay)tutorialReturnPage=null;
+            if (id == ScreenId.Login && current != id) loginReturnPage = current;
+            else if (id != ScreenId.Login) loginReturnPage = null;
+            if (id == ScreenId.LanguageSelect && current != id) languageReturnPage = current;
+            else if (id != ScreenId.LanguageSelect) languageReturnPage = null;
+            if (id==ScreenId.Settings && current!=ScreenId.Settings && current!=ScreenId.LanguageSelect && current!=ScreenId.Login) settingsReturnPage=current;
+            else if (id!=ScreenId.Settings && id!=ScreenId.LanguageSelect && id!=ScreenId.Login) settingsReturnPage=null;
             CancelLoadingPreparation();
             // The transient Back target belongs only to the directly opened auxiliary
             // page. Preserve it on a refresh of that page; clear it on every departure,
@@ -365,7 +446,7 @@ namespace LegendsOfRus
             if (designReady)
                 BuildInteractionLayer(id, root);
 
-            if (designReady && id == ScreenId.Dialogue)
+            if (designReady && id == ScreenId.Dialogue && root.GetComponentInChildren<ProductionDialogueView>() == null)
                 BuildStoryDialogueOverlay(root);
             else if (designReady && (id == ScreenId.Victory || id == ScreenId.Fail))
                 BuildOutcomeReactionOverlay(root, id);
@@ -586,7 +667,7 @@ namespace LegendsOfRus
                         return;
                     }
                     worldMap.BindNavigation(target => Show(target), OpenChapterMap,
-                        () => NavigateBackFrom(ScreenId.WorldMap), Toast);
+                        () => NavigateBackFrom(ScreenId.WorldMap), worldMap.Notice.Show);
                     return;
 
                 case ScreenId.ChapterMap:
@@ -596,7 +677,7 @@ namespace LegendsOfRus
                         Debug.LogError("Chapter Map has no complete native bindings.");return;
                     }
                     chapterMap.BindNavigation(target=>Show(target),OpenSelectedLevel,
-                        ()=>NavigateBackFrom(ScreenId.ChapterMap),Toast);
+                        ()=>NavigateBackFrom(ScreenId.ChapterMap),chapterMap.Notice.Show);
                     return;
 
                 case ScreenId.PreLevel:
@@ -613,89 +694,79 @@ namespace LegendsOfRus
                     break;
 
                 case ScreenId.Dialogue:
-                    Hotspot(parent, "Continue", 215, 1400, 520, 150, ContinueAfterDialogue);
+                    var dialogue = parent.GetComponentInChildren<ProductionDialogueView>();
+                    if (dialogue == null || !dialogue.HasRequiredBindings) throw new InvalidOperationException("Dialogue native bindings are missing.");
+                    dialogue.Bind(ContinueAfterDialogue);
                     break;
 
                 case ScreenId.Victory:
-                    Hotspot(parent, "Continue", 185, 1330, 570, 149, ContinueAfterVictory);
-                    Hotspot(
-                        parent,
-                        "DoubleReward",
-                        180,
-                        1480,
-                        580,
-                        120,
-                        RequestRewardedDouble
-                    );
-                    break;
+                    var victory=parent.GetComponentInChildren<ProductionVictoryView>();
+                    if(victory==null||!victory.HasRequiredBindings)throw new InvalidOperationException("Victory native bindings are missing.");
+                    victory.BindNavigation(ContinueAfterVictory,RequestRewardedDouble,target=>Show(target));
+                    return;
 
                 case ScreenId.Fail:
-                    Hotspot(parent, "Retry", 185, 1260, 570, 140, RestartCurrentLevel);
-                    Hotspot(parent, "Exit", 190, 1450, 560, 120, () => Show(ScreenId.ChapterMap));
-                    break;
+                    var failure=parent.GetComponentInChildren<ProductionFailView>();
+                    if(failure==null||!failure.HasRequiredBindings)throw new InvalidOperationException("Failure native bindings are missing.");
+                    failure.BindNavigation(RestartCurrentLevel,()=>Show(ScreenId.ChapterMap),target=>Show(target));
+                    return;
 
                 case ScreenId.Shop:
-                    Hotspot(parent, "Pack1", 55, 360, 390, 370, () =>
-                        RequestPurchase("starter", null));
-                    Hotspot(parent, "Pack2", 490, 360, 390, 370, () =>
-                        RequestPurchase("hero", null));
-                    Hotspot(parent, "Pack3", 55, 760, 390, 370, () =>
-                        RequestPurchase("firebird", null));
-                    DemoShortcut(parent, "SpecialOffer", "СПЕЦПРЕДЛОЖЕНИЕ", 260, 1420, 421, 100, () => Show(ScreenId.SpecialOffer));
-                    Hotspot(parent, "Back", 0, 0, 180, 180, NavigateBack);
-                    break;
+                    var shop=parent.GetComponentInChildren<ProductionShopView>();
+                    if(shop!=null&&shop.HasRequiredBindings){shop.Bind(target=>Show(target),NavigateBack,offer=>RequestPurchase(offer,null));return;}
+                    throw new InvalidOperationException("Shop native bindings are missing.");
 
                 case ScreenId.DailyReward:
-                    Hotspot(parent, "Back", 15, 1470, 145, 160, () => Show(ScreenId.Home));
-                    Hotspot(parent, "Claim", 260, 1450, 520, 150, ClaimDailyReward);
-                    break;
+                    var daily=parent.GetComponentInChildren<ProductionDailyRewardView>();
+                    if(daily==null||!daily.HasRequiredBindings)throw new InvalidOperationException("DailyReward native bindings are missing.");
+                    daily.Bind(ClaimDailyRewardWithReceipt,NavigateBack,target=>Show(target));
+                    return;
+
+                case ScreenId.BoosterSelect:
+                    var boosterPage=parent.GetComponentInChildren<ProductionBoosterSelectionView>();
+                    if(boosterPage==null||!boosterPage.HasRequiredBindings)throw new InvalidOperationException("Booster Selection native bindings are missing.");
+                    boosterPage.Bind(false,NavigateBack,()=>{StartLevel();return current!=ScreenId.BoosterSelect;});
+                    return;
+
+                case ScreenId.OutOfEnergy:
+                    var energyPage=parent.GetComponentInChildren<ProductionOutOfEnergyView>();
+                    if(energyPage==null||!energyPage.HasRequiredBindings)throw new InvalidOperationException("Out of Energy native bindings are missing.");
+                    energyPage.Bind(false,NavigateBack,()=>RequestPurchase("energy",NavigateBack),RequestDemoFriendEnergy,RequestRewardedEnergy);
+                    return;
+
+                case ScreenId.RewardClaim:
+                    var receiptPage=parent.GetComponentInChildren<ProductionRewardReceivedView>();
+                    if(receiptPage==null||!receiptPage.HasRequiredBindings)throw new InvalidOperationException("Reward Received native bindings are missing.");
+                    receiptPage.Bind(null,0,NavigateBack);
+                    return;
 
                 case ScreenId.Events:
-                    Hotspot(parent, "FirstEvent", 80, 350, 780, 250, () => Show(ScreenId.EventDetail));
-                    Hotspot(parent, "Back", 0, 1450, 170, 200, NavigateBack);
-                    break;
+                    var eventsPage=parent.GetComponentInChildren<ProductionEventsView>();
+                    if(eventsPage==null||!eventsPage.HasRequiredBindings)throw new InvalidOperationException("Events native bindings are missing.");
+                    eventsPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.Profile:
-                    DemoShortcut(parent, "IndividualRanking", "ЛИЧНЫЙ РЕЙТИНГ", 165, 970, 290, 90, () => Show(ScreenId.IndividualRanking));
-                    DemoShortcut(parent, "TeamHub", "КОМАНДА", 485, 970, 290, 90, () => Show(ScreenId.TeamHub));
-                    DemoShortcut(parent, "Inventory", "ИНВЕНТАРЬ", 165, 1080, 290, 90, () => Show(ScreenId.Inventory));
-                    DemoShortcut(parent, "Login", "ВХОД / ГОСТЬ", 485, 1080, 290, 90, () => Show(ScreenId.Login));
-                    Hotspot(parent, "Back", 0, 1460, 160, 190, NavigateBack);
-                    break;
+                    var profilePage=parent.GetComponentInChildren<ProductionProfileView>();
+                    if(profilePage==null||!profilePage.HasRequiredBindings)throw new InvalidOperationException("Profile native bindings are missing.");
+                    profilePage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.Settings:
-                    BuildSettingsHotspots(parent);
-                    DemoShortcut(parent, "Language", "ЯЗЫК", 150, 1000, 300, 80, () => Show(ScreenId.LanguageSelect));
-                    DemoShortcut(parent, "Tutorial", "ОБУЧЕНИЕ", 490, 1000, 300, 80, () => Show(ScreenId.TutorialOverlay));
-                    DemoShortcut(parent, "Offline", "DEMO: OFFLINE", 150, 1095, 300, 80, () => Show(ScreenId.OfflineState));
-                    DemoShortcut(parent, "Maintenance", "DEMO: MAINTENANCE", 490, 1095, 300, 80, () => Show(ScreenId.MaintenanceState));
-                    DemoShortcut(parent, "ErrorState", "DEMO: ERROR", 320, 1190, 300, 80, () => Show(ScreenId.EmptyErrorState));
+                    BindNativeSettings(parent);
                     break;
 
                 case ScreenId.Characters:
-                    Hotspot(parent, "Use", 650, 530, 220, 80, () => Toast("Иван выбран активным героем."));
-                    Hotspot(parent, "Back", 0, 1450, 165, 200, () => Show(ScreenId.Home));
-                    break;
+                    var charactersPage=parent.GetComponentInChildren<ProductionCharactersView>();
+                    if(charactersPage==null||!charactersPage.HasRequiredBindings)throw new InvalidOperationException("Characters native bindings are missing.");
+                    charactersPage.Bind(target=>Show(target),NavigateBack,category=>{Show(ScreenId.Shop);var shop=contentRoot.GetComponentInChildren<ProductionShopView>();if(shop!=null)shop.SelectCategory(category);});
+                    return;
 
                 case ScreenId.Mail:
-                    Hotspot(
-                        parent,
-                        "ClaimAll",
-                        300,
-                        1450,
-                        420,
-                        120,
-                        () =>
-                        {
-                            Toast(
-                                "Почтовые награды пока недоступны. " +
-                                "Вы можете продолжить игру."
-                            );
-                        },
-                        MetaUiControlRole.OneShotReward
-                    );
-                    Hotspot(parent, "Back", 0, 1440, 165, 190, () => Show(ScreenId.Home));
-                    break;
+                    var mailPage=parent.GetComponentInChildren<ProductionMailView>();
+                    if(mailPage==null||!mailPage.HasRequiredBindings)throw new InvalidOperationException("Mail native bindings are missing.");
+                    mailPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.SplashTitle:
                     SplashTitleView splash = parent.GetComponentInChildren<SplashTitleView>(true);
@@ -713,74 +784,89 @@ namespace LegendsOfRus
                     break;
 
                 case ScreenId.EventDetail:
-                    Hotspot(parent, "Claim", 220, 1270, 501, 120, ClaimDemoEventReward);
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var eventDetailPage=parent.GetComponentInChildren<ProductionEventDetailView>();
+                    if(eventDetailPage==null||!eventDetailPage.HasRequiredBindings)throw new InvalidOperationException("Event Detail native bindings are missing.");
+                    eventDetailPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.IndividualRanking:
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var rankingPage=parent.GetComponentInChildren<ProductionIndividualRankingView>();
+                    if(rankingPage==null||!rankingPage.HasRequiredBindings)throw new InvalidOperationException("Individual Ranking native bindings are missing.");
+                    rankingPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.TeamHub:
-                    Hotspot(parent, "Ranking", 220, 760, 501, 100, () => Show(ScreenId.TeamRanking));
-                    Hotspot(parent, "Chat", 220, 885, 501, 100, () => Show(ScreenId.TeamChat));
-                    Hotspot(parent, "Friends", 220, 1010, 501, 100, () => Show(ScreenId.FriendsList));
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var teamHubPage=parent.GetComponentInChildren<ProductionTeamHubView>();
+                    if(teamHubPage==null||!teamHubPage.HasRequiredBindings)throw new InvalidOperationException("Team Hub native bindings are missing.");
+                    teamHubPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.TeamRanking:
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var teamRankingPage=parent.GetComponentInChildren<ProductionTeamRankingView>();
+                    if(teamRankingPage==null||!teamRankingPage.HasRequiredBindings)throw new InvalidOperationException("Team Ranking native bindings are missing.");
+                    teamRankingPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.TeamChat:
-                    Hotspot(parent, "Send", 545, 1265, 280, 105, SendDemoTeamMessage);
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var chatPage=parent.GetComponentInChildren<ProductionTeamChatView>();
+                    if(chatPage==null||!chatPage.HasRequiredBindings)throw new InvalidOperationException("Team Chat native bindings are missing.");
+                    chatPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.FriendsList:
-                    Hotspot(parent, "Energy", 220, 1270, 501, 110, RequestDemoFriendEnergy);
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var friendsPage=parent.GetComponentInChildren<ProductionFriendsListView>();
+                    if(friendsPage==null||!friendsPage.HasRequiredBindings)throw new InvalidOperationException("Friends List native bindings are missing.");
+                    friendsPage.Bind(target=>Show(target),NavigateBack);
+                    return;
 
                 case ScreenId.Inventory:
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var inventoryPage=parent.GetComponentInChildren<ProductionInventoryView>();
+                    if(inventoryPage==null||!inventoryPage.HasRequiredBindings)throw new InvalidOperationException("Inventory native bindings are missing.");
+                    inventoryPage.Bind(target=>Show(target),NavigateBack,category=>{Show(ScreenId.Shop);var shop=contentRoot.GetComponentInChildren<ProductionShopView>();if(shop!=null)shop.SelectCategory(category);});
+                    return;
 
                 case ScreenId.SpecialOffer:
-                    Hotspot(parent, "Buy", 250, 1270, 441, 120, () => RequestPurchase("starter", null));
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var offer=parent.GetComponentInChildren<ProductionSpecialOfferView>();
+                    if(offer==null||!offer.HasRequiredBindings)throw new InvalidOperationException("Special Offer native bindings are missing.");
+                    offer.Bind(NavigateBack,()=>Show(ScreenId.Shop),idToBuy=>RequestPurchase(idToBuy,null));
+                    return;
 
                 case ScreenId.LanguageSelect:
-                    Hotspot(parent, "Ru", 220, 780, 501, 105, () => SetDemoLanguage("ru"));
-                    Hotspot(parent, "En", 220, 910, 501, 105, () => SetDemoLanguage("en"));
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var languagePage = parent.GetComponentInChildren<ProductionLanguageSelectView>();
+                    if (languagePage == null || !languagePage.HasRequiredBindings)
+                        throw new InvalidOperationException("Language Select native bindings are missing.");
+                    languagePage.Bind(NavigateBack);
+                    return;
 
                 case ScreenId.Login:
-                    Hotspot(parent, "Guest", 220, 1220, 501, 120, ContinueAsDemoGuest);
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var loginPage = parent.GetComponentInChildren<ProductionLoginView>();
+                    if (loginPage == null || !loginPage.HasRequiredBindings) throw new InvalidOperationException("Login native bindings are missing.");
+                    loginPage.Bind(ContinueAsDemoGuest, NavigateBack);
+                    return;
 
                 case ScreenId.TutorialOverlay:
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var help=parent.GetComponentInChildren<ProductionTutorialView>();
+                    if(help==null||!help.HasRequiredBindings)throw new InvalidOperationException("Tutorial native bindings are missing.");
+                    help.Bind(NavigateBack);
+                    return;
 
                 case ScreenId.OfflineState:
-                case ScreenId.EmptyErrorState:
-                    Hotspot(parent, "Retry", 250, 1270, 441, 120, () => Show(ScreenId.Home));
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var offline=parent.GetComponentInChildren<ProductionOfflineView>();
+                    if(offline==null||!offline.HasRequiredBindings)throw new InvalidOperationException("Offline native bindings are missing.");
+                    offline.Bind(NavigateBack,null,target=>Show(target),category=>{Show(ScreenId.Shop);var offlineShop=contentRoot.GetComponentInChildren<ProductionShopView>();if(offlineShop)offlineShop.SelectCategory(category);});
+                    return;
+
 
                 case ScreenId.MaintenanceState:
-                    Hotspot(parent, "Back", 35, 1450, 220, 105, NavigateBack);
-                    break;
+                    var maintenance=parent.GetComponentInChildren<ProductionMaintenanceView>();
+                    if(maintenance==null||!maintenance.HasRequiredBindings)throw new InvalidOperationException("Maintenance native bindings are missing.");
+                    maintenance.Bind(NavigateBack);
+                    return;
 
                 case ScreenId.ChapterComplete:
-                    Hotspot(parent, "Continue", 160, 1280, 320, 125, () =>
-                        ContinueAfterChapterComplete(ScreenId.WorldMap));
-                    Hotspot(parent, "Map", 500, 1280, 300, 125, () =>
-                        ContinueAfterChapterComplete(ScreenId.WorldMap));
+                    var chapterComplete=parent.GetComponentInChildren<ProductionChapterCompleteView>();
+                    if(chapterComplete==null||!chapterComplete.HasRequiredBindings)throw new InvalidOperationException("Chapter Complete requires its aligned native prefab.");
+                    chapterComplete.Bind(()=>{int generation=RouteGeneration;ContinueAfterChapterComplete(ScreenId.WorldMap);return RouteGeneration!=generation;});
                     break;
 
                 case ScreenId.Chapter15:
@@ -789,39 +875,14 @@ namespace LegendsOfRus
             }
         }
 
-        void BuildSettingsHotspots(RectTransform parent)
+        void BindNativeSettings(RectTransform parent)
         {
-            Hotspot(parent, "Music", 720, 350, 170, 85, () =>
-            {
-                GameState.Instance.ToggleMusic();
-                Toast($"Музыка: {(GameState.Instance.Save.music ? "вкл." : "выкл.")}");
-            });
-            Hotspot(parent, "Sfx", 720, 440, 170, 85, () =>
-            {
-                GameState.Instance.ToggleSfx();
-                Toast($"Звуки: {(GameState.Instance.Save.sfx ? "вкл." : "выкл.")}");
-            });
-            Hotspot(parent, "Vibration", 720, 530, 170, 85, () =>
-            {
-                GameState.Instance.ToggleVibration();
-                Toast($"Вибрация: {(GameState.Instance.Save.vibration ? "вкл." : "выкл.")}");
-            });
-            Hotspot(parent, "Notifications", 720, 620, 170, 85, () =>
-            {
-                GameState.Instance.ToggleNotifications();
-                Toast($"Уведомления: {(GameState.Instance.Save.notifications ? "вкл." : "выкл.")}");
-            });
-            Hotspot(parent, "Back", 330, 1460, 300, 170, () =>
-            {
-                if (settingsReturnToPause)
-                {
-                    settingsReturnToPause = false;
-                    ShowModal(ScreenId.Pause);
-                }
-                else
-                {
-                    NavigateBack();
-                }
+            var view=parent.GetComponentInChildren<ProductionSettingsView>();
+            if(view==null || !view.HasRequiredBindings)throw new InvalidOperationException("Settings native bindings are missing.");
+            view.Bind(target=>Show(target),NavigateBack,category=>{
+                Show(ScreenId.Shop);
+                var shop=contentRoot.GetComponentInChildren<ProductionShopView>();
+                if(shop!=null)shop.SelectCategory(category);
             });
         }
 
@@ -845,12 +906,6 @@ namespace LegendsOfRus
                 Toast("Демо-запрос энергии записан локально. Энергия не начисляется без серверного подтверждения.");
             else
                 Toast("Запрос энергии уже отправлен в этой демо-сессии.");
-        }
-
-        void SetDemoLanguage(string code)
-        {
-            DemoFeatureState.SetLanguage(code);
-            Toast("Язык демо: " + DemoFeatureState.LanguageCode + ". Полная локализация будет подключена отдельным контентным этапом.");
         }
 
         void ContinueAsDemoGuest()
@@ -1150,13 +1205,16 @@ namespace LegendsOfRus
 
         void ClaimDailyReward()
         {
-            if (!GameState.Instance.ClaimDailyReward())
-            {
-                Toast("Сегодняшняя награда уже получена.");
-                return;
-            }
+            if (!ClaimDailyRewardWithReceipt()) Toast("Сегодняшняя награда уже получена или не сохранена.");
+        }
 
-            ShowModal(ScreenId.RewardClaim);
+        bool ClaimDailyRewardWithReceipt()
+        {
+            if (modalMotionState != ModalMotionState.Closed || !GameState.Instance.ClaimDailyReward(out var granted)) return false;
+            pendingRewardReceipt = granted;
+            pendingRewardDay = GameState.Instance.Save.dailyRewardCycleDay;
+            if (!ShowModal(ScreenId.RewardClaim)) { pendingRewardReceipt = null; pendingRewardDay = 0; }
+            return true; // Persistence succeeded; the modal cannot grant or roll back the transaction.
         }
 
         void ShowPause()
@@ -1174,6 +1232,17 @@ namespace LegendsOfRus
 
             if (!ShowModal(ScreenId.Pause))
                 activeBoard.TryResume();
+        }
+
+        /// <summary>Show an error over the current meta page. Retry runs once after close, only if the route is still current.
+        /// Supply the actual failed operation; null disables Retry. Gameplay integration is intentionally deferred.</summary>
+        public bool ShowErrorDialog(Action retryFailedOperation=null)
+        {
+            if(current==ScreenId.Gameplay||modalMotionState!=ModalMotionState.Closed||IsScreenTransitioning)return false;
+            if(!ShowModal(ScreenId.EmptyErrorState))return false;
+            var error=modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
+            error.Bind(CloseModal,retryFailedOperation==null?(Action)null:()=>RequestCloseModal(retryFailedOperation));
+            return true;
         }
 
         bool ShowModal(ScreenId id)
@@ -1262,63 +1331,41 @@ namespace LegendsOfRus
         {
             switch (id)
             {
+                case ScreenId.EmptyErrorState:
+                    var error=parent.GetComponentInChildren<ProductionErrorDialogView>();
+                    if(error==null||!error.HasRequiredBindings)throw new InvalidOperationException("Error Dialog native bindings are missing.");
+                    error.Bind(CloseModal,null);
+                    break;
                 case ScreenId.Pause:
-                    Hotspot(parent, "Resume", 235, 910, 470, 105, ResumeGameplayFromPause);
-                    Hotspot(parent, "Restart", 235, 1025, 470, 105, () =>
-                    {
-                        RequestCloseModal(RestartAfterPauseClose);
-                    });
-                    Hotspot(parent, "Settings", 235, 1140, 470, 105, () =>
-                    {
-                        settingsReturnToPause = true;
-                        ShowModal(ScreenId.Settings);
-                    });
-                    Hotspot(parent, "Exit", 235, 1255, 470, 105, () =>
-                    {
-                        RequestCloseModal(ExitAfterPauseClose);
-                    });
+                    var pause = parent.GetComponentInChildren<ProductionPauseView>();
+                    if (pause == null || !pause.HasRequiredBindings)
+                        throw new InvalidOperationException("Pause requires its aligned native prefab.");
+                    pause.Bind(activeBoard, ResumeGameplayFromPause,
+                        () => RequestCloseModal(RestartAfterPauseClose),
+                        () => { settingsReturnToPause = true; ShowModal(ScreenId.Settings); },
+                        () => RequestCloseModal(ExitAfterPauseClose));
                     break;
 
                 case ScreenId.OutOfEnergy:
-                    Hotspot(parent, "Close", 805, 380, 100, 100, CloseModal);
-                    Hotspot(parent, "Buy", 235, 870, 475, 100, () =>
-                    {
-                        RequestPurchase(
-                            "energy",
-                            () => RequestCloseModal(StartLevel)
-                        );
-                    });
-                    Hotspot(parent, "AskFriends", 235, 985, 475, 100, RequestDemoFriendEnergy);
-                    Hotspot(
-                        parent,
-                        "WatchAd",
-                        235,
-                        1095,
-                        475,
-                        100,
-                        RequestRewardedEnergy
-                    );
+                    var energy=parent.GetComponentInChildren<ProductionOutOfEnergyView>();
+                    if(energy==null||!energy.HasRequiredBindings)throw new InvalidOperationException("Out of Energy native bindings are missing.");
+                    energy.Bind(true,CloseModal,()=>RequestPurchase("energy",()=>RequestCloseModal(StartLevel)),RequestDemoFriendEnergy,RequestRewardedEnergy);
                     break;
 
                 case ScreenId.BoosterSelect:
-                    Hotspot(parent, "Close", 790, 260, 110, 110, CloseModal);
-                    Hotspot(parent, "Play", 260, 1265, 430, 130, () =>
-                    {
-                        RequestCloseModal(StartLevel);
-                    });
+                    var boosters=parent.GetComponentInChildren<ProductionBoosterSelectionView>();
+                    if(boosters==null||!boosters.HasRequiredBindings)throw new InvalidOperationException("Booster Selection native bindings are missing.");
+                    boosters.Bind(true,CloseModal,()=>{RequestCloseModal(StartLevel);return true;});
                     break;
 
                 case ScreenId.RewardClaim:
-                    Hotspot(parent, "Claim", 260, 1260, 430, 140, CloseModal);
+                    var received = parent.GetComponentInChildren<ProductionRewardReceivedView>();
+                    if (received == null || !received.HasRequiredBindings) throw new InvalidOperationException("Reward Received native bindings are missing.");
+                    received.Bind(pendingRewardReceipt, pendingRewardDay, CloseModal);
                     break;
 
                 case ScreenId.Settings:
-                    BuildSettingsHotspots(parent);
-                    DemoShortcut(parent, "Language", "ЯЗЫК", 150, 1000, 300, 80, () => Show(ScreenId.LanguageSelect));
-                    DemoShortcut(parent, "Tutorial", "ОБУЧЕНИЕ", 490, 1000, 300, 80, () => Show(ScreenId.TutorialOverlay));
-                    DemoShortcut(parent, "Offline", "DEMO: OFFLINE", 150, 1095, 300, 80, () => Show(ScreenId.OfflineState));
-                    DemoShortcut(parent, "Maintenance", "DEMO: MAINTENANCE", 490, 1095, 300, 80, () => Show(ScreenId.MaintenanceState));
-                    DemoShortcut(parent, "ErrorState", "DEMO: ERROR", 320, 1190, 300, 80, () => Show(ScreenId.EmptyErrorState));
+                    BindNativeSettings(parent);
                     break;
             }
         }
@@ -1404,6 +1451,7 @@ namespace LegendsOfRus
 
         void RetireModalRootImmediately()
         {
+            if (activeModalId == ScreenId.RewardClaim) { pendingRewardReceipt = null; pendingRewardDay = 0; }
             GameObject retiringRoot = modalRoot;
             modalRoot = null;
             modalVisualRoot = null;
@@ -1427,7 +1475,8 @@ namespace LegendsOfRus
                 id == ScreenId.Settings ||
                 id == ScreenId.OutOfEnergy ||
                 id == ScreenId.BoosterSelect ||
-                id == ScreenId.RewardClaim;
+                id == ScreenId.RewardClaim ||
+                id == ScreenId.EmptyErrorState;
         }
 
         void RetireContentRoot()
@@ -1509,7 +1558,9 @@ namespace LegendsOfRus
                 onFail: score =>
                 {
                     LevelData outcomeLevel = activeBoard.CurrentLevel;
-                    GameState.Instance.RecordLevelFailure(outcomeLevel, score);
+                    var failedProgress=new int[activeBoard.GoalCount];
+                    for(int i=0;i<failedProgress.Length;i++)failedProgress[i]=activeBoard.GetGoalSlot(i).Current;
+                    GameState.Instance.RecordLevelFailure(outcomeLevel, score, failedProgress);
                     PrivacyAwareAnalytics.TryLevelFail(
                         outcomeLevel.id,
                         activeAnalyticsAttemptNumber,
@@ -1683,6 +1734,8 @@ namespace LegendsOfRus
 
         void BuildOutcomeReactionOverlay(RectTransform parent, ScreenId id)
         {
+            if(id==ScreenId.Victory&&parent.GetComponentInChildren<ProductionVictoryView>()!=null)return;
+            if(id==ScreenId.Fail&&parent.GetComponentInChildren<ProductionFailView>()!=null)return;
             LocalizedStoryReaction reaction = activeOutcomeReaction;
             if (reaction == null) return;
 
@@ -1747,100 +1800,16 @@ namespace LegendsOfRus
 
         void BuildChapterCompleteOverlay(RectTransform parent)
         {
-            ChapterCompletionSummary summary = StoryService.GetChapterCompletionSummary();
-            LocalizedChapterCompletion copy = StoryService.GetLocalizedChapterCompletion();
-            if (summary == null || copy == null) return;
-
-            string summaryText;
-            try
-            {
-                summaryText = string.Format(
-                    copy.SummaryFormat,
-                    summary.CompletedLevels,
-                    summary.TotalLevels,
-                    summary.EarnedStars,
-                    summary.MaximumStars
-                );
-            }
-            catch (FormatException)
-            {
-                summaryText =
-                    $"{summary.CompletedLevels}/{summary.TotalLevels} УРОВНЕЙ • " +
-                    $"{summary.EarnedStars}/{summary.MaximumStars} ЗВЁЗД";
-            }
-
-            var panel = new GameObject(
-                "ChapterCompletionSummary",
-                typeof(RectTransform),
-                typeof(Image),
-                typeof(Outline)
-            );
-            panel.transform.SetParent(parent, false);
-            RectTransform panelRect = panel.GetComponent<RectTransform>();
-            SetPixelRect(panelRect, 125, 1085, 691, 180);
-
-            Image background = panel.GetComponent<Image>();
-            background.color = new Color32(5, 21, 36, 247);
-            background.raycastTarget = false;
-
-            Outline outline = panel.GetComponent<Outline>();
-            outline.effectColor = new Color32(220, 164, 67, 235);
-            outline.effectDistance = new Vector2(2f, -2f);
-            outline.useGraphicAlpha = true;
-
-            Text title = CreateText(
-                panelRect,
-                "CompletionTitle",
-                copy.Title,
-                27,
-                TextAnchor.MiddleCenter
-            );
-            title.rectTransform.anchorMin = new Vector2(0.04f, 0.68f);
-            title.rectTransform.anchorMax = new Vector2(0.96f, 0.96f);
-            title.rectTransform.offsetMin = Vector2.zero;
-            title.rectTransform.offsetMax = Vector2.zero;
-            title.fontStyle = FontStyle.Bold;
-            title.color = new Color32(247, 207, 113, 255);
-
-            Text progress = CreateText(
-                panelRect,
-                "CompletionProgress",
-                summaryText,
-                31,
-                TextAnchor.MiddleCenter
-            );
-            progress.rectTransform.anchorMin = new Vector2(0.04f, 0.34f);
-            progress.rectTransform.anchorMax = new Vector2(0.96f, 0.70f);
-            progress.rectTransform.offsetMin = Vector2.zero;
-            progress.rectTransform.offsetMax = Vector2.zero;
-            progress.fontStyle = FontStyle.Bold;
-            progress.color = new Color32(244, 232, 203, 255);
-
-            Text note = CreateText(
-                panelRect,
-                "CompletionRewardNote",
-                copy.RewardNote,
-                21,
-                TextAnchor.MiddleCenter
-            );
-            note.rectTransform.anchorMin = new Vector2(0.04f, 0.05f);
-            note.rectTransform.anchorMax = new Vector2(0.96f, 0.36f);
-            note.rectTransform.offsetMin = Vector2.zero;
-            note.rectTransform.offsetMax = Vector2.zero;
-            note.color = new Color32(215, 196, 158, 255);
-            note.horizontalOverflow = HorizontalWrapMode.Wrap;
-            note.verticalOverflow = VerticalWrapMode.Truncate;
-
-            MetaUiTransition completionTransition =
-                panel.AddComponent<MetaUiTransition>();
-            completionTransition.Initialize(
-                motionPresenter,
-                MetaUiMotionPreset.ChapterComplete
-            );
+            var view=parent.GetComponentInChildren<ProductionChapterCompleteView>();
+            if(view!=null)view.RefreshContent();
         }
 
         bool UsesTopHud(ScreenId id)
         {
+            if((id==ScreenId.Events||id==ScreenId.EventDetail||id==ScreenId.IndividualRanking||id==ScreenId.TeamHub||id==ScreenId.TeamRanking||id==ScreenId.TeamChat||id==ScreenId.FriendsList||id==ScreenId.Mail||id==ScreenId.Profile||id==ScreenId.Inventory||id==ScreenId.Characters||id==ScreenId.Settings)&&ProductionMetaPageCutoverRegistry.IsCutover(id))return false; // Native live header.
+            if (id == ScreenId.DailyReward && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
+            if (id == ScreenId.SpecialOffer && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
+            if (id == ScreenId.Shop && ProductionMetaPageCutoverRegistry.IsCutover(id)) return false; // Native live HUD.
             if (id == ScreenId.PreLevel) return false; // Native page owns its live HUD.
             if (id == ScreenId.ChapterMap) return false; // Native page owns its live HUD.
             if (id == ScreenId.WorldMap) return false; // The aligned page owns its live Home-style HUD.
@@ -1919,6 +1888,21 @@ namespace LegendsOfRus
 
         public void Toast(string message)
         {
+            if(current==ScreenId.Victory&&contentRoot!=null)
+            {
+                var victory=contentRoot.GetComponentInChildren<ProductionVictoryView>();
+                if(victory!=null){victory.SetStatus(message);return;}
+            }
+            // Gameplay owns one styled status slot; other screens keep their existing presentation.
+            if (current == ScreenId.Gameplay && contentRoot != null && !HasActiveModalBlocker)
+            {
+                var view = contentRoot.GetComponentInChildren<ProductionGameplayView>();
+                if (view != null && view.Status != null && view.Status.HasRequiredBindings)
+                {
+                    view.Status.Show(message);
+                    return;
+                }
+            }
             StartCoroutine(ToastRoutine(message));
         }
 

@@ -6,6 +6,7 @@ namespace LegendsOfRus
     [ExecuteAlways, DisallowMultipleComponent]
     public sealed class SplashTitleForegroundLayout : MonoBehaviour
     {
+        public bool ReferenceComposition;
         public RectTransform Logo;
         public RectTransform Version;
         public RectTransform Language;
@@ -51,7 +52,7 @@ namespace LegendsOfRus
             if (safeRect == null) return;
             safeRect.GetWorldCorners(corners);
             float gap = Mathf.Max(0f, root.InverseTransformPoint(corners[2]).y - root.rect.yMax);
-            Vector2 shift = Vector2.up * gap;
+            Vector2 shift = ReferenceComposition ? Vector2.zero : Vector2.up * gap;
             SetPosition(Logo, logoPosition + shift);
             SetPosition(Version, versionPosition + shift);
             SetPosition(Language, languagePosition + shift);

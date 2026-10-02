@@ -21,7 +21,13 @@ namespace LegendsOfRus
         public static void BuildInto(RectTransform root)
         {
             var existing = root.GetComponent<ProductionWorldMapView>();
-            if (existing != null && existing.HasRequiredBindings) { AlignPresentation(existing); return; }
+            if (existing != null && existing.HasRequiredBindings) { existing.RefreshContent(); AlignPresentation(existing); return; }
+            if(existing != null && existing.Content != null && !Application.isPlaying)
+            {
+                ProductionWorldMapSourceComposition.Apply(existing);
+                existing.GetComponent<ProductionWorldMapLayout>().View=existing;
+                existing.RefreshContent();AlignPresentation(existing);return;
+            }
             if (root.Find(ContentName) != null)
                 throw new InvalidOperationException("World Map bindings need repair outside Play Mode.");
             var homePrefab = Resources.Load<GameObject>("ProductionUI/Pages/Home");
@@ -94,6 +100,7 @@ namespace LegendsOfRus
             view.TaskPanel.SetActive(false);
             var layout = root.GetComponent<ProductionWorldMapLayout>() ?? root.gameObject.AddComponent<ProductionWorldMapLayout>();
             layout.View = view;
+            ProductionWorldMapSourceComposition.Apply(view);
             view.Revision = ProductionWorldMapView.CurrentRevision;
             view.RefreshContent(); layout.ApplyNow();
             if (!view.HasRequiredBindings) throw new InvalidOperationException("World Map composition bindings are incomplete.");
@@ -102,6 +109,7 @@ namespace LegendsOfRus
 
         public static void AlignPresentation(ProductionWorldMapView view)
         {
+            if(view.SourceComposition)return;
             foreach (var graphic in view.GetComponentsInChildren<ProductionWorldMapGraphic>(true))
                 if (graphic.GetComponent<CanvasRenderer>() == null) graphic.gameObject.AddComponent<CanvasRenderer>();
             // Node positions stretch with the safe-area height. Avoid a one-pixel glyph jump
@@ -110,6 +118,7 @@ namespace LegendsOfRus
                 node.Number.GetComponent<SplashTitleTextGeometry>().SnapToScreenPixels = false;
             view.TitleText.rectTransform.anchoredPosition = new Vector2(242,-42);
             foreach (var label in view.NavLabels) label.rectTransform.anchoredPosition = new Vector2(38,-218);
+            ProductionNavigationStyle.Apply(view);
         }
 
         static Sprite Load(string name) => Resources.Load<Sprite>(ArtRoot+name) ?? throw new InvalidOperationException("Missing World Map artwork: "+name);

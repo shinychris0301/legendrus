@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using LegendsOfRus.GameplayCore;
 
 namespace LegendsOfRus
@@ -56,6 +58,7 @@ namespace LegendsOfRus
         public string PlanHash { get; }
         public SpecialCombinationKind CombinationKind { get; }
         public GameplayBoosterKind BoosterKind { get; }
+        public IReadOnlyList<BoardClearedCellInstruction> ClearedCells { get; }
 
         public GameplayMotionEvent(
             int sequence,
@@ -67,7 +70,8 @@ namespace LegendsOfRus
             SpecialGemKind specialKind,
             string planHash,
             SpecialCombinationKind combinationKind = SpecialCombinationKind.None,
-            GameplayBoosterKind boosterKind = GameplayBoosterKind.None
+            GameplayBoosterKind boosterKind = GameplayBoosterKind.None,
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null
         )
         {
             Sequence = sequence < 1 ? 1 : sequence;
@@ -80,6 +84,7 @@ namespace LegendsOfRus
             PlanHash = planHash ?? string.Empty;
             CombinationKind = combinationKind;
             BoosterKind = boosterKind;
+            ClearedCells = clearedCells ?? Array.Empty<BoardClearedCellInstruction>();
         }
 
         public override string ToString()

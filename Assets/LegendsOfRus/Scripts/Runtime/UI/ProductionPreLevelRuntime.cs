@@ -8,6 +8,7 @@ namespace LegendsOfRus
     public static class ProductionPreLevelRuntime
     {
         public const string ContentName = "PRE_LEVEL_ALIGNED_CONTENT";
+        public const float EnvironmentTone = .70f;
         public const string ArtRoot = "ProductionUI/PreLevelAligned/";
         public static readonly string[] ArtNames = { "panel_goals", "panel_wide", "ruby", "mace", "firebird", "shield", "potion", "chest" };
         public static readonly BoosterType[] Boosters = { BoosterType.BogatyrMace, BoosterType.Firebird, BoosterType.LivingLight, BoosterType.SeaPearl };
@@ -15,7 +16,8 @@ namespace LegendsOfRus
         public static void BuildInto(RectTransform root)
         {
             var existing = root.GetComponent<ProductionPreLevelView>();
-            if (existing != null && existing.HasRequiredBindings) { AlignPresentation(existing); return; }
+            if(existing!=null){EnsureGoalCapacity(existing);EnsureBoosterDetails(existing);}
+            if (existing != null && existing.Content != null) { ProductionPreLevelSourceControls.Apply(existing); return; }
             if (root.Find(ContentName) != null) throw new InvalidOperationException("Pre-Level bindings need repair outside Play Mode.");
             var source = Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>();
             if (source == null || !source.HasRequiredBindings) throw new InvalidOperationException("Pre-Level requires the accepted Chapter Map.");
@@ -28,10 +30,10 @@ namespace LegendsOfRus
             Art(view.GoalsArea,"GoalsPanel",Load("panel_goals"),0,0,571,360);
             view.GoalsHeading = Label(view,view.GoalsArea,"GoalsHeading","ЦЕЛИ",100,43,371,48,34);
             view.SelectedLevel = Label(view,view.GoalsArea,"SelectedLevel","УРОВЕНЬ 1",100,88,371,30,21);
-            view.Goals = new PreLevelGoalView[2];
+            view.Goals = new PreLevelGoalView[3];
             view.Ruby = Load("ruby"); view.Sapphire = Resources.Load<Sprite>(ProductionHomeRuntime.ArtRoot+"gems_icon");
             view.GoalMedallion = Resources.Load<Sprite>(ProductionChapterMapRuntime.ArtRoot+"node");
-            for (int i=0;i<2;i++)
+            for (int i=0;i<3;i++)
             {
                 var slot = Rect(view.GoalsArea,"Goal_"+i,110+i*195,118,156,200);
                 view.Goals[i] = new PreLevelGoalView {
@@ -47,7 +49,7 @@ namespace LegendsOfRus
             view.MovesValue=Label(view,view.MovesArea,"MovesValue","28",25,78,150,78,62);
             view.BoostersArea=Rect(view.Body,"Boosters",105,455,731,295);
             Art(view.BoostersArea,"BoostersPanel",Load("panel_wide"),0,0,731,295);
-            view.BoostersHeading=Label(view,view.BoostersArea,"BoostersHeading","ВЫБЕРИТЕ БУСТЕРЫ",50,29,631,47,32);
+            view.BoostersHeading=Label(view,view.BoostersArea,"BoostersHeading","БУСТЕРЫ В ИГРЕ",50,29,631,47,32);
             view.BoosterButtons=new Button[4];view.BoosterCounts=new Text[4];view.BonusRoots=new RectTransform[4];view.BonusCounts=new Text[4];
             string[] art = {"mace","firebird","shield","potion"};
             for(int i=0;i<4;i++)
@@ -83,16 +85,62 @@ namespace LegendsOfRus
             view.FooterOrnament=Clone(source.FooterOrnament.rectTransform,view.Content,"FooterOrnament").GetComponent<Image>();
             view.Footer=Clone(source.Footer,view.Content,"Navigation");view.BackButton=view.Footer.Find("Back").GetComponent<Button>();view.PlayButton=view.Footer.Find("PlayButton").GetComponent<Button>();view.PlayText=view.PlayButton.transform.Find("PlayLabel").GetComponent<Text>();
             var layout=root.GetComponent<ProductionPreLevelLayout>()??root.gameObject.AddComponent<ProductionPreLevelLayout>();layout.View=view;
-            view.Revision=ProductionPreLevelView.CurrentRevision;AlignPresentation(view);view.RefreshContent();layout.ApplyNow();
+            EnsureBoosterDetails(view);view.Revision=ProductionPreLevelView.CurrentRevision;AlignPresentation(view);view.RefreshContent();layout.ApplyNow();
             if(!view.HasRequiredBindings)throw new InvalidOperationException("Pre-Level composition is incomplete.");
+        }
+        static void EnsureBoosterDetails(ProductionPreLevelView view)
+        {
+            if(view.BoostersArea==null||view.PlayButton==null)return;
+            if(view.BoosterDetailsRoot==null)
+            {
+                view.BoosterDetailsRoot=Rect(view.BoostersArea,"BoosterDetails",50,96,631,164);
+                view.BoosterDetailIcon=Art(view.BoosterDetailsRoot,"Icon",Load("mace"),10,0,130,130);
+                view.BoosterDetailIcon.preserveAspect=true;
+                view.BoosterDetailText=Label(view,view.BoosterDetailsRoot,"Explanation","",164,0,457,86,21);
+                // Small explanatory text uses a flat face for legibility on the lacquer.
+                view.BoosterDetailText.GetComponent<ProductionHomeGoldText>().enabled=false;
+                view.BoosterDetailText.material=null;
+                view.BoosterDetailText.fontStyle=FontStyle.Normal;
+                view.BoosterDetailText.alignment=TextAnchor.MiddleLeft;
+                view.BoosterDetailText.horizontalOverflow=HorizontalWrapMode.Wrap;
+                var back=Art(view.BoosterDetailsRoot,"AllBoosters",view.PlayButton.targetGraphic.GetComponent<Image>().sprite,225,90,250,74);
+                view.BoosterDetailsBack=Button(back);
+                view.BoosterDetailsBackText=Label(view,back.transform,"Label","НАЗАД",15,23,220,28,20);
+                view.BoosterDetailsBackText.GetComponent<ProductionHomeGoldText>().enabled=false;
+                view.BoosterDetailsBackText.material=null;
+            }
+            if(view.BoosterCatalog==null)
+            {
+                var face=Art(view.BoosterDetailsRoot,"OpenBoosterCatalog",view.PlayButton.image.sprite,365,90,250,74);
+                view.BoosterCatalog=Button(face);view.BoosterCatalogText=Label(view,face.transform,"Label","ВСЕ БУСТЕРЫ",15,23,220,28,20);
+            }
+            Place(view.BoosterDetailText,164,0,457,86,21);
+            var returnRect=(RectTransform)view.BoosterDetailsBack.transform;
+            returnRect.pivot=new Vector2(.5f,.5f);
+            returnRect.anchoredPosition=new Vector2(240,-127);returnRect.sizeDelta=new Vector2(250,74);
+            view.BoosterDetailsBack.GetComponent<Image>().preserveAspect=true;
+            Place(view.BoosterDetailsBackText,15,23,220,28,20);
+            view.BoosterDetailsRoot.gameObject.SetActive(false);
+            view.Revision=ProductionPreLevelView.CurrentRevision;
+        }
+        static void EnsureGoalCapacity(ProductionPreLevelView view)
+        {
+            if(view.Goals==null||view.Goals.Length!=2)return;
+            var clone=UnityEngine.Object.Instantiate(view.Goals[1].Root,view.GoalsArea,false);clone.name="Goal_2";
+            Array.Resize(ref view.Goals,3);
+            view.Goals[2]=new PreLevelGoalView{Root=clone,Icon=clone.Find("GoalIcon").GetComponent<Image>(),Description=clone.Find("GoalDescription").GetComponent<Text>(),Count=clone.Find("GoalCount").GetComponent<Text>()};
+            view.Revision=ProductionPreLevelView.CurrentRevision;
         }
         static void AlignPresentation(ProductionPreLevelView view)
         {
+            // Derive from the shared source each time so rebuilds never compound the tint.
+            Color scenery=Resources.Load<GameObject>("ProductionUI/Pages/ChapterMap").GetComponent<ProductionChapterMapView>().Environment.color;
+            view.Environment.color=new Color(scenery.r*EnvironmentTone,scenery.g*EnvironmentTone,scenery.b*EnvironmentTone,scenery.a);
             // Position live lettering inside the lacquer surface, clear of the raised trim.
             view.GoalsArea.sizeDelta=new Vector2(571,380);
             ((RectTransform)view.GoalsArea.Find("GoalsPanel")).sizeDelta=new Vector2(571,380);
             Place(view.GoalsHeading,100,77,371,42,32);Place(view.SelectedLevel,100,117,371,30,20);
-            for(int i=0;i<2;i++)
+            for(int i=0;i<3;i++)
             {
                 var goal=view.Goals[i];goal.Root.anchoredPosition=new Vector2(110+i*195,-145);
                 Place(goal.Description,18,19,120,70,17);Place(goal.Count,0,119,156,44,36);
@@ -107,13 +155,42 @@ namespace LegendsOfRus
                 view.BonusRoots[i].sizeDelta=new Vector2(83,32);
                 ((RectTransform)view.BonusRoots[i].Find("Icon")).sizeDelta=new Vector2(32,32);
                 Place(view.BonusCounts[i],32,0,45,32,20);
+                // Keep the raised stock badge inside the panel, above its lower gold trim.
+                var badge=(RectTransform)view.BoosterCounts[i].transform.parent;
+                badge.anchoredPosition=new Vector2(100,-103);badge.sizeDelta=new Vector2(58,58);
+                Place(view.BoosterCounts[i],8,8,42,42,32);
+                view.BoosterCounts[i].resizeTextMinSize=24;view.BoosterCounts[i].resizeTextMaxSize=64;
+                view.BoosterCounts[i].horizontalOverflow=HorizontalWrapMode.Wrap;
+                view.BoosterCounts[i].verticalOverflow=VerticalWrapMode.Truncate;
+            }
+            ApplyReadableLettering(view);
+        }
+        static void ApplyReadableLettering(ProductionPreLevelView view)
+        {
+            foreach(Text text in view.GetComponentsInChildren<Text>(true))
+            {
+                // The large approved Play face keeps its gold treatment. Small text needs solid strokes.
+                if(text==view.PlayText)continue;
+                var gold=text.GetComponent<ProductionHomeGoldText>();if(gold!=null)gold.enabled=false;
+                text.material=null;text.color=new Color32(250,225,171,255);
+                text.fontStyle=FontStyle.Normal;
+                foreach(Shadow effect in text.GetComponents<Shadow>())effect.enabled=false;
+                Shadow shadow=Array.Find(text.GetComponents<Shadow>(),x=>x.GetType()==typeof(Shadow));
+                if(shadow==null)shadow=text.gameObject.AddComponent<Shadow>();
+                shadow.enabled=true;shadow.effectColor=new Color32(12,8,3,210);
+                shadow.effectDistance=new Vector2(1.4f,-1.4f);shadow.useGraphicAlpha=true;
+            }
+            foreach(Text count in view.BoosterCounts)
+            {
+                count.fontStyle=FontStyle.Bold;count.color=new Color32(255,244,199,255);
+                count.GetComponent<Shadow>().effectDistance=new Vector2(2,-2);
             }
         }
         static void Place(Text text,float x,float y,float w,float h,int size)
         {
             text.rectTransform.anchoredPosition=new Vector2(x,-y);text.rectTransform.sizeDelta=new Vector2(w*2,h*2);text.fontSize=size*2;
         }
-        static Sprite Load(string name)=>Resources.Load<Sprite>(ArtRoot+name)??throw new InvalidOperationException("Missing Pre-Level art: "+name);
+        static Sprite Load(string name)=>ProductionBoosterArt.Replacement(ArtRoot+name)??Resources.Load<Sprite>(ArtRoot+name)??throw new InvalidOperationException("Missing Pre-Level art: "+name);
         static RectTransform Clone(RectTransform source,Transform parent,string name){var go=UnityEngine.Object.Instantiate(source.gameObject,parent,false);go.name=name;return (RectTransform)go.transform;}
         static RectTransform Rect(Transform p,string n,float x,float y,float w,float h)=>ProductionChapterMapRuntime.Rect(p,n,x,y,w,h);
         static Image Art(Transform p,string n,Sprite s,float x,float y,float w,float h){var image=Rect(p,n,x,y,w,h).gameObject.AddComponent<Image>();image.sprite=s;image.raycastTarget=false;return image;}

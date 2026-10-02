@@ -26,7 +26,8 @@ namespace LegendsOfRus
             "resource_plus", "progress_frame", "progress_fill", "quest_reward_frame", "quest_reward_gem", "footer_base_generated",
             "home_map_foliage"
         };
-        static readonly string[] TextureKeys = Array.ConvertAll(TextureNames, name => ArtRoot + name);
+        static readonly string[] TextureKeys = Array.ConvertAll(ProductionHomeSourceComposition.Names,
+            name => ProductionHomeSourceComposition.ArtRoot + name);
         public static IReadOnlyList<string> GetTextureResourceKeys() => Array.AsReadOnly(TextureKeys);
         static readonly Color Gold = new Color32(232, 209, 162, 255);
 
@@ -98,6 +99,12 @@ namespace LegendsOfRus
             if (Application.isPlaying) throw new InvalidOperationException("Home asset migration must run outside Play Mode.");
             if (view == null || view.Revision < 2 || view.Revision > ProductionHomeView.CurrentRevision)
                 throw new InvalidOperationException("Home reference migration requires an installed aligned Home view.");
+            if (view.SourcePlay != null)
+            {
+                ProductionHomeSourceComposition.Apply(view);
+                if (!view.HasRequiredBindings) throw new InvalidOperationException("Home source migration produced incomplete bindings.");
+                return;
+            }
             AlignReferenceComposition(view, LoadSprites(loadSprite));
             if (!view.HasRequiredBindings) throw new InvalidOperationException("Home reference migration produced incomplete bindings.");
         }
@@ -251,6 +258,7 @@ namespace LegendsOfRus
             AlignSceneLighting(view.Ivan, HeroLightingMaterialResource);
             AlignSceneLighting(view.MapFoliage, FoliageLightingMaterialResource);
             view.Revision = ProductionHomeView.CurrentRevision;
+            ProductionHomeSourceComposition.Apply(view);
         }
 
         static void AlignSceneLighting(Image image, string materialResource)

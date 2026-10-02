@@ -9,7 +9,7 @@ namespace LegendsOfRus
         public override void ModifyMesh(VertexHelper vh)
         {
             var star=graphic as ProductionWorldMapGraphic;
-            if(!IsActive()||star==null||star.Kind!=WorldMapGraphicKind.Star||!star.Dimmed)return;
+            if(!IsActive()||star==null||star.Kind!=WorldMapGraphicKind.Star||star.ActiveStarArt!=null||!star.Dimmed)return;
             vh.Clear();Rect r=star.GetPixelAdjustedRect();Vector2 center=r.center;float radius=Mathf.Min(r.width,r.height)*.5f;
             Color dark=new Color32(4,11,17,255),gold=new Color32(179,122,45,255),light=new Color32(250,209,121,255);
             for(int i=0;i<10;i++)
@@ -17,8 +17,8 @@ namespace LegendsOfRus
                 Vector2 a=Point(i,radius),b=Point((i+1)%10,radius);
                 Color ca=Color.Lerp(gold,light,Mathf.Clamp01(.5f+(-a.x+a.y)/Mathf.Max(1,radius)*.35f));
                 Color cb=Color.Lerp(gold,light,Mathf.Clamp01(.5f+(-b.x+b.y)/Mathf.Max(1,radius)*.35f));
-                Tri(vh,center,center+a*.84f,center+b*.84f,dark,dark,dark);
-                Tri(vh,center+a,center+b,center+b*.84f,ca,cb,gold);Tri(vh,center+b*.84f,center+a*.84f,center+a,gold,gold,ca);
+                Tri(vh,center,center+a*.70f,center+b*.70f,dark,dark,dark);
+                Tri(vh,center+a,center+b,center+b*.70f,ca,cb,gold);Tri(vh,center+b*.70f,center+a*.70f,center+a,gold,gold,ca);
             }
         }
         static Vector2 Point(int i,float radius)

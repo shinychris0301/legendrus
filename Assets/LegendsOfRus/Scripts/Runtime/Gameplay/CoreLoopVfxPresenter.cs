@@ -563,6 +563,17 @@ namespace LegendsOfRus
             float delayStep = 0.022f
         )
         {
+            if (motion.ClearedCells.Count > 0)
+            {
+                // Bound the burst count and use real resolver cells, including cascades.
+                int bursts = Mathf.Min(motion.ClearedCells.Count, CoreLoopVfxProfile.MaximumBurstEffectsPerCue);
+                for (int i = 0; i < bursts; i++)
+                {
+                    var cell = motion.ClearedCells[i * motion.ClearedCells.Count / bursts];
+                    EmitAtPosition(cue, cell.Position, i * delayStep, .018f);
+                }
+                return;
+            }
             int count = Mathf.Clamp(
                 requestedCount <= 0
                     ? 1

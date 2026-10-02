@@ -11,7 +11,7 @@ namespace LegendsOfRus
     public sealed class Match3Board : MonoBehaviour
     {
         const int DefaultColumns = 8;
-        const int DefaultRows = 9;
+        const int DefaultRows = 7;
         const int DefaultTileTypes = 6;
 
         int columns = DefaultColumns;
@@ -24,7 +24,6 @@ namespace LegendsOfRus
         LevelGoalRuntime goalRuntime;
 
         Image[,] cellBackgrounds;
-        Image[,] specialMatchColors;
         Match3CellInput[,] cellInputs;
         Image[,] gemImages;
         Image[,] specialImages;
@@ -39,7 +38,7 @@ namespace LegendsOfRus
         Sprite colorSpecialSprite;
 
         int moves;
-        int score = 12540;
+        int score = 0;
 
         Vector2Int selected = new Vector2Int(-1, -1);
         readonly GameplayStateMachine interaction = new GameplayStateMachine();
@@ -82,6 +81,8 @@ namespace LegendsOfRus
         public int ColumnCount => columns;
         public int RowCount => rows;
         public LevelData CurrentLevel => currentLevel;
+        public int GoalCount => goalRuntime?.SlotCount ?? 0;
+        public LevelGoalProgress GetGoalSlot(int index) => goalRuntime?.GetSlot(index);
         public LevelGoalProgress GoalSlot1 => goalRuntime?.GetSlot(0);
         public LevelGoalProgress GoalSlot2 => goalRuntime?.GetSlot(1);
         public int GoalSlot1Remaining => goalRuntime?.RemainingAt(0) ?? 0;
@@ -133,7 +134,6 @@ namespace LegendsOfRus
             tileTypes = Mathf.Clamp(currentLevel.tileTypes, 3, DefaultTileTypes);
             cellBackgrounds = new Image[columns, rows];
             cellMechanics = new GameplayCellMechanics[columns, rows];
-            specialMatchColors = new Image[columns, rows];
             cellInputs = new Match3CellInput[columns, rows];
             gemImages = new Image[columns, rows];
             specialImages = new Image[columns, rows];
@@ -237,8 +237,8 @@ namespace LegendsOfRus
                     float y0 = 1f - (float)(y + 1) / rows;
                     float y1 = 1f - (float)y / rows;
 
-                    const float gapX = 0.0006f;
-                    const float gapY = 0.0005f;
+                    const float gapX = 0f;
+                    const float gapY = 0f;
                     // The input root still owns the complete nominal cell. Only the
                     // decorative inset changes for the thin reference-style gold grid.
                     cellRt.anchorMin = new Vector2(x0, y0);
@@ -288,8 +288,8 @@ namespace LegendsOfRus
                     );
                     visual.transform.SetParent(content.transform, false);
                     var visualRt = visual.GetComponent<RectTransform>();
-                    visualRt.anchorMin = new Vector2(0.03f, 0.01f);
-                    visualRt.anchorMax = new Vector2(0.97f, 0.99f);
+                    visualRt.anchorMin = new Vector2(0.08f, 0.05f);
+                    visualRt.anchorMax = new Vector2(0.92f, 0.95f);
                     visualRt.offsetMin = Vector2.zero;
                     visualRt.offsetMax = Vector2.zero;
                     visualRoots[x, y] = visualRt;
@@ -313,23 +313,19 @@ namespace LegendsOfRus
                     specialImage.raycastTarget = false;
                     specialImage.enabled = false;
                     specialImages[x, y] = specialImage;
-                    // Supplied power-up art has a fixed colour. Preserve the actual match
-                    // identity with a small, untinted gem marker on the travelling visual.
-                    var matchColorGo = new GameObject("SpecialMatchColor", typeof(RectTransform), typeof(Image));
-                    matchColorGo.transform.SetParent(visual.transform, false);
-                    var matchColorRect = (RectTransform)matchColorGo.transform;
-                    matchColorRect.anchorMin = matchColorRect.anchorMax = matchColorRect.pivot = new Vector2(1, 0);
-                    matchColorRect.anchoredPosition = new Vector2(-1, 1);
-                    matchColorRect.sizeDelta = new Vector2(27, 29);
-                    var matchColor = matchColorGo.GetComponent<Image>();
-                    matchColor.preserveAspect = true; matchColor.raycastTarget = false; matchColor.enabled = false;
-                    specialMatchColors[x, y] = matchColor;
                     var typography = Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
                     string fontSource;
                     Font font = typography != null ? typography.Resolve(false, out fontSource) : null;
                     cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font);
                 }
             }
+            var grid = new GameObject("SharedGrid", typeof(RectTransform), typeof(ProductionGameplayCell));
+            grid.transform.SetParent(transform, false);
+            Stretch((RectTransform)grid.transform);
+            var rails = grid.GetComponent<ProductionGameplayCell>();
+            rails.GridOnly = true; rails.Columns = columns; rails.Rows = rows;
+            rails.sprite = ProductionGameplaySourceControls.Load("grid");
+            rails.raycastTarget = false; rails.SetVerticesDirty();
         }
 
         void Stretch(RectTransform rt)
@@ -748,6 +744,44 @@ namespace LegendsOfRus
             }
         }
 
+        IEnumerator AnimateReshuffle(bool gather)
+        {
+            // Animate the existing planned permutation. Obstacle layers and objective items
+            // stay on their cells; only the same tile-bearing positions as the core participate.
+            var offsets = new Vector2[columns, rows];
+            Vector3 center = ((RectTransform)transform).TransformPoint(((RectTransform)transform).rect.center);
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
+            {
+                var rt = visualRoots[x, y];
+                offsets[x, y] = (Vector2)rt.parent.InverseTransformPoint(center) - (Vector2)rt.localPosition;
+            }
+            float duration = gather ? .28f : .38f;
+            float elapsed = 0;
+            do
+            {
+                float p = CoreLoopMotionProfile.EaseInOutSine(Mathf.Clamp01(elapsed / duration));
+                float amount = gather ? p : 1 - p;
+                for (int y = 0; y < rows; y++)
+                for (int x = 0; x < columns; x++)
+                {
+                    if (model.GetTile(new BoardPosition(x, y)) < 0) continue;
+                    visualRoots[x, y].anchoredPosition = offsets[x, y] * amount * .72f;
+                    visualRoots[x, y].localScale = Vector3.one * Mathf.Lerp(1, .3f, amount);
+                    visualGroups[x, y].alpha = 1 - amount;
+                }
+                yield return null;
+                elapsed += Time.unscaledDeltaTime;
+            } while (elapsed < duration);
+            if (gather)
+            {
+                for (int y = 0; y < rows; y++)
+                for (int x = 0; x < columns; x++)
+                    if (model.GetTile(new BoardPosition(x, y)) >= 0) visualGroups[x, y].alpha = 0;
+            }
+            else ResetVisualTransforms();
+        }
+
         IEnumerator AnimateSpecialCreation(Vector2Int p, SpecialGem special)
         {
             Refresh(p.x, p.y);
@@ -1105,7 +1139,8 @@ namespace LegendsOfRus
                     SpecialGem.None,
                     plan.PlanHash,
                     wave.Combination,
-                    waveBooster
+                    waveBooster,
+                    wave.ClearedCells
                 );
 
                 if (wave.Activations.Count > 0)
@@ -1239,7 +1274,8 @@ namespace LegendsOfRus
                     SpecialGem.None,
                     plan.PlanHash,
                     wave.Combination,
-                    waveBooster
+                    waveBooster,
+                    wave.ClearedCells
                 );
                 EnsurePhase(GameplayPhase.ResolvingMatches);
             }
@@ -1255,6 +1291,7 @@ namespace LegendsOfRus
                     SpecialGem.None,
                     plan.PlanHash
                 );
+                yield return AnimateReshuffle(true);
                 BoardSnapshot reshuffled = plan.SnapshotAfterReshuffle ?? plan.FinalSnapshot;
                 if (!RestorePlannedSnapshot(reshuffled, "after-reshuffle", plan.PlanHash))
                 {
@@ -1262,8 +1299,10 @@ namespace LegendsOfRus
                     yield break;
                 }
                 RefreshAll();
-                yield return new WaitForSecondsRealtime(0.22f);
-                ScreenRouter.Instance?.Toast("Нет доступных ходов — поле перемешано.");
+                yield return AnimateReshuffle(false);
+                ScreenRouter.Instance?.Toast(DemoFeatureState.LanguageCode == "en"
+                    ? "No available moves — the board was reshuffled."
+                    : "Нет доступных ходов — поле перемешано.");
                 PublishMotion(
                     GameplayMotionKind.ReshuffleCompleted,
                     ToView(plan.PrimaryPosition),
@@ -1655,7 +1694,8 @@ namespace LegendsOfRus
             SpecialGem specialKind,
             string planHash,
             SpecialCombinationKind combinationKind = SpecialCombinationKind.None,
-            GameplayBoosterKind boosterKind = GameplayBoosterKind.None
+            GameplayBoosterKind boosterKind = GameplayBoosterKind.None,
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null
         )
         {
             var motion = new GameplayMotionEvent(
@@ -1668,7 +1708,8 @@ namespace LegendsOfRus
                 specialKind,
                 planHash,
                 combinationKind,
-                boosterKind
+                boosterKind,
+                clearedCells
             );
             lastMotionEvent = motion;
             motionEventCount++;
@@ -2083,8 +2124,22 @@ namespace LegendsOfRus
             special.enabled = specialType != SpecialGem.None;
             special.color = Color.white;
 
-            if (specialType == SpecialGem.Row) special.sprite = rowSpecialSprite;
-            else if (specialType == SpecialGem.Column) special.sprite = columnSpecialSprite;
+            special.rectTransform.localRotation = Quaternion.identity;
+            special.preserveAspect = true;
+            Stretch(special.rectTransform);
+            if (specialType == SpecialGem.Row || specialType == SpecialGem.Column)
+            {
+                special.sprite = ProductionGameplayArt.LineSpecial(type);
+                special.preserveAspect = false;
+                var specialRect = special.rectTransform;
+                // Relative anchors stay valid when Refresh precedes the first layout,
+                // and when the board is resized. Give the colored body a readable thickness.
+                specialRect.anchorMin = new Vector2(0, .21f);
+                specialRect.anchorMax = new Vector2(1, .79f);
+                specialRect.offsetMin = specialRect.offsetMax = Vector2.zero;
+                // A single elongated object carries direction through physical orientation.
+                special.rectTransform.localRotation = Quaternion.Euler(0, 0, specialType == SpecialGem.Column ? 90 : 0);
+            }
             else if (specialType == SpecialGem.Burst) special.sprite = burstSpecialSprite;
             else if (specialType == SpecialGem.Color) special.sprite = colorSpecialSprite;
 
@@ -2096,9 +2151,6 @@ namespace LegendsOfRus
                 special.enabled = false;
             }
             else if (special.enabled) gem.enabled = false;
-            var matchColor = specialMatchColors[x, y];
-            matchColor.enabled = special.enabled && type >= 0 && type < gemSprites.Length;
-            matchColor.sprite = matchColor.enabled ? gemSprites[type] : null;
             ApplyCellMechanicTint(x, y);
         }
 

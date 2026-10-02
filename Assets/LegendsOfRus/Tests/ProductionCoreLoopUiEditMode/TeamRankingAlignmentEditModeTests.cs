@@ -1,0 +1,18 @@
+#if UNITY_EDITOR
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+namespace LegendsOfRus.Tests.ProductionCoreLoopUi {
+ public sealed class TeamRankingAlignmentEditModeTests {
+ const string Path="Assets/LegendsOfRus/Resources/ProductionUI/Pages/TeamRanking.prefab";
+ [Test] public void NativePageHasCompleteBindingsAndNoScreenshotDependencies(){
+ var root=AssetDatabase.LoadAssetAtPath<GameObject>(Path);Assert.That(root,Is.Not.Null);var v=root.GetComponent<ProductionTeamRankingView>();Assert.That(v.HasRequiredBindings,Is.True);Assert.That(v.HasLiveLeaderboard,Is.False);
+ Assert.That(root.GetComponent<ProductionCoreLoopPageMarker>().ScreenshotFree,Is.True);Assert.That(root.GetComponentsInChildren<Button>(true).Length,Is.EqualTo(12));Assert.That(root.GetComponentsInChildren<Canvas>(true),Is.Empty);Assert.That(root.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+ foreach(var dep in AssetDatabase.GetDependencies(Path,true)){Assert.That(dep,Does.Not.Contain("ReferenceOnly"));Assert.That(dep,Does.Not.Contain("DesignScreens"));}
+ foreach(var image in root.GetComponentsInChildren<Image>(true))Assert.That(image.sprite,Is.Not.Null,image.name);Assert.That(v.InfoPanel.activeSelf,Is.False);
+ }
+ [Test]public void BuilderIsIdempotent(){var root=Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(Path));try{int count=root.GetComponentsInChildren<Transform>(true).Length;ProductionTeamRankingRuntime.BuildInto((RectTransform)root.transform);ProductionTeamRankingRuntime.BuildInto((RectTransform)root.transform);Assert.That(root.GetComponentsInChildren<Transform>(true).Length,Is.EqualTo(count));}finally{Object.DestroyImmediate(root);}}
+ }
+}
+#endif

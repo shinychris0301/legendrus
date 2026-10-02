@@ -9,6 +9,10 @@ namespace LegendsOfRus.Editor
         internal static void Configure(TextureImporter ti,string name)
         {
             LockedDesignImporter.ConfigureWorldMapTexture(ti,name);
+            // Keep the new frame's corner carving at a controlled display size.
+            // The existing artwork and all other imports retain their settings.
+            if(name=="board_frame_r7")ti.spriteBorder=new Vector4(128,128,128,128);
+            if(name=="card_wood_r9")ti.spriteBorder=new Vector4(100,420,100,150);
             var regions=new List<SpriteMetaData>();
             foreach(var region in ProductionGameplayArt.Regions)
             {

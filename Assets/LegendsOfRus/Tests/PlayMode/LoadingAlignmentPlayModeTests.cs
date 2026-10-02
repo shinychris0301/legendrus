@@ -209,6 +209,9 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(view.transform.Find(ProductionLoadingRuntime.ContentName + "/LowerContrast")
                 .GetComponent<CanvasRenderer>(), Is.Not.Null, "The lower contrast graphic must render.");
             AssertSingleInfrastructure();
+            Assert.That(view.TipBody.enabled || view.TipTitle.enabled, Is.False, "Russian uses original panel lettering.");
+            Assert.That(view.TipPanel.sprite, Is.SameAs(view.SourceTipRussian));
+            Assert.That(view.SourceStatus.enabled, Is.True);
             Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672");
             Capture(view, new Vector2Int(576, 1280), new Rect(0, 0, 576, 1230), "Loading_576x1280_safearea");
             Capture(view, new Vector2Int(1080, 2340), new Rect(0, 0, 1080, 2340), "Loading_1080x2340");
@@ -217,6 +220,9 @@ namespace LegendsOfRus.Tests.PlayMode
             DemoFeatureState.SetLanguage("en"); view.RefreshContent();
             Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672_EN");
             Assert.That(view.StatusText.text, Is.EqualTo("Loading..."));
+            Assert.That(view.TipTitle.enabled && view.TipBody.enabled && view.StatusText.enabled, Is.True);
+            Assert.That(view.TipPanel.sprite, Is.SameAs(view.SourceTipBlank));
+            Assert.That(view.SourceStatus.enabled, Is.False);
             DemoFeatureState.SetLanguage("ru"); view.RefreshContent();
             Capture(view, new Vector2Int(941, 1672), new Rect(0, 0, 941, 1672), "Loading_941x1672_roundtrip");
             SplashResponsivePlayModeTests.AssertCapturePixelsEqual(OutputPath("Loading_941x1672.png"), OutputPath("Loading_941x1672_roundtrip.png"));
@@ -291,7 +297,7 @@ namespace LegendsOfRus.Tests.PlayMode
                 AssertInside(barBounds, safeRect, "progress bar");
                 AssertInside(percentBounds, safeRect, "percentage");
                 AssertInside(bodyBounds, safeRect, "tip text");
-                Assert.That(view.TipBody.preferredHeight, Is.LessThanOrEqualTo(view.TipBody.rectTransform.rect.height + 1));
+                if (view.TipBody.enabled) Assert.That(view.TipBody.preferredHeight, Is.LessThanOrEqualTo(view.TipBody.rectTransform.rect.height + 1));
                 Rect environmentBounds = ScreenBounds(view.Environment.rectTransform, camera);
                 Assert.That(environmentBounds.xMin, Is.LessThanOrEqualTo(1f));
                 Assert.That(environmentBounds.yMin, Is.LessThanOrEqualTo(1f));
@@ -308,10 +314,15 @@ namespace LegendsOfRus.Tests.PlayMode
                 texture.Apply();
                 Color empty = texture.GetPixel(Mathf.RoundToInt(barBounds.xMin + barBounds.width * .75f),
                     Mathf.RoundToInt(barBounds.center.y));
-                Assert.That(empty.b, Is.GreaterThan(empty.r), "The visible empty track must retain its navy hue.");
-                Assert.That(empty.r, Is.LessThan(.3f), "The opaque track must cover the bright snowy environment.");
-                if (!errorState)
+                if (errorState)
                 {
+                    Assert.That(view.RetryButton.gameObject.activeSelf && view.RetryButton.interactable, Is.True);
+                    AssertInside(ScreenBounds(view.RetryButton.GetComponent<RectTransform>(), camera), safeRect, "retry control");
+                }
+                else
+                {
+                    Assert.That(empty.b, Is.GreaterThan(empty.r), "The visible empty track must retain its navy hue.");
+                    Assert.That(empty.r, Is.LessThan(.3f), "The opaque track must cover the environment.");
                     Color filled = texture.GetPixel(Mathf.RoundToInt(barBounds.xMin + barBounds.width * .15f),
                         Mathf.RoundToInt(barBounds.center.y));
                     Assert.That(filled.b, Is.GreaterThan(filled.r), "The visible fill must retain its sapphire hue.");

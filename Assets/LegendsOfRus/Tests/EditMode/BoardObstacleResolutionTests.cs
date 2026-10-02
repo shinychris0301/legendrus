@@ -94,7 +94,11 @@ namespace LegendsOfRus.Tests
         [Test]
         public void AdjacentMatch_DamagesCrateOnlyOnceForTheWave()
         {
-            var board = CreateDoubleMatchBoard(12204);
+            // Leave enough cells for the planner's final playable-board guarantee.
+            // The former 3x3 fixture could clear both lower rows below a top crate,
+            // leaving a board on which no reshuffle could produce a legal move.
+            var board = new BoardModel(4, 4, 4, new SeededBoardRandom(12204));
+            board.LoadRows("0012", "0013", "1102", "2323");
             var crate = new BoardPosition(1, 0);
             board.SetObstacle(
                 crate,
