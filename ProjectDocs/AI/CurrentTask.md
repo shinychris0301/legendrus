@@ -1,3 +1,11 @@
+# 2026-10-03 — Updated project committed and uploaded
+
+User explicitly requested committing the updated project. All1,612 pending paths (15 existing modified files and1,597 new evidence files) were committed in five bounded batches and verified on GitHub branch `repair/full-evidence-batches-20261002T181726Z`. Full project/evidence snapshot: `5da25f56e65890587419cef3dc55e8ed5ebf6fbb`; source/report commit: `db8f57d7518aaeb53236089254ef0e9f7368c639`. [Completion](GitCommitRecovery/R2ProjectUpdate/Completion.json) · [Git task report](GitCommitRecovery/R2ProjectUpdate/README.md).
+
+All updated Git blobs match the reviewed pre-commit workspace. No evidence exclusions/recompression, force push, history rewrite or main changes. Existing ignored builds/caches/signing files remain local. Active source/tool whitespace checks pass;238 preserved raw-evidence/CSV/patch warnings are documented. Sensitive-path screening and988text high-confidence credential checks found no credential candidates. Latest143distinct Unity passes retained; current source/evidence verifier passed freshly, no new Unity/build/device execution. This small completion record follows the five verified update commits and is published on the same branch.
+
+**Next:** failed-save spending and rejected noncampaign booster-refund handling, then guarded APK refresh. Current APK still excludes newer doubled-gold, first-clear and ordinary-credit source changes. Human201–210 recordings/feedback remain pending; paid/video settlement unverified, phone/hosting deferred, effects last.
+
 # 2026-10-03 — Ordinary credit recovery R1 complete (source)
 
 User requested the next task. [Results](OrdinaryCreditRecovery/R1/TestResults.md) · [143-case reconciliation](OrdinaryCreditRecovery/R1/QA/TestReconciliation.json) · [Final validation](OrdinaryCreditRecovery/R1/QA/FinalValidation.json). Reproduced six arithmetic wraps and six blocked-save live mutations in actual isolated Unity. AddGold/AddGems/AddBooster now delegate to checked atomic TryAdd APIs; full credit is adopted only after a successful write or an already durably committed primary. Rejection preserves balances and emits no Changed event; arithmetic rejection stays retryable, failed writing locks further credits. Existing signatures, nonpositive/invalid-type behavior, reward amounts and caps retained.
