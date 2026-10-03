@@ -1,0 +1,117 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -316,6 +316,114 @@
+             );
+         }
+ 
++        static LevelData FirstClearBoundaryFixture()
++        {
++            var level = JsonUtility.FromJson<LevelData>(JsonUtility.ToJson(ChapterLevelCatalog.Find(1, 1)));
++            level.rewards = new LevelRewardData { gold = 1, gems = 1, boosterMace = 1,
++                boosterFirebird = 1, boosterLivingLight = 1, boosterSeaPearl = 1 };
++            return level;
++        }
++
++        [TestCase(0)]
++        [TestCase(1)]
++        [TestCase(2)]
++        [TestCase(3)]
++        [TestCase(4)]
++        [TestCase(5)]
++        [TestCase(6)]
++        public void FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(int boundary)
++        {
++            var state = GameState.Instance;
++            var level = FirstClearBoundaryFixture();
++            state.RegisterLevelAttempt(level);
++            switch (boundary)
++            {
++                case 0: state.Save.gold = int.MaxValue; break;
++                case 1: state.Save.gems = int.MaxValue; break;
++                case 2: state.Save.boosterMace = int.MaxValue; break;
++                case 3: state.Save.boosterFirebird = int.MaxValue; break;
++                case 4: state.Save.boosterLivingLight = int.MaxValue; break;
++                case 5: state.Save.boosterSeaPearl = int.MaxValue; break;
++                case 6:
++                    var progress = state.GetLevelProgress(1, 1);
++                    progress.completions = int.MaxValue; progress.rewardClaimed = true;
++                    break;
++            }
++            state.Persist();
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var priorWrite = state.LastWriteResult; var outcome = state.LastCompletionResult;
++            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
++            for (int i = 0; i < present.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                for (int attempt = 0; attempt < 2; attempt++)
++                {
++                    System.Exception rejection = null;
++                    bool ignoredLogs = LogAssert.ignoreFailingMessages;
++                    try
++                    {
++                        LogAssert.ignoreFailingMessages = true;
++                        try { state.CompleteLevel(level, level.starScoreThresholds[2]); }
++                        catch (System.InvalidOperationException ex) { rejection = ex; }
++                    }
++                    finally { LogAssert.ignoreFailingMessages = ignoredLogs; }
++                    Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "No partial credit or progress, boundary " + boundary);
++                    Assert.That(rejection, Is.Not.Null, "Compatibility API must not report a committed completion.");
++                }
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastCompletionResult, Is.SameAs(outcome));
++                Assert.That(state.LastWriteResult, Is.SameAs(priorWrite)); Assert.That(state.CanPersist, Is.True);
++                Assert.That(events, Is.Zero);
++                for (int i = 0; i < present.Length; i++)
++                {
++                    Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[i]), Is.EqualTo(present[i]));
++                    Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[i]), Is.EqualTo(journal[i]));
++                }
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [Test]
++        public void FirstClearBlockedSaveCannotPublishRewardsOrProgress()
++        {
++            var state = GameState.Instance; var level = FirstClearBoundaryFixture();
++            state.RegisterLevelAttempt(level);
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var savedJournal = new string[PersistedSaveKeys.Length]; var savedPresent = new bool[savedJournal.Length];
++            for (int i = 0; i < savedJournal.Length; i++)
++            { savedPresent[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); savedJournal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            Assert.That(SaveService.LoadWithResult().Status, Is.EqualTo(PlayerSaveLoadStatus.UnsupportedFutureVersion));
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                System.Exception rejection = null; bool ignoredLogs = LogAssert.ignoreFailingMessages;
++                try
++                {
++                    LogAssert.ignoreFailingMessages = true;
++                    try { state.CompleteLevel(level, level.starScoreThresholds[2]); }
++                    catch (System.InvalidOperationException ex) { rejection = ex; }
++                }
++                finally { LogAssert.ignoreFailingMessages = ignoredLogs; }
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.Save, Is.SameAs(original));
++                Assert.That(rejection, Is.Not.Null); Assert.That(state.LastCompletionResult, Is.Null); Assert.That(events, Is.Zero);
++                Assert.That(state.LastWriteResult.Status, Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                Assert.That(state.CanPersist, Is.False);
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]), Is.False); Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                state.Changed -= changed;
++                for (int i = 0; i < savedJournal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (savedPresent[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], savedJournal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
+         [Test]
+         public void TutorialProgress_PersistsAndCannotBeCompletedTwice()
+         {

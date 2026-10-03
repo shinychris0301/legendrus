@@ -9,10 +9,11 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[5]
 BASE = Path(__file__).resolve().parent.parent
-BUILD = Path('ProjectDocs/AI/ReturningPlayerRecap/R3AndroidRefresh/QA')
+BUILD = Path('ProjectDocs/AI/DailyRewardRecovery/R2AndroidRefresh/QA')
 APK = Path('Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk')
-PIN = {'bytes': 766017314,
-       'sha256': '2302b069bddf4b0261513fa5696bfa60dc9940f1c9bd61bc34a54c063079335e'}
+PIN = {'bytes': 766014334,
+       'sha256': '9f72045fe3a2e68114be24d687dfb2a51c07c48d39ec58aa4afbafe9a5744654'}
+PRESETS = ('stock-999', 'stock-1000', 'stock-9999', 'stock-max', 'story-early', 'story-finale')
 PACKAGE = 'com.example.legendsofrus.v117debug'
 ACTIVITY = 'com.unity3d.player.UnityPlayerGameActivity'
 ADB = Path('/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb')
@@ -43,8 +44,8 @@ def inspect_local(root=ROOT, pin=PIN):
             result['status'] = 'local_checksum_mismatch'
             return result
         read = lambda name: json.loads((root / BUILD / name).read_text())
-        artifact, verification, final, packed = [read(name) for name in
-            ('Artifact.json', 'ApkVerification.json', 'BuildValidation.json', 'PackedAssets.json')]
+        artifact, verification, final, packed, native = [read(name) for name in
+            ('Artifact.json', 'ApkVerification.json', 'BuildValidation.json', 'PackedAssets.json', 'NativeClaimVerification.json')]
         required = ('signatureVerified', 'sameCertificateAsPriorLocalApk', 'zipCrcPassed',
                     'zip16KiBAlignmentPassed', 'debuggable', 'portrait')
         markers = ('DevelopmentGameplayProfile', 'DevelopmentGameplayProfileBadge',
@@ -63,10 +64,24 @@ def inspect_local(root=ROOT, pin=PIN):
             and packed.get('result') == 'Succeeded' and packed.get('gameplayRevision') == 24
             and packed.get('stockLayouts') == 4 and packed.get('unityVersion') == '6000.5.9f1'
             and packed.get('profileRevision') == 13 and packed.get('dialogueRevision') == 2
+            and packed.get('victoryRevision') == 12
+            and packed.get('dailyRewardRevision') == 5 and packed.get('receiptRevision') == 2
+            and native.get('compiledOverflowRejectionPackaged') is True
+            and native.get('before', {}).get('generatedOverflowCatch') is False
+            and native.get('after', {}).get('generatedOverflowCatch') is True
+            and native.get('after', {}).get('packagedMethodBytesMatchCompiledOutput') is True
+            and native.get('after', {}).get('packagedLibrarySha256') == final.get('nativeClaimLibrarySha256')
+            and isinstance(final.get('nativeClaimLibrarySha256'), str)
+            and re.fullmatch('[a-f0-9]{64}', final.get('nativeClaimLibrarySha256')) is not None
+            and verification.get('presetRuntimeTypes', {}).get('DevelopmentGameplayFixtures') is True
+            and all(verification.get('presetSelectors', {}).get(key) is True for key in PRESETS)
+            and [row.get('selector') for row in packed.get('fixedPresets', [])] == list(PRESETS)
             and all(verification.get('recapRuntimeTypes', {}).get(key) is True
                     for key in ('ProductionStoryRecapView', 'StoryRecap', 'StoryRecapEntry'))
         )
         result.update(matchesVerifiedRecapApk=bool(matches), recapPackaged=bool(matches), checksumSidecarMatches=True,
+                      matchesVerifiedPresetApk=bool(matches), fixedPresetsPackaged=bool(matches),
+                      dailyRewardOverflowCatchPackaged=bool(matches),
                       recordedSignatureAndCompiledInclusionVerified=bool(matches))
         result['status'] = 'offline_prepared_device_deferred' if matches else 'build_evidence_requires_review'
     except (OSError, ValueError, TypeError, KeyError, AttributeError):

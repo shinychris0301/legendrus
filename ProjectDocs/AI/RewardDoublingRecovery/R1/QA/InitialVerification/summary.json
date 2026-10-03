@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 76.38080620765686,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests;LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests;LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/RewardDoublingRecovery/R1/QA/Verify/results.xml",
+    "-logFile",
+    "/tmp/lor-reward-doubling-recovery-r1/Verify/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-reward-doubling-recovery-r1/Verify/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-reward-doubling-recovery-r1/Verify",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "37",
+    "result": "Failed(Child)",
+    "total": "37",
+    "passed": "36",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 11:54:31Z",
+    "end-time": "2026-10-03 11:55:20Z",
+    "duration": "49.3340386"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.OverflowDoubleGoldCanRetryAtExactLimitAndPersistsOnce",
+      "result": "Failed",
+      "message": "  An earned star retains a resting glow after its reveal.\n  Expected: greater than 0\n  But was:  0.0f\n"
+    }
+  ]
+}

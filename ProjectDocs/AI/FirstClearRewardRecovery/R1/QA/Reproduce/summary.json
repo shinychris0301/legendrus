@@ -1,0 +1,82 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 40.70702815055847,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal;LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearBlockedSaveCannotPublishRewardsOrProgress",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FirstClearRewardRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-first-clear-reward-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-first-clear-reward-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-first-clear-reward-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "8",
+    "result": "Failed(Child)",
+    "total": "8",
+    "passed": "0",
+    "failed": "8",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 13:06:12Z",
+    "end-time": "2026-10-03 13:06:12Z",
+    "duration": "0.4178546"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(0)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 0\n  Expected string length 1147 but was 1149. Strings differ at index 24.\n  Expected: \"{\"saveVersion\":6,\"gold\":2147483647,\"gems\":350,\"energy\":5,\"ene...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":-2147483648,\"gems\":351,\"energy\":5,\"en...\"\n  -----------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(1)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 1\n  Expected string length 1149 but was 1151. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":2147483647,\"energy\":5,\"e...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":-2147483648,\"energy\":5,\"...\"\n  ---------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(2)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 2\n  Expected string length 1151 but was 1153. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":5,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":351,\"energy\":5,\"energyMa...\"\n  ---------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(3)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 3\n  Expected string length 1151 but was 1153. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":5,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":351,\"energy\":5,\"energyMa...\"\n  ---------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(4)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 4\n  Expected string length 1151 but was 1153. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":5,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":351,\"energy\":5,\"energyMa...\"\n  ---------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(5)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 5\n  Expected string length 1150 but was 1152. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":5,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":351,\"energy\":5,\"energyMa...\"\n  ---------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearArithmeticRejectionPreservesRewardsProgressAndJournal(6)",
+      "result": "Failed",
+      "message": "  No partial credit or progress, boundary 6\n  Expected string length 1150 but was 1154. Strings differ at index 126.\n  Expected: \"...728475350,\"chapter\":1,\"level\":1,\"stars\":0,\"storyStage\":0,\"...\"\n  But was:  \"...728475350,\"chapter\":1,\"level\":2,\"stars\":3,\"storyStage\":1,\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.FirstClearBlockedSaveCannotPublishRewardsOrProgress",
+      "result": "Failed",
+      "message": "  Expected string length 1142 but was 1143. Strings differ at index 28.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":5,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12541,\"gems\":351,\"energy\":5,\"energyMa...\"\n  ---------------------------------------^\n\nTearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect"
+    }
+  ]
+}

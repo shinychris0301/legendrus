@@ -440,10 +440,34 @@ namespace LegendsOfRus
             Persist();
         }
 
-        public void AddGold(int amount)
+        // Compatibility entry points retain their void contract. Callers that need
+        // confirmation of a full, committed credit must use the TryAdd APIs.
+        public void AddGold(int amount) => TryAddGold(amount);
+
+        public bool TryAddGold(int amount) => TryCredit(amount,
+            (candidate, credit) => candidate.gold = checked(candidate.gold + credit));
+
+        bool TryCredit(int amount, Action<PlayerSaveData, int> apply)
         {
-            Save.gold += Mathf.Max(0, amount);
-            Persist();
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            try { apply(candidate, Mathf.Max(0, amount)); }
+            catch (OverflowException) { return false; }
+
+            bool written = SaveService.TrySave(candidate, out var result);
+            LastWriteResult = result;
+            if (!written && !result.PrimaryDurablyCommitted)
+            {
+                canPersist = false;
+                return false;
+            }
+
+            // A committed primary is already a credit even if journal cleanup
+            // failed. Publish it once and block later writes until recovery.
+            Save = candidate;
+            canPersist = written;
+            Changed?.Invoke();
+            return true;
         }
 
         public bool SpendGold(int amount)
@@ -454,11 +478,10 @@ namespace LegendsOfRus
             return true;
         }
 
-        public void AddGems(int amount)
-        {
-            Save.gems += Mathf.Max(0, amount);
-            Persist();
-        }
+        public void AddGems(int amount) => TryAddGems(amount);
+
+        public bool TryAddGems(int amount) => TryCredit(amount,
+            (candidate, credit) => candidate.gems = checked(candidate.gems + credit));
 
         public bool SpendGems(int amount)
         {
@@ -575,6 +598,15 @@ namespace LegendsOfRus
 
         public LevelCompletionResult CompleteLevel(LevelData levelData, int score)
         {
+            if (!TryCompleteLevel(levelData, score, out var completion))
+                throw new InvalidOperationException("Level completion could not be committed.");
+            return completion;
+        }
+
+        // Progress and the entire first-clear grant belong to the same journal commit.
+        public bool TryCompleteLevel(LevelData levelData, int score, out LevelCompletionResult completion)
+        {
+            completion = null;
             if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Continuation consumption is not integrated yet.");
             if (levelData == null)
                 throw new ArgumentNullException(nameof(levelData));
@@ -585,16 +617,20 @@ namespace LegendsOfRus
                 );
             }
 
-            LevelProgressData progress = GetLevelProgress(
-                levelData.chapterId,
-                levelData.levelId,
-                create: true
-            );
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (candidate.levelProgress == null) candidate.levelProgress = new List<LevelProgressData>();
+            LevelProgressData progress = candidate.levelProgress.Find(p => p != null &&
+                p.chapterId == levelData.chapterId && p.levelId == levelData.levelId);
+            if (progress == null)
+            {
+                progress = new LevelProgressData { chapterId = levelData.chapterId, levelId = levelData.levelId };
+                candidate.levelProgress.Add(progress);
+            }
             if (progress.attempts == 0)
                 progress.attempts = 1;
 
             int earnedStars = levelData.EvaluateStars(score);
-            progress.completions++;
             progress.bestScore = Mathf.Max(progress.bestScore, score);
             progress.bestStars = Mathf.Max(progress.bestStars, earnedStars);
 
@@ -603,49 +639,54 @@ namespace LegendsOfRus
             int grantedGold = grantReward ? Mathf.Max(0, rewards.gold) : 0;
             int grantedGems = grantReward ? Mathf.Max(0, rewards.gems) : 0;
 
-            if (grantReward)
+            try
             {
-                progress.rewardClaimed = true;
-                Save.gold += grantedGold;
-                Save.gems += grantedGems;
-                Save.boosterMace += Mathf.Max(0, rewards.boosterMace);
-                Save.boosterFirebird += Mathf.Max(0, rewards.boosterFirebird);
-                Save.boosterLivingLight += Mathf.Max(0, rewards.boosterLivingLight);
-                Save.boosterSeaPearl += Mathf.Max(0, rewards.boosterSeaPearl);
+                progress.completions = checked(progress.completions + 1);
+                if (grantReward)
+                {
+                    candidate.gold = checked(candidate.gold + grantedGold);
+                    candidate.gems = checked(candidate.gems + grantedGems);
+                    candidate.boosterMace = checked(candidate.boosterMace + Mathf.Max(0, rewards.boosterMace));
+                    candidate.boosterFirebird = checked(candidate.boosterFirebird + Mathf.Max(0, rewards.boosterFirebird));
+                    candidate.boosterLivingLight = checked(candidate.boosterLivingLight + Mathf.Max(0, rewards.boosterLivingLight));
+                    candidate.boosterSeaPearl = checked(candidate.boosterSeaPearl + Mathf.Max(0, rewards.boosterSeaPearl));
+                    progress.rewardClaimed = true;
+                }
             }
+            catch (OverflowException) { return false; }
 
-            Save.lastCompletedChapter = levelData.chapterId;
-            Save.lastCompletedLevel = levelData.levelId;
-            Save.lastRewardGold = grantedGold;
-            Save.lastRewardGems = grantedGems;
-            Save.lastRewardEligibleForDouble = grantReward && grantedGold > 0;
-            Save.lastRewardDoubled = false;
-            Save.storyStage = Mathf.Max(Save.storyStage, levelData.levelId);
+            candidate.lastCompletedChapter = levelData.chapterId;
+            candidate.lastCompletedLevel = levelData.levelId;
+            candidate.lastRewardGold = grantedGold;
+            candidate.lastRewardGems = grantedGems;
+            candidate.lastRewardEligibleForDouble = grantReward && grantedGold > 0;
+            candidate.lastRewardDoubled = false;
+            candidate.storyStage = Mathf.Max(candidate.storyStage, levelData.levelId);
 
             LevelData next = ChapterLevelCatalog.Next(levelData);
             if (next != null)
             {
-                Save.highestUnlockedLevel = Mathf.Max(
-                    Save.highestUnlockedLevel,
+                candidate.highestUnlockedLevel = Mathf.Max(
+                    candidate.highestUnlockedLevel,
                     next.levelId
                 );
-                Save.selectedChapter = next.chapterId;
-                Save.selectedLevel = next.levelId;
+                candidate.selectedChapter = next.chapterId;
+                candidate.selectedLevel = next.levelId;
             }
             else
             {
-                Save.highestUnlockedLevel = Mathf.Max(
-                    Save.highestUnlockedLevel,
+                candidate.highestUnlockedLevel = Mathf.Max(
+                    candidate.highestUnlockedLevel,
                     levelData.levelId
                 );
-                Save.selectedChapter = levelData.chapterId;
-                Save.selectedLevel = levelData.levelId;
+                candidate.selectedChapter = levelData.chapterId;
+                candidate.selectedLevel = levelData.levelId;
             }
 
-            Save.chapter = Save.selectedChapter;
-            Save.level = Save.highestUnlockedLevel;
-            Save.stars = CalculateTotalStars();
-            LastCompletionResult = new LevelCompletionResult(
+            candidate.chapter = candidate.selectedChapter;
+            candidate.level = candidate.highestUnlockedLevel;
+            candidate.stars = CalculateTotalStars(candidate);
+            var committedCompletion = new LevelCompletionResult(
                 levelData,
                 earnedStars,
                 grantedGold,
@@ -653,13 +694,20 @@ namespace LegendsOfRus
                 grantReward,
                 score
             );
-            Persist();
-            return LastCompletionResult;
+            bool written = SaveService.TrySave(candidate, out var write);
+            LastWriteResult = write;
+            if (!written && !write.PrimaryDurablyCommitted) { canPersist = false; return false; }
+            Save = candidate;
+            canPersist = written;
+            completion = LastCompletionResult = committedCompletion;
+            Changed?.Invoke();
+            return true;
         }
 
         public bool TryDoubleLastLevelGoldReward()
         {
             if (
+                !canPersist ||
                 !Save.lastRewardEligibleForDouble ||
                 Save.lastRewardDoubled ||
                 Save.lastRewardGold <= 0
@@ -668,20 +716,39 @@ namespace LegendsOfRus
                 return false;
             }
 
-            Save.gold += Save.lastRewardGold;
-            Save.lastRewardDoubled = true;
-            Persist();
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            try
+            {
+                candidate.gold = checked(candidate.gold + candidate.lastRewardGold);
+            }
+            catch (OverflowException)
+            {
+                // Preserve the eligible reward until the full credit fits; never publish a partial grant.
+                return false;
+            }
+            candidate.lastRewardDoubled = true;
+            PlayerSaveWriteResult result;
+            bool written = SaveService.TrySave(candidate, out result);
+            LastWriteResult = result;
+            if (!written) { canPersist = false; return false; }
+            Save = candidate;
+            Changed?.Invoke();
             return true;
         }
 
         public int CalculateTotalStars()
         {
-            if (Save.levelProgress == null) return 0;
+            return CalculateTotalStars(Save);
+        }
+
+        static int CalculateTotalStars(PlayerSaveData save)
+        {
+            if (save.levelProgress == null) return 0;
 
             int total = 0;
-            for (int i = 0; i < Save.levelProgress.Count; i++)
+            for (int i = 0; i < save.levelProgress.Count; i++)
             {
-                LevelProgressData progress = Save.levelProgress[i];
+                LevelProgressData progress = save.levelProgress[i];
                 if (progress != null)
                     total += Mathf.Clamp(progress.bestStars, 0, 3);
             }
@@ -727,30 +794,31 @@ namespace LegendsOfRus
             return true;
         }
 
-        public void AddBooster(BoosterType type, int amount = 1)
-        {
-            amount = Mathf.Max(0, amount);
-            if (amount == 0) return;
+        public void AddBooster(BoosterType type, int amount = 1) => TryAddBooster(type, amount);
 
+        public bool TryAddBooster(BoosterType type, int amount = 1)
+        {
+            Action<PlayerSaveData, int> apply;
             switch (type)
             {
                 case BoosterType.BogatyrMace:
-                    Save.boosterMace += amount;
+                    apply = (candidate, credit) => candidate.boosterMace = checked(candidate.boosterMace + credit);
                     break;
                 case BoosterType.Firebird:
-                    Save.boosterFirebird += amount;
+                    apply = (candidate, credit) => candidate.boosterFirebird = checked(candidate.boosterFirebird + credit);
                     break;
                 case BoosterType.LivingLight:
-                    Save.boosterLivingLight += amount;
+                    apply = (candidate, credit) => candidate.boosterLivingLight = checked(candidate.boosterLivingLight + credit);
                     break;
                 case BoosterType.SeaPearl:
-                    Save.boosterSeaPearl += amount;
+                    apply = (candidate, credit) => candidate.boosterSeaPearl = checked(candidate.boosterSeaPearl + credit);
                     break;
                 default:
-                    return;
+                    return false;
             }
-
-            Persist();
+            if (!canPersist) return false;
+            if (amount <= 0) return true;
+            return TryCredit(amount, apply);
         }
 
         public int BoosterCount(BoosterType type)
@@ -775,7 +843,15 @@ namespace LegendsOfRus
             DateTime now = DateTime.UtcNow;
             if (!canPersist || !DailyRewardSchedule.CanClaim(Save, now)) return false;
             var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
-            if (!DailyRewardSchedule.TryApply(candidate, now)) return false;
+            try
+            {
+                if (!DailyRewardSchedule.TryApply(candidate, now)) return false;
+            }
+            catch (OverflowException)
+            {
+                // Reject the candidate before writing or publishing a receipt; keep the day retryable.
+                return false;
+            }
             PlayerSaveWriteResult result;
             bool written = SaveService.TrySave(candidate, out result);
             LastWriteResult = result;

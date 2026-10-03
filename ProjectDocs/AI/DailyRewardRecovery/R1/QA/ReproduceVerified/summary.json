@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 31.388992071151733,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.OverflowClaimPreservesAllBalancesEligibilityAndJournal",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/DailyRewardRecovery/R1/QA/ReproduceVerified/results.xml",
+    "-logFile",
+    "/tmp/lor-daily-reward-recovery-r1/ReproduceVerified/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-daily-reward-recovery-r1/ReproduceVerified/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-daily-reward-recovery-r1/ReproduceVerified",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "1",
+    "result": "Failed(Child)",
+    "total": "1",
+    "passed": "0",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 09:31:32Z",
+    "end-time": "2026-10-03 09:31:33Z",
+    "duration": "0.7498695"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.OverflowClaimPreservesAllBalancesEligibilityAndJournal",
+      "result": "Failed",
+      "message": "  Overflow scenario 0\n  Expected: No Exception to be thrown\n  But was:  <System.OverflowException: Arithmetic operation resulted in an overflow.\n  at LegendsOfRus.DailyRewardSchedule.TryApply (LegendsOfRus.PlayerSaveData s, System.DateTime utc) [0x0001a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/DailyRewardSchedule.cs:42 \n  at LegendsOfRus.GameState.ClaimDailyReward (LegendsOfRus.DailyRewardGrant& granted) [0x00036] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:778 \n  at LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests+<>c__DisplayClass15_2.<OverflowClaimPreservesAllBalancesEligibilityAndJournal>b__1 () [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/DailyRewardAlignmentPlayModeTests.cs:126 \n  at NUnit.Framework.Constraints.ThrowsConstraint+VoidInvocationDescriptor.Invoke () [0x00001] in <8b63e8ac0a4746599ed207982825ae6c>:0 \n  at NUnit.Framework.Constraints.ThrowsConstraint+ExceptionInterceptor.Intercept (System.Object invocation) [0x00050] in <8b63e8ac0a4746599ed207982825ae6c>:0 >\n"
+    }
+  ]
+}

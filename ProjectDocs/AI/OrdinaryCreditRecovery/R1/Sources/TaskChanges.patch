@@ -1,0 +1,284 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -440,10 +440,34 @@
+             Persist();
+         }
+ 
+-        public void AddGold(int amount)
+-        {
+-            Save.gold += Mathf.Max(0, amount);
+-            Persist();
++        // Compatibility entry points retain their void contract. Callers that need
++        // confirmation of a full, committed credit must use the TryAdd APIs.
++        public void AddGold(int amount) => TryAddGold(amount);
++
++        public bool TryAddGold(int amount) => TryCredit(amount,
++            (candidate, credit) => candidate.gold = checked(candidate.gold + credit));
++
++        bool TryCredit(int amount, Action<PlayerSaveData, int> apply)
++        {
++            if (!canPersist) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            try { apply(candidate, Mathf.Max(0, amount)); }
++            catch (OverflowException) { return false; }
++
++            bool written = SaveService.TrySave(candidate, out var result);
++            LastWriteResult = result;
++            if (!written && !result.PrimaryDurablyCommitted)
++            {
++                canPersist = false;
++                return false;
++            }
++
++            // A committed primary is already a credit even if journal cleanup
++            // failed. Publish it once and block later writes until recovery.
++            Save = candidate;
++            canPersist = written;
++            Changed?.Invoke();
++            return true;
+         }
+ 
+         public bool SpendGold(int amount)
+@@ -454,11 +478,10 @@
+             return true;
+         }
+ 
+-        public void AddGems(int amount)
+-        {
+-            Save.gems += Mathf.Max(0, amount);
+-            Persist();
+-        }
++        public void AddGems(int amount) => TryAddGems(amount);
++
++        public bool TryAddGems(int amount) => TryCredit(amount,
++            (candidate, credit) => candidate.gems = checked(candidate.gems + credit));
+ 
+         public bool SpendGems(int amount)
+         {
+@@ -771,30 +794,31 @@
+             return true;
+         }
+ 
+-        public void AddBooster(BoosterType type, int amount = 1)
+-        {
+-            amount = Mathf.Max(0, amount);
+-            if (amount == 0) return;
+-
++        public void AddBooster(BoosterType type, int amount = 1) => TryAddBooster(type, amount);
++
++        public bool TryAddBooster(BoosterType type, int amount = 1)
++        {
++            Action<PlayerSaveData, int> apply;
+             switch (type)
+             {
+                 case BoosterType.BogatyrMace:
+-                    Save.boosterMace += amount;
++                    apply = (candidate, credit) => candidate.boosterMace = checked(candidate.boosterMace + credit);
+                     break;
+                 case BoosterType.Firebird:
+-                    Save.boosterFirebird += amount;
++                    apply = (candidate, credit) => candidate.boosterFirebird = checked(candidate.boosterFirebird + credit);
+                     break;
+                 case BoosterType.LivingLight:
+-                    Save.boosterLivingLight += amount;
++                    apply = (candidate, credit) => candidate.boosterLivingLight = checked(candidate.boosterLivingLight + credit);
+                     break;
+                 case BoosterType.SeaPearl:
+-                    Save.boosterSeaPearl += amount;
++                    apply = (candidate, credit) => candidate.boosterSeaPearl = checked(candidate.boosterSeaPearl + credit);
+                     break;
+                 default:
+-                    return;
+-            }
+-
+-            Persist();
++                    return false;
++            }
++            if (!canPersist) return false;
++            if (amount <= 0) return true;
++            return TryCredit(amount, apply);
+         }
+ 
+         public int BoosterCount(BoosterType type)
+--- a/Assets/LegendsOfRus/Tests/PlayMode/InventoryAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/InventoryAlignmentPlayModeTests.cs
+@@ -67,7 +67,7 @@
+  var v=View();Assert.That(v.HasCollectibleInventory,Is.False);string save=StableSave();for(int i=0;i<20;i++){v.DynamicRoot.Find("Item_"+i).GetComponent<Button>().onClick.Invoke();Assert.That(v.SelectedItem,Is.EqualTo(i));Assert.That(v.ItemName.text,Is.EqualTo(ProductionInventoryView.ItemTitle(i).ToUpperInvariant()));Assert.That(v.QuantityText.text,Is.EqualTo("—"));Assert.That(v.UseButton.interactable||v.CanUseSelectedItem,Is.False);v.UseButton.onClick.Invoke();}yield return WaitForNormalButtonColors();Capture("Inventory_Map_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.Tabs[2].onClick.Invoke();Assert.That(v.SelectedItem,Is.EqualTo(3));Assert.That(v.DynamicRoot.Find("Item_6"),Is.Not.Null);Assert.That(v.DynamicRoot.Find("Item_0"),Is.Null);yield return WaitForNormalButtonColors();Capture("Inventory_Materials_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.Tabs[3].onClick.Invoke();Assert.That(v.SelectedItem,Is.EqualTo(2));Assert.That(v.DynamicRoot.Find("Item_18"),Is.Not.Null);yield return WaitForNormalButtonColors();Capture("Inventory_Quest_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));Assert.Throws<ArgumentOutOfRangeException>(()=>v.SelectItem(23));Assert.Throws<ArgumentOutOfRangeException>(()=>v.SelectTab((InventoryTab)8));Assert.That(StableSave(),Is.EqualTo(save));
+  }
+  [UnityTest]public IEnumerator RealBoosterQuantitiesRefreshWithoutConsumption(){
+- var v=View();GameState.Instance.Save.boosterMace=7;GameState.Instance.Save.boosterFirebird=0;GameState.Instance.Save.boosterLivingLight=-5;GameState.Instance.Save.boosterSeaPearl=13;string save=StableSave();v.NavButtons[3].onClick.Invoke();Assert.That(v.SelectedTab,Is.EqualTo(InventoryTab.Boosters));Assert.That(v.QuantityText.text,Is.EqualTo("7"));Assert.That(v.DynamicRoot.Find("Item_21/Count").GetComponent<Text>().text,Is.EqualTo("0"));Assert.That(v.DynamicRoot.Find("Item_22/Count").GetComponent<Text>().text,Is.EqualTo("0"));v.UseButton.onClick.Invoke();yield return WaitForNormalButtonColors();Capture("Inventory_Boosters_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));Assert.That(StableSave(),Is.EqualTo(save));GameState.Instance.AddBooster(BoosterType.BogatyrMace,2);yield return null;Assert.That(v.QuantityText.text,Is.EqualTo("9"));v.SelectItem(23);Assert.That(v.QuantityText.text,Is.EqualTo("13"));yield return WaitForNormalButtonColors();Capture("Inventory_Pearl_safe_RU_R4",new Vector2Int(576,1280),new Rect(0,48,576,1172));DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return WaitForNormalButtonColors();Capture("Inventory_Boosters_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
++ var v=View();GameState.Instance.Save.boosterMace=7;GameState.Instance.Save.boosterFirebird=0;GameState.Instance.Save.boosterLivingLight=-5;GameState.Instance.Save.boosterSeaPearl=13;string save=StableSave();v.NavButtons[3].onClick.Invoke();Assert.That(v.SelectedTab,Is.EqualTo(InventoryTab.Boosters));Assert.That(v.QuantityText.text,Is.EqualTo("7"));Assert.That(v.DynamicRoot.Find("Item_21/Count").GetComponent<Text>().text,Is.EqualTo("0"));Assert.That(v.DynamicRoot.Find("Item_22/Count").GetComponent<Text>().text,Is.EqualTo("0"));v.UseButton.onClick.Invoke();yield return WaitForNormalButtonColors();Capture("Inventory_Boosters_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));Assert.That(StableSave(),Is.EqualTo(save));/* The negative display fixture is intentionally invalid; restore a valid save before testing committed credits. */GameState.Instance.Save.boosterLivingLight=0;GameState.Instance.AddBooster(BoosterType.BogatyrMace,2);yield return null;Assert.That(v.QuantityText.text,Is.EqualTo("9"));v.SelectItem(23);Assert.That(v.QuantityText.text,Is.EqualTo("13"));yield return WaitForNormalButtonColors();Capture("Inventory_Pearl_safe_RU_R4",new Vector2Int(576,1280),new Rect(0,48,576,1172));DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return WaitForNormalButtonColors();Capture("Inventory_Boosters_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));
+  }
+  [UnityTest]public IEnumerator DetailsAndVipBlockUnderlyingInputAndBackDismisses(){
+  var v=View();string save=StableSave();int generation=router.RouteGeneration;v.DetailsButton.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.True);v.ProfileButton.onClick.Invoke();v.Tabs[1].onClick.Invoke();v.SelectTab(InventoryTab.Boosters);v.SelectItem(3);Assert.That(v.SelectedItem,Is.Zero);Assert.That(v.SelectedTab,Is.EqualTo(InventoryTab.Artifacts));Assert.That(router.RouteGeneration,Is.EqualTo(generation));yield return WaitForNormalButtonColors();Capture("Inventory_Details_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));DemoFeatureState.SetLanguage("en");v.RefreshContent();yield return WaitForNormalButtonColors();Capture("Inventory_Details_safe_EN",new Vector2Int(576,1280),new Rect(0,48,576,1172));router.NavigateBack();Assert.That(v.InfoPanel.activeSelf,Is.False);Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Inventory));v.NavButtons[4].onClick.Invoke();Assert.That(v.InfoHeading.text,Is.EqualTo("VIP"));yield return WaitForNormalButtonColors();Capture("Inventory_VIP_EN",new Vector2Int(941,1672),new Rect(0,0,941,1672));v.CloseInfoButton.onClick.Invoke();Assert.That(v.InfoPanel.activeSelf,Is.False);Assert.That(StableSave(),Is.EqualTo(save));
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -476,6 +476,168 @@
+             for (int i = 0; i < 4; i++)Assert.That(state.BoosterCount((BoosterType)i), Is.EqualTo(boosters[i]));
+         }
+ 
++        static void SetOrdinaryCreditBalance(PlayerSaveData save, int resource, int value)
++        {
++            switch (resource)
++            {
++                case 0: save.gold = value; break;
++                case 1: save.gems = value; break;
++                case 2: save.boosterMace = value; break;
++                case 3: save.boosterFirebird = value; break;
++                case 4: save.boosterLivingLight = value; break;
++                case 5: save.boosterSeaPearl = value; break;
++                default: Assert.Fail("Unknown credit resource."); break;
++            }
++        }
++
++        static void AddOrdinaryCredit(GameState state, int resource, int amount)
++        {
++            if (resource == 0) state.AddGold(amount);
++            else if (resource == 1) state.AddGems(amount);
++            else state.AddBooster((BoosterType)(resource - 2), amount);
++        }
++
++        static bool TryOrdinaryCredit(GameState state, int resource, int amount)
++        {
++            if (resource == 0) return state.TryAddGold(amount);
++            if (resource == 1) return state.TryAddGems(amount);
++            return state.TryAddBooster((BoosterType)(resource - 2), amount);
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditOverflowPreservesLiveSaveAndJournal(int resource)
++        {
++            var state = GameState.Instance;
++            SetOrdinaryCreditBalance(state.Save, resource, int.MaxValue - 1);
++            state.Persist();
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var priorWrite = state.LastWriteResult;
++            var journal = new string[PersistedSaveKeys.Length]; var present = new bool[journal.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignoredLogs = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                for (int attempt = 0; attempt < 2; attempt++)
++                {
++                    AddOrdinaryCredit(state, resource, 2);
++                    Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "Full credit must be rejected without wrapping or partial mutation.");
++                    Assert.That(TryOrdinaryCredit(state, resource, 2), Is.False);
++                }
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite));
++                Assert.That(state.CanPersist, Is.True); Assert.That(events, Is.Zero);
++                for (int i = 0; i < journal.Length; i++)
++                { Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[i]), Is.EqualTo(present[i])); Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[i]), Is.EqualTo(journal[i])); }
++            }
++            finally { LogAssert.ignoreFailingMessages = ignoredLogs; state.Changed -= changed; }
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditBlockedWritePreservesLiveSaveAndFutureJournal(int resource)
++        {
++            var state = GameState.Instance; var original = state.Save; string before = JsonUtility.ToJson(original);
++            var journal = new string[PersistedSaveKeys.Length]; var present = new bool[journal.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignoredLogs = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                AddOrdinaryCredit(state, resource, 1);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.Save, Is.SameAs(original));
++                Assert.That(events, Is.Zero); Assert.That(state.CanPersist, Is.False);
++                Assert.That(state.LastWriteResult.Status, Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                var blockedWrite = state.LastWriteResult;
++                AddOrdinaryCredit(state, resource, 1);
++                for (int other = 0; other < 6; other++) Assert.That(TryOrdinaryCredit(state, other, 1), Is.False);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.LastWriteResult, Is.SameAs(blockedWrite));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]) || PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                LogAssert.ignoreFailingMessages = ignoredLogs; state.Changed -= changed;
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditFullLimitReloadAndOverflowRecovery(int resource)
++        {
++            var state = GameState.Instance;
++            Assert.That(state.SpendEnergy(1), Is.True);
++            SetOrdinaryCreditBalance(state.Save, resource, int.MaxValue - 2); state.Persist();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(TryOrdinaryCredit(state, resource, 2), Is.True); Assert.That(events, Is.EqualTo(1));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(state.Save)));
++                var atLimit = state.Save; var priorWrite = state.LastWriteResult;
++                Assert.That(TryOrdinaryCredit(state, resource, 1), Is.False);
++                Assert.That(state.Save, Is.SameAs(atLimit)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite));
++                Assert.That(events, Is.EqualTo(1)); Assert.That(state.CanPersist, Is.True);
++                bool spent = resource == 0 ? state.SpendGold(1) : resource == 1 ? state.SpendGems(1) : state.TryUseBooster((BoosterType)(resource - 2));
++                Assert.That(spent, Is.True); Assert.That(TryOrdinaryCredit(state, resource, 1), Is.True);
++                Assert.That(events, Is.EqualTo(3));
++                var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++                SetOrdinaryCreditBalance(expected, resource, int.MaxValue);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(state.Save)));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditLargestGrantPreservesOtherResources(int resource)
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True);
++            SetOrdinaryCreditBalance(state.Save, resource, 0); state.Persist();
++            var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++            SetOrdinaryCreditBalance(expected, resource, int.MaxValue);
++            AddOrdinaryCredit(state, resource, int.MaxValue);
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++            Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
++        }
++
++        [Test]
++        public void OrdinaryCreditNonpositiveAndUnknownBoosterKeepLegacyBehavior()
++        {
++            var state = GameState.Instance; state.Persist();
++            string before = JsonUtility.ToJson(state.Save);
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                foreach (int amount in new[] { 0, -1, int.MinValue })
++                {
++                    Assert.That(state.TryAddGold(amount), Is.True); Assert.That(state.TryAddGems(amount), Is.True);
++                    foreach (BoosterType type in System.Enum.GetValues(typeof(BoosterType)))
++                        Assert.That(state.TryAddBooster(type, amount), Is.True);
++                }
++                Assert.That(events, Is.EqualTo(6), "Gold/gem no-ops still persist; booster no-ops do not.");
++                var original = state.Save; var priorWrite = state.LastWriteResult;
++                foreach (int amount in new[] { 0, 1, int.MaxValue })
++                {
++                    state.AddBooster((BoosterType)99, amount);
++                    Assert.That(state.TryAddBooster((BoosterType)99, amount), Is.False);
++                }
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite));
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(events, Is.EqualTo(6));
++            }
++            finally { state.Changed -= changed; }
++        }
++
+         [Test]
+         public void TutorialProgress_PersistsAndCannotBeCompletedTwice()
+         {

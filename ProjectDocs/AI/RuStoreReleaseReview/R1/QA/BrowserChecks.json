@@ -1,0 +1,268 @@
+{
+  "passed": 45,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Working example net receipts: 200 payers ×500 less refunds/fee",
+      "observed": 83300,
+      "expected": 83300,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Working example includes UA, variable and allocated fixed costs",
+      "observed": -151700,
+      "expected": -151700,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Break-even paid CPI includes fixed/variable allocation",
+      "observed": 4.83,
+      "expected": 4.83,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Required payer conversion uses same 90-day cost horizon",
+      "observed": 0.056422569027611044,
+      "expected": 0.056422569027611044,
+      "tolerance": 0.000001
+    },
+    {
+      "name": "Low conversion independent expected surplus",
+      "observed": -210093.3,
+      "expected": -210093.3,
+      "tolerance": 0.005
+    },
+    {
+      "name": "High conversion independent expected surplus",
+      "observed": 181500,
+      "expected": 181500,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Organic cohort has no paid acquisition cost",
+      "observed": 0,
+      "expected": 0,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Organic installs retain operating costs",
+      "observed": 48300,
+      "expected": 48300,
+      "tolerance": 0.005
+    },
+    {
+      "name": "No paid installs has no CPI boundary",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Owner/development allocation changes payback",
+      "observed": -1,
+      "expected": -1,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Net ad proceeds do not receive another store fee",
+      "observed": -141700,
+      "expected": -141700,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Fully refunded IAP has no net receipts",
+      "observed": 0,
+      "expected": 0,
+      "tolerance": 0.005
+    },
+    {
+      "name": "Zero realized proceeds cannot meet positive costs",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Conversion above100% is labeled unreachable",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "name": "Zero installs clears stale result",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Negative costs rejected",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Invalid percentage rejected",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Blank input rejected",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Fractional installs rejected",
+      "observed": null,
+      "expected": null
+    },
+    {
+      "name": "Low conversion: grossIap parity",
+      "observed": 29900,
+      "expected": 29900,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: netIap parity",
+      "observed": 24906.699999999997,
+      "expected": 24906.7,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: netIapPerInstall parity",
+      "observed": 2.4906699999999997,
+      "expected": 2.49,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: contributionPerInstall parity",
+      "observed": 1.9906699999999997,
+      "expected": 1.99,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: marketingCost parity",
+      "observed": 200000,
+      "expected": 200000,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: preTaxCohortSurplus parity",
+      "observed": -210093.3,
+      "expected": -210093.3,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: breakEvenPaidCpi parity",
+      "observed": -1.0093300000000003,
+      "expected": -1.01,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Low conversion: requiredPayerFraction parity",
+      "observed": 0.09435212211975091,
+      "expected": 0.09435212211975091,
+      "tolerance": 1e-7
+    },
+    {
+      "name": "Working example: grossIap parity",
+      "observed": 100000,
+      "expected": 100000,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: netIap parity",
+      "observed": 83300,
+      "expected": 83300,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: netIapPerInstall parity",
+      "observed": 8.33,
+      "expected": 8.33,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: contributionPerInstall parity",
+      "observed": 7.83,
+      "expected": 7.83,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: marketingCost parity",
+      "observed": 200000,
+      "expected": 200000,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: preTaxCohortSurplus parity",
+      "observed": -151700,
+      "expected": -151700,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: breakEvenPaidCpi parity",
+      "observed": 4.83,
+      "expected": 4.83,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "Working example: requiredPayerFraction parity",
+      "observed": 0.056422569027611044,
+      "expected": 0.056422569027611044,
+      "tolerance": 1e-7
+    },
+    {
+      "name": "High conversion: grossIap parity",
+      "observed": 500000,
+      "expected": 500000,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: netIap parity",
+      "observed": 416500,
+      "expected": 416500,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: netIapPerInstall parity",
+      "observed": 41.65,
+      "expected": 41.65,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: contributionPerInstall parity",
+      "observed": 41.15,
+      "expected": 41.15,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: marketingCost parity",
+      "observed": 200000,
+      "expected": 200000,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: preTaxCohortSurplus parity",
+      "observed": 181500,
+      "expected": 181500,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: breakEvenPaidCpi parity",
+      "observed": 38.15,
+      "expected": 38.15,
+      "tolerance": 0.0051
+    },
+    {
+      "name": "High conversion: requiredPayerFraction parity",
+      "observed": 0.028211284513805522,
+      "expected": 0.028211284513805522,
+      "tolerance": 1e-7
+    },
+    {
+      "name": "Desktop has no horizontal overflow",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "name": "Portrait has no horizontal overflow",
+      "observed": true,
+      "expected": true
+    }
+  ],
+  "errors": [],
+  "scope": "Offline revenue planning tool; isolated Chrome profile, not Unity or game screenshots"
+}

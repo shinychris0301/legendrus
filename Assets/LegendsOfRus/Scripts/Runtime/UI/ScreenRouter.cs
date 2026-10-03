@@ -192,7 +192,15 @@ namespace LegendsOfRus
         public void NavigateBack()
         {
             if(activeModalId==ScreenId.Dialogue){if(!IsModalTransitioning)CloseModal();return;}
-            if(activeModalId==ScreenId.EmptyErrorState){if(!IsModalTransitioning)CloseModal();return;}
+            if(activeModalId==ScreenId.EmptyErrorState)
+            {
+                if(!IsModalTransitioning)
+                {
+                    if(IsPendingGameplayVictory(activeBoard))CloseRejectedGameplayVictory(activeBoard);
+                    else CloseModal();
+                }
+                return;
+            }
             if(activeModalId==ScreenId.TutorialOverlay){if(IsModalTransitioning)return;var guide=modalVisualRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;RequestCloseModal(()=>activeBoard?.TryResume());return;}
             if(current==ScreenId.TutorialOverlay){var guide=contentRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;Show(tutorialReturnPage ?? ScreenId.SplashTitle);return;}
             if (current == ScreenId.Login && contentRoot != null)
@@ -1581,6 +1589,46 @@ namespace LegendsOfRus
             Show(ScreenId.ChapterMap);
         }
 
+        bool IsPendingGameplayVictory(Match3Board board)
+        {
+            return board != null && board == activeBoard && current == ScreenId.Gameplay &&
+                board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Completed;
+        }
+
+        void CloseRejectedGameplayVictory(Match3Board board)
+        {
+            RequestCloseModal(() => { if(IsPendingGameplayVictory(board))Show(ScreenId.ChapterMap); });
+        }
+
+        IEnumerator ShowGameplayCompletionError(Match3Board board, int score)
+        {
+            // Wait only for existing UI transitions; stale boards/routes never receive this retry.
+            while(IsPendingGameplayVictory(board) && (IsScreenTransitioning || modalMotionState != ModalMotionState.Closed))
+                yield return null;
+            if(!IsPendingGameplayVictory(board) || !ShowModal(ScreenId.EmptyErrorState))yield break;
+            var error=modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
+            Action retry=GameState.Instance.CanPersist
+                ? (Action)(() => RequestCloseModal(() => CommitGameplayVictory(board,score))) : null;
+            error.Bind(() => CloseRejectedGameplayVictory(board),retry);
+        }
+
+        void CommitGameplayVictory(Match3Board board, int score)
+        {
+            if(!IsPendingGameplayVictory(board))return;
+            LevelData outcomeLevel=board.CurrentLevel;
+            if(!GameState.Instance.TryCompleteLevel(outcomeLevel,score,out var completion))
+            {
+                StartCoroutine(ShowGameplayCompletionError(board,score));
+                return;
+            }
+            PrivacyAwareAnalytics.TryLevelComplete(completion.Level.id,activeAnalyticsAttemptNumber,
+                score,completion.Stars,completion.FirstClearRewardGranted);
+            BalanceTelemetryReviewService.Instance?.TryRecordLevelWin(outcomeLevel,
+                activeAnalyticsAttemptNumber,board.Moves,score);
+            ClearActiveGameplayAnalytics();
+            ShowOutcome(ScreenId.Victory,outcomeLevel,StoryReactionOutcomes.Victory);
+        }
+
         void BuildGameplayOverlay(RectTransform parent)
         {
             var view = parent.GetComponentInChildren<ProductionGameplayView>();
@@ -1590,35 +1638,10 @@ namespace LegendsOfRus
             boardGo.transform.SetParent(view.BoardMount, false);
             Stretch(boardGo.GetComponent<RectTransform>());
 
-            activeBoard = boardGo.GetComponent<Match3Board>();
+            var board = boardGo.GetComponent<Match3Board>();
+            activeBoard = board;
             activeBoard.Initialize(
-                onWin: score =>
-                {
-                    LevelData outcomeLevel = activeBoard.CurrentLevel;
-                    LevelCompletionResult completion = GameState.Instance.CompleteLevel(
-                        outcomeLevel,
-                        score
-                    );
-                    PrivacyAwareAnalytics.TryLevelComplete(
-                        completion.Level.id,
-                        activeAnalyticsAttemptNumber,
-                        score,
-                        completion.Stars,
-                        completion.FirstClearRewardGranted
-                    );
-                    BalanceTelemetryReviewService.Instance?.TryRecordLevelWin(
-                        outcomeLevel,
-                        activeAnalyticsAttemptNumber,
-                        activeBoard != null ? activeBoard.Moves : 0,
-                        score
-                    );
-                    ClearActiveGameplayAnalytics();
-                    ShowOutcome(
-                        ScreenId.Victory,
-                        outcomeLevel,
-                        StoryReactionOutcomes.Victory
-                    );
-                },
+                onWin: score => CommitGameplayVictory(board,score),
                 onFail: score =>
                 {
                     LevelData outcomeLevel = activeBoard.CurrentLevel;

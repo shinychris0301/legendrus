@@ -1,0 +1,57 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 59.978198766708374,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests;LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearOverflowNativeRetryCommitsExactlyOnceInBothLanguages;LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearRetryRouteChangeRejectsStaleCompletedBoard;LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearBlockedSaveDisablesRetryAndBackLeavesWithoutReward",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/FirstClearRewardRecovery/R1/QA/Focus/results.xml",
+    "-logFile",
+    "/tmp/lor-first-clear-reward-recovery-r1/Focus/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-first-clear-reward-recovery-r1/Focus/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-first-clear-reward-recovery-r1/Focus",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "23",
+    "result": "Failed(Child)",
+    "total": "23",
+    "passed": "20",
+    "failed": "3",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 13:14:25Z",
+    "end-time": "2026-10-03 13:15:03Z",
+    "duration": "37.4323091"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearBlockedSaveDisablesRetryAndBackLeavesWithoutReward",
+      "result": "Failed",
+      "message": "  String lengths are both 1474. Strings differ at index 94.\n  Expected: \"...\"lastEnergyUtcTicks\":639266300675706370,\"chapter\":1,\"level...\"\n  But was:  \"...\"lastEnergyUtcTicks\":639266300754004600,\"chapter\":1,\"level...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearOverflowNativeRetryCommitsExactlyOnceInBothLanguages",
+      "result": "Failed",
+      "message": "  String lengths are both 1481. Strings differ at index 101.\n  Expected: \"...\"lastEnergyUtcTicks\":639266300797734140,\"chapter\":1,\"level...\"\n  But was:  \"...\"lastEnergyUtcTicks\":639266300904399790,\"chapter\":1,\"level...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FirstClearRetryRouteChangeRejectsStaleCompletedBoard",
+      "result": "Failed",
+      "message": "  String lengths are both 1481. Strings differ at index 100.\n  Expected: \"...,\"lastEnergyUtcTicks\":639266300915561060,\"chapter\":1,\"leve...\"\n  But was:  \"...,\"lastEnergyUtcTicks\":639266301004516060,\"chapter\":1,\"leve...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

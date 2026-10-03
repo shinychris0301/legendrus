@@ -38,14 +38,23 @@ with tempfile.TemporaryDirectory(prefix='lor-offline-preflight-r2-') as temp:
             'ApkVerification.json': {**pin, 'package': tool.PACKAGE, 'versionName': '0.0.0',
                 'versionCode': 1, 'abi': 'arm64-v8a', 'minimumApi': 26, 'targetApi': 36,
                 'recapRuntimeTypes': {key: True for key in ('ProductionStoryRecapView', 'StoryRecap', 'StoryRecapEntry')},
+                'presetRuntimeTypes': {'DevelopmentGameplayFixtures': True},
+                'presetSelectors': {key: True for key in tool.PRESETS},
                 **{key: True for key in ('signatureVerified', 'sameCertificateAsPriorLocalApk',
                     'zipCrcPassed', 'zip16KiBAlignmentPassed', 'debuggable', 'portrait')},
                 'runtimeMetadataMarkers': {key: True for key in ('DevelopmentGameplayProfile',
                     'DevelopmentGameplayProfileBadge', 'lor_gameplay_qa',
                     'LegendsOfRus_GameplayQA_v1_', 'ProductionGameplayStockLayout')}},
-            'BuildValidation.json': {'result': 'Passed', 'artifactSha256': pin['sha256'], 'artifactBytes': pin['bytes']},
+            'BuildValidation.json': {'result': 'Passed', 'artifactSha256': pin['sha256'], 'artifactBytes': pin['bytes'],
+                'nativeClaimLibrarySha256': 'b' * 64},
+            'NativeClaimVerification.json': {'compiledOverflowRejectionPackaged': True,
+                'before': {'generatedOverflowCatch': False},
+                'after': {'generatedOverflowCatch': True, 'packagedMethodBytesMatchCompiledOutput': True,
+                    'packagedLibrarySha256': 'b' * 64}},
             'PackedAssets.json': {'result': 'Succeeded', 'gameplayRevision': 24,
-                'stockLayouts': 4, 'unityVersion': '6000.5.9f1', 'profileRevision': 13, 'dialogueRevision': 2}}
+                'stockLayouts': 4, 'unityVersion': '6000.5.9f1', 'profileRevision': 13, 'dialogueRevision': 2,
+                'victoryRevision': 12, 'dailyRewardRevision': 5, 'receiptRevision': 2,
+                'fixedPresets': [{'selector': key} for key in tool.PRESETS]}}
         for name, value in data.items():
             (qa / name).write_text(json.dumps(value))
         return data
@@ -68,7 +77,24 @@ with tempfile.TemporaryDirectory(prefix='lor-offline-preflight-r2-') as temp:
     passed('malformed evidence blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
     seed(); (qa / 'ApkVerification.json').write_text('[]')
     passed('wrong evidence structure blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
+    seed(); (qa / 'NativeClaimVerification.json').unlink()
+    passed('missing native claim evidence blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
     mutations = [
+        ('unverified compiled overflow rejection', 'NativeClaimVerification.json', 'compiledOverflowRejectionPackaged', False),
+        ('missing generated overflow catch', 'NativeClaimVerification.json', 'after', {}),
+        ('wrong native library evidence hash', 'BuildValidation.json', 'nativeClaimLibrarySha256', '0' * 64),
+        ('wrong native method payload', 'NativeClaimVerification.json', 'after',
+         {'generatedOverflowCatch': True, 'packagedMethodBytesMatchCompiledOutput': False,
+          'packagedLibrarySha256': 'b' * 64}),
+        ('stale daily owner', 'PackedAssets.json', 'dailyRewardRevision', 4),
+        ('stale receipt owner', 'PackedAssets.json', 'receiptRevision', 1),
+        ('missing fixed factory', 'ApkVerification.json', 'presetRuntimeTypes', {}),
+        ('missing preset selector', 'ApkVerification.json', 'presetSelectors',
+         {key: True for key in tool.PRESETS[:-1]}),
+        ('false preset selector', 'ApkVerification.json', 'presetSelectors',
+         {key: key != 'stock-1000' for key in tool.PRESETS}),
+        ('missing packed fixture inventory', 'PackedAssets.json', 'fixedPresets', []),
+        ('stale Victory revision', 'PackedAssets.json', 'victoryRevision', 11),
         ('wrong package', 'ApkVerification.json', 'package', 'different'),
         ('wrong recorded artifact hash', 'Artifact.json', 'sha256', '0' * 64),
         ('wrong recorded artifact size', 'Artifact.json', 'bytes', 1),
