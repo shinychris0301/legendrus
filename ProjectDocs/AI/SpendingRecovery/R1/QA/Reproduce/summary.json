@@ -1,0 +1,87 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 20.01231622695923,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "SpendingBlockedWrite;SpendingNegativeEnergy;SpendingRefundOverflow",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SpendingRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-spending-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-spending-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-spending-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "9",
+    "result": "Failed(Child)",
+    "total": "9",
+    "passed": "0",
+    "failed": "9",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 14:44:27Z",
+    "end-time": "2026-10-03 14:44:27Z",
+    "duration": "0.664129"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(0)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 27.\n  Expected: \"{\"saveVersion\":6,\"gold\":12540,\"gems\":350,\"energy\":4,\"energyMa...\"\n  But was:  \"{\"saveVersion\":6,\"gold\":12539,\"gems\":350,\"energy\":4,\"energyMa...\"\n  --------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(1)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 38.\n  Expected: \"...rsion\":6,\"gold\":12540,\"gems\":350,\"energy\":4,\"energyMax\":5,...\"\n  But was:  \"...rsion\":6,\"gold\":12540,\"gems\":349,\"energy\":4,\"energyMax\":5,...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(2)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 50.\n  Expected: \"...ld\":12540,\"gems\":350,\"energy\":4,\"energyMax\":5,\"lastEnergyU...\"\n  But was:  \"...ld\":12540,\"gems\":350,\"energy\":3,\"energyMax\":5,\"lastEnergyU...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(3)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 487.\n  Expected: \"...Completions\":[],\"boosterMace\":7,\"boosterFirebird\":5,\"boost...\"\n  But was:  \"...Completions\":[],\"boosterMace\":6,\"boosterFirebird\":5,\"boost...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(4)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 507.\n  Expected: \"...sterMace\":7,\"boosterFirebird\":5,\"boosterLivingLight\":8,\"bo...\"\n  But was:  \"...sterMace\":7,\"boosterFirebird\":4,\"boosterLivingLight\":8,\"bo...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(5)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  String lengths are both 1011. Strings differ at index 530.\n  Expected: \"...ebird\":5,\"boosterLivingLight\":8,\"boosterSeaPearl\":10,\"last...\"\n  But was:  \"...ebird\":5,\"boosterLivingLight\":7,\"boosterSeaPearl\":10,\"last...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(6)",
+      "result": "Failed",
+      "message": "  No debit before durable commitment.\n  Expected string length 1011 but was 1010. Strings differ at index 550.\n  Expected: \"...ingLight\":8,\"boosterSeaPearl\":10,\"lastDailyRewardUtc\":\"\",\"...\"\n  But was:  \"...ingLight\":8,\"boosterSeaPearl\":9,\"lastDailyRewardUtc\":\"\",\"d...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits",
+      "result": "Failed",
+      "message": "  Expected: Paused\n  But was:  Idle\n"
+    }
+  ]
+}

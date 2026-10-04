@@ -728,6 +728,9 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash));
             Assert.That(board.Moves, Is.EqualTo(beforeMoves + 5));
             Assert.That(state.BoosterCount(BoosterType.SeaPearl), Is.EqualTo(beforeInventory - 1));
+            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Applied));
+            Assert.That(state.Save.boosterCommand.type, Is.EqualTo(BoosterType.SeaPearl));
+            expectedSave.boosterCommand = state.Save.boosterCommand;
             Assert.That(
                 JsonUtility.ToJson(state.Save),
                 Is.EqualTo(JsonUtility.ToJson(expectedSave))
@@ -782,7 +785,11 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Idle));
             Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash));
             Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(beforeInventory));
-            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(beforeSave));
+            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Refunded));
+            Assert.That(state.Save.boosterCommand.type, Is.EqualTo(BoosterType.Firebird));
+            var expectedRecovery = JsonUtility.FromJson<PlayerSaveData>(beforeSave);
+            expectedRecovery.boosterCommand = state.Save.boosterCommand;
+            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expectedRecovery)));
             Assert.That(IndexOf(motions, GameplayMotionKind.BoosterActivated), Is.GreaterThanOrEqualTo(0));
             Assert.That(IndexOf(motions, GameplayMotionKind.BoosterCompleted), Is.EqualTo(-1));
             Assert.That(IndexOf(motions, GameplayMotionKind.CommandRecovered), Is.GreaterThanOrEqualTo(0));

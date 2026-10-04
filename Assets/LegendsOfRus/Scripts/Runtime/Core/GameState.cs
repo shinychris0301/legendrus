@@ -13,6 +13,20 @@ namespace LegendsOfRus
     }
 
     [Serializable]
+    public sealed class BoosterCommandReceipt
+    {
+        public int schemaVersion = 1;
+        public string commandId = "";
+        public BoosterType type;
+        public CampaignBoosterState state;
+
+        internal bool IsValid => schemaVersion == 1 && CampaignBoosterTransactions.Known(type) &&
+            (state == CampaignBoosterState.None ? string.IsNullOrEmpty(commandId) :
+            state >= CampaignBoosterState.Reserved && state <= CampaignBoosterState.Refunded &&
+            Guid.TryParseExact(commandId, "N", out _));
+    }
+
+    [Serializable]
     public sealed class LevelProgressData
     {
         public int chapterId = 1;
@@ -136,6 +150,8 @@ namespace LegendsOfRus
         // Optional v6 extension with its own schema; legacy saves simply have no retained attempt.
         public RetainedRoundData retainedRound;
         public List<ContinuationTransactionData> continuationTransactions = new List<ContinuationTransactionData>();
+        // Optional v6 extension. One durable receipt protects the ordinary board's in-flight booster.
+        public BoosterCommandReceipt boosterCommand = new BoosterCommandReceipt();
     }
 
     public sealed partial class GameState : MonoBehaviour
@@ -160,6 +176,7 @@ namespace LegendsOfRus
         float nextEnergyRefresh;
         bool saveRewriteRequired;
         bool canPersist = true;
+        bool persistenceInProgress;
 
         void Awake()
         {
@@ -171,6 +188,7 @@ namespace LegendsOfRus
             if (LastLoadResult.CanPersist)
             {
                 MigrateSave();
+                TryRecoverPendingBoosterCommand();
             }
             else
             {
@@ -198,19 +216,19 @@ namespace LegendsOfRus
 
         void MigrateSave()
         {
-            if (Save == null)
-                Save = new PlayerSaveData();
-
-            string sourceJson = JsonUtility.ToJson(Save);
+            if (!canPersist || persistenceInProgress) return;
+            var source = Save ?? new PlayerSaveData();
+            string sourceJson = JsonUtility.ToJson(source);
 
             PlayerSaveMigrationResult migration =
                 PlayerSaveMigrationRegistry.Migrate(
-                    Save,
+                    source,
                     BuildLegacyProgress,
                     DateTime.UtcNow.Ticks
                 );
             if (!migration.Succeeded || migration.Data == null)
             {
+                canPersist = false;
                 Debug.LogError(
                     "Player save migration blocked: " +
                     (migration != null
@@ -219,17 +237,17 @@ namespace LegendsOfRus
                 );
                 return;
             }
-            Save = migration.Data;
+            var candidate = migration.Data;
             // Migration clones through Unity JSON, which may materialize an empty optional object.
-            if (Save.retainedRound != null && string.IsNullOrEmpty(Save.retainedRound.attemptId))
-                Save.retainedRound = null;
+            if (candidate.retainedRound != null && string.IsNullOrEmpty(candidate.retainedRound.attemptId))
+                candidate.retainedRound = null;
 
-            NormalizeLevelProgress();
-            NormalizeTutorialProgress();
-            NormalizeStoryProgress();
-            NormalizeChapterCompletionProgress();
+            NormalizeLevelProgress(candidate);
+            NormalizeTutorialProgress(candidate);
+            NormalizeStoryProgress(candidate);
+            NormalizeChapterCompletionProgress(candidate);
 
-            string normalizedJson = JsonUtility.ToJson(Save);
+            string normalizedJson = JsonUtility.ToJson(candidate);
             if (saveRewriteRequired
                 || migration.Changed
                 || !string.Equals(
@@ -237,9 +255,22 @@ namespace LegendsOfRus
                     normalizedJson,
                     StringComparison.Ordinal))
             {
-                Persist();
+                // Startup rewrites obey the same acknowledgement policy as ordinary
+                // transactions. Keep loaded progress and the pending rewrite on rejection.
+                saveRewriteRequired = true;
+                persistenceInProgress = true;
+                try
+                {
+                    if (!TryCommitBalance(candidate))
+                        Debug.LogError("Player save write blocked: " + LastWriteResult);
+                }
+                finally
+                {
+                    // Changed observers may throw after the primary was committed.
+                    if (ReferenceEquals(Save, candidate)) saveRewriteRequired = false;
+                    persistenceInProgress = false;
+                }
             }
-            saveRewriteRequired = false;
         }
 
         List<LevelProgressData> BuildLegacyProgress(PlayerSaveData legacy)
@@ -270,10 +301,12 @@ namespace LegendsOfRus
             return migrated;
         }
 
-        void NormalizeLevelProgress()
+        void NormalizeLevelProgress() => NormalizeLevelProgress(Save);
+
+        static void NormalizeLevelProgress(PlayerSaveData save)
         {
-            if (Save.levelProgress == null)
-                Save.levelProgress = new List<LevelProgressData>();
+            if (save.levelProgress == null)
+                save.levelProgress = new List<LevelProgressData>();
 
             ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1();
             int maxLevel = 1;
@@ -281,9 +314,9 @@ namespace LegendsOfRus
                 maxLevel = catalog.levels[catalog.levels.Length - 1].levelId;
 
             var seen = new HashSet<string>(StringComparer.Ordinal);
-            for (int i = Save.levelProgress.Count - 1; i >= 0; i--)
+            for (int i = save.levelProgress.Count - 1; i >= 0; i--)
             {
-                LevelProgressData progress = Save.levelProgress[i];
+                LevelProgressData progress = save.levelProgress[i];
                 string key = progress != null
                     ? $"{progress.chapterId}:{progress.levelId}"
                     : string.Empty;
@@ -293,7 +326,7 @@ namespace LegendsOfRus
                     !seen.Add(key)
                 )
                 {
-                    Save.levelProgress.RemoveAt(i);
+                    save.levelProgress.RemoveAt(i);
                     continue;
                 }
 
@@ -305,99 +338,108 @@ namespace LegendsOfRus
                 progress.completions = Mathf.Max(0, progress.completions);
                 if (progress.completions > 0)
                 {
-                    Save.highestUnlockedLevel = Mathf.Max(
-                        Save.highestUnlockedLevel,
+                    save.highestUnlockedLevel = Mathf.Max(
+                        save.highestUnlockedLevel,
                         Mathf.Min(maxLevel, progress.levelId + 1)
                     );
                 }
             }
 
-            Save.selectedChapter = catalog.chapterId;
-            Save.highestUnlockedLevel = Mathf.Clamp(
-                Mathf.Max(1, Save.highestUnlockedLevel),
+            save.selectedChapter = catalog.chapterId;
+            save.highestUnlockedLevel = Mathf.Clamp(
+                Mathf.Max(1, save.highestUnlockedLevel),
                 1,
                 maxLevel
             );
-            Save.selectedLevel = Mathf.Clamp(
-                Mathf.Max(1, Save.selectedLevel),
+            save.selectedLevel = Mathf.Clamp(
+                Mathf.Max(1, save.selectedLevel),
                 1,
-                Save.highestUnlockedLevel
+                save.highestUnlockedLevel
             );
 
-            Save.chapter = Save.selectedChapter;
-            Save.level = Save.highestUnlockedLevel;
-            Save.stars = CalculateTotalStars();
+            save.chapter = save.selectedChapter;
+            save.level = save.highestUnlockedLevel;
+            save.stars = CalculateTotalStars(save);
         }
 
-        void NormalizeTutorialProgress()
+        static void NormalizeTutorialProgress(PlayerSaveData save)
         {
-            if (Save.completedTutorialSteps == null)
-                Save.completedTutorialSteps = new List<string>();
+            if (save.completedTutorialSteps == null)
+                save.completedTutorialSteps = new List<string>();
 
             var seen = new HashSet<string>(StringComparer.Ordinal);
-            for (int i = Save.completedTutorialSteps.Count - 1; i >= 0; i--)
+            for (int i = save.completedTutorialSteps.Count - 1; i >= 0; i--)
             {
-                string tutorialId = Save.completedTutorialSteps[i];
+                string tutorialId = save.completedTutorialSteps[i];
                 if (string.IsNullOrWhiteSpace(tutorialId) || !seen.Add(tutorialId))
-                    Save.completedTutorialSteps.RemoveAt(i);
+                    save.completedTutorialSteps.RemoveAt(i);
             }
         }
 
-        void NormalizeStoryProgress()
+        static void NormalizeStoryProgress(PlayerSaveData save)
         {
-            if (Save.completedStoryScenes == null)
-                Save.completedStoryScenes = new List<string>();
-            StoryProgress.Normalize(Save.completedStoryScenes);
+            if (save.completedStoryScenes == null)
+                save.completedStoryScenes = new List<string>();
+            StoryProgress.Normalize(save.completedStoryScenes);
         }
 
-        void NormalizeChapterCompletionProgress()
+        static void NormalizeChapterCompletionProgress(PlayerSaveData save)
         {
-            if (Save.acknowledgedChapterCompletions == null)
-                Save.acknowledgedChapterCompletions = new List<int>();
+            if (save.acknowledgedChapterCompletions == null)
+                save.acknowledgedChapterCompletions = new List<int>();
 
             var seen = new HashSet<int>();
-            for (int i = Save.acknowledgedChapterCompletions.Count - 1; i >= 0; i--)
+            for (int i = save.acknowledgedChapterCompletions.Count - 1; i >= 0; i--)
             {
-                int chapterId = Save.acknowledgedChapterCompletions[i];
+                int chapterId = save.acknowledgedChapterCompletions[i];
                 if (chapterId <= 0 || !seen.Add(chapterId))
-                    Save.acknowledgedChapterCompletions.RemoveAt(i);
+                    save.acknowledgedChapterCompletions.RemoveAt(i);
             }
 
             ChapterStoryCatalogData catalog = StoryCatalog.LoadChapter1();
             if (
                 catalog != null &&
-                Save.acknowledgedChapterCompletions.Contains(catalog.chapterId) &&
-                !ChapterCompletionPrerequisitesMet(catalog)
+                save.acknowledgedChapterCompletions.Contains(catalog.chapterId) &&
+                !ChapterCompletionPrerequisitesMet(save, catalog)
             )
             {
-                Save.acknowledgedChapterCompletions.Remove(catalog.chapterId);
+                save.acknowledgedChapterCompletions.Remove(catalog.chapterId);
             }
 
-            Save.acknowledgedChapterCompletions.Sort();
+            save.acknowledgedChapterCompletions.Sort();
         }
 
-        public void RefreshEnergyFromClock()
+        public void RefreshEnergyFromClock() => TryRefreshEnergyFromClock();
+
+        // A healthy clock with no due refill succeeds without a write or notification.
+        public bool TryRefreshEnergyFromClock()
         {
-            if (Save.energy >= Save.energyMax)
+            if (!canPersist) return false;
+            if (Save.energy == Save.energyMax) return true;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (!AdvanceEnergyClock(candidate, DateTime.UtcNow.Ticks)) return true;
+            return TryCommitBalance(candidate);
+        }
+
+        static bool AdvanceEnergyClock(PlayerSaveData candidate, long now)
+        {
+            if (candidate.energy >= candidate.energyMax)
             {
-                Save.energy = Save.energyMax;
-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
-                return;
+                if (candidate.energy == candidate.energyMax) return false;
+                candidate.energy = candidate.energyMax;
+                candidate.lastEnergyUtcTicks = now;
+                return true;
             }
 
-            long now = DateTime.UtcNow.Ticks;
             long interval = TimeSpan.FromMinutes(EnergyRefillMinutes).Ticks;
-            long elapsed = Math.Max(0, now - Save.lastEnergyUtcTicks);
-            int gained = (int)(elapsed / interval);
-            if (gained <= 0) return;
+            long elapsed = Math.Max(0, now - candidate.lastEnergyUtcTicks);
+            long gained = elapsed / interval;
+            if (gained <= 0) return false;
 
-            Save.energy = Mathf.Min(Save.energyMax, Save.energy + gained);
-            if (Save.energy >= Save.energyMax)
-                Save.lastEnergyUtcTicks = now;
-            else
-                Save.lastEnergyUtcTicks += gained * interval;
-
-            Persist();
+            candidate.energy = (int)Math.Min(candidate.energyMax, (long)candidate.energy + gained);
+            candidate.lastEnergyUtcTicks = candidate.energy >= candidate.energyMax
+                ? now : candidate.lastEnergyUtcTicks + gained * interval;
+            return true;
         }
 
         public TimeSpan EnergyRemaining()
@@ -413,59 +455,98 @@ namespace LegendsOfRus
 
         public bool SpendEnergy(int amount = 1)
         {
-            RefreshEnergyFromClock();
-            if (Save.energy < amount) return false;
-
-            bool wasFull = Save.energy >= Save.energyMax;
-            Save.energy -= amount;
+            if (!canPersist || amount < 0) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            long now = DateTime.UtcNow.Ticks;
+            AdvanceEnergyClock(candidate, now);
+            if (candidate.energy < amount) return false;
+            bool wasFull = candidate.energy >= candidate.energyMax;
+            candidate.energy -= amount;
             if (wasFull)
-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+                candidate.lastEnergyUtcTicks = now;
+            return TryCommitBalance(candidate);
+        }
 
-            Persist();
+        public void AddEnergy(int amount) => TryAddEnergy(amount);
+
+        public bool TryAddEnergy(int amount)
+        {
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            // Energy has an existing cap; widen before addition so the grant cannot wrap.
+            candidate.energy = (int)Math.Max(0L, Math.Min(candidate.energyMax,
+                (long)candidate.energy + Mathf.Max(0, amount)));
+            if (candidate.energy >= candidate.energyMax)
+                candidate.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+            return TryCommitBalance(candidate);
+        }
+
+        public void RefillEnergy() => TryRefillEnergy();
+
+        public bool TryRefillEnergy()
+        {
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            candidate.energy = candidate.energyMax;
+            candidate.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+            return TryCommitBalance(candidate);
+        }
+
+        // Compatibility entry points retain their void contract. Callers that need
+        // confirmation of a full, committed credit must use the TryAdd APIs.
+        public void AddGold(int amount) => TryAddGold(amount);
+
+        public bool TryAddGold(int amount) => TryCredit(amount,
+            (candidate, credit) => candidate.gold = checked(candidate.gold + credit));
+
+        bool TryCredit(int amount, Action<PlayerSaveData, int> apply)
+        {
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            try { apply(candidate, Mathf.Max(0, amount)); }
+            catch (OverflowException) { return false; }
+
+            return TryCommitBalance(candidate);
+        }
+
+        bool TryCommitBalance(PlayerSaveData candidate)
+        {
+            if (!canPersist) return false;
+            bool written = SaveService.TrySave(candidate, out var result);
+            LastWriteResult = result;
+            if (!written && !result.PrimaryDurablyCommitted)
+            {
+                canPersist = false;
+                return false;
+            }
+
+            // A committed primary is already a balance change even if journal cleanup
+            // failed. Publish it once and block later writes until recovery.
+            Save = candidate;
+            canPersist = written;
+            Changed?.Invoke();
             return true;
-        }
-
-        public void AddEnergy(int amount)
-        {
-            Save.energy = Mathf.Clamp(Save.energy + Mathf.Max(0, amount), 0, Save.energyMax);
-            if (Save.energy >= Save.energyMax)
-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
-            Persist();
-        }
-
-        public void RefillEnergy()
-        {
-            Save.energy = Save.energyMax;
-            Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
-            Persist();
-        }
-
-        public void AddGold(int amount)
-        {
-            Save.gold += Mathf.Max(0, amount);
-            Persist();
         }
 
         public bool SpendGold(int amount)
         {
-            if (amount < 0 || Save.gold < amount) return false;
-            Save.gold -= amount;
-            Persist();
-            return true;
+            if (!canPersist || amount < 0 || Save.gold < amount) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            candidate.gold -= amount;
+            return TryCommitBalance(candidate);
         }
 
-        public void AddGems(int amount)
-        {
-            Save.gems += Mathf.Max(0, amount);
-            Persist();
-        }
+        public void AddGems(int amount) => TryAddGems(amount);
+
+        public bool TryAddGems(int amount) => TryCredit(amount,
+            (candidate, credit) => candidate.gems = checked(candidate.gems + credit));
 
         public bool SpendGems(int amount)
         {
-            if (amount < 0 || Save.gems < amount) return false;
-            Save.gems -= amount;
-            Persist();
-            return true;
+            if (!canPersist || amount < 0 || Save.gems < amount) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            candidate.gems -= amount;
+            return TryCommitBalance(candidate);
         }
 
         public bool IsLevelUnlocked(int chapterId, int levelId)
@@ -478,21 +559,25 @@ namespace LegendsOfRus
 
         public bool SelectLevel(int chapterId, int levelId)
         {
-            if (ContinuationBlocksNewAttempt()) return false;
+            if (!canPersist || ContinuationBlocksNewAttempt()) return false;
             if (TryGetRetainedRound(out var retained) && (retained.chapter != chapterId || retained.level != levelId)) return false;
             if (!IsLevelUnlocked(chapterId, levelId)) return false;
             if (ChapterLevelCatalog.Find(chapterId, levelId) == null) return false;
 
-            Save.selectedChapter = chapterId;
-            Save.selectedLevel = levelId;
-            Persist();
-            return true;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            candidate.selectedChapter = chapterId;
+            candidate.selectedLevel = levelId;
+            return TryCommitBalance(candidate);
         }
 
-        public void EnsureSelectedLevelIsUnlocked()
+        public void EnsureSelectedLevelIsUnlocked() => TryEnsureSelectedLevelIsUnlocked();
+
+        public bool TryEnsureSelectedLevelIsUnlocked()
         {
-            NormalizeLevelProgress();
-            Persist();
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            NormalizeLevelProgress(candidate);
+            return TryCommitBalance(candidate);
         }
 
         public LevelProgressData GetLevelProgress(
@@ -528,53 +613,119 @@ namespace LegendsOfRus
             return created;
         }
 
-        public int RegisterLevelAttempt(LevelData levelData)
+        public int RegisterLevelAttempt(LevelData levelData) =>
+            TryRegisterLevelAttempt(levelData, out var attempt) ? attempt : 0;
+
+        bool CanRegisterLevelAttempt(LevelData levelData)
         {
-            if (levelData == null) return 0;
+            if (levelData == null || !canPersist) return false;
             if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Resolve or recover the continuation reservation before starting another round.");
             if (TryGetRetainedRound(out _)) throw new InvalidOperationException("Resolve the retained attempt before starting another round.");
-            Save.retainedRound = null; // Reject stale/incompatible optional checkpoints without resetting progress.
-            unsavedRetainedRound = null;
-            if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
-                return 0;
-
-            Save.selectedChapter = levelData.chapterId;
-            Save.selectedLevel = levelData.levelId;
-            LevelProgressData progress = GetLevelProgress(
-                levelData.chapterId,
-                levelData.levelId,
-                create: true
-            );
-            progress.attempts++;
-            if (progress.attempts > 1)
-                progress.retries++;
-
-            Persist();
-            return progress.attempts;
+            return IsLevelUnlocked(levelData.chapterId, levelData.levelId);
         }
 
-        public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
+        public bool TryRegisterLevelAttempt(LevelData levelData, out int attempt)
         {
-            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Finalize the retained continuation transaction first.");
-            if (levelData == null) return;
-            if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
-                return;
+            attempt = 0;
+            if (!CanRegisterLevelAttempt(levelData)) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (!TryPrepareLevelAttempt(candidate, levelData, out var preparedAttempt) ||
+                !TryCommitRoundCandidate(candidate, clearRetainedAttempt: true)) return false;
+            attempt = preparedAttempt;
+            return true;
+        }
 
-            LevelProgressData progress = GetLevelProgress(
-                levelData.chapterId,
-                levelData.levelId,
-                create: true
-            );
-            if (progress.attempts == 0)
-                progress.attempts = 1;
-            LastFailureResult = new LevelFailureResult(levelData, score, goalProgress);
-            progress.failures++;
+        // Normal paid-in-energy entry commits the debit and attempt together before board construction.
+        public bool TryStartLevel(LevelData levelData, out int attempt, out bool insufficientEnergy)
+        {
+            attempt = 0;
+            insufficientEnergy = false;
+            if (!CanRegisterLevelAttempt(levelData) || HasPendingBoosterCommand) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            long now = DateTime.UtcNow.Ticks;
+            AdvanceEnergyClock(candidate, now);
+            if (candidate.energy < 1) { insufficientEnergy = true; return false; }
+            bool wasFull = candidate.energy >= candidate.energyMax;
+            candidate.energy--;
+            if (wasFull) candidate.lastEnergyUtcTicks = now;
+            if (!TryPrepareLevelAttempt(candidate, levelData, out var preparedAttempt) ||
+                !TryCommitRoundCandidate(candidate, clearRetainedAttempt: true)) return false;
+            attempt = preparedAttempt;
+            return true;
+        }
+
+        static LevelProgressData CandidateLevelProgress(PlayerSaveData candidate, LevelData levelData)
+        {
+            if (candidate.levelProgress == null) candidate.levelProgress = new List<LevelProgressData>();
+            var progress = candidate.levelProgress.Find(p => p != null &&
+                p.chapterId == levelData.chapterId && p.levelId == levelData.levelId);
+            if (progress == null)
+            {
+                progress = new LevelProgressData { chapterId = levelData.chapterId, levelId = levelData.levelId };
+                candidate.levelProgress.Add(progress);
+            }
+            return progress;
+        }
+
+        static bool TryPrepareLevelAttempt(PlayerSaveData candidate, LevelData levelData, out int attempt)
+        {
+            attempt = 0;
+            candidate.retainedRound = null; // Discard only incompatible optional checkpoints on commitment.
+            candidate.selectedChapter = levelData.chapterId;
+            candidate.selectedLevel = levelData.levelId;
+            var progress = CandidateLevelProgress(candidate, levelData);
+            try
+            {
+                progress.attempts = checked(progress.attempts + 1);
+                if (progress.attempts > 1) progress.retries = checked(progress.retries + 1);
+            }
+            catch (OverflowException) { return false; }
+            attempt = progress.attempts;
+            return attempt > 0;
+        }
+
+        bool TryCommitRoundCandidate(PlayerSaveData candidate, LevelFailureResult failure = null, bool clearRetainedAttempt = false)
+        {
+            if (!canPersist) return false;
+            bool written = SaveService.TrySave(candidate, out var result);
+            LastWriteResult = result;
+            if (!written && !result.PrimaryDurablyCommitted) { canPersist = false; return false; }
+            Save = candidate;
+            if (clearRetainedAttempt) unsavedRetainedRound = null;
+            if (failure != null) LastFailureResult = failure;
+            canPersist = written;
+            Changed?.Invoke();
+            return true;
+        }
+
+        public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null) =>
+            TryRecordLevelFailure(levelData, score, goalProgress);
+
+        public bool TryRecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
+        {
+            if (!canPersist) return false;
+            if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Finalize the retained continuation transaction first.");
+            if (levelData == null || !IsLevelUnlocked(levelData.chapterId, levelData.levelId)) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            var progress = CandidateLevelProgress(candidate, levelData);
+            if (progress.attempts == 0) progress.attempts = 1;
+            try { progress.failures = checked(progress.failures + 1); }
+            catch (OverflowException) { return false; }
             progress.bestScore = Mathf.Max(progress.bestScore, score);
-            Persist();
+            return TryCommitRoundCandidate(candidate, new LevelFailureResult(levelData, score, goalProgress));
         }
 
         public LevelCompletionResult CompleteLevel(LevelData levelData, int score)
         {
+            if (!TryCompleteLevel(levelData, score, out var completion))
+                throw new InvalidOperationException("Level completion could not be committed.");
+            return completion;
+        }
+
+        // Progress and the entire first-clear grant belong to the same journal commit.
+        public bool TryCompleteLevel(LevelData levelData, int score, out LevelCompletionResult completion)
+        {
+            completion = null;
             if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Continuation consumption is not integrated yet.");
             if (levelData == null)
                 throw new ArgumentNullException(nameof(levelData));
@@ -585,16 +736,20 @@ namespace LegendsOfRus
                 );
             }
 
-            LevelProgressData progress = GetLevelProgress(
-                levelData.chapterId,
-                levelData.levelId,
-                create: true
-            );
+            if (!canPersist || HasPendingBoosterCommand) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (candidate.levelProgress == null) candidate.levelProgress = new List<LevelProgressData>();
+            LevelProgressData progress = candidate.levelProgress.Find(p => p != null &&
+                p.chapterId == levelData.chapterId && p.levelId == levelData.levelId);
+            if (progress == null)
+            {
+                progress = new LevelProgressData { chapterId = levelData.chapterId, levelId = levelData.levelId };
+                candidate.levelProgress.Add(progress);
+            }
             if (progress.attempts == 0)
                 progress.attempts = 1;
 
             int earnedStars = levelData.EvaluateStars(score);
-            progress.completions++;
             progress.bestScore = Mathf.Max(progress.bestScore, score);
             progress.bestStars = Mathf.Max(progress.bestStars, earnedStars);
 
@@ -603,49 +758,54 @@ namespace LegendsOfRus
             int grantedGold = grantReward ? Mathf.Max(0, rewards.gold) : 0;
             int grantedGems = grantReward ? Mathf.Max(0, rewards.gems) : 0;
 
-            if (grantReward)
+            try
             {
-                progress.rewardClaimed = true;
-                Save.gold += grantedGold;
-                Save.gems += grantedGems;
-                Save.boosterMace += Mathf.Max(0, rewards.boosterMace);
-                Save.boosterFirebird += Mathf.Max(0, rewards.boosterFirebird);
-                Save.boosterLivingLight += Mathf.Max(0, rewards.boosterLivingLight);
-                Save.boosterSeaPearl += Mathf.Max(0, rewards.boosterSeaPearl);
+                progress.completions = checked(progress.completions + 1);
+                if (grantReward)
+                {
+                    candidate.gold = checked(candidate.gold + grantedGold);
+                    candidate.gems = checked(candidate.gems + grantedGems);
+                    candidate.boosterMace = checked(candidate.boosterMace + Mathf.Max(0, rewards.boosterMace));
+                    candidate.boosterFirebird = checked(candidate.boosterFirebird + Mathf.Max(0, rewards.boosterFirebird));
+                    candidate.boosterLivingLight = checked(candidate.boosterLivingLight + Mathf.Max(0, rewards.boosterLivingLight));
+                    candidate.boosterSeaPearl = checked(candidate.boosterSeaPearl + Mathf.Max(0, rewards.boosterSeaPearl));
+                    progress.rewardClaimed = true;
+                }
             }
+            catch (OverflowException) { return false; }
 
-            Save.lastCompletedChapter = levelData.chapterId;
-            Save.lastCompletedLevel = levelData.levelId;
-            Save.lastRewardGold = grantedGold;
-            Save.lastRewardGems = grantedGems;
-            Save.lastRewardEligibleForDouble = grantReward && grantedGold > 0;
-            Save.lastRewardDoubled = false;
-            Save.storyStage = Mathf.Max(Save.storyStage, levelData.levelId);
+            candidate.lastCompletedChapter = levelData.chapterId;
+            candidate.lastCompletedLevel = levelData.levelId;
+            candidate.lastRewardGold = grantedGold;
+            candidate.lastRewardGems = grantedGems;
+            candidate.lastRewardEligibleForDouble = grantReward && grantedGold > 0;
+            candidate.lastRewardDoubled = false;
+            candidate.storyStage = Mathf.Max(candidate.storyStage, levelData.levelId);
 
             LevelData next = ChapterLevelCatalog.Next(levelData);
             if (next != null)
             {
-                Save.highestUnlockedLevel = Mathf.Max(
-                    Save.highestUnlockedLevel,
+                candidate.highestUnlockedLevel = Mathf.Max(
+                    candidate.highestUnlockedLevel,
                     next.levelId
                 );
-                Save.selectedChapter = next.chapterId;
-                Save.selectedLevel = next.levelId;
+                candidate.selectedChapter = next.chapterId;
+                candidate.selectedLevel = next.levelId;
             }
             else
             {
-                Save.highestUnlockedLevel = Mathf.Max(
-                    Save.highestUnlockedLevel,
+                candidate.highestUnlockedLevel = Mathf.Max(
+                    candidate.highestUnlockedLevel,
                     levelData.levelId
                 );
-                Save.selectedChapter = levelData.chapterId;
-                Save.selectedLevel = levelData.levelId;
+                candidate.selectedChapter = levelData.chapterId;
+                candidate.selectedLevel = levelData.levelId;
             }
 
-            Save.chapter = Save.selectedChapter;
-            Save.level = Save.highestUnlockedLevel;
-            Save.stars = CalculateTotalStars();
-            LastCompletionResult = new LevelCompletionResult(
+            candidate.chapter = candidate.selectedChapter;
+            candidate.level = candidate.highestUnlockedLevel;
+            candidate.stars = CalculateTotalStars(candidate);
+            var committedCompletion = new LevelCompletionResult(
                 levelData,
                 earnedStars,
                 grantedGold,
@@ -653,13 +813,20 @@ namespace LegendsOfRus
                 grantReward,
                 score
             );
-            Persist();
-            return LastCompletionResult;
+            bool written = SaveService.TrySave(candidate, out var write);
+            LastWriteResult = write;
+            if (!written && !write.PrimaryDurablyCommitted) { canPersist = false; return false; }
+            Save = candidate;
+            canPersist = written;
+            completion = LastCompletionResult = committedCompletion;
+            Changed?.Invoke();
+            return true;
         }
 
         public bool TryDoubleLastLevelGoldReward()
         {
             if (
+                !canPersist ||
                 !Save.lastRewardEligibleForDouble ||
                 Save.lastRewardDoubled ||
                 Save.lastRewardGold <= 0
@@ -668,20 +835,39 @@ namespace LegendsOfRus
                 return false;
             }
 
-            Save.gold += Save.lastRewardGold;
-            Save.lastRewardDoubled = true;
-            Persist();
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            try
+            {
+                candidate.gold = checked(candidate.gold + candidate.lastRewardGold);
+            }
+            catch (OverflowException)
+            {
+                // Preserve the eligible reward until the full credit fits; never publish a partial grant.
+                return false;
+            }
+            candidate.lastRewardDoubled = true;
+            PlayerSaveWriteResult result;
+            bool written = SaveService.TrySave(candidate, out result);
+            LastWriteResult = result;
+            if (!written) { canPersist = false; return false; }
+            Save = candidate;
+            Changed?.Invoke();
             return true;
         }
 
         public int CalculateTotalStars()
         {
-            if (Save.levelProgress == null) return 0;
+            return CalculateTotalStars(Save);
+        }
+
+        static int CalculateTotalStars(PlayerSaveData save)
+        {
+            if (save.levelProgress == null) return 0;
 
             int total = 0;
-            for (int i = 0; i < Save.levelProgress.Count; i++)
+            for (int i = 0; i < save.levelProgress.Count; i++)
             {
-                LevelProgressData progress = Save.levelProgress[i];
+                LevelProgressData progress = save.levelProgress[i];
                 if (progress != null)
                     total += Mathf.Clamp(progress.bestStars, 0, 3);
             }
@@ -701,56 +887,71 @@ namespace LegendsOfRus
 
         public bool TryUseBooster(BoosterType type)
         {
+            if (!canPersist || !CampaignBoosterTransactions.Known(type) || BoosterCount(type) < 1) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            CampaignBoosterTransactions.Add(candidate, type, -1);
+            return TryCommitBalance(candidate);
+        }
+
+        public bool HasPendingBoosterCommand => Save.boosterCommand != null &&
+            Save.boosterCommand.state == CampaignBoosterState.Reserved;
+
+        public bool TryBeginBoosterCommand(BoosterType type, out string commandId)
+        {
+            commandId = null;
+            if (!canPersist || HasPendingBoosterCommand || !CampaignBoosterTransactions.Known(type) || BoosterCount(type) < 1) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            CampaignBoosterTransactions.Add(candidate, type, -1);
+            candidate.boosterCommand = new BoosterCommandReceipt
+            { commandId = Guid.NewGuid().ToString("N"), type = type, state = CampaignBoosterState.Reserved };
+            if (!TryCommitBalance(candidate)) return false;
+            commandId = candidate.boosterCommand.commandId;
+            return true;
+        }
+
+        public bool TrySettleBoosterCommand(string commandId, bool applied)
+        {
+            var receipt = Save.boosterCommand;
+            if (receipt == null || !receipt.IsValid || string.IsNullOrEmpty(commandId) || receipt.commandId != commandId) return false;
+            var target = applied ? CampaignBoosterState.Applied : CampaignBoosterState.Refunded;
+            if (receipt.state == target) return true;
+            if (!canPersist || receipt.state != CampaignBoosterState.Reserved) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            try { if (!applied) CampaignBoosterTransactions.Add(candidate, receipt.type, 1); }
+            catch (OverflowException) { return false; }
+            candidate.boosterCommand.state = target;
+            return TryCommitBalance(candidate);
+        }
+
+        // Call after the owning board is lost. A reserved effect has no committed round result.
+        public bool TryRecoverPendingBoosterCommand() => !HasPendingBoosterCommand ||
+            TrySettleBoosterCommand(Save.boosterCommand.commandId, applied: false);
+
+        public void AddBooster(BoosterType type, int amount = 1) => TryAddBooster(type, amount);
+
+        public bool TryAddBooster(BoosterType type, int amount = 1)
+        {
+            Action<PlayerSaveData, int> apply;
             switch (type)
             {
                 case BoosterType.BogatyrMace:
-                    if (Save.boosterMace <= 0) return false;
-                    Save.boosterMace--;
+                    apply = (candidate, credit) => candidate.boosterMace = checked(candidate.boosterMace + credit);
                     break;
                 case BoosterType.Firebird:
-                    if (Save.boosterFirebird <= 0) return false;
-                    Save.boosterFirebird--;
+                    apply = (candidate, credit) => candidate.boosterFirebird = checked(candidate.boosterFirebird + credit);
                     break;
                 case BoosterType.LivingLight:
-                    if (Save.boosterLivingLight <= 0) return false;
-                    Save.boosterLivingLight--;
+                    apply = (candidate, credit) => candidate.boosterLivingLight = checked(candidate.boosterLivingLight + credit);
                     break;
                 case BoosterType.SeaPearl:
-                    if (Save.boosterSeaPearl <= 0) return false;
-                    Save.boosterSeaPearl--;
+                    apply = (candidate, credit) => candidate.boosterSeaPearl = checked(candidate.boosterSeaPearl + credit);
                     break;
                 default:
                     return false;
             }
-
-            Persist();
-            return true;
-        }
-
-        public void AddBooster(BoosterType type, int amount = 1)
-        {
-            amount = Mathf.Max(0, amount);
-            if (amount == 0) return;
-
-            switch (type)
-            {
-                case BoosterType.BogatyrMace:
-                    Save.boosterMace += amount;
-                    break;
-                case BoosterType.Firebird:
-                    Save.boosterFirebird += amount;
-                    break;
-                case BoosterType.LivingLight:
-                    Save.boosterLivingLight += amount;
-                    break;
-                case BoosterType.SeaPearl:
-                    Save.boosterSeaPearl += amount;
-                    break;
-                default:
-                    return;
-            }
-
-            Persist();
+            if (!canPersist) return false;
+            if (amount <= 0) return true;
+            return TryCredit(amount, apply);
         }
 
         public int BoosterCount(BoosterType type)
@@ -775,7 +976,15 @@ namespace LegendsOfRus
             DateTime now = DateTime.UtcNow;
             if (!canPersist || !DailyRewardSchedule.CanClaim(Save, now)) return false;
             var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
-            if (!DailyRewardSchedule.TryApply(candidate, now)) return false;
+            try
+            {
+                if (!DailyRewardSchedule.TryApply(candidate, now)) return false;
+            }
+            catch (OverflowException)
+            {
+                // Reject the candidate before writing or publishing a receipt; keep the day retryable.
+                return false;
+            }
             PlayerSaveWriteResult result;
             bool written = SaveService.TrySave(candidate, out result);
             LastWriteResult = result;
@@ -799,14 +1008,13 @@ namespace LegendsOfRus
 
         public bool CompleteTutorial(string tutorialId)
         {
-            if (string.IsNullOrWhiteSpace(tutorialId)) return false;
-            if (Save.completedTutorialSteps == null)
-                Save.completedTutorialSteps = new List<string>();
-            if (Save.completedTutorialSteps.Contains(tutorialId)) return false;
-
-            Save.completedTutorialSteps.Add(tutorialId);
-            Persist();
-            return true;
+            if (!canPersist || string.IsNullOrWhiteSpace(tutorialId) || HasCompletedTutorial(tutorialId))
+                return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (candidate.completedTutorialSteps == null)
+                candidate.completedTutorialSteps = new List<string>();
+            candidate.completedTutorialSteps.Add(tutorialId);
+            return TryCommitBalance(candidate);
         }
 
         public bool HasCompletedStoryScene(string sceneId)
@@ -816,13 +1024,13 @@ namespace LegendsOfRus
 
         public bool CompleteStoryScene(string sceneId)
         {
-            if (Save.completedStoryScenes == null)
-                Save.completedStoryScenes = new List<string>();
-            if (!StoryProgress.Complete(Save.completedStoryScenes, sceneId))
+            if (!canPersist || string.IsNullOrWhiteSpace(sceneId) || HasCompletedStoryScene(sceneId))
                 return false;
-
-            Persist();
-            return true;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (candidate.completedStoryScenes == null)
+                candidate.completedStoryScenes = new List<string>();
+            if (!StoryProgress.Complete(candidate.completedStoryScenes, sceneId)) return false;
+            return TryCommitBalance(candidate);
         }
 
         public ChapterCompletionPhase GetChapterCompletionPhase(int chapterId)
@@ -868,18 +1076,15 @@ namespace LegendsOfRus
 
         public bool AcknowledgeChapterCompletion(int chapterId)
         {
-            if (GetChapterCompletionPhase(chapterId) != ChapterCompletionPhase.PresentationPending)
+            if (!canPersist || GetChapterCompletionPhase(chapterId) != ChapterCompletionPhase.PresentationPending)
                 return false;
-
-            if (Save.acknowledgedChapterCompletions == null)
-                Save.acknowledgedChapterCompletions = new List<int>();
-            if (Save.acknowledgedChapterCompletions.Contains(chapterId))
-                return false;
-
-            Save.acknowledgedChapterCompletions.Add(chapterId);
-            Save.acknowledgedChapterCompletions.Sort();
-            Persist();
-            return true;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            if (candidate.acknowledgedChapterCompletions == null)
+                candidate.acknowledgedChapterCompletions = new List<int>();
+            if (candidate.acknowledgedChapterCompletions.Contains(chapterId)) return false;
+            candidate.acknowledgedChapterCompletions.Add(chapterId);
+            candidate.acknowledgedChapterCompletions.Sort();
+            return TryCommitBalance(candidate);
         }
 
         public ChapterCompletionSummary GetChapterCompletionSummary(int chapterId)
@@ -914,24 +1119,38 @@ namespace LegendsOfRus
             );
         }
 
-        bool ChapterCompletionPrerequisitesMet(ChapterStoryCatalogData catalog)
+        static bool ChapterCompletionPrerequisitesMet(PlayerSaveData save, ChapterStoryCatalogData catalog)
         {
             if (catalog?.completion == null) return false;
 
-            LevelProgressData finalProgress = GetLevelProgress(
-                catalog.chapterId,
-                catalog.completion.finalLevelId
-            );
+            LevelProgressData finalProgress = save.levelProgress?.Find(progress =>
+                progress != null && progress.chapterId == catalog.chapterId &&
+                progress.levelId == catalog.completion.finalLevelId);
             return
                 finalProgress != null &&
                 finalProgress.completions > 0 &&
-                HasCompletedStoryScene(catalog.completion.finaleSceneId);
+                StoryProgress.HasCompleted(save.completedStoryScenes, catalog.completion.finaleSceneId);
         }
 
-        public void ToggleMusic() { Save.music = !Save.music; Persist(); }
-        public void ToggleSfx() { Save.sfx = !Save.sfx; Persist(); }
-        public void ToggleVibration() { Save.vibration = !Save.vibration; Persist(); }
-        public void ToggleNotifications() { Save.notifications = !Save.notifications; Persist(); }
+        public void ToggleMusic() => TryTogglePreference(0);
+        public void ToggleSfx() => TryTogglePreference(1);
+        public void ToggleVibration() => TryTogglePreference(2);
+        public void ToggleNotifications() => TryTogglePreference(3);
+
+        public bool TryTogglePreference(int index)
+        {
+            if (index < 0 || index > 3) throw new ArgumentOutOfRangeException(nameof(index));
+            if (!canPersist) return false;
+            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+            switch (index)
+            {
+                case 0: candidate.music = !candidate.music; break;
+                case 1: candidate.sfx = !candidate.sfx; break;
+                case 2: candidate.vibration = !candidate.vibration; break;
+                case 3: candidate.notifications = !candidate.notifications; break;
+            }
+            return TryCommitBalance(candidate);
+        }
 
         public void ResetProgress()
         {
@@ -967,18 +1186,23 @@ namespace LegendsOfRus
 
         public void Persist()
         {
-            PlayerSaveWriteResult result;
-            if (!SaveService.TrySave(Save, out result))
-            {
-                LastWriteResult = result;
-                canPersist = false;
-                Debug.LogError("Player save write blocked: " + result);
-                return;
-            }
+            // A Changed observer may request saving again while this write is publishing.
+            if (persistenceInProgress) return;
+            if (!TryPersist())
+                Debug.LogError("Player save write blocked: " + LastWriteResult);
+        }
 
-            LastWriteResult = result;
-            canPersist = true;
-            Changed?.Invoke();
+        public bool TryPersist()
+        {
+            if (!canPersist || persistenceInProgress) return false;
+            persistenceInProgress = true;
+            try
+            {
+                // This legacy API persists the already prepared live Save. Preserve its
+                // identity and the existing durable-primary acknowledgement policy.
+                return TryCommitBalance(Save);
+            }
+            finally { persistenceInProgress = false; }
         }
     }
 }

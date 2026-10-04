@@ -1,0 +1,309 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -393,28 +393,37 @@
+             Save.acknowledgedChapterCompletions.Sort();
+         }
+ 
+-        public void RefreshEnergyFromClock()
+-        {
+-            if (Save.energy >= Save.energyMax)
+-            {
+-                Save.energy = Save.energyMax;
+-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+-                return;
+-            }
+-
+-            long now = DateTime.UtcNow.Ticks;
++        public void RefreshEnergyFromClock() => TryRefreshEnergyFromClock();
++
++        // A healthy clock with no due refill succeeds without a write or notification.
++        public bool TryRefreshEnergyFromClock()
++        {
++            if (!canPersist) return false;
++            if (Save.energy == Save.energyMax) return true;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            if (!AdvanceEnergyClock(candidate, DateTime.UtcNow.Ticks)) return true;
++            return TryCommitBalance(candidate);
++        }
++
++        static bool AdvanceEnergyClock(PlayerSaveData candidate, long now)
++        {
++            if (candidate.energy >= candidate.energyMax)
++            {
++                if (candidate.energy == candidate.energyMax) return false;
++                candidate.energy = candidate.energyMax;
++                candidate.lastEnergyUtcTicks = now;
++                return true;
++            }
++
+             long interval = TimeSpan.FromMinutes(EnergyRefillMinutes).Ticks;
+-            long elapsed = Math.Max(0, now - Save.lastEnergyUtcTicks);
+-            int gained = (int)(elapsed / interval);
+-            if (gained <= 0) return;
+-
+-            Save.energy = Mathf.Min(Save.energyMax, Save.energy + gained);
+-            if (Save.energy >= Save.energyMax)
+-                Save.lastEnergyUtcTicks = now;
+-            else
+-                Save.lastEnergyUtcTicks += gained * interval;
+-
+-            Persist();
++            long elapsed = Math.Max(0, now - candidate.lastEnergyUtcTicks);
++            long gained = elapsed / interval;
++            if (gained <= 0) return false;
++
++            candidate.energy = (int)Math.Min(candidate.energyMax, (long)candidate.energy + gained);
++            candidate.lastEnergyUtcTicks = candidate.energy >= candidate.energyMax
++                ? now : candidate.lastEnergyUtcTicks + gained * interval;
++            return true;
+         }
+ 
+         public TimeSpan EnergyRemaining()
+@@ -433,22 +442,7 @@
+             if (!canPersist || amount < 0) return false;
+             var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+             long now = DateTime.UtcNow.Ticks;
+-            if (candidate.energy >= candidate.energyMax)
+-            {
+-                candidate.energy = candidate.energyMax;
+-                candidate.lastEnergyUtcTicks = now;
+-            }
+-            else
+-            {
+-                long interval = TimeSpan.FromMinutes(EnergyRefillMinutes).Ticks;
+-                int gained = (int)(Math.Max(0, now - candidate.lastEnergyUtcTicks) / interval);
+-                if (gained > 0)
+-                {
+-                    candidate.energy = Mathf.Min(candidate.energyMax, candidate.energy + gained);
+-                    candidate.lastEnergyUtcTicks = candidate.energy >= candidate.energyMax
+-                        ? now : candidate.lastEnergyUtcTicks + gained * interval;
+-                }
+-            }
++            AdvanceEnergyClock(candidate, now);
+             if (candidate.energy < amount) return false;
+             bool wasFull = candidate.energy >= candidate.energyMax;
+             candidate.energy -= amount;
+@@ -457,19 +451,29 @@
+             return TryCommitBalance(candidate);
+         }
+ 
+-        public void AddEnergy(int amount)
+-        {
+-            Save.energy = Mathf.Clamp(Save.energy + Mathf.Max(0, amount), 0, Save.energyMax);
+-            if (Save.energy >= Save.energyMax)
+-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+-            Persist();
+-        }
+-
+-        public void RefillEnergy()
+-        {
+-            Save.energy = Save.energyMax;
+-            Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+-            Persist();
++        public void AddEnergy(int amount) => TryAddEnergy(amount);
++
++        public bool TryAddEnergy(int amount)
++        {
++            if (!canPersist) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            // Energy has an existing cap; widen before addition so the grant cannot wrap.
++            candidate.energy = (int)Math.Max(0L, Math.Min(candidate.energyMax,
++                (long)candidate.energy + Mathf.Max(0, amount)));
++            if (candidate.energy >= candidate.energyMax)
++                candidate.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
++            return TryCommitBalance(candidate);
++        }
++
++        public void RefillEnergy() => TryRefillEnergy();
++
++        public bool TryRefillEnergy()
++        {
++            if (!canPersist) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            candidate.energy = candidate.energyMax;
++            candidate.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
++            return TryCommitBalance(candidate);
+         }
+ 
+         // Compatibility entry points retain their void contract. Callers that need
+@@ -500,7 +504,7 @@
+                 return false;
+             }
+ 
+-            // A committed primary is already a credit even if journal cleanup
++            // A committed primary is already a balance change even if journal cleanup
+             // failed. Publish it once and block later writes until recovery.
+             Save = candidate;
+             canPersist = written;
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -880,6 +880,169 @@
+             Assert.That(state.Save.highestUnlockedLevel, Is.EqualTo(11));
+         }
+ 
++        [TestCase(1)] [TestCase(3)] [TestCase(5)]
++        public void EnergyGrantLargestAmountRespectsExistingCap(int energy)
++        {
++            var state = GameState.Instance;
++            state.Save.energy = energy; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            state.AddEnergy(int.MaxValue);
++            Assert.That(state.Save.energy, Is.EqualTo(state.Save.energyMax));
++            Assert.That(SaveService.Load().energy, Is.EqualTo(state.Save.energyMax));
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
++        public void EnergyMutationBlockedSavePreservesBalanceClockAndEvents(int operation)
++        {
++            var state = GameState.Instance;
++            state.Save.energy = operation == 3 ? state.Save.energyMax : 1;
++            state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddMinutes(-61).Ticks; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignored = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                if (operation == 3) Assert.That(state.SpendGold(1), Is.False);
++                if (operation == 0) state.AddEnergy(2);
++                else if (operation == 1) state.RefillEnergy();
++                else state.RefreshEnergyFromClock();
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "Energy and its clock cannot publish before saving.");
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(events, Is.Zero);
++                Assert.That(state.CanPersist, Is.False); var failedWrite = state.LastWriteResult;
++                Assert.That(failedWrite.Status, Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                state.AddEnergy(1); state.RefillEnergy(); state.RefreshEnergyFromClock();
++                Assert.That(state.TryAddEnergy(1) || state.TryRefillEnergy() || state.TryRefreshEnergyFromClock(), Is.False);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(events, Is.Zero);
++                Assert.That(state.LastWriteResult, Is.SameAs(failedWrite));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]) || PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                LogAssert.ignoreFailingMessages = ignored; state.Changed -= changed;
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
++        [TestCase(false)] [TestCase(true)]
++        public void EnergyClockLargestCapCannotWrapDuringRefreshOrSpending(bool spend)
++        {
++            var state = GameState.Instance;
++            state.Save.energyMax = int.MaxValue; state.Save.energy = int.MaxValue - 1;
++            state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddMinutes(-61).Ticks; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            if (spend)
++            {
++                Assert.That(state.SpendEnergy(), Is.True);
++                Assert.That(state.Save.energy, Is.EqualTo(int.MaxValue - 1));
++            }
++            else
++            {
++                state.RefreshEnergyFromClock();
++                Assert.That(state.Save.energy, Is.EqualTo(int.MaxValue));
++            }
++            Assert.That(SaveService.Load().energy, Is.EqualTo(state.Save.energy));
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        public void EnergyTryApisCommitOnceAndPreserveUnrelatedSave(int operation)
++        {
++            var state = GameState.Instance;
++            state.Save.energy = 1; state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddMinutes(operation == 2 ? -61 : 0).Ticks; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++            long before = System.DateTime.UtcNow.Ticks;
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                bool committed = operation == 0 ? state.TryAddEnergy(2) : operation == 1 ? state.TryRefillEnergy() : state.TryRefreshEnergyFromClock();
++                Assert.That(committed, Is.True); Assert.That(events, Is.EqualTo(1));
++                expected.energy = operation == 1 ? expected.energyMax : 3;
++                if (operation == 1)
++                {
++                    Assert.That(state.Save.lastEnergyUtcTicks, Is.InRange(before, System.DateTime.UtcNow.Ticks));
++                    expected.lastEnergyUtcTicks = state.Save.lastEnergyUtcTicks;
++                }
++                else if (operation == 2) expected.lastEnergyUtcTicks += System.TimeSpan.FromMinutes(60).Ticks;
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [TestCase(-10, 1)] [TestCase(29, 1)] [TestCase(30, 2)] [TestCase(61, 3)] [TestCase(1000, 5)]
++        public void EnergyClockBoundariesPreserveRemainderAndReload(int minutes, int expectedEnergy)
++        {
++            var state = GameState.Instance;
++            state.Save.energy = 1; state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddMinutes(-minutes).Ticks; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            var original = state.Save; long oldTicks = original.lastEnergyUtcTicks;
++            var priorWrite = state.LastWriteResult; long before = System.DateTime.UtcNow.Ticks;
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(state.TryRefreshEnergyFromClock(), Is.True);
++                Assert.That(state.Save.energy, Is.EqualTo(expectedEnergy));
++                Assert.That(events, Is.EqualTo(expectedEnergy > 1 ? 1 : 0));
++                if (expectedEnergy == 1)
++                { Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite)); }
++                if (expectedEnergy == state.Save.energyMax)
++                    Assert.That(state.Save.lastEnergyUtcTicks, Is.InRange(before, System.DateTime.UtcNow.Ticks));
++                else Assert.That(state.Save.lastEnergyUtcTicks, Is.EqualTo(oldTicks + (expectedEnergy - 1) * System.TimeSpan.FromMinutes(GameState.EnergyRefillMinutes).Ticks));
++                var committed = state.LastWriteResult; long settledTicks = state.Save.lastEnergyUtcTicks;
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(state.Save)));
++                Assert.That(state.TryRefreshEnergyFromClock(), Is.True);
++                Assert.That(state.Save.lastEnergyUtcTicks, Is.EqualTo(settledTicks));
++                Assert.That(state.LastWriteResult, Is.SameAs(committed));
++                Assert.That(events, Is.EqualTo(expectedEnergy > 1 ? 1 : 0));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [Test]
++        public void EnergyAtFullDoesNotRewriteClockAndSpendingStartsRealCountdown()
++        {
++            var state = GameState.Instance;
++            state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddHours(-2).Ticks; Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++            var original = state.Save; string before = JsonUtility.ToJson(original); var write = state.LastWriteResult;
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(state.TryRefreshEnergyFromClock(), Is.True); state.RefreshEnergyFromClock();
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.Save, Is.SameAs(original));
++                Assert.That(state.LastWriteResult, Is.SameAs(write)); Assert.That(events, Is.Zero);
++                Assert.That(state.EnergyRemaining(), Is.EqualTo(System.TimeSpan.Zero));
++                long start = System.DateTime.UtcNow.Ticks; Assert.That(state.SpendEnergy(), Is.True);
++                Assert.That(state.Save.energy, Is.EqualTo(4)); Assert.That(events, Is.EqualTo(1));
++                Assert.That(state.Save.lastEnergyUtcTicks, Is.InRange(start, System.DateTime.UtcNow.Ticks));
++                Assert.That(state.EnergyRemaining().TotalMinutes, Is.InRange(29.9, 30.0));
++                Assert.That(SaveService.Load().lastEnergyUtcTicks, Is.EqualTo(state.Save.lastEnergyUtcTicks));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [TestCase(int.MinValue)] [TestCase(-1)] [TestCase(0)] [TestCase(int.MaxValue)]
++        public void EnergyGrantNonpositiveAndLargestAmountsRetainCapBehavior(int amount)
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(2), Is.True);
++            var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++            long before = System.DateTime.UtcNow.Ticks;
++            Assert.That(state.TryAddEnergy(amount), Is.True);
++            if (amount > 0)
++            {
++                expected.energy = expected.energyMax;
++                Assert.That(state.Save.lastEnergyUtcTicks, Is.InRange(before, System.DateTime.UtcNow.Ticks));
++                expected.lastEnergyUtcTicks = state.Save.lastEnergyUtcTicks;
++            }
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++            Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
++        }
++
+         void SnapshotAndClearSaveJournal()
+         {
+             hadPersistedSaves = new bool[PersistedSaveKeys.Length];

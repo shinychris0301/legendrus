@@ -106,6 +106,99 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(state.ClaimDailyReward(),Is.False);Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
             yield return null;
         }
+
+        [UnityTest]public IEnumerator OverflowClaimPreservesAllBalancesEligibilityAndJournal()
+        {
+            var state=GameState.Instance;
+            int[] days={1,2,4,5,6,7,1};
+            for(int scenario=0;scenario<days.Length;scenario++)
+            {
+                SeedOverflowClaim(days[scenario],scenario);
+                string before=JsonUtility.ToJson(state.Save);
+                var journal=new string[keys.Length];var present=new bool[keys.Length];
+                for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
+                var priorWrite=state.LastWriteResult;
+                int events=0;Action changed=()=>events++;state.Changed+=changed;
+                try
+                {
+                    DailyRewardGrant receipt=default;
+                    bool claimed=true;
+                    Assert.DoesNotThrow(()=>claimed=state.ClaimDailyReward(out receipt),"Overflow scenario "+scenario);
+                    Assert.That(claimed,Is.False);Assert.That(receipt,Is.EqualTo(default(DailyRewardGrant)));
+                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                    Assert.That(state.CanPersist,Is.True,"Arithmetic rejection must not lock unrelated saving.");
+                    Assert.That(state.LastWriteResult,Is.EqualTo(priorWrite));Assert.That(events,Is.Zero);
+                    Assert.That(DailyRewardSchedule.CanClaim(state.Save,DateTime.UtcNow),Is.True);
+                    for(int i=0;i<keys.Length;i++)
+                    {
+                        Assert.That(PlayerPrefs.HasKey(keys[i]),Is.EqualTo(present[i]));
+                        Assert.That(PlayerPrefs.GetString(keys[i]),Is.EqualTo(journal[i]));
+                    }
+                }
+                finally{state.Changed-=changed;}
+            }
+            yield return null;
+        }
+
+        [UnityTest]public IEnumerator OverflowButtonShowsFailureAndRecoveredClaimOpensExactlyOneReceipt()
+        {
+            foreach(string lang in new[]{"ru","en"})
+            {
+                router.Show(ScreenId.Home);Settle();
+                SeedOverflowClaim(7,5);
+                DemoFeatureState.SetLanguage(lang);
+                router.Show(ScreenId.DailyReward);Settle();yield return null;
+                var state=GameState.Instance;var view=View();
+                string before=JsonUtility.ToJson(state.Save);
+                Assert.That(view.ClaimButton.interactable,Is.True);
+                Assert.DoesNotThrow(()=>view.ClaimButton.onClick.Invoke());
+                Assert.DoesNotThrow(()=>view.ClaimButton.onClick.Invoke());
+                Assert.That(router.ActiveModal,Is.Null,"Rejected rewards must not publish a receipt.");
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                Assert.That(view.Status.text,Is.EqualTo(lang=="en"?
+                    "Reward not saved. Please try again after resolving storage.":"Не удалось сохранить награду. Проверьте сохранение."));
+                Assert.That(view.ClaimButton.interactable,Is.True,"Claim remains retryable.");
+
+                // Free one inventory slot through the ordinary transaction, then retry the same day.
+                Assert.That(state.TryUseBooster(BoosterType.Firebird),Is.True);
+                int gold=state.Save.gold,gems=state.Save.gems;
+                view.ClaimButton.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.RewardClaim));
+                Assert.That(state.Save.gold,Is.EqualTo(gold+1000));Assert.That(state.Save.gems,Is.EqualTo(gems+40));
+                Assert.That(state.Save.boosterFirebird,Is.EqualTo(int.MaxValue));
+                Assert.That(state.Save.dailyRewardCycleDay,Is.EqualTo(7));
+                string committed=JsonUtility.ToJson(state.Save);
+                Assert.That(state.ClaimDailyReward(),Is.False);
+                var receipt=router.Viewport.GetComponentInChildren<ProductionRewardReceivedView>();
+                Assert.That(receipt,Is.Not.Null);receipt.Confirm.onClick.Invoke();Settle();yield return null;
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(committed));
+                Assert.That(router.ActiveModal,Is.Null);Assert.That(View().ClaimButton.interactable,Is.False);
+                Assert.That(SaveService.Load().boosterFirebird,Is.EqualTo(int.MaxValue));
+                Assert.That(SaveService.Load().lastDailyRewardUtc,Is.EqualTo(state.Save.lastDailyRewardUtc));
+                Capture("DailyReward_OverflowRecovered_"+lang,new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            }
+        }
+
+        void SeedOverflowClaim(int day,int scenario)
+        {
+            var now=DateTime.UtcNow;
+            var save=new PlayerSaveData{energy=4,lastEnergyUtcTicks=now.Ticks,
+                lastDailyRewardUtc=now.AddDays(-1).ToString("yyyyMMdd"),dailyRewardCycleDay=day==1?7:day-1,
+                dailyRewardMonthUtc=now.ToString("yyyyMM"),dailyRewardMonthClaims=0};
+            switch(scenario)
+            {
+                case 0:save.gold=int.MaxValue;break;
+                case 1:save.gems=int.MaxValue;break;
+                case 2:save.boosterLivingLight=int.MaxValue;break;
+                case 3:save.boosterSeaPearl=int.MaxValue;break;
+                case 4:save.boosterMace=int.MaxValue;break;
+                case 5:save.boosterFirebird=int.MaxValue;break;
+                case 6:save.dailyRewardMonthClaims=int.MaxValue;break;
+            }
+            GameState.Instance.Save=save;GameState.Instance.Persist();
+            Assert.That(GameState.Instance.CanPersist,Is.True);
+            Assert.That(DailyRewardSchedule.Day(GameState.Instance.Save,now),Is.EqualTo(day));
+        }
         [UnityTest]public IEnumerator EveryNextRewardDescriptionFitsInBothLanguages()
         {
             foreach(string lang in new[]{"ru","en"})

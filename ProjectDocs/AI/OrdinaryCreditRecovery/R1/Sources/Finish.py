@@ -1,0 +1,47 @@
+"""Write the continuity record from completed native test evidence."""
+from pathlib import Path
+import json,xml.etree.ElementTree as ET
+ROOT=Path(__file__).resolve().parents[5];BASE=Path(__file__).resolve().parent.parent;QA=BASE/'QA'
+counts={};names=set();play=set();edit=set()
+for group in ('Core','UI','Runtime','Edit'):
+ report=json.loads((QA/group/'summary.json').read_text());assert report['exitCode']==0 and report['result']['result']=='Passed'
+ cases=ET.parse(QA/group/'results.xml').findall('.//test-case');assert all(c.get('result')=='Passed' for c in cases)
+ unique={c.get('fullname') for c in cases};assert len(unique)==len(cases);counts[group]=len(unique);names.update(unique)
+ (edit if report['mode']=='EditMode' else play).update(unique)
+assert counts=={'Core':76,'UI':17,'Runtime':13,'Edit':37}
+(QA/'TestReconciliation.json').write_text(json.dumps({'result':'Passed','finalGroups':counts,'editDistinctPassed':len(edit),'playDistinctPassed':len(play),'totalDistinctPassed':len(names),'focused25CasesRepeatedInCoreNotAddedToDistinctTotal':True,'preFix12FailuresPreserved':True},indent=2)+'\n')
+text='''# 2026-10-03 — Ordinary credit recovery R1 complete (source)
+
+Ordinary gold, gem and four booster credits now prepare a checked candidate save and publish only a committed full credit. `TryAddGold`, `TryAddGems` and `TryAddBooster` return a commit result; existing void entry points keep their signatures and delegate to them. Overflow rejects before writing, leaves the live save/journal/prior write result unchanged, emits no Changed event and permits a later valid credit. Failed writing leaves the original save intact and locks further credit writes. A primary already durably committed is adopted once even when cleanup fails, with further writes blocked. No partial grant, saturation or new inventory cap.
+
+Fresh Unity 6000.5.9f1: **37 Edit Mode + 106 Play Mode = 143 distinct passes**, zero final failures/skips; all four final launchers exit 0. [Reconciliation](QA/TestReconciliation.json) · [Core76](QA/Core/summary.json) · [UI17](QA/UI/summary.json) · [Runtime13](QA/Runtime/summary.json) · [Edit37](QA/Edit/summary.json) · [Final validation](QA/FinalValidation.json).
+
+Before the production fix, all twelve regression cases failed in actual isolated Unity execution: six balances wrapped from Int32.MaxValue−1 plus2 to Int32.MinValue, and six credits mutated live balances despite an unsupported-future-version journal blocking the writer. [Reproduction](QA/Reproduce/summary.json) · [Initial regression patch](Sources/ReproductionTestChanges.patch). The first post-fix focused run passed25; those cases are repeated within Core and counted once. No post-fix test failure or skip. The first source-preservation validator rejected the new API comment outside its stripped method region; the comparison now explicitly accounts for that comment. [Validator attempt](QA/ValidationAttempt01.json). No production change or test rerun was needed for this validator correction.
+
+New checks cover all six resources at exact capacity, Int32.MaxValue grants from zero, rejection without partial mutation, capacity release through existing spending/consumption followed by retry, journal reload, nonpositive requests, invalid booster enum, blocked-write latching and cross-resource rejection after locking. Core also passes prior first-clear/replay/progression/story, native RU/EN first-clear recovery, doubled-gold recovery and daily-reward recovery. UI checks exercise actual Home live currencies/reentry/max balances, Inventory9, PreLevel6 and Gameplay live inventory. Runtime checks cover Match3Runtime12 and the real animation-recovery fixture: board/moves/goals restored, booster refunded once, completion suppressed and effects cleared. Journal37 uses the existing synthetic store to cover interrupted write phases; it is not a new fault-injected GameState cleanup-failure runtime test.
+
+The existing Inventory negative living-light fixture continues to verify zero display/no consumption; it now restores that deliberately invalid value to zero before testing a committed mace credit. Normal save validation is preserved. The actual Unity [Russian inventory portrait](QA/UI/Captures/LOR_INVENTORY_CAPTURE_DIR/Inventory_Pearl_safe_RU_R4.png) was inspected: mace9 and pearl13 are shown in the existing page. Captures use simulated display/safe areas and isolated saves; no new design, human acceptance or physical-device result is inferred.
+
+Only three task-start inputs changed: `Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs`, existing `LevelSystemRuntimePlayModeTests.cs` and existing `InventoryAlignmentPlayModeTests.cs`. [Task-only patch](Sources/TaskChanges.patch) and backed-up current files preserve the earlier local patches. All other GameState methods, previous daily/double/first-clear changes, ScreenRouter, Match3Board, assets/metas/GUIDs/fonts/prefabs/builders/revisions/approved Splash/settings/packages/backend/provider/Android guards remain unchanged. The final verifier checks all7839 project inputs, with7836 unchanged and none added/deleted, patch reverse applicability, continuity preservation and APK/sidecar hashes.
+
+Current development APK remains **766,014,334 bytes / SHA256 `9f72045fe3a2e68114be24d687dfb2a51c07c48d39ec58aa4afbafe9a5744654`**. It packages DailyRewardRecovery/R2AndroidRefresh and excludes newer doubled-gold, first-clear and ordinary-credit changes. No build, signing/credential inspection, personal player journal access, phone/ADB/hosting/store action, Git commit or push occurred.
+
+The void APIs do not acknowledge a rejected credit; callers that require confirmation must use the TryAdd result. The sole production AddBooster caller is the noncampaign command-refund path; its healthy recovery is verified, but rejected refund handling is unchanged and has no durable pending-refund guarantee. Ordinary SpendGold/SpendGems/TryUseBooster still mutate before Persist and must be reviewed before claiming all inventory transactions safe. These are the next bounded integrity tasks. Do not enable stock-max reward testing based on this change alone. Later guarded APK delivery should package accumulated fixes. Human201–210 recordings/feedback remain pending; phone/hosting deferred, all18physical rows pending, effects last. RuStore paid/rewarded-video settlement remains unverified.
+'''
+(BASE/'TestResults.md').write_text(text)
+entry='''# 2026-10-03 — Ordinary credit recovery R1 complete (source)
+
+User requested the next task. [Results](OrdinaryCreditRecovery/R1/TestResults.md) · [143-case reconciliation](OrdinaryCreditRecovery/R1/QA/TestReconciliation.json) · [Final validation](OrdinaryCreditRecovery/R1/QA/FinalValidation.json). Reproduced six arithmetic wraps and six blocked-save live mutations in actual isolated Unity. AddGold/AddGems/AddBooster now delegate to checked atomic TryAdd APIs; full credit is adopted only after a successful write or an already durably committed primary. Rejection preserves balances and emits no Changed event; arithmetic rejection stays retryable, failed writing locks further credits. Existing signatures, nonpositive/invalid-type behavior, reward amounts and caps retained.
+
+Fresh Unity6000.5.9f1: **37 Edit +106 Play =143 distinct passes**, zero final failures/skips; four final launchers exit0. Core76, native UI17, runtime13, journal37. Focus25 repeated within Core and counted once; all12 pre-fix failures retained. Exact limits/full largest grants/reload/capacity-release retry, prior daily/double/first-clear recovery, live HUD and healthy command refund pass. Synthetic journal interruption matrix is distinct from GameState fault injection. Inventory's negative display fixture is restored to valid stock before testing credit; native Russian portrait inspected, no new visual/human/physical acceptance.
+
+Three inputs changed from task start: GameState.cs, LevelSystemRuntimePlayModeTests.cs, InventoryAlignmentPlayModeTests.cs;7836of7839 unchanged, none added/deleted. Other GameState methods, previous fixes/Router/Match3Board and all GUIDs/metas/art/fonts/prefabs/builders/approved Splash/settings/packages/backend/guards preserved. Four continuity docs plus task tools/evidence updated. Current APK/sidecar remains766,014,334bytes/SHA256`9f72045fe3a2e68114be24d687dfb2a51c07c48d39ec58aa4afbafe9a5744654` and excludes doubled-gold, first-clear and ordinary-credit source fixes. No new build, personal journal/credentials access, phone/hosting/store action or Git commit/push.
+
+**Next:** review/reproduce failed-save SpendGold/SpendGems/TryUseBooster behavior and noncampaign rejected-refund handling. Existing void credit wrappers cannot acknowledge rejection; use TryAdd when confirmation is needed. Healthy refunds are verified, but no durable pending-refund guarantee is added. Stock-max remains display/consumption only. Later guarded APK delivery must package accumulated verified changes. Human201–210 recording/feedback remains pending; real paid/video settlement unverified, phone/hosting deferred, all18physical rows pending, effects last.
+
+'''
+for name in ('CurrentTask','ConversationHandoff'):
+ p=ROOT/'ProjectDocs/AI'/f'{name}.md';old=(BASE/'Sources/Before'/p.relative_to(ROOT)).read_text();p.write_text(entry+old)
+for name in ('SessionLog','DevelopmentSchedule'):
+ p=ROOT/'ProjectDocs/AI'/f'{name}.md';old=(BASE/'Sources/Before'/p.relative_to(ROOT)).read_text();p.write_text(old.rstrip()+'\n\n'+entry.rstrip()+'\n')
+print('Continuity updated from',len(names),'distinct native test passes.')

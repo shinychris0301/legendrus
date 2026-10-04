@@ -1,0 +1,404 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -287,10 +287,12 @@
+             return migrated;
+         }
+ 
+-        void NormalizeLevelProgress()
+-        {
+-            if (Save.levelProgress == null)
+-                Save.levelProgress = new List<LevelProgressData>();
++        void NormalizeLevelProgress() => NormalizeLevelProgress(Save);
++
++        static void NormalizeLevelProgress(PlayerSaveData save)
++        {
++            if (save.levelProgress == null)
++                save.levelProgress = new List<LevelProgressData>();
+ 
+             ChapterLevelCatalogData catalog = ChapterLevelCatalog.LoadChapter1();
+             int maxLevel = 1;
+@@ -298,9 +300,9 @@
+                 maxLevel = catalog.levels[catalog.levels.Length - 1].levelId;
+ 
+             var seen = new HashSet<string>(StringComparer.Ordinal);
+-            for (int i = Save.levelProgress.Count - 1; i >= 0; i--)
+-            {
+-                LevelProgressData progress = Save.levelProgress[i];
++            for (int i = save.levelProgress.Count - 1; i >= 0; i--)
++            {
++                LevelProgressData progress = save.levelProgress[i];
+                 string key = progress != null
+                     ? $"{progress.chapterId}:{progress.levelId}"
+                     : string.Empty;
+@@ -310,7 +312,7 @@
+                     !seen.Add(key)
+                 )
+                 {
+-                    Save.levelProgress.RemoveAt(i);
++                    save.levelProgress.RemoveAt(i);
+                     continue;
+                 }
+ 
+@@ -322,28 +324,28 @@
+                 progress.completions = Mathf.Max(0, progress.completions);
+                 if (progress.completions > 0)
+                 {
+-                    Save.highestUnlockedLevel = Mathf.Max(
+-                        Save.highestUnlockedLevel,
++                    save.highestUnlockedLevel = Mathf.Max(
++                        save.highestUnlockedLevel,
+                         Mathf.Min(maxLevel, progress.levelId + 1)
+                     );
+                 }
+             }
+ 
+-            Save.selectedChapter = catalog.chapterId;
+-            Save.highestUnlockedLevel = Mathf.Clamp(
+-                Mathf.Max(1, Save.highestUnlockedLevel),
++            save.selectedChapter = catalog.chapterId;
++            save.highestUnlockedLevel = Mathf.Clamp(
++                Mathf.Max(1, save.highestUnlockedLevel),
+                 1,
+                 maxLevel
+             );
+-            Save.selectedLevel = Mathf.Clamp(
+-                Mathf.Max(1, Save.selectedLevel),
++            save.selectedLevel = Mathf.Clamp(
++                Mathf.Max(1, save.selectedLevel),
+                 1,
+-                Save.highestUnlockedLevel
++                save.highestUnlockedLevel
+             );
+ 
+-            Save.chapter = Save.selectedChapter;
+-            Save.level = Save.highestUnlockedLevel;
+-            Save.stars = CalculateTotalStars();
++            save.chapter = save.selectedChapter;
++            save.level = save.highestUnlockedLevel;
++            save.stars = CalculateTotalStars(save);
+         }
+ 
+         void NormalizeTutorialProgress()
+@@ -543,21 +545,25 @@
+ 
+         public bool SelectLevel(int chapterId, int levelId)
+         {
+-            if (ContinuationBlocksNewAttempt()) return false;
++            if (!canPersist || ContinuationBlocksNewAttempt()) return false;
+             if (TryGetRetainedRound(out var retained) && (retained.chapter != chapterId || retained.level != levelId)) return false;
+             if (!IsLevelUnlocked(chapterId, levelId)) return false;
+             if (ChapterLevelCatalog.Find(chapterId, levelId) == null) return false;
+ 
+-            Save.selectedChapter = chapterId;
+-            Save.selectedLevel = levelId;
+-            Persist();
+-            return true;
+-        }
+-
+-        public void EnsureSelectedLevelIsUnlocked()
+-        {
+-            NormalizeLevelProgress();
+-            Persist();
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            candidate.selectedChapter = chapterId;
++            candidate.selectedLevel = levelId;
++            return TryCommitBalance(candidate);
++        }
++
++        public void EnsureSelectedLevelIsUnlocked() => TryEnsureSelectedLevelIsUnlocked();
++
++        public bool TryEnsureSelectedLevelIsUnlocked()
++        {
++            if (!canPersist) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            NormalizeLevelProgress(candidate);
++            return TryCommitBalance(candidate);
+         }
+ 
+         public LevelProgressData GetLevelProgress(
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionChapterMapView.cs
+@@ -113,12 +113,12 @@
+         }
+         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
+ 
+-        public void BindNavigation(Action<ScreenId> show,Action openSelectedLevel,Action back,Action<string> notify)
++        public void BindNavigation(Action<ScreenId> show,Func<bool> openSelectedLevel,Action back,Action<string> notify,Action selectionRejected=null)
+         {
+             Unbind();committed=false;
+             Bind(ProfileButton,()=>show(ScreenId.Profile),true);Bind(SettingsButton,()=>show(ScreenId.Settings),true);
+             Bind(BackButton,back,true);
+-            Bind(PlayButton,openSelectedLevel,true);
++            Bind(PlayButton,()=>{committed=openSelectedLevel();},false);
+             Bind(Scroller.CurrentButton,Scroller.JumpToCurrent,false);
+             for(int i=0;i<3;i++){int resource=i;Bind(PlusButtons[i],()=>show(resource==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);}
+             for(int i=0;i<Nodes.Length;i++)
+@@ -133,8 +133,11 @@
+                         bool published=ChapterLevelCatalog.Find(1,level)!=null;
+                         notify(published?(DemoFeatureState.LanguageCode=="en"?"Complete the previous level to unlock this one.":"Пройдите предыдущий уровень, чтобы открыть этот."):(DemoFeatureState.LanguageCode=="en"?"This level is coming soon.":"Этот уровень скоро появится."));return;
+                     }
+-                    GameState.Instance.SelectLevel(1,level);
+-                    committed=true;openSelectedLevel();
++                    if(!GameState.Instance.SelectLevel(1,level))
++                    {
++                        selectionRejected?.Invoke();return;
++                    }
++                    committed=openSelectedLevel();
+                 },false);
+             }
+             ActionsBound=true;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -715,7 +715,7 @@
+                         Debug.LogError("Chapter Map has no complete native bindings.");return;
+                     }
+                     chapterMap.BindNavigation(target=>Show(target),OpenSelectedLevel,
+-                        ()=>NavigateBackFrom(ScreenId.ChapterMap),chapterMap.Notice.Show);
++                        ()=>NavigateBackFrom(ScreenId.ChapterMap),chapterMap.Notice.Show,()=>ShowErrorDialog());
+                     return;
+ 
+                 case ScreenId.PreLevel:
+@@ -1136,7 +1136,7 @@
+                 ShowErrorDialog(GameState.Instance.CanPersist ? (Action)StartLevel : null);
+                 return;
+             }
+-            GameState.Instance.EnsureSelectedLevelIsUnlocked();
++            if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return; }
+             if (!GameState.Instance.SpendEnergy())
+             {
+                 if (!GameState.Instance.CanPersist)
+@@ -1162,15 +1162,17 @@
+             Show(ScreenId.Gameplay);
+         }
+ 
+-        void OpenSelectedLevel()
+-        {
+-            GameState.Instance.EnsureSelectedLevelIsUnlocked();
++        bool OpenSelectedLevel()
++        {
++            if (HasActiveModalBlocker || IsScreenTransitioning) return false;
++            if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return false; }
+             if (StoryService.TryBeginChapterIntro())
+                 Show(ScreenId.Dialogue);
+             else if (TryShowPendingChapterFlow())
+-                return;
++                return true;
+             else
+                 Show(ScreenId.PreLevel);
++            return current != ScreenId.ChapterMap;
+         }
+ 
+         void OpenChapterMap()
+--- a/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs
+@@ -374,5 +374,56 @@
+             layout.ApplyNow();Canvas.ForceUpdateCanvases();
+             Assert.That(Vector2.Distance(old,view.Nodes[0].Root.anchoredPosition),Is.LessThan(.01f));
+         }
++
++        [UnityTest]
++        public IEnumerator SelectionRejectedNativeNodeStaysOnMapWithError()
++        {
++            yield return VerifyRejectedSelection(false);
++        }
++        [UnityTest]
++        public IEnumerator SelectionRejectedNativePlayStaysOnMapWithError()
++        {
++            yield return VerifyRejectedSelection(true);
++        }
++        [UnityTest]
++        public IEnumerator SelectionRejectedNativeNodeEnglishStaysOnMapWithError()
++        {
++            yield return VerifyRejectedSelection(false,true);
++        }
++        [UnityTest]
++        public IEnumerator SelectionRejectedNativePlayEnglishStaysOnMapWithError()
++        {
++            yield return VerifyRejectedSelection(true,true);
++        }
++        IEnumerator VerifyRejectedSelection(bool play,bool english=false)
++        {
++            DemoFeatureState.SetLanguage(english?"en":"ru");
++            var state=GameState.Instance;state.Save.highestUnlockedLevel=2;state.EnsureSelectedLevelIsUnlocked();
++            state.CompleteStoryScene(StoryCatalog.LoadChapter1().introSceneId);StoryService.ResetRuntime();
++            var original=state.Save;string before=JsonUtility.ToJson(original);
++            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
++            foreach(string key in keys)PlayerPrefs.DeleteKey(key);
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++            try
++            {
++                var root=Root();var view=root.GetComponentInChildren<ProductionChapterMapView>();
++                (play?view.PlayButton:view.Nodes[1].Button).onClick.Invoke();Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(Root(),Is.SameAs(root));
++                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(state.CanPersist,Is.False);var write=state.LastWriteResult;
++                var error=router.GameCanvas.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error.Retry.interactable,Is.False);
++                router.NavigateBack();Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(router.ActiveModal,Is.Null);
++                (play?view.PlayButton:view.Nodes[1].Button).onClick.Invoke();Settle();yield return null;
++                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));Assert.That(state.LastWriteResult,Is.SameAs(write));
++                Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                router.NavigateBack();Settle();yield return null;
++                view.BackButton.onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
++            }
++            finally{LogAssert.ignoreFailingMessages=ignored;}
++        }
++
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -1422,5 +1422,141 @@
+             }
+             PlayerPrefs.Save();
+         }
++
++        [TestCase(false)] [TestCase(true)]
++        public void SelectionRejectedWritePreservesSelectionAndLockedState(bool alreadyLocked)
++        {
++            var state=GameState.Instance;state.Save.highestUnlockedLevel=2;state.Persist();
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++            int events=0;System.Action changed=()=>events++;
++            try
++            {
++                if(alreadyLocked)Assert.That(state.SpendGold(1),Is.False);
++                var original=state.Save;string before=JsonUtility.ToJson(original);state.Changed+=changed;
++                Assert.That(state.SelectLevel(1,2),Is.False);
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(events,Is.Zero);Assert.That(state.CanPersist,Is.False);var write=state.LastWriteResult;
++                Assert.That(state.SelectLevel(1,1),Is.False);Assert.That(state.LastWriteResult,Is.SameAs(write));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1])||PlayerPrefs.HasKey(PersistedSaveKeys[2]),Is.False);
++            }
++            finally
++            {
++                state.Changed-=changed;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                LogAssert.ignoreFailingMessages=ignored;
++            }
++        }
++
++        [TestCase(false)] [TestCase(true)]
++        public void SelectionNormalizationRejectedWritePreservesExactSave(bool alreadyLocked)
++        {
++            var state=GameState.Instance;
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++            int events=0;System.Action changed=()=>events++;
++            try
++            {
++                if(alreadyLocked)Assert.That(state.SpendGold(1),Is.False);
++                state.Save.selectedChapter=9;state.Save.selectedLevel=999;state.Save.highestUnlockedLevel=999;state.Save.levelProgress=null;
++                var original=state.Save;string before=JsonUtility.ToJson(original);state.Changed+=changed;
++                state.EnsureSelectedLevelIsUnlocked();
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(events,Is.Zero);Assert.That(state.CanPersist,Is.False);var write=state.LastWriteResult;
++                state.EnsureSelectedLevelIsUnlocked();Assert.That(state.LastWriteResult,Is.SameAs(write));
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));
++            }
++            finally
++            {
++                state.Changed-=changed;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                LogAssert.ignoreFailingMessages=ignored;
++            }
++        }
++
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
++        public void SelectionInvalidTargetPreservesSaveAndWriteResult(int boundary)
++        {
++            var state=GameState.Instance;var original=state.Save;string before=JsonUtility.ToJson(original);var write=state.LastWriteResult;
++            int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                int chapter=boundary==2?2:1;int level=boundary==0?0:boundary==1?-1:boundary==2?1:2;
++                Assert.That(state.SelectLevel(chapter,level),Is.False);Assert.That(state.Save,Is.SameAs(original));
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(events,Is.Zero);
++            }
++            finally{state.Changed-=changed;}
++        }
++
++        [Test]
++        public void SelectionValidTargetCommitsOnceAndReloadsWithoutAttemptOrDebit()
++        {
++            var state=GameState.Instance;state.Save.highestUnlockedLevel=2;state.Persist();
++            var candidate=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));candidate.selectedLevel=2;
++            int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                Assert.That(state.SelectLevel(1,2),Is.True);Assert.That(events,Is.EqualTo(1));
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(JsonUtility.ToJson(candidate)));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(candidate)));
++                Assert.That(state.GetLevelProgress(1,2),Is.Null);
++            }
++            finally{state.Changed-=changed;}
++        }
++
++        [Test]
++        public void SelectionNormalizationCommitsExistingRepairRulesOnCandidate()
++        {
++            var state=GameState.Instance;state.Save.selectedChapter=9;state.Save.selectedLevel=999;state.Save.highestUnlockedLevel=999;
++            state.Save.levelProgress=new System.Collections.Generic.List<LevelProgressData>{null,new LevelProgressData{chapterId=1,levelId=501},
++                new LevelProgressData{chapterId=1,levelId=1,bestStars=1},new LevelProgressData{chapterId=1,levelId=1,bestStars=7,bestScore=-3,attempts=-1,retries=4,failures=4,completions=1}};
++            var original=state.Save;string before=JsonUtility.ToJson(original);int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                Assert.That(state.TryEnsureSelectedLevelIsUnlocked(),Is.True);Assert.That(state.Save,Is.Not.SameAs(original));
++                Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(events,Is.EqualTo(1));
++                Assert.That(state.Save.selectedChapter,Is.EqualTo(1));Assert.That(state.Save.selectedLevel,Is.EqualTo(500));Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(500));
++                Assert.That(state.Save.levelProgress,Has.Count.EqualTo(1));var progress=state.Save.levelProgress[0];
++                Assert.That(progress.bestStars,Is.EqualTo(3));Assert.That(progress.bestScore,Is.Zero);Assert.That(progress.attempts,Is.Zero);Assert.That(progress.retries,Is.Zero);Assert.That(progress.failures,Is.Zero);Assert.That(state.Save.stars,Is.EqualTo(3));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++            }
++            finally{state.Changed-=changed;}
++        }
++
++        [TestCase(false)] [TestCase(true)]
++        public void SelectionRecoveryRequiresFreshStateAndCommitsAfterJournalRepair(bool normalization)
++        {
++            var state=GameState.Instance;GameObject freshObject=null;state.Save.highestUnlockedLevel=2;state.Persist();
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);PlayerPrefs.SetString(PersistedSaveKeys[0],JsonUtility.ToJson(future));PlayerPrefs.Save();
++            try
++            {
++                Assert.That(normalization?state.TryEnsureSelectedLevelIsUnlocked():state.SelectLevel(1,2),Is.False);var write=state.LastWriteResult;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                Assert.That(state.TryEnsureSelectedLevelIsUnlocked(),Is.False);Assert.That(state.SelectLevel(1,2),Is.False);Assert.That(state.LastWriteResult,Is.SameAs(write));
++                freshObject=new GameObject("FreshSelectionRecoveryState");var fresh=freshObject.AddComponent<GameState>();
++                Assert.That(fresh.CanPersist,Is.True);Assert.That(fresh.Save.selectedLevel,Is.EqualTo(1));
++                int events=0;System.Action changed=()=>events++;fresh.Changed+=changed;
++                try{Assert.That(fresh.SelectLevel(1,2),Is.True);Assert.That(events,Is.EqualTo(1));Assert.That(SaveService.Load().selectedLevel,Is.EqualTo(2));}
++                finally{fresh.Changed-=changed;}
++            }
++            finally
++            {
++                typeof(GameState).GetProperty("Instance").SetValue(null,state);if(freshObject!=null)Object.DestroyImmediate(freshObject);
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++            }
++        }
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
+@@ -121,7 +121,6 @@
+             string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+             try
+             {
+-                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Player save write blocked:"));
+                 Root().GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();Settle();yield return null;
+                 Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                 Assert.That(router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().Retry.interactable,Is.False);

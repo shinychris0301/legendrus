@@ -1,0 +1,52 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 19.79894781112671,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "RoundStartEnergyClockAndRetry;RoundStartRejectedSave;RoundStartRejectsNull;RoundFailureOverflow;RoundStartNative;RoundStartCommittedOrdinary;RoundStartOrdinaryInitializer",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/RoundLifecycleRecovery/R1/QA/BoundariesCorrected/results.xml",
+    "-logFile",
+    "/tmp/lor-round-lifecycle-recovery-r1/BoundariesCorrected/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-round-lifecycle-recovery-r1/BoundariesCorrected/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-round-lifecycle-recovery-r1/BoundariesCorrected",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "11",
+    "result": "Failed(Child)",
+    "total": "11",
+    "passed": "9",
+    "failed": "2",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 20:52:33Z",
+    "end-time": "2026-10-03 20:52:35Z",
+    "duration": "2.0607816"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundStartRejectedSaveKeepsDebitClockAndAttemptUntilFreshRecovery",
+      "result": "Failed",
+      "message": "  Expected: 0\n  But was:  1\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.RoundStartNativeNoEnergyOpensExistingGateWithoutAnAttempt",
+      "result": "Failed",
+      "message": "  Expected: PreLevel\n  But was:  ChapterMap\n"
+    }
+  ]
+}

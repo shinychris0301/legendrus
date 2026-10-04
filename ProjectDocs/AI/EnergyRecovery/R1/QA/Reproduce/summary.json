@@ -1,0 +1,87 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 25.080222845077515,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LevelSystemRuntimePlayModeTests.EnergyGrantLargestAmountRespectsExistingCap;LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents;LevelSystemRuntimePlayModeTests.EnergyClockLargestCapCannotWrapDuringRefreshOrSpending",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/EnergyRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-energy-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-energy-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-energy-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "9",
+    "result": "Failed(Child)",
+    "total": "9",
+    "passed": "0",
+    "failed": "9",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 15:55:31Z",
+    "end-time": "2026-10-03 15:55:32Z",
+    "duration": "0.4765981"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyClockLargestCapCannotWrapDuringRefreshOrSpending(False)",
+      "result": "Failed",
+      "message": "  Expected: 2147483647\n  But was:  -2147483648\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyClockLargestCapCannotWrapDuringRefreshOrSpending(True)",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyGrantLargestAmountRespectsExistingCap(1)",
+      "result": "Failed",
+      "message": "  Expected: 5\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyGrantLargestAmountRespectsExistingCap(3)",
+      "result": "Failed",
+      "message": "  Expected: 5\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyGrantLargestAmountRespectsExistingCap(5)",
+      "result": "Failed",
+      "message": "  Expected: 5\n  But was:  0\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents(0)",
+      "result": "Failed",
+      "message": "  Energy and its clock cannot publish before saving.\n  String lengths are both 1082. Strings differ at index 50.\n  Expected: \"...ld\":12540,\"gems\":350,\"energy\":1,\"energyMax\":5,\"lastEnergyU...\"\n  But was:  \"...ld\":12540,\"gems\":350,\"energy\":3,\"energyMax\":5,\"lastEnergyU...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents(1)",
+      "result": "Failed",
+      "message": "  Energy and its clock cannot publish before saving.\n  String lengths are both 1082. Strings differ at index 50.\n  Expected: \"...ld\":12540,\"gems\":350,\"energy\":1,\"energyMax\":5,\"lastEnergyU...\"\n  But was:  \"...ld\":12540,\"gems\":350,\"energy\":5,\"energyMax\":5,\"lastEnergyU...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents(2)",
+      "result": "Failed",
+      "message": "  Energy and its clock cannot publish before saving.\n  String lengths are both 1082. Strings differ at index 50.\n  Expected: \"...ld\":12540,\"gems\":350,\"energy\":1,\"energyMax\":5,\"lastEnergyU...\"\n  But was:  \"...ld\":12540,\"gems\":350,\"energy\":3,\"energyMax\":5,\"lastEnergyU...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents(3)",
+      "result": "Failed",
+      "message": "  Energy and its clock cannot publish before saving.\n  String lengths are both 1082. Strings differ at index 94.\n  Expected: \"...5,\"lastEnergyUtcTicks\":639266360719864180,\"chapter\":1,\"lev...\"\n  But was:  \"...5,\"lastEnergyUtcTicks\":639266397319873700,\"chapter\":1,\"lev...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

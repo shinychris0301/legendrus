@@ -1,0 +1,67 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 35.848374366760254,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite;StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair;StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite;StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/StartupRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/dev/shm/lor-startup-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-startup-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/dev/shm/lor-startup-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "5",
+    "result": "Failed(Child)",
+    "total": "5",
+    "passed": "0",
+    "failed": "5",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-04 02:43:56Z",
+    "end-time": "2026-10-04 02:43:56Z",
+    "duration": "0.4240246"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate",
+      "result": "Failed",
+      "message": "  Expected: same as <LegendsOfRus.PlayerSaveData>\n  But was:  <LegendsOfRus.PlayerSaveData>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite",
+      "result": "Failed",
+      "message": "  Expected: same as <LegendsOfRus.PlayerSaveData>\n  But was:  <LegendsOfRus.PlayerSaveData>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair",
+      "result": "Failed",
+      "message": "  Expected: same as <LegendsOfRus.PlayerSaveData>\n  But was:  <LegendsOfRus.PlayerSaveData>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(5)",
+      "result": "Failed",
+      "message": "  Rejected normalization must not replace the loaded progress.\n  Expected: same as <LegendsOfRus.PlayerSaveData>\n  But was:  <LegendsOfRus.PlayerSaveData>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(6)",
+      "result": "Failed",
+      "message": "  Rejected normalization must not replace the loaded progress.\n  Expected: same as <LegendsOfRus.PlayerSaveData>\n  But was:  <LegendsOfRus.PlayerSaveData>\n"
+    }
+  ]
+}

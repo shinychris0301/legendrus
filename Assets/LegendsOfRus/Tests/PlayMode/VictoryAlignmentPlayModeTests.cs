@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Collections.Generic;
+using System.Reflection;
+using LegendsOfRus.GameplayCore;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -221,6 +223,244 @@ namespace LegendsOfRus.Tests.PlayMode
             yield return new WaitForSecondsRealtime(1);
             Capture("Victory_GoldDoubled_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
         }
+        [TestCase(int.MaxValue,1)]
+        [TestCase(int.MaxValue-139,140)]
+        [TestCase(1,int.MaxValue)]
+        public void DoubleGoldOverflowPreservesEligibilityBalancesAndJournal(int gold,int reward)
+        {
+            var state=GameState.Instance;Win(3,4000);
+            state.Save.gold=gold;state.Save.lastRewardGold=reward;state.Persist();
+            string before=JsonUtility.ToJson(state.Save);var originalSave=state.Save;
+            var priorWrite=state.LastWriteResult;var outcome=state.LastCompletionResult;
+            var present=new bool[keys.Length];var journal=new string[keys.Length];
+            for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
+            int events=0;Action changed=()=>events++;state.Changed+=changed;
+            try
+            {
+                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
+                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
+                Assert.That(state.Save,Is.SameAs(originalSave));
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
+                Assert.That(state.LastWriteResult,Is.EqualTo(priorWrite));
+                Assert.That(state.CanPersist,Is.True);Assert.That(events,Is.Zero);
+                for(int i=0;i<keys.Length;i++)
+                {
+                    Assert.That(PlayerPrefs.HasKey(keys[i]),Is.EqualTo(present[i]));
+                    Assert.That(PlayerPrefs.GetString(keys[i]),Is.EqualTo(journal[i]));
+                }
+            }
+            finally{state.Changed-=changed;}
+        }
+        [UnityTest]
+        public IEnumerator FailedDoubleGoldSaveDoesNotPublishOrConsumeReward()
+        {
+            var state=GameState.Instance;Win(3,4000);yield return null;
+            string before=JsonUtility.ToJson(state.Save);var originalSave=state.Save;
+            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
+            foreach(string key in keys)PlayerPrefs.DeleteKey(key);
+            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+            Assert.That(SaveService.LoadWithResult().Status,Is.EqualTo(PlayerSaveLoadStatus.UnsupportedFutureVersion));
+            var outcome=state.LastCompletionResult;int events=0;Action changed=()=>events++;state.Changed+=changed;
+            try
+            {
+                // Preserve the behavioral assertion when reproducing the old Persist error log.
+                bool ignoredLogs=LogAssert.ignoreFailingMessages;bool doubled;
+                try{LogAssert.ignoreFailingMessages=true;doubled=state.TryDoubleLastLevelGoldReward();}
+                finally{LogAssert.ignoreFailingMessages=ignoredLogs;}
+                Assert.That(doubled,Is.False);
+                Assert.That(state.Save,Is.SameAs(originalSave));
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
+                Assert.That(state.LastWriteResult.Status,Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
+                Assert.That(state.CanPersist,Is.False);var rejectedWrite=state.LastWriteResult;
+                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
+                Assert.That(state.LastWriteResult,Is.EqualTo(rejectedWrite));
+                Assert.That(events,Is.Zero);Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
+                Assert.That(PlayerPrefs.HasKey(keys[1]),Is.False);Assert.That(PlayerPrefs.HasKey(keys[2]),Is.False);
+                Assert.That(View().RewardValues[0].text,Is.EqualTo("140"));
+            }
+            finally{state.Changed-=changed;}
+        }
+        [UnityTest]
+        public IEnumerator OverflowDoubleGoldCanRetryAtExactLimitAndPersistsOnce()
+        {
+            foreach(string language in new[]{"ru","en"})
+            {
+                GameState.Instance.ResetProgress();GameState.Instance.Save.highestUnlockedLevel=3;
+                DemoFeatureState.SetLanguage(language);
+                Win(3,4000);yield return null;
+                var state=GameState.Instance;int reward=state.Save.lastRewardGold;
+                Assert.That(reward,Is.EqualTo(140));state.Save.gold=int.MaxValue-reward+1;state.Persist();
+                string before=JsonUtility.ToJson(state.Save);
+                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                Assert.That(View().DoubleButton.interactable,Is.True);
+                Assert.That(View().RewardValues[0].text,Is.EqualTo("140"));
+                Assert.That(state.SpendGold(1),Is.True);
+                var expected=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
+                expected.gold=int.MaxValue;expected.lastRewardDoubled=true;
+                var outcome=state.LastCompletionResult;int events=0;Action changed=()=>events++;state.Changed+=changed;
+                try
+                {
+                    // Service call only: this does not bypass or certify the video-provider gate.
+                    Assert.That(state.TryDoubleLastLevelGoldReward(),Is.True);
+                    Assert.That(events,Is.EqualTo(1));Assert.That(state.CanPersist,Is.True);
+                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(JsonUtility.ToJson(expected)));
+                    Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
+                    Assert.That(View().RewardValues[0].text,Is.EqualTo("280"));
+                    Assert.That(View().DoubleButton.interactable,Is.False);
+                    Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);Assert.That(events,Is.EqualTo(1));
+                }
+                finally{state.Changed-=changed;}
+                var loaded=SaveService.Load();Assert.That(loaded.gold,Is.EqualTo(int.MaxValue));
+                Assert.That(loaded.lastRewardDoubled,Is.True);
+                router.Show(ScreenId.Home);Settle();router.Show(ScreenId.Victory);Settle();yield return null;
+                Assert.That(View().RewardValues[0].text,Is.EqualTo("280"));Assert.That(View().DoubleButton.interactable,Is.False);
+                yield return new WaitForSecondsRealtime(1);
+                yield return WaitForNormalButtonColors();
+                Capture("Victory_OverflowDoubleRecovered_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
+                state.Save=loaded;
+                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False,"Reloaded flags must reject duplicate credit.");
+                Assert.That(state.Save.gold,Is.EqualTo(int.MaxValue));
+            }
+        }
+        IEnumerator StartFirstClearBoundary(string language, bool overflow)
+        {
+            var state=GameState.Instance;state.ResetProgress();StoryService.ResetRuntime();
+            DemoFeatureState.SetLanguage(language);
+            foreach(var level in ChapterLevelCatalog.LoadChapter1().levels)
+                foreach(var step in level.tutorialSteps)state.Save.completedTutorialSteps.Add(step.id);
+            Assert.That(state.SpendEnergy(1),Is.True);
+            state.Save.gold=overflow?int.MaxValue-ChapterLevelCatalog.Find(1,1).rewards.gold+1:500;
+            state.Persist();router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));
+            Assert.That(router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board.CanAcceptPointerInput,Is.True);
+            Assert.That(router.ShowErrorDialog(()=>{}),Is.False,"Ordinary Gameplay error entry remains guarded.");
+        }
+
+        static BoardResolutionPlan ChooseFirstClearMove(Match3Board board)
+        {
+            var model=(BoardModel)typeof(Match3Board).GetField("model",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(board);
+            string hash=board.BoardStateHash;var planner=new BoardResolutionPlanner(model,null,board.RuleVersion);
+            BoardResolutionPlan best=null;float bestValue=float.NegativeInfinity;
+            for(int y=0;y<model.Height;y++)for(int x=0;x<model.Width;x++)
+                foreach(var direction in new[]{new BoardPosition(1,0),new BoardPosition(0,1)})
+                {
+                    var a=new BoardPosition(x,y);var b=new BoardPosition(x+direction.X,y+direction.Y);
+                    if(!model.IsInside(b))continue;var plan=planner.PlanSwap(a,b);
+                    if(!plan.IsResolved||!plan.ConsumesMove)continue;
+                    int red=0,blue=0;foreach(var wave in plan.Waves){red+=wave.ClearedByTileType[0];blue+=wave.ClearedByTileType[1];}
+                    float value=1000*(Math.Min(red,board.RedRemaining)+Math.Min(blue,board.BlueRemaining))+plan.TotalScoreDelta;
+                    if(value>bestValue){bestValue=value;best=plan;}
+                }
+            Assert.That(board.BoardStateHash,Is.EqualTo(hash));return best;
+        }
+
+        IEnumerator DriveRejectedFirstClearWin(Match3Board board)
+        {
+            int commands=0;
+            while(board&&board.CanAcceptPointerInput)
+            {
+                Assert.That(++commands,Is.LessThanOrEqualTo(28));var plan=ChooseFirstClearMove(board);Assert.That(plan,Is.Not.Null);
+                Assert.That(board.SwipeCell(plan.PrimaryPosition.X,plan.PrimaryPosition.Y,
+                    new Vector2Int(plan.SecondaryPosition.X-plan.PrimaryPosition.X,plan.SecondaryPosition.Y-plan.PrimaryPosition.Y)),Is.True);
+                float deadline=Time.realtimeSinceStartup+15;
+                while(board&&board.Phase!=GameplayPhase.Completed&&board.Phase!=GameplayPhase.Failed&&
+                    (board.HasActiveCommand||!board.CanAcceptPointerInput)&&Time.realtimeSinceStartup<deadline)yield return null;
+                Assert.That(Time.realtimeSinceStartup,Is.LessThan(deadline));yield return null;
+            }
+            Assert.That(board,Is.Not.Null);Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Completed));
+            Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));
+            Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));Assert.That(board.CanAcceptPointerInput,Is.False);
+            Assert.That(router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().HasRequiredBindings,Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator FirstClearOverflowNativeRetryCommitsExactlyOnceInBothLanguages()
+        {
+            foreach(string language in new[]{"ru","en"})
+            {
+                yield return StartFirstClearBoundary(language,true);
+                var state=GameState.Instance;var board=router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board;
+                string before=JsonUtility.ToJson(state.Save);var priorWrite=state.LastWriteResult;
+                var journal=new string[keys.Length];for(int i=0;i<keys.Length;i++)journal[i]=PlayerPrefs.GetString(keys[i]);
+                yield return DriveRejectedFirstClearWin(board);
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastCompletionResult,Is.Null);
+                Assert.That(state.LastWriteResult,Is.SameAs(priorWrite));Assert.That(state.CanPersist,Is.True);
+                for(int i=0;i<keys.Length;i++)Assert.That(PlayerPrefs.GetString(keys[i]),Is.EqualTo(journal[i]));
+                string boardHash=board.BoardStateHash;int score=board.Score,moves=board.Moves;
+                var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error.Retry.interactable,Is.True);
+                error.Retry.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(board.BoardStateHash,Is.EqualTo(boardHash));
+                Assert.That(board.Score,Is.EqualTo(score));Assert.That(board.Moves,Is.EqualTo(moves));
+                Assert.That(state.SpendGold(1),Is.True);int gems=state.Save.gems;
+                error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();int events=0;Action changed=()=>events++;state.Changed+=changed;
+                try
+                {
+                    error.Retry.onClick.Invoke();error.Retry.onClick.Invoke();
+                    Assert.That(router.HasActiveModalBlocker,Is.True);Settle();
+                    Assert.That(events,Is.EqualTo(1));Assert.That(state.Save.gold,Is.EqualTo(int.MaxValue));
+                    Assert.That(state.Save.gems,Is.EqualTo(gems+ChapterLevelCatalog.Find(1,1).rewards.gems));
+                    Assert.That(state.GetLevelProgress(1,1).completions,Is.EqualTo(1));Assert.That(state.GetLevelProgress(1,1).rewardClaimed,Is.True);
+                    Assert.That(state.GetLevelProgress(1,1).attempts,Is.EqualTo(1));
+                    Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(2));Assert.That(state.Save.selectedLevel,Is.EqualTo(2));
+                    Assert.That(state.LastCompletionResult.Score,Is.EqualTo(score));Assert.That(state.LastWriteResult.Success,Is.True);
+                    Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
+                }
+                finally{state.Changed-=changed;}
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Victory));Assert.That(router.ActiveModal,Is.Null);
+                yield return new WaitForSecondsRealtime(1);yield return WaitForNormalButtonColors();
+                Capture("Victory_FirstClearOverflowRecovered_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator FirstClearRetryRouteChangeRejectsStaleCompletedBoard()
+        {
+            yield return StartFirstClearBoundary("ru",true);
+            var state=GameState.Instance;var board=router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board;
+            string before=JsonUtility.ToJson(state.Save);yield return DriveRejectedFirstClearWin(board);
+            var callback=(Action<int>)typeof(Match3Board).GetField("onWin",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(board);
+            int score=board.Score;router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().Retry.onClick.Invoke();
+            router.Show(ScreenId.Inventory);Settle();yield return null;callback(score);Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Inventory));Assert.That(router.ActiveModal,Is.Null);
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastCompletionResult,Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator FirstClearOverflowCloseLeavesProgressEligibleAndUnchanged()
+        {
+            yield return StartFirstClearBoundary("ru",true);
+            var state=GameState.Instance;var board=router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board;
+            string before=JsonUtility.ToJson(state.Save);yield return DriveRejectedFirstClearWin(board);
+            var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();
+            error.Close.onClick.Invoke();error.Close.onClick.Invoke();Assert.That(router.HasActiveModalBlocker,Is.True);
+            Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(router.ActiveModal,Is.Null);
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastCompletionResult,Is.Null);
+            Assert.That(state.GetLevelProgress(1,1).rewardClaimed,Is.False);Assert.That(state.GetLevelProgress(1,1).completions,Is.Zero);
+        }
+
+        [UnityTest]
+        public IEnumerator FirstClearBlockedSaveDisablesRetryAndBackLeavesWithoutReward()
+        {
+            yield return StartFirstClearBoundary("en",false);
+            var state=GameState.Instance;var board=router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board;
+            string before=JsonUtility.ToJson(state.Save);var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
+            foreach(string key in keys)PlayerPrefs.DeleteKey(key);
+            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+            yield return DriveRejectedFirstClearWin(board);
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastCompletionResult,Is.Null);
+            Assert.That(state.CanPersist,Is.False);Assert.That(state.LastWriteResult.Status,Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
+            Assert.That(router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().Retry.interactable,Is.False);
+            router.NavigateBack();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(router.ActiveModal,Is.Null);
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
+            Assert.That(PlayerPrefs.HasKey(keys[1]),Is.False);Assert.That(PlayerPrefs.HasKey(keys[2]),Is.False);
+        }
+
         [UnityTest]
         public IEnumerator UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow()
         {
@@ -246,6 +486,11 @@ namespace LegendsOfRus.Tests.PlayMode
             var board=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(board,Is.Not.Null);
             var field=typeof(Match3Board).GetField("onWin",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
             var callback=(Action<int>)field.GetValue(board);Assert.That(callback,Is.Not.Null);
+            // An early callback must not commit. A real win calls back only after Completed.
+            string before=OutcomeStateWithoutClock();callback(2468);Settle();
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));Assert.That(OutcomeStateWithoutClock(),Is.EqualTo(before));
+            if(board.Phase==GameplayPhase.Paused)Assert.That(board.TryResume(),Is.True);
+            typeof(Match3Board).GetMethod("EnsurePhase",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(board,new object[]{GameplayPhase.Completed});
             // Exercise the router's real callback; this is not a simulated gem-swap win.
             callback(2468);Settle();yield return null;
             Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Victory));Assert.That(state.LastCompletionResult.Score,Is.EqualTo(2468));

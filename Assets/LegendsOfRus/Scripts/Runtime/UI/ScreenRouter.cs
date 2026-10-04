@@ -85,6 +85,10 @@ namespace LegendsOfRus
         ScreenId? languageReturnPage;
         ScreenId? loginReturnPage;
         Match3Board activeBoard;
+        bool levelStartInProgress;
+        LevelData pendingGameplayLevel;
+        int pendingGameplayAttempt;
+        LevelTutorialPresenter tutorialErrorOwner;
         string activeAnalyticsLevelId = string.Empty;
         int activeAnalyticsAttemptNumber;
         LocalizedStoryReaction activeOutcomeReaction;
@@ -192,7 +196,17 @@ namespace LegendsOfRus
         public void NavigateBack()
         {
             if(activeModalId==ScreenId.Dialogue){if(!IsModalTransitioning)CloseModal();return;}
-            if(activeModalId==ScreenId.EmptyErrorState){if(!IsModalTransitioning)CloseModal();return;}
+            if(activeModalId==ScreenId.EmptyErrorState)
+            {
+                if(!IsModalTransitioning)
+                {
+                    if(tutorialErrorOwner != null)CloseModal();
+                    else if(IsGameplayInventoryError(activeBoard))CloseGameplayInventoryError(activeBoard);
+                    else if(IsPendingGameplayVictory(activeBoard))CloseRejectedGameplayVictory(activeBoard);
+                    else CloseModal();
+                }
+                return;
+            }
             if(activeModalId==ScreenId.TutorialOverlay){if(IsModalTransitioning)return;var guide=modalVisualRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;RequestCloseModal(()=>activeBoard?.TryResume());return;}
             if(current==ScreenId.TutorialOverlay){var guide=contentRoot.GetComponentInChildren<ProductionTutorialView>();if(guide!=null&&guide.TryDismissDetails())return;Show(tutorialReturnPage ?? ScreenId.SplashTitle);return;}
             if (current == ScreenId.Login && contentRoot != null)
@@ -704,7 +718,7 @@ namespace LegendsOfRus
                         Debug.LogError("Chapter Map has no complete native bindings.");return;
                     }
                     chapterMap.BindNavigation(target=>Show(target),OpenSelectedLevel,
-                        ()=>NavigateBackFrom(ScreenId.ChapterMap),chapterMap.Notice.Show);
+                        ()=>NavigateBackFrom(ScreenId.ChapterMap),chapterMap.Notice.Show,()=>ShowErrorDialog());
                     return;
 
                 case ScreenId.PreLevel:
@@ -1118,37 +1132,50 @@ namespace LegendsOfRus
 
         void StartLevel()
         {
-            if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
-            GameState.Instance.EnsureSelectedLevelIsUnlocked();
-            if (!GameState.Instance.SpendEnergy())
+            if (levelStartInProgress) return;
+            levelStartInProgress = true;
+            try
             {
-                LevelData selected = ChapterLevelCatalog.ResolveSelected(
-                    GameState.Instance.Save
-                );
-                if (selected != null)
+                if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
+                if (!GameState.Instance.CanPersist) { ShowErrorDialog(); return; }
+                if (!GameState.Instance.TryRecoverPendingBoosterCommand() || !GameState.Instance.CanPersist)
                 {
-                    PrivacyAwareAnalytics.TryEnergyGateBlocked(
-                        selected.id,
-                        1,
-                        Mathf.Max(0, GameState.Instance.Save.energy)
-                    );
+                    ShowErrorDialog(GameState.Instance.CanPersist ? (Action)StartLevel : null);
+                    return;
                 }
-                ShowModal(ScreenId.OutOfEnergy);
-                return;
+                if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return; }
+                LevelData selected = ChapterLevelCatalog.ResolveSelected(GameState.Instance.Save);
+                if (!GameState.Instance.TryStartLevel(selected, out var attempt, out var insufficientEnergy))
+                {
+                    if (!insufficientEnergy) { ShowErrorDialog(); return; }
+                    if (selected != null)
+                        PrivacyAwareAnalytics.TryEnergyGateBlocked(selected.id, 1, Mathf.Max(0, GameState.Instance.Save.energy));
+                    ShowModal(ScreenId.OutOfEnergy);
+                    return;
+                }
+                pendingGameplayLevel = selected;
+                pendingGameplayAttempt = attempt;
+                Show(ScreenId.Gameplay);
             }
-
-            Show(ScreenId.Gameplay);
+            finally
+            {
+                pendingGameplayLevel = null;
+                pendingGameplayAttempt = 0;
+                levelStartInProgress = false;
+            }
         }
 
-        void OpenSelectedLevel()
+        bool OpenSelectedLevel()
         {
-            GameState.Instance.EnsureSelectedLevelIsUnlocked();
+            if (HasActiveModalBlocker || IsScreenTransitioning) return false;
+            if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return false; }
             if (StoryService.TryBeginChapterIntro())
                 Show(ScreenId.Dialogue);
             else if (TryShowPendingChapterFlow())
-                return;
+                return true;
             else
                 Show(ScreenId.PreLevel);
+            return current != ScreenId.ChapterMap;
         }
 
         void OpenChapterMap()
@@ -1213,6 +1240,12 @@ namespace LegendsOfRus
         {
             switch (StoryService.AdvanceDialogue())
             {
+                case StoryAdvanceResult.SaveRejected:
+                    var dialogue = contentRoot.GetComponentInChildren<ProductionDialogueView>();
+                    // Re-arm the existing one-shot control without replacing the current page.
+                    if (dialogue != null) dialogue.Bind(ContinueAfterDialogue);
+                    ShowErrorDialog();
+                    break;
                 case StoryAdvanceResult.MoreLines:
                     Show(ScreenId.Dialogue);
                     break;
@@ -1238,7 +1271,7 @@ namespace LegendsOfRus
                 !StoryService.AcknowledgeChapterComplete()
             )
             {
-                Toast("Не удалось сохранить завершение главы. Попробуйте ещё раз.");
+                ShowErrorDialog();
                 return;
             }
 
@@ -1514,6 +1547,7 @@ namespace LegendsOfRus
 
         void RetireModalRootImmediately()
         {
+            tutorialErrorOwner = null;
             recapEntries=null;
             if (activeModalId == ScreenId.RewardClaim) { pendingRewardReceipt = null; pendingRewardDay = 0; }
             GameObject retiringRoot = modalRoot;
@@ -1564,7 +1598,8 @@ namespace LegendsOfRus
 
         void ResumeAfterPauseClose()
         {
-            activeBoard?.TryResume();
+            if (activeBoard != null && !activeBoard.TryResume() && IsGameplayInventoryError(activeBoard))
+                StartCoroutine(ShowGameplayInventoryError(activeBoard));
         }
 
         void RestartAfterPauseClose()
@@ -1581,6 +1616,83 @@ namespace LegendsOfRus
             Show(ScreenId.ChapterMap);
         }
 
+        void ShowGameplayTutorialError(Match3Board board, LevelTutorialPresenter presenter)
+        {
+            if (board == null || board != activeBoard || current != ScreenId.Gameplay ||
+                board.Phase != LegendsOfRus.GameplayCore.GameplayPhase.Paused ||
+                presenter == null || !presenter.IsPresenting || presenter.CurrentStep == null ||
+                contentRoot == null || contentRoot.GetComponentInChildren<LevelTutorialPresenter>() != presenter ||
+                modalMotionState != ModalMotionState.Closed || IsScreenTransitioning)
+                return;
+            if (!ShowModal(ScreenId.EmptyErrorState)) return;
+            tutorialErrorOwner = presenter;
+            // Dismissing the error leaves this exact tutorial and its board pause intact.
+            var error = modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
+            error.Bind(CloseModal, null);
+        }
+
+        bool IsGameplayInventoryError(Match3Board board) => board != null && board == activeBoard &&
+            current == ScreenId.Gameplay && board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Paused &&
+            board.HasInventoryRecoveryError;
+
+        void CloseGameplayInventoryError(Match3Board board)
+        {
+            RequestCloseModal(() => { if(IsGameplayInventoryError(board))Show(ScreenId.ChapterMap); });
+        }
+
+        IEnumerator ShowGameplayInventoryError(Match3Board board)
+        {
+            while(IsGameplayInventoryError(board) && (IsScreenTransitioning || modalMotionState != ModalMotionState.Closed))
+                yield return null;
+            if(!IsGameplayInventoryError(board) || !ShowModal(ScreenId.EmptyErrorState))yield break;
+            var error=modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
+            Action retry=GameState.Instance.CanPersist ? (Action)(() => RequestCloseModal(() =>
+            {
+                if(IsGameplayInventoryError(board) && !board.TryResume())StartCoroutine(ShowGameplayInventoryError(board));
+            })) : null;
+            error.Bind(() => CloseGameplayInventoryError(board),retry);
+        }
+
+        bool IsPendingGameplayVictory(Match3Board board)
+        {
+            return board != null && board == activeBoard && current == ScreenId.Gameplay &&
+                board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Completed;
+        }
+
+        void CloseRejectedGameplayVictory(Match3Board board)
+        {
+            RequestCloseModal(() => { if(IsPendingGameplayVictory(board))Show(ScreenId.ChapterMap); });
+        }
+
+        IEnumerator ShowGameplayCompletionError(Match3Board board, int score)
+        {
+            // Wait only for existing UI transitions; stale boards/routes never receive this retry.
+            while(IsPendingGameplayVictory(board) && (IsScreenTransitioning || modalMotionState != ModalMotionState.Closed))
+                yield return null;
+            if(!IsPendingGameplayVictory(board) || !ShowModal(ScreenId.EmptyErrorState))yield break;
+            var error=modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
+            Action retry=GameState.Instance.CanPersist
+                ? (Action)(() => RequestCloseModal(() => CommitGameplayVictory(board,score))) : null;
+            error.Bind(() => CloseRejectedGameplayVictory(board),retry);
+        }
+
+        void CommitGameplayVictory(Match3Board board, int score)
+        {
+            if(!IsPendingGameplayVictory(board))return;
+            LevelData outcomeLevel=board.CurrentLevel;
+            if(!GameState.Instance.TryCompleteLevel(outcomeLevel,score,out var completion))
+            {
+                StartCoroutine(ShowGameplayCompletionError(board,score));
+                return;
+            }
+            PrivacyAwareAnalytics.TryLevelComplete(completion.Level.id,activeAnalyticsAttemptNumber,
+                score,completion.Stars,completion.FirstClearRewardGranted);
+            BalanceTelemetryReviewService.Instance?.TryRecordLevelWin(outcomeLevel,
+                activeAnalyticsAttemptNumber,board.Moves,score);
+            ClearActiveGameplayAnalytics();
+            ShowOutcome(ScreenId.Victory,outcomeLevel,StoryReactionOutcomes.Victory);
+        }
+
         void BuildGameplayOverlay(RectTransform parent)
         {
             var view = parent.GetComponentInChildren<ProductionGameplayView>();
@@ -1590,35 +1702,16 @@ namespace LegendsOfRus
             boardGo.transform.SetParent(view.BoardMount, false);
             Stretch(boardGo.GetComponent<RectTransform>());
 
-            activeBoard = boardGo.GetComponent<Match3Board>();
+            var board = boardGo.GetComponent<Match3Board>();
+            activeBoard = board;
+            board.InventoryRecoveryRequired += failed => StartCoroutine(ShowGameplayInventoryError(failed));
+            LevelData startedLevel = pendingGameplayLevel ?? ChapterLevelCatalog.ResolveSelected(GameState.Instance.Save);
+            int? startedAttempt = pendingGameplayAttempt > 0 ? (int?)pendingGameplayAttempt : null;
+            pendingGameplayLevel = null;
+            pendingGameplayAttempt = 0;
             activeBoard.Initialize(
-                onWin: score =>
-                {
-                    LevelData outcomeLevel = activeBoard.CurrentLevel;
-                    LevelCompletionResult completion = GameState.Instance.CompleteLevel(
-                        outcomeLevel,
-                        score
-                    );
-                    PrivacyAwareAnalytics.TryLevelComplete(
-                        completion.Level.id,
-                        activeAnalyticsAttemptNumber,
-                        score,
-                        completion.Stars,
-                        completion.FirstClearRewardGranted
-                    );
-                    BalanceTelemetryReviewService.Instance?.TryRecordLevelWin(
-                        outcomeLevel,
-                        activeAnalyticsAttemptNumber,
-                        activeBoard != null ? activeBoard.Moves : 0,
-                        score
-                    );
-                    ClearActiveGameplayAnalytics();
-                    ShowOutcome(
-                        ScreenId.Victory,
-                        outcomeLevel,
-                        StoryReactionOutcomes.Victory
-                    );
-                },
+                levelData: startedLevel,
+                onWin: score => CommitGameplayVictory(board,score),
                 onFail: score =>
                 {
                     LevelData outcomeLevel = activeBoard.CurrentLevel;
@@ -1632,7 +1725,8 @@ namespace LegendsOfRus
                     if (!retained) Toast(DemoFeatureState.LanguageCode == "ru"
                         ? "Раунд не сохранён. Не закрывайте игру; повторите попытку или выйдите через меню."
                         : "Round not saved. Keep the game open; retry or leave through the menu.");
-                }
+                },
+                registeredAttempt: startedAttempt
             );
 
             view.Bind(activeBoard, ShowPause);
@@ -1645,10 +1739,9 @@ namespace LegendsOfRus
             );
             tutorialGo.transform.SetParent(parent, false);
             Stretch(tutorialGo.GetComponent<RectTransform>());
-            tutorialGo.GetComponent<LevelTutorialPresenter>().Initialize(
-                activeBoard,
-                activeBoard.CurrentLevel
-            );
+            var tutorial = tutorialGo.GetComponent<LevelTutorialPresenter>();
+            tutorial.AcknowledgementRejected += failed => ShowGameplayTutorialError(board, failed);
+            tutorial.Initialize(activeBoard, activeBoard.CurrentLevel);
         }
 
         void BeginGameplayAnalytics()

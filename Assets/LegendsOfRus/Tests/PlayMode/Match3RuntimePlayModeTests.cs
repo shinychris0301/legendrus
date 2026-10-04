@@ -282,6 +282,61 @@ namespace LegendsOfRus.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits()
+        {
+            var state = GameState.Instance; string beforeHash = board.BoardStateHash;
+            board.SimulateStuckCommandForTesting(BoosterType.Firebird);
+            Assert.That(board.HasActiveCommand, Is.True);
+            Assert.That(state.TryAddBooster(BoosterType.Firebird, int.MaxValue - state.BoosterCount(BoosterType.Firebird)), Is.True);
+            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Gameplay command recover(ed|y pending): qa:stuck-command"));
+            board.ForceCommandTimeoutForTesting(); yield return null; yield return null;
+            Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash)); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
+            Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Paused)); Assert.That(board.CanAcceptPointerInput, Is.False);
+            Assert.That(board.TryResume(), Is.False);
+            Assert.That(state.HasPendingBoosterCommand, Is.True);
+            Assert.That(SaveService.Load().boosterCommand.state, Is.EqualTo(CampaignBoosterState.Reserved));
+            int recovered = 0; board.MotionEventPublished += e => { if(e.Kind == GameplayMotionKind.CommandRecovered)recovered++; };
+            Assert.That(state.TryUseBooster(BoosterType.Firebird), Is.True);
+            Assert.That(board.TryResume(), Is.True); Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Idle));
+            Assert.That(board.HasActiveCommand, Is.False); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
+            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Refunded));
+            Assert.That(board.TryResume(), Is.False); board.ForceCommandTimeoutForTesting(); yield return null;
+            Assert.That(recovered, Is.EqualTo(1)); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
+        }
+
+        [UnityTest]
+        public IEnumerator SpendingRefundBlockedWriteRetainsReceiptAndCannotResume()
+        {
+            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True);
+            string boardHash = board.BoardStateHash; int moves = board.Moves;
+            board.SimulateStuckCommandForTesting(BoosterType.Firebird);
+            var original = state.Save; string reserved = JsonUtility.ToJson(original);
+            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
+            for (int i = 0; i < journal.Length; i++)
+            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
+            var future = JsonUtility.FromJson<PlayerSaveData>(reserved); future.saveVersion = 999;
+            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
+            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
+            try
+            {
+                LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: qa:stuck-command"));
+                board.ForceCommandTimeoutForTesting(); yield return null; yield return null;
+                Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Paused)); Assert.That(board.BoardStateHash, Is.EqualTo(boardHash));
+                Assert.That(board.Moves, Is.EqualTo(moves)); Assert.That(board.HasActiveCommand, Is.True);
+                Assert.That(state.Save, Is.SameAs(original)); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(reserved));
+                Assert.That(state.HasPendingBoosterCommand, Is.True); Assert.That(state.CanPersist, Is.False);
+                Assert.That(board.TryResume(), Is.False); Assert.That(board.CanAcceptPointerInput, Is.False);
+                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
+            }
+            finally
+            {
+                for (int i = 0; i < journal.Length; i++)
+                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
+                PlayerPrefs.Save();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator SpecialCombination_VerifiesEveryRuntimeWaveHash()
         {
             const string id = "special.row-column";
@@ -427,5 +482,32 @@ namespace LegendsOfRus.Tests.PlayMode
             }
             PlayerPrefs.Save();
         }
+
+        [UnityTest]
+        public IEnumerator RoundStartCommittedOrdinaryBoardKeepsRuntimeBoosterOwnershipAndSeed()
+        {
+            var state=GameState.Instance;var level=board.CurrentLevel;
+            Assert.That(state.TryStartLevel(level,out int attempt,out _),Is.True);
+            int energy=state.Save.energy;var write=state.LastWriteResult;
+            board.Initialize(level,null,null,attempt);
+            Assert.That(state.GetLevelProgress(level.chapterId,level.levelId).attempts,Is.EqualTo(attempt));Assert.That(state.Save.energy,Is.EqualTo(energy));
+            Assert.That(state.LastWriteResult,Is.SameAs(write));
+            Assert.That(board.BoardSeed,Is.EqualTo(BoardSeedUtility.CreateRuntimeSeed(level.chapterId,level.levelId,level.boardSeed+attempt)));
+            int moves=board.Moves;int boosters=state.BoosterCount(BoosterType.SeaPearl);board.UseBooster(BoosterType.SeaPearl);yield return WaitUntilInteractive();
+            Assert.That(board.Moves,Is.EqualTo(moves+5));Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(boosters-1));
+            Assert.That(state.Save.boosterCommand.state,Is.EqualTo(CampaignBoosterState.Applied));
+            Assert.That(state.GetLevelProgress(level.chapterId,level.levelId).attempts,Is.EqualTo(attempt));Assert.That(state.Save.energy,Is.EqualTo(energy));
+            Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
+        }
+
+        [Test]
+        public void RoundStartOrdinaryInitializerRejectsUncommittedAttempt()
+        {
+            var level=board.CurrentLevel;var state=GameState.Instance;var write=state.LastWriteResult;string hash=board.BoardStateHash;
+            Assert.Throws<System.ArgumentException>(()=>board.Initialize(level,null,null,0));
+            Assert.Throws<System.ArgumentException>(()=>board.Initialize(level,null,null,state.GetLevelProgress(level.chapterId,level.levelId).attempts+1));
+            Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(state.LastWriteResult,Is.SameAs(write));
+        }
+
     }
 }

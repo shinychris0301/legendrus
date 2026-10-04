@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Failed(Child)" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.9112871">
+  <test-suite type="TestSuite" id="2670" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1491" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.911287" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2664" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="702" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.876799" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1197057" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2665" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="702" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.863665" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2666" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="702" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.847545" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2667" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="702" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.830820" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1962" name="ChapterMapAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.607543" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1968" name="SelectionRejectedNativeNodeStaysOnMapWithError" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.SelectionRejectedNativeNodeStaysOnMapWithError" methodname="SelectionRejectedNativeNodeStaysOnMapWithError" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="2124712962" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.388518" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: ChapterMap
+  But was:  PreLevel
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests+<VerifyRejectedSelection>d__22.MoveNext () [0x00185] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:401
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+
+IgnoreFailingMessages:false
+]]></output>
+              </test-case>
+              <test-case id="1969" name="SelectionRejectedNativePlayStaysOnMapWithError" fullname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.SelectionRejectedNativePlayStaysOnMapWithError" methodname="SelectionRejectedNativePlayStaysOnMapWithError" classname="LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests" runstate="Runnable" seed="952882390" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.198893" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: ChapterMap
+  But was:  PreLevel
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests+<VerifyRejectedSelection>d__22.MoveNext () [0x00185] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/ChapterMapAlignmentPlayModeTests.cs:401
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2242" name="LevelSystemRuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="127" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.184705" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="2393" name="SelectionNormalizationRejectedWritePreservesExactSave" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionNormalizationRejectedWritePreservesExactSave" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.083110" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2391" name="SelectionNormalizationRejectedWritePreservesExactSave(False)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionNormalizationRejectedWritePreservesExactSave(False)" methodname="SelectionNormalizationRejectedWritePreservesExactSave" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1064919747" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.035478" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected string length 1086 but was 1088. Strings differ at index 126.
+  Expected: "...678910460,"chapter":1,"level":1,"stars":0,"storyStage":0,"..."
+  But was:  "...678910460,"chapter":1,"level":500,"stars":0,"storyStage":0..."
+  --------------------------------------------^
+
+TearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                    <stack-trace><![CDATA[LegendsOfRus.GameState:ResetProgress () (at Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:1076)
+LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests/<TearDown>d__8:MoveNext () (at Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:49)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+]]></output>
+                </test-case>
+                <test-case id="2392" name="SelectionNormalizationRejectedWritePreservesExactSave(True)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionNormalizationRejectedWritePreservesExactSave(True)" methodname="SelectionNormalizationRejectedWritePreservesExactSave" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="82426834" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.031160" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected string length 1086 but was 1088. Strings differ at index 126.
+  Expected: "...679244070,"chapter":1,"level":1,"stars":0,"storyStage":0,"..."
+  But was:  "...679244070,"chapter":1,"level":500,"stars":0,"storyStage":0..."
+  --------------------------------------------^
+
+TearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                    <stack-trace><![CDATA[LegendsOfRus.GameState:ResetProgress () (at Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:1076)
+LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests/<TearDown>d__8:MoveNext () (at Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:49)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+]]></output>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="2390" name="SelectionRejectedWritePreservesSelectionAndLockedState" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionRejectedWritePreservesSelectionAndLockedState" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.083357" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2388" name="SelectionRejectedWritePreservesSelectionAndLockedState(False)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionRejectedWritePreservesSelectionAndLockedState(False)" methodname="SelectionRejectedWritePreservesSelectionAndLockedState" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1315549178" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:07Z" duration="0.033468" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: False
+  But was:  True
+
+TearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                    <stack-trace><![CDATA[LegendsOfRus.GameState:ResetProgress () (at Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:1076)
+LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests/<TearDown>d__8:MoveNext () (at Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:49)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+]]></output>
+                </test-case>
+                <test-case id="2389" name="SelectionRejectedWritePreservesSelectionAndLockedState(True)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionRejectedWritePreservesSelectionAndLockedState(True)" methodname="SelectionRejectedWritePreservesSelectionAndLockedState" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1257575616" result="Failed" start-time="2026-10-03 20:11:07Z" end-time="2026-10-03 20:11:08Z" duration="0.033322" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: False
+  But was:  True
+
+TearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                    <stack-trace><![CDATA[LegendsOfRus.GameState:ResetProgress () (at Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:1076)
+LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests/<TearDown>d__8:MoveNext () (at Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:49)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at /home/bokken/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SelectionRecovery/R1/QA/Reproduce/results.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

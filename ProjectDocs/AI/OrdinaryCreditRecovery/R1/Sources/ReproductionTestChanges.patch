@@ -1,0 +1,95 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -476,6 +476,92 @@
+             for (int i = 0; i < 4; i++)Assert.That(state.BoosterCount((BoosterType)i), Is.EqualTo(boosters[i]));
+         }
+ 
++        static void SetOrdinaryCreditBalance(PlayerSaveData save, int resource, int value)
++        {
++            switch (resource)
++            {
++                case 0: save.gold = value; break;
++                case 1: save.gems = value; break;
++                case 2: save.boosterMace = value; break;
++                case 3: save.boosterFirebird = value; break;
++                case 4: save.boosterLivingLight = value; break;
++                case 5: save.boosterSeaPearl = value; break;
++                default: Assert.Fail("Unknown credit resource."); break;
++            }
++        }
++
++        static void AddOrdinaryCredit(GameState state, int resource, int amount)
++        {
++            if (resource == 0) state.AddGold(amount);
++            else if (resource == 1) state.AddGems(amount);
++            else state.AddBooster((BoosterType)(resource - 2), amount);
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditOverflowPreservesLiveSaveAndJournal(int resource)
++        {
++            var state = GameState.Instance;
++            SetOrdinaryCreditBalance(state.Save, resource, int.MaxValue - 1);
++            state.Persist();
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var priorWrite = state.LastWriteResult;
++            var journal = new string[PersistedSaveKeys.Length]; var present = new bool[journal.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignoredLogs = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                for (int attempt = 0; attempt < 2; attempt++)
++                {
++                    AddOrdinaryCredit(state, resource, 2);
++                    Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "Full credit must be rejected without wrapping or partial mutation.");
++                }
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite));
++                Assert.That(state.CanPersist, Is.True); Assert.That(events, Is.Zero);
++                for (int i = 0; i < journal.Length; i++)
++                { Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[i]), Is.EqualTo(present[i])); Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[i]), Is.EqualTo(journal[i])); }
++            }
++            finally { LogAssert.ignoreFailingMessages = ignoredLogs; state.Changed -= changed; }
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        [TestCase(3)] [TestCase(4)] [TestCase(5)]
++        public void OrdinaryCreditBlockedWritePreservesLiveSaveAndFutureJournal(int resource)
++        {
++            var state = GameState.Instance; var original = state.Save; string before = JsonUtility.ToJson(original);
++            var journal = new string[PersistedSaveKeys.Length]; var present = new bool[journal.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignoredLogs = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                AddOrdinaryCredit(state, resource, 1);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.Save, Is.SameAs(original));
++                Assert.That(events, Is.Zero); Assert.That(state.CanPersist, Is.False);
++                Assert.That(state.LastWriteResult.Status, Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                var blockedWrite = state.LastWriteResult;
++                AddOrdinaryCredit(state, resource, 1);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.LastWriteResult, Is.SameAs(blockedWrite));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]) || PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                LogAssert.ignoreFailingMessages = ignoredLogs; state.Changed -= changed;
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
+         [Test]
+         public void TutorialProgress_PersistsAndCannotBeCompletedTwice()
+         {

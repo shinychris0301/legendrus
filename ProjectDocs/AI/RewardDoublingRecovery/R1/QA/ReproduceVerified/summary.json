@@ -1,0 +1,62 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 31.19398808479309,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.DoubleGoldOverflowPreservesEligibilityBalancesAndJournal;LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FailedDoubleGoldSaveDoesNotPublishOrConsumeReward",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/RewardDoublingRecovery/R1/QA/ReproduceVerified/results.xml",
+    "-logFile",
+    "/tmp/lor-reward-doubling-recovery-r1/ReproduceVerified/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-reward-doubling-recovery-r1/ReproduceVerified/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-reward-doubling-recovery-r1/ReproduceVerified",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "4",
+    "result": "Failed(Child)",
+    "total": "4",
+    "passed": "0",
+    "failed": "4",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 11:53:41Z",
+    "end-time": "2026-10-03 11:53:43Z",
+    "duration": "1.4665303"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.DoubleGoldOverflowPreservesEligibilityBalancesAndJournal(int.MaxValue,1)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.DoubleGoldOverflowPreservesEligibilityBalancesAndJournal(2147483508,140)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.DoubleGoldOverflowPreservesEligibilityBalancesAndJournal(1,int.MaxValue)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.VictoryAlignmentPlayModeTests.FailedDoubleGoldSaveDoesNotPublishOrConsumeReward",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    }
+  ]
+}

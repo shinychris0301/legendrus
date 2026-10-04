@@ -1,0 +1,185 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CU3Ec__DisplayClass52_2_U3CBindNavigationU3Eb__4_m94C334CFB527240C045135B4EA4E6109BC6DCBA6 (U3CU3Ec__DisplayClass52_2_t9F9A10E71F3E3EF236A645BA0B3196F07E438A8C* __this, const RuntimeMethod* method) 
+{
+	static bool s_Il2CppMethodInitialized;
+	if (!s_Il2CppMethodInitialized)
+	{
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteral333C2050C35BF1A3E14D939F5FFEBA286C24354D);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteral6DB4008AB79C37909304CEBA10A3CA5154205283);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteral9DF967B044B94882330522D2C49983EA2A0C62E6);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteralB9FB708BF65877ADFC45E8AF1142C08C132312F2);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteralC6DE535D828F30C374EB3BE3FFDE520228FC3096);
+		s_Il2CppMethodInitialized = true;
+	}
+	int32_t V_0 = 0;
+	bool V_1 = false;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B7_0 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B4_0 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B6_0 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B5_0 = NULL;
+	String_t* G_B10_0 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B10_1 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B9_0 = NULL;
+	Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* G_B8_0 = NULL;
+	Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* G_B14_0 = NULL;
+	Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* G_B13_0 = NULL;
+	{
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_0 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_0);
+		ProductionChapterMapView_t73FA61D194FCDDD0F89F8021A5BBFC50FD5D1075* L_1 = L_0->___U3CU3E4__this;
+		NullCheck(L_1);
+		ProductionChapterMapScroller_t51327F0475F52DB572838C6E0792E7D7EBC90EA6* L_2 = L_1->___Scroller;
+		NullCheck(L_2);
+		bool L_3;
+		L_3 = ProductionChapterMapScroller_get_IsDragging_m3DB3A03337C9A46FB07F82BB844D683745FD7544_inline(L_2, NULL);
+		if (!L_3)
+		{
+			goto IL_0018;
+		}
+	}
+	{
+		return;
+	}
+
+IL_0018:
+	{
+		ChapterMapNode_t6EE3B1AED87D25E8453712E8A8883B374A0129B0* L_4 = __this->___node;
+		NullCheck(L_4);
+		int32_t L_5 = L_4->___LevelId;
+		V_0 = L_5;
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_6 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_6);
+		ProductionChapterMapView_t73FA61D194FCDDD0F89F8021A5BBFC50FD5D1075* L_7 = L_6->___U3CU3E4__this;
+		int32_t L_8 = V_0;
+		NullCheck(L_7);
+		bool L_9;
+		L_9 = ProductionChapterMapView_LevelAvailable_m61FB0980DD4E9A97C2B8CBD4AAE7742E42E2EDA9(L_7, L_8, NULL);
+		if (L_9)
+		{
+			goto IL_0092;
+		}
+	}
+	{
+		int32_t L_10 = V_0;
+		LevelData_tCD69EAEAB70C2F2CD76C9F4727F8491C1C989CDC* L_11;
+		L_11 = ChapterLevelCatalog_Find_mB0A3275A64F35FB511F90A6049719C9B1971FDC6(1, L_10, NULL);
+		V_1 = (bool)((!(((RuntimeObject*)(LevelData_tCD69EAEAB70C2F2CD76C9F4727F8491C1C989CDC*)L_11) <= ((RuntimeObject*)(RuntimeObject*)NULL)))? 1 : 0);
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_12 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_12);
+		Action_1_t3CB5D1A819C3ED3F99E9E39F890F18633253949A* L_13 = L_12->___notify;
+		bool L_14 = V_1;
+		if (L_14)
+		{
+			G_B7_0 = L_13;
+			goto IL_006f;
+		}
+		G_B4_0 = L_13;
+	}
+	{
+		String_t* L_15;
+		L_15 = DemoFeatureState_get_LanguageCode_m3DF9CF2D676DB6CDA9612686549EA2EEE3BB5438(NULL);
+		bool L_16;
+		L_16 = String_op_Equality_m030E1B219352228970A076136E455C4E568C02C1(L_15, _stringLiteralC6DE535D828F30C374EB3BE3FFDE520228FC3096, NULL);
+		if (L_16)
+		{
+			G_B6_0 = G_B4_0;
+			goto IL_0068;
+		}
+		G_B5_0 = G_B4_0;
+	}
+	{
+		G_B10_0 = _stringLiteral9DF967B044B94882330522D2C49983EA2A0C62E6;
+		G_B10_1 = G_B5_0;
+		goto IL_008c;
+	}
+
+IL_0068:
+	{
+		G_B10_0 = _stringLiteral333C2050C35BF1A3E14D939F5FFEBA286C24354D;
+		G_B10_1 = G_B6_0;
+		goto IL_008c;
+	}
+
+IL_006f:
+	{
+		String_t* L_17;
+		L_17 = DemoFeatureState_get_LanguageCode_m3DF9CF2D676DB6CDA9612686549EA2EEE3BB5438(NULL);
+		bool L_18;
+		L_18 = String_op_Equality_m030E1B219352228970A076136E455C4E568C02C1(L_17, _stringLiteralC6DE535D828F30C374EB3BE3FFDE520228FC3096, NULL);
+		if (L_18)
+		{
+			G_B9_0 = G_B7_0;
+			goto IL_0087;
+		}
+		G_B8_0 = G_B7_0;
+	}
+	{
+		G_B10_0 = _stringLiteralB9FB708BF65877ADFC45E8AF1142C08C132312F2;
+		G_B10_1 = G_B8_0;
+		goto IL_008c;
+	}
+
+IL_0087:
+	{
+		G_B10_0 = _stringLiteral6DB4008AB79C37909304CEBA10A3CA5154205283;
+		G_B10_1 = G_B9_0;
+	}
+
+IL_008c:
+	{
+		NullCheck(G_B10_1);
+		Action_1_Invoke_m690438AAE38F9762172E3AE0A33D0B42ACD35790_inline(G_B10_1, G_B10_0, NULL);
+		return;
+	}
+
+IL_0092:
+	{
+		GameState_t5E590D2FB317152A4011A3CA69E3F311E0A7393A* L_19;
+		L_19 = GameState_get_Instance_m3202061BC5E0A39B53697C35D0BEE15692173D74_inline(NULL);
+		int32_t L_20 = V_0;
+		NullCheck(L_19);
+		bool L_21;
+		L_21 = GameState_SelectLevel_m6055ECAE894AC442764BC224B6B3FB0ABA949570(L_19, 1, L_20, NULL);
+		if (L_21)
+		{
+			goto IL_00b6;
+		}
+	}
+	{
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_22 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_22);
+		Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* L_23 = L_22->___selectionRejected;
+		Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* L_24 = L_23;
+		if (L_24)
+		{
+			G_B14_0 = L_24;
+			goto IL_00b0;
+		}
+		G_B13_0 = L_24;
+	}
+	{
+		return;
+	}
+
+IL_00b0:
+	{
+		NullCheck(G_B14_0);
+		Action_Invoke_m7126A54DACA72B845424072887B5F3A51FC3808E_inline(G_B14_0, NULL);
+		return;
+	}
+
+IL_00b6:
+	{
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_25 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_25);
+		ProductionChapterMapView_t73FA61D194FCDDD0F89F8021A5BBFC50FD5D1075* L_26 = L_25->___U3CU3E4__this;
+		U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* L_27 = __this->___CSU24U3CU3E8__locals2;
+		NullCheck(L_27);
+		Func_1_t2BE7F58348C9CC544A8973B3A9E55541DE43C457* L_28 = L_27->___openSelectedLevel;
+		NullCheck(L_28);
+		bool L_29;
+		L_29 = Func_1_Invoke_mBB7F37C468451AF57FAF31635C544D6B8C4373B2_inline(L_28, NULL);
+		NullCheck(L_26);
+		L_26->___committed = L_29;
+		return;
+	}
+}

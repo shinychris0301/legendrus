@@ -1,0 +1,110 @@
+--- a/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/VictoryAlignmentPlayModeTests.cs
+@@ -220,6 +220,107 @@
+             Assert.That(View().DoubleButton.interactable,Is.False);Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
+             yield return new WaitForSecondsRealtime(1);
+             Capture("Victory_GoldDoubled_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++        }
++        [TestCase(int.MaxValue,1)]
++        [TestCase(int.MaxValue-139,140)]
++        [TestCase(1,int.MaxValue)]
++        public void DoubleGoldOverflowPreservesEligibilityBalancesAndJournal(int gold,int reward)
++        {
++            var state=GameState.Instance;Win(3,4000);
++            state.Save.gold=gold;state.Save.lastRewardGold=reward;state.Persist();
++            string before=JsonUtility.ToJson(state.Save);var originalSave=state.Save;
++            var priorWrite=state.LastWriteResult;var outcome=state.LastCompletionResult;
++            var present=new bool[keys.Length];var journal=new string[keys.Length];
++            for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
++            int events=0;Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
++                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
++                Assert.That(state.Save,Is.SameAs(originalSave));
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
++                Assert.That(state.LastWriteResult,Is.EqualTo(priorWrite));
++                Assert.That(state.CanPersist,Is.True);Assert.That(events,Is.Zero);
++                for(int i=0;i<keys.Length;i++)
++                {
++                    Assert.That(PlayerPrefs.HasKey(keys[i]),Is.EqualTo(present[i]));
++                    Assert.That(PlayerPrefs.GetString(keys[i]),Is.EqualTo(journal[i]));
++                }
++            }
++            finally{state.Changed-=changed;}
++        }
++        [UnityTest]
++        public IEnumerator FailedDoubleGoldSaveDoesNotPublishOrConsumeReward()
++        {
++            var state=GameState.Instance;Win(3,4000);yield return null;
++            string before=JsonUtility.ToJson(state.Save);var originalSave=state.Save;
++            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
++            foreach(string key in keys)PlayerPrefs.DeleteKey(key);
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++            Assert.That(SaveService.LoadWithResult().Status,Is.EqualTo(PlayerSaveLoadStatus.UnsupportedFutureVersion));
++            var outcome=state.LastCompletionResult;int events=0;Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                // Preserve the behavioral assertion when reproducing the old Persist error log.
++                bool ignoredLogs=LogAssert.ignoreFailingMessages;bool doubled;
++                try{LogAssert.ignoreFailingMessages=true;doubled=state.TryDoubleLastLevelGoldReward();}
++                finally{LogAssert.ignoreFailingMessages=ignoredLogs;}
++                Assert.That(doubled,Is.False);
++                Assert.That(state.Save,Is.SameAs(originalSave));
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
++                Assert.That(state.LastWriteResult.Status,Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                Assert.That(state.CanPersist,Is.False);var rejectedWrite=state.LastWriteResult;
++                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
++                Assert.That(state.LastWriteResult,Is.EqualTo(rejectedWrite));
++                Assert.That(events,Is.Zero);Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(keys[1]),Is.False);Assert.That(PlayerPrefs.HasKey(keys[2]),Is.False);
++                Assert.That(View().RewardValues[0].text,Is.EqualTo("140"));
++            }
++            finally{state.Changed-=changed;}
++        }
++        [UnityTest]
++        public IEnumerator OverflowDoubleGoldCanRetryAtExactLimitAndPersistsOnce()
++        {
++            foreach(string language in new[]{"ru","en"})
++            {
++                GameState.Instance.ResetProgress();GameState.Instance.Save.highestUnlockedLevel=3;
++                DemoFeatureState.SetLanguage(language);
++                Win(3,4000);yield return null;
++                var state=GameState.Instance;int reward=state.Save.lastRewardGold;
++                Assert.That(reward,Is.EqualTo(140));state.Save.gold=int.MaxValue-reward+1;state.Persist();
++                string before=JsonUtility.ToJson(state.Save);
++                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(View().DoubleButton.interactable,Is.True);
++                Assert.That(View().RewardValues[0].text,Is.EqualTo("140"));
++                Assert.That(state.SpendGold(1),Is.True);
++                var expected=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++                expected.gold=int.MaxValue;expected.lastRewardDoubled=true;
++                var outcome=state.LastCompletionResult;int events=0;Action changed=()=>events++;state.Changed+=changed;
++                try
++                {
++                    // Service call only: this does not bypass or certify the video-provider gate.
++                    Assert.That(state.TryDoubleLastLevelGoldReward(),Is.True);
++                    Assert.That(events,Is.EqualTo(1));Assert.That(state.CanPersist,Is.True);
++                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(JsonUtility.ToJson(expected)));
++                    Assert.That(state.LastCompletionResult,Is.SameAs(outcome));
++                    Assert.That(View().RewardValues[0].text,Is.EqualTo("280"));
++                    Assert.That(View().DoubleButton.interactable,Is.False);
++                    Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False);Assert.That(events,Is.EqualTo(1));
++                }
++                finally{state.Changed-=changed;}
++                var loaded=SaveService.Load();Assert.That(loaded.gold,Is.EqualTo(int.MaxValue));
++                Assert.That(loaded.lastRewardDoubled,Is.True);
++                router.Show(ScreenId.Home);Settle();router.Show(ScreenId.Victory);Settle();yield return null;
++                Assert.That(View().RewardValues[0].text,Is.EqualTo("280"));Assert.That(View().DoubleButton.interactable,Is.False);
++                yield return WaitForNormalButtonColors();
++                Capture("Victory_OverflowDoubleRecovered_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
++                state.Save=loaded;
++                Assert.That(state.TryDoubleLastLevelGoldReward(),Is.False,"Reloaded flags must reject duplicate credit.");
++                Assert.That(state.Save.gold,Is.EqualTo(int.MaxValue));
++            }
+         }
+         [UnityTest]
+         public IEnumerator UnavailableVideoPreservesRewardsAndContinueRoutesThroughExistingStoryFlow()

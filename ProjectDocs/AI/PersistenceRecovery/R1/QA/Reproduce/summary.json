@@ -1,0 +1,72 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 33.610119581222534,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "PersistenceLockedLegacy;PersistenceLegacyChangedReentry",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/PersistenceRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/dev/shm/lor-persistence-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/dev/shm/lor-persistence-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/dev/shm/lor-persistence-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "6",
+    "result": "Failed(Child)",
+    "total": "6",
+    "passed": "0",
+    "failed": "6",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-04 01:10:44Z",
+    "end-time": "2026-10-04 01:10:45Z",
+    "duration": "0.4000654"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLegacyChangedReentryCommitsOnlyOnce",
+      "result": "Failed",
+      "message": "  Expected: 1\n  But was:  2\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLockedLegacyRetryDoesNotRescanOrReplaceFailureEvidence",
+      "result": "Failed",
+      "message": "  Expected: same as <WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED>\n  But was:  <WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED>\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLockedLegacyWriteCannotOverwriteRepairedJournal(False,False)",
+      "result": "Failed",
+      "message": "  Locked instance must not replace repaired history.\n  Expected string length 1709 but was 1710. Strings differ at index 34.\n  Expected: \"...SAVE_ENVELOPE\\nformat=1\\nintent=replace\\npayloadVersion=6\\nrev...\"\n  But was:  \"...SAVE_ENVELOPE\\nformat=1\\nintent=ordinary\\npayloadVersion=6\\nre...\"\n  ----------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLockedLegacyWriteCannotOverwriteRepairedJournal(False,True)",
+      "result": "Failed",
+      "message": "  Locked instance must not replace repaired history.\n  Expected string length 1709 but was 1710. Strings differ at index 34.\n  Expected: \"...SAVE_ENVELOPE\\nformat=1\\nintent=replace\\npayloadVersion=6\\nrev...\"\n  But was:  \"...SAVE_ENVELOPE\\nformat=1\\nintent=ordinary\\npayloadVersion=6\\nre...\"\n  ----------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLockedLegacyWriteCannotOverwriteRepairedJournal(True,False)",
+      "result": "Failed",
+      "message": "  Locked instance must not replace repaired history.\n  Expected string length 1709 but was 1686. Strings differ at index 34.\n  Expected: \"...SAVE_ENVELOPE\\nformat=1\\nintent=replace\\npayloadVersion=6\\nrev...\"\n  But was:  \"...SAVE_ENVELOPE\\nformat=1\\nintent=ordinary\\npayloadVersion=6\\nre...\"\n  ----------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.PersistenceLockedLegacyWriteCannotOverwriteRepairedJournal(True,True)",
+      "result": "Failed",
+      "message": "  Locked instance must not replace repaired history.\n  Expected string length 1709 but was 1686. Strings differ at index 34.\n  Expected: \"...SAVE_ENVELOPE\\nformat=1\\nintent=replace\\npayloadVersion=6\\nrev...\"\n  But was:  \"...SAVE_ENVELOPE\\nformat=1\\nintent=ordinary\\npayloadVersion=6\\nre...\"\n  ----------------------------------------------^\n"
+    }
+  ]
+}

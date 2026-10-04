@@ -1,0 +1,306 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -216,19 +216,19 @@
+ 
+         void MigrateSave()
+         {
+-            if (Save == null)
+-                Save = new PlayerSaveData();
+-
+-            string sourceJson = JsonUtility.ToJson(Save);
++            if (!canPersist || persistenceInProgress) return;
++            var source = Save ?? new PlayerSaveData();
++            string sourceJson = JsonUtility.ToJson(source);
+ 
+             PlayerSaveMigrationResult migration =
+                 PlayerSaveMigrationRegistry.Migrate(
+-                    Save,
++                    source,
+                     BuildLegacyProgress,
+                     DateTime.UtcNow.Ticks
+                 );
+             if (!migration.Succeeded || migration.Data == null)
+             {
++                canPersist = false;
+                 Debug.LogError(
+                     "Player save migration blocked: " +
+                     (migration != null
+@@ -237,17 +237,17 @@
+                 );
+                 return;
+             }
+-            Save = migration.Data;
++            var candidate = migration.Data;
+             // Migration clones through Unity JSON, which may materialize an empty optional object.
+-            if (Save.retainedRound != null && string.IsNullOrEmpty(Save.retainedRound.attemptId))
+-                Save.retainedRound = null;
+-
+-            NormalizeLevelProgress();
+-            NormalizeTutorialProgress();
+-            NormalizeStoryProgress();
+-            NormalizeChapterCompletionProgress();
+-
+-            string normalizedJson = JsonUtility.ToJson(Save);
++            if (candidate.retainedRound != null && string.IsNullOrEmpty(candidate.retainedRound.attemptId))
++                candidate.retainedRound = null;
++
++            NormalizeLevelProgress(candidate);
++            NormalizeTutorialProgress(candidate);
++            NormalizeStoryProgress(candidate);
++            NormalizeChapterCompletionProgress(candidate);
++
++            string normalizedJson = JsonUtility.ToJson(candidate);
+             if (saveRewriteRequired
+                 || migration.Changed
+                 || !string.Equals(
+@@ -255,9 +255,22 @@
+                     normalizedJson,
+                     StringComparison.Ordinal))
+             {
+-                Persist();
+-            }
+-            saveRewriteRequired = false;
++                // Startup rewrites obey the same acknowledgement policy as ordinary
++                // transactions. Keep loaded progress and the pending rewrite on rejection.
++                saveRewriteRequired = true;
++                persistenceInProgress = true;
++                try
++                {
++                    if (!TryCommitBalance(candidate))
++                        Debug.LogError("Player save write blocked: " + LastWriteResult);
++                }
++                finally
++                {
++                    // Changed observers may throw after the primary was committed.
++                    if (ReferenceEquals(Save, candidate)) saveRewriteRequired = false;
++                    persistenceInProgress = false;
++                }
++            }
+         }
+ 
+         List<LevelProgressData> BuildLegacyProgress(PlayerSaveData legacy)
+@@ -349,51 +362,51 @@
+             save.stars = CalculateTotalStars(save);
+         }
+ 
+-        void NormalizeTutorialProgress()
+-        {
+-            if (Save.completedTutorialSteps == null)
+-                Save.completedTutorialSteps = new List<string>();
++        static void NormalizeTutorialProgress(PlayerSaveData save)
++        {
++            if (save.completedTutorialSteps == null)
++                save.completedTutorialSteps = new List<string>();
+ 
+             var seen = new HashSet<string>(StringComparer.Ordinal);
+-            for (int i = Save.completedTutorialSteps.Count - 1; i >= 0; i--)
+-            {
+-                string tutorialId = Save.completedTutorialSteps[i];
++            for (int i = save.completedTutorialSteps.Count - 1; i >= 0; i--)
++            {
++                string tutorialId = save.completedTutorialSteps[i];
+                 if (string.IsNullOrWhiteSpace(tutorialId) || !seen.Add(tutorialId))
+-                    Save.completedTutorialSteps.RemoveAt(i);
+-            }
+-        }
+-
+-        void NormalizeStoryProgress()
+-        {
+-            if (Save.completedStoryScenes == null)
+-                Save.completedStoryScenes = new List<string>();
+-            StoryProgress.Normalize(Save.completedStoryScenes);
+-        }
+-
+-        void NormalizeChapterCompletionProgress()
+-        {
+-            if (Save.acknowledgedChapterCompletions == null)
+-                Save.acknowledgedChapterCompletions = new List<int>();
++                    save.completedTutorialSteps.RemoveAt(i);
++            }
++        }
++
++        static void NormalizeStoryProgress(PlayerSaveData save)
++        {
++            if (save.completedStoryScenes == null)
++                save.completedStoryScenes = new List<string>();
++            StoryProgress.Normalize(save.completedStoryScenes);
++        }
++
++        static void NormalizeChapterCompletionProgress(PlayerSaveData save)
++        {
++            if (save.acknowledgedChapterCompletions == null)
++                save.acknowledgedChapterCompletions = new List<int>();
+ 
+             var seen = new HashSet<int>();
+-            for (int i = Save.acknowledgedChapterCompletions.Count - 1; i >= 0; i--)
+-            {
+-                int chapterId = Save.acknowledgedChapterCompletions[i];
++            for (int i = save.acknowledgedChapterCompletions.Count - 1; i >= 0; i--)
++            {
++                int chapterId = save.acknowledgedChapterCompletions[i];
+                 if (chapterId <= 0 || !seen.Add(chapterId))
+-                    Save.acknowledgedChapterCompletions.RemoveAt(i);
++                    save.acknowledgedChapterCompletions.RemoveAt(i);
+             }
+ 
+             ChapterStoryCatalogData catalog = StoryCatalog.LoadChapter1();
+             if (
+                 catalog != null &&
+-                Save.acknowledgedChapterCompletions.Contains(catalog.chapterId) &&
+-                !ChapterCompletionPrerequisitesMet(catalog)
++                save.acknowledgedChapterCompletions.Contains(catalog.chapterId) &&
++                !ChapterCompletionPrerequisitesMet(save, catalog)
+             )
+             {
+-                Save.acknowledgedChapterCompletions.Remove(catalog.chapterId);
+-            }
+-
+-            Save.acknowledgedChapterCompletions.Sort();
++                save.acknowledgedChapterCompletions.Remove(catalog.chapterId);
++            }
++
++            save.acknowledgedChapterCompletions.Sort();
+         }
+ 
+         public void RefreshEnergyFromClock() => TryRefreshEnergyFromClock();
+@@ -1106,18 +1119,17 @@
+             );
+         }
+ 
+-        bool ChapterCompletionPrerequisitesMet(ChapterStoryCatalogData catalog)
++        static bool ChapterCompletionPrerequisitesMet(PlayerSaveData save, ChapterStoryCatalogData catalog)
+         {
+             if (catalog?.completion == null) return false;
+ 
+-            LevelProgressData finalProgress = GetLevelProgress(
+-                catalog.chapterId,
+-                catalog.completion.finalLevelId
+-            );
++            LevelProgressData finalProgress = save.levelProgress?.Find(progress =>
++                progress != null && progress.chapterId == catalog.chapterId &&
++                progress.levelId == catalog.completion.finalLevelId);
+             return
+                 finalProgress != null &&
+                 finalProgress.completions > 0 &&
+-                HasCompletedStoryScene(catalog.completion.finaleSceneId);
++                StoryProgress.HasCompleted(save.completedStoryScenes, catalog.completion.finaleSceneId);
+         }
+ 
+         public void ToggleMusic() => TryTogglePreference(0);
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -1956,5 +1956,114 @@
+             Assert.That(state.LastWriteResult.Success,Is.True);Assert.That(state.CanPersist,Is.True);long revision=state.LastWriteResult.Revision;Assert.That(state.TryPersist(),Is.True);Assert.That(state.LastWriteResult.Revision,Is.EqualTo(revision+1));
+         }
+ 
++        static System.Reflection.FieldInfo StartupRewriteField => typeof(GameState).GetField("saveRewriteRequired",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
++        static void StartupInvokeMigration(GameState state) => typeof(GameState).GetMethod("MigrateSave",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(state,null);
++        static PlayerSaveData StartupNormalizationSeed(int version)
++        {
++            return new PlayerSaveData
++            {
++                saveVersion=version,gold=3131,energy=5,energyMax=5,lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks,
++                level=2,highestUnlockedLevel=2,selectedLevel=2,stars=99,
++                levelProgress=new System.Collections.Generic.List<LevelProgressData>{new LevelProgressData{chapterId=1,levelId=1,bestStars=2,bestScore=100,attempts=1,completions=1,rewardClaimed=true}},
++                completedTutorialSteps=new System.Collections.Generic.List<string>{"swap","swap",""},
++                completedStoryScenes=new System.Collections.Generic.List<string>{"chapter01.intro","chapter01.intro","unknown.scene"},
++                acknowledgedChapterCompletions=new System.Collections.Generic.List<int>{1,1,0}
++            };
++        }
++        [TestCase(5)] [TestCase(6)]
++        public void StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(int version)
++        {
++            var previous=GameState.Instance;var old=PersistenceSnapshotJournal();GameObject freshObject=null;bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++            try
++            {
++                PersistenceRestoreJournal(new string[3]);var seed=StartupNormalizationSeed(version);PlayerPrefs.SetString(PersistedSaveKeys[0],PersistenceEncodeEnvelope(seed,long.MaxValue));PlayerPrefs.Save();var journal=PersistenceSnapshotJournal();
++                freshObject=new GameObject("StartupRejectedRewriteState");var fresh=freshObject.AddComponent<GameState>();
++                Assert.That(fresh.LastLoadResult.Status,Is.EqualTo(PlayerSaveLoadStatus.LoadedPrimary));Assert.That(fresh.LastWriteResult.Status,Is.EqualTo(PlayerSaveWriteStatus.RevisionExhausted));Assert.That(fresh.CanPersist,Is.False);
++                Assert.That(fresh.Save,Is.SameAs(fresh.LastLoadResult.Data),"Rejected normalization must not replace the loaded progress.");
++                Assert.That(JsonUtility.ToJson(fresh.Save),Is.EqualTo(JsonUtility.ToJson(seed)));Assert.That((bool)StartupRewriteField.GetValue(fresh),Is.True);PersistenceAssertJournal(journal);
++            }
++            finally{typeof(GameState).GetProperty("Instance").SetValue(null,previous);if(freshObject!=null)Object.DestroyImmediate(freshObject);PersistenceRestoreJournal(old);LogAssert.ignoreFailingMessages=ignored;}
++        }
++        [Test]
++        public void StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair()
++        {
++            var state=GameState.Instance;var old=PersistenceSnapshotJournal();var original=StartupNormalizationSeed(5);state.Save=original;StartupRewriteField.SetValue(state,true);
++            try
++            {
++                PersistenceSeedBlockedJournal(0);Assert.That(state.TryPersist(),Is.False);var write=state.LastWriteResult;string before=JsonUtility.ToJson(original);
++                PersistenceRestoreJournal(new string[3]);Assert.That(SaveService.TryReplaceHistory(new PlayerSaveData{energy=5,lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks},out var repaired),Is.True);var journal=PersistenceSnapshotJournal();
++                bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;try{StartupInvokeMigration(state);}finally{LogAssert.ignoreFailingMessages=ignored;}
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That((bool)StartupRewriteField.GetValue(state),Is.True);Assert.That(state.CanPersist,Is.False);PersistenceAssertJournal(journal);
++            }
++            finally{PersistenceRestoreJournal(old);}
++        }
++        [Test]
++        public void StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite()
++        {
++            var previous=GameState.Instance;var old=PersistenceSnapshotJournal();GameObject freshObject=null;
++            try
++            {
++                PersistenceRestoreJournal(new string[3]);Assert.That(SaveService.TryReplaceHistory(new PlayerSaveData{energy=5,lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks},out var write),Is.True);var journal=PersistenceSnapshotJournal();
++                freshObject=new GameObject("StartupHealthyNoOpState");var fresh=freshObject.AddComponent<GameState>();
++                Assert.That(fresh.LastLoadResult.RequiresRewrite,Is.False);Assert.That(fresh.Save,Is.SameAs(fresh.LastLoadResult.Data));Assert.That(fresh.LastWriteResult,Is.Null);Assert.That(fresh.CanPersist,Is.True);Assert.That((bool)StartupRewriteField.GetValue(fresh),Is.False);PersistenceAssertJournal(journal);
++            }
++            finally{typeof(GameState).GetProperty("Instance").SetValue(null,previous);if(freshObject!=null)Object.DestroyImmediate(freshObject);PersistenceRestoreJournal(old);}
++        }
++        [Test]
++        public void StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate()
++        {
++            var state=GameState.Instance;state.Save=StartupNormalizationSeed(5);StartupRewriteField.SetValue(state,true);int events=0;PlayerSaveData acknowledged=null;
++            System.Action changed=()=>{events++;acknowledged=state.Save;StartupInvokeMigration(state);};state.Changed+=changed;
++            try{StartupInvokeMigration(state);}
++            finally{state.Changed-=changed;}
++            Assert.That(events,Is.EqualTo(1));Assert.That(state.Save,Is.SameAs(acknowledged));Assert.That(state.Save.saveVersion,Is.EqualTo(6));Assert.That(state.Save.stars,Is.EqualTo(2));Assert.That((bool)StartupRewriteField.GetValue(state),Is.False);
++            Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++        }
++        [TestCase(1)] [TestCase(5)] [TestCase(6)]
++        public void StartupHealthyRewritePublishesOnlyCommittedNormalizedCandidate(int version)
++        {
++            var state=GameState.Instance;var source=StartupNormalizationSeed(version);state.Save=source;string before=JsonUtility.ToJson(source);int events=0;
++            System.Action changed=()=>{events++;Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));Assert.That(state.TryPersist(),Is.False);};state.Changed+=changed;
++            try{StartupInvokeMigration(state);}finally{state.Changed-=changed;}
++            Assert.That(events,Is.EqualTo(1));Assert.That(state.Save,Is.Not.SameAs(source));Assert.That(JsonUtility.ToJson(source),Is.EqualTo(before));
++            Assert.That(state.Save.saveVersion,Is.EqualTo(6));Assert.That(state.Save.stars,Is.EqualTo(version==1?3:2));Assert.That(state.Save.gold,Is.EqualTo(3131));Assert.That(state.Save.highestUnlockedLevel,Is.EqualTo(2));
++            Assert.That(state.Save.completedTutorialSteps,Is.EqualTo(new[]{"swap"}));Assert.That(state.Save.completedStoryScenes,Is.EqualTo(new[]{"chapter01.intro","unknown.scene"}));Assert.That(state.Save.acknowledgedChapterCompletions,Is.Empty);
++            Assert.That(state.LastWriteResult.Success,Is.True);Assert.That(state.CanPersist,Is.True);Assert.That((bool)StartupRewriteField.GetValue(state),Is.False);
++            var committed=state.Save;var journal=PersistenceSnapshotJournal();StartupInvokeMigration(state);Assert.That(state.Save,Is.SameAs(committed));PersistenceAssertJournal(journal);
++        }
++        [TestCase(false,false)] [TestCase(true,false)] [TestCase(false,true)] [TestCase(true,true)]
++        public void StartupChapterAcknowledgementUsesCandidateFinalePrerequisites(bool finalRound,bool finalScene)
++        {
++            var state=GameState.Instance;var source=StartupNormalizationSeed(6);var catalog=StoryCatalog.LoadChapter1();source.levelProgress.Clear();source.completedStoryScenes.Clear();
++            if(finalRound)source.levelProgress.Add(new LevelProgressData{chapterId=catalog.chapterId,levelId=catalog.completion.finalLevelId,completions=1,attempts=1,bestStars=3,rewardClaimed=true});
++            if(finalScene)source.completedStoryScenes.Add(catalog.completion.finaleSceneId);state.Save=source;string before=JsonUtility.ToJson(source);
++            StartupInvokeMigration(state);Assert.That(state.LastWriteResult.Success,Is.True);Assert.That(state.Save.acknowledgedChapterCompletions.Contains(1),Is.EqualTo(finalRound&&finalScene));
++            Assert.That(state.HasAcknowledgedChapterCompletion(1),Is.EqualTo(finalRound&&finalScene));Assert.That(JsonUtility.ToJson(source),Is.EqualTo(before));Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++        }
++        [TestCase(false)] [TestCase(true)]
++        public void StartupLegacyAndBackupRewriteKeepOriginalLoadEvidenceUnnormalized(bool backup)
++        {
++            var previous=GameState.Instance;var old=PersistenceSnapshotJournal();GameObject freshObject=null;
++            try
++            {
++                PersistenceRestoreJournal(new string[3]);var seed=StartupNormalizationSeed(5);string raw=JsonUtility.ToJson(seed);
++                if(backup){PlayerPrefs.SetString(PersistedSaveKeys[0],"{broken-startup-primary");PlayerPrefs.SetString(PersistedSaveKeys[1],PersistenceEncodeEnvelope(seed,7));}else PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++                freshObject=new GameObject("StartupSuccessfulRewriteState");var fresh=freshObject.AddComponent<GameState>();
++                Assert.That(fresh.LastLoadResult.Status,Is.EqualTo(backup?PlayerSaveLoadStatus.RecoveredBackup:PlayerSaveLoadStatus.LoadedPrimary));Assert.That(fresh.LastLoadResult.RequiresRewrite,Is.True);
++                Assert.That(JsonUtility.ToJson(fresh.LastLoadResult.Data),Is.EqualTo(raw));Assert.That(fresh.Save,Is.Not.SameAs(fresh.LastLoadResult.Data));Assert.That(fresh.Save.saveVersion,Is.EqualTo(6));Assert.That(fresh.Save.stars,Is.EqualTo(2));
++                Assert.That(fresh.CanPersist,Is.True);Assert.That(fresh.LastWriteResult.Success,Is.True);Assert.That((bool)StartupRewriteField.GetValue(fresh),Is.False);Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(fresh.Save)));
++            }
++            finally{typeof(GameState).GetProperty("Instance").SetValue(null,previous);if(freshObject!=null)Object.DestroyImmediate(freshObject);PersistenceRestoreJournal(old);}
++        }
++        [Test]
++        public void StartupObserverExceptionRetainsAcknowledgementAndReleasesMigrationGuard()
++        {
++            var state=GameState.Instance;state.Save=StartupNormalizationSeed(5);System.Action changed=()=>throw new System.InvalidOperationException("test.startup.observer");state.Changed+=changed;
++            try{var exception=Assert.Throws<System.Reflection.TargetInvocationException>(()=>StartupInvokeMigration(state));Assert.That(exception.InnerException,Is.TypeOf<System.InvalidOperationException>());}
++            finally{state.Changed-=changed;}
++            Assert.That(state.LastWriteResult.Success,Is.True);Assert.That(state.Save.saveVersion,Is.EqualTo(6));Assert.That((bool)StartupRewriteField.GetValue(state),Is.False);Assert.That(state.CanPersist,Is.True);
++            var acknowledged=state.Save;var journal=PersistenceSnapshotJournal();StartupInvokeMigration(state);Assert.That(state.Save,Is.SameAs(acknowledged));PersistenceAssertJournal(journal);Assert.That(state.TryPersist(),Is.True);
++        }
++
+     }
+ }

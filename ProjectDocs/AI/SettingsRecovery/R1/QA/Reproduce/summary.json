@@ -1,0 +1,102 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 32.95168375968933,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "SettingsRejectedLegacyToggle;SettingsRejectedNativeSwitch;SettingsRejectedPausedSwitch;SettingsReentrantChangedSwitch;SettingsReboundSwitch",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SettingsRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-settings-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-settings-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-settings-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "12",
+    "result": "Failed(Child)",
+    "total": "12",
+    "passed": "0",
+    "failed": "12",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 22:04:14Z",
+    "end-time": "2026-10-03 22:04:16Z",
+    "duration": "1.8413765"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(0,False)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 661.\n  Expected: \"...yRewardMonthClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":...\"\n  But was:  \"...yRewardMonthClaims\":0,\"music\":false,\"sfx\":true,\"vibration\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(1,False)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 672.\n  Expected: \"...hClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":true,\"notif...\"\n  But was:  \"...hClaims\":0,\"music\":true,\"sfx\":false,\"vibration\":true,\"noti...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(2,False)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 689.\n  Expected: \"...\":true,\"sfx\":true,\"vibration\":true,\"notifications\":true,\"r...\"\n  But was:  \"...\":true,\"sfx\":true,\"vibration\":false,\"notifications\":true,\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(3,False)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 710.\n  Expected: \"...bration\":true,\"notifications\":true,\"retainedRound\":{\"schem...\"\n  But was:  \"...bration\":true,\"notifications\":false,\"retainedRound\":{\"sche...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(0,True)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 661.\n  Expected: \"...yRewardMonthClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":...\"\n  But was:  \"...yRewardMonthClaims\":0,\"music\":false,\"sfx\":true,\"vibration\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(1,True)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 672.\n  Expected: \"...hClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":true,\"notif...\"\n  But was:  \"...hClaims\":0,\"music\":true,\"sfx\":false,\"vibration\":true,\"noti...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(2,True)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 689.\n  Expected: \"...\":true,\"sfx\":true,\"vibration\":true,\"notifications\":true,\"r...\"\n  But was:  \"...\":true,\"sfx\":true,\"vibration\":false,\"notifications\":true,\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(3,True)",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 710.\n  Expected: \"...bration\":true,\"notifications\":true,\"retainedRound\":{\"schem...\"\n  But was:  \"...bration\":true,\"notifications\":false,\"retainedRound\":{\"sche...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SettingsReboundSwitchRejectsRetiredListener",
+      "result": "Failed",
+      "message": "  Expected string length 1083 but was 1084. Strings differ at index 662.\n  Expected: \"...yRewardMonthClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":...\"\n  But was:  \"...yRewardMonthClaims\":0,\"music\":false,\"sfx\":true,\"vibration\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SettingsReentrantChangedSwitchCommitsOnlyOneToggle",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SettingsRejectedNativeSwitchKeepsPageAndExplainsFailureInBothLanguages",
+      "result": "Failed",
+      "message": "  Expected string length 1082 but was 1083. Strings differ at index 661.\n  Expected: \"...yRewardMonthClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":...\"\n  But was:  \"...yRewardMonthClaims\":0,\"music\":false,\"sfx\":true,\"vibration\"...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.SettingsAlignmentPlayModeTests.SettingsRejectedPausedSwitchKeepsBoardAndModalInBothLanguages",
+      "result": "Failed",
+      "message": "  Expected string length 1216 but was 1217. Strings differ at index 795.\n  Expected: \"...yRewardMonthClaims\":0,\"music\":true,\"sfx\":true,\"vibration\":...\"\n  But was:  \"...yRewardMonthClaims\":0,\"music\":false,\"sfx\":true,\"vibration\"...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

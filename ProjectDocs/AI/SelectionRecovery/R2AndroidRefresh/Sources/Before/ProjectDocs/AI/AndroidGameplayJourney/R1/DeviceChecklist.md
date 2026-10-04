@@ -1,0 +1,91 @@
+# Offline Android gameplay — prepared checks
+
+Status: **prepared; physical execution postponed by the user on 2026-09-30.** Editor evidence is in [TestResults.md](TestResults.md). All device rows below remain pending.
+
+Current preparation: [tutorial recovery Android refresh R2](../../TutorialRecovery/R2AndroidRefresh/TestResults.md) pins the verified APK, **766,026,550 bytes**, SHA256 `b699646db5f7ac9effc403c768eb19200b5eb3b58f14858b331f5edb80aa5fb4`. Profile13/native recap, Dialogue2, Gameplay24/four stock layouts, Victory12 and all six fixed disposable presets are packaged. [Profile commands and scenarios](../../AndroidGameplayProfile/R1/Usage.md). Android activation, isolation, recap touch/readability and lifecycle still require device evidence. Earlier R1/R2 results and device-preflight JSON remain historical.
+
+## Entry conditions
+
+1. From the project root, check the local artifact without contacting a phone:
+
+   ```bash
+   PYTHONDONTWRITEBYTECODE=1 python3 ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
+   ```
+
+   Default status `offline_prepared_device_deferred` verifies the pinned local hash, size, sidecar and linked tutorial R2 build/inspection/preset and42native-method evidence. It performs no ADB call. Exit 2 means a prerequisite needs review. It writes current offline evidence under TutorialRecovery/R2AndroidRefresh/QA, leaving historical R1/R2 evidence intact. The existing R1 `Sources/DevicePreflight.py` delegates to this same implementation.
+2. Only after phone work resumes, connect exactly one authorized phone and add `--device` to the command above. This mode reads device count/model/API, package path and installed APK hash. It does not install, launch, stop, clear/uninstall, read player data or export credentials. Zero, multiple, unauthorized or mixed attachments, split packages and build mismatches require review. `device_identity_verified_qa_activation_pending` confirms the installed APK identity only; the QA indicator and save boundary are still unverified. Offline exit 0 does not authorize device execution.
+3. The existing disposable save profile is implemented; use `fresh`, `resume`, `empty-energy` or one of the six exact fixed presets at a **cold process launch** as documented in Usage. Verify the yellow `QA · DISPOSABLE SAVE` indicator before controlled actions. A launcher-icon start without the extra uses normal player data. Never deliver a reset command into a running process. Invalid/missing ownership remains blocked; do not use normal saves as a fallback. Keep the credential probe separate. Do not clear/uninstall or read normal save/credential records to create a fixture.
+4. Record APK hash, Unity/build version, phone model/API, native resolution/insets, language and QA ownership. Verify offline mode before starting; real purchases, ads, accounts and social services are outside this run. Record visible baseline balances, stock, selected round, first-clear state and settings. Evidence must stay within the disposable profile. Exact Editor move counts are automated fixture evidence, not a phone pass criterion or human difficulty target.
+
+## Device execution matrix
+
+| ID | Action | Expected result / evidence |
+|---|---|---|
+| NAV-01 | From normal startup, use actual touches through Home → World Map → Chapter Map → story/PreLevel → Gameplay. Return using visible Back controls. | Correct hierarchy, one active screen, no blocked taps or stuck overlay. Record route and screenshots. Repeat in Russian and English. |
+| INPUT-01 | Make a valid swap, then an invalid swap; interrupt a drag with Android Home and return. | A valid move resolves once; invalid swap restores without consuming a move. Interrupted input releases, no phantom move or persistent touch lock. Record moves before/after and a short clip. |
+| ENERGY-01 | On disposable state, start with zero energy; then start a fresh round with energy available. | Zero-energy start is blocked by the normal UI. Successful initial start charges once. Opening/closing PreLevel, Settings or Pause does not charge. Record balances and route. |
+| WIN-01 | Win an uncleared round using legal touches. Continue through reward/story/map. Relaunch, then play and win that round again. | First-clear reward equals the round definition once; completed story/progress persists. Replay does not duplicate the first-clear grant. Record both before/after balances and completion state. This is a played replay, unlike the Editor service-level replay check. |
+| FAIL-01 | Exhaust moves without meeting goals; use free Retry, then Pause → Exit. | Failure grants no win reward. Retry creates a fresh board with the round's initial move budget; preserves the existing free-retry policy without another energy charge. Exit follows the normal map route; no duplicated failure accounting. |
+| BOOST-01 | Exercise each available inventory booster on disposable state, including cancel and an unavailable/empty inventory case. | One inventory charge per accepted use; canceled/unavailable actions do not charge. Input recovers and affected cells follow current rules. Record quantities before/after; do not judge deferred effect design as accepted here. |
+| STOCK-01 | With a separately established disposable stock fixture, inspect 999, 1 000, 9 999 and 2 147 483 647 on all four cards in RU/EN at native phone scale. | Exact full grouped live numbers; 999 uses the circular badge, ≥1 000 uses the wider emerald/gold face; captions and safe areas intact. Record text, crop and physical legibility separately; maximum ten-digit values remain a known small-text risk. Pending fixture and phone evidence. |
+| STOCK-02 | With exactly 1 000 Sea Pearls in disposable state, touch its visible count/card during a playable round; duplicate the tap while the board is busy. | One accepted consumption, exact 1 000→999 presentation change and +5 moves; a busy duplicate does not consume again. Sea Pearl acts immediately without a targeting step. Verify the board remains otherwise consistent. Pending fixture and phone evidence. |
+| STOCK-03 | With a large-stock fixture, use targeted boosters through the visible count face, cancel targeting, and reopen Pause/Settings in both languages. | Count decoration forwards touches to the existing card; cancellation does not consume, no hidden blocker, stale count or duplicated charge. Pending fixture and phone evidence. |
+| RECAP-01 | Before acknowledging any story in disposable state, open Profile → History in RU/EN. Then read the normal intro and revisit History. | Empty eligibility is disabled with localized no-read-scenes text; intro becomes eligible only after normal acknowledgement. Reader opens existing native Dialogue; no energy spend or extra reward. Physical evidence pending. |
+| RECAP-02 | In disposable state with at least three normally acknowledged scenes, open Story from History page2, browse Earlier/Later, rapidly repeat Continue, change language and use visible/Android Back. | Latest acknowledged in narrative order opens; unread scenes stay hidden, each accepted tap advances once, native top controls fit/are legible, same History page restores. Record balances, selection and persistence after relaunch. Android Back remains separately unverified. |
+| RECAP-03 | With a separately reviewed disposable state that has earned/acknowledged the actual round500 finale, replay it to completion twice; also leave recap for another screen and reopen. | Finish returns to Profile History without ChapterComplete routing or duplicate acknowledgement/grant; stale controls do not navigate after retirement. Pending eligible finale fixture and phone evidence; do not invent an intent seeding command or use normal saves. |
+| PAUSE-01 | Pause → Settings → Back → Resume; change language and settings. Try Android Back from these states. | Visible controls preserve the same round, moves and board. Android Back must not strand input or accidentally spend resources; record its actual route separately, since Editor visible-Back tests do not establish platform Back behavior. |
+| LIFE-01 | Background/foreground while idle, dragging and resolving a cascade; test brief screen lock. | On same-process return, no duplicate action/reward or stuck input; board finishes consistently and settings persist. Record whether Android retained or killed the process; do not conflate these cases. |
+| SAVE-01 | Change settings/language, complete a round and consume a booster; close and relaunch the disposable app process. | Durable progress, balances, inventory and preferences restore. No duplicate grant or stale transient Victory result. Do not expect arbitrary unfinished mid-round board recovery. |
+| FAIL-SAVE-01 | Reach settled Failure; relaunch before Retry/Exit. Then choose Retry or Exit and relaunch again. | The compatible retained failed-round decision restores once with its original score/attempt and no added energy charge. Finalized loss stays finalized; no repeated failure/grant. This is the supported retained-failure contract, not playable paid/ad continuation. |
+| CLOCK-01 | Record energy and time, leave app long enough for a real regeneration interval, return and reopen. | Energy catch-up respects its cap and is not repeated on a second load. Do not change the phone clock or treat the Editor timestamp simulation as this test. |
+| UI-PERF-01 | Inspect normal gameplay, Pause, Victory, Failure and maps at native phone scale during the above journeys. | Captions legible, safe areas and controls intact. Capture representative frame-time/memory observations during cascades, with device conditions and recording overhead stated. No FPS or readability pass without measured/observed device evidence. |
+
+Large-stock fixture dependency: the packaged Android profile accepts only `fresh`, `resume` and `empty-energy`; it cannot seed arbitrary booster quantities. R5's large-stock setup is an Editor test fixture, not an Android intent command. `fresh` alone cannot execute STOCK-01/02/03. Keep these rows blocked on a separately reviewed disposable fixture and physical execution; do not edit normal preferences, claim solver/test captures as phone evidence, or invent a stock extra. Ordinary navigation/energy/available-booster rows can proceed after verified QA activation.
+
+Recap fixture dependency: fresh/resume/empty-energy do not seed arbitrary acknowledged scenes or a round500 finale. RECAP-02 needs earned acknowledgements; RECAP-03 needs a separately reviewed eligible disposable fixture or normal completion within that disposable profile. R2 synthetic Editor ledgers are not Android fixtures. All recap rows remain pending.
+
+For each row record: pending/pass/fail, APK hash, baseline/actual result, evidence path, reproduction steps and any open issue. Keep performance and visual judgment separate from functional assertions. Prior credential/title success and R3 package inspection are not device gameplay evidence for these rows.
+
+## Reproducing the prepared Editor checks
+
+`Sources/Verify.py` requires fresh run names and isolated `/tmp/lor-android-journey-r1/` product storage. Close the project in the Editor first. The captured options use this workspace's absolute paths. Existing results must not be overwritten.
+
+- Journey: filter in `Sources/TargetFilter.txt`, options in `Sources/JourneyOptions.json`.
+- Writer: `FunctionalDemoNavigationPlayModeTests.PersistenceWriterCompletesAndSaves`, options in `Sources/WriteOptions.json`.
+- Reader: `FunctionalDemoNavigationPlayModeTests.PersistenceReaderRestoresWithoutDuplicateReward`, options in `Sources/ReadOptions.json`; run after Writer in a separate process sharing only the isolated product store. For another run, update both phase options to a new isolated store/checkpoint.
+
+Use the `LegendsOfRus.Tests.PlayMode.` namespace prefix. Previously authorized `-force-vulkan` applies only to verification processes; project graphics settings remain unchanged.
+
+### 2026-10-02 fixture preparation update
+
+[Fixed fixture scope and Editor rehearsal](../../AndroidGameplayProfile/R3FixturePreparation/TestResults.md) now defines the stock boundaries, eight-round/three-scene early recap and fully acknowledged 500-round finale. Fourteen isolated Unity process checks and 34 fake-JNI entry checks pass. At the R3 preparation checkpoint the APK had no new selectors; reference DTOs still have no supported import route. R4 completed the source and R5 below completes packaging. STOCK-01/02/03 and RECAP-02/03 still require resumed physical execution. Every device row remains pending. This preparation does not turn service-level synthetic completions into earned phone evidence.
+
+### 2026-10-02 fixed preset implementation R4
+
+[Six bounded presets R4](../../AndroidGameplayProfile/R4FixedPresets/TestResults.md) are now installed and verified in Editor/source. Stock names are `stock-999`, `stock-1000`, `stock-9999`, `stock-max`; story names are `story-early` (eight rounds/three acknowledged scenes) and `story-finale` (500 rounds/58 scenes/Chapter1 acknowledged). New preset foreign/empty owners are rejected before mutation, and failed preparation/commit cannot fall back to normal saves. Presets are synthetic QA state, not earned human/phone outcomes. `stock-max` permits display/consumption only because normal first-clear booster additions lack overflow protection.
+
+At the R4 checkpoint, the then-current R3 APK excluded these selectors; R4 closed source implementation only. R5 now completes the separately verified guarded refresh. STOCK-01/02/03 and RECAP-02/03 still await resumed device execution. Do not send new selectors to the old APK. After refresh, cold-launch one exact supported preset and use `resume` for subsequent persistence checks. All 18 physical rows remain pending; no ADB/device/install/launch or normal-save action occurred in R4.
+
+### 2026-10-03 fixed-preset packaging R5
+
+[R5 results](../../AndroidGameplayProfile/R5AndroidRefresh/TestResults.md) establish matching original certificate, exact six compiled selectors and factory, preserved native pages and153Unity Edit/120synthetic guard passes. Canonical offline preflight now verifies R5 evidence and passes45mocked boundary checks. All18physical rows remain pending. No phone was enumerated, installed or launched for R5; packaging and Editor candidates are not Android lifecycle/save-isolation/human acceptance. Original R3 APK and rejected initial R5 audit candidate are retained separately.
+
+### 2026-10-03 daily-reward packaging R2
+
+[R2 results](../../DailyRewardRecovery/R2AndroidRefresh/TestResults.md) verify the current pin, original certificate and compiled claim-handler bytes;160fresh Unity Edit and52mocked/offline preflight checks pass. Original R5APK/sidecar and historical evidence are preserved. Existing18rows remain pending; this milestone did not install, launch, enumerate a phone or read app data. Daily-reward overflow/retry coverage is isolated Unity evidence from R1, not a phone result.
+
+### 2026-10-03 spending/refund packaging R2
+
+[Current results](../../SpendingRecovery/R2AndroidRefresh/TestResults.md) verify this new pin and original certificate,22compiled transaction owners,442Unity source-stage passes and64mocked offline checks. Prior daily-R2artifact/sidecar/evidence retained. All accumulated rewards/credits/spending and durable booster compensation are packaged. Physical process-kill/relaunch, rejected storage/refund recovery and same-board input still require device observations in the existing lifecycle/save/booster rows. No additional physical acceptance; all18rows pending, zero ADB/install/launch/player-data action. Dated older artifact statements above are historical; current supported preset list is in Usage.
+
+### 2026-10-03 energy recovery packaging R2
+
+[Current results](../../EnergyRecovery/R2AndroidRefresh/TestResults.md) verify this latest pin/certificate,30native energy/transaction owners,160fresh Unity Edit and77mocked offline checks. Source-stage342runtime/service checks remain separate. Previous SpendingR2artifact/sidecar retained. Existing CLOCK-01/SAVE-01/LIFE-01 and booster rows still require real regeneration, rejected-save recovery, countdown/cap persistence and process-relaunch observations in disposable state when phone work resumes. No arbitrary unfinished board checkpoint or commercial offer activation is claimed. All18physical rows remain pending; zero ADB/install/launch/player-data action. Dated earlier pins above remain historical.
+
+### 2026-10-03 narrative recovery packaging R2
+
+[Current results](../../NarrativeRecovery/R2AndroidRefresh/TestResults.md) verify this pin/certificate,35native owners,160fresh Unity Edit and88mocked offline checks. Source-stage396runtime/service checks remain separate. Previous EnergyR2artifact/sidecar retained. Existing story/save/lifecycle rows still require native phone touches, acknowledged scene/chapter durability and re-offer after rejected-save recovery in disposable state. There is no persisted line-position/unfinished-board checkpoint or commercial activation claim. All18physical rows remain pending; zero ADB/install/launch/player-data action. Earlier dated pins remain historical.
+
+## 2026-10-03 — tutorial recovery build pin
+
+[Current TutorialR2 results](../../TutorialRecovery/R2AndroidRefresh/TestResults.md) verify 766,026,550bytes/SHA256`b699646db5f7ac9effc403c768eb19200b5eb3b58f14858b331f5edb80aa5fb4`, original development certificate,42native owners/two tutorial callbacks,160fresh Unity Edit checks and104mocked offline checks. Prior same-source405runtime/service checks remain separate. Previous NarrativeR2APK/sidecar retained; earlier dated pins remain historical. Tutorial saving rejection preserves its paused step and exact overlay; Close/Back dismisses the error. After repair/relaunch, unread authored steps are re-offered without a line/board checkpoint. All18physical rows still require phone touch, lifecycle/recovery and disposable-profile isolation evidence. No phone/hosting or commercial acceptance claim.

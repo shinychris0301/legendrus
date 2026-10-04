@@ -1,0 +1,316 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -948,13 +948,13 @@
+ 
+         public bool CompleteStoryScene(string sceneId)
+         {
+-            if (Save.completedStoryScenes == null)
+-                Save.completedStoryScenes = new List<string>();
+-            if (!StoryProgress.Complete(Save.completedStoryScenes, sceneId))
++            if (!canPersist || string.IsNullOrWhiteSpace(sceneId) || HasCompletedStoryScene(sceneId))
+                 return false;
+-
+-            Persist();
+-            return true;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            if (candidate.completedStoryScenes == null)
++                candidate.completedStoryScenes = new List<string>();
++            if (!StoryProgress.Complete(candidate.completedStoryScenes, sceneId)) return false;
++            return TryCommitBalance(candidate);
+         }
+ 
+         public ChapterCompletionPhase GetChapterCompletionPhase(int chapterId)
+@@ -1000,18 +1000,15 @@
+ 
+         public bool AcknowledgeChapterCompletion(int chapterId)
+         {
+-            if (GetChapterCompletionPhase(chapterId) != ChapterCompletionPhase.PresentationPending)
++            if (!canPersist || GetChapterCompletionPhase(chapterId) != ChapterCompletionPhase.PresentationPending)
+                 return false;
+-
+-            if (Save.acknowledgedChapterCompletions == null)
+-                Save.acknowledgedChapterCompletions = new List<int>();
+-            if (Save.acknowledgedChapterCompletions.Contains(chapterId))
+-                return false;
+-
+-            Save.acknowledgedChapterCompletions.Add(chapterId);
+-            Save.acknowledgedChapterCompletions.Sort();
+-            Persist();
+-            return true;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            if (candidate.acknowledgedChapterCompletions == null)
++                candidate.acknowledgedChapterCompletions = new List<int>();
++            if (candidate.acknowledgedChapterCompletions.Contains(chapterId)) return false;
++            candidate.acknowledgedChapterCompletions.Add(chapterId);
++            candidate.acknowledgedChapterCompletions.Sort();
++            return TryCommitBalance(candidate);
+         }
+ 
+         public ChapterCompletionSummary GetChapterCompletionSummary(int chapterId)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/StoryService.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/StoryService.cs
+@@ -6,7 +6,8 @@
+         MoreLines,
+         PreLevel,
+         ChapterMap,
+-        ChapterComplete
++        ChapterComplete,
++        SaveRejected
+     }
+ 
+     public static class StoryService
+@@ -172,12 +173,17 @@
+         public static StoryAdvanceResult AdvanceDialogue()
+         {
+             if (activeSequence == null) return StoryAdvanceResult.None;
+-            if (activeSequence.Advance()) return StoryAdvanceResult.MoreLines;
++            if (activeSequence.LineIndex + 1 < activeSequence.Scene.lines.Length && activeSequence.Advance())
++                return StoryAdvanceResult.MoreLines;
+ 
+             StorySceneData completed = activeSequence.Scene;
++            GameState state = GameState.Instance;
++            bool completedNow = state != null && state.CompleteStoryScene(completed?.id);
++            // Keep the current final line and unread eligibility on a rejected save.
++            if (!completedNow && (state == null || !state.HasCompletedStoryScene(completed?.id)))
++                return StoryAdvanceResult.SaveRejected;
++            activeSequence.Advance();
+             activeSequence = null;
+-            GameState state = GameState.Instance;
+-            bool completedNow = state != null && state.CompleteStoryScene(completed?.id);
+             if (completedNow)
+             {
+                 PrivacyAwareAnalytics.TryStorySceneComplete(
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -1233,6 +1233,12 @@
+         {
+             switch (StoryService.AdvanceDialogue())
+             {
++                case StoryAdvanceResult.SaveRejected:
++                    var dialogue = contentRoot.GetComponentInChildren<ProductionDialogueView>();
++                    // Re-arm the existing one-shot control without replacing the current page.
++                    if (dialogue != null) dialogue.Bind(ContinueAfterDialogue);
++                    ShowErrorDialog();
++                    break;
+                 case StoryAdvanceResult.MoreLines:
+                     Show(ScreenId.Dialogue);
+                     break;
+@@ -1258,7 +1264,7 @@
+                 !StoryService.AcknowledgeChapterComplete()
+             )
+             {
+-                Toast("Не удалось сохранить завершение главы. Попробуйте ещё раз.");
++                ShowErrorDialog();
+                 return;
+             }
+ 
+--- a/Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/DialogueAlignmentPlayModeTests.cs
+@@ -59,6 +59,43 @@
+  }
+  Assert.That(line,Is.EqualTo(scene.lines.Length));
+  Assert.That(router.CurrentScreen,Is.EqualTo(finale?ScreenId.ChapterComplete:ScreenId.ChapterMap));Assert.That(GameState.Instance.HasCompletedStoryScene(milestone.sceneId),Is.True);
++ }
++ }
++ [UnityTest] public IEnumerator RejectedNarrativeWritesKeepExactNativePageInBothLanguages(){
++ var keys=new[]{"LegendsOfRus_Save_v1","LegendsOfRus_Save_v1_Backup","LegendsOfRus_Save_v1_Staging"};
++ foreach(var language in new[]{"ru","en"})foreach(int kind in new[]{0,1,2,3}){
++ var state=GameState.Instance;state.ResetProgress();StoryService.ResetRuntime();DemoFeatureState.SetLanguage(language);
++ var story=StoryCatalog.LoadChapter1();
++ if(kind>=2){state.Save.highestUnlockedLevel=500;state.Save.levelProgress.Add(new LevelProgressData{chapterId=1,levelId=500,completions=1,bestStars=3,rewardClaimed=true});state.Save.lastCompletedChapter=1;state.Save.lastCompletedLevel=500;Assert.That(SaveService.TrySave(state.Save,out _),Is.True);}
++ if(kind==1){var level=ChapterLevelCatalog.Find(1,1);state.CompleteLevel(level,level.starScoreThresholds[0]);}
++ if(kind==3){Assert.That(state.CompleteStoryScene(story.completion.finaleSceneId),Is.True);router.Show(ScreenId.ChapterComplete);Settle();yield return null;}
++ else{
++ Assert.That(kind==0?StoryService.TryBeginChapterIntro():StoryService.TryBeginPostVictoryDialogue(),Is.True);router.Show(ScreenId.Dialogue);Settle();yield return null;
++ var scene=StoryCatalog.FindScene(StoryService.ActiveSceneId);for(int i=1;i<scene.lines.Length;i++){ClickContinue();yield return null;}
++ }
++ var page=kind==3?router.Viewport.GetComponentInChildren<ProductionChapterCompleteView>().gameObject:View().gameObject;
++ int generation=router.RouteGeneration;string before=JsonUtility.ToJson(state.Save),sceneId=StoryService.ActiveSceneId;
++ string line=kind==3?null:View().Description.text;
++ var present=new bool[keys.Length];var journal=new string[keys.Length];for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
++ var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;foreach(string key in keys)PlayerPrefs.DeleteKey(key);string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++ try{
++ if(kind==3){var chapter=page.GetComponent<ProductionChapterCompleteView>();chapter.Actions[1].onClick.Invoke();chapter.Actions[1].onClick.Invoke();}
++ else{View().Continue.onClick.Invoke();View().Continue.onClick.Invoke();}
++ Settle();yield return null;
++ Assert.That(router.CurrentScreen,Is.EqualTo(kind==3?ScreenId.ChapterComplete:ScreenId.Dialogue));Assert.That(router.RouteGeneration,Is.EqualTo(generation));Assert.That(page.activeInHierarchy,Is.True);
++ Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error,Is.Not.Null);Assert.That(error.Retry.interactable,Is.False);
++ Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.CanPersist,Is.False);Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
++ if(kind==3)Assert.That(state.HasPendingChapterCompletion(1),Is.True);else{Assert.That(View().gameObject,Is.SameAs(page));Assert.That(View().Description.text,Is.EqualTo(line));Assert.That(StoryService.ActiveSceneId,Is.EqualTo(sceneId));Assert.That(state.HasCompletedStoryScene(sceneId),Is.False);}
++ error.Retry.onClick.Invoke();Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++ if(language=="ru")error.Close.onClick.Invoke();else router.NavigateBack();Settle();yield return null;
++ Assert.That(router.ActiveModal,Is.Null);Assert.That(router.RouteGeneration,Is.EqualTo(generation));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++ if(kind<3){yield return WaitForNormalButtonColors();Capture("Dialogue_SavePending_"+kind+"_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));View().Continue.onClick.Invoke();}
++ else page.GetComponent<ProductionChapterCompleteView>().Actions[0].onClick.Invoke();
++ Settle();yield return null;Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));Assert.That(router.RouteGeneration,Is.EqualTo(generation));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++ router.NavigateBack();Settle();yield return null;Assert.That(router.ActiveModal,Is.Null);
++ }
++ finally{for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}PlayerPrefs.Save();state.ResetProgress();StoryService.ResetRuntime();router.Show(ScreenId.Home);Settle();}
++ yield return null;
+  }
+  }
+  [UnityTest] public IEnumerator RebindingAndDisabledStateDoNotAdvanceOrDuplicateActions(){
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -1043,6 +1043,161 @@
+             Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
+         }
+ 
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)] [TestCase(4)]
++        public void NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(int operation)
++        {
++            var state = GameState.Instance; var story = StoryCatalog.LoadChapter1();
++            StoryService.ResetRuntime();
++            if (operation == 1 || operation == 3)
++            {
++                state.Save.highestUnlockedLevel = 500;
++                state.Save.levelProgress.Add(new LevelProgressData { chapterId = 1, levelId = 500, completions = 1, bestStars = 3, rewardClaimed = true });
++                state.Save.lastCompletedChapter = 1; state.Save.lastCompletedLevel = 500;
++                Assert.That(SaveService.TrySave(state.Save, out _), Is.True);
++                if (operation == 1) Assert.That(state.CompleteStoryScene(story.completion.finaleSceneId), Is.True);
++            }
++            if (operation == 2)
++            {
++                var level = ChapterLevelCatalog.Find(1, 1); state.CompleteLevel(level, level.starScoreThresholds[0]);
++            }
++            bool service = operation >= 2;
++            if (service)
++            {
++                Assert.That(operation == 4 ? StoryService.TryBeginChapterIntro() : StoryService.TryBeginPostVictoryDialogue(), Is.True);
++                var scene = StoryCatalog.FindScene(StoryService.ActiveSceneId);
++                for (int i = 1; i < scene.lines.Length; i++) Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.MoreLines));
++            }
++            string sceneId = StoryService.ActiveSceneId;
++            var finalLine = StoryService.CurrentLine;
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignored = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                bool acknowledged = service ? StoryService.AdvanceDialogue().ToString() != "SaveRejected" :
++                    operation == 0 ? state.CompleteStoryScene(story.introSceneId) : state.AcknowledgeChapterCompletion(1);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "Rejected story/chapter acknowledgement must remain unread/pending.");
++                Assert.That(acknowledged, Is.False); Assert.That(events, Is.Zero); Assert.That(state.Save, Is.SameAs(original));
++                Assert.That(state.CanPersist, Is.False); var failedWrite = state.LastWriteResult;
++                if (service)
++                {
++                    Assert.That(StoryService.ActiveSceneId, Is.EqualTo(sceneId));
++                    Assert.That(StoryService.CurrentLine.Text, Is.EqualTo(finalLine.Text));
++                    Assert.That(StoryService.AdvanceDialogue().ToString(), Is.EqualTo("SaveRejected"));
++                }
++                else Assert.That(operation == 0 ? state.CompleteStoryScene(story.introSceneId) : state.AcknowledgeChapterCompletion(1), Is.False);
++                Assert.That(state.LastWriteResult, Is.SameAs(failedWrite)); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]) || PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                StoryService.ResetRuntime(); state.Changed -= changed; LogAssert.ignoreFailingMessages = ignored;
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++            var freshObject = new GameObject("FreshNarrativeRecoveryState");
++            try
++            {
++                var fresh = freshObject.AddComponent<GameState>(); Assert.That(fresh.CanPersist, Is.True);
++                int gold = fresh.Save.gold, gems = fresh.Save.gems, energy = fresh.Save.energy;
++                if (operation == 1)
++                {
++                    Assert.That(fresh.HasPendingChapterCompletion(1), Is.True);
++                    Assert.That(StoryService.AcknowledgeChapterComplete(), Is.True);
++                    Assert.That(StoryService.AcknowledgeChapterComplete(), Is.False);
++                    Assert.That(fresh.GetChapterCompletionPhase(1), Is.EqualTo(ChapterCompletionPhase.Acknowledged));
++                }
++                else if (service)
++                {
++                    Assert.That(operation == 4 ? StoryService.TryBeginChapterIntro() : StoryService.TryBeginPostVictoryDialogue(), Is.True);
++                    Assert.That(StoryService.ActiveSceneId, Is.EqualTo(sceneId));
++                    var scene = StoryCatalog.FindScene(sceneId);
++                    for (int i = 1; i < scene.lines.Length; i++) Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.MoreLines));
++                    Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(operation == 4 ? StoryAdvanceResult.PreLevel : operation == 3 ? StoryAdvanceResult.ChapterComplete : StoryAdvanceResult.ChapterMap));
++                    Assert.That(fresh.HasCompletedStoryScene(sceneId), Is.True);
++                    Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.None));
++                }
++                else
++                {
++                    Assert.That(fresh.HasCompletedStoryScene(story.introSceneId), Is.False);
++                    Assert.That(fresh.CompleteStoryScene(story.introSceneId), Is.True);
++                    Assert.That(fresh.CompleteStoryScene(story.introSceneId), Is.False);
++                }
++                Assert.That(fresh.Save.gold, Is.EqualTo(gold)); Assert.That(fresh.Save.gems, Is.EqualTo(gems)); Assert.That(fresh.Save.energy, Is.EqualTo(energy));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(fresh.Save)));
++            }
++            finally
++            {
++                StoryService.ResetRuntime(); typeof(GameState).GetProperty("Instance").SetValue(null, state); Object.Destroy(freshObject);
++            }
++        }
++
++        [TestCase(false)] [TestCase(true)]
++        public void NarrativeAcknowledgementCommitsOnceWithoutOtherSaveMutation(bool chapter)
++        {
++            var state = GameState.Instance; var story = StoryCatalog.LoadChapter1();
++            if (chapter)
++            {
++                state.Save.highestUnlockedLevel = 500;
++                state.Save.levelProgress.Add(new LevelProgressData { chapterId = 1, levelId = 500, completions = 1, bestStars = 3, rewardClaimed = true });
++                Assert.That(state.CompleteStoryScene(story.completion.finaleSceneId), Is.True);
++            }
++            var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++            if (chapter) expected.acknowledgedChapterCompletions.Add(1);
++            else expected.completedStoryScenes.Add(story.introSceneId);
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(chapter ? state.AcknowledgeChapterCompletion(1) : state.CompleteStoryScene(story.introSceneId), Is.True);
++                Assert.That(events, Is.EqualTo(1));
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
++                var committed = state.LastWriteResult;
++                Assert.That(chapter ? state.AcknowledgeChapterCompletion(1) : state.CompleteStoryScene(story.introSceneId), Is.False);
++                Assert.That(events, Is.EqualTo(1)); Assert.That(state.LastWriteResult, Is.SameAs(committed));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [Test]
++        public void NarrativeInvalidAndIneligibleAcknowledgementsDoNotInitializeOrWrite()
++        {
++            var state = GameState.Instance; state.Save.completedStoryScenes = null; state.Save.acknowledgedChapterCompletions = null;
++            string before = JsonUtility.ToJson(state.Save); var write = state.LastWriteResult;
++            Assert.That(state.CompleteStoryScene(null) || state.CompleteStoryScene("") || state.CompleteStoryScene(" "), Is.False);
++            Assert.That(state.AcknowledgeChapterCompletion(-1) || state.AcknowledgeChapterCompletion(0) || state.AcknowledgeChapterCompletion(1) || state.AcknowledgeChapterCompletion(2), Is.False);
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.LastWriteResult, Is.SameAs(write));
++            Assert.That(state.CompleteStoryScene(StoryCatalog.LoadChapter1().introSceneId), Is.True);
++            Assert.That(SaveService.Load().completedStoryScenes, Does.Contain(StoryCatalog.LoadChapter1().introSceneId));
++        }
++
++        [Test]
++        public void NarrativeExternallyCommittedActiveSceneReturnsWithoutDuplicateGrantOrEvent()
++        {
++            var state = GameState.Instance; StoryService.ResetRuntime(); Assert.That(StoryService.TryBeginChapterIntro(), Is.True);
++            var scene = StoryCatalog.FindScene(StoryService.ActiveSceneId);
++            for (int i = 1; i < scene.lines.Length; i++) Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.MoreLines));
++            Assert.That(state.CompleteStoryScene(scene.id), Is.True); string before = JsonUtility.ToJson(state.Save); var write = state.LastWriteResult;
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.PreLevel));
++                Assert.That(StoryService.ActiveSceneId, Is.Empty); Assert.That(StoryService.CurrentLine, Is.Null);
++                Assert.That(StoryService.AdvanceDialogue(), Is.EqualTo(StoryAdvanceResult.None));
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.LastWriteResult, Is.SameAs(write)); Assert.That(events, Is.Zero);
++            }
++            finally { state.Changed -= changed; StoryService.ResetRuntime(); }
++        }
++
+         void SnapshotAndClearSaveJournal()
+         {
+             hadPersistedSaves = new bool[PersistedSaveKeys.Length];

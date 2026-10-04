@@ -1,0 +1,92 @@
+{
+  "reviewDateLocal": "2026-10-02",
+  "horizonDays": 90,
+  "status": "HYPOTHETICAL_NOT_FORECAST_OR_REVENUE",
+  "businessModel": "free_download_with_iap",
+  "feeSource": "https://www.rustore.ru/help/legal/devs/developers-agreement",
+  "inputStatus": "All inputs except sourced default fee are hypothetical. Actual developer terms unverified.",
+  "excluded": "Actual developer taxes, settlement timing and all unentered costs. Development/owner labor allocation defaults to zero.",
+  "cases": [
+    {
+      "name": "Low conversion",
+      "inputs": {
+        "installs": 10000,
+        "paidFraction": 1,
+        "payerFraction": 0.01,
+        "grossSpendPerPayer": 299,
+        "feeFraction": 0.15,
+        "refundFraction": 0.02,
+        "netAdsPerInstall": 0,
+        "variableCostPerInstall": 0.5,
+        "paidCpi": 20,
+        "allocatedFixedCost": 30000,
+        "allocatedDevelopmentCost": 0
+      },
+      "outputs": {
+        "grossIap": 29900.0,
+        "netIap": 24906.7,
+        "netIapPerInstall": 2.49,
+        "contributionPerInstall": 1.99,
+        "marketingCost": 200000.0,
+        "preTaxCohortSurplus": -210093.3,
+        "breakEvenPaidCpi": -1.01,
+        "requiredPayerFraction": 0.09435212211975091,
+        "scope": "Hypothetical 90-day cohort; actual tax and unentered costs excluded."
+      }
+    },
+    {
+      "name": "Working example",
+      "inputs": {
+        "installs": 10000,
+        "paidFraction": 1,
+        "payerFraction": 0.02,
+        "grossSpendPerPayer": 500,
+        "feeFraction": 0.15,
+        "refundFraction": 0.02,
+        "netAdsPerInstall": 0,
+        "variableCostPerInstall": 0.5,
+        "paidCpi": 20,
+        "allocatedFixedCost": 30000,
+        "allocatedDevelopmentCost": 0
+      },
+      "outputs": {
+        "grossIap": 100000.0,
+        "netIap": 83300.0,
+        "netIapPerInstall": 8.33,
+        "contributionPerInstall": 7.83,
+        "marketingCost": 200000.0,
+        "preTaxCohortSurplus": -151700.0,
+        "breakEvenPaidCpi": 4.83,
+        "requiredPayerFraction": 0.056422569027611044,
+        "scope": "Hypothetical 90-day cohort; actual tax and unentered costs excluded."
+      }
+    },
+    {
+      "name": "High conversion",
+      "inputs": {
+        "installs": 10000,
+        "paidFraction": 1,
+        "payerFraction": 0.05,
+        "grossSpendPerPayer": 1000,
+        "feeFraction": 0.15,
+        "refundFraction": 0.02,
+        "netAdsPerInstall": 0,
+        "variableCostPerInstall": 0.5,
+        "paidCpi": 20,
+        "allocatedFixedCost": 30000,
+        "allocatedDevelopmentCost": 0
+      },
+      "outputs": {
+        "grossIap": 500000.0,
+        "netIap": 416500.0,
+        "netIapPerInstall": 41.65,
+        "contributionPerInstall": 41.15,
+        "marketingCost": 200000.0,
+        "preTaxCohortSurplus": 181500.0,
+        "breakEvenPaidCpi": 38.15,
+        "requiredPayerFraction": 0.028211284513805522,
+        "scope": "Hypothetical 90-day cohort; actual tax and unentered costs excluded."
+      }
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R1/DeviceChecklist.md
+@@ -2,7 +2,7 @@
+ 
+ Status: **prepared; physical execution postponed by the user on 2026-09-30.** Editor evidence is in [TestResults.md](TestResults.md). All device rows below remain pending.
+ 
+-Current preparation: [settings recovery Android refresh R2](../../SettingsRecovery/R2AndroidRefresh/TestResults.md) pins the verified APK, **766,032,162 bytes**, SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc`. Profile13/native recap, Dialogue2, Gameplay24/four stock layouts, Victory12 and all six fixed disposable presets are packaged. [Profile commands and scenarios](../../AndroidGameplayProfile/R1/Usage.md). Android activation, isolation, recap touch/readability and lifecycle still require device evidence. Earlier R1/R2 results and device-preflight JSON remain historical.
++Current preparation: [persistence recovery Android refresh R2](../../PersistenceRecovery/R2AndroidRefresh/TestResults.md) pins the verified APK, **766,032,918 bytes**, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`. Profile13/native recap, Dialogue2, Gameplay24/four stock layouts, Victory12 and all six fixed disposable presets are packaged. [Profile commands and scenarios](../../AndroidGameplayProfile/R1/Usage.md). Android activation, isolation, recap touch/readability and lifecycle still require device evidence. Earlier R1/R2 results and device-preflight JSON remain historical.
+ 
+ ## Entry conditions
+ 
+@@ -12,7 +12,7 @@
+    PYTHONDONTWRITEBYTECODE=1 python3 ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
+    ```
+ 
+-   Default status `offline_prepared_device_deferred` verifies the pinned local hash, size, sidecar and linked Settings R2 build/inspection/preset and68native-method evidence. It performs no ADB call. Exit 2 means a prerequisite needs review. It writes current offline evidence under SettingsRecovery/R2AndroidRefresh/QA, leaving historical R1/R2 evidence intact. The existing R1 `Sources/DevicePreflight.py` delegates to this same implementation.
++   Default status `offline_prepared_device_deferred` verifies the pinned local hash, size, sidecar and linked Persistence R2 build/inspection/preset and72native-method evidence. It performs no ADB call. Exit 2 means a prerequisite needs review. It writes current offline evidence under PersistenceRecovery/R2AndroidRefresh/QA, leaving historical R1/R2 evidence intact. The existing R1 `Sources/DevicePreflight.py` delegates to this same implementation.
+ 2. Only after phone work resumes, connect exactly one authorized phone and add `--device` to the command above. This mode reads device count/model/API, package path and installed APK hash. It does not install, launch, stop, clear/uninstall, read player data or export credentials. Zero, multiple, unauthorized or mixed attachments, split packages and build mismatches require review. `device_identity_verified_qa_activation_pending` confirms the installed APK identity only; the QA indicator and save boundary are still unverified. Offline exit 0 does not authorize device execution.
+ 3. The existing disposable save profile is implemented; use `fresh`, `resume`, `empty-energy` or one of the six exact fixed presets at a **cold process launch** as documented in Usage. Verify the yellow `QA · DISPOSABLE SAVE` indicator before controlled actions. A launcher-icon start without the extra uses normal player data. Never deliver a reset command into a running process. Invalid/missing ownership remains blocked; do not use normal saves as a fallback. Keep the credential probe separate. Do not clear/uninstall or read normal save/credential records to create a fixture.
+ 4. Record APK hash, Unity/build version, phone model/API, native resolution/insets, language and QA ownership. Verify offline mode before starting; real purchases, ads, accounts and social services are outside this run. Record visible baseline balances, stock, selected round, first-clear state and settings. Evidence must stay within the disposable profile. Exact Editor move counts are automated fixture evidence, not a phone pass criterion or human difficulty target.
+@@ -101,3 +101,7 @@
+ ## 2026-10-03 — Settings recovery build pin
+ 
+ [Current Settings R2 results](../../SettingsRecovery/R2AndroidRefresh/TestResults.md) verify 766,032,162 bytes/SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc`, original development certificate, 68 native owners/six callbacks, 160 fresh Unity Edit checks and 184 mocked offline checks. Prior same-source 396 runtime/service checks remain separate. Previous round lifecycle APK/sidecar is retained; earlier dated pins remain historical. Four preferences commit before adoption; rejected saves preserve the switch/feedback state and existing standalone/paused Settings root. Existing localized rejection panel and owned callback/reentry guard are packaged. All 18 physical rows still require native touches, disposable-profile isolation and lifecycle/recovery evidence. No physical audibility/haptics/notifications or commercial acceptance claim.
++
++## 2026-10-03 — Ordinary persistence recovery build pin
++
++[Current persistence R2 results](../../PersistenceRecovery/R2AndroidRefresh/TestResults.md) verify 766,032,918 bytes/SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, original development certificate, 72 native owners/six callbacks, 160 fresh Unity Edit checks and 204 mocked offline checks. Prior same-source 426 runtime/service checks remain separate. Previous Settings APK/sidecar retained; earlier dated pins historical. Ordinary saving respects session lock and callback reentry and retains live Save identity/shared durable-primary acknowledgement. Existing migration/reset policies are packaged; startup normalization/load presentation and separate language recovery remain pending. All 18 physical rows still require native touches, disposable-profile isolation and lifecycle/recovery evidence. No physical or commercial acceptance claim.
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/CheckPreflight.py
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/CheckPreflight.py
+@@ -46,18 +46,19 @@
+                     'DevelopmentGameplayProfileBadge', 'lor_gameplay_qa',
+                     'LegendsOfRus_GameplayQA_v1_', 'ProductionGameplayStockLayout')}},
+             'BuildValidation.json': {'result': 'Passed', 'artifactSha256': pin['sha256'], 'artifactBytes': pin['bytes'],
+-                'nativeRecoveryLibrarySha256': 'b' * 64, 'nativeMethodCount': 68,'atomicSettingsPreferenceRecoveryPackaged': True,'atomicRoundLifecycleRecoveryPackaged': True,'atomicSelectionNormalizationRecoveryPackaged': True,'atomicTutorialAcknowledgementRecoveryPackaged': True,'atomicNarrativeAcknowledgementRecoveryPackaged': True, 'cappedAtomicEnergyAndClockRecoveryPackaged': True,
++                'nativeRecoveryLibrarySha256': 'b' * 64, 'nativeMethodCount': 72,'acknowledgedOrdinaryPersistenceRecoveryPackaged':True,'persistenceOwnerRegionsVerified':4,'atomicSettingsPreferenceRecoveryPackaged': True,'atomicRoundLifecycleRecoveryPackaged': True,'atomicSelectionNormalizationRecoveryPackaged': True,'atomicTutorialAcknowledgementRecoveryPackaged': True,'atomicNarrativeAcknowledgementRecoveryPackaged': True, 'cappedAtomicEnergyAndClockRecoveryPackaged': True,
+                 'atomicSpendingAndDurableBoosterRefundRecoveryPackaged': True,
+                 'doubledGoldAndFirstClearRecoveryPackaged': True, 'ordinaryCreditRecoveryPackaged': True,
+                 'dailyRewardOverflowRejectionPackaged': True},
+-            'AfterNative.json': {'stage': 'After','atomicSettingsPreferenceRecoveryPackaged': True,'settingsCallbacks':{'OwnedSettingsListener':{'packagedMethodBytesMatchCompiledOutput':True,'rejectsRetiredBindingBeforeInputAndAction':True,'checksButtonAndInfoShieldBeforeAction':True}},'atomicRoundLifecycleRecoveryPackaged': True,'atomicSelectionNormalizationRecoveryPackaged': True,'selectionCallbacks':{k:{'packagedMethodBytesMatchCompiledOutput':True} for k in ('AcknowledgedMapPlay','AcknowledgedMapNode','SelectionError')},'atomicTutorialAcknowledgementRecoveryPackaged': True,'tutorialCallbacks':{k:{'packagedMethodBytesMatchCompiledOutput':True} for k in ('OwnedTutorialContinue','OwnedTutorialError')}, 'atomicNarrativeAcknowledgementRecoveryPackaged': True, 'cappedAtomicEnergyAndClockRecoveryPackaged': True, 'validatedReceiptAndRecoveryMetadataPresent': True,
++            'AfterNative.json': {'stage': 'After','acknowledgedOrdinaryPersistenceRecoveryPackaged':True,'persistenceOwnerRegionsVerified':4,'atomicSettingsPreferenceRecoveryPackaged': True,'settingsCallbacks':{'OwnedSettingsListener':{'packagedMethodBytesMatchCompiledOutput':True,'rejectsRetiredBindingBeforeInputAndAction':True,'checksButtonAndInfoShieldBeforeAction':True}},'atomicRoundLifecycleRecoveryPackaged': True,'atomicSelectionNormalizationRecoveryPackaged': True,'selectionCallbacks':{k:{'packagedMethodBytesMatchCompiledOutput':True} for k in ('AcknowledgedMapPlay','AcknowledgedMapNode','SelectionError')},'atomicTutorialAcknowledgementRecoveryPackaged': True,'tutorialCallbacks':{k:{'packagedMethodBytesMatchCompiledOutput':True} for k in ('OwnedTutorialContinue','OwnedTutorialError')}, 'atomicNarrativeAcknowledgementRecoveryPackaged': True, 'cappedAtomicEnergyAndClockRecoveryPackaged': True, 'validatedReceiptAndRecoveryMetadataPresent': True,
+                 'packagedLibraryMatchesGradleInput': True, 'packagedLibrarySha256': 'b' * 64,
+                 'methods': {owner: {'packagedMethodBytesMatchCompiledOutput': True,
+                     'generatedOverflowCatch': owner in tool.CHECKED_CREDITS,
+-                    'callsAtomicBalanceCommit': owner in tool.ATOMIC_SPENDS + tool.ATOMIC_ENERGY_APIS + tool.ATOMIC_NARRATIVE_APIS + tool.ATOMIC_TUTORIAL_APIS + tool.ATOMIC_SELECTION_APIS, 'callsPersist': False,
++                    'callsAtomicBalanceCommit': owner in ('GameState_TryPersist',) + tool.ATOMIC_SPENDS + tool.ATOMIC_ENERGY_APIS + tool.ATOMIC_NARRATIVE_APIS + tool.ATOMIC_TUTORIAL_APIS + tool.ATOMIC_SELECTION_APIS, 'callsPersist': False,
+                     'callsAtomicRoundCommit': owner in tool.ATOMIC_ROUND_APIS,
+                     **{flag:True for flag in tool.ROUND_FLAGS.get(owner,())},
+                     **{flag:True for flag in tool.SETTINGS_FLAGS.get(owner,())},
++                    **{flag:True for flag in tool.PERSISTENCE_FLAGS.get(owner,())},
+                     'hasWideCapMath': owner in tool.WIDE_ENERGY_MATH,
+                     'callsSharedEnergyClock': owner in tool.SHARED_ENERGY_CLOCK or owner in ('GameState_TryStartLevel',),
+                     **{flag:True for flag in tool.TUTORIAL_FLAGS.get(owner,())},
+@@ -97,6 +98,11 @@
+     seed(); (qa / 'AfterNative.json').unlink()
+     passed('missing native recovery evidence blocks readiness', inspect()['status'] == 'local_evidence_unavailable_or_invalid')
+     mutations = [
++        ('unverified persistence build proof', 'BuildValidation.json', 'acknowledgedOrdinaryPersistenceRecoveryPackaged', False),
++        ('unverified persistence native proof', 'AfterNative.json', 'acknowledgedOrdinaryPersistenceRecoveryPackaged', False),
++        ('wrong persistence build region count', 'BuildValidation.json', 'persistenceOwnerRegionsVerified', 3),
++        ('wrong persistence native region count', 'AfterNative.json', 'persistenceOwnerRegionsVerified', 3),
++
+         ('unverified settings build proof','BuildValidation.json','atomicSettingsPreferenceRecoveryPackaged',False),
+         ('unverified settings native proof','AfterNative.json','atomicSettingsPreferenceRecoveryPackaged',False),
+         ('missing owned settings callback proof','AfterNative.json','settingsCallbacks',{}),
+@@ -224,6 +230,22 @@
+             ('ProductionSettingsView_Listen', 'packagedMethodBytesMatchCompiledOutput', False),
+             ('ProductionSettingsView_RefreshInfo', 'packagedMethodBytesMatchCompiledOutput', False),
+             ('ProductionSettingsView_Bind', 'packagedMethodBytesMatchCompiledOutput', False),
++            ('GameState_Persist', 'guardsNestedPublication', False),
++            ('GameState_Persist', 'delegatesAcknowledgingPersistence', False),
++            ('GameState_Persist', 'logsRejectedPersistence', False),
++            ('GameState_TryPersist', 'rejectsLockAndReentryBeforeCommit', False),
++            ('GameState_TryPersist', 'commitsCurrentLiveSave', False),
++            ('GameState_TryPersist', 'scopedFinallyReleasesPersistenceGuard', False),
++            ('GameState_MigrateSave', 'retainsStartupPersistDelegation', False),
++            ('GameState_ResetProgress', 'replacesHistoryBeforeAdoption', False),
++            ('GameState_TryCommitBalance', 'durablePrimaryAcknowledgementBeforeAdoption', False),
++            ('GameState_TryCommitBalance', 'commitsBeforeChanged', False),
++            ('GameState_Persist', 'packagedMethodBytesMatchCompiledOutput', False),
++            ('GameState_TryPersist', 'packagedMethodBytesMatchCompiledOutput', False),
++            ('GameState_MigrateSave', 'packagedMethodBytesMatchCompiledOutput', False),
++            ('GameState_ResetProgress', 'packagedMethodBytesMatchCompiledOutput', False),
++            ('GameState_TryPersist', 'callsAtomicBalanceCommit', False),
++            ('GameState_TryPersist', 'callsPersist', True),
+             ('GameState_CompleteTutorial', 'callsAtomicBalanceCommit', False),
+             ('GameState_CompleteTutorial', 'callsPersist', True),
+             ('GameState_CompleteTutorial', 'packagedMethodBytesMatchCompiledOutput', False),
+--- a/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
++++ b/ProjectDocs/AI/AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py
+@@ -9,15 +9,17 @@
+ 
+ ROOT = Path(__file__).resolve().parents[5]
+ BASE = Path(__file__).resolve().parent.parent
+-BUILD = Path('ProjectDocs/AI/SettingsRecovery/R2AndroidRefresh/QA')
++BUILD = Path('ProjectDocs/AI/PersistenceRecovery/R2AndroidRefresh/QA')
+ APK = Path('Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk')
+-PIN = {'bytes': 766032162,
+-       'sha256': '0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc'}
++PIN = {'bytes': 766032918,
++       'sha256': '1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e'}
+ PRESETS = ('stock-999', 'stock-1000', 'stock-9999', 'stock-max', 'story-early', 'story-finale')
+ NATIVE_METHODS = ('GameState_RefreshEnergyFromClock', 'GameState_TryRefreshEnergyFromClock', 'GameState_AdvanceEnergyClock', 'GameState_EnergyRemaining', 'GameState_SpendEnergy', 'GameState_AddEnergy', 'GameState_TryAddEnergy', 'GameState_RefillEnergy', 'GameState_TryRefillEnergy', 'GameState_TryAddGold', 'GameState_TryCredit', 'GameState_TryCommitBalance', 'GameState_SpendGold', 'GameState_TryAddGems', 'GameState_SpendGems', 'GameState_CompleteLevel', 'GameState_TryCompleteLevel', 'GameState_TryDoubleLastLevelGoldReward', 'GameState_TryUseBooster', 'GameState_TryBeginBoosterCommand', 'GameState_TrySettleBoosterCommand', 'GameState_TryRecoverPendingBoosterCommand', 'GameState_TryAddBooster', 'GameState_ClaimDailyReward', 'Match3Board_ConsumeCommandBooster', 'Match3Board_RefundCommand', 'Match3Board_RecoverActiveCommand', 'Match3Board_TryResume', 'ScreenRouter_StartLevel', 'ScreenRouter_CommitGameplayVictory','GameState_CompleteStoryScene','GameState_AcknowledgeChapterCompletion','StoryService_AdvanceDialogue','ScreenRouter_ContinueAfterDialogue','ScreenRouter_ContinueAfterChapterComplete','GameState_CompleteTutorial','LevelTutorialPresenter_Advance','LevelTutorialPresenter_BuildOverlay','ScreenRouter_ShowGameplayTutorialError','ScreenRouter_BuildGameplayOverlay','ScreenRouter_NavigateBack','ScreenRouter_RetireModalRootImmediately','GameState_SelectLevel','GameState_EnsureSelectedLevelIsUnlocked','GameState_TryEnsureSelectedLevelIsUnlocked','GameState_NormalizeLevelProgress','ScreenRouter_OpenSelectedLevel','ProductionChapterMapView_BindNavigation','ScreenRouter_BuildInteractionLayer')
+ NATIVE_METHODS += ('GameState_RegisterLevelAttempt', 'GameState_CanRegisterLevelAttempt', 'GameState_TryRegisterLevelAttempt', 'GameState_TryStartLevel', 'GameState_CandidateLevelProgress', 'GameState_TryPrepareLevelAttempt', 'GameState_TryCommitRoundCandidate', 'GameState_RecordLevelFailure', 'GameState_TryRecordLevelFailure', 'GameState_TryFinalizeRetainedFailure', 'Match3Board_Initialize', 'Match3Board_InitializeCore')
+ NATIVE_METHODS += ('GameState_TryTogglePreference', 'ProductionSettingsView_TogglePreference', 'ProductionSettingsView_Unbind', 'ProductionSettingsView_InputReady', 'ProductionSettingsView_Listen', 'ProductionSettingsView_RefreshInfo', 'ProductionSettingsView_Bind')
+ SETTINGS_FLAGS = {'GameState_TryTogglePreference': ('validatesPreferenceBeforeClone', 'respectsPreferenceWriteLock', 'changesAllFourPreferenceCandidates', 'callsAtomicBalanceCommit'), 'ProductionSettingsView_TogglePreference': ('guardsPreferenceReentry', 'refreshesAfterAcknowledgement', 'rejectionUsesExistingInfoPanel'), 'ProductionSettingsView_Unbind': ('retiresBindingBeforeRemovingListeners',), 'ProductionSettingsView_InputReady': ('blocksPreferenceCommitReentry', 'preservesModalTransitionGuard'), 'ProductionSettingsView_Listen': ('capturesBindingOwner', 'ownedSettingsCallbackCompiledAndPackaged'), 'ProductionSettingsView_RefreshInfo': ('existingLocalizedErrorBranchPackaged',), 'ProductionSettingsView_Bind': ('retiresPreviousBindingsBeforeRebinding',)}
++NATIVE_METHODS += ('GameState_Persist', 'GameState_TryPersist', 'GameState_MigrateSave', 'GameState_ResetProgress')
++PERSISTENCE_FLAGS = {'GameState_Persist': ('guardsNestedPublication', 'delegatesAcknowledgingPersistence', 'logsRejectedPersistence'), 'GameState_TryPersist': ('rejectsLockAndReentryBeforeCommit', 'commitsCurrentLiveSave', 'scopedFinallyReleasesPersistenceGuard'), 'GameState_MigrateSave': ('retainsStartupPersistDelegation',), 'GameState_ResetProgress': ('replacesHistoryBeforeAdoption',), 'GameState_TryCommitBalance': ('durablePrimaryAcknowledgementBeforeAdoption', 'commitsBeforeChanged')}
+ ATOMIC_SPENDS = ('GameState_SpendGold', 'GameState_SpendGems', 'GameState_SpendEnergy', 'GameState_TryUseBooster')
+ CHECKED_CREDITS = ('GameState_ClaimDailyReward', 'GameState_TryDoubleLastLevelGoldReward', 'GameState_TryCompleteLevel', 'GameState_TryCredit', 'GameState_TrySettleBoosterCommand')
+ ATOMIC_ENERGY_APIS = ('GameState_TryAddEnergy', 'GameState_TryRefillEnergy', 'GameState_TryRefreshEnergyFromClock')
+@@ -88,7 +90,11 @@
+             and final.get('doubledGoldAndFirstClearRecoveryPackaged') is True
+             and final.get('ordinaryCreditRecoveryPackaged') is True
+             and final.get('dailyRewardOverflowRejectionPackaged') is True
+-            and final.get('nativeMethodCount') == 68
++            and final.get('nativeMethodCount') == 72
++            and final.get('acknowledgedOrdinaryPersistenceRecoveryPackaged') is True
++            and native.get('acknowledgedOrdinaryPersistenceRecoveryPackaged') is True
++            and final.get('persistenceOwnerRegionsVerified') == 4
++            and native.get('persistenceOwnerRegionsVerified') == 4
+             and final.get('atomicSettingsPreferenceRecoveryPackaged') is True
+             and native.get('atomicSettingsPreferenceRecoveryPackaged') is True
+             and final.get('atomicRoundLifecycleRecoveryPackaged') is True
+@@ -150,6 +156,9 @@
+                     and row.get('checksButtonAndInfoShieldBeforeAction') is True
+                     for row in native.get('settingsCallbacks', {}).values())
+             and packed.get('settingsRevision') == 5
++            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in PERSISTENCE_FLAGS.items() for flag in flags)
++            and native.get('methods', {}).get('GameState_TryPersist', {}).get('callsAtomicBalanceCommit') is True
++            and native.get('methods', {}).get('GameState_TryPersist', {}).get('callsPersist') is False
+             and native.get('packagedLibrarySha256') == final.get('nativeRecoveryLibrarySha256')
+             and isinstance(final.get('nativeRecoveryLibrarySha256'), str)
+             and re.fullmatch('[a-f0-9]{64}', final.get('nativeRecoveryLibrarySha256')) is not None
+@@ -164,6 +173,7 @@
+                       dailyRewardOverflowCatchPackaged=bool(matches),
+                       atomicSpendingAndBoosterRefundRecoveryPackaged=bool(matches),
+                       accumulatedRewardAndCreditRecoveryPackaged=bool(matches),
++                      acknowledgedOrdinaryPersistenceRecoveryPackaged=bool(matches),
+                       atomicSettingsPreferenceRecoveryPackaged=bool(matches),
+                       atomicRoundLifecycleRecoveryPackaged=bool(matches),
+                       atomicSelectionNormalizationRecoveryPackaged=bool(matches),
+--- a/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
++++ b/ProjectDocs/AI/AndroidGameplayProfile/R1/Usage.md
+@@ -4,16 +4,16 @@
+ 
+ ## Commands
+ 
+-Select one command at **cold process launch**, before any game state loads. The installed Editor/source and verified settings-recovery R2 development APK support the six fixed presets below, along with `fresh`, `resume` and `empty-energy`. Android activation and save isolation still require physical evidence.
++Select one command at **cold process launch**, before any game state loads. The installed Editor/source and verified persistence-recovery R2 development APK support the six fixed presets below, along with `fresh`, `resume` and `empty-energy`. Android activation and save isolation still require physical evidence.
+ 
+ | Command | Result |
+ |---|---|
+ | `fresh` | Replace only the five owned QA preference slots with a fresh round-1 profile: default balances, energy and boosters; Russian language; fresh consent state. First-attempt board and rules are the ordinary campaign's. |
+ | `resume` | Continue the owned QA journal. Requires a previously created profile. It does not restore an arbitrary unfinished round; supported retained Failure behaves as in normal gameplay. |
+ | `empty-energy` | Reset QA as above with zero energy and a new clock timestamp. Used to exercise the normal Out of Energy gate. |
+-| `stock-999`, `stock-1000`, `stock-9999`, `stock-max` | Replace owned QA state with round 1/default balances, energy 4 and exactly 999, 1 000, 9 999 or 2 147 483 647 of each of the four boosters. Packaged in the verified settings-recovery R2 development APK; physical activation pending. |
+-| `story-early` | Eight synthetically completed rounds, 24 stars, intro and two acknowledged milestone scenes; selected/unlocked round 9, energy 4. Packaged in the verified settings-recovery R2 development APK; physical activation pending. |
+-| `story-finale` | All 500 rounds synthetically completed, 1 500 stars, all 58 scenes and Chapter 1 acknowledged; selected/unlocked round 500, energy 4. Chapter 2 remains unavailable. Packaged in the verified settings-recovery R2 development APK; physical activation pending. |
++| `stock-999`, `stock-1000`, `stock-9999`, `stock-max` | Replace owned QA state with round 1/default balances, energy 4 and exactly 999, 1 000, 9 999 or 2 147 483 647 of each of the four boosters. Packaged in the verified persistence-recovery R2 development APK; physical activation pending. |
++| `story-early` | Eight synthetically completed rounds, 24 stars, intro and two acknowledged milestone scenes; selected/unlocked round 9, energy 4. Packaged in the verified persistence-recovery R2 development APK; physical activation pending. |
++| `story-finale` | All 500 rounds synthetically completed, 1 500 stars, all 58 scenes and Chapter 1 acknowledged; selected/unlocked round 500, energy 4. Chapter 2 remains unavailable. Packaged in the verified persistence-recovery R2 development APK; physical activation pending. |
+ | No command | Normal player profile. The QA save remains available for a later explicit `resume`. |
+ 
+ There is no runtime switch or in-game destructive reset control. To repeat a fixture, end the QA process and explicitly launch its reset command again. To verify persistence, launch `resume`, **not** `fresh`. Invalid commands and missing resume ownership block initialization; they must not silently load normal data. A corrupt QA journal uses the existing recovery/write-lock policy, never the normal save. `fresh` deliberately replaces the QA journal, including its recovery slots.
+@@ -28,7 +28,7 @@
+ 
+ The Android entry reads the intent string extra `lor_gameplay_qa` on cold launch. It is compiled for Android development builds only and additionally requires the current approved development application ID `com.example.legendsofrus.v117debug` and Android's debuggable flag. Non-development players have no activation path. No manifest, package ID, Java plugin or build-approval flags were changed.
+ 
+-The current [verified settings-recovery R2 APK](../../SettingsRecovery/R2AndroidRefresh/TestResults.md) includes this profile, Profile revision13/story recap and Gameplay revision24: 766,032,162 bytes, SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc`. Its launch activity is `com.unity3d.player.UnityPlayerGameActivity`, verified from the local APK manifest. Packaging inclusion is established; Android cold-launch activation and isolation remain untested. The earlier credential-test installed artifact is historical, and no current installed build identity is assumed.
++The current [verified persistence-recovery R2 APK](../../PersistenceRecovery/R2AndroidRefresh/TestResults.md) includes this profile, Profile revision13/story recap and Gameplay revision24: 766,032,918 bytes, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`. Its launch activity is `com.unity3d.player.UnityPlayerGameActivity`, verified from the local APK manifest. Packaging inclusion is established; Android cold-launch activation and isolation remain untested. The earlier credential-test installed artifact is historical, and no current installed build identity is assumed.
+ 
+ Run the [current preflight](../../AndroidGameplayJourney/R2OfflineHandoff/Sources/Preflight.py) without arguments for an offline artifact check. After phone execution resumes, use `--device` for read-only installed-identity queries. Neither mode launches the game. Verify the yellow QA indicator after a separately performed cold launch before any controlled action. Do not clear app data, uninstall, read credential records or reuse the credential probe as a gameplay fixture.
+ 
+@@ -47,7 +47,7 @@
+ 
+ ## Large-stock limits
+ 
+-The verified settings-recovery R2 APK packages the four exact stock names, with no arbitrary quantity, JSON, path or save-import command. Use `stock-1000` for the native 1 000→999 Sea Pearl boundary, then `resume` to check durability. Stock fixtures have no completed rounds or acknowledged scenes. All presets reset language/consent as fresh QA state; ordinary language controls remain available.
++The verified persistence-recovery R2 APK packages the four exact stock names, with no arbitrary quantity, JSON, path or save-import command. Use `stock-1000` for the native 1 000→999 Sea Pearl boundary, then `resume` to check durability. Stock fixtures have no completed rounds or acknowledged scenes. All presets reset language/consent as fresh QA state; ordinary language controls remain available.
+ 
+ `stock-max` is restricted to display/consumption testing. Checked reward/credit rejection and durable command refunds are now packaged; avoid reward-producing actions with this maximum fixture, which has no grant capacity. This implementation does not change the normal economy or introduce a stock-cap policy. Exact-count Editor rendering/input tests and cold persistence do not establish physical legibility or Android activation.
+ 
+@@ -56,13 +56,13 @@
+ Only `LegendsOfRus_GameplayQA_v1_` keys are reset: the primary/backup/staging save journal, language and compliance keys, plus the profile's own ownership marker. No preference enumeration or `DeleteAll` is used. Normal progress/preferences and Android credentials are not imported or reset. Account configuration and the credential probe are blocked in QA; optional analytics and monetization calls are blocked too. Current content delivery remains locally configured. This is gameplay-state isolation, not a separate Android OS user, install or security boundary; ordinary debug capture/export files retain their existing destinations.
+ 
+ 
+-Optional recap is reached through Profile → History → Story. Eligible scenes must be acknowledged and milestone eligibility requires its completed round. Installed `story-early` and `story-finale` create bounded synthetic ledgers matching the independently rehearsed R3 service outcomes, including ordinary first-clear balances/stock and claimed rewards; replay cannot claim those grants again. These are synthetic QA completions, not human play or earned phone evidence. Both selectors remain packaged in the current settings-recovery R2 APK; cold-launch activation remains unverified on a phone.
++Optional recap is reached through Profile → History → Story. Eligible scenes must be acknowledged and milestone eligibility requires its completed round. Installed `story-early` and `story-finale` create bounded synthetic ledgers matching the independently rehearsed R3 service outcomes, including ordinary first-clear balances/stock and claimed rewards; replay cannot claim those grants again. These are synthetic QA completions, not human play or earned phone evidence. Both selectors remain packaged in the current persistence-recovery R2 APK; cold-launch activation remains unverified on a phone.
+ 
+ ## Fixed fixtures — installed source and verified development APK
+ 
+ [Implementation and checks R4](../R4FixedPresets/TestResults.md) installs the six bounded selectors in the existing profile. Candidates are prepared from validated active Chapter 1 content before owned-slot deletion. New presets reject a present foreign or empty ownership marker before mutation; no marker or the exact existing owner is allowed. The candidate commits through the existing QA SaveService journal before publishing ownership. Content/commit failures remain blocked for that process and never read normal data. Existing `fresh`, `resume`, `empty-energy` and no-command behavior is preserved, including the older fresh reset semantics.
+ 
+-The factory is compiled only for Editor or Android development builds. Android intent/package/debuggable guards and cold-process selection remain unchanged. Current reference DTO exports have no supported import route. [Current packaging checks](../../SettingsRecovery/R2AndroidRefresh/TestResults.md) verify the factory and exact selectors; [R5 checks](../R5AndroidRefresh/TestResults.md) remain historical. Resumed device execution is still required for Android activation/isolation acceptance; all18physical rows remain pending. The original R3 artifact is archived and does not contain these presets.
++The factory is compiled only for Editor or Android development builds. Android intent/package/debuggable guards and cold-process selection remain unchanged. Current reference DTO exports have no supported import route. [Current packaging checks](../../PersistenceRecovery/R2AndroidRefresh/TestResults.md) verify the factory and exact selectors; [R5 checks](../R5AndroidRefresh/TestResults.md) remain historical. Resumed device execution is still required for Android activation/isolation acceptance; all18physical rows remain pending. The original R3 artifact is archived and does not contain these presets.
+ 
+ ## 2026-10-03 — daily-reward build pin
+ 
+@@ -95,3 +95,7 @@
+ ## 2026-10-03 — Settings recovery build pin
+ 
+ [Current Settings R2 results](../../SettingsRecovery/R2AndroidRefresh/TestResults.md) verify 766,032,162 bytes/SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc`, original development certificate, 68 native owners/six callbacks, 160 fresh Unity Edit checks and 184 mocked offline checks. Prior same-source 396 runtime/service checks remain separate. Previous round lifecycle APK/sidecar is retained; earlier dated pins remain historical. Four preferences commit before adoption; rejected saves preserve the switch/feedback state and existing standalone/paused Settings root. Existing localized rejection panel and owned callback/reentry guard are packaged. All 18 physical rows still require native touches, disposable-profile isolation and lifecycle/recovery evidence. No physical audibility/haptics/notifications or commercial acceptance claim.
++
++## 2026-10-03 — Ordinary persistence recovery build pin
++
++[Current persistence R2 results](../../PersistenceRecovery/R2AndroidRefresh/TestResults.md) verify 766,032,918 bytes/SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, original development certificate, 72 native owners/six callbacks, 160 fresh Unity Edit checks and 204 mocked offline checks. Prior same-source 426 runtime/service checks remain separate. Previous Settings APK/sidecar retained; earlier dated pins historical. Ordinary saving respects session lock and callback reentry and retains live Save identity/shared durable-primary acknowledgement. Existing migration/reset policies are packaged; startup normalization/load presentation and separate language recovery remain pending. All 18 physical rows still require native touches, disposable-profile isolation and lifecycle/recovery evidence. No physical or commercial acceptance claim.
+--- a/ProjectDocs/AI/ConversationHandoff.md
++++ b/ProjectDocs/AI/ConversationHandoff.md
+@@ -1,3 +1,11 @@
++# 2026-10-03 — Ordinary persistence recovery guarded Android refresh R2 complete
++
++[Build results](PersistenceRecovery/R2AndroidRefresh/TestResults.md) · [Reconciliation](PersistenceRecovery/R2AndroidRefresh/QA/BuildValidation.json) · [Final validation](PersistenceRecovery/R2AndroidRefresh/QA/FinalValidation.json). APK **766,032,918 bytes**, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, now includes acknowledging Persist/TryPersist, session-lock rejection and Changed reentry cleanup alongside all previous recovery. Previous Settings APK/sidecar preserved under BeforePersistenceRefreshR2.
++
++Unity 6000.5.9f1: 160 fresh distinct Edit checks pass, zero failures/skips; existing guarded build succeeds/exit 0 (110.05s). Prior same-source 426 passes (341 Play/85 Edit) remain R1 evidence; no new Play Mode/device run. 72 generated/native owners and six callbacks match packaged code (71 before); four persistence regions verified with shared durable-primary acknowledgement, live identity and scoped cleanup. Original certificate/identity/permissions/CRC/16KiB/six ELFs/nine DEX/four Java-meta pins retained. 403 ZIP paths/399 payloads identical/four reviewed changes; engine and complete player asset pack identical, 29,387 membership rows/eight page sizes unchanged. 204 mocked offline checks pass; actual default preflight pins the artifact with zero ADB calls. 7,839 project inputs unchanged; helper/generated cleanup complete, tracked fingerprint restored, six caches byte-verified and preserved temporarily under /dev/shm with unchanged build/disk guards. Eight handoff/tool files updated with acceptance/history retained.
++
++**Next core work:** audit startup migration normalization/load presentation and separate language persistence, using reproduced defects to scope changes. Persist saves an already prepared live Save; arbitrary prior direct edits/normalization rollback remain outside this fix. Human 201–210 recordings/ratings/observations before tuning remain parallel; previously confirmed unrecorded, no rescan here. All 18 physical rows pending; phone/hosting deferred. Real paid/video settlement, production RuStore readiness and measured profitability remain unverified; stock-max restricted, effects last. No personal journal/credentials/Git/store or physical acceptance action.
++
+ # 2026-10-03 — Ordinary persistence recovery R1 complete (source)
+ 
+ [Results](PersistenceRecovery/R1/TestResults.md) · [Reconciliation](PersistenceRecovery/R1/QA/TestReconciliation.json) · [Final validation](PersistenceRecovery/R1/QA/FinalValidation.json). Six pre-fix failures reproduced. General Persist now delegates to acknowledging TryPersist, respects the session lock, retains the original rejection evidence and guards its Changed reentry. Existing live Save/progress identity and pending receipts remain intact; shared durable-primary policy reused. Old locked sessions cannot overwrite repaired history; fresh state recovery and explicit reset retain distinct existing policies.
+--- a/ProjectDocs/AI/CurrentTask.md
++++ b/ProjectDocs/AI/CurrentTask.md
+@@ -1,3 +1,11 @@
++# 2026-10-03 — Ordinary persistence recovery guarded Android refresh R2 complete
++
++[Build results](PersistenceRecovery/R2AndroidRefresh/TestResults.md) · [Reconciliation](PersistenceRecovery/R2AndroidRefresh/QA/BuildValidation.json) · [Final validation](PersistenceRecovery/R2AndroidRefresh/QA/FinalValidation.json). APK **766,032,918 bytes**, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, now includes acknowledging Persist/TryPersist, session-lock rejection and Changed reentry cleanup alongside all previous recovery. Previous Settings APK/sidecar preserved under BeforePersistenceRefreshR2.
++
++Unity 6000.5.9f1: 160 fresh distinct Edit checks pass, zero failures/skips; existing guarded build succeeds/exit 0 (110.05s). Prior same-source 426 passes (341 Play/85 Edit) remain R1 evidence; no new Play Mode/device run. 72 generated/native owners and six callbacks match packaged code (71 before); four persistence regions verified with shared durable-primary acknowledgement, live identity and scoped cleanup. Original certificate/identity/permissions/CRC/16KiB/six ELFs/nine DEX/four Java-meta pins retained. 403 ZIP paths/399 payloads identical/four reviewed changes; engine and complete player asset pack identical, 29,387 membership rows/eight page sizes unchanged. 204 mocked offline checks pass; actual default preflight pins the artifact with zero ADB calls. 7,839 project inputs unchanged; helper/generated cleanup complete, tracked fingerprint restored, six caches byte-verified and preserved temporarily under /dev/shm with unchanged build/disk guards. Eight handoff/tool files updated with acceptance/history retained.
++
++**Next core work:** audit startup migration normalization/load presentation and separate language persistence, using reproduced defects to scope changes. Persist saves an already prepared live Save; arbitrary prior direct edits/normalization rollback remain outside this fix. Human 201–210 recordings/ratings/observations before tuning remain parallel; previously confirmed unrecorded, no rescan here. All 18 physical rows pending; phone/hosting deferred. Real paid/video settlement, production RuStore readiness and measured profitability remain unverified; stock-max restricted, effects last. No personal journal/credentials/Git/store or physical acceptance action.
++
+ # 2026-10-03 — Ordinary persistence recovery R1 complete (source)
+ 
+ [Results](PersistenceRecovery/R1/TestResults.md) · [Reconciliation](PersistenceRecovery/R1/QA/TestReconciliation.json) · [Final validation](PersistenceRecovery/R1/QA/FinalValidation.json). Six pre-fix failures reproduced. General Persist now delegates to acknowledging TryPersist, respects the session lock, retains the original rejection evidence and guards its Changed reentry. Existing live Save/progress identity and pending receipts remain intact; shared durable-primary policy reused. Old locked sessions cannot overwrite repaired history; fresh state recovery and explicit reset retain distinct existing policies.
+--- a/ProjectDocs/AI/DevelopmentSchedule.md
++++ b/ProjectDocs/AI/DevelopmentSchedule.md
+@@ -342,3 +342,11 @@
+ One production file and one fixture changed; 7,837/7,839 inputs unchanged, none added/deleted. Existing startup migration/reset methods, approved art/metas/prefabs/builders/fonts/settings/packages/backend/guards and prior user edits preserved. Four continuity documents updated with history retained. No build/personal journal/credentials/Git/phone/hosting/store action. The legacy API persists already prepared live Save; arbitrary prior direct edits and migration normalization rollback/load-presentation remain outside this fix. Separate language recovery remains pending. Human 201–210 still unrecorded from prior confirmation; no rescan/tuning. All 18 physical rows pending, real paid/video settlement/RuStore production readiness/measured profitability unverified, stock-max restricted, effects last.
+ 
+ **Next:** guarded APK refresh packaging ordinary persistence recovery. Current APK/sidecar remains 766,032,162 bytes/SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc` and excludes these new fixes while retaining Settings and prior recovery. Human 201–210 recording/review remains parallel.
++
++# 2026-10-03 — Ordinary persistence recovery guarded Android refresh R2 complete
++
++[Build results](PersistenceRecovery/R2AndroidRefresh/TestResults.md) · [Reconciliation](PersistenceRecovery/R2AndroidRefresh/QA/BuildValidation.json) · [Final validation](PersistenceRecovery/R2AndroidRefresh/QA/FinalValidation.json). APK **766,032,918 bytes**, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, now includes acknowledging Persist/TryPersist, session-lock rejection and Changed reentry cleanup alongside all previous recovery. Previous Settings APK/sidecar preserved under BeforePersistenceRefreshR2.
++
++Unity 6000.5.9f1: 160 fresh distinct Edit checks pass, zero failures/skips; existing guarded build succeeds/exit 0 (110.05s). Prior same-source 426 passes (341 Play/85 Edit) remain R1 evidence; no new Play Mode/device run. 72 generated/native owners and six callbacks match packaged code (71 before); four persistence regions verified with shared durable-primary acknowledgement, live identity and scoped cleanup. Original certificate/identity/permissions/CRC/16KiB/six ELFs/nine DEX/four Java-meta pins retained. 403 ZIP paths/399 payloads identical/four reviewed changes; engine and complete player asset pack identical, 29,387 membership rows/eight page sizes unchanged. 204 mocked offline checks pass; actual default preflight pins the artifact with zero ADB calls. 7,839 project inputs unchanged; helper/generated cleanup complete, tracked fingerprint restored, six caches byte-verified and preserved temporarily under /dev/shm with unchanged build/disk guards. Eight handoff/tool files updated with acceptance/history retained.
++
++**Next core work:** audit startup migration normalization/load presentation and separate language persistence, using reproduced defects to scope changes. Persist saves an already prepared live Save; arbitrary prior direct edits/normalization rollback remain outside this fix. Human 201–210 recordings/ratings/observations before tuning remain parallel; previously confirmed unrecorded, no rescan here. All 18 physical rows pending; phone/hosting deferred. Real paid/video settlement, production RuStore readiness and measured profitability remain unverified; stock-max restricted, effects last. No personal journal/credentials/Git/store or physical acceptance action.
+--- a/ProjectDocs/AI/SessionLog.md
++++ b/ProjectDocs/AI/SessionLog.md
+@@ -6385,3 +6385,11 @@
+ One production file and one fixture changed; 7,837/7,839 inputs unchanged, none added/deleted. Existing startup migration/reset methods, approved art/metas/prefabs/builders/fonts/settings/packages/backend/guards and prior user edits preserved. Four continuity documents updated with history retained. No build/personal journal/credentials/Git/phone/hosting/store action. The legacy API persists already prepared live Save; arbitrary prior direct edits and migration normalization rollback/load-presentation remain outside this fix. Separate language recovery remains pending. Human 201–210 still unrecorded from prior confirmation; no rescan/tuning. All 18 physical rows pending, real paid/video settlement/RuStore production readiness/measured profitability unverified, stock-max restricted, effects last.
+ 
+ **Next:** guarded APK refresh packaging ordinary persistence recovery. Current APK/sidecar remains 766,032,162 bytes/SHA256 `0310f6a446f268fb36a70c3a7af604cc89b54c5cbc51f19a864316aeaf421adc` and excludes these new fixes while retaining Settings and prior recovery. Human 201–210 recording/review remains parallel.
++
++# 2026-10-03 — Ordinary persistence recovery guarded Android refresh R2 complete
++
++[Build results](PersistenceRecovery/R2AndroidRefresh/TestResults.md) · [Reconciliation](PersistenceRecovery/R2AndroidRefresh/QA/BuildValidation.json) · [Final validation](PersistenceRecovery/R2AndroidRefresh/QA/FinalValidation.json). APK **766,032,918 bytes**, SHA256 `1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e`, now includes acknowledging Persist/TryPersist, session-lock rejection and Changed reentry cleanup alongside all previous recovery. Previous Settings APK/sidecar preserved under BeforePersistenceRefreshR2.
++
++Unity 6000.5.9f1: 160 fresh distinct Edit checks pass, zero failures/skips; existing guarded build succeeds/exit 0 (110.05s). Prior same-source 426 passes (341 Play/85 Edit) remain R1 evidence; no new Play Mode/device run. 72 generated/native owners and six callbacks match packaged code (71 before); four persistence regions verified with shared durable-primary acknowledgement, live identity and scoped cleanup. Original certificate/identity/permissions/CRC/16KiB/six ELFs/nine DEX/four Java-meta pins retained. 403 ZIP paths/399 payloads identical/four reviewed changes; engine and complete player asset pack identical, 29,387 membership rows/eight page sizes unchanged. 204 mocked offline checks pass; actual default preflight pins the artifact with zero ADB calls. 7,839 project inputs unchanged; helper/generated cleanup complete, tracked fingerprint restored, six caches byte-verified and preserved temporarily under /dev/shm with unchanged build/disk guards. Eight handoff/tool files updated with acceptance/history retained.
++
++**Next core work:** audit startup migration normalization/load presentation and separate language persistence, using reproduced defects to scope changes. Persist saves an already prepared live Save; arbitrary prior direct edits/normalization rollback remain outside this fix. Human 201–210 recordings/ratings/observations before tuning remain parallel; previously confirmed unrecorded, no rescan here. All 18 physical rows pending; phone/hosting deferred. Real paid/video settlement, production RuStore readiness and measured profitability remain unverified; stock-max restricted, effects last. No personal journal/credentials/Git/store or physical acceptance action.

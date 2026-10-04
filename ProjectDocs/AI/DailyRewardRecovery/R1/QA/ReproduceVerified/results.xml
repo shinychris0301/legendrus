@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.7498695">
+  <test-suite type="TestSuite" id="2510" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1356" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.749870" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2504" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="567" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.702778" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2595587" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2505" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="567" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.688387" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2506" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="567" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.675005" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2507" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="567" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.656230" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2064" name="DailyRewardAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.630646" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2069" name="OverflowClaimPreservesAllBalancesEligibilityAndJournal" fullname="LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests.OverflowClaimPreservesAllBalancesEligibilityAndJournal" methodname="OverflowClaimPreservesAllBalancesEligibilityAndJournal" classname="LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests" runstate="Runnable" seed="1810582833" result="Failed" start-time="2026-10-03 09:31:32Z" end-time="2026-10-03 09:31:33Z" duration="0.612145" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Overflow scenario 0
+  Expected: No Exception to be thrown
+  But was:  <System.OverflowException: Arithmetic operation resulted in an overflow.
+  at LegendsOfRus.DailyRewardSchedule.TryApply (LegendsOfRus.PlayerSaveData s, System.DateTime utc) [0x0001a] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/DailyRewardSchedule.cs:42 
+  at LegendsOfRus.GameState.ClaimDailyReward (LegendsOfRus.DailyRewardGrant& granted) [0x00036] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs:778 
+  at LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests+<>c__DisplayClass15_2.<OverflowClaimPreservesAllBalancesEligibilityAndJournal>b__1 () [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/DailyRewardAlignmentPlayModeTests.cs:126 
+  at NUnit.Framework.Constraints.ThrowsConstraint+VoidInvocationDescriptor.Invoke () [0x00001] in <8b63e8ac0a4746599ed207982825ae6c>:0 
+  at NUnit.Framework.Constraints.ThrowsConstraint+ExceptionInterceptor.Intercept (System.Object invocation) [0x00050] in <8b63e8ac0a4746599ed207982825ae6c>:0 >
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.DailyRewardAlignmentPlayModeTests+<OverflowClaimPreservesAllBalancesEligibilityAndJournal>d__15.MoveNext () [0x00137] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/DailyRewardAlignmentPlayModeTests.cs:126
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/DailyRewardRecovery/R1/QA/ReproduceVerified/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

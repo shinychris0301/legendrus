@@ -113,12 +113,12 @@ namespace LegendsOfRus
         }
         static string Balance(int n)=>Mathf.Max(0,n).ToString("N0",CultureInfo.InvariantCulture).Replace(","," ");
 
-        public void BindNavigation(Action<ScreenId> show,Action openSelectedLevel,Action back,Action<string> notify)
+        public void BindNavigation(Action<ScreenId> show,Func<bool> openSelectedLevel,Action back,Action<string> notify,Action selectionRejected=null)
         {
             Unbind();committed=false;
             Bind(ProfileButton,()=>show(ScreenId.Profile),true);Bind(SettingsButton,()=>show(ScreenId.Settings),true);
             Bind(BackButton,back,true);
-            Bind(PlayButton,openSelectedLevel,true);
+            Bind(PlayButton,()=>{committed=openSelectedLevel();},false);
             Bind(Scroller.CurrentButton,Scroller.JumpToCurrent,false);
             for(int i=0;i<3;i++){int resource=i;Bind(PlusButtons[i],()=>show(resource==2?ScreenId.OutOfEnergy:ScreenId.Shop),true);}
             for(int i=0;i<Nodes.Length;i++)
@@ -133,8 +133,11 @@ namespace LegendsOfRus
                         bool published=ChapterLevelCatalog.Find(1,level)!=null;
                         notify(published?(DemoFeatureState.LanguageCode=="en"?"Complete the previous level to unlock this one.":"Пройдите предыдущий уровень, чтобы открыть этот."):(DemoFeatureState.LanguageCode=="en"?"This level is coming soon.":"Этот уровень скоро появится."));return;
                     }
-                    GameState.Instance.SelectLevel(1,level);
-                    committed=true;openSelectedLevel();
+                    if(!GameState.Instance.SelectLevel(1,level))
+                    {
+                        selectionRejected?.Invoke();return;
+                    }
+                    committed=openSelectedLevel();
                 },false);
             }
             ActionsBound=true;

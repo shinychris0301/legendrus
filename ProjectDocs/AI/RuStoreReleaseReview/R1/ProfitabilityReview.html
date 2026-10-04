@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legends of Rus · RuStore revenue review</title>
+<style>
+:root{color-scheme:dark;--bg:#101b28;--panel:#1a2a3c;--gold:#ecc67a;--text:#edf2f7;--muted:#b7c6d7;--red:#ffadab;--green:#98dfbc}*{box-sizing:border-box}body{background:var(--bg);color:var(--text);font:16px/1.55 system-ui,sans-serif;margin:0;padding:32px}main{max-width:1100px;margin:auto}h1{font-size:clamp(26px,4vw,40px);line-height:1.2;margin:0 0 12px}h2{font-size:21px;color:var(--gold)}p{max-width:88ch;color:var(--muted)}a{color:var(--gold)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}section{background:var(--panel);padding:24px;border:1px solid #34465a;border-radius:12px}.inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:block;font-size:14px;color:var(--muted)}input,select{width:100%;font:inherit;background:#101b28;color:var(--text);border:1px solid #587086;border-radius:5px;padding:9px;margin-top:5px}input:focus,select:focus{outline:2px solid var(--gold)}.metric{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #34465a}.metric strong{text-align:right;font-variant-numeric:tabular-nums}.large{font-size:27px}.negative{color:var(--red)}.positive{color:var(--green)}#error{color:var(--red)}.bar{height:14px;border-radius:4px;margin:5px 0 16px;background:var(--gold);max-width:100%;min-width:0}.cost{background:var(--red)}small{color:var(--muted)}footer{margin:22px 0;color:var(--muted)}@media(max-width:760px){body{padding:16px}.grid{grid-template-columns:1fr}section{padding:18px}}@media(max-width:380px){.inputs{grid-template-columns:1fr}.metric{flex-wrap:wrap}}
+@media(max-width:760px){.metric:has(.large){flex-direction:column;gap:8px}.metric:has(.large) strong{text-align:left}}
+</style>
+<main>
+<h1>Can this RuStore release earn a surplus?</h1>
+<p>Free download with in-app purchases · 90-day install cohort · Review dated October 2, 2026. <strong>These scenarios are assumptions, not measured game revenue.</strong> Purchases and ads remain disabled in the current project.</p>
+<p><a href="ReadinessReview.md">Readiness and development backlog</a> · <a href="ProfitabilityScenarios.json">Scenario inputs</a> · <a href="https://www.rustore.ru/help/legal/devs/developers-agreement">Default 15% fee source</a></p>
+<div class="grid">
+<section><h2>Change the assumptions</h2>
+<label>Example<select id="scenario"><option value="working">Working example</option><option value="low">Low conversion</option><option value="high">High conversion</option></select></label>
+<p><small>Every input except the sourced standard fee is hypothetical. Confirm the fee in your actual agreement. Organic installs have no acquisition charge here; their operating costs still count.</small></p>
+<form id="inputs" class="inputs" novalidate>
+<label>Cohort installs<input id="installs" type="number" min="1" step="1" value="10000"></label>
+<label>Paid acquisition share (%)<input id="paidFraction" type="number" min="0" max="100" step="0.1" value="100"></label>
+<label>Payers within 90 days (%)<input id="payerFraction" type="number" min="0" max="100" step="0.1" value="2"></label>
+<label>Total 90-day gross spend / payer (₽)<input id="grossSpendPerPayer" type="number" min="0" step="1" value="500"></label>
+<label>RuStore IAP fee (%)<input id="feeFraction" type="number" min="0" max="100" step="0.1" value="15"></label>
+<label>IAP refunds (%)<input id="refundFraction" type="number" min="0" max="100" step="0.1" value="2"></label>
+<label>Net 90-day ad proceeds / install (₽)<input id="netAdsPerInstall" type="number" min="0" step="0.1" value="0"></label>
+<label>90-day variable cost / install (₽)<input id="variableCostPerInstall" type="number" min="0" step="0.1" value="0.5"></label>
+<label>CPI for paid installs (₽)<input id="paidCpi" type="number" min="0" step="0.1" value="20"></label>
+<label>Allocated 90-day fixed operating cost (₽)<input id="allocatedFixedCost" type="number" min="0" step="100" value="30000"></label>
+<label>Allocated development / owner labor (₽)<input id="allocatedDevelopmentCost" type="number" min="0" step="100" value="0"></label>
+</form><p id="error" role="alert"></p></section>
+<section aria-live="polite"><h2>90-day cohort result</h2>
+<div class="metric"><span>Gross IAP</span><strong id="gross"></strong></div>
+<div class="metric"><span>Net IAP after fee and refunds</span><strong id="net"></strong></div>
+<div class="metric"><span>Net IAP / install</span><strong id="perInstall"></strong></div>
+<div class="metric"><span>Contribution / install after variable costs</span><strong id="contribution"></strong></div>
+<div class="metric"><span>Acquisition spend</span><strong id="marketing"></strong></div>
+<div class="metric"><span>Pre-tax cohort surplus</span><strong class="large" id="surplus"></strong></div>
+<div class="metric"><span>Break-even paid CPI</span><strong id="breakEven"></strong></div>
+<div class="metric"><span>Break-even payer conversion</span><strong id="required"></strong></div>
+<p id="interpretation"></p>
+<h2>Proceeds compared with costs</h2>
+<label>Net IAP + net ad proceeds</label><div id="revenueBar" class="bar"></div>
+<label>Acquisition + variable + allocated costs</label><div id="costBar" class="bar cost"></div>
+<p><small>Prices and spend are RUB; ad proceeds are already net of the ad provider and do not receive an additional RuStore IAP deduction. A pass is part of IAP, counted once. Taxes, settlement timing and unentered costs are excluded. Fee/refund arithmetic is a planning approximation; provider reports remain authoritative.</small></p>
+</section></div>
+<footer>This page is an offline planning tool, not a Unity capture or store listing. No analytics, remote scripts, purchase SDK or network request is used. Positive scenario results do not establish the game's profitability. Include actual labor and development costs before assessing payback.</footer>
+</main>
+<script>
+const fields=['installs','paidFraction','payerFraction','grossSpendPerPayer','feeFraction','refundFraction','netAdsPerInstall','variableCostPerInstall','paidCpi','allocatedFixedCost','allocatedDevelopmentCost'];
+const fractions=new Set(['paidFraction','payerFraction','feeFraction','refundFraction']);
+const money=new Intl.NumberFormat('en-US',{style:'currency',currency:'RUB',maximumFractionDigits:2});
+function calculate(d){
+ if(fields.some(k=>!Number.isFinite(d[k])||d[k]<0)||d.installs<=0||!Number.isSafeInteger(d.installs)||[...fractions].some(k=>d[k]>1))throw Error('Enter finite non-negative inputs, positive whole installs and percentages from 0 to 100.');
+ const gross=d.installs*d.payerFraction*d.grossSpendPerPayer,realized=(1-d.refundFraction)*(1-d.feeFraction),net=gross*realized;
+ const contribution=net/d.installs+d.netAdsPerInstall-d.variableCostPerInstall,fixed=d.allocatedFixedCost+d.allocatedDevelopmentCost,marketing=d.installs*d.paidFraction*d.paidCpi;
+ const required=Math.max(0,d.paidFraction*d.paidCpi+d.variableCostPerInstall+fixed/d.installs-d.netAdsPerInstall),denominator=d.grossSpendPerPayer*realized;
+ const result={grossIap:gross,netIap:net,netIapPerInstall:net/d.installs,contributionPerInstall:contribution,marketingCost:marketing,preTaxCohortSurplus:d.installs*contribution-marketing-fixed,breakEvenPaidCpi:d.paidFraction?(contribution-fixed/d.installs)/d.paidFraction:null,requiredPayerFraction:denominator?required/denominator:(required?null:0),totalProceeds:net+d.installs*d.netAdsPerInstall,totalCosts:marketing+d.installs*d.variableCostPerInstall+fixed};
+ if(Object.values(result).some(x=>x!==null&&!Number.isFinite(x)))throw Error('Inputs exceed the calculator range.');return result;
+}
+function render(){
+ try{
+  const d={};for(const k of fields){const raw=document.getElementById(k).value;if(!raw.trim())throw Error('Complete every input.');d[k]=Number(raw)/(fractions.has(k)?100:1);}
+  const r=calculate(d);window.currentResults=r;document.getElementById('error').textContent='';
+  for(const [id,key] of [['gross','grossIap'],['net','netIap'],['perInstall','netIapPerInstall'],['contribution','contributionPerInstall'],['marketing','marketingCost'],['surplus','preTaxCohortSurplus']])document.getElementById(id).textContent=money.format(r[key]);
+  document.getElementById('surplus').className='large '+(r.preTaxCohortSurplus<0?'negative':'positive');
+  document.getElementById('breakEven').textContent=r.breakEvenPaidCpi===null?'N/A · no paid installs':r.breakEvenPaidCpi<0?'No affordable paid CPI':money.format(r.breakEvenPaidCpi);
+  document.getElementById('required').textContent=r.requiredPayerFraction===null?'Unreachable with zero realized spend':r.requiredPayerFraction>1?'Unreachable · above 100%':(r.requiredPayerFraction*100).toFixed(2)+'%';
+  document.getElementById('interpretation').textContent=r.preTaxCohortSurplus<0?'These assumptions lose money within the 90-day horizon. Measure the inputs before funding acquisition.':'These assumptions produce a pre-tax surplus. This remains a hypothesis until verified against actual cohorts and all costs.';
+  const max=Math.max(r.totalProceeds,r.totalCosts,1);document.getElementById('revenueBar').style.width=(100*r.totalProceeds/max)+'%';document.getElementById('costBar').style.width=(100*r.totalCosts/max)+'%';
+ }catch(e){window.currentResults=null;document.getElementById('error').textContent=e.message;for(const id of ['gross','net','perInstall','contribution','marketing','surplus','breakEven','required'])document.getElementById(id).textContent='—';document.getElementById('interpretation').textContent='Correct the inputs to calculate.';for(const id of ['revenueBar','costBar'])document.getElementById(id).style.width='0%';}
+}
+document.getElementById('inputs').addEventListener('input',render);document.getElementById('inputs').addEventListener('submit',e=>e.preventDefault());
+document.getElementById('scenario').addEventListener('change',e=>{const c={low:[1,299],working:[2,500],high:[5,1000]}[e.target.value];const defaults={installs:10000,paidFraction:100,payerFraction:c[0],grossSpendPerPayer:c[1],feeFraction:15,refundFraction:2,netAdsPerInstall:0,variableCostPerInstall:.5,paidCpi:20,allocatedFixedCost:30000,allocatedDevelopmentCost:0};for(const k of fields)document.getElementById(k).value=defaults[k];render();});
+render();
+</script>
+</html>

@@ -374,5 +374,56 @@ namespace LegendsOfRus.Tests.PlayMode
             layout.ApplyNow();Canvas.ForceUpdateCanvases();
             Assert.That(Vector2.Distance(old,view.Nodes[0].Root.anchoredPosition),Is.LessThan(.01f));
         }
+
+        [UnityTest]
+        public IEnumerator SelectionRejectedNativeNodeStaysOnMapWithError()
+        {
+            yield return VerifyRejectedSelection(false);
+        }
+        [UnityTest]
+        public IEnumerator SelectionRejectedNativePlayStaysOnMapWithError()
+        {
+            yield return VerifyRejectedSelection(true);
+        }
+        [UnityTest]
+        public IEnumerator SelectionRejectedNativeNodeEnglishStaysOnMapWithError()
+        {
+            yield return VerifyRejectedSelection(false,true);
+        }
+        [UnityTest]
+        public IEnumerator SelectionRejectedNativePlayEnglishStaysOnMapWithError()
+        {
+            yield return VerifyRejectedSelection(true,true);
+        }
+        IEnumerator VerifyRejectedSelection(bool play,bool english=false)
+        {
+            DemoFeatureState.SetLanguage(english?"en":"ru");
+            var state=GameState.Instance;state.Save.highestUnlockedLevel=2;state.EnsureSelectedLevelIsUnlocked();
+            state.CompleteStoryScene(StoryCatalog.LoadChapter1().introSceneId);StoryService.ResetRuntime();
+            var original=state.Save;string before=JsonUtility.ToJson(original);
+            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
+            foreach(string key in keys)PlayerPrefs.DeleteKey(key);
+            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
+            try
+            {
+                var root=Root();var view=root.GetComponentInChildren<ProductionChapterMapView>();
+                (play?view.PlayButton:view.Nodes[1].Button).onClick.Invoke();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(Root(),Is.SameAs(root));
+                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                Assert.That(state.CanPersist,Is.False);var write=state.LastWriteResult;
+                var error=router.GameCanvas.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error.Retry.interactable,Is.False);
+                router.NavigateBack();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(router.ActiveModal,Is.Null);
+                (play?view.PlayButton:view.Nodes[1].Button).onClick.Invoke();Settle();yield return null;
+                Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));Assert.That(state.LastWriteResult,Is.SameAs(write));
+                Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                router.NavigateBack();Settle();yield return null;
+                view.BackButton.onClick.Invoke();Settle();Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.WorldMap));
+            }
+            finally{LogAssert.ignoreFailingMessages=ignored;}
+        }
+
     }
 }

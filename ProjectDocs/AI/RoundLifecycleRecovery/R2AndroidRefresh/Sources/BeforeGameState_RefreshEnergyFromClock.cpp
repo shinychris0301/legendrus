@@ -1,0 +1,8 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void GameState_RefreshEnergyFromClock_m62D3547232AF01EC9779ADF04DB1A023B9B8F3B9 (GameState_t5E590D2FB317152A4011A3CA69E3F311E0A7393A* __this, const RuntimeMethod* method) 
+{
+	{
+		bool L_0;
+		L_0 = GameState_TryRefreshEnergyFromClock_m780600D8ABF49A77F6AD1E967414BDFD743C6D97(__this, NULL);
+		return;
+	}
+}

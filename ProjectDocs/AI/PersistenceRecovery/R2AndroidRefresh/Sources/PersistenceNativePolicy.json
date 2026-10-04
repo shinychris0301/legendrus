@@ -1,0 +1,30 @@
+{
+  "extraOwners": [
+    "GameState_Persist",
+    "GameState_TryPersist",
+    "GameState_MigrateSave",
+    "GameState_ResetProgress"
+  ],
+  "flags": {
+    "GameState_Persist": [
+      "guardsNestedPublication",
+      "delegatesAcknowledgingPersistence",
+      "logsRejectedPersistence"
+    ],
+    "GameState_TryPersist": [
+      "rejectsLockAndReentryBeforeCommit",
+      "commitsCurrentLiveSave",
+      "scopedFinallyReleasesPersistenceGuard"
+    ],
+    "GameState_MigrateSave": [
+      "retainsStartupPersistDelegation"
+    ],
+    "GameState_ResetProgress": [
+      "replacesHistoryBeforeAdoption"
+    ],
+    "GameState_TryCommitBalance": [
+      "durablePrimaryAcknowledgementBeforeAdoption",
+      "commitsBeforeChanged"
+    ]
+  }
+}

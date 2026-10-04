@@ -1,0 +1,602 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.RetainedRound.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.RetainedRound.cs
+@@ -44,7 +44,9 @@
+             var candidate=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+             if (!CancelUnusedContinuation(candidate,data)) return false;
+             var progress=candidate.levelProgress.Single(p=>p.chapterId==data.chapter&&p.levelId==data.level);
+-            progress.failures++;progress.bestScore=Math.Max(progress.bestScore,data.score);candidate.retainedRound=null;
++            try { progress.failures=checked(progress.failures+1); }
++            catch (OverflowException) { return false; }
++            progress.bestScore=Math.Max(progress.bestScore,data.score);candidate.retainedRound=null;
+             if (!CommitRetained(candidate)) return false;
+             unsavedRetainedRound=null;
+             PrivacyAwareAnalytics.TryLevelFail(ChapterLevelCatalog.Find(data.chapter,data.level).id,data.attempt,data.score);
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -599,49 +599,106 @@
+             return created;
+         }
+ 
+-        public int RegisterLevelAttempt(LevelData levelData)
+-        {
+-            if (levelData == null) return 0;
++        public int RegisterLevelAttempt(LevelData levelData) =>
++            TryRegisterLevelAttempt(levelData, out var attempt) ? attempt : 0;
++
++        bool CanRegisterLevelAttempt(LevelData levelData)
++        {
++            if (levelData == null || !canPersist) return false;
+             if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Resolve or recover the continuation reservation before starting another round.");
+             if (TryGetRetainedRound(out _)) throw new InvalidOperationException("Resolve the retained attempt before starting another round.");
+-            Save.retainedRound = null; // Reject stale/incompatible optional checkpoints without resetting progress.
+-            unsavedRetainedRound = null;
+-            if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
+-                return 0;
+-
+-            Save.selectedChapter = levelData.chapterId;
+-            Save.selectedLevel = levelData.levelId;
+-            LevelProgressData progress = GetLevelProgress(
+-                levelData.chapterId,
+-                levelData.levelId,
+-                create: true
+-            );
+-            progress.attempts++;
+-            if (progress.attempts > 1)
+-                progress.retries++;
+-
+-            Persist();
+-            return progress.attempts;
+-        }
+-
+-        public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
+-        {
++            return IsLevelUnlocked(levelData.chapterId, levelData.levelId);
++        }
++
++        public bool TryRegisterLevelAttempt(LevelData levelData, out int attempt)
++        {
++            attempt = 0;
++            if (!CanRegisterLevelAttempt(levelData)) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            if (!TryPrepareLevelAttempt(candidate, levelData, out var preparedAttempt) ||
++                !TryCommitRoundCandidate(candidate, clearRetainedAttempt: true)) return false;
++            attempt = preparedAttempt;
++            return true;
++        }
++
++        // Normal paid-in-energy entry commits the debit and attempt together before board construction.
++        public bool TryStartLevel(LevelData levelData, out int attempt, out bool insufficientEnergy)
++        {
++            attempt = 0;
++            insufficientEnergy = false;
++            if (!CanRegisterLevelAttempt(levelData) || HasPendingBoosterCommand) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            long now = DateTime.UtcNow.Ticks;
++            AdvanceEnergyClock(candidate, now);
++            if (candidate.energy < 1) { insufficientEnergy = true; return false; }
++            bool wasFull = candidate.energy >= candidate.energyMax;
++            candidate.energy--;
++            if (wasFull) candidate.lastEnergyUtcTicks = now;
++            if (!TryPrepareLevelAttempt(candidate, levelData, out var preparedAttempt) ||
++                !TryCommitRoundCandidate(candidate, clearRetainedAttempt: true)) return false;
++            attempt = preparedAttempt;
++            return true;
++        }
++
++        static LevelProgressData CandidateLevelProgress(PlayerSaveData candidate, LevelData levelData)
++        {
++            if (candidate.levelProgress == null) candidate.levelProgress = new List<LevelProgressData>();
++            var progress = candidate.levelProgress.Find(p => p != null &&
++                p.chapterId == levelData.chapterId && p.levelId == levelData.levelId);
++            if (progress == null)
++            {
++                progress = new LevelProgressData { chapterId = levelData.chapterId, levelId = levelData.levelId };
++                candidate.levelProgress.Add(progress);
++            }
++            return progress;
++        }
++
++        static bool TryPrepareLevelAttempt(PlayerSaveData candidate, LevelData levelData, out int attempt)
++        {
++            attempt = 0;
++            candidate.retainedRound = null; // Discard only incompatible optional checkpoints on commitment.
++            candidate.selectedChapter = levelData.chapterId;
++            candidate.selectedLevel = levelData.levelId;
++            var progress = CandidateLevelProgress(candidate, levelData);
++            try
++            {
++                progress.attempts = checked(progress.attempts + 1);
++                if (progress.attempts > 1) progress.retries = checked(progress.retries + 1);
++            }
++            catch (OverflowException) { return false; }
++            attempt = progress.attempts;
++            return attempt > 0;
++        }
++
++        bool TryCommitRoundCandidate(PlayerSaveData candidate, LevelFailureResult failure = null, bool clearRetainedAttempt = false)
++        {
++            if (!canPersist) return false;
++            bool written = SaveService.TrySave(candidate, out var result);
++            LastWriteResult = result;
++            if (!written && !result.PrimaryDurablyCommitted) { canPersist = false; return false; }
++            Save = candidate;
++            if (clearRetainedAttempt) unsavedRetainedRound = null;
++            if (failure != null) LastFailureResult = failure;
++            canPersist = written;
++            Changed?.Invoke();
++            return true;
++        }
++
++        public void RecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null) =>
++            TryRecordLevelFailure(levelData, score, goalProgress);
++
++        public bool TryRecordLevelFailure(LevelData levelData, int score, IReadOnlyList<int> goalProgress = null)
++        {
++            if (!canPersist) return false;
+             if (ContinuationBlocksNewAttempt()) throw new InvalidOperationException("Finalize the retained continuation transaction first.");
+-            if (levelData == null) return;
+-            if (!IsLevelUnlocked(levelData.chapterId, levelData.levelId))
+-                return;
+-
+-            LevelProgressData progress = GetLevelProgress(
+-                levelData.chapterId,
+-                levelData.levelId,
+-                create: true
+-            );
+-            if (progress.attempts == 0)
+-                progress.attempts = 1;
+-            LastFailureResult = new LevelFailureResult(levelData, score, goalProgress);
+-            progress.failures++;
++            if (levelData == null || !IsLevelUnlocked(levelData.chapterId, levelData.levelId)) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            var progress = CandidateLevelProgress(candidate, levelData);
++            if (progress.attempts == 0) progress.attempts = 1;
++            try { progress.failures = checked(progress.failures + 1); }
++            catch (OverflowException) { return false; }
+             progress.bestScore = Mathf.Max(progress.bestScore, score);
+-            Persist();
++            return TryCommitRoundCandidate(candidate, new LevelFailureResult(levelData, score, goalProgress));
+         }
+ 
+         public LevelCompletionResult CompleteLevel(LevelData levelData, int score)
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
+@@ -140,13 +140,20 @@
+         public void Initialize(
+             LevelData levelData,
+             Action<int> onWin,
+-            Action<int> onFail
++            Action<int> onFail,
++            int? registeredAttempt = null
+         )
+         {
+             ruleVersion = CurrentGameplayRules;
+             useCurrentBoardArt = true;
+             campaignInventory = null;
+-            InitializeCore(levelData, onWin, onFail, null);
++            if (registeredAttempt.HasValue && registeredAttempt.Value < 1)
++                throw new ArgumentException("A committed ordinary attempt must be positive.");
++            if (registeredAttempt.HasValue && (levelData == null || GameState.Instance == null ||
++                GameState.Instance.GetLevelProgress(levelData.chapterId, levelData.levelId)?.attempts != registeredAttempt.Value))
++                throw new ArgumentException("The ordinary attempt must match the committed progress ledger.");
++            InitializeCore(levelData, onWin, onFail, registeredAttempt,
++                preRegisteredOrdinaryAttempt: registeredAttempt.HasValue);
+         }
+ 
+         // Explicit development campaign entry: the coordinator already committed the attempt.
+@@ -168,9 +175,9 @@
+ 
+         }
+ 
+-        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null)
+-        {
+-            campaignManaged = committedAttempt.HasValue;
++        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null, bool preRegisteredOrdinaryAttempt = false)
++        {
++            campaignManaged = committedAttempt.HasValue && !preRegisteredOrdinaryAttempt;
+             this.onWin = onWin;
+             this.onFail = onFail;
+             currentLevel = levelData ?? ChapterLevelCatalog.ResolveSelected(null);
+@@ -199,6 +206,7 @@
+             int attempt = retained?.attempt ?? committedAttempt ?? (GameState.Instance != null
+                 ? GameState.Instance.RegisterLevelAttempt(currentLevel)
+                 : 1);
++            if (attempt < 1) throw new InvalidOperationException("Round attempt could not be committed.");
+             retainedAttemptNumber = attempt;
+             retainedAttemptId = retained?.attemptId ?? Guid.NewGuid().ToString("N");
+             int seed = BoardSeedUtility.CreateRuntimeSeed(
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -85,6 +85,9 @@
+         ScreenId? languageReturnPage;
+         ScreenId? loginReturnPage;
+         Match3Board activeBoard;
++        bool levelStartInProgress;
++        LevelData pendingGameplayLevel;
++        int pendingGameplayAttempt;
+         LevelTutorialPresenter tutorialErrorOwner;
+         string activeAnalyticsLevelId = string.Empty;
+         int activeAnalyticsAttemptNumber;
+@@ -1129,37 +1132,37 @@
+ 
+         void StartLevel()
+         {
+-            if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
+-            if (!GameState.Instance.CanPersist) { ShowErrorDialog(); return; }
+-            if (!GameState.Instance.TryRecoverPendingBoosterCommand() || !GameState.Instance.CanPersist)
+-            {
+-                ShowErrorDialog(GameState.Instance.CanPersist ? (Action)StartLevel : null);
+-                return;
+-            }
+-            if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return; }
+-            if (!GameState.Instance.SpendEnergy())
+-            {
+-                if (!GameState.Instance.CanPersist)
++            if (levelStartInProgress) return;
++            levelStartInProgress = true;
++            try
++            {
++                if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
++                if (!GameState.Instance.CanPersist) { ShowErrorDialog(); return; }
++                if (!GameState.Instance.TryRecoverPendingBoosterCommand() || !GameState.Instance.CanPersist)
+                 {
+-                    ShowErrorDialog();
++                    ShowErrorDialog(GameState.Instance.CanPersist ? (Action)StartLevel : null);
+                     return;
+                 }
+-                LevelData selected = ChapterLevelCatalog.ResolveSelected(
+-                    GameState.Instance.Save
+-                );
+-                if (selected != null)
++                if (!GameState.Instance.TryEnsureSelectedLevelIsUnlocked()) { ShowErrorDialog(); return; }
++                LevelData selected = ChapterLevelCatalog.ResolveSelected(GameState.Instance.Save);
++                if (!GameState.Instance.TryStartLevel(selected, out var attempt, out var insufficientEnergy))
+                 {
+-                    PrivacyAwareAnalytics.TryEnergyGateBlocked(
+-                        selected.id,
+-                        1,
+-                        Mathf.Max(0, GameState.Instance.Save.energy)
+-                    );
++                    if (!insufficientEnergy) { ShowErrorDialog(); return; }
++                    if (selected != null)
++                        PrivacyAwareAnalytics.TryEnergyGateBlocked(selected.id, 1, Mathf.Max(0, GameState.Instance.Save.energy));
++                    ShowModal(ScreenId.OutOfEnergy);
++                    return;
+                 }
+-                ShowModal(ScreenId.OutOfEnergy);
+-                return;
+-            }
+-
+-            Show(ScreenId.Gameplay);
++                pendingGameplayLevel = selected;
++                pendingGameplayAttempt = attempt;
++                Show(ScreenId.Gameplay);
++            }
++            finally
++            {
++                pendingGameplayLevel = null;
++                pendingGameplayAttempt = 0;
++                levelStartInProgress = false;
++            }
+         }
+ 
+         bool OpenSelectedLevel()
+@@ -1702,7 +1705,12 @@
+             var board = boardGo.GetComponent<Match3Board>();
+             activeBoard = board;
+             board.InventoryRecoveryRequired += failed => StartCoroutine(ShowGameplayInventoryError(failed));
++            LevelData startedLevel = pendingGameplayLevel ?? ChapterLevelCatalog.ResolveSelected(GameState.Instance.Save);
++            int? startedAttempt = pendingGameplayAttempt > 0 ? (int?)pendingGameplayAttempt : null;
++            pendingGameplayLevel = null;
++            pendingGameplayAttempt = 0;
+             activeBoard.Initialize(
++                levelData: startedLevel,
+                 onWin: score => CommitGameplayVictory(board,score),
+                 onFail: score =>
+                 {
+@@ -1717,7 +1725,8 @@
+                     if (!retained) Toast(DemoFeatureState.LanguageCode == "ru"
+                         ? "Раунд не сохранён. Не закрывайте игру; повторите попытку или выйдите через меню."
+                         : "Round not saved. Keep the game open; retry or leave through the menu.");
+-                }
++                },
++                registeredAttempt: startedAttempt
+             );
+ 
+             view.Bind(activeBoard, ShowPause);
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -1558,5 +1558,150 @@
+                 for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
+             }
+         }
++
++        [TestCase(false)] [TestCase(true)]
++        public void RoundRegistrationRejectedWriteKeepsCountersAndSelection(bool locked)
++        {
++            VerifyRejectedRoundWrite(locked,false);
++        }
++        [TestCase(false)] [TestCase(true)]
++        public void RoundFailureRejectedWriteKeepsProgressAndPresentation(bool locked)
++        {
++            VerifyRejectedRoundWrite(locked,true);
++        }
++        void VerifyRejectedRoundWrite(bool locked,bool failure)
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);
++            if(failure){state.RegisterLevelAttempt(level);state.RecordLevelFailure(level,10);}
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++            int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                if(locked)Assert.That(state.SpendGold(1),Is.False);
++                var original=state.Save;var outcome=state.LastFailureResult;string before=JsonUtility.ToJson(original);
++                if(failure)state.RecordLevelFailure(level,200);else Assert.That(state.RegisterLevelAttempt(level),Is.Zero);
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.Save,Is.SameAs(original));Assert.That(state.LastFailureResult,Is.SameAs(outcome));Assert.That(events,Is.Zero);
++                Assert.That(state.CanPersist,Is.False);var write=state.LastWriteResult;
++                if(failure)state.RecordLevelFailure(level,400);else Assert.That(state.RegisterLevelAttempt(level),Is.Zero);
++                Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));
++            }
++            finally
++            {
++                state.Changed-=changed;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                LogAssert.ignoreFailingMessages=ignored;
++            }
++        }
++        [TestCase(false)] [TestCase(true)]
++        public void RoundRegistrationCounterOverflowDoesNotPublish(bool retries)
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);var progress=state.GetLevelProgress(1,1,true);
++            progress.attempts=retries?1:int.MaxValue;progress.retries=retries?int.MaxValue:0;
++            string before=JsonUtility.ToJson(state.Save);var original=state.Save;var write=state.LastWriteResult;
++            Assert.That(state.RegisterLevelAttempt(level),Is.Zero);Assert.That(state.Save,Is.SameAs(original));
++            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(state.CanPersist,Is.True);
++        }
++
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)]
++        public void RoundStartEnergyClockAndRetryCommitTogether(int scenario)
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);
++            state.Save.energy=scenario==0?0:scenario==1?0:state.Save.energyMax;
++            long clock=System.DateTime.UtcNow.AddMinutes(scenario==1?-31:0).Ticks;
++            state.Save.lastEnergyUtcTicks=clock;
++            if(scenario==2)Assert.That(state.RegisterLevelAttempt(level),Is.EqualTo(1));
++            state.Persist();var original=state.Save;string before=JsonUtility.ToJson(original);
++            var write=state.LastWriteResult;int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                bool started=state.TryStartLevel(level,out int attempt,out bool insufficient);
++                if(scenario==0)
++                {
++                    Assert.That(started,Is.False);Assert.That(insufficient,Is.True);Assert.That(attempt,Is.Zero);
++                    Assert.That(state.Save,Is.SameAs(original));Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(events,Is.Zero);
++                }
++                else
++                {
++                    Assert.That(started,Is.True);Assert.That(insufficient,Is.False);Assert.That(attempt,Is.EqualTo(scenario==1?1:2));
++                    Assert.That(events,Is.EqualTo(1));Assert.That(state.Save,Is.Not.SameAs(original));
++                    Assert.That(state.Save.energy,Is.EqualTo(scenario==1?0:state.Save.energyMax-1));
++                    Assert.That(state.GetLevelProgress(1,1).retries,Is.EqualTo(scenario==1?0:1));
++                    Assert.That(state.Save.lastEnergyUtcTicks,Is.GreaterThan(clock));
++                }
++                Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++            }
++            finally{state.Changed-=changed;}
++        }
++
++        [Test]
++        public void RoundStartRejectedSaveKeepsDebitClockAndAttemptUntilFreshRecovery()
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);state.Save.energy=0;
++            state.Save.lastEnergyUtcTicks=System.DateTime.UtcNow.AddMinutes(-31).Ticks;state.Persist();
++            var original=state.Save;string before=JsonUtility.ToJson(original);GameObject freshObject=null;
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                Assert.That(state.TryStartLevel(level,out int attempt,out bool insufficient),Is.False);Assert.That(attempt,Is.Zero);Assert.That(insufficient,Is.False);
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(events,Is.Zero);
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));var write=state.LastWriteResult;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                Assert.That(state.TryStartLevel(level,out _,out _),Is.False);Assert.That(state.LastWriteResult,Is.SameAs(write));
++                freshObject=new GameObject("FreshRoundStartRecoveryState");var fresh=freshObject.AddComponent<GameState>();
++                Assert.That(fresh.CanPersist,Is.True);Assert.That(fresh.Save.energy,Is.EqualTo(1),"Existing Awake clock catch-up is committed before start.");Assert.That(fresh.GetLevelProgress(1,1),Is.Null);
++                Assert.That(fresh.TryStartLevel(level,out attempt,out insufficient),Is.True);Assert.That(attempt,Is.EqualTo(1));Assert.That(insufficient,Is.False);
++                Assert.That(fresh.Save.energy,Is.Zero);Assert.That(fresh.GetLevelProgress(1,1).retries,Is.Zero);
++                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(fresh.Save)));
++            }
++            finally
++            {
++                state.Changed-=changed;typeof(GameState).GetProperty("Instance").SetValue(null,state);if(freshObject!=null)Object.DestroyImmediate(freshObject);
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++            }
++        }
++
++        [Test]
++        public void RoundStartRejectsNullLockedLevelAndPendingBoosterWithoutWriting()
++        {
++            var state=GameState.Instance;var original=state.Save;string before=JsonUtility.ToJson(original);var write=state.LastWriteResult;
++            Assert.That(state.TryStartLevel(null,out _,out _),Is.False);
++            Assert.That(state.TryStartLevel(ChapterLevelCatalog.Find(1,2),out _,out _),Is.False);
++            Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));
++            Assert.That(state.TryBeginBoosterCommand(BoosterType.Firebird,out _),Is.True);
++            original=state.Save;before=JsonUtility.ToJson(original);write=state.LastWriteResult;
++            Assert.That(state.TryStartLevel(ChapterLevelCatalog.Find(1,1),out int attempt,out bool insufficient),Is.False);
++            Assert.That(attempt,Is.Zero);Assert.That(insufficient,Is.False);Assert.That(state.Save,Is.SameAs(original));
++            Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));
++        }
++
++        [Test]
++        public void RoundFailureOverflowKeepsPreviousResultAndFailurePublishesBeforeChanged()
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);int[] goals=new int[level.goals.Length];
++            for(int i=0;i<goals.Length;i++)goals[i]=int.MaxValue;
++            bool observed=false;System.Action changed=()=>{observed=true;Assert.That(state.LastFailureResult.Score,Is.EqualTo(123));Assert.That(state.GetLevelProgress(1,1).failures,Is.EqualTo(1));};
++            state.Changed+=changed;
++            try{Assert.That(state.TryRecordLevelFailure(level,123,goals),Is.True);}
++            finally{state.Changed-=changed;}
++            Assert.That(observed,Is.True);var outcome=state.LastFailureResult;
++            for(int i=0;i<goals.Length;i++){goals[i]=0;Assert.That(outcome.CurrentAt(i),Is.EqualTo(level.goals[i].target));}
++            state.GetLevelProgress(1,1).failures=int.MaxValue;state.Persist();var original=state.Save;string before=JsonUtility.ToJson(original);var write=state.LastWriteResult;
++            Assert.That(state.TryRecordLevelFailure(level,400),Is.False);Assert.That(state.Save,Is.SameAs(original));Assert.That(state.LastFailureResult,Is.SameAs(outcome));
++            Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(state.CanPersist,Is.True);
++            Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(before));
++        }
++
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
+@@ -482,5 +482,32 @@
+             }
+             PlayerPrefs.Save();
+         }
++
++        [UnityTest]
++        public IEnumerator RoundStartCommittedOrdinaryBoardKeepsRuntimeBoosterOwnershipAndSeed()
++        {
++            var state=GameState.Instance;var level=board.CurrentLevel;
++            Assert.That(state.TryStartLevel(level,out int attempt,out _),Is.True);
++            int energy=state.Save.energy;var write=state.LastWriteResult;
++            board.Initialize(level,null,null,attempt);
++            Assert.That(state.GetLevelProgress(level.chapterId,level.levelId).attempts,Is.EqualTo(attempt));Assert.That(state.Save.energy,Is.EqualTo(energy));
++            Assert.That(state.LastWriteResult,Is.SameAs(write));
++            Assert.That(board.BoardSeed,Is.EqualTo(BoardSeedUtility.CreateRuntimeSeed(level.chapterId,level.levelId,level.boardSeed+attempt)));
++            int moves=board.Moves;int boosters=state.BoosterCount(BoosterType.SeaPearl);board.UseBooster(BoosterType.SeaPearl);yield return WaitUntilInteractive();
++            Assert.That(board.Moves,Is.EqualTo(moves+5));Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(boosters-1));
++            Assert.That(state.Save.boosterCommand.state,Is.EqualTo(CampaignBoosterState.Applied));
++            Assert.That(state.GetLevelProgress(level.chapterId,level.levelId).attempts,Is.EqualTo(attempt));Assert.That(state.Save.energy,Is.EqualTo(energy));
++            Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++        }
++
++        [Test]
++        public void RoundStartOrdinaryInitializerRejectsUncommittedAttempt()
++        {
++            var level=board.CurrentLevel;var state=GameState.Instance;var write=state.LastWriteResult;string hash=board.BoardStateHash;
++            Assert.Throws<System.ArgumentException>(()=>board.Initialize(level,null,null,0));
++            Assert.Throws<System.ArgumentException>(()=>board.Initialize(level,null,null,state.GetLevelProgress(level.chapterId,level.levelId).attempts+1));
++            Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(state.LastWriteResult,Is.SameAs(write));
++        }
++
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
+@@ -467,5 +467,84 @@
+             Assert.That(Bounds(view.BoostersArea,camera).Overlaps(Bounds(view.RewardsArea,camera)),Is.False);
+             Assert.That(Bounds(view.RewardsArea,camera).Overlaps(Bounds(view.PlayButton.transform as RectTransform,camera)),Is.False);
+         }
++
++        [UnityTest]
++        public IEnumerator RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy()
++        {
++            var state=GameState.Instance;state.Save.energy=4;state.Save.lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks;
++            state.GetLevelProgress(1,1,true).attempts=int.MaxValue;state.Persist();
++            string before=JsonUtility.ToJson(state.Save);var view=Root().GetComponentInChildren<ProductionPreLevelView>();
++            view.PlayButton.onClick.Invoke();Settle();yield return null;
++            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);
++            router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
++        }
++
++
++        [UnityTest]
++        public IEnumerator RoundStartNativeReentrantCallbackCommitsOnceInBothLanguages()
++        {
++            foreach(string language in new[]{"ru","en"})
++            {
++                var state=GameState.Instance;state.ResetProgress();DemoFeatureState.SetLanguage(language);
++                state.Save.highestUnlockedLevel=31;state.SelectLevel(1,31);state.Save.energy=4;
++                state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();router.Show(ScreenId.PreLevel);Settle();yield return null;
++                var view=Root().GetComponentInChildren<ProductionPreLevelView>();var play=view.PlayButton;
++                int calls=0;System.Action changed=()=>{calls++;typeof(ScreenRouter).GetMethod("StartLevel",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(router,null);};
++                state.Changed+=changed;
++                try{play.onClick.Invoke();}
++                finally{state.Changed-=changed;}
++                Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));Assert.That(router.ActiveModal,Is.Null);
++                Assert.That(calls,Is.EqualTo(2),"Selection normalization and one combined debit/attempt; board initialization must not register again.");
++                Assert.That(state.Save.energy,Is.EqualTo(3));Assert.That(state.GetLevelProgress(1,31).attempts,Is.EqualTo(1));Assert.That(state.GetLevelProgress(1,31).retries,Is.Zero);
++                var active=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(active,Is.Not.Null);Assert.That(active.CurrentLevel.levelId,Is.EqualTo(31));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
++                router.Show(ScreenId.PreLevel);Settle();yield return null;
++            }
++        }
++
++        [UnityTest]
++        public IEnumerator RoundStartNativeWriteRejectedAfterNormalizationKeepsPreLevelInBothLanguages()
++        {
++            foreach(string language in new[]{"ru","en"})
++            {
++                var state=GameState.Instance;state.ResetProgress();DemoFeatureState.SetLanguage(language);state.Save.energy=4;state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();
++                router.Show(ScreenId.PreLevel);Settle();yield return null;string before=JsonUtility.ToJson(state.Save);
++                var present=new bool[keys.Length];var journal=new string[keys.Length];for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
++                string raw=null;int calls=0;System.Action changed=()=>
++                {
++                    if(++calls!=1)return;var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++                    foreach(string key in keys)PlayerPrefs.DeleteKey(key);raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++                };
++                state.Changed+=changed;
++                try
++                {
++                    var view=Root().GetComponentInChildren<ProductionPreLevelView>();view.PlayButton.onClick.Invoke();Settle();yield return null;
++                    Assert.That(calls,Is.EqualTo(1));Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.CanPersist,Is.False);
++                    Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
++                    router.NavigateBack();Settle();yield return null;var write=state.LastWriteResult;
++                    view.PlayButton.onClick.Invoke();Settle();yield return null;
++                    Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++                    Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                }
++                finally
++                {
++                    state.Changed-=changed;for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}PlayerPrefs.Save();
++                }
++            }
++        }
++
++        [UnityTest]
++        public IEnumerator RoundStartNativeNoEnergyOpensExistingGateWithoutAnAttempt()
++        {
++            var state=GameState.Instance;state.Save.energy=0;state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();
++            string before=JsonUtility.ToJson(state.Save);var view=Root().GetComponentInChildren<ProductionPreLevelView>();view.PlayButton.onClick.Invoke();Settle();yield return null;
++            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.OutOfEnergy));
++            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);
++            router.Viewport.GetComponentInChildren<ProductionOutOfEnergyView>().Close.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
++        }
++
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundPlayModeTests.cs
+@@ -196,5 +196,18 @@
+             Assert.That(State.GetLevelProgress(1,31).failures,Is.EqualTo(1));Assert.That(State.GetLevelProgress(1,31).attempts,Is.EqualTo(2));
+             Assert.That(State.Save.energy,Is.EqualTo(energy));Assert.That(State.Save.retainedRound,Is.Null);
+         }
++
++        [Test]
++        public void RoundFailureFinalizeOverflowRetainsCheckpointAndJournal()
++        {
++            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);
++            State.GetLevelProgress(1,data.level).failures=int.MaxValue;State.Persist();
++            string before=JsonUtility.ToJson(State.Save);var original=State.Save;var write=State.LastWriteResult;
++            Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.False);
++            Assert.That(State.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(State.Save),Is.EqualTo(before));
++            Assert.That(State.LastWriteResult,Is.SameAs(write));Assert.That(State.TryGetRetainedRound(out var after),Is.True);
++            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(data)));Assert.That(State.CanPersist,Is.True);
++        }
++
+     }
+ }

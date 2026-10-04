@@ -1,0 +1,2380 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using LegendsOfRus.GameplayCore;
+using SpecialGem = LegendsOfRus.GameplayCore.SpecialGemKind;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace LegendsOfRus
+{
+    public sealed partial class Match3Board : MonoBehaviour
+    {
+        const int DefaultColumns = 8;
+        const int DefaultRows = 7;
+        const int DefaultTileTypes = 6;
+
+        int columns = DefaultColumns;
+        int rows = DefaultRows;
+        int tileTypes = DefaultTileTypes;
+
+        BoardModel model;
+        BoardResolutionPlanner resolutionPlanner;
+        GameplayRuleVersion ruleVersion = GameplayRuleVersion.Legacy;
+        PrototypeBoardAudio mechanicsAudio;
+        public const GameplayRuleVersion CurrentGameplayRules = GameplayRuleVersion.PrototypeR4;
+        public GameplayRuleVersion RuleVersion => ruleVersion;
+        // Artwork adoption is independent from matching rules and prototype animation rollout.
+        bool useCurrentBoardArt = true;
+        public bool UsesCurrentBoardArt => useCurrentBoardArt || ruleVersion != GameplayRuleVersion.Legacy;
+        public MechanicsReplayCommand LastMechanicsCommand {get;private set;}
+        LevelData currentLevel;
+        LevelGoalRuntime goalRuntime;
+
+        Image[,] cellBackgrounds;
+        Match3CellInput[,] cellInputs;
+        Image[,] gemImages;
+        Image[,] specialImages;
+        RectTransform[,] visualRoots;
+        CanvasGroup[,] visualGroups;
+
+        GameplayCellMechanics[,] cellMechanics;
+        Sprite[] gemSprites;
+        Sprite rowSpecialSprite;
+        Sprite columnSpecialSprite;
+        Sprite burstSpecialSprite;
+        Sprite colorSpecialSprite;
+
+        int moves;
+        int score = 0;
+
+        Vector2Int selected = new Vector2Int(-1, -1);
+        readonly GameplayStateMachine interaction = new GameplayStateMachine();
+        BoosterType? armedBooster;
+        string lastResolutionPlanHash = string.Empty;
+        string lastPlanFinalStateHash = string.Empty;
+
+        readonly BoardCommandWatchdog commandWatchdog = new BoardCommandWatchdog();
+        readonly HashSet<string> warnedCallbackFailures = new HashSet<string>();
+        RuntimeCommandTransaction activeCommand;
+        CoreLoopVfxPresenter vfxPresenter;
+        const float DefaultCommandTimeoutSeconds = 10f;
+        float commandTimeoutSeconds = DefaultCommandTimeoutSeconds;
+        bool recoveringCommand;
+        bool refundPending;
+
+        bool lastWaveVerificationPassed = true;
+        int lastVerifiedWaveCount;
+        BoardPosition lastRequestedPrimary = new BoardPosition(-1, -1);
+        BoardPosition lastRequestedSecondary = new BoardPosition(-1, -1);
+        int requestedCommandCount;
+        int motionSequence;
+        int motionEventCount;
+        GameplayMotionEvent lastMotionEvent;
+        int activePointerId = int.MinValue;
+
+        bool campaignManaged;
+        ICampaignBoardInventory campaignInventory;
+        void ShowLegacyToast(string message){if(!campaignManaged)ScreenRouter.Instance?.Toast(message);}
+        public bool CampaignInventoryBlocked => campaignInventory != null && campaignInventory.Blocked;
+        Action<int> onWin;
+        Action<int> onFail;
+
+        public event Action<int> ScoreChanged;
+        public event Action<int> MovesChanged;
+        public event Action<int, int> GoalSlotsChanged;
+        public event Action<int, int> GoalsChanged;
+        public event Action<BoardObstacleInteractionInstruction> ObstacleInteracted;
+        public event Action<BoardObjectiveItemCollection> ObjectiveItemCollected;
+        public event Action<string> CommandRejected;
+        public event Action<Match3Board> InventoryRecoveryRequired;
+        public bool HasInventoryRecoveryError => refundPending ||
+            (!campaignManaged && GameState.Instance != null && (!GameState.Instance.CanPersist ||
+            GameState.Instance.HasPendingBoosterCommand && (activeCommand == null ||
+            activeCommand.BoosterCommandId != GameState.Instance.Save.boosterCommand.commandId)));
+        public event Action<GameplayMotionEvent> MotionEventPublished;
+
+        public int Moves => moves;
+        public int Score => score;
+        public int ColumnCount => columns;
+        public int RowCount => rows;
+        public LevelData CurrentLevel => currentLevel;
+        public int GoalCount => goalRuntime?.SlotCount ?? 0;
+        public LevelGoalProgress GetGoalSlot(int index) => goalRuntime?.GetSlot(index);
+        public LevelGoalProgress GoalSlot1 => goalRuntime?.GetSlot(0);
+        public LevelGoalProgress GoalSlot2 => goalRuntime?.GetSlot(1);
+        public int GoalSlot1Remaining => goalRuntime?.RemainingAt(0) ?? 0;
+        public int GoalSlot2Remaining => goalRuntime?.RemainingAt(1) ?? 0;
+        public int RedRemaining => GoalSlot1Remaining;
+        public int BlueRemaining => GoalSlot2Remaining;
+        public GameplayPhase Phase => interaction.Current;
+        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && !HasInventoryRecoveryError && interaction.CanAcceptPointerInput;
+        public string BoardStateHash => model != null ? model.ComputeStateHash() : string.Empty;
+        public int? BoardSeed => model != null ? model.Seed : null;
+        public string BoardReplayToken =>
+            model != null ? model.CreateSnapshot().ToReplayToken() : string.Empty;
+        public string LastResolutionPlanHash => lastResolutionPlanHash;
+        public string LastPlanFinalStateHash => lastPlanFinalStateHash;
+        public bool LastWaveVerificationPassed => lastWaveVerificationPassed;
+        public int LastVerifiedWaveCount => lastVerifiedWaveCount;
+        public bool HasActiveCommand => activeCommand != null;
+        public string ActiveCommandLabel => activeCommand != null ? activeCommand.Label : string.Empty;
+        public bool IsBoosterArmed => armedBooster.HasValue;
+        public BoosterType? ArmedBooster => armedBooster;
+        public BoardPosition LastRequestedPrimary => lastRequestedPrimary;
+        public BoardPosition LastRequestedSecondary => lastRequestedSecondary;
+        public int RequestedCommandCount => requestedCommandCount;
+        public string LastRejectedCommandReason { get; private set; } = string.Empty;
+        public int MotionEventCount => motionEventCount;
+        public GameplayMotionEvent LastMotionEvent => lastMotionEvent;
+        public CoreLoopVfxPresenter VfxPresenter => vfxPresenter;
+
+        public void Initialize(Action<int> onWin, Action<int> onFail)
+        {
+            PlayerSaveData save = GameState.Instance != null
+                ? GameState.Instance.Save
+                : null;
+            Initialize(ChapterLevelCatalog.ResolveSelected(save), onWin, onFail);
+        }
+
+        public void Initialize(
+            LevelData levelData,
+            Action<int> onWin,
+            Action<int> onFail
+        )
+        {
+            ruleVersion = CurrentGameplayRules;
+            useCurrentBoardArt = true;
+            campaignInventory = null;
+            InitializeCore(levelData, onWin, onFail, null);
+        }
+
+        // Explicit development campaign entry: the coordinator already committed the attempt.
+        public void InitializeCampaign(LevelData levelData, int committedAttempt, Action<int> onWin, Action<int> onFail, ICampaignBoardInventory inventory = null)
+        {
+            if (levelData == null || committedAttempt < 1) throw new ArgumentException("Committed campaign level/attempt required.");
+            ruleVersion = CurrentGameplayRules;
+            useCurrentBoardArt = true;
+            campaignInventory = inventory;
+            InitializeCore(levelData, onWin, onFail, committedAttempt);
+        }
+
+        // Explicit disposable sandbox, never an entry for a saved campaign receipt.
+        public void InitializeMechanicsSandbox(LevelData level, GameplayRuleVersion rules, ICampaignBoardInventory inventory)
+        {
+            if(!Enum.IsDefined(typeof(GameplayRuleVersion),rules))throw new ArgumentException("Unknown rules");
+            ruleVersion=rules;useCurrentBoardArt=false;campaignInventory=inventory;
+            InitializeCore(level,_=>{},_=>{},1);
+
+        }
+
+        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null)
+        {
+            campaignManaged = committedAttempt.HasValue;
+            this.onWin = onWin;
+            this.onFail = onFail;
+            currentLevel = levelData ?? ChapterLevelCatalog.ResolveSelected(null);
+
+            columns = Mathf.Max(3, currentLevel.columns);
+            rows = Mathf.Max(3, currentLevel.rows);
+            tileTypes = Mathf.Clamp(currentLevel.tileTypes, 3, DefaultTileTypes);
+            cellBackgrounds = new Image[columns, rows];
+            cellMechanics = new GameplayCellMechanics[columns, rows];
+            cellInputs = new Match3CellInput[columns, rows];
+            gemImages = new Image[columns, rows];
+            specialImages = new Image[columns, rows];
+            visualRoots = new RectTransform[columns, rows];
+            visualGroups = new CanvasGroup[columns, rows];
+
+            interaction.Force(GameplayPhase.Idle);
+            interaction.Changed += OnGameplayPhaseChanged;
+            ResetMotionTimeline();
+            warnedCallbackFailures.Clear();
+            activePointerId = int.MinValue;
+
+            moves = Mathf.Max(1, currentLevel.moveLimit);
+            score = Mathf.Max(0, currentLevel.startingScore);
+            goalRuntime = new LevelGoalRuntime(currentLevel, score);
+
+            int attempt = retained?.attempt ?? committedAttempt ?? (GameState.Instance != null
+                ? GameState.Instance.RegisterLevelAttempt(currentLevel)
+                : 1);
+            retainedAttemptNumber = attempt;
+            retainedAttemptId = retained?.attemptId ?? Guid.NewGuid().ToString("N");
+            int seed = BoardSeedUtility.CreateRuntimeSeed(
+                currentLevel.chapterId,
+                currentLevel.levelId,
+                currentLevel.boardSeed + Mathf.Max(1, attempt)
+            );
+            model = LevelBoardFactory.Create(currentLevel, seed, rules:ruleVersion);
+            model.SquareMatches = ruleVersion >= GameplayRuleVersion.PrototypeR2;
+            model.StandaloneSpecials = ruleVersion >= GameplayRuleVersion.PrototypeR4;
+            if (retained != null)
+            {
+                model.RestoreSnapshot(retained.Snapshot(currentLevel));moves=retained.moves;score=retained.score;
+                goalRuntime.RestoreSnapshot(new LevelGoalRuntimeSnapshot(retained.goals));
+                interaction.Force(GameplayPhase.Failed);
+            }
+
+            // Supplied isolated gem/booster sheets, independent from reference-screen artwork.
+            gemSprites = new Sprite[6];
+            for (int i = 0; i < gemSprites.Length; i++) gemSprites[i] = ProductionGameplayArt.Gem(i);
+            rowSpecialSprite = ProductionGameplayArt.Load("row");
+            columnSpecialSprite = ProductionGameplayArt.Load("column");
+            burstSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("bomb") : ProductionGameplayArt.Load("burst");
+            colorSpecialSprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("color") : ProductionGameplayArt.Load("color");
+
+            BuildGrid();
+            vfxPresenter = GetComponent<CoreLoopVfxPresenter>();
+            if (vfxPresenter == null)
+                vfxPresenter = gameObject.AddComponent<CoreLoopVfxPresenter>();
+            vfxPresenter.Initialize(this);
+            resolutionPlanner = new BoardResolutionPlanner(model,null,ruleVersion);
+            Debug.Log(
+                $"Legends of Rus level={currentLevel.id}, attempt={attempt}, " +
+                $"board={columns}x{rows}, seed={seed}, " +
+                $"hash={model.ComputeStateHash()}"
+            );
+            RefreshAll();
+            // Shared composition for the adopted rules and explicit sandbox profiles.
+            // Existing R25 presentation is retained; further effect refinement is deferred.
+            if(ruleVersion!=GameplayRuleVersion.Legacy){GemShatterView.Attach(this);PrototypeImpactView.Attach(this);PrototypeBoosterView.Attach(this);mechanicsAudio=PrototypeBoardAudio.Attach(this);}
+            if(ruleVersion>=GameplayRuleVersion.PrototypeR2)SparkFlightView.Attach(this);
+            if(ruleVersion>=GameplayRuleVersion.PrototypeR4){MaterialBreakView.Attach(this);SpecialSequenceView.Attach(this);}
+            PublishState();
+        }
+
+
+        void Update()
+        {
+            if (
+                activeCommand != null &&
+                commandWatchdog.IsTimedOut(Time.realtimeSinceStartupAsDouble)
+            )
+            {
+                RecoverActiveCommand(
+                    $"Command timeout: {activeCommand.Label}"
+                );
+            }
+        }
+
+        Sprite LoadRuntimeSprite(string resourceKey)
+        {
+            var sprite = Resources.Load<Sprite>(resourceKey);
+            if (sprite != null) return sprite;
+
+            var texture = Resources.Load<Texture2D>(resourceKey);
+            if (texture == null)
+            {
+                Debug.LogError($"Missing gameplay texture: {resourceKey}");
+                return null;
+            }
+
+            return Sprite.Create(
+                texture,
+                new Rect(0f, 0f, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                100f
+            );
+        }
+
+        void BuildGrid()
+        {
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    var cell = new GameObject(
+                        $"Cell_{x}_{y}",
+                        typeof(RectTransform),
+                        typeof(Image),
+                        typeof(Match3CellInput)
+                    );
+                    cell.transform.SetParent(transform, false);
+
+                    var cellRt = cell.GetComponent<RectTransform>();
+                    float x0 = (float)x / columns;
+                    float x1 = (float)(x + 1) / columns;
+                    float y0 = 1f - (float)(y + 1) / rows;
+                    float y1 = 1f - (float)y / rows;
+
+                    const float gapX = 0f;
+                    const float gapY = 0f;
+                    // The input root still owns the complete nominal cell. Only the
+                    // decorative inset changes for the thin reference-style gold grid.
+                    cellRt.anchorMin = new Vector2(x0, y0);
+                    cellRt.anchorMax = new Vector2(x1, y1);
+                    cellRt.offsetMin = Vector2.zero;
+                    cellRt.offsetMax = Vector2.zero;
+
+                    var hitTarget = cell.GetComponent<Image>();
+                    hitTarget.color = Color.clear;
+                    hitTarget.raycastTarget = true;
+
+                    var content = new GameObject(
+                        "CellContent",
+                        typeof(RectTransform),
+                        typeof(ProductionGameplayCell)
+                    );
+                    content.transform.SetParent(cell.transform, false);
+                    var contentRt = content.GetComponent<RectTransform>();
+                    contentRt.anchorMin = new Vector2(
+                        gapX * columns,
+                        gapY * rows
+                    );
+                    contentRt.anchorMax = new Vector2(
+                        1f - gapX * columns,
+                        1f - gapY * rows
+                    );
+                    contentRt.offsetMin = Vector2.zero;
+                    contentRt.offsetMax = Vector2.zero;
+
+                    var background = content.GetComponent<Image>();
+                    // The native lacquer cell owns only presentation; the input root is unchanged.
+                    background.preserveAspect = false;
+                    background.color = Color.white;
+                    background.raycastTarget = false;
+                    cellBackgrounds[x, y] = background;
+
+                    var input = cell.GetComponent<Match3CellInput>();
+                    input.Board = this;
+                    input.X = x;
+                    input.Y = y;
+                    cellInputs[x, y] = input;
+
+                    var visual = new GameObject(
+                        "GemVisual",
+                        typeof(RectTransform),
+                        typeof(CanvasGroup)
+                    );
+                    visual.transform.SetParent(content.transform, false);
+                    var visualRt = visual.GetComponent<RectTransform>();
+                    visualRt.anchorMin = new Vector2(0.08f, 0.05f);
+                    visualRt.anchorMax = new Vector2(0.92f, 0.95f);
+                    visualRt.offsetMin = Vector2.zero;
+                    visualRt.offsetMax = Vector2.zero;
+                    visualRoots[x, y] = visualRt;
+                    visualGroups[x, y] = visual.GetComponent<CanvasGroup>();
+
+                    var gemGo = new GameObject("Gem", typeof(RectTransform), typeof(Image));
+                    gemGo.transform.SetParent(visual.transform, false);
+                    var gemRt = gemGo.GetComponent<RectTransform>();
+                    Stretch(gemRt);
+                    var gem = gemGo.GetComponent<Image>();
+                    gem.preserveAspect = true;
+                    gem.raycastTarget = false;
+                    gemImages[x, y] = gem;
+
+                    var specialGo = new GameObject("Special", typeof(RectTransform), typeof(Image));
+                    specialGo.transform.SetParent(visual.transform, false);
+                    var specialRt = specialGo.GetComponent<RectTransform>();
+                    Stretch(specialRt);
+                    var specialImage = specialGo.GetComponent<Image>();
+                    specialImage.preserveAspect = true;
+                    specialImage.raycastTarget = false;
+                    specialImage.enabled = false;
+                    specialImages[x, y] = specialImage;
+                    var typography = Resources.Load<SplashTitleTypography>(ProductionHomeRuntime.TypographyResource);
+                    string fontSource;
+                    Font font = typography != null ? typography.Resolve(false, out fontSource) : null;
+                    cellMechanics[x, y] = new GameplayCellMechanics(contentRt, font, UsesCurrentBoardArt);
+                }
+            }
+            var grid = new GameObject("SharedGrid", typeof(RectTransform), typeof(ProductionGameplayCell));
+            grid.transform.SetParent(transform, false);
+            Stretch((RectTransform)grid.transform);
+            var rails = grid.GetComponent<ProductionGameplayCell>();
+            rails.GridOnly = true; rails.Columns = columns; rails.Rows = rows;
+            rails.sprite = ProductionGameplaySourceControls.Load("grid");
+            rails.raycastTarget = false; rails.SetVerticesDirty();
+        }
+
+        void Stretch(RectTransform rt)
+        {
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+        }
+
+        public bool TapCell(int x, int y)
+        {
+            if (!interaction.CanAcceptPointerInput) return false;
+
+            var p = new Vector2Int(x, y);
+            if (!Inside(p)) return false;
+
+            if (armedBooster.HasValue)
+            {
+                EnsurePhase(GameplayPhase.BoosterTargeting);
+                StartCoroutine(ApplyArmedBooster(p, Vector2Int.zero));
+                return true;
+            }
+
+            if(ruleVersion!=GameplayRuleVersion.Legacy && model.GetSpecial(ToCore(p))!=SpecialGem.None)
+            {
+                var plan=resolutionPlanner.PlanTapSpecial(ToCore(p));
+                if(!plan.IsResolved)return false;
+                ClearSelectionVisual();StartCoroutine(ExecutePrototypeTap(plan));return true;
+            }
+
+            if (selected.x < 0)
+            {
+                return Select(p);
+            }
+
+            if (selected == p)
+            {
+                ClearSelectionVisual();
+                return true;
+            }
+
+            if (!Adjacent(selected, p))
+            {
+                ClearSelectionVisual();
+                return Select(p);
+            }
+
+            var first = selected;
+            RecordRequestedCommand(first, p);
+            ClearSelectionVisual(false);
+            if (!TrySetPhase(GameplayPhase.Swapping)) return false;
+            StartCoroutine(TrySwap(first, p));
+            return true;
+        }
+
+        IEnumerator ExecutePrototypeTap(BoardResolutionPlan plan)
+        {
+            if(!BeginRuntimeCommand("tap-special",plan))yield break;
+            LastMechanicsCommand=new MechanicsReplayCommand{Rules=ruleVersion,BeforeToken=plan.BeforeSnapshot.ToReplayToken(),Tap=true,X=plan.PrimaryPosition.X,Y=plan.PrimaryPosition.Y,ExpectedPlanHash=plan.PlanHash};
+            EnsurePhase(GameplayPhase.Swapping);
+            moves--;goalRuntime?.RecordConsumedMove();SafeInvoke(MovesChanged,moves,"MovesChanged");PublishGoalState();
+            EnsurePhase(GameplayPhase.ResolvingMatches);
+            lastResolutionPlanHash=plan.PlanHash;lastPlanFinalStateHash=plan.FinalSnapshot.StateHash;
+            yield return ExecuteResolutionPlan(plan);
+            if(!HasActiveCommand || !CompleteRuntimeCommand())yield break;
+            yield return CheckEndState();
+        }
+
+        public bool TryAcquirePointer(int pointerId)
+        {
+            if (activePointerId != int.MinValue && activePointerId != pointerId)
+                return false;
+
+            activePointerId = pointerId;
+            return true;
+        }
+
+        public bool OwnsPointer(int pointerId)
+        {
+            return activePointerId == pointerId;
+        }
+
+        public void ReleasePointer(int pointerId)
+        {
+            if (activePointerId == pointerId)
+                activePointerId = int.MinValue;
+        }
+
+        public bool SwipeCell(int x, int y, Vector2Int direction)
+        {
+            if (!interaction.CanAcceptPointerInput) return false;
+
+            var a = new Vector2Int(x, y);
+            if (!Inside(a) || direction == Vector2Int.zero) return false;
+
+            if (armedBooster.HasValue)
+            {
+                EnsurePhase(GameplayPhase.BoosterTargeting);
+                StartCoroutine(ApplyArmedBooster(a, direction));
+                return true;
+            }
+
+            var b = a + direction;
+            if (!Inside(b)) return false;
+
+            RecordRequestedCommand(a, b);
+            ClearSelectionVisual(false);
+            if (!TrySetPhase(GameplayPhase.Swapping)) return false;
+            StartCoroutine(TrySwap(a, b));
+            return true;
+        }
+
+        bool Select(Vector2Int p)
+        {
+            if (!TrySetPhase(GameplayPhase.Selected)) return false;
+            selected = p;
+            cellBackgrounds[p.x, p.y].color = new Color(1f, 0.88f, 0.55f, 1f);
+            StopCoroutineIfNeeded();
+            StartCoroutine(PulseSelection(p));
+            return true;
+        }
+
+        IEnumerator PulseSelection(Vector2Int p)
+        {
+            var rt = visualRoots[p.x, p.y];
+            float t = 0f;
+            while (
+                t < CoreLoopMotionProfile.SelectionPulseSeconds &&
+                selected == p &&
+                interaction.Current == GameplayPhase.Selected
+            )
+            {
+                t += Time.unscaledDeltaTime;
+                float k = Mathf.Sin(
+                    Mathf.Clamp01(
+                        t / CoreLoopMotionProfile.SelectionPulseSeconds
+                    ) * Mathf.PI
+                );
+                rt.localScale = Vector3.one * (1f + 0.08f * k);
+                yield return null;
+            }
+            if (selected == p) rt.localScale = Vector3.one;
+        }
+
+        void StopCoroutineIfNeeded()
+        {
+            // Intentionally empty. Selection animation is self-terminating.
+        }
+
+        void ClearSelectionVisual(bool returnToIdle = true)
+        {
+            if (selected.x >= 0 && Inside(selected))
+            {
+                ApplyCellMechanicTint(selected.x, selected.y);
+                visualRoots[selected.x, selected.y].localScale = Vector3.one;
+            }
+            selected = new Vector2Int(-1, -1);
+
+            if (returnToIdle && interaction.Current == GameplayPhase.Selected)
+                TrySetPhase(GameplayPhase.Idle);
+        }
+
+        IEnumerator TrySwap(Vector2Int a, Vector2Int b)
+        {
+            EnsurePhase(GameplayPhase.Swapping);
+            LastRejectedCommandReason = string.Empty;
+
+            BoardResolutionPlan plan;
+            try
+            {
+                plan = resolutionPlanner.PlanSwap(
+                    ToCore(a),
+                    ToCore(b)
+                );
+            }
+            catch (Exception exception)
+            {
+                // Planning occurs before a runtime transaction exists. Keep an
+                // unexpected planner/provider exception from stranding the
+                // interaction phase in Swapping with no watchdog owner.
+                LastRejectedCommandReason =
+                    "Swap planning failed before board mutation.";
+                PublishMotion(
+                    GameplayMotionKind.CommandRecovered,
+                    a,
+                    b,
+                    0,
+                    0,
+                    SpecialGem.None,
+                    string.Empty
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                Debug.LogError(
+                    "Swap planning failed safely: " + exception.Message
+                );
+                interaction.Force(GameplayPhase.Idle);
+                yield break;
+            }
+
+            if (plan.Status == BoardResolutionStatus.Rejected)
+            {
+                // A blocked chain, crate, item, or empty cell is normal player
+                // input. It does not mutate or spend a move, but now receives a
+                // deterministic nudge and a presentation hook instead of a
+                // silent no-op.
+                LastRejectedCommandReason = plan.RejectionReason ?? string.Empty;
+                PublishMotion(
+                    GameplayMotionKind.SwapRejected,
+                    a,
+                    b,
+                    0,
+                    0,
+                    SpecialGem.None,
+                    plan.PlanHash
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                yield return AnimateRejectedSwap(
+                    a,
+                    b,
+                    CoreLoopMotionProfile.RejectedSwapSeconds
+                );
+                TrySetPhase(GameplayPhase.Idle);
+                yield break;
+            }
+
+            if (!BeginRuntimeCommand("swap", plan))
+            {
+                EnsurePhase(GameplayPhase.Idle);
+                yield break;
+            }
+
+            if(ruleVersion!=GameplayRuleVersion.Legacy)LastMechanicsCommand=new MechanicsReplayCommand{Rules=ruleVersion,BeforeToken=plan.BeforeSnapshot.ToReplayToken(),X=a.x,Y=a.y,ToX=b.x,ToY=b.y,ExpectedPlanHash=plan.PlanHash};
+
+            PublishMotion(
+                GameplayMotionKind.SwapStarted,
+                a,
+                b,
+                0,
+                2,
+                SpecialGem.None,
+                plan.PlanHash
+            );
+            yield return AnimateSwap(
+                a,
+                b,
+                CoreLoopMotionProfile.SwapSeconds
+            );
+            if (!RestorePlannedSnapshot(plan.SnapshotAfterSwap, "after-swap", plan.PlanHash))
+            {
+                RecoverActiveCommand("Could not restore after-swap snapshot.");
+                yield break;
+            }
+            Refresh(a.x, a.y);
+            Refresh(b.x, b.y);
+            PublishMotion(
+                GameplayMotionKind.SwapCommitted,
+                a,
+                b,
+                0,
+                2,
+                SpecialGem.None,
+                plan.PlanHash
+            );
+
+            if (plan.IsInvalidSwap)
+            {
+                EnsurePhase(GameplayPhase.InvalidSwapReturning);
+                PublishMotion(
+                    GameplayMotionKind.SwapReturnStarted,
+                    a,
+                    b,
+                    0,
+                    2,
+                    SpecialGem.None,
+                    plan.PlanHash
+                );
+                yield return AnimateSwap(
+                    a,
+                    b,
+                    CoreLoopMotionProfile.InvalidSwapReturnSeconds
+                );
+                if (!RestorePlannedSnapshot(plan.BeforeSnapshot, "invalid-swap-return", plan.PlanHash))
+                {
+                    RecoverActiveCommand("Could not restore invalid-swap snapshot.");
+                    yield break;
+                }
+                Refresh(a.x, a.y);
+                Refresh(b.x, b.y);
+                PublishMotion(
+                    GameplayMotionKind.SwapReturned,
+                    a,
+                    b,
+                    0,
+                    2,
+                    SpecialGem.None,
+                    plan.PlanHash
+                );
+                CompleteRuntimeCommand();
+                EnsurePhase(GameplayPhase.Idle);
+                yield break;
+            }
+
+            if (plan.ConsumesMove)
+            {
+                moves--;
+                goalRuntime?.RecordConsumedMove();
+                SafeInvoke(MovesChanged, moves, "MovesChanged");
+                PublishGoalState();
+            }
+
+            lastResolutionPlanHash = plan.PlanHash;
+            lastPlanFinalStateHash = plan.FinalSnapshot?.StateHash ?? string.Empty;
+            EnsurePhase(GameplayPhase.ResolvingMatches);
+            Debug.Log($"Resolution plan: {plan.ToDebugString()}");
+            yield return ExecuteResolutionPlan(plan);
+
+            if (!HasActiveCommand)
+                yield break;
+
+            if (!CompleteRuntimeCommand()) yield break;
+            yield return CheckEndState();
+        }
+
+        IEnumerator AnimateSwap(Vector2Int a, Vector2Int b, float duration)
+        {
+            var va = visualRoots[a.x, a.y];
+            var vb = visualRoots[b.x, b.y];
+            Vector3 startA = va.position;
+            Vector3 startB = vb.position;
+
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float p = CoreLoopMotionProfile.EaseOutCubic(t / duration);
+
+                va.position = Vector3.Lerp(startA, startB, p);
+                vb.position = Vector3.Lerp(startB, startA, p);
+                yield return null;
+            }
+
+            va.anchoredPosition = Vector2.zero;
+            vb.anchoredPosition = Vector2.zero;
+        }
+
+        IEnumerator AnimateRejectedSwap(
+            Vector2Int source,
+            Vector2Int target,
+            float duration
+        )
+        {
+            RectTransform sourceVisual = visualRoots[source.x, source.y];
+            RectTransform targetVisual = visualRoots[target.x, target.y];
+            Vector2 direction = new Vector2(
+                target.x - source.x,
+                -(target.y - source.y)
+            ).normalized;
+            float cellWidth = Mathf.Max(
+                1f,
+                cellBackgrounds[source.x, source.y].rectTransform.rect.width
+            );
+            float cellHeight = Mathf.Max(
+                1f,
+                cellBackgrounds[source.x, source.y].rectTransform.rect.height
+            );
+            Vector2 nudge = new Vector2(
+                direction.x * cellWidth,
+                direction.y * cellHeight
+            ) * CoreLoopMotionProfile.RejectedOffsetInCells;
+
+            Color sourceColor = cellBackgrounds[source.x, source.y].color;
+            Color targetColor = cellBackgrounds[target.x, target.y].color;
+            Color warning = new Color(0.95f, 0.40f, 0.22f, 1f);
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float p = Mathf.Clamp01(elapsed / duration);
+                float wave = Mathf.Sin(p * Mathf.PI * 2f) * (1f - p);
+                float pulse = Mathf.Sin(p * Mathf.PI);
+                sourceVisual.anchoredPosition = nudge * wave;
+                targetVisual.localScale = Vector3.one * (1f - 0.06f * pulse);
+                cellBackgrounds[source.x, source.y].color = Color.Lerp(
+                    sourceColor,
+                    warning,
+                    pulse * 0.72f
+                );
+                cellBackgrounds[target.x, target.y].color = Color.Lerp(
+                    targetColor,
+                    warning,
+                    pulse * 0.88f
+                );
+                yield return null;
+            }
+
+            sourceVisual.anchoredPosition = Vector2.zero;
+            targetVisual.localScale = Vector3.one;
+            ApplyCellMechanicTint(source.x, source.y);
+            ApplyCellMechanicTint(target.x, target.y);
+        }
+
+        IEnumerator AnimateClear(HashSet<Vector2Int> cells, int combo)
+        {
+            if (cells.Count == 0) yield break;
+
+            float duration = combo > 1
+                ? CoreLoopMotionProfile.ClearSeconds * 0.80f
+                : CoreLoopMotionProfile.ClearSeconds;
+            float t = 0f;
+
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float p = Mathf.Clamp01(t / duration);
+                float scale = p < 0.35f
+                    ? Mathf.Lerp(1f, 1.22f, p / 0.35f)
+                    : Mathf.Lerp(1.22f, 0.12f, (p - 0.35f) / 0.65f);
+
+                float alpha = 1f - Mathf.Clamp01((p - 0.25f) / 0.75f);
+
+                foreach (var cell in cells)
+                {
+                    if (!Inside(cell)) continue;
+                    visualRoots[cell.x, cell.y].localScale = Vector3.one * scale;
+                    visualGroups[cell.x, cell.y].alpha = alpha;
+                }
+
+                yield return null;
+            }
+
+            foreach (var cell in cells)
+            {
+                if (!Inside(cell)) continue;
+                visualRoots[cell.x, cell.y].localScale = Vector3.one;
+                visualGroups[cell.x, cell.y].alpha = 1f;
+            }
+        }
+
+        IEnumerator AnimateReshuffle(bool gather)
+        {
+            // Animate the existing planned permutation. Obstacle layers and objective items
+            // stay on their cells; only the same tile-bearing positions as the core participate.
+            var offsets = new Vector2[columns, rows];
+            Vector3 center = ((RectTransform)transform).TransformPoint(((RectTransform)transform).rect.center);
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
+            {
+                var rt = visualRoots[x, y];
+                offsets[x, y] = (Vector2)rt.parent.InverseTransformPoint(center) - (Vector2)rt.localPosition;
+            }
+            float duration = gather ? .28f : .38f;
+            float elapsed = 0;
+            do
+            {
+                float p = CoreLoopMotionProfile.EaseInOutSine(Mathf.Clamp01(elapsed / duration));
+                float amount = gather ? p : 1 - p;
+                for (int y = 0; y < rows; y++)
+                for (int x = 0; x < columns; x++)
+                {
+                    if (model.GetTile(new BoardPosition(x, y)) < 0) continue;
+                    visualRoots[x, y].anchoredPosition = offsets[x, y] * amount * .72f;
+                    visualRoots[x, y].localScale = Vector3.one * Mathf.Lerp(1, .3f, amount);
+                    visualGroups[x, y].alpha = 1 - amount;
+                }
+                yield return null;
+                elapsed += Time.unscaledDeltaTime;
+            } while (elapsed < duration);
+            if (gather)
+            {
+                for (int y = 0; y < rows; y++)
+                for (int x = 0; x < columns; x++)
+                    if (model.GetTile(new BoardPosition(x, y)) >= 0) visualGroups[x, y].alpha = 0;
+            }
+            else ResetVisualTransforms();
+        }
+
+        IEnumerator AnimateSpecialCreation(Vector2Int p, SpecialGem special)
+        {
+            Refresh(p.x, p.y);
+
+            var rt = visualRoots[p.x, p.y];
+            var overlay = specialImages[p.x, p.y];
+            overlay.enabled = true;
+
+            float duration = CoreLoopMotionProfile.SpecialCreationSeconds;
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float q = Mathf.Clamp01(t / duration);
+                float pulse = Mathf.Sin(q * Mathf.PI);
+                rt.localScale = Vector3.one * (1f + 0.34f * pulse);
+                overlay.color = new Color(1f, 1f, 1f, ruleVersion>=GameplayRuleVersion.PrototypeR4 && MechanicsSequenceArt.Available && SpecialSequenceView.Supports(special) ? Mathf.Clamp01((q-.35f)/.65f) : Mathf.Lerp(0.55f, 1f, pulse));
+                yield return null;
+            }
+
+            rt.localScale = Vector3.one;
+            overlay.color = Color.white;
+        }
+
+        public void UseBooster(BoosterType type)
+        {
+            if (campaignManaged && (campaignInventory == null || campaignInventory.Blocked))
+            {
+                LastRejectedCommandReason = "Campaign booster transactions are not enabled.";
+                SafeCommandRejected(LastRejectedCommandReason);
+                return;
+            }
+            // Board-changing UI actions cannot race a held board gesture from
+            // another finger. Pointer-up releases ownership before a normal
+            // single-touch booster tap can enter here.
+            if (
+                !interaction.CanAcceptPointerInput ||
+                activePointerId != int.MinValue
+            )
+            {
+                return;
+            }
+
+            if (interaction.Current == GameplayPhase.Selected)
+                ClearSelectionVisual();
+
+            if (type == BoosterType.SeaPearl)
+            {
+                CancelArmedBooster(showToast: false);
+
+                if (!BeginRuntimeCommand("booster:SeaPearl", null))
+                {
+                    LastRejectedCommandReason = "Another board command is active.";
+                    PublishBoosterMotion(
+                        GameplayMotionKind.BoosterRejected,
+                        new Vector2Int(-1, -1),
+                        0,
+                        string.Empty,
+                        GameplayBoosterKind.SeaPearl
+                    );
+                    SafeCommandRejected(LastRejectedCommandReason);
+                    return;
+                }
+
+                if (!ConsumeCommandBooster(type))
+                {
+                    CompleteRuntimeCommand();
+                    LastRejectedCommandReason = "Booster inventory is empty.";
+                    PublishBoosterMotion(
+                        GameplayMotionKind.BoosterRejected,
+                        new Vector2Int(-1, -1),
+                        0,
+                        string.Empty,
+                        GameplayBoosterKind.SeaPearl
+                    );
+                    SafeCommandRejected(LastRejectedCommandReason);
+                    if (!HasInventoryRecoveryError) ShowLegacyToast("Жемчужина закончилась.");
+                    PauseForBlockedInventory();
+                    return;
+                }
+
+                EnsurePhase(GameplayPhase.ActivatingSpecials);
+                PublishBoosterMotion(
+                    GameplayMotionKind.BoosterActivated,
+                    new Vector2Int(-1, -1),
+                    5,
+                    string.Empty,
+                    GameplayBoosterKind.SeaPearl
+                );
+                moves += 5;
+                SafeInvoke(MovesChanged, moves, "MovesChanged");
+                StartCoroutine(ExecuteSeaPearlCommand());
+                return;
+            }
+
+            if (armedBooster.HasValue && armedBooster.Value == type)
+            {
+                CancelArmedBooster(showToast: true);
+                return;
+            }
+
+            armedBooster = type;
+            ClearSelectionVisual(false);
+            EnsurePhase(GameplayPhase.BoosterTargeting);
+
+            if (type == BoosterType.BogatyrMace)
+                ShowLegacyToast("Булава: коснитесь клетки для ряда или проведите вверх/вниз для столбца.");
+            else if (type == BoosterType.Firebird)
+                ShowLegacyToast("Перо Жар-Птицы: выберите клетку — очистится область 3×3.");
+            else if (type == BoosterType.LivingLight)
+                ShowLegacyToast("Живой Свет: выберите самоцвет — будут очищены все самоцветы этого цвета.");
+        }
+
+        public void CancelArmedBooster(bool showToast = true)
+        {
+            if (!armedBooster.HasValue) return;
+
+            armedBooster = null;
+            if (interaction.Current == GameplayPhase.BoosterTargeting)
+                EnsurePhase(GameplayPhase.Idle);
+
+            if (showToast)
+                ShowLegacyToast("Бустер отменён.");
+        }
+
+        IEnumerator ExecuteSeaPearlCommand()
+        {
+            yield return SeaPearlAnimation();
+
+            if (!HasActiveCommand)
+                yield break;
+
+            PublishBoosterMotion(
+                GameplayMotionKind.BoosterCompleted,
+                new Vector2Int(-1, -1),
+                5,
+                string.Empty,
+                GameplayBoosterKind.SeaPearl
+            );
+            if (!CompleteRuntimeCommand()) yield break;
+            EnsurePhase(GameplayPhase.Idle);
+        }
+
+        IEnumerator ApplyArmedBooster(Vector2Int target, Vector2Int direction)
+        {
+            if (
+                !armedBooster.HasValue ||
+                interaction.Current != GameplayPhase.BoosterTargeting ||
+                !Inside(target)
+            )
+            {
+                yield break;
+            }
+
+            BoosterType type = armedBooster.Value;
+            BoardBoosterCommandKind command;
+
+            if (type == BoosterType.BogatyrMace)
+            {
+                bool column = direction == Vector2Int.up || direction == Vector2Int.down;
+                command = column
+                    ? BoardBoosterCommandKind.MaceColumn
+                    : BoardBoosterCommandKind.MaceRow;
+            }
+            else if (type == BoosterType.Firebird)
+            {
+                command = BoardBoosterCommandKind.FirebirdArea;
+            }
+            else if (type == BoosterType.LivingLight)
+            {
+                command = BoardBoosterCommandKind.LivingLightColor;
+            }
+            else
+            {
+                EnsurePhase(GameplayPhase.Idle);
+                yield break;
+            }
+            GameplayBoosterKind boosterKind = ToGameplayBooster(command);
+
+            BoardResolutionPlan plan;
+            try
+            {
+                plan = resolutionPlanner.PlanBooster(
+                    new BoardBoosterRequest(command, ToCore(target))
+                );
+                if (plan == null)
+                    throw new InvalidOperationException(
+                        "Booster planner returned no resolution plan."
+                    );
+            }
+            catch (Exception exception)
+            {
+                LastRejectedCommandReason =
+                    "Booster planning failed before board mutation.";
+                PublishBoosterMotion(
+                    GameplayMotionKind.BoosterRejected,
+                    target,
+                    0,
+                    string.Empty,
+                    boosterKind
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                Debug.LogError(
+                    "Booster planning failed safely: " + exception.Message
+                );
+                armedBooster = null;
+                EnsurePhase(GameplayPhase.Idle);
+                ShowLegacyToast(
+                    "Бустер восстановлен после ошибки. Повторите действие."
+                );
+                yield break;
+            }
+
+            if (!plan.IsResolved)
+            {
+                LastRejectedCommandReason = plan.RejectionReason ?? string.Empty;
+                PublishBoosterMotion(
+                    GameplayMotionKind.BoosterRejected,
+                    target,
+                    0,
+                    plan.PlanHash,
+                    boosterKind
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                ShowLegacyToast(
+                    string.IsNullOrEmpty(plan.RejectionReason)
+                        ? "Выберите заполненную клетку."
+                        : plan.RejectionReason
+                );
+                EnsurePhase(GameplayPhase.BoosterTargeting);
+                yield break;
+            }
+
+            if (!BeginRuntimeCommand("booster:" + command, plan))
+            {
+                LastRejectedCommandReason = "Another board command is active.";
+                PublishBoosterMotion(
+                    GameplayMotionKind.BoosterRejected,
+                    target,
+                    0,
+                    plan.PlanHash,
+                    boosterKind
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                EnsurePhase(GameplayPhase.BoosterTargeting);
+                yield break;
+            }
+
+            if (!ConsumeCommandBooster(type))
+            {
+                CompleteRuntimeCommand();
+                armedBooster = null;
+                EnsurePhase(GameplayPhase.Idle);
+                LastRejectedCommandReason = "Booster inventory is empty.";
+                PublishBoosterMotion(
+                    GameplayMotionKind.BoosterRejected,
+                    target,
+                    0,
+                    plan.PlanHash,
+                    boosterKind
+                );
+                SafeCommandRejected(LastRejectedCommandReason);
+                if (!HasInventoryRecoveryError) ShowLegacyToast("Этот бустер закончился.");
+                PauseForBlockedInventory();
+                yield break;
+            }
+
+            armedBooster = null;
+            EnsurePhase(GameplayPhase.ActivatingSpecials);
+            int boosterAffectedCount = FirstWaveAffectedCount(plan);
+            PublishBoosterMotion(
+                GameplayMotionKind.BoosterActivated,
+                target,
+                boosterAffectedCount,
+                plan.PlanHash,
+                boosterKind
+            );
+
+            if (command == BoardBoosterCommandKind.MaceRow || command == BoardBoosterCommandKind.MaceColumn)
+                ShowLegacyToast("Булава Богатыря сокрушает преграды.");
+            else if (command == BoardBoosterCommandKind.FirebirdArea)
+                ShowLegacyToast("Перо Жар-Птицы вспыхивает живым огнём.");
+            else if (command == BoardBoosterCommandKind.LivingLightColor)
+                ShowLegacyToast("Живой Свет очищает выбранный цвет.");
+
+            lastResolutionPlanHash = plan.PlanHash;
+            lastPlanFinalStateHash = plan.FinalSnapshot?.StateHash ?? string.Empty;
+            Debug.Log($"Booster resolution plan: {plan.ToDebugString()}");
+            if(ruleVersion!=GameplayRuleVersion.Legacy)yield return new WaitForSecondsRealtime(.18f);
+            yield return ExecuteResolutionPlan(plan);
+
+            if (!HasActiveCommand)
+                yield break;
+
+            PublishBoosterMotion(
+                GameplayMotionKind.BoosterCompleted,
+                target,
+                boosterAffectedCount,
+                plan.PlanHash,
+                boosterKind
+            );
+            if (!CompleteRuntimeCommand()) yield break;
+            yield return CheckEndState();
+        }
+
+        IEnumerator ExecuteResolutionPlan(BoardResolutionPlan plan)
+        {
+            lastWaveVerificationPassed = true;
+            lastVerifiedWaveCount = 0;
+            GameplayBoosterKind planBooster = ToGameplayBooster(plan.Booster);
+
+            BoardSnapshot expectedCurrent = plan.ActionKind == BoardResolutionActionKind.Swap
+                ? plan.SnapshotAfterSwap
+                : plan.BeforeSnapshot;
+
+            if (!VerifyCurrentState(expectedCurrent, "plan-start", plan.PlanHash))
+            {
+                RecoverActiveCommand("Board hash mismatch at plan start.");
+                yield break;
+            }
+
+            for (int waveIndex = 0; waveIndex < plan.Waves.Count; waveIndex++)
+            {
+                BoardResolutionWave wave = plan.Waves[waveIndex];
+                GameplayBoosterKind waveBooster = wave.ComboIndex == 1
+                    ? planBooster
+                    : GameplayBoosterKind.None;
+
+                if (!VerifyCurrentState(
+                    expectedCurrent,
+                    $"wave-{wave.ComboIndex}-before",
+                    plan.PlanHash
+                ))
+                {
+                    RecoverActiveCommand("Board hash mismatch before resolution wave.");
+                    yield break;
+                }
+
+                if (wave.ComboIndex > 1)
+                {
+                    PublishMotion(
+                        GameplayMotionKind.CascadeStarted,
+                        ToView(plan.PrimaryPosition),
+                        ToView(plan.SecondaryPosition),
+                        wave.ComboIndex,
+                        wave.ClearedCells.Count,
+                        SpecialGem.None,
+                        plan.PlanHash,
+                        wave.Combination,
+                        GameplayBoosterKind.None
+                    );
+                }
+
+                bool sparkWave = ContainsSpark(wave.Activations);
+                if (!sparkWave && ruleVersion == GameplayRuleVersion.Legacy)
+                PublishMotion(
+                    GameplayMotionKind.MatchWaveStarted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    wave.ComboIndex,
+                    wave.ClearedCells.Count,
+                    SpecialGem.None,
+                    plan.PlanHash,
+                    wave.Combination,
+                    waveBooster,
+                    wave.ClearedCells
+                );
+
+                if (ruleVersion >= GameplayRuleVersion.PrototypeR4)
+                {
+                    EnsurePhase(GameplayPhase.ResolvingMatches);
+                    yield return AnimateCausalWave(wave, plan);
+                }
+                else
+                {
+                if (wave.Activations.Count > 0)
+                {
+                    EnsurePhase(GameplayPhase.ActivatingSpecials);
+                    yield return AnimateResolutionActivations(
+                        wave.Activations,
+                        wave.ComboIndex,
+                        plan.PlanHash,
+                        wave.Combination,
+                        waveBooster
+                    );
+                }
+
+                if (sparkWave || ruleVersion != GameplayRuleVersion.Legacy)
+                PublishMotion(
+                    GameplayMotionKind.MatchWaveStarted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    wave.ComboIndex,
+                    wave.ClearedCells.Count,
+                    SpecialGem.None,
+                    plan.PlanHash,
+                    wave.Combination,
+                    waveBooster,
+                    wave.ClearedCells
+                );
+
+                EnsurePhase(GameplayPhase.ResolvingMatches);
+                var clear = new HashSet<Vector2Int>();
+                for (int i = 0; i < wave.ClearedCells.Count; i++)
+                    clear.Add(ToView(wave.ClearedCells[i].Position));
+
+                yield return AnimateClear(clear, wave.ComboIndex);
+                yield return AnimateObstacleInteractions(wave.ObstacleInteractions);
+
+                }
+
+                if (!RestorePlannedSnapshot(
+                    wave.SnapshotAfterClear,
+                    $"wave-{wave.ComboIndex}-after-clear",
+                    plan.PlanHash
+                ))
+                {
+                    RecoverActiveCommand("Could not apply after-clear snapshot.");
+                    yield break;
+                }
+                RefreshAll();
+
+                if (wave.Creations.Count > 0)
+                {
+                    EnsurePhase(GameplayPhase.CreatingSpecials);
+                    if(ruleVersion>=GameplayRuleVersion.PrototypeR4)
+                    {
+                        // Hide restored idle sprites before yielding into the completion coroutine.
+                        foreach(var creation in wave.Creations)specialImages[creation.Position.X,creation.Position.Y].enabled=false;
+                        yield return AnimateCreationsR21(wave,plan.PlanHash,waveBooster);
+                    }
+                    else for (int i = 0; i < wave.Creations.Count; i++)
+                    {
+                        BoardSpecialCreationInstruction creation = wave.Creations[i];
+                        PublishMotion(
+                            GameplayMotionKind.SpecialCreationStarted,
+                            ToView(creation.Position),
+                            ToView(creation.Position),
+                            wave.ComboIndex,
+                            1,
+                            creation.Kind,
+                            plan.PlanHash,
+                            wave.Combination,
+                            waveBooster
+                        );
+                        yield return AnimateSpecialCreation(
+                            ToView(creation.Position),
+                            creation.Kind
+                        );
+                    }
+                }
+
+                score += wave.ScoreDelta;
+                goalRuntime?.ApplyWave(wave, score);
+                PublishState();
+
+                if (!RestorePlannedSnapshot(
+                    wave.SnapshotAfterCollapse,
+                    $"wave-{wave.ComboIndex}-after-collapse",
+                    plan.PlanHash
+                ))
+                {
+                    RecoverActiveCommand("Could not apply after-collapse snapshot.");
+                    yield break;
+                }
+                RefreshAll();
+
+                if (wave.Collapse.Changed)
+                {
+                    EnsurePhase(GameplayPhase.Falling);
+                    PublishMotion(
+                        GameplayMotionKind.FallStarted,
+                        ToView(plan.PrimaryPosition),
+                        ToView(plan.SecondaryPosition),
+                        wave.ComboIndex,
+                        wave.Collapse.Moves.Count + wave.Collapse.Spawns.Count,
+                        SpecialGem.None,
+                        plan.PlanHash,
+                        wave.Combination,
+                        waveBooster
+                    );
+                    yield return AnimateCollapsePlan(
+                        wave.Collapse,
+                        CoreLoopMotionProfile.FallSeconds
+                    );
+                    PublishMotion(
+                        GameplayMotionKind.FallCompleted,
+                        ToView(plan.PrimaryPosition),
+                        ToView(plan.SecondaryPosition),
+                        wave.ComboIndex,
+                        wave.Collapse.Moves.Count + wave.Collapse.Spawns.Count,
+                        SpecialGem.None,
+                        plan.PlanHash,
+                        wave.Combination,
+                        waveBooster
+                    );
+                }
+
+                for (int i = 0; i < wave.Collapse.CollectedObjectiveItems.Count; i++)
+                {
+                    SafeInvoke(
+                        ObjectiveItemCollected,
+                        wave.Collapse.CollectedObjectiveItems[i],
+                        "ObjectiveItemCollected"
+                    );
+                }
+
+                if (!VerifyCurrentState(
+                    wave.SnapshotAfterCollapse,
+                    $"wave-{wave.ComboIndex}-verified",
+                    plan.PlanHash
+                ))
+                {
+                    RecoverActiveCommand("Board hash mismatch after resolution wave.");
+                    yield break;
+                }
+
+                lastVerifiedWaveCount++;
+                expectedCurrent = wave.SnapshotAfterCollapse;
+                PublishMotion(
+                    GameplayMotionKind.MatchWaveCompleted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    wave.ComboIndex,
+                    wave.ClearedCells.Count,
+                    SpecialGem.None,
+                    plan.PlanHash,
+                    wave.Combination,
+                    waveBooster,
+                    wave.ClearedCells
+                );
+                EnsurePhase(GameplayPhase.ResolvingMatches);
+            }
+
+            if (plan.Reshuffle.Attempts > 0)
+            {
+                PublishMotion(
+                    GameplayMotionKind.ReshuffleStarted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    0,
+                    plan.Reshuffle.Attempts,
+                    SpecialGem.None,
+                    plan.PlanHash
+                );
+                yield return AnimateReshuffle(true);
+                BoardSnapshot reshuffled = plan.SnapshotAfterReshuffle ?? plan.FinalSnapshot;
+                if (!RestorePlannedSnapshot(reshuffled, "after-reshuffle", plan.PlanHash))
+                {
+                    RecoverActiveCommand("Could not apply reshuffle snapshot.");
+                    yield break;
+                }
+                RefreshAll();
+                yield return AnimateReshuffle(false);
+                ShowLegacyToast(DemoFeatureState.LanguageCode == "en"
+                    ? "No available moves — the board was reshuffled."
+                    : "Нет доступных ходов — поле перемешано.");
+                PublishMotion(
+                    GameplayMotionKind.ReshuffleCompleted,
+                    ToView(plan.PrimaryPosition),
+                    ToView(plan.SecondaryPosition),
+                    0,
+                    plan.Reshuffle.Attempts,
+                    SpecialGem.None,
+                    plan.PlanHash
+                );
+            }
+
+            if (!RestorePlannedSnapshot(plan.FinalSnapshot, "final", plan.PlanHash))
+            {
+                RecoverActiveCommand("Could not apply final resolution snapshot.");
+                yield break;
+            }
+            RefreshAll();
+
+            if (!VerifyCurrentState(plan.FinalSnapshot, "final-verified", plan.PlanHash))
+            {
+                RecoverActiveCommand("Final board hash mismatch.");
+                yield break;
+            }
+        }
+
+        bool RestorePlannedSnapshot(
+            BoardSnapshot snapshot,
+            string stage,
+            string planHash
+        )
+        {
+            if (snapshot == null)
+            {
+                lastWaveVerificationPassed = false;
+                Debug.LogError($"Resolution plan {planHash} has no snapshot for {stage}.");
+                return false;
+            }
+
+            model.RestoreSnapshot(snapshot);
+            return VerifyCurrentState(snapshot, stage, planHash);
+        }
+
+        bool VerifyCurrentState(
+            BoardSnapshot expected,
+            string stage,
+            string planHash
+        )
+        {
+            if (expected == null)
+            {
+                lastWaveVerificationPassed = false;
+                Debug.LogError($"Resolution plan {planHash} has no expected state for {stage}.");
+                return false;
+            }
+
+            string actual = model.ComputeStateHash();
+            bool matches = string.Equals(
+                actual,
+                expected.StateHash,
+                StringComparison.Ordinal
+            );
+
+            if (!matches)
+            {
+                lastWaveVerificationPassed = false;
+                Debug.LogError(
+                    $"Resolution snapshot mismatch: plan={planHash}, stage={stage}, " +
+                    $"expected={expected.StateHash}, actual={actual}"
+                );
+            }
+
+            return matches;
+        }
+
+        IEnumerator AnimateResolutionActivations(
+            IReadOnlyList<BoardSpecialActivationInstruction> activations,
+            int comboIndex,
+            string planHash,
+            SpecialCombinationKind combinationKind,
+            GameplayBoosterKind boosterKind
+        )
+        {
+            for (int i = 0; i < activations.Count; i++)
+            {
+                BoardSpecialActivationInstruction activation = activations[i];
+                Vector2Int position = ToView(activation.Position);
+                if (!Inside(position)) continue;
+
+                if(activation.Kind == SpecialGem.Spark)
+                {
+                    gemImages[position.x,position.y].enabled=false;
+                    specialImages[position.x,position.y].enabled=false;
+                    GetComponentInChildren<SparkFlightView>()?.Present(activation);
+                }
+                PublishMotion(
+                    GameplayMotionKind.SpecialActivationStarted,
+                    position,
+                    activation.Target.HasValue ? ToView(activation.Target.Value) : position,
+                    comboIndex,
+                    i == 0 ? activations.Count : 0,
+                    activation.Kind,
+                    planHash,
+                    combinationKind,
+                    boosterKind
+                );
+            }
+
+            float hold = ContainsSpark(activations) ? SparkFlightView.Duration + .06f : ruleVersion != GameplayRuleVersion.Legacy ? PrototypeImpactView.ActivationSeconds : CoreLoopMotionProfile.SpecialActivationHoldSeconds;
+            float elapsed=0;
+            while(elapsed<hold)
+            {
+                if(ruleVersion!=GameplayRuleVersion.Legacy)
+                    foreach(var a in activations)
+                    {
+                        if(a.Kind==SpecialGem.Spark)continue;
+                        float windup=Mathf.Clamp01(elapsed/PrototypeImpactView.Anticipation);
+                        float release=Mathf.Clamp01((elapsed-PrototypeImpactView.Anticipation)/.16f);
+                        float scale=elapsed<PrototypeImpactView.Anticipation?Mathf.Lerp(1,.82f,windup):Mathf.Lerp(1.22f,1,release);
+                        visualRoots[a.Position.X,a.Position.Y].localScale=Vector3.one*scale;
+                    }
+                elapsed+=Time.unscaledDeltaTime;yield return null;
+            }
+            foreach(var a in activations)visualRoots[a.Position.X,a.Position.Y].localScale=Vector3.one;
+        }
+
+        static bool ContainsSpark(IReadOnlyList<BoardSpecialActivationInstruction> activations)
+        {
+            for(int i=0;i<activations.Count;i++)if(activations[i].Kind==SpecialGem.Spark)return true;
+            return false;
+        }
+
+        IEnumerator AnimateObstacleInteractions(
+            IReadOnlyList<BoardObstacleInteractionInstruction> interactions
+        )
+        {
+            if (interactions == null || interactions.Count == 0)
+                yield break;
+
+            var affected = new HashSet<Vector2Int>();
+            for (int i = 0; i < interactions.Count; i++)
+            {
+                BoardObstacleInteractionInstruction interaction = interactions[i];
+                SafeInvoke(
+                    ObstacleInteracted,
+                    interaction,
+                    "ObstacleInteracted"
+                );
+                Vector2Int position = ToView(interaction.Position);
+                if (Inside(position)) affected.Add(position);
+            }
+
+            float duration = 0.12f;
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float pulse = Mathf.Sin(
+                    Mathf.Clamp01(elapsed / duration) * Mathf.PI
+                );
+                foreach (Vector2Int position in affected)
+                {
+                    cellBackgrounds[position.x, position.y].color = Color.Lerp(
+                        cellBackgrounds[position.x, position.y].color,
+                        Color.white,
+                        pulse
+                    );
+                }
+                yield return null;
+            }
+
+            foreach (Vector2Int position in affected)
+                ApplyCellMechanicTint(position.x, position.y);
+        }
+
+        IEnumerator AnimateCollapsePlan(
+            BoardCollapseResult collapse,
+            float duration
+        )
+        {
+            var animated = new List<Vector2Int>();
+            var startPositions = new Dictionary<Vector2Int, Vector2>();
+            var startAlphas = new Dictionary<Vector2Int, float>();
+
+            for (int i = 0; i < collapse.Moves.Count; i++)
+            {
+                BoardCellMove move = collapse.Moves[i];
+                Vector2Int to = ToView(move.To);
+                if (!Inside(to)) continue;
+
+                float height = Mathf.Max(
+                    1f,
+                    cellBackgrounds[to.x, to.y].rectTransform.rect.height
+                );
+                int rowsFallen = Math.Max(1, move.To.Y - move.From.Y);
+                visualRoots[to.x, to.y].anchoredPosition =
+                    new Vector2(0f, rowsFallen * height);
+                if (!startPositions.ContainsKey(to))
+                    animated.Add(to);
+                startPositions[to] = visualRoots[to.x, to.y].anchoredPosition;
+                startAlphas[to] = visualGroups[to.x, to.y].alpha;
+            }
+
+            for (int i = 0; i < collapse.Spawns.Count; i++)
+            {
+                BoardCellSpawn spawn = collapse.Spawns[i];
+                Vector2Int to = ToView(spawn.To);
+                if (!Inside(to)) continue;
+
+                float height = Mathf.Max(
+                    1f,
+                    cellBackgrounds[to.x, to.y].rectTransform.rect.height
+                );
+                float startRows = to.y + spawn.SpawnOrder + 1.5f;
+                visualRoots[to.x, to.y].anchoredPosition =
+                    new Vector2(0f, startRows * height);
+                visualGroups[to.x, to.y].alpha = 0.30f;
+                if (!startPositions.ContainsKey(to))
+                    animated.Add(to);
+                startPositions[to] = visualRoots[to.x, to.y].anchoredPosition;
+                startAlphas[to] = visualGroups[to.x, to.y].alpha;
+            }
+
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float eased = CoreLoopMotionProfile.EaseOutCubic(
+                    elapsed / duration
+                );
+
+                for (int i = 0; i < animated.Count; i++)
+                {
+                    Vector2Int position = animated[i];
+                    RectTransform rt = visualRoots[position.x, position.y];
+                    rt.anchoredPosition = Vector2.Lerp(
+                        startPositions[position],
+                        Vector2.zero,
+                        eased
+                    );
+                    visualGroups[position.x, position.y].alpha =
+                        Mathf.Lerp(
+                            startAlphas[position],
+                            1f,
+                            eased
+                        );
+                }
+
+                yield return null;
+            }
+
+            for (int i = 0; i < animated.Count; i++)
+            {
+                Vector2Int position = animated[i];
+                visualRoots[position.x, position.y].anchoredPosition = Vector2.zero;
+                visualGroups[position.x, position.y].alpha = 1f;
+            }
+        }
+
+        IEnumerator SeaPearlAnimation()
+        {
+            ShowLegacyToast("Жемчужина Морского Царя: +5 ходов.");
+            yield return new WaitForSecondsRealtime(0.30f);
+        }
+
+        bool BeginRuntimeCommand(
+            string label,
+            BoardResolutionPlan plan
+        )
+        {
+            if (CampaignInventoryBlocked || HasInventoryRecoveryError) { PauseForBlockedInventory(); return false; }
+            if (!campaignManaged && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand && activeCommand == null)
+            { interaction.Force(GameplayPhase.Paused); SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired"); return false; }
+            if (activeCommand != null)
+            {
+                Debug.LogError(
+                    $"Cannot begin {label}; {activeCommand.Label} is still active."
+                );
+                return false;
+            }
+
+            BoardSnapshot before = plan?.BeforeSnapshot ?? model.CreateSnapshot();
+            long token = commandWatchdog.Begin(
+                label,
+                Time.realtimeSinceStartupAsDouble,
+                commandTimeoutSeconds
+            );
+
+            activeCommand = new RuntimeCommandTransaction(
+                token,
+                label,
+                before,
+                moves,
+                score,
+                goalRuntime?.CaptureSnapshot()
+            );
+            recoveringCommand = false;
+            return true;
+        }
+
+        void PauseForBlockedInventory()
+        {
+            if (!HasInventoryRecoveryError) return;
+            interaction.Force(GameplayPhase.Paused);
+            SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
+        }
+
+        bool ConsumeCommandBooster(BoosterType type)
+        {
+            string commandId = null;
+            bool consumed = campaignManaged ? campaignInventory.Consume(type) :
+                GameState.Instance != null && GameState.Instance.TryBeginBoosterCommand(type, out commandId);
+            if (consumed) activeCommand?.MarkBoosterConsumed(type, commandId);
+            return consumed;
+        }
+
+        bool RefundCommand(RuntimeCommandTransaction command)
+        {
+            if (!command.ConsumedBooster.HasValue) return true;
+            return campaignManaged ? campaignInventory != null && campaignInventory.Refund() :
+                GameState.Instance != null && GameState.Instance.TrySettleBoosterCommand(command.BoosterCommandId, applied: false);
+        }
+
+        bool CompleteRuntimeCommand()
+        {
+            if (activeCommand == null) return !CampaignInventoryBlocked;
+            if (campaignManaged && activeCommand.ConsumedBooster.HasValue && !campaignInventory.Complete())
+            {
+                commandWatchdog.Cancel(); activeCommand = null; interaction.Force(GameplayPhase.Paused); return false;
+            }
+            if (!campaignManaged && activeCommand.ConsumedBooster.HasValue &&
+                (GameState.Instance == null || !GameState.Instance.TrySettleBoosterCommand(activeCommand.BoosterCommandId, applied: true)))
+            {
+                RecoverActiveCommand("Booster completion could not be committed.");
+                return false;
+            }
+            commandWatchdog.Complete(activeCommand.Token);
+            activeCommand = null;
+            recoveringCommand = false;
+            return !CampaignInventoryBlocked;
+        }
+
+        void RecoverActiveCommand(string reason)
+        {
+            if (recoveringCommand || refundPending || activeCommand == null)
+                return;
+
+            recoveringCommand = true;
+            RuntimeCommandTransaction failed = activeCommand;
+            GameplayBoosterKind recoveredBooster = ToGameplayBooster(
+                failed.Label,
+                failed.ConsumedBooster
+            );
+
+            StopAllCoroutines();
+            ClearTransientEffects();
+            ResetPointerOwnership();
+            commandWatchdog.Cancel();
+
+            model.RestoreSnapshot(failed.BeforeSnapshot);
+            moves = failed.MovesBefore;
+            score = failed.ScoreBefore;
+            if (goalRuntime != null && failed.GoalsBefore != null)
+                goalRuntime.RestoreSnapshot(failed.GoalsBefore);
+
+            bool refunded = RefundCommand(failed);
+            refundPending = !refunded;
+
+            armedBooster = null;
+            selected = new Vector2Int(-1, -1);
+            if (refunded) activeCommand = null;
+            ResetVisualTransforms();
+            RefreshAll();
+            bool canResume = refunded && !HasInventoryRecoveryError && !CampaignInventoryBlocked;
+            interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused);
+            PublishState();
+
+            lastWaveVerificationPassed = false;
+            if (refunded) PublishMotion(
+                GameplayMotionKind.CommandRecovered,
+                new Vector2Int(0, 0),
+                new Vector2Int(0, 0),
+                0,
+                0,
+                SpecialGem.None,
+                lastResolutionPlanHash,
+                SpecialCombinationKind.None,
+                recoveredBooster
+            );
+            Debug.LogError(
+                $"Gameplay command {(refunded ? "recovered" : "recovery pending")}: {failed.Label}. " +
+                $"Reason={reason}; board={model.ComputeStateHash()}"
+            );
+            if (refunded) ShowLegacyToast(
+                "Ход восстановлен после ошибки анимации. Повторите действие."
+            );
+            if (!canResume) SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
+            recoveringCommand = false;
+        }
+
+        void RecordRequestedCommand(Vector2Int first, Vector2Int second)
+        {
+            lastRequestedPrimary = ToCore(first);
+            lastRequestedSecondary = ToCore(second);
+            requestedCommandCount++;
+        }
+
+        void ResetPointerOwnership()
+        {
+            activePointerId = int.MinValue;
+            if (cellInputs == null)
+                return;
+
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
+            {
+                Match3CellInput input = cellInputs[x, y];
+                if (input == null || !input.enabled)
+                    continue;
+
+                // OnDisable releases the cell-local pointer latch. Re-enable
+                // immediately so recovery cannot strand the source cell or
+                // leave a board-wide pointer owner after a lost pointer-up.
+                input.enabled = false;
+                input.enabled = true;
+            }
+        }
+
+        void ClearTransientEffects()
+        {
+            vfxPresenter?.ResetEffects();
+        }
+
+        void ResetMotionTimeline()
+        {
+            motionSequence = 0;
+            motionEventCount = 0;
+            lastMotionEvent = null;
+        }
+
+        void PublishMotion(
+            GameplayMotionKind kind,
+            Vector2Int primary,
+            Vector2Int secondary,
+            int comboIndex,
+            int affectedCount,
+            SpecialGem specialKind,
+            string planHash,
+            SpecialCombinationKind combinationKind = SpecialCombinationKind.None,
+            GameplayBoosterKind boosterKind = GameplayBoosterKind.None,
+            IReadOnlyList<BoardClearedCellInstruction> clearedCells = null,
+            SpecialGem payload = SpecialGem.None
+        )
+        {
+            var motion = new GameplayMotionEvent(
+                ++motionSequence,
+                kind,
+                ToCore(primary),
+                ToCore(secondary),
+                comboIndex,
+                affectedCount,
+                specialKind,
+                planHash,
+                combinationKind,
+                boosterKind,
+                clearedCells, payload
+            );
+            lastMotionEvent = motion;
+            motionEventCount++;
+
+            CoreLoopFeedbackService.Publish(motion, mechanicsAudio != null && mechanicsAudio.HandlesSound);
+
+            Action<GameplayMotionEvent> handlers = MotionEventPublished;
+            if (handlers == null) return;
+            foreach (Delegate candidate in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<GameplayMotionEvent>)candidate)(motion);
+                }
+                catch (Exception exception)
+                {
+                    WarnCallbackFailure("Gameplay motion", exception);
+                }
+            }
+        }
+
+        void PublishBoosterMotion(
+            GameplayMotionKind kind,
+            Vector2Int target,
+            int affectedCount,
+            string planHash,
+            GameplayBoosterKind boosterKind
+        )
+        {
+            PublishMotion(
+                kind,
+                target,
+                target,
+                0,
+                affectedCount,
+                SpecialGem.None,
+                planHash,
+                SpecialCombinationKind.None,
+                boosterKind
+            );
+        }
+
+        static int FirstWaveAffectedCount(BoardResolutionPlan plan)
+        {
+            return plan != null && plan.Waves.Count > 0
+                ? plan.Waves[0].ClearedCells.Count
+                : 0;
+        }
+
+        static GameplayBoosterKind ToGameplayBooster(
+            BoardBoosterCommandKind command
+        )
+        {
+            switch (command)
+            {
+                case BoardBoosterCommandKind.MaceRow:
+                    return GameplayBoosterKind.BogatyrMaceRow;
+                case BoardBoosterCommandKind.MaceColumn:
+                    return GameplayBoosterKind.BogatyrMaceColumn;
+                case BoardBoosterCommandKind.FirebirdArea:
+                    return GameplayBoosterKind.Firebird;
+                case BoardBoosterCommandKind.LivingLightColor:
+                    return GameplayBoosterKind.LivingLight;
+                default:
+                    return GameplayBoosterKind.None;
+            }
+        }
+
+        static GameplayBoosterKind ToGameplayBooster(
+            string commandLabel,
+            BoosterType? consumedBooster
+        )
+        {
+            if (!string.IsNullOrEmpty(commandLabel))
+            {
+                if (commandLabel.EndsWith("MaceRow", StringComparison.Ordinal))
+                    return GameplayBoosterKind.BogatyrMaceRow;
+                if (commandLabel.EndsWith("MaceColumn", StringComparison.Ordinal))
+                    return GameplayBoosterKind.BogatyrMaceColumn;
+                if (commandLabel.EndsWith("FirebirdArea", StringComparison.Ordinal))
+                    return GameplayBoosterKind.Firebird;
+                if (commandLabel.EndsWith("LivingLightColor", StringComparison.Ordinal))
+                    return GameplayBoosterKind.LivingLight;
+                if (commandLabel.EndsWith("SeaPearl", StringComparison.Ordinal))
+                    return GameplayBoosterKind.SeaPearl;
+            }
+
+            if (consumedBooster == BoosterType.Firebird)
+                return GameplayBoosterKind.Firebird;
+            if (consumedBooster == BoosterType.LivingLight)
+                return GameplayBoosterKind.LivingLight;
+            if (consumedBooster == BoosterType.SeaPearl)
+                return GameplayBoosterKind.SeaPearl;
+            return GameplayBoosterKind.None;
+        }
+
+        void SafeCommandRejected(string reason)
+        {
+            Action<string> handlers = CommandRejected;
+            if (handlers == null) return;
+            foreach (Delegate candidate in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<string>)candidate)(reason);
+                }
+                catch (Exception exception)
+                {
+                    WarnCallbackFailure("Command rejection", exception);
+                }
+            }
+        }
+
+        void SafeInvoke<T>(
+            Action<T> handlers,
+            T value,
+            string label
+        )
+        {
+            if (handlers == null) return;
+            foreach (Delegate candidate in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<T>)candidate)(value);
+                }
+                catch (Exception exception)
+                {
+                    WarnCallbackFailure(label, exception);
+                }
+            }
+        }
+
+        void SafeInvoke<TFirst, TSecond>(
+            Action<TFirst, TSecond> handlers,
+            TFirst first,
+            TSecond second,
+            string label
+        )
+        {
+            if (handlers == null) return;
+            foreach (Delegate candidate in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<TFirst, TSecond>)candidate)(first, second);
+                }
+                catch (Exception exception)
+                {
+                    WarnCallbackFailure(label, exception);
+                }
+            }
+        }
+
+        void WarnCallbackFailure(string label, Exception exception)
+        {
+            if (!warnedCallbackFailures.Add(label)) return;
+            Debug.LogWarning(
+                $"{label} observer failed and was isolated: " +
+                exception.Message
+            );
+        }
+
+        public bool LoadQAPreset(string presetId)
+        {
+            if (activeCommand != null)
+                return false;
+
+            if (!BoardQAPresetFactory.TryGet(presetId, out BoardQAPreset preset))
+                return false;
+            return LoadSnapshotForTesting(preset.Snapshot);
+        }
+
+        public bool LoadSnapshotForTesting(BoardSnapshot snapshot, bool preserveGoals = false)
+        {
+            if (activeCommand != null || snapshot == null)
+                return false;
+            if (
+                snapshot.Width != columns ||
+                snapshot.Height != rows ||
+                snapshot.TileTypeCount != tileTypes
+            )
+            {
+                return false;
+            }
+
+            StopAllCoroutines();
+            ClearTransientEffects();
+            model.RestoreSnapshot(snapshot);
+            resolutionPlanner = new BoardResolutionPlanner(
+                model,
+                BoardBalanceProfile.CommercialDefault, ruleVersion
+            );
+            armedBooster = null;
+            selected = new Vector2Int(-1, -1);
+            moves = preserveGoals ? currentLevel.moveLimit : 50;
+            score = 0;
+            if(preserveGoals) goalRuntime = new LevelGoalRuntime(currentLevel,score);
+            else
+            goalRuntime = new LevelGoalRuntime(
+                new[]
+                {
+                    new LevelGoalData
+                    {
+                        type = LevelGoalTypes.CollectTile,
+                        tileType = 0,
+                        target = 999
+                    },
+                    new LevelGoalData
+                    {
+                        type = LevelGoalTypes.CollectTile,
+                        tileType = 1,
+                        target = 999
+                    }
+                },
+                score
+            );
+            lastResolutionPlanHash = string.Empty;
+            lastPlanFinalStateHash = string.Empty;
+            lastWaveVerificationPassed = true;
+            lastVerifiedWaveCount = 0;
+            LastRejectedCommandReason = string.Empty;
+            ResetPointerOwnership();
+            warnedCallbackFailures.Clear();
+            ResetMotionTimeline();
+            interaction.Force(GameplayPhase.Idle);
+            ResetVisualTransforms();
+            RefreshAll();
+            PublishState();
+            return true;
+        }
+
+        public Match3CellInput GetCellInputForTesting(int x, int y)
+        {
+            return x >= 0 && x < columns && y >= 0 && y < rows
+                ? cellInputs[x, y]
+                : null;
+        }
+
+        public RectTransform GetCellRectForTesting(int x, int y)
+        {
+            Match3CellInput input = GetCellInputForTesting(x, y);
+            return input != null ? input.transform as RectTransform : null;
+        }
+
+        public RectTransform GetCellVisualRectForTesting(int x, int y)
+        {
+            return x >= 0 && x < columns && y >= 0 && y < rows
+                ? visualRoots[x, y]
+                : null;
+        }
+
+        public float GetCellVisualAlphaForTesting(int x, int y)
+        {
+            return x >= 0 && x < columns && y >= 0 && y < rows
+                ? visualGroups[x, y].alpha
+                : 0f;
+        }
+
+        public void SimulateStuckCommandForTesting(BoosterType? consumedBooster = null)
+        {
+            if (!BeginRuntimeCommand("qa:stuck-command", null))
+                return;
+
+            if (
+                !campaignManaged && consumedBooster.HasValue &&
+                GameState.Instance != null &&
+                ConsumeCommandBooster(consumedBooster.Value)
+            )
+            {
+                // The normal durable reservation was made by ConsumeCommandBooster.
+            }
+
+            interaction.Force(GameplayPhase.ResolvingMatches);
+        }
+
+        public void ForceCommandTimeoutForTesting()
+        {
+            commandWatchdog.ForceTimeout(Time.realtimeSinceStartupAsDouble);
+        }
+
+        public bool TryPause()
+        {
+            return
+                activePointerId == int.MinValue &&
+                interaction.TryPause();
+        }
+
+        public bool TryResume()
+        {
+            if (refundPending)
+            {
+                if (activeCommand == null || !RefundCommand(activeCommand)) return false;
+                var failed = activeCommand;
+                refundPending = false; activeCommand = null;
+                bool canResume = !HasInventoryRecoveryError && !CampaignInventoryBlocked;
+                interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused); PublishState();
+                PublishMotion(GameplayMotionKind.CommandRecovered, Vector2Int.zero, Vector2Int.zero,
+                    0, 0, SpecialGem.None, lastResolutionPlanHash, SpecialCombinationKind.None,
+                    ToGameplayBooster(failed.Label, failed.ConsumedBooster));
+                return canResume;
+            }
+            if (!campaignManaged && activeCommand == null && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand)
+            {
+                if (!GameState.Instance.TryRecoverPendingBoosterCommand()) return false;
+            }
+            if (CampaignInventoryBlocked || HasInventoryRecoveryError) return false;
+            return interaction.TryResume();
+        }
+
+        bool TrySetPhase(GameplayPhase phase)
+        {
+            if (interaction.TryTransition(phase))
+                return true;
+
+            Debug.LogError(
+                $"Invalid gameplay phase transition: {interaction.Current} -> {phase}"
+            );
+            return false;
+        }
+
+        void EnsurePhase(GameplayPhase phase)
+        {
+            if (interaction.Current == phase)
+                return;
+
+            if (!interaction.TryTransition(phase))
+            {
+                Debug.LogError(
+                    $"Recovered invalid gameplay phase transition: " +
+                    $"{interaction.Current} -> {phase}"
+                );
+                interaction.Force(phase);
+            }
+        }
+
+        void OnGameplayPhaseChanged(GameplayPhase previous, GameplayPhase next)
+        {
+#if UNITY_EDITOR
+            if (Debug.isDebugBuild)
+                Debug.Log($"Gameplay phase: {previous} -> {next}");
+#endif
+        }
+
+        IEnumerator CheckEndState()
+        {
+            if (goalRuntime != null && goalRuntime.AllComplete)
+            {
+                EnsurePhase(GameplayPhase.Completed);
+                SafeInvoke(onWin, score, "Win");
+                yield break;
+            }
+
+            if (moves <= 0)
+            {
+                EnsurePhase(GameplayPhase.Failed);
+                SafeInvoke(onFail, score, "Fail");
+                yield break;
+            }
+
+            EnsurePhase(GameplayPhase.Idle);
+        }
+
+        bool Adjacent(Vector2Int a, Vector2Int b)
+        {
+            return model.AreAdjacent(ToCore(a), ToCore(b));
+        }
+
+        bool Inside(Vector2Int p)
+        {
+            return model.IsInside(ToCore(p));
+        }
+
+        static BoardPosition ToCore(Vector2Int position)
+        {
+            return new BoardPosition(position.x, position.y);
+        }
+
+        static Vector2Int ToView(BoardPosition position)
+        {
+            return new Vector2Int(position.X, position.Y);
+        }
+
+        void PublishState()
+        {
+            SafeInvoke(ScoreChanged, score, "ScoreChanged");
+            SafeInvoke(MovesChanged, moves, "MovesChanged");
+            PublishGoalState();
+        }
+
+        void PublishGoalState()
+        {
+            SafeInvoke(
+                GoalSlotsChanged,
+                GoalSlot1Remaining,
+                GoalSlot2Remaining,
+                "GoalSlotsChanged"
+            );
+            SafeInvoke(
+                GoalsChanged,
+                RedRemaining,
+                BlueRemaining,
+                "GoalsChanged"
+            );
+        }
+
+        void RefreshAll()
+        {
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
+                Refresh(x, y);
+        }
+
+        void Refresh(int x, int y)
+        {
+            int type = model.GetTile(new BoardPosition(x, y));
+            var gem = gemImages[x, y];
+            var special = specialImages[x, y];
+            var group = visualGroups[x, y];
+            var rt = visualRoots[x, y];
+
+            group.alpha = 1f;
+            rt.localScale = Vector3.one;
+            rt.anchoredPosition = Vector2.zero;
+
+            gem.enabled = type >= 0;
+            if (type >= 0 && type < gemSprites.Length)
+                gem.sprite = gemSprites[type];
+
+            var specialType = model.GetSpecial(new BoardPosition(x, y));
+            special.enabled = specialType != SpecialGem.None;
+            special.color = Color.white;
+
+            special.rectTransform.localRotation = Quaternion.identity;
+            special.preserveAspect = true;
+            Stretch(special.rectTransform);
+            if (specialType == SpecialGem.Row || specialType == SpecialGem.Column)
+            {
+                special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("line") : ProductionGameplayArt.LineSpecial(type);
+                special.preserveAspect = UsesCurrentBoardArt;
+                var specialRect = special.rectTransform;
+                // Relative anchors stay valid when Refresh precedes the first layout,
+                // and when the board is resized. Give the colored body a readable thickness.
+                specialRect.anchorMin = new Vector2(0, UsesCurrentBoardArt?0:.21f);
+                specialRect.anchorMax = new Vector2(1, UsesCurrentBoardArt?1:.79f);
+                specialRect.offsetMin = specialRect.offsetMax = Vector2.zero;
+                // A single elongated object carries direction through physical orientation.
+                special.rectTransform.localRotation = Quaternion.Euler(0, 0, specialType == SpecialGem.Column ? 90 : 0);
+            }
+            else if (specialType == SpecialGem.Burst) special.sprite = burstSpecialSprite;
+            else if (specialType == SpecialGem.Color) special.sprite = colorSpecialSprite;
+            else if (specialType == SpecialGem.Spark) special.sprite = UsesCurrentBoardArt ? PrototypeBoardArt.Load("spark") : ProductionBoosterArt.Icon(1);
+
+            if(UsesCurrentBoardArt && special.enabled)
+            {
+                special.rectTransform.anchorMin = Vector2.one * -.04f;
+                special.rectTransform.anchorMax = Vector2.one * 1.04f;
+            }
+
+            BoardObjectiveItemKind item = model.GetObjectiveItem(new BoardPosition(x, y));
+            if (item != BoardObjectiveItemKind.None)
+            {
+                gem.enabled = true;
+                gem.sprite = ProductionGameplayArt.Load("feather");
+                special.enabled = false;
+            }
+            else if (special.enabled) gem.enabled = false;
+            ApplyCellMechanicTint(x, y);
+        }
+
+        void ApplyCellMechanicTint(int x, int y)
+        {
+            var position = new BoardPosition(x, y);
+            BoardObstacleData obstacle = model.GetObstacle(position);
+            cellBackgrounds[x, y].color = Color.white;
+            cellMechanics[x, y].Refresh(obstacle);
+        }
+
+        void ResetVisualTransforms()
+        {
+            ClearCreationGraphics();
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
+            {
+                visualRoots[x, y].anchoredPosition = Vector2.zero;
+                visualRoots[x, y].localScale = Vector3.one;
+                visualGroups[x, y].alpha = 1f;
+            }
+        }
+    }
+}

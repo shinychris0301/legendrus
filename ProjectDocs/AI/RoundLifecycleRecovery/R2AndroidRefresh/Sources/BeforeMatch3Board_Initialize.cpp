@@ -1,0 +1,18 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void Match3Board_Initialize_m720F33967253E3D8E5D060F9E0FBFA72F6A278AC (Match3Board_tE4CAA58AF06191DC578D60DE5FA7659B8C8ACD69* __this, LevelData_tCD69EAEAB70C2F2CD76C9F4727F8491C1C989CDC* ___0_levelData, Action_1_tD69A6DC9FBE94131E52F5A73B2A9D4AB51EEC404* ___1_onWin, Action_1_tD69A6DC9FBE94131E52F5A73B2A9D4AB51EEC404* ___2_onFail, const RuntimeMethod* method) 
+{
+	Nullable_1_tCF32C56A2641879C053C86F273C0C6EC1B40BC28 V_0;
+	memset((&V_0), 0, sizeof(V_0));
+	{
+		__this->___ruleVersion = 5;
+		__this->___useCurrentBoardArt = (bool)1;
+		__this->___campaignInventory = (RuntimeObject*)NULL;
+		Il2CppCodeGenWriteBarrier((void**)(&__this->___campaignInventory), (void*)(RuntimeObject*)NULL);
+		LevelData_tCD69EAEAB70C2F2CD76C9F4727F8491C1C989CDC* L_0 = ___0_levelData;
+		Action_1_tD69A6DC9FBE94131E52F5A73B2A9D4AB51EEC404* L_1 = ___1_onWin;
+		Action_1_tD69A6DC9FBE94131E52F5A73B2A9D4AB51EEC404* L_2 = ___2_onFail;
+		il2cpp_codegen_initobj((&V_0), sizeof(Nullable_1_tCF32C56A2641879C053C86F273C0C6EC1B40BC28));
+		Nullable_1_tCF32C56A2641879C053C86F273C0C6EC1B40BC28 L_3 = V_0;
+		Match3Board_InitializeCore_m135C11F55EA1098D3F637709C35C16A00AD954A2(__this, L_0, L_1, L_2, L_3, (RetainedRoundData_t3EA1BA932DFF2408098F1FB87EC5A5A24130D7A1*)NULL, NULL);
+		return;
+	}
+}

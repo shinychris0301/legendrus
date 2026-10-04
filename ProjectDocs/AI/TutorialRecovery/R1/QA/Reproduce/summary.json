@@ -1,0 +1,67 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 26.626402854919434,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LevelSystemRuntimePlayModeTests.TutorialRejected;LevelSystemRuntimePlayModeTests.TutorialStaleContinue",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/TutorialRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-tutorial-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-tutorial-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-tutorial-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "5",
+    "result": "Failed(Child)",
+    "total": "5",
+    "passed": "0",
+    "failed": "5",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 19:14:39Z",
+    "end-time": "2026-10-03 19:14:40Z",
+    "duration": "0.6120459"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.TutorialRejectedContinueKeepsExactStepQueueOverlayAndPause(False)",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.TutorialRejectedContinueKeepsExactStepQueueOverlayAndPause(True)",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.TutorialRejectedWritePreservesUnreadLedgerAndEvents(False)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.TutorialRejectedWritePreservesUnreadLedgerAndEvents(True)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.TutorialStaleContinueCannotCompleteTheNextQueuedStep",
+      "result": "Failed",
+      "message": "  Expected: True\n  But was:  False\n"
+    }
+  ]
+}

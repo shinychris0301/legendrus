@@ -1,0 +1,11 @@
+# Project update committed and uploaded — 2026-10-03
+
+The user requested committing the updated project. All1,612 pending changed/untracked paths were committed and uploaded to the existing `repair/full-evidence-batches-20261002T181726Z` branch in five bounded batches, preserving the earlier preference to upload all evidence. Source/report commit `db8f57d7` is followed by four complete capture batches; full update snapshot `5da25f56e65890587419cef3dc55e8ed5ebf6fbb` was verified on GitHub. [Completion record](Completion.json).
+
+Fifteen existing tracked files and1,597 new evidence files were included. Each path's Git blob matches the pinned pre-commit workspace. Batches contain46,515,795 /401,554,202 /398,148,421 /399,520,599 /252,726,255bytes before Git compression. No original update-plan file was excluded or recompressed. Existing .gitignore rules continue to keep builds, caches and signing files local. Original local and remote main remain unchanged; no reset, force push or history rewrite.
+
+Latest ordinary-credit verification remains37Edit+106Play=143distinct Unity passes. Its source/evidence/APK verifier passed freshly during this Git task; no new Unity run/build/device execution was needed because implementation files were unchanged. All changed/untracked candidate paths were screened for sensitive filenames;988text files had no high-confidence credential-pattern findings. Active source/tool whitespace checks passed. The238 warnings in raw captured/generated evidence, CSV and patch context are preserved byte for byte; they do not describe active production-source changes.
+
+This record and CurrentTask/SessionLog are committed after the verified five update batches. The final live GitHub hash is checked again after publishing that small completion commit. Private backups of the original index, path/blob manifest, native commit/push logs and progress are retained under `/tmp/lor-project-git-20261003T141744Z`.
+
+Next development remains failed-save spending and rejected noncampaign booster-refund handling, then a guarded APK refresh. Current APK still excludes newer doubled-gold, first-clear and ordinary-credit source fixes. Human201–210 acceptance remains pending; phone/hosting deferred and effects last.

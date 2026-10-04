@@ -1,0 +1,19 @@
+{
+  "extraOwners": ["GameState_RegisterLevelAttempt", "GameState_CanRegisterLevelAttempt", "GameState_TryRegisterLevelAttempt", "GameState_TryStartLevel", "GameState_CandidateLevelProgress", "GameState_TryPrepareLevelAttempt", "GameState_TryCommitRoundCandidate", "GameState_RecordLevelFailure", "GameState_TryRecordLevelFailure", "GameState_TryFinalizeRetainedFailure", "Match3Board_Initialize", "Match3Board_InitializeCore"],
+  "atomicApis": ["GameState_TryRegisterLevelAttempt", "GameState_TryStartLevel", "GameState_TryRecordLevelFailure"],
+  "flags": {
+    "GameState_RegisterLevelAttempt": ["delegatesToAcknowledgedAttemptRegistration"],
+    "GameState_CanRegisterLevelAttempt": ["guardsRetainedAndContinuation", "respectsRoundWriteLock"],
+    "GameState_TryRegisterLevelAttempt": ["preparesAttemptBeforeCommit"],
+    "GameState_TryStartLevel": ["callsSharedEnergyClock", "debitsEnergyInCandidate", "preparesAttemptBeforeCommit"],
+    "GameState_TryPrepareLevelAttempt": ["generatedOverflowCatch"],
+    "GameState_TryCommitRoundCandidate": ["savesBeforeAdoptingCandidate", "publishesFailureBeforeChanged", "preservesPrimaryCommitPolicy"],
+    "GameState_RecordLevelFailure": ["delegatesToAcknowledgedFailure"],
+    "GameState_TryRecordLevelFailure": ["respectsRoundWriteLock", "generatedOverflowCatch"],
+    "GameState_TryFinalizeRetainedFailure": ["generatedOverflowCatch"],
+    "Match3Board_Initialize": ["validatesCommittedOrdinaryAttempt", "forwardsOrdinaryOwnership"],
+    "Match3Board_InitializeCore": ["rejectsUncommittedAttempt", "keepsOrdinaryBoosterOwner"],
+    "ScreenRouter_StartLevel": ["guardsReentrantStart", "checksAtomicStartBeforeGameplay", "forwardsCommittedAttemptOnce"],
+    "ScreenRouter_BuildGameplayOverlay": ["consumesCommittedAttemptBeforeInitialization", "forwardsCommittedOrdinaryAttempt"]
+  }
+}
