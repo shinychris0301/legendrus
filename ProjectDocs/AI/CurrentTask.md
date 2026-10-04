@@ -1,3 +1,11 @@
+# 2026-10-03 — Recovery project and complete QA evidence committed and uploaded
+
+[Delivery record](GitCommitRecovery/R3ProjectUpdate/README.md) · [Completion](GitCommitRecovery/R3ProjectUpdate/Completion.json). User requested committing updated files; prior authorization to upload all evidence in smaller batches retained. All 6,953 updated paths committed and uploaded in 16 bounded batches to `repair/full-evidence-batches-20261002T181726Z`. Complete snapshot `6a2eb28906d6be266bda658a6ff4e5393eb92969` verified on the remote; all reviewed file blobs match. 2,639 QA captures and 24 explicitly included build-test summaries/logs retained. Original main/history preserved; no force push or reset. This continuity/completion record follows in a small final commit.
+
+Latest startup source verification rerun passed against the recorded 363 Play + 85 Edit = 448 distinct Unity cases; no new Unity run/build/phone/hosting/store action. Three stale Git temporary object/pack files byte-verified and preserved outside the repository to recover disk space. Native Git authentication recovered through the existing VS Code helper without reading/exporting credentials. Actual builds/caches/signing files remain ignored locally.
+
+**Next development:** guarded APK refresh packaging startup migration recovery, then language-write acknowledgement and existing native rejection feedback. Current APK still excludes the startup source fix; ordinary persistence and previous recovery remain packaged. Human 201–210 still unrecorded, all 18 physical rows pending; phone/hosting deferred, real commercial settlement/RuStore readiness/measured profitability unverified, stock-max restricted and effects last.
+
 # 2026-10-03 — Startup migration recovery R1 complete (source)
 
 [Results](StartupRecovery/R1/TestResults.md) · [Reconciliation](StartupRecovery/R1/QA/TestReconciliation.json) · [Final validation](StartupRecovery/R1/QA/FinalValidation.json). Five pre-fix Unity failures reproduced. Migration now normalizes a candidate and acknowledges shared durable saving before adoption/publication; rejected rewrites preserve loaded identity/progress/evidence and stay pending/locked. Healthy no-ops keep loaded identity. Migration callback reentry and observer-exception cleanup are guarded; candidate chapter prerequisites retain existing rules.
