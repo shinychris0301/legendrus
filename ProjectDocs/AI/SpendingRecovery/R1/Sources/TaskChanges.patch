@@ -1,0 +1,959 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -10,6 +10,20 @@
+         Firebird,
+         LivingLight,
+         SeaPearl
++    }
++
++    [Serializable]
++    public sealed class BoosterCommandReceipt
++    {
++        public int schemaVersion = 1;
++        public string commandId = "";
++        public BoosterType type;
++        public CampaignBoosterState state;
++
++        internal bool IsValid => schemaVersion == 1 && CampaignBoosterTransactions.Known(type) &&
++            (state == CampaignBoosterState.None ? string.IsNullOrEmpty(commandId) :
++            state >= CampaignBoosterState.Reserved && state <= CampaignBoosterState.Refunded &&
++            Guid.TryParseExact(commandId, "N", out _));
+     }
+ 
+     [Serializable]
+@@ -136,6 +150,8 @@
+         // Optional v6 extension with its own schema; legacy saves simply have no retained attempt.
+         public RetainedRoundData retainedRound;
+         public List<ContinuationTransactionData> continuationTransactions = new List<ContinuationTransactionData>();
++        // Optional v6 extension. One durable receipt protects the ordinary board's in-flight booster.
++        public BoosterCommandReceipt boosterCommand = new BoosterCommandReceipt();
+     }
+ 
+     public sealed partial class GameState : MonoBehaviour
+@@ -171,6 +187,7 @@
+             if (LastLoadResult.CanPersist)
+             {
+                 MigrateSave();
++                TryRecoverPendingBoosterCommand();
+             }
+             else
+             {
+@@ -413,16 +430,31 @@
+ 
+         public bool SpendEnergy(int amount = 1)
+         {
+-            RefreshEnergyFromClock();
+-            if (Save.energy < amount) return false;
+-
+-            bool wasFull = Save.energy >= Save.energyMax;
+-            Save.energy -= amount;
++            if (!canPersist || amount < 0) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            long now = DateTime.UtcNow.Ticks;
++            if (candidate.energy >= candidate.energyMax)
++            {
++                candidate.energy = candidate.energyMax;
++                candidate.lastEnergyUtcTicks = now;
++            }
++            else
++            {
++                long interval = TimeSpan.FromMinutes(EnergyRefillMinutes).Ticks;
++                int gained = (int)(Math.Max(0, now - candidate.lastEnergyUtcTicks) / interval);
++                if (gained > 0)
++                {
++                    candidate.energy = Mathf.Min(candidate.energyMax, candidate.energy + gained);
++                    candidate.lastEnergyUtcTicks = candidate.energy >= candidate.energyMax
++                        ? now : candidate.lastEnergyUtcTicks + gained * interval;
++                }
++            }
++            if (candidate.energy < amount) return false;
++            bool wasFull = candidate.energy >= candidate.energyMax;
++            candidate.energy -= amount;
+             if (wasFull)
+-                Save.lastEnergyUtcTicks = DateTime.UtcNow.Ticks;
+-
+-            Persist();
+-            return true;
++                candidate.lastEnergyUtcTicks = now;
++            return TryCommitBalance(candidate);
+         }
+ 
+         public void AddEnergy(int amount)
+@@ -454,6 +486,12 @@
+             try { apply(candidate, Mathf.Max(0, amount)); }
+             catch (OverflowException) { return false; }
+ 
++            return TryCommitBalance(candidate);
++        }
++
++        bool TryCommitBalance(PlayerSaveData candidate)
++        {
++            if (!canPersist) return false;
+             bool written = SaveService.TrySave(candidate, out var result);
+             LastWriteResult = result;
+             if (!written && !result.PrimaryDurablyCommitted)
+@@ -472,10 +510,10 @@
+ 
+         public bool SpendGold(int amount)
+         {
+-            if (amount < 0 || Save.gold < amount) return false;
+-            Save.gold -= amount;
+-            Persist();
+-            return true;
++            if (!canPersist || amount < 0 || Save.gold < amount) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            candidate.gold -= amount;
++            return TryCommitBalance(candidate);
+         }
+ 
+         public void AddGems(int amount) => TryAddGems(amount);
+@@ -485,10 +523,10 @@
+ 
+         public bool SpendGems(int amount)
+         {
+-            if (amount < 0 || Save.gems < amount) return false;
+-            Save.gems -= amount;
+-            Persist();
+-            return true;
++            if (!canPersist || amount < 0 || Save.gems < amount) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            candidate.gems -= amount;
++            return TryCommitBalance(candidate);
+         }
+ 
+         public bool IsLevelUnlocked(int chapterId, int levelId)
+@@ -617,7 +655,7 @@
+                 );
+             }
+ 
+-            if (!canPersist) return false;
++            if (!canPersist || HasPendingBoosterCommand) return false;
+             var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
+             if (candidate.levelProgress == null) candidate.levelProgress = new List<LevelProgressData>();
+             LevelProgressData progress = candidate.levelProgress.Find(p => p != null &&
+@@ -768,31 +806,45 @@
+ 
+         public bool TryUseBooster(BoosterType type)
+         {
+-            switch (type)
+-            {
+-                case BoosterType.BogatyrMace:
+-                    if (Save.boosterMace <= 0) return false;
+-                    Save.boosterMace--;
+-                    break;
+-                case BoosterType.Firebird:
+-                    if (Save.boosterFirebird <= 0) return false;
+-                    Save.boosterFirebird--;
+-                    break;
+-                case BoosterType.LivingLight:
+-                    if (Save.boosterLivingLight <= 0) return false;
+-                    Save.boosterLivingLight--;
+-                    break;
+-                case BoosterType.SeaPearl:
+-                    if (Save.boosterSeaPearl <= 0) return false;
+-                    Save.boosterSeaPearl--;
+-                    break;
+-                default:
+-                    return false;
+-            }
+-
+-            Persist();
++            if (!canPersist || !CampaignBoosterTransactions.Known(type) || BoosterCount(type) < 1) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            CampaignBoosterTransactions.Add(candidate, type, -1);
++            return TryCommitBalance(candidate);
++        }
++
++        public bool HasPendingBoosterCommand => Save.boosterCommand != null &&
++            Save.boosterCommand.state == CampaignBoosterState.Reserved;
++
++        public bool TryBeginBoosterCommand(BoosterType type, out string commandId)
++        {
++            commandId = null;
++            if (!canPersist || HasPendingBoosterCommand || !CampaignBoosterTransactions.Known(type) || BoosterCount(type) < 1) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            CampaignBoosterTransactions.Add(candidate, type, -1);
++            candidate.boosterCommand = new BoosterCommandReceipt
++            { commandId = Guid.NewGuid().ToString("N"), type = type, state = CampaignBoosterState.Reserved };
++            if (!TryCommitBalance(candidate)) return false;
++            commandId = candidate.boosterCommand.commandId;
+             return true;
+         }
++
++        public bool TrySettleBoosterCommand(string commandId, bool applied)
++        {
++            var receipt = Save.boosterCommand;
++            if (receipt == null || !receipt.IsValid || string.IsNullOrEmpty(commandId) || receipt.commandId != commandId) return false;
++            var target = applied ? CampaignBoosterState.Applied : CampaignBoosterState.Refunded;
++            if (receipt.state == target) return true;
++            if (!canPersist || receipt.state != CampaignBoosterState.Reserved) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            try { if (!applied) CampaignBoosterTransactions.Add(candidate, receipt.type, 1); }
++            catch (OverflowException) { return false; }
++            candidate.boosterCommand.state = target;
++            return TryCommitBalance(candidate);
++        }
++
++        // Call after the owning board is lost. A reserved effect has no committed round result.
++        public bool TryRecoverPendingBoosterCommand() => !HasPendingBoosterCommand ||
++            TrySettleBoosterCommand(Save.boosterCommand.commandId, applied: false);
+ 
+         public void AddBooster(BoosterType type, int amount = 1) => TryAddBooster(type, amount);
+ 
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/Match3Board.cs
+@@ -61,6 +61,7 @@
+         const float DefaultCommandTimeoutSeconds = 10f;
+         float commandTimeoutSeconds = DefaultCommandTimeoutSeconds;
+         bool recoveringCommand;
++        bool refundPending;
+ 
+         bool lastWaveVerificationPassed = true;
+         int lastVerifiedWaveCount;
+@@ -86,6 +87,11 @@
+         public event Action<BoardObstacleInteractionInstruction> ObstacleInteracted;
+         public event Action<BoardObjectiveItemCollection> ObjectiveItemCollected;
+         public event Action<string> CommandRejected;
++        public event Action<Match3Board> InventoryRecoveryRequired;
++        public bool HasInventoryRecoveryError => refundPending ||
++            (!campaignManaged && GameState.Instance != null && (!GameState.Instance.CanPersist ||
++            GameState.Instance.HasPendingBoosterCommand && (activeCommand == null ||
++            activeCommand.BoosterCommandId != GameState.Instance.Save.boosterCommand.commandId)));
+         public event Action<GameplayMotionEvent> MotionEventPublished;
+ 
+         public int Moves => moves;
+@@ -102,7 +108,7 @@
+         public int RedRemaining => GoalSlot1Remaining;
+         public int BlueRemaining => GoalSlot2Remaining;
+         public GameplayPhase Phase => interaction.Current;
+-        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && interaction.CanAcceptPointerInput;
++        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && !HasInventoryRecoveryError && interaction.CanAcceptPointerInput;
+         public string BoardStateHash => model != null ? model.ComputeStateHash() : string.Empty;
+         public int? BoardSeed => model != null ? model.Seed : null;
+         public string BoardReplayToken =>
+@@ -923,8 +929,7 @@
+                     return;
+                 }
+ 
+-                var state = GameState.Instance;
+-                if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
++                if (!ConsumeCommandBooster(type))
+                 {
+                     CompleteRuntimeCommand();
+                     LastRejectedCommandReason = "Booster inventory is empty.";
+@@ -936,11 +941,11 @@
+                         GameplayBoosterKind.SeaPearl
+                     );
+                     SafeCommandRejected(LastRejectedCommandReason);
+-                    ShowLegacyToast("Жемчужина закончилась.");
++                    if (!HasInventoryRecoveryError) ShowLegacyToast("Жемчужина закончилась.");
++                    PauseForBlockedInventory();
+                     return;
+                 }
+ 
+-                MarkActiveCommandBoosterConsumed(type);
+                 EnsurePhase(GameplayPhase.ActivatingSpecials);
+                 PublishBoosterMotion(
+                     GameplayMotionKind.BoosterActivated,
+@@ -1108,8 +1113,7 @@
+                 yield break;
+             }
+ 
+-            var state = GameState.Instance;
+-            if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
++            if (!ConsumeCommandBooster(type))
+             {
+                 CompleteRuntimeCommand();
+                 armedBooster = null;
+@@ -1123,11 +1127,11 @@
+                     boosterKind
+                 );
+                 SafeCommandRejected(LastRejectedCommandReason);
+-                ShowLegacyToast("Этот бустер закончился.");
++                if (!HasInventoryRecoveryError) ShowLegacyToast("Этот бустер закончился.");
++                PauseForBlockedInventory();
+                 yield break;
+             }
+ 
+-            MarkActiveCommandBoosterConsumed(type);
+             armedBooster = null;
+             EnsurePhase(GameplayPhase.ActivatingSpecials);
+             int boosterAffectedCount = FirstWaveAffectedCount(plan);
+@@ -1687,7 +1691,9 @@
+             BoardResolutionPlan plan
+         )
+         {
+-            if (CampaignInventoryBlocked) return false;
++            if (CampaignInventoryBlocked || HasInventoryRecoveryError) { PauseForBlockedInventory(); return false; }
++            if (!campaignManaged && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand && activeCommand == null)
++            { interaction.Force(GameplayPhase.Paused); SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired"); return false; }
+             if (activeCommand != null)
+             {
+                 Debug.LogError(
+@@ -1715,9 +1721,27 @@
+             return true;
+         }
+ 
+-        void MarkActiveCommandBoosterConsumed(BoosterType booster)
+-        {
+-            activeCommand?.MarkBoosterConsumed(booster);
++        void PauseForBlockedInventory()
++        {
++            if (!HasInventoryRecoveryError) return;
++            interaction.Force(GameplayPhase.Paused);
++            SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
++        }
++
++        bool ConsumeCommandBooster(BoosterType type)
++        {
++            string commandId = null;
++            bool consumed = campaignManaged ? campaignInventory.Consume(type) :
++                GameState.Instance != null && GameState.Instance.TryBeginBoosterCommand(type, out commandId);
++            if (consumed) activeCommand?.MarkBoosterConsumed(type, commandId);
++            return consumed;
++        }
++
++        bool RefundCommand(RuntimeCommandTransaction command)
++        {
++            if (!command.ConsumedBooster.HasValue) return true;
++            return campaignManaged ? campaignInventory != null && campaignInventory.Refund() :
++                GameState.Instance != null && GameState.Instance.TrySettleBoosterCommand(command.BoosterCommandId, applied: false);
+         }
+ 
+         bool CompleteRuntimeCommand()
+@@ -1726,6 +1750,12 @@
+             if (campaignManaged && activeCommand.ConsumedBooster.HasValue && !campaignInventory.Complete())
+             {
+                 commandWatchdog.Cancel(); activeCommand = null; interaction.Force(GameplayPhase.Paused); return false;
++            }
++            if (!campaignManaged && activeCommand.ConsumedBooster.HasValue &&
++                (GameState.Instance == null || !GameState.Instance.TrySettleBoosterCommand(activeCommand.BoosterCommandId, applied: true)))
++            {
++                RecoverActiveCommand("Booster completion could not be committed.");
++                return false;
+             }
+             commandWatchdog.Complete(activeCommand.Token);
+             activeCommand = null;
+@@ -1735,7 +1765,7 @@
+ 
+         void RecoverActiveCommand(string reason)
+         {
+-            if (recoveringCommand || activeCommand == null)
++            if (recoveringCommand || refundPending || activeCommand == null)
+                 return;
+ 
+             recoveringCommand = true;
+@@ -1756,20 +1786,20 @@
+             if (goalRuntime != null && failed.GoalsBefore != null)
+                 goalRuntime.RestoreSnapshot(failed.GoalsBefore);
+ 
+-            if (campaignManaged && failed.ConsumedBooster.HasValue) campaignInventory?.Refund();
+-            if (!campaignManaged && failed.ConsumedBooster.HasValue && GameState.Instance != null)
+-                GameState.Instance.AddBooster(failed.ConsumedBooster.Value, 1);
++            bool refunded = RefundCommand(failed);
++            refundPending = !refunded;
+ 
+             armedBooster = null;
+             selected = new Vector2Int(-1, -1);
+-            activeCommand = null;
++            if (refunded) activeCommand = null;
+             ResetVisualTransforms();
+             RefreshAll();
+-            interaction.Force(GameplayPhase.Idle);
++            bool canResume = refunded && !HasInventoryRecoveryError && !CampaignInventoryBlocked;
++            interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused);
+             PublishState();
+ 
+             lastWaveVerificationPassed = false;
+-            PublishMotion(
++            if (refunded) PublishMotion(
+                 GameplayMotionKind.CommandRecovered,
+                 new Vector2Int(0, 0),
+                 new Vector2Int(0, 0),
+@@ -1781,12 +1811,13 @@
+                 recoveredBooster
+             );
+             Debug.LogError(
+-                $"Gameplay command recovered: {failed.Label}. " +
++                $"Gameplay command {(refunded ? "recovered" : "recovery pending")}: {failed.Label}. " +
+                 $"Reason={reason}; board={model.ComputeStateHash()}"
+             );
+-            ShowLegacyToast(
++            if (refunded) ShowLegacyToast(
+                 "Ход восстановлен после ошибки анимации. Повторите действие."
+             );
++            if (!canResume) SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
+             recoveringCommand = false;
+         }
+ 
+@@ -2123,10 +2154,10 @@
+             if (
+                 !campaignManaged && consumedBooster.HasValue &&
+                 GameState.Instance != null &&
+-                GameState.Instance.TryUseBooster(consumedBooster.Value)
++                ConsumeCommandBooster(consumedBooster.Value)
+             )
+             {
+-                MarkActiveCommandBoosterConsumed(consumedBooster.Value);
++                // The normal durable reservation was made by ConsumeCommandBooster.
+             }
+ 
+             interaction.Force(GameplayPhase.ResolvingMatches);
+@@ -2146,6 +2177,23 @@
+ 
+         public bool TryResume()
+         {
++            if (refundPending)
++            {
++                if (activeCommand == null || !RefundCommand(activeCommand)) return false;
++                var failed = activeCommand;
++                refundPending = false; activeCommand = null;
++                bool canResume = !HasInventoryRecoveryError && !CampaignInventoryBlocked;
++                interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused); PublishState();
++                PublishMotion(GameplayMotionKind.CommandRecovered, Vector2Int.zero, Vector2Int.zero,
++                    0, 0, SpecialGem.None, lastResolutionPlanHash, SpecialCombinationKind.None,
++                    ToGameplayBooster(failed.Label, failed.ConsumedBooster));
++                return canResume;
++            }
++            if (!campaignManaged && activeCommand == null && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand)
++            {
++                if (!GameState.Instance.TryRecoverPendingBoosterCommand()) return false;
++            }
++            if (CampaignInventoryBlocked || HasInventoryRecoveryError) return false;
+             return interaction.TryResume();
+         }
+ 
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/RuntimeCommandTransaction.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Gameplay/RuntimeCommandTransaction.cs
+@@ -11,6 +11,7 @@
+         public int ScoreBefore { get; }
+         public LevelGoalRuntimeSnapshot GoalsBefore { get; }
+         public BoosterType? ConsumedBooster { get; private set; }
++        public string BoosterCommandId { get; private set; }
+ 
+         public RuntimeCommandTransaction(
+             long token,
+@@ -29,9 +30,10 @@
+             GoalsBefore = goalsBefore;
+         }
+ 
+-        public void MarkBoosterConsumed(BoosterType booster)
++        public void MarkBoosterConsumed(BoosterType booster, string commandId = null)
+         {
+             ConsumedBooster = booster;
++            BoosterCommandId = commandId;
+         }
+     }
+ }
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerSavePayloadCodec.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Services/PlayerSavePayloadCodec.cs
+@@ -130,6 +130,14 @@
+                 return false;
+             }
+ 
++            // An absent extension keeps legacy v6 saves valid; malformed receipts cannot grant stock.
++            if (data.boosterCommand != null && !data.boosterCommand.IsValid)
++            {
++                data = null;
++                diagnosticCode = "SAVE_BOOSTER_COMMAND_INVALID";
++                return false;
++            }
++
+             // JsonUtility may retain field initializers for an omitted field.
+             // The inspected legacy version is authoritative.
+             data.saveVersion = declaredVersion;
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ScreenRouter.cs
+@@ -196,7 +196,8 @@
+             {
+                 if(!IsModalTransitioning)
+                 {
+-                    if(IsPendingGameplayVictory(activeBoard))CloseRejectedGameplayVictory(activeBoard);
++                    if(IsGameplayInventoryError(activeBoard))CloseGameplayInventoryError(activeBoard);
++                    else if(IsPendingGameplayVictory(activeBoard))CloseRejectedGameplayVictory(activeBoard);
+                     else CloseModal();
+                 }
+                 return;
+@@ -1127,9 +1128,20 @@
+         void StartLevel()
+         {
+             if (GameState.Instance.TryGetRetainedRound(out _)) { Show(ScreenId.Fail); return; }
++            if (!GameState.Instance.CanPersist) { ShowErrorDialog(); return; }
++            if (!GameState.Instance.TryRecoverPendingBoosterCommand() || !GameState.Instance.CanPersist)
++            {
++                ShowErrorDialog(GameState.Instance.CanPersist ? (Action)StartLevel : null);
++                return;
++            }
+             GameState.Instance.EnsureSelectedLevelIsUnlocked();
+             if (!GameState.Instance.SpendEnergy())
+             {
++                if (!GameState.Instance.CanPersist)
++                {
++                    ShowErrorDialog();
++                    return;
++                }
+                 LevelData selected = ChapterLevelCatalog.ResolveSelected(
+                     GameState.Instance.Save
+                 );
+@@ -1572,7 +1584,8 @@
+ 
+         void ResumeAfterPauseClose()
+         {
+-            activeBoard?.TryResume();
++            if (activeBoard != null && !activeBoard.TryResume() && IsGameplayInventoryError(activeBoard))
++                StartCoroutine(ShowGameplayInventoryError(activeBoard));
+         }
+ 
+         void RestartAfterPauseClose()
+@@ -1587,6 +1600,28 @@
+             CancelActiveGameplayAnalytics();
+             activeBoard?.TryResume();
+             Show(ScreenId.ChapterMap);
++        }
++
++        bool IsGameplayInventoryError(Match3Board board) => board != null && board == activeBoard &&
++            current == ScreenId.Gameplay && board.Phase == LegendsOfRus.GameplayCore.GameplayPhase.Paused &&
++            board.HasInventoryRecoveryError;
++
++        void CloseGameplayInventoryError(Match3Board board)
++        {
++            RequestCloseModal(() => { if(IsGameplayInventoryError(board))Show(ScreenId.ChapterMap); });
++        }
++
++        IEnumerator ShowGameplayInventoryError(Match3Board board)
++        {
++            while(IsGameplayInventoryError(board) && (IsScreenTransitioning || modalMotionState != ModalMotionState.Closed))
++                yield return null;
++            if(!IsGameplayInventoryError(board) || !ShowModal(ScreenId.EmptyErrorState))yield break;
++            var error=modalVisualRoot.GetComponentInChildren<ProductionErrorDialogView>();
++            Action retry=GameState.Instance.CanPersist ? (Action)(() => RequestCloseModal(() =>
++            {
++                if(IsGameplayInventoryError(board) && !board.TryResume())StartCoroutine(ShowGameplayInventoryError(board));
++            })) : null;
++            error.Bind(() => CloseGameplayInventoryError(board),retry);
+         }
+ 
+         bool IsPendingGameplayVictory(Match3Board board)
+@@ -1640,6 +1675,7 @@
+ 
+             var board = boardGo.GetComponent<Match3Board>();
+             activeBoard = board;
++            board.InventoryRecoveryRequired += failed => StartCoroutine(ShowGameplayInventoryError(failed));
+             activeBoard.Initialize(
+                 onWin: score => CommitGameplayVictory(board,score),
+                 onFail: score =>
+--- a/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopVfxBoosterFeedbackPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/CoreLoopVfxBoosterFeedbackPlayModeTests.cs
+@@ -728,6 +728,9 @@
+             Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash));
+             Assert.That(board.Moves, Is.EqualTo(beforeMoves + 5));
+             Assert.That(state.BoosterCount(BoosterType.SeaPearl), Is.EqualTo(beforeInventory - 1));
++            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Applied));
++            Assert.That(state.Save.boosterCommand.type, Is.EqualTo(BoosterType.SeaPearl));
++            expectedSave.boosterCommand = state.Save.boosterCommand;
+             Assert.That(
+                 JsonUtility.ToJson(state.Save),
+                 Is.EqualTo(JsonUtility.ToJson(expectedSave))
+@@ -782,7 +785,11 @@
+             Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Idle));
+             Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash));
+             Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(beforeInventory));
+-            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(beforeSave));
++            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Refunded));
++            Assert.That(state.Save.boosterCommand.type, Is.EqualTo(BoosterType.Firebird));
++            var expectedRecovery = JsonUtility.FromJson<PlayerSaveData>(beforeSave);
++            expectedRecovery.boosterCommand = state.Save.boosterCommand;
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expectedRecovery)));
+             Assert.That(IndexOf(motions, GameplayMotionKind.BoosterActivated), Is.GreaterThanOrEqualTo(0));
+             Assert.That(IndexOf(motions, GameplayMotionKind.BoosterCompleted), Is.EqualTo(-1));
+             Assert.That(IndexOf(motions, GameplayMotionKind.CommandRecovered), Is.GreaterThanOrEqualTo(0));
+--- a/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/GameplayAlignmentPlayModeTests.cs
+@@ -315,6 +315,63 @@
+             Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(inventory-1));Assert.That(view.BoosterCounts[3].text,Is.EqualTo((inventory-1).ToString()));
+         }
+ 
++        IEnumerator WaitForInventoryError()
++        {
++            float deadline=Time.realtimeSinceStartup+5;
++            while(router.ActiveModal!=ScreenId.EmptyErrorState && Time.realtimeSinceStartup<deadline)yield return null;
++            Settle();yield return null;
++            Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++        }
++
++        [UnityTest]
++        public IEnumerator SpendingNativeRefundRetryExitAndStaleCallbacksInBothLanguages()
++        {
++            var state=GameState.Instance;Assert.That(state.SpendEnergy(1),Is.True);
++            foreach(string language in new[]{"ru","en"})
++            {
++                router.Show(ScreenId.Gameplay);Settle();yield return null;
++                DemoFeatureState.SetLanguage(language);
++                var view=Root().GetComponentInChildren<ProductionGameplayView>();var board=view.Board;
++                var target=new BoardPosition(3,3);
++                string hash=board.BoardStateHash;int moves=board.Moves,score=board.Score;
++                ClickCardEdge(view.Footer.Find("BoosterCard_1").GetComponent<ProductionGameplayBoosterCard>());
++                Assert.That(board.TapCell(target.X,target.Y),Is.True);
++                Assert.That(state.HasPendingBoosterCommand,Is.True);string id=state.Save.boosterCommand.commandId;
++                Assert.That(state.TryAddBooster(BoosterType.Firebird,int.MaxValue-state.BoosterCount(BoosterType.Firebird)),Is.True);
++                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: booster:FirebirdArea"));
++                board.ForceCommandTimeoutForTesting();yield return WaitForInventoryError();
++                Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Paused));Assert.That(board.BoardStateHash,Is.EqualTo(hash));
++                Assert.That(board.Moves,Is.EqualTo(moves));Assert.That(board.Score,Is.EqualTo(score));
++                var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error.Retry.interactable,Is.True);
++                error.Retry.onClick.Invoke();Settle();yield return WaitForInventoryError();
++                Assert.That(state.Save.boosterCommand.commandId,Is.EqualTo(id));Assert.That(state.HasPendingBoosterCommand,Is.True);
++                Assert.That(state.TryUseBooster(BoosterType.Firebird),Is.True);
++                error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();var stale=error.Retry.onClick;
++                error.Retry.onClick.Invoke();error.Retry.onClick.Invoke();Settle();yield return null;
++                Assert.That(router.ActiveModal,Is.Null);Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Idle));
++                Assert.That(state.Save.boosterCommand.state,Is.EqualTo(CampaignBoosterState.Refunded));
++                Assert.That(state.BoosterCount(BoosterType.Firebird),Is.EqualTo(int.MaxValue));
++                Assert.That(SaveService.Load().boosterCommand.state,Is.EqualTo(CampaignBoosterState.Refunded));
++                Capture("Gameplay_RefundRecovered_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
++
++                ClickCardEdge(view.Footer.Find("BoosterCard_1").GetComponent<ProductionGameplayBoosterCard>());
++                Assert.That(board.TapCell(target.X,target.Y),Is.True);
++                Assert.That(state.TryAddBooster(BoosterType.Firebird,1),Is.True);
++                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: booster:FirebirdArea"));
++                board.ForceCommandTimeoutForTesting();yield return WaitForInventoryError();
++                Capture("Gameplay_RefundPending_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672),allowBlockingModal:true);
++                router.NavigateBack();Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(state.HasPendingBoosterCommand,Is.True);
++                Assert.That(SaveService.Load().boosterCommand.state,Is.EqualTo(CampaignBoosterState.Reserved));
++                Assert.That(state.TryUseBooster(BoosterType.Firebird),Is.True);
++                router.Show(ScreenId.PreLevel);Settle();yield return null;
++                router.Viewport.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));Assert.That(state.HasPendingBoosterCommand,Is.False);
++                string committed=JsonUtility.ToJson(state.Save);stale.Invoke();Settle();yield return null;
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(committed));
++            }
++        }
++
+         [UnityTest]
+         public IEnumerator NativePauseKeepsTheSameBoardAndBlocksBoosterInput()
+         {
+@@ -544,7 +601,7 @@
+             public Rect safeArea;
+         }
+ 
+-        void Capture(string name, Vector2Int size, Rect safeArea, Action<Camera> inspect = null)
++        void Capture(string name, Vector2Int size, Rect safeArea, Action<Camera> inspect = null, bool allowBlockingModal = false)
+         {
+             string directory = Environment.GetEnvironmentVariable("LOR_GAMEPLAY_CAPTURE_DIR");
+             Assert.That(directory, Is.Not.Null.And.Not.Empty);
+@@ -578,7 +635,18 @@
+                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
+                 Canvas.ForceUpdateCanvases();
+ 
+-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionGameplayView>(),camera,size,safeArea);
++                if (allowBlockingModal)
++                {
++                    Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++                    Assert.That(Root().GetComponentInChildren<ProductionGameplayView>().Board.CanAcceptPointerInput,Is.False);
++                    var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();
++                    var hits=new List<RaycastResult>();
++                    EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current)
++                    {position=Bounds((RectTransform)error.Close.transform,camera).center},hits);
++                    Assert.That(hits,Is.Not.Empty);
++                    Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(error.Close));
++                }
++                else VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionGameplayView>(),camera,size,safeArea);
+                 inspect?.Invoke(camera);
+                 camera.Render(); RenderTexture.active = target;
+                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -638,6 +638,194 @@
+             finally { state.Changed -= changed; }
+         }
+ 
++        static bool SpendResource(GameState state, int resource, int amount = 1)
++        {
++            if (resource == 0) return state.SpendGold(amount);
++            if (resource == 1) return state.SpendGems(amount);
++            if (resource == 2) return state.SpendEnergy(amount);
++            if (resource == 7) return state.TryBeginBoosterCommand(BoosterType.Firebird, out _);
++            return state.TryUseBooster((BoosterType)(resource - 3));
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
++        [TestCase(4)] [TestCase(5)] [TestCase(6)] [TestCase(7)]
++        public void SpendingBlockedWriteCannotDebitOrReportSuccess(int resource)
++        {
++            var state = GameState.Instance;
++            Assert.That(state.SpendEnergy(1), Is.True);
++            var original = state.Save; string before = JsonUtility.ToJson(original);
++            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(before); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            bool ignored = LogAssert.ignoreFailingMessages;
++            try
++            {
++                LogAssert.ignoreFailingMessages = true;
++                bool spent = SpendResource(state, resource);
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before), "No debit before durable commitment.");
++                Assert.That(spent, Is.False); Assert.That(state.Save, Is.SameAs(original)); Assert.That(events, Is.Zero);
++                Assert.That(state.CanPersist, Is.False); var failedWrite = state.LastWriteResult;
++                Assert.That(failedWrite.Status, Is.EqualTo(PlayerSaveWriteStatus.WriteBlocked));
++                for (int other = 0; other < 8; other++) Assert.That(SpendResource(state, other), Is.False);
++                Assert.That(state.LastWriteResult, Is.SameAs(failedWrite)); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before));
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++                Assert.That(PlayerPrefs.HasKey(PersistedSaveKeys[1]) || PlayerPrefs.HasKey(PersistedSaveKeys[2]), Is.False);
++            }
++            finally
++            {
++                LogAssert.ignoreFailingMessages = ignored; state.Changed -= changed;
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
++        [Test]
++        public void SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation()
++        {
++            var state = GameState.Instance; string before = JsonUtility.ToJson(state.Save); var priorWrite = state.LastWriteResult;
++            Assert.That(state.SpendEnergy(-1), Is.False);
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before)); Assert.That(state.LastWriteResult, Is.SameAs(priorWrite));
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
++        [TestCase(4)] [TestCase(5)] [TestCase(6)]
++        public void SpendingSuccessCommitsOnlyItsBalanceAndReloads(int resource)
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True);
++            var expected = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));
++            if (resource == 0) expected.gold--;
++            else if (resource == 1) expected.gems--;
++            else if (resource == 2) expected.energy--;
++            else SetOrdinaryCreditBalance(expected, resource - 1, state.BoosterCount((BoosterType)(resource - 3)) - 1);
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(SpendResource(state, resource), Is.True); Assert.That(events, Is.EqualTo(1));
++                Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(JsonUtility.ToJson(expected)));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(expected)));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [Test]
++        public void SpendingInvalidInsufficientAndEnergyClockBoundaries()
++        {
++            var state = GameState.Instance; var original = state.Save; var write = state.LastWriteResult;
++            string before = JsonUtility.ToJson(original);
++            Assert.That(state.SpendGold(-1) || state.SpendGems(-1) || state.SpendEnergy(int.MinValue), Is.False);
++            Assert.That(state.SpendGold(int.MaxValue) || state.SpendGems(int.MaxValue) || state.SpendEnergy(int.MaxValue), Is.False);
++            Assert.That(state.TryUseBooster((BoosterType)99), Is.False);
++            Assert.That(state.Save, Is.SameAs(original)); Assert.That(state.LastWriteResult, Is.SameAs(write));
++            Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before));
++            state.Save.energy = 0; state.Save.lastEnergyUtcTicks = System.DateTime.UtcNow.AddMinutes(-31).Ticks; state.Persist();
++            Assert.That(state.SpendEnergy(), Is.True); Assert.That(state.Save.energy, Is.Zero);
++            Assert.That(state.SpendEnergy(), Is.False); Assert.That(state.Save.energy, Is.Zero);
++            Assert.That(state.SpendGold(0) && state.SpendGems(0) && state.SpendEnergy(0), Is.True);
++        }
++
++        [TestCase(BoosterType.BogatyrMace, false)] [TestCase(BoosterType.Firebird, false)]
++        [TestCase(BoosterType.LivingLight, false)] [TestCase(BoosterType.SeaPearl, false)]
++        [TestCase(BoosterType.BogatyrMace, true)] [TestCase(BoosterType.Firebird, true)]
++        [TestCase(BoosterType.LivingLight, true)] [TestCase(BoosterType.SeaPearl, true)]
++        public void SpendingBoosterReceiptSettlesOnceAndRejectsConflictingSettlement(BoosterType type, bool applied)
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True); int before = state.BoosterCount(type);
++            int events = 0; System.Action changed = () => events++; state.Changed += changed;
++            try
++            {
++                Assert.That(state.TryBeginBoosterCommand(type, out string id), Is.True);
++                Assert.That(System.Guid.TryParseExact(id, "N", out _), Is.True);
++                Assert.That(state.BoosterCount(type), Is.EqualTo(before - 1)); Assert.That(state.HasPendingBoosterCommand, Is.True);
++                Assert.That(SaveService.Load().boosterCommand.commandId, Is.EqualTo(id));
++                Assert.That(state.TryBeginBoosterCommand(type, out _), Is.False);
++                Assert.That(state.TryCompleteLevel(ChapterLevelCatalog.Find(1,1),15000,out var premature),Is.False);
++                Assert.That(premature,Is.Null);
++                Assert.That(state.TrySettleBoosterCommand(id, applied), Is.True);
++                Assert.That(state.BoosterCount(type), Is.EqualTo(applied ? before - 1 : before));
++                Assert.That(state.HasPendingBoosterCommand, Is.False); Assert.That(events, Is.EqualTo(2));
++                var written = state.LastWriteResult; var committed = state.Save;
++                Assert.That(state.TrySettleBoosterCommand(id, applied), Is.True);
++                Assert.That(state.TrySettleBoosterCommand(id, !applied), Is.False);
++                Assert.That(state.Save, Is.SameAs(committed)); Assert.That(state.LastWriteResult, Is.SameAs(written)); Assert.That(events, Is.EqualTo(2));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(state.Save)));
++            }
++            finally { state.Changed -= changed; }
++        }
++
++        [TestCase(BoosterType.BogatyrMace)] [TestCase(BoosterType.Firebird)]
++        [TestCase(BoosterType.LivingLight)] [TestCase(BoosterType.SeaPearl)]
++        public void SpendingFreshGameStateRecoversAbandonedReceiptExactlyOnce(BoosterType type)
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True); int before = state.BoosterCount(type);
++            Assert.That(state.TryBeginBoosterCommand(type, out string id), Is.True);
++            Assert.That(SaveService.Load().boosterCommand.state, Is.EqualTo(CampaignBoosterState.Reserved));
++            var freshObject = new GameObject("FreshSpendingRecoveryState");
++            try
++            {
++                var fresh = freshObject.AddComponent<GameState>();
++                Assert.That(GameState.Instance, Is.SameAs(fresh)); Assert.That(fresh.HasPendingBoosterCommand, Is.False);
++                Assert.That(fresh.Save.boosterCommand.commandId, Is.EqualTo(id));
++                Assert.That(fresh.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Refunded));
++                Assert.That(fresh.BoosterCount(type), Is.EqualTo(before));
++                var write = fresh.LastWriteResult;
++                Assert.That(fresh.TryRecoverPendingBoosterCommand(), Is.True);
++                Assert.That(fresh.TrySettleBoosterCommand(id, false), Is.True); Assert.That(fresh.LastWriteResult, Is.SameAs(write));
++                Assert.That(JsonUtility.ToJson(SaveService.Load()), Is.EqualTo(JsonUtility.ToJson(fresh.Save)));
++            }
++            finally
++            {
++                typeof(GameState).GetProperty("Instance").SetValue(null, state);
++                Object.Destroy(freshObject);
++            }
++        }
++
++        [Test]
++        public void SpendingStaleReceiptCannotCreditNewCommandOrResetHistory()
++        {
++            var state = GameState.Instance;
++            Assert.That(state.TryBeginBoosterCommand(BoosterType.Firebird, out string old), Is.True);
++            Assert.That(state.TrySettleBoosterCommand(old, false), Is.True);
++            Assert.That(state.TryBeginBoosterCommand(BoosterType.Firebird, out string current), Is.True);
++            Assert.That(current, Is.Not.EqualTo(old)); string before = JsonUtility.ToJson(state.Save);
++            Assert.That(state.TrySettleBoosterCommand(old, false), Is.False); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before));
++            state.ResetProgress(); before = JsonUtility.ToJson(state.Save);
++            Assert.That(state.TrySettleBoosterCommand(current, false), Is.False); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(before));
++        }
++
++        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)] [TestCase(4)]
++        public void SpendingMalformedReceiptCannotBeWritten(int invalid)
++        {
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(GameState.Instance.Save));
++            candidate.boosterCommand = new BoosterCommandReceipt { commandId = System.Guid.NewGuid().ToString("N"), state = CampaignBoosterState.Reserved };
++            if (invalid == 0) candidate.boosterCommand.schemaVersion = 2;
++            if (invalid == 1) candidate.boosterCommand.commandId = "invalid";
++            if (invalid == 2) candidate.boosterCommand.type = (BoosterType)99;
++            if (invalid == 3) candidate.boosterCommand.state = (CampaignBoosterState)99;
++            if (invalid == 4) candidate.boosterCommand.state = CampaignBoosterState.None;
++            string primary = PlayerPrefs.GetString(PersistedSaveKeys[0]);
++            Assert.That(SaveService.TrySave(candidate, out var result), Is.False);
++            Assert.That(result.Status, Is.EqualTo(PlayerSaveWriteStatus.InvalidInput));
++            Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(primary));
++        }
++
++        [Test]
++        public void SpendingLegacyV6WithoutReceiptStillLoads()
++        {
++            var save = GameState.Instance.Save;
++            string raw = JsonUtility.ToJson(save).Replace(",\"boosterCommand\":" + JsonUtility.ToJson(save.boosterCommand), "");
++            Assert.That(raw.Contains("boosterCommand"), Is.False);
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            var loaded = SaveService.LoadWithResult(); Assert.That(loaded.CanPersist, Is.True);
++            Assert.That(loaded.Data.boosterCommand.state, Is.EqualTo(CampaignBoosterState.None));
++            Assert.That(loaded.Data.gold, Is.EqualTo(save.gold)); Assert.That(loaded.Data.boosterFirebird, Is.EqualTo(save.boosterFirebird));
++        }
++
+         [Test]
+         public void TutorialProgress_PersistsAndCannotBeCompletedTwice()
+         {
+--- a/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs
+@@ -282,6 +282,61 @@
+         }
+ 
+         [UnityTest]
++        public IEnumerator SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits()
++        {
++            var state = GameState.Instance; string beforeHash = board.BoardStateHash;
++            board.SimulateStuckCommandForTesting(BoosterType.Firebird);
++            Assert.That(board.HasActiveCommand, Is.True);
++            Assert.That(state.TryAddBooster(BoosterType.Firebird, int.MaxValue - state.BoosterCount(BoosterType.Firebird)), Is.True);
++            LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Gameplay command recover(ed|y pending): qa:stuck-command"));
++            board.ForceCommandTimeoutForTesting(); yield return null; yield return null;
++            Assert.That(board.BoardStateHash, Is.EqualTo(beforeHash)); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
++            Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Paused)); Assert.That(board.CanAcceptPointerInput, Is.False);
++            Assert.That(board.TryResume(), Is.False);
++            Assert.That(state.HasPendingBoosterCommand, Is.True);
++            Assert.That(SaveService.Load().boosterCommand.state, Is.EqualTo(CampaignBoosterState.Reserved));
++            int recovered = 0; board.MotionEventPublished += e => { if(e.Kind == GameplayMotionKind.CommandRecovered)recovered++; };
++            Assert.That(state.TryUseBooster(BoosterType.Firebird), Is.True);
++            Assert.That(board.TryResume(), Is.True); Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Idle));
++            Assert.That(board.HasActiveCommand, Is.False); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
++            Assert.That(state.Save.boosterCommand.state, Is.EqualTo(CampaignBoosterState.Refunded));
++            Assert.That(board.TryResume(), Is.False); board.ForceCommandTimeoutForTesting(); yield return null;
++            Assert.That(recovered, Is.EqualTo(1)); Assert.That(state.BoosterCount(BoosterType.Firebird), Is.EqualTo(int.MaxValue));
++        }
++
++        [UnityTest]
++        public IEnumerator SpendingRefundBlockedWriteRetainsReceiptAndCannotResume()
++        {
++            var state = GameState.Instance; Assert.That(state.SpendEnergy(1), Is.True);
++            string boardHash = board.BoardStateHash; int moves = board.Moves;
++            board.SimulateStuckCommandForTesting(BoosterType.Firebird);
++            var original = state.Save; string reserved = JsonUtility.ToJson(original);
++            var present = new bool[PersistedSaveKeys.Length]; var journal = new string[present.Length];
++            for (int i = 0; i < journal.Length; i++)
++            { present[i] = PlayerPrefs.HasKey(PersistedSaveKeys[i]); journal[i] = PlayerPrefs.GetString(PersistedSaveKeys[i]); }
++            var future = JsonUtility.FromJson<PlayerSaveData>(reserved); future.saveVersion = 999;
++            foreach (string key in PersistedSaveKeys) PlayerPrefs.DeleteKey(key);
++            string raw = JsonUtility.ToJson(future); PlayerPrefs.SetString(PersistedSaveKeys[0], raw); PlayerPrefs.Save();
++            try
++            {
++                LogAssert.Expect(LogType.Error, new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: qa:stuck-command"));
++                board.ForceCommandTimeoutForTesting(); yield return null; yield return null;
++                Assert.That(board.Phase, Is.EqualTo(GameplayPhase.Paused)); Assert.That(board.BoardStateHash, Is.EqualTo(boardHash));
++                Assert.That(board.Moves, Is.EqualTo(moves)); Assert.That(board.HasActiveCommand, Is.True);
++                Assert.That(state.Save, Is.SameAs(original)); Assert.That(JsonUtility.ToJson(state.Save), Is.EqualTo(reserved));
++                Assert.That(state.HasPendingBoosterCommand, Is.True); Assert.That(state.CanPersist, Is.False);
++                Assert.That(board.TryResume(), Is.False); Assert.That(board.CanAcceptPointerInput, Is.False);
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]), Is.EqualTo(raw));
++            }
++            finally
++            {
++                for (int i = 0; i < journal.Length; i++)
++                { PlayerPrefs.DeleteKey(PersistedSaveKeys[i]); if (present[i]) PlayerPrefs.SetString(PersistedSaveKeys[i], journal[i]); }
++                PlayerPrefs.Save();
++            }
++        }
++
++        [UnityTest]
+         public IEnumerator SpecialCombination_VerifiesEveryRuntimeWaveHash()
+         {
+             const string id = "special.row-column";
+--- a/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs
+@@ -109,6 +109,31 @@
+                 state.TryUseBooster(booster);Assert.That(view.BoosterCounts[i].text,Is.EqualTo((count+1).ToString()));
+             }
+             yield return null;
++        }
++
++        [UnityTest]
++        public IEnumerator SpendingBlockedSaveShowsErrorWithoutStartingOrSpendingEnergy()
++        {
++            var state=GameState.Instance;Assert.That(state.SpendEnergy(1),Is.True);
++            string before=JsonUtility.ToJson(state.Save);var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
++            var present=new bool[keys.Length];var journal=new string[keys.Length];
++            for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);PlayerPrefs.DeleteKey(keys[i]);}
++            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++            try
++            {
++                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Player save write blocked:"));
++                Root().GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();Settle();yield return null;
++                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
++                Assert.That(router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().Retry.interactable,Is.False);
++                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.CanPersist,Is.False);
++                Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
++                router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
++            }
++            finally
++            {
++                for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}
++                PlayerPrefs.Save();
++            }
+         }
+ 
+         [UnityTest]

@@ -1,0 +1,72 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 25.31060481071472,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "SelectionRejectedWritePreservesSelectionAndLockedState;SelectionNormalizationRejectedWritePreservesExactSave;SelectionRejectedNativeNodeStaysOnMapWithError;SelectionRejectedNativePlayStaysOnMapWithError",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SelectionRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-selection-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-selection-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-selection-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "6",
+    "result": "Failed(Child)",
+    "total": "6",
+    "passed": "0",
+    "failed": "6",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 20:11:07Z",
+    "end-time": "2026-10-03 20:11:08Z",
+    "duration": "0.9112871"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.SelectionRejectedNativeNodeStaysOnMapWithError",
+      "result": "Failed",
+      "message": "  Expected: ChapterMap\n  But was:  PreLevel\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.ChapterMapAlignmentPlayModeTests.SelectionRejectedNativePlayStaysOnMapWithError",
+      "result": "Failed",
+      "message": "  Expected: ChapterMap\n  But was:  PreLevel\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionNormalizationRejectedWritePreservesExactSave(False)",
+      "result": "Failed",
+      "message": "  Expected string length 1086 but was 1088. Strings differ at index 126.\n  Expected: \"...678910460,\"chapter\":1,\"level\":1,\"stars\":0,\"storyStage\":0,\"...\"\n  But was:  \"...678910460,\"chapter\":1,\"level\":500,\"stars\":0,\"storyStage\":0...\"\n  --------------------------------------------^\n\nTearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionNormalizationRejectedWritePreservesExactSave(True)",
+      "result": "Failed",
+      "message": "  Expected string length 1086 but was 1088. Strings differ at index 126.\n  Expected: \"...679244070,\"chapter\":1,\"level\":1,\"stars\":0,\"storyStage\":0,\"...\"\n  But was:  \"...679244070,\"chapter\":1,\"level\":500,\"stars\":0,\"storyStage\":0...\"\n  --------------------------------------------^\n\nTearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionRejectedWritePreservesSelectionAndLockedState(False)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n\nTearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SelectionRejectedWritePreservesSelectionAndLockedState(True)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n\nTearDown : Unhandled log message: '[Error] Player save reset blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED'. Use UnityEngine.TestTools.LogAssert.Expect"
+    }
+  ]
+}

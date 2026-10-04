@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 25.15035390853882,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "SpendingNative;SpendingBlockedSave;CoreLoopVfxBoosterFeedbackPlayModeTests.SeaPearl_GrantsFiveMovesWithoutBoardOrUnrelatedSaveMutation;CoreLoopVfxBoosterFeedbackPlayModeTests.Recovery_ClearsBoosterVfxSuppressesCompletionAndRefundsOnce",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SpendingRecovery/R1/QA/NativeVerify/results.xml",
+    "-logFile",
+    "/tmp/lor-spending-recovery-r1/NativeVerify/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-spending-recovery-r1/NativeVerify/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-spending-recovery-r1/NativeVerify",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "4",
+    "result": "Failed(Child)",
+    "total": "4",
+    "passed": "3",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 15:07:24Z",
+    "end-time": "2026-10-03 15:07:25Z",
+    "duration": "1.6272212"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.GameplayAlignmentPlayModeTests.SpendingNativeRefundRetryExitAndStaleCallbacksInBothLanguages",
+      "result": "Failed",
+      "message": "  BoosterCard_0 edge must reach its existing forwarding control.\n  Expected: same as <BoosterCard_0 (LegendsOfRus.ProductionGameplayBoosterCard)>\n  But was:  null\n"
+    }
+  ]
+}

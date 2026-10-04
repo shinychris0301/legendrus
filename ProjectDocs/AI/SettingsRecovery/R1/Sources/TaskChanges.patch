@@ -1,0 +1,260 @@
+--- a/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/Core/GameState.cs
+@@ -1119,10 +1119,25 @@
+                 HasCompletedStoryScene(catalog.completion.finaleSceneId);
+         }
+ 
+-        public void ToggleMusic() { Save.music = !Save.music; Persist(); }
+-        public void ToggleSfx() { Save.sfx = !Save.sfx; Persist(); }
+-        public void ToggleVibration() { Save.vibration = !Save.vibration; Persist(); }
+-        public void ToggleNotifications() { Save.notifications = !Save.notifications; Persist(); }
++        public void ToggleMusic() => TryTogglePreference(0);
++        public void ToggleSfx() => TryTogglePreference(1);
++        public void ToggleVibration() => TryTogglePreference(2);
++        public void ToggleNotifications() => TryTogglePreference(3);
++
++        public bool TryTogglePreference(int index)
++        {
++            if (index < 0 || index > 3) throw new ArgumentOutOfRangeException(nameof(index));
++            if (!canPersist) return false;
++            var candidate = JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
++            switch (index)
++            {
++                case 0: candidate.music = !candidate.music; break;
++                case 1: candidate.sfx = !candidate.sfx; break;
++                case 2: candidate.vibration = !candidate.vibration; break;
++                case 3: candidate.notifications = !candidate.notifications; break;
++            }
++            return TryCommitBalance(candidate);
++        }
+ 
+         public void ResetProgress()
+         {
+--- a/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsView.cs
++++ b/Assets/LegendsOfRus/Scripts/Runtime/UI/ProductionSettingsView.cs
+@@ -33,14 +33,16 @@
+         string language;
+         bool committed;
+         int infoKind;
++        object bindingOwner=new object();
++        bool preferenceChangeInProgress;
+         void OnEnable(){Observe();RefreshContent();}
+         void OnDisable(){if(observed!=null)observed.Changed-=RefreshState;observed=null;Unbind();}
+         void Update(){if(observed!=GameState.Instance){Observe();RefreshState();}if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
+         void Observe(){if(observed!=null)observed.Changed-=RefreshState;observed=GameState.Instance;if(isActiveAndEnabled&&observed!=null)observed.Changed+=RefreshState;}
+-        void Unbind(){for(int i=0;i<buttons.Count;i++)if(buttons[i])buttons[i].onClick.RemoveListener(listeners[i]);buttons.Clear();listeners.Clear();ActionsBound=false;}
+-        bool InputReady(){if(!ActionsBound||committed||!isActiveAndEnabled)return false;var router=ScreenRouter.Instance;if(router==null)return true;if(router.ActiveModal==ScreenId.Settings)return !router.IsModalTransitioning;return !router.HasActiveModalBlocker&&!router.IsScreenTransitioning;}
++        void Unbind(){bindingOwner=new object();for(int i=0;i<buttons.Count;i++)if(buttons[i])buttons[i].onClick.RemoveListener(listeners[i]);buttons.Clear();listeners.Clear();ActionsBound=false;}
++        bool InputReady(){if(!ActionsBound||committed||preferenceChangeInProgress||!isActiveAndEnabled)return false;var router=ScreenRouter.Instance;if(router==null)return true;if(router.ActiveModal==ScreenId.Settings)return !router.IsModalTransitioning;return !router.HasActiveModalBlocker&&!router.IsScreenTransitioning;}
+         public bool CanAct()=>InputReady()&&!InfoPanel.activeSelf;
+-        void Listen(Button button,Action action,bool overlay=false){UnityAction call=()=>{if(!InputReady()||!button.IsInteractable()||(!overlay&&InfoPanel.activeSelf))return;action();};button.onClick.AddListener(call);buttons.Add(button);listeners.Add(call);}
++        void Listen(Button button,Action action,bool overlay=false){object owner=bindingOwner;UnityAction call=()=>{if(!ReferenceEquals(owner,bindingOwner)||!InputReady()||!button.IsInteractable()||(!overlay&&InfoPanel.activeSelf))return;action();};button.onClick.AddListener(call);buttons.Add(button);listeners.Add(call);}
+         public void Bind(Action<ScreenId> show,Action back,Action<string> shop)
+         {
+             Unbind();committed=false;
+@@ -60,21 +62,26 @@
+         {
+             if(index<0||index>3)throw new ArgumentOutOfRangeException(nameof(index));
+             if(!CanAct()||GameState.Instance==null)return;
+-            switch(index){case 0:GameState.Instance.ToggleMusic();break;case 1:GameState.Instance.ToggleSfx();break;case 2:GameState.Instance.ToggleVibration();break;case 3:GameState.Instance.ToggleNotifications();break;}
++            bool accepted;
++            preferenceChangeInProgress=true;
++            try { accepted=GameState.Instance.TryTogglePreference(index); }
++            finally { preferenceChangeInProgress=false; }
+             RefreshState();
++            if(!accepted)ShowInfo(7);
+         }
+         public bool Preference(int index){var s=GameState.Instance!=null?GameState.Instance.Save:null;if(index<0||index>3)throw new ArgumentOutOfRangeException(nameof(index));return s!=null&&new[]{s.music,s.sfx,s.vibration,s.notifications}[index];}
+         public bool TryDismiss(){if(!InfoPanel||!InfoPanel.activeSelf)return false;InfoPanel.SetActive(false);return true;}
+-        public void ShowInfo(int kind){if(!CanAct())return;if(kind<0||kind>6)throw new ArgumentOutOfRangeException(nameof(kind));infoKind=kind;RefreshInfo();InfoPanel.SetActive(true);}
++        public void ShowInfo(int kind){if(!CanAct())return;if(kind<0||kind>7)throw new ArgumentOutOfRangeException(nameof(kind));infoKind=kind;RefreshInfo();InfoPanel.SetActive(true);}
+         static readonly string[] RuRows={"Язык","Облако","Аккаунт","Поддержка","Конфиденциальность","ВЫЙТИ ИЗ АККАУНТА"};
+         static readonly string[] EnRows={"Language","Cloud","Account","Support","Privacy","SIGN OUT"};
+         void RefreshInfo()
+         {
+             bool en=DemoFeatureState.LanguageCode=="en";
+-            InfoHeading.text=infoKind==6?(en?"PAUSED GAME":"ИГРА НА ПАУЗЕ"):(en?EnRows:RuRows)[infoKind];
++            bool error=infoKind==7;
++            InfoHeading.text=error?(en?"AN ERROR OCCURRED":"ПРОИЗОШЛА ОШИБКА"):infoKind==6?(en?"PAUSED GAME":"ИГРА НА ПАУЗЕ"):(en?EnRows:RuRows)[infoKind];
+             string[] ru={"Выберите язык интерфейса для текущего сеанса.","Прогресс хранится на этом устройстве. Облачная синхронизация пока недоступна.","Сейчас используется локальный профиль. Привязка аккаунта и восстановление пока недоступны.","Обращение в службу поддержки пока недоступно. Версия игры: "+Application.version,"Раздел документов и управления согласием пока недоступен. Ваши настройки согласия не изменены.","Выход и смена аккаунта пока недоступны. Локальный прогресс сохранён.","Закройте настройки и вернитесь к игре, прежде чем открывать другие страницы."};
+             string[] eng={"Choose the interface language for this session.","Progress is stored on this device. Cloud synchronization is not available yet.","You are using a local profile. Account linking and recovery are not available yet.","Contacting support is not available yet. Game version: "+Application.version,"Documents and consent controls are not available yet. Your consent settings have not changed.","Sign out and account switching are not available yet. Local progress is preserved.","Close Settings and return to the game before opening another page."};
+-            InfoDescription.text=(en?eng:ru)[infoKind];CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";
++            InfoDescription.text=error?(en?"Action could not be completed.\nClose this message and try again.":"Действие не выполнено.\nЗакройте окно и попробуйте снова."):(en?eng:ru)[infoKind];CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";
+             LanguageChoices.SetActive(infoKind==0);GeneralInfoContent.SetActive(infoKind!=0);
+             var shield=InfoPanel.transform.Find("InputShield").GetComponent<ProductionHomePanel>();
+             shield.LeftColor=shield.RightColor=new Color(0,0,0,infoKind==0?.60f:.92f);shield.SetVerticesDirty();
+--- a/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs
+@@ -1703,5 +1703,81 @@
+             Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(before));
+         }
+ 
++
++        [TestCase(0,false)] [TestCase(1,false)] [TestCase(2,false)] [TestCase(3,false)]
++        [TestCase(0,true)] [TestCase(1,true)] [TestCase(2,true)] [TestCase(3,true)]
++        public void SettingsRejectedLegacyToggleKeepsLiveJournalAndFeedback(int index,bool locked)
++        {
++            var state=GameState.Instance;
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];
++            for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
++            foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;int events=0;System.Action changed=()=>events++;state.Changed+=changed;
++            try
++            {
++                if(locked)Assert.That(state.SpendGold(1),Is.False);var original=state.Save;string before=JsonUtility.ToJson(original);
++                SettingsLegacyToggle(state,index);
++                Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(events,Is.Zero);Assert.That(state.CanPersist,Is.False);
++                var feedback=CoreLoopFeedbackService.Instance;if(feedback!=null){Assert.That(feedback.MusicEnabled,Is.True);Assert.That(feedback.SfxEnabled,Is.True);Assert.That(feedback.VibrationEnabled,Is.True);}
++                var write=state.LastWriteResult;SettingsLegacyToggle(state,index);Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(events,Is.Zero);
++                Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));
++            }
++            finally
++            {
++                state.Changed-=changed;for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();LogAssert.ignoreFailingMessages=ignored;
++            }
++        }
++        static void SettingsLegacyToggle(GameState state,int index)
++        {
++            switch(index){case 0:state.ToggleMusic();break;case 1:state.ToggleSfx();break;case 2:state.ToggleVibration();break;case 3:state.ToggleNotifications();break;default:throw new System.ArgumentOutOfRangeException(nameof(index));}
++        }
++
++
++        [TestCase(0,false)] [TestCase(1,false)] [TestCase(2,false)] [TestCase(3,false)]
++        [TestCase(0,true)] [TestCase(1,true)] [TestCase(2,true)] [TestCase(3,true)]
++        public void SettingsHealthyToggleCommitsOnlyItsPreferenceAndPreservesPendingReceipt(int index,bool enabled)
++        {
++            var state=GameState.Instance;var level=ChapterLevelCatalog.Find(1,1);Assert.That(state.RegisterLevelAttempt(level),Is.EqualTo(1));state.RecordLevelFailure(level,123);
++            state.Save.music=state.Save.sfx=state.Save.vibration=state.Save.notifications=enabled;
++            Assert.That(state.TryBeginBoosterCommand(BoosterType.Firebird,out string command),Is.True);
++            var original=state.Save;var failure=state.LastFailureResult;string before=JsonUtility.ToJson(original);var expected=JsonUtility.FromJson<PlayerSaveData>(before);
++            switch(index){case 0:expected.music=!expected.music;break;case 1:expected.sfx=!expected.sfx;break;case 2:expected.vibration=!expected.vibration;break;case 3:expected.notifications=!expected.notifications;break;}
++            int events=0;System.Action changed=()=>{events++;Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(JsonUtility.ToJson(expected)));Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(expected)));};state.Changed+=changed;
++            try{Assert.That(state.TryTogglePreference(index),Is.True);}
++            finally{state.Changed-=changed;}
++            Assert.That(events,Is.EqualTo(1));Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.Save,Is.Not.SameAs(original));
++            Assert.That(state.LastFailureResult,Is.SameAs(failure));Assert.That(state.HasPendingBoosterCommand,Is.True);Assert.That(state.Save.boosterCommand.commandId,Is.EqualTo(command));
++        }
++        [TestCase(-1)] [TestCase(4)]
++        public void SettingsInvalidPreferenceDoesNotWriteOrPublish(int index)
++        {
++            var state=GameState.Instance;var original=state.Save;string before=JsonUtility.ToJson(original);var write=state.LastWriteResult;
++            Assert.Throws<System.ArgumentOutOfRangeException>(()=>state.TryTogglePreference(index));Assert.That(state.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(original),Is.EqualTo(before));Assert.That(state.LastWriteResult,Is.SameAs(write));
++        }
++        [Test]
++        public void SettingsRecoveryKeepsOldSessionLockedAndFreshStateCanCommitAfterRepair()
++        {
++            var state=GameState.Instance;state.Save.energy=4;state.Save.lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks;state.Persist();string before=JsonUtility.ToJson(state.Save);GameObject freshObject=null;
++            var present=new bool[PersistedSaveKeys.Length];var journal=new string[present.Length];for(int i=0;i<present.Length;i++){present[i]=PlayerPrefs.HasKey(PersistedSaveKeys[i]);journal[i]=PlayerPrefs.GetString(PersistedSaveKeys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;foreach(string key in PersistedSaveKeys)PlayerPrefs.DeleteKey(key);string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(PersistedSaveKeys[0],raw);PlayerPrefs.Save();
++            try
++            {
++                Assert.That(state.TryTogglePreference(3),Is.False);Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(PlayerPrefs.GetString(PersistedSaveKeys[0]),Is.EqualTo(raw));var write=state.LastWriteResult;
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++                Assert.That(state.TryTogglePreference(3),Is.False);Assert.That(state.LastWriteResult,Is.SameAs(write));
++                freshObject=new GameObject("FreshSettingsRecoveryState");var fresh=freshObject.AddComponent<GameState>();Assert.That(fresh.CanPersist,Is.True);Assert.That(fresh.Save.notifications,Is.True);
++                int events=0;System.Action changed=()=>events++;fresh.Changed+=changed;
++                try{Assert.That(fresh.TryTogglePreference(3),Is.True);Assert.That(events,Is.EqualTo(1));Assert.That(fresh.Save.notifications,Is.False);Assert.That(SaveService.Load().notifications,Is.False);}
++                finally{fresh.Changed-=changed;}
++                Assert.That(fresh.Save.energy,Is.EqualTo(4));Assert.That(fresh.Save.music&&fresh.Save.sfx&&fresh.Save.vibration,Is.True);
++            }
++            finally
++            {
++                typeof(GameState).GetProperty("Instance").SetValue(null,state);if(freshObject!=null)Object.DestroyImmediate(freshObject);
++                for(int i=0;i<present.Length;i++){PlayerPrefs.DeleteKey(PersistedSaveKeys[i]);if(present[i])PlayerPrefs.SetString(PersistedSaveKeys[i],journal[i]);}PlayerPrefs.Save();
++            }
++        }
++
+     }
+ }
+--- a/Assets/LegendsOfRus/Tests/PlayMode/SettingsAlignmentPlayModeTests.cs
++++ b/Assets/LegendsOfRus/Tests/PlayMode/SettingsAlignmentPlayModeTests.cs
+@@ -415,5 +415,88 @@
+                 }
+             Assert.That(v.GetComponentsInChildren<AnimatedHotspot>(true),Is.Empty);
+         }
++
++        [UnityTest] public IEnumerator SettingsRejectedNativeSwitchKeepsPageAndExplainsFailureInBothLanguages()
++        {yield return VerifySettingsRejectedNativeSwitch(false);}
++        [UnityTest] public IEnumerator SettingsRejectedPausedSwitchKeepsBoardAndModalInBothLanguages()
++        {yield return VerifySettingsRejectedNativeSwitch(true);}
++        IEnumerator VerifySettingsRejectedNativeSwitch(bool paused)
++        {
++            foreach(string language in new[]{"ru","en"})
++            {
++                var state=GameState.Instance;state.ResetProgress();DemoFeatureState.SetLanguage(language);Match3Board board=null;
++                if(paused)
++                {
++                    state.Save.highestUnlockedLevel=31;Assert.That(state.SelectLevel(1,31),Is.True);
++                    foreach(var step in ChapterLevelCatalog.Find(1,31).tutorialSteps)state.CompleteTutorial(step.id);
++                    router.Show(ScreenId.Gameplay);Settle();yield return null;yield return null;yield return null;
++                    var game=router.Viewport.GetComponentInChildren<ProductionGameplayView>();board=game.Board;
++                    game.PauseButton.onClick.Invoke();Settle();yield return null;
++                    router.Viewport.GetComponentInChildren<ProductionPauseView>().Actions[2].onClick.Invoke();Settle();yield return null;
++                }
++                else{router.Show(ScreenId.Settings);Settle();yield return null;}
++                var view=View();var root=Root();string before=JsonUtility.ToJson(state.Save);string hash=board!=null?board.BoardStateHash:null;int moves=board!=null?board.Moves:0;
++                var present=new bool[3];var journal=new string[3];for(int i=0;i<3;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
++                var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;foreach(string key in keys)if(key!=LanguagePreference.Key)PlayerPrefs.DeleteKey(key);string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
++                bool ignored=LogAssert.ignoreFailingMessages;LogAssert.ignoreFailingMessages=true;
++                try
++                {
++                    for(int index=0;index<4;index++)
++                    {
++                        view.SwitchButtons[index].onClick.Invoke();Settle();yield return null;
++                        Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(Root(),Is.SameAs(root));Assert.That(view.InfoPanel.activeSelf,Is.True);
++                        Assert.That(view.InfoHeading.text,Is.EqualTo(language=="ru"?"ПРОИЗОШЛА ОШИБКА":"AN ERROR OCCURRED"));
++                        Assert.That(view.SwitchButtons[index].image.sprite.name,Is.EqualTo("switch_on"));Assert.That(view.LanguageChoices.activeSelf,Is.False);
++                        Assert.That(router.ActiveModal,paused?Is.EqualTo(ScreenId.Settings):Is.Null);var write=state.LastWriteResult;
++                        view.SwitchButtons[index].onClick.Invoke();Assert.That(state.LastWriteResult,Is.SameAs(write));
++                        if(index%2==0)view.CloseInfoButton.onClick.Invoke();else router.NavigateBack();Settle();yield return null;
++                        Assert.That(view.InfoPanel.activeSelf,Is.False);Assert.That(Root(),Is.SameAs(root));
++                        if(board!=null){Assert.That(board.Phase,Is.EqualTo(GameplayCore.GameplayPhase.Paused));Assert.That(board.BoardStateHash,Is.EqualTo(hash));Assert.That(board.Moves,Is.EqualTo(moves));Assert.That(board.CanAcceptPointerInput,Is.False);}
++                    }
++                    Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
++                    if(paused){view.BackButton.onClick.Invoke();Settle();yield return null;Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.Pause));Assert.That(router.Viewport.GetComponentInChildren<ProductionGameplayView>().Board,Is.SameAs(board));}
++                }
++                finally
++                {
++                    for(int i=0;i<3;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}PlayerPrefs.Save();LogAssert.ignoreFailingMessages=ignored;
++                }
++            }
++        }
++        [UnityTest] public IEnumerator SettingsReentrantChangedSwitchCommitsOnlyOneToggle()
++        {
++            var state=GameState.Instance;var view=View();int events=0;Action changed=()=>{if(++events==1)view.SwitchButtons[0].onClick.Invoke();};state.Changed+=changed;
++            try{view.SwitchButtons[0].onClick.Invoke();}
++            finally{state.Changed-=changed;}
++            Assert.That(state.Save.music,Is.False);Assert.That(events,Is.EqualTo(1));Assert.That(SaveService.Load().music,Is.False);yield return null;
++        }
++        [UnityTest] public IEnumerator SettingsReboundSwitchRejectsRetiredListener()
++        {
++            var view=View();var buttons=(List<Button>)typeof(ProductionSettingsView).GetField("buttons",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(view);
++            var listeners=(List<UnityEngine.Events.UnityAction>)typeof(ProductionSettingsView).GetField("listeners",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(view);
++            var retired=listeners[buttons.IndexOf(view.SwitchButtons[0])];view.Bind(id=>{},()=>{},category=>{});string before=JsonUtility.ToJson(GameState.Instance.Save);var write=GameState.Instance.LastWriteResult;
++            retired.Invoke();Assert.That(JsonUtility.ToJson(GameState.Instance.Save),Is.EqualTo(before));Assert.That(GameState.Instance.LastWriteResult,Is.SameAs(write));yield return null;
++        }
++
++
++        [UnityTest] public IEnumerator SettingsRejectedInfoBlocksOtherControlsAndPreservesLanguageOnRefresh()
++        {
++            var state=GameState.Instance;state.ResetProgress();var view=View();var root=Root();
++            var present=new bool[3];var journal=new string[3];for(int i=0;i<3;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
++            var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;for(int i=0;i<3;i++)PlayerPrefs.DeleteKey(keys[i]);PlayerPrefs.SetString(keys[0],JsonUtility.ToJson(future));PlayerPrefs.Save();
++            try
++            {
++                view.SwitchButtons[1].onClick.Invoke();Settle();yield return null;Assert.That(view.InfoPanel.activeSelf,Is.True);string before=JsonUtility.ToJson(state.Save);int generation=router.RouteGeneration;
++                view.ProfileButton.onClick.Invoke();view.PlusButtons[0].onClick.Invoke();view.Rows[0].onClick.Invoke();view.SwitchButtons[2].onClick.Invoke();view.LanguageButtons[1].onClick.Invoke();
++                Assert.That(router.RouteGeneration,Is.EqualTo(generation));Assert.That(DemoFeatureState.LanguageCode,Is.EqualTo("ru"));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
++                DemoFeatureState.SetLanguage("en");view.RefreshContent();Assert.That(view.InfoPanel.activeSelf,Is.True);Assert.That(view.InfoHeading.text,Is.EqualTo("AN ERROR OCCURRED"));
++                Assert.That(view.InfoDescription.text,Is.EqualTo("Action could not be completed.\nClose this message and try again."));Assert.That(view.CloseInfoLabel.text,Is.EqualTo("CLOSE"));
++                yield return WaitForNormalButtonColors();Capture("Settings_Rejected_360_EN",new Vector2Int(360,640),new Rect(0,20,360,600));
++                DemoFeatureState.SetLanguage("ru");view.RefreshContent();yield return WaitForNormalButtonColors();Capture("Settings_Rejected_RU",new Vector2Int(941,1672),new Rect(0,0,941,1672));
++                view.CloseInfoButton.onClick.Invoke();Assert.That(view.InfoPanel.activeSelf,Is.False);Assert.That(Root(),Is.SameAs(root));
++                view.BackButton.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.SplashTitle));
++            }
++            finally{for(int i=0;i<3;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}PlayerPrefs.Save();}
++        }
++
+     }
+ }

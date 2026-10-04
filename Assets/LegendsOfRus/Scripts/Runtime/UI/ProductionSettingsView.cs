@@ -33,14 +33,16 @@ namespace LegendsOfRus
         string language;
         bool committed;
         int infoKind;
+        object bindingOwner=new object();
+        bool preferenceChangeInProgress;
         void OnEnable(){Observe();RefreshContent();}
         void OnDisable(){if(observed!=null)observed.Changed-=RefreshState;observed=null;Unbind();}
         void Update(){if(observed!=GameState.Instance){Observe();RefreshState();}if(language!=DemoFeatureState.LanguageCode)RefreshContent();}
         void Observe(){if(observed!=null)observed.Changed-=RefreshState;observed=GameState.Instance;if(isActiveAndEnabled&&observed!=null)observed.Changed+=RefreshState;}
-        void Unbind(){for(int i=0;i<buttons.Count;i++)if(buttons[i])buttons[i].onClick.RemoveListener(listeners[i]);buttons.Clear();listeners.Clear();ActionsBound=false;}
-        bool InputReady(){if(!ActionsBound||committed||!isActiveAndEnabled)return false;var router=ScreenRouter.Instance;if(router==null)return true;if(router.ActiveModal==ScreenId.Settings)return !router.IsModalTransitioning;return !router.HasActiveModalBlocker&&!router.IsScreenTransitioning;}
+        void Unbind(){bindingOwner=new object();for(int i=0;i<buttons.Count;i++)if(buttons[i])buttons[i].onClick.RemoveListener(listeners[i]);buttons.Clear();listeners.Clear();ActionsBound=false;}
+        bool InputReady(){if(!ActionsBound||committed||preferenceChangeInProgress||!isActiveAndEnabled)return false;var router=ScreenRouter.Instance;if(router==null)return true;if(router.ActiveModal==ScreenId.Settings)return !router.IsModalTransitioning;return !router.HasActiveModalBlocker&&!router.IsScreenTransitioning;}
         public bool CanAct()=>InputReady()&&!InfoPanel.activeSelf;
-        void Listen(Button button,Action action,bool overlay=false){UnityAction call=()=>{if(!InputReady()||!button.IsInteractable()||(!overlay&&InfoPanel.activeSelf))return;action();};button.onClick.AddListener(call);buttons.Add(button);listeners.Add(call);}
+        void Listen(Button button,Action action,bool overlay=false){object owner=bindingOwner;UnityAction call=()=>{if(!ReferenceEquals(owner,bindingOwner)||!InputReady()||!button.IsInteractable()||(!overlay&&InfoPanel.activeSelf))return;action();};button.onClick.AddListener(call);buttons.Add(button);listeners.Add(call);}
         public void Bind(Action<ScreenId> show,Action back,Action<string> shop)
         {
             Unbind();committed=false;
@@ -60,21 +62,26 @@ namespace LegendsOfRus
         {
             if(index<0||index>3)throw new ArgumentOutOfRangeException(nameof(index));
             if(!CanAct()||GameState.Instance==null)return;
-            switch(index){case 0:GameState.Instance.ToggleMusic();break;case 1:GameState.Instance.ToggleSfx();break;case 2:GameState.Instance.ToggleVibration();break;case 3:GameState.Instance.ToggleNotifications();break;}
+            bool accepted;
+            preferenceChangeInProgress=true;
+            try { accepted=GameState.Instance.TryTogglePreference(index); }
+            finally { preferenceChangeInProgress=false; }
             RefreshState();
+            if(!accepted)ShowInfo(7);
         }
         public bool Preference(int index){var s=GameState.Instance!=null?GameState.Instance.Save:null;if(index<0||index>3)throw new ArgumentOutOfRangeException(nameof(index));return s!=null&&new[]{s.music,s.sfx,s.vibration,s.notifications}[index];}
         public bool TryDismiss(){if(!InfoPanel||!InfoPanel.activeSelf)return false;InfoPanel.SetActive(false);return true;}
-        public void ShowInfo(int kind){if(!CanAct())return;if(kind<0||kind>6)throw new ArgumentOutOfRangeException(nameof(kind));infoKind=kind;RefreshInfo();InfoPanel.SetActive(true);}
+        public void ShowInfo(int kind){if(!CanAct())return;if(kind<0||kind>7)throw new ArgumentOutOfRangeException(nameof(kind));infoKind=kind;RefreshInfo();InfoPanel.SetActive(true);}
         static readonly string[] RuRows={"Язык","Облако","Аккаунт","Поддержка","Конфиденциальность","ВЫЙТИ ИЗ АККАУНТА"};
         static readonly string[] EnRows={"Language","Cloud","Account","Support","Privacy","SIGN OUT"};
         void RefreshInfo()
         {
             bool en=DemoFeatureState.LanguageCode=="en";
-            InfoHeading.text=infoKind==6?(en?"PAUSED GAME":"ИГРА НА ПАУЗЕ"):(en?EnRows:RuRows)[infoKind];
+            bool error=infoKind==7;
+            InfoHeading.text=error?(en?"AN ERROR OCCURRED":"ПРОИЗОШЛА ОШИБКА"):infoKind==6?(en?"PAUSED GAME":"ИГРА НА ПАУЗЕ"):(en?EnRows:RuRows)[infoKind];
             string[] ru={"Выберите язык интерфейса для текущего сеанса.","Прогресс хранится на этом устройстве. Облачная синхронизация пока недоступна.","Сейчас используется локальный профиль. Привязка аккаунта и восстановление пока недоступны.","Обращение в службу поддержки пока недоступно. Версия игры: "+Application.version,"Раздел документов и управления согласием пока недоступен. Ваши настройки согласия не изменены.","Выход и смена аккаунта пока недоступны. Локальный прогресс сохранён.","Закройте настройки и вернитесь к игре, прежде чем открывать другие страницы."};
             string[] eng={"Choose the interface language for this session.","Progress is stored on this device. Cloud synchronization is not available yet.","You are using a local profile. Account linking and recovery are not available yet.","Contacting support is not available yet. Game version: "+Application.version,"Documents and consent controls are not available yet. Your consent settings have not changed.","Sign out and account switching are not available yet. Local progress is preserved.","Close Settings and return to the game before opening another page."};
-            InfoDescription.text=(en?eng:ru)[infoKind];CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";
+            InfoDescription.text=error?(en?"Action could not be completed.\nClose this message and try again.":"Действие не выполнено.\nЗакройте окно и попробуйте снова."):(en?eng:ru)[infoKind];CloseInfoLabel.text=en?"CLOSE":"ЗАКРЫТЬ";
             LanguageChoices.SetActive(infoKind==0);GeneralInfoContent.SetActive(infoKind!=0);
             var shield=InfoPanel.transform.Find("InputShield").GetComponent<ProductionHomePanel>();
             shield.LeftColor=shield.RightColor=new Color(0,0,0,infoKind==0?.60f:.92f);shield.SetVerticesDirty();

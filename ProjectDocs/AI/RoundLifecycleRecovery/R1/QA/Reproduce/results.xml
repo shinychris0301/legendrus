@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="8" result="Failed(Child)" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.2527854">
+  <test-suite type="TestSuite" id="2693" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1509" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.252785" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2687" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="720" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.208435" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1284251" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2688" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="720" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.197288" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2689" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="720" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.181126" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2690" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="720" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="1.164381" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2244" name="LevelSystemRuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="141" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.272420" total="6" passed="0" failed="6" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="2411" name="RoundFailureRejectedWriteKeepsProgressAndPresentation" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.086239" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2409" name="RoundFailureRejectedWriteKeepsProgressAndPresentation(False)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation(False)" methodname="RoundFailureRejectedWriteKeepsProgressAndPresentation" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="92895498" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.036475" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected string length 1214 but was 1215. Strings differ at index 434.
+  Expected: "...":1,"bestStars":0,"bestScore":10,"attempts":1,"retries":0,..."
+  But was:  "...":1,"bestStars":0,"bestScore":200,"attempts":1,"retries":0..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.VerifyRejectedRoundWrite (System.Boolean locked, System.Boolean failure) [0x0014d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1588
+at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation (System.Boolean locked) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1570
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2410" name="RoundFailureRejectedWriteKeepsProgressAndPresentation(True)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation(True)" methodname="RoundFailureRejectedWriteKeepsProgressAndPresentation" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1015940821" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.030288" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected string length 1214 but was 1215. Strings differ at index 434.
+  Expected: "...":1,"bestStars":0,"bestScore":10,"attempts":1,"retries":0,..."
+  But was:  "...":1,"bestStars":0,"bestScore":200,"attempts":1,"retries":0..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.VerifyRejectedRoundWrite (System.Boolean locked, System.Boolean failure) [0x0014d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1588
+at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation (System.Boolean locked) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1570
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="2414" name="RoundRegistrationCounterOverflowDoesNotPublish" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.082027" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2412" name="RoundRegistrationCounterOverflowDoesNotPublish(False)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish(False)" methodname="RoundRegistrationCounterOverflowDoesNotPublish" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="570219029" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.033401" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: 0
+  But was:  -2147483648
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish (System.Boolean retries) [0x00051] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1607
+]]></stack-trace>
+                  </failure>
+                </test-case>
+                <test-case id="2413" name="RoundRegistrationCounterOverflowDoesNotPublish(True)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish(True)" methodname="RoundRegistrationCounterOverflowDoesNotPublish" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="602550424" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.033246" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: 0
+  But was:  2
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish (System.Boolean retries) [0x00051] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1607
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="2408" name="RoundRegistrationRejectedWriteKeepsCountersAndSelection" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.084108" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2406" name="RoundRegistrationRejectedWriteKeepsCountersAndSelection(False)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection(False)" methodname="RoundRegistrationRejectedWriteKeepsCountersAndSelection" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="306012531" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.033326" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: 0
+  But was:  1
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.VerifyRejectedRoundWrite (System.Boolean locked, System.Boolean failure) [0x0013c] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1587
+at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection (System.Boolean locked) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1565
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2407" name="RoundRegistrationRejectedWriteKeepsCountersAndSelection(True)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection(True)" methodname="RoundRegistrationRejectedWriteKeepsCountersAndSelection" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1414601138" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:29Z" duration="0.034096" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: 0
+  But was:  1
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.VerifyRejectedRoundWrite (System.Boolean locked, System.Boolean failure) [0x0013c] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1587
+at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection (System.Boolean locked) [0x00000] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1565
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestFixture" id="2494" name="PreLevelAlignmentPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="0.793169" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2502" name="RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy" fullname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy" methodname="RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy" classname="LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests" runstate="Runnable" seed="93520293" result="Failed" start-time="2026-10-03 20:42:29Z" end-time="2026-10-03 20:42:30Z" duration="0.777343" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: PreLevel
+  But was:  Gameplay
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests+<RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy>d__24.MoveNext () [0x000d2] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/PreLevelAlignmentPlayModeTests.cs:478
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=chapter01.level01, attempt=-2147483648, board=8x7, seed=508541, hash=63C4330589EABDB4
+Gameplay phase: Idle -> Paused
+Gameplay phase: Paused -> Idle
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2516" name="RetainedRoundPlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" testcasecount="22" result="Failed" site="Child" start-time="2026-10-03 20:42:30Z" end-time="2026-10-03 20:42:30Z" duration="0.049380" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <output><![CDATA[Legends of Rus EDITOR memory observation: allocated=265 MiB, reserved=659 MiB, managed=38 MiB. Exceeded guardrails: reserved >= 640 MiB (warning). Comparison band=Warning. Editor measurements are not an Android Player budget verdict. Profile a Development Build on the target device. Evidence remains local and bounded.
+]]></output>
+              <test-case id="2539" name="RoundFailureFinalizeOverflowRetainsCheckpointAndJournal" fullname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.RoundFailureFinalizeOverflowRetainsCheckpointAndJournal" methodname="RoundFailureFinalizeOverflowRetainsCheckpointAndJournal" classname="LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests" runstate="Runnable" seed="908977044" result="Failed" start-time="2026-10-03 20:42:30Z" end-time="2026-10-03 20:42:30Z" duration="0.022225" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.RoundFailureFinalizeOverflowRetainsCheckpointAndJournal () [0x00070] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/RetainedRoundPlayModeTests.cs:206
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/RoundLifecycleRecovery/R1/QA/Reproduce/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

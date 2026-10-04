@@ -9,11 +9,31 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[5]
 BASE = Path(__file__).resolve().parent.parent
-BUILD = Path('ProjectDocs/AI/DailyRewardRecovery/R2AndroidRefresh/QA')
+BUILD = Path('ProjectDocs/AI/PersistenceRecovery/R2AndroidRefresh/QA')
 APK = Path('Builds/Verification/v1_17_step01/LegendsOfRus-v1.17-step01-development.apk')
-PIN = {'bytes': 766014334,
-       'sha256': '9f72045fe3a2e68114be24d687dfb2a51c07c48d39ec58aa4afbafe9a5744654'}
+PIN = {'bytes': 766032918,
+       'sha256': '1fb0de635e3e5be659e7f58b4cfb853dc3e3c702e4e70ff20a055b0101da3f5e'}
 PRESETS = ('stock-999', 'stock-1000', 'stock-9999', 'stock-max', 'story-early', 'story-finale')
+NATIVE_METHODS = ('GameState_RefreshEnergyFromClock', 'GameState_TryRefreshEnergyFromClock', 'GameState_AdvanceEnergyClock', 'GameState_EnergyRemaining', 'GameState_SpendEnergy', 'GameState_AddEnergy', 'GameState_TryAddEnergy', 'GameState_RefillEnergy', 'GameState_TryRefillEnergy', 'GameState_TryAddGold', 'GameState_TryCredit', 'GameState_TryCommitBalance', 'GameState_SpendGold', 'GameState_TryAddGems', 'GameState_SpendGems', 'GameState_CompleteLevel', 'GameState_TryCompleteLevel', 'GameState_TryDoubleLastLevelGoldReward', 'GameState_TryUseBooster', 'GameState_TryBeginBoosterCommand', 'GameState_TrySettleBoosterCommand', 'GameState_TryRecoverPendingBoosterCommand', 'GameState_TryAddBooster', 'GameState_ClaimDailyReward', 'Match3Board_ConsumeCommandBooster', 'Match3Board_RefundCommand', 'Match3Board_RecoverActiveCommand', 'Match3Board_TryResume', 'ScreenRouter_StartLevel', 'ScreenRouter_CommitGameplayVictory','GameState_CompleteStoryScene','GameState_AcknowledgeChapterCompletion','StoryService_AdvanceDialogue','ScreenRouter_ContinueAfterDialogue','ScreenRouter_ContinueAfterChapterComplete','GameState_CompleteTutorial','LevelTutorialPresenter_Advance','LevelTutorialPresenter_BuildOverlay','ScreenRouter_ShowGameplayTutorialError','ScreenRouter_BuildGameplayOverlay','ScreenRouter_NavigateBack','ScreenRouter_RetireModalRootImmediately','GameState_SelectLevel','GameState_EnsureSelectedLevelIsUnlocked','GameState_TryEnsureSelectedLevelIsUnlocked','GameState_NormalizeLevelProgress','ScreenRouter_OpenSelectedLevel','ProductionChapterMapView_BindNavigation','ScreenRouter_BuildInteractionLayer')
+NATIVE_METHODS += ('GameState_RegisterLevelAttempt', 'GameState_CanRegisterLevelAttempt', 'GameState_TryRegisterLevelAttempt', 'GameState_TryStartLevel', 'GameState_CandidateLevelProgress', 'GameState_TryPrepareLevelAttempt', 'GameState_TryCommitRoundCandidate', 'GameState_RecordLevelFailure', 'GameState_TryRecordLevelFailure', 'GameState_TryFinalizeRetainedFailure', 'Match3Board_Initialize', 'Match3Board_InitializeCore')
+NATIVE_METHODS += ('GameState_TryTogglePreference', 'ProductionSettingsView_TogglePreference', 'ProductionSettingsView_Unbind', 'ProductionSettingsView_InputReady', 'ProductionSettingsView_Listen', 'ProductionSettingsView_RefreshInfo', 'ProductionSettingsView_Bind')
+SETTINGS_FLAGS = {'GameState_TryTogglePreference': ('validatesPreferenceBeforeClone', 'respectsPreferenceWriteLock', 'changesAllFourPreferenceCandidates', 'callsAtomicBalanceCommit'), 'ProductionSettingsView_TogglePreference': ('guardsPreferenceReentry', 'refreshesAfterAcknowledgement', 'rejectionUsesExistingInfoPanel'), 'ProductionSettingsView_Unbind': ('retiresBindingBeforeRemovingListeners',), 'ProductionSettingsView_InputReady': ('blocksPreferenceCommitReentry', 'preservesModalTransitionGuard'), 'ProductionSettingsView_Listen': ('capturesBindingOwner', 'ownedSettingsCallbackCompiledAndPackaged'), 'ProductionSettingsView_RefreshInfo': ('existingLocalizedErrorBranchPackaged',), 'ProductionSettingsView_Bind': ('retiresPreviousBindingsBeforeRebinding',)}
+NATIVE_METHODS += ('GameState_Persist', 'GameState_TryPersist', 'GameState_MigrateSave', 'GameState_ResetProgress')
+PERSISTENCE_FLAGS = {'GameState_Persist': ('guardsNestedPublication', 'delegatesAcknowledgingPersistence', 'logsRejectedPersistence'), 'GameState_TryPersist': ('rejectsLockAndReentryBeforeCommit', 'commitsCurrentLiveSave', 'scopedFinallyReleasesPersistenceGuard'), 'GameState_MigrateSave': ('retainsStartupPersistDelegation',), 'GameState_ResetProgress': ('replacesHistoryBeforeAdoption',), 'GameState_TryCommitBalance': ('durablePrimaryAcknowledgementBeforeAdoption', 'commitsBeforeChanged')}
+ATOMIC_SPENDS = ('GameState_SpendGold', 'GameState_SpendGems', 'GameState_SpendEnergy', 'GameState_TryUseBooster')
+CHECKED_CREDITS = ('GameState_ClaimDailyReward', 'GameState_TryDoubleLastLevelGoldReward', 'GameState_TryCompleteLevel', 'GameState_TryCredit', 'GameState_TrySettleBoosterCommand')
+ATOMIC_ENERGY_APIS = ('GameState_TryAddEnergy', 'GameState_TryRefillEnergy', 'GameState_TryRefreshEnergyFromClock')
+WIDE_ENERGY_MATH = ('GameState_TryAddEnergy', 'GameState_AdvanceEnergyClock')
+SHARED_ENERGY_CLOCK = ('GameState_SpendEnergy', 'GameState_TryRefreshEnergyFromClock')
+ENERGY_WRAPPERS = ('GameState_AddEnergy', 'GameState_RefillEnergy', 'GameState_RefreshEnergyFromClock')
+ATOMIC_NARRATIVE_APIS = ('GameState_CompleteStoryScene','GameState_AcknowledgeChapterCompletion')
+NARRATIVE_ROUTES = ('ScreenRouter_ContinueAfterDialogue','ScreenRouter_ContinueAfterChapterComplete')
+ATOMIC_TUTORIAL_APIS = ('GameState_CompleteTutorial',)
+TUTORIAL_FLAGS = {'LevelTutorialPresenter_Advance': ('rejectsBeforeClearingTutorialStep', 'guardsInactiveTutorialPresenter'), 'LevelTutorialPresenter_BuildOverlay': ('capturesPresentedOverlayAndStep', 'ownedContinueCallbackCompiledAndPackaged'), 'ScreenRouter_ShowGameplayTutorialError': ('scopedTutorialErrorOwner',), 'ScreenRouter_BuildGameplayOverlay': ('registersAcknowledgementRejected', 'ownedErrorCallbackCompiledAndPackaged'), 'ScreenRouter_NavigateBack': ('tutorialBackOwnerPriority',), 'ScreenRouter_RetireModalRootImmediately': ('clearsTutorialErrorOwner',)}
+ATOMIC_SELECTION_APIS = ('GameState_SelectLevel','GameState_TryEnsureSelectedLevelIsUnlocked')
+SELECTION_FLAGS = {'GameState_SelectLevel': ('respectsSelectionWriteLock',), 'GameState_TryEnsureSelectedLevelIsUnlocked': ('respectsSelectionWriteLock', 'normalizesCandidateBeforeCommit'), 'GameState_EnsureSelectedLevelIsUnlocked': ('delegatesToAcknowledgedNormalization',), 'GameState_NormalizeLevelProgress': ('normalizesExplicitCandidate',), 'ScreenRouter_StartLevel': ('normalizationCheckedBeforeEnergySpend',), 'ScreenRouter_OpenSelectedLevel': ('normalizationCheckedBeforeStoryRouting',), 'ProductionChapterMapView_BindNavigation': ('acknowledgedMapCallbacksCompiledAndPackaged',), 'ScreenRouter_BuildInteractionLayer': ('bindsAcknowledgedMapOpenAndError',)}
+ATOMIC_ROUND_APIS = ('GameState_TryRegisterLevelAttempt', 'GameState_TryStartLevel', 'GameState_TryRecordLevelFailure')
+ROUND_FLAGS = {'GameState_RegisterLevelAttempt': ('delegatesToAcknowledgedAttemptRegistration',), 'GameState_CanRegisterLevelAttempt': ('guardsRetainedAndContinuation', 'respectsRoundWriteLock'), 'GameState_TryRegisterLevelAttempt': ('preparesAttemptBeforeCommit',), 'GameState_TryStartLevel': ('callsSharedEnergyClock', 'debitsEnergyInCandidate', 'preparesAttemptBeforeCommit'), 'GameState_TryPrepareLevelAttempt': ('generatedOverflowCatch',), 'GameState_TryCommitRoundCandidate': ('savesBeforeAdoptingCandidate', 'publishesFailureBeforeChanged', 'preservesPrimaryCommitPolicy'), 'GameState_RecordLevelFailure': ('delegatesToAcknowledgedFailure',), 'GameState_TryRecordLevelFailure': ('respectsRoundWriteLock', 'generatedOverflowCatch'), 'GameState_TryFinalizeRetainedFailure': ('generatedOverflowCatch',), 'Match3Board_Initialize': ('validatesCommittedOrdinaryAttempt', 'forwardsOrdinaryOwnership'), 'Match3Board_InitializeCore': ('rejectsUncommittedAttempt', 'keepsOrdinaryBoosterOwner'), 'ScreenRouter_StartLevel': ('guardsReentrantStart', 'checksAtomicStartBeforeGameplay', 'forwardsCommittedAttemptOnce'), 'ScreenRouter_BuildGameplayOverlay': ('consumesCommittedAttemptBeforeInitialization', 'forwardsCommittedOrdinaryAttempt')}
 PACKAGE = 'com.example.legendsofrus.v117debug'
 ACTIVITY = 'com.unity3d.player.UnityPlayerGameActivity'
 ADB = Path('/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Data/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb')
@@ -45,7 +65,7 @@ def inspect_local(root=ROOT, pin=PIN):
             return result
         read = lambda name: json.loads((root / BUILD / name).read_text())
         artifact, verification, final, packed, native = [read(name) for name in
-            ('Artifact.json', 'ApkVerification.json', 'BuildValidation.json', 'PackedAssets.json', 'NativeClaimVerification.json')]
+            ('Artifact.json', 'ApkVerification.json', 'BuildValidation.json', 'PackedAssets.json', 'AfterNative.json')]
         required = ('signatureVerified', 'sameCertificateAsPriorLocalApk', 'zipCrcPassed',
                     'zip16KiBAlignmentPassed', 'debuggable', 'portrait')
         markers = ('DevelopmentGameplayProfile', 'DevelopmentGameplayProfileBadge',
@@ -66,13 +86,82 @@ def inspect_local(root=ROOT, pin=PIN):
             and packed.get('profileRevision') == 13 and packed.get('dialogueRevision') == 2
             and packed.get('victoryRevision') == 12
             and packed.get('dailyRewardRevision') == 5 and packed.get('receiptRevision') == 2
-            and native.get('compiledOverflowRejectionPackaged') is True
-            and native.get('before', {}).get('generatedOverflowCatch') is False
-            and native.get('after', {}).get('generatedOverflowCatch') is True
-            and native.get('after', {}).get('packagedMethodBytesMatchCompiledOutput') is True
-            and native.get('after', {}).get('packagedLibrarySha256') == final.get('nativeClaimLibrarySha256')
-            and isinstance(final.get('nativeClaimLibrarySha256'), str)
-            and re.fullmatch('[a-f0-9]{64}', final.get('nativeClaimLibrarySha256')) is not None
+            and final.get('atomicSpendingAndDurableBoosterRefundRecoveryPackaged') is True
+            and final.get('doubledGoldAndFirstClearRecoveryPackaged') is True
+            and final.get('ordinaryCreditRecoveryPackaged') is True
+            and final.get('dailyRewardOverflowRejectionPackaged') is True
+            and final.get('nativeMethodCount') == 72
+            and final.get('acknowledgedOrdinaryPersistenceRecoveryPackaged') is True
+            and native.get('acknowledgedOrdinaryPersistenceRecoveryPackaged') is True
+            and final.get('persistenceOwnerRegionsVerified') == 4
+            and native.get('persistenceOwnerRegionsVerified') == 4
+            and final.get('atomicSettingsPreferenceRecoveryPackaged') is True
+            and native.get('atomicSettingsPreferenceRecoveryPackaged') is True
+            and final.get('atomicRoundLifecycleRecoveryPackaged') is True
+            and native.get('atomicRoundLifecycleRecoveryPackaged') is True
+            and final.get('atomicSelectionNormalizationRecoveryPackaged') is True
+            and native.get('atomicSelectionNormalizationRecoveryPackaged') is True
+            and final.get('atomicTutorialAcknowledgementRecoveryPackaged') is True
+            and native.get('atomicTutorialAcknowledgementRecoveryPackaged') is True
+            and final.get('atomicNarrativeAcknowledgementRecoveryPackaged') is True
+            and native.get('atomicNarrativeAcknowledgementRecoveryPackaged') is True
+            and final.get('cappedAtomicEnergyAndClockRecoveryPackaged') is True
+            and native.get('cappedAtomicEnergyAndClockRecoveryPackaged') is True
+            and native.get('stage') == 'After'
+            and native.get('validatedReceiptAndRecoveryMetadataPresent') is True
+            and native.get('packagedLibraryMatchesGradleInput') is True
+            and set(native.get('methods', {})) == set(NATIVE_METHODS)
+            and all(native.get('methods', {}).get(owner, {}).get('packagedMethodBytesMatchCompiledOutput') is True
+                    for owner in NATIVE_METHODS)
+            and all(native.get('methods', {}).get(owner, {}).get('generatedOverflowCatch') is True
+                    for owner in CHECKED_CREDITS)
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicBalanceCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False
+                    for owner in ATOMIC_SPENDS)
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicBalanceCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False
+                    for owner in ATOMIC_ENERGY_APIS)
+            and all(native.get('methods', {}).get(owner, {}).get('hasWideCapMath') is True
+                    for owner in WIDE_ENERGY_MATH)
+            and all(native.get('methods', {}).get(owner, {}).get('callsSharedEnergyClock') is True
+                    for owner in SHARED_ENERGY_CLOCK)
+            and all(native.get('methods', {}).get(owner, {}).get('callsTryEnergyApi') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False
+                    for owner in ENERGY_WRAPPERS)
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicBalanceCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False
+                    for owner in ATOMIC_NARRATIVE_APIS)
+            and native.get('methods', {}).get('StoryService_AdvanceDialogue', {}).get('callsStoryCommit') is True
+            and native.get('methods', {}).get('StoryService_AdvanceDialogue', {}).get('rejectsBeforeClearingFinalSequence') is True
+            and all(native.get('methods', {}).get(owner, {}).get('callsErrorDialog') is True for owner in NARRATIVE_ROUTES)
+            and native.get('methods', {}).get('ScreenRouter_ContinueAfterChapterComplete', {}).get('callsChapterAcknowledgement') is True
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicBalanceCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False for owner in ATOMIC_TUTORIAL_APIS)
+            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in TUTORIAL_FLAGS.items() for flag in flags)
+            and set(native.get('tutorialCallbacks', {})) == {'OwnedTutorialContinue','OwnedTutorialError'}
+            and all(row.get('packagedMethodBytesMatchCompiledOutput') is True for row in native.get('tutorialCallbacks', {}).values())
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicBalanceCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False for owner in ATOMIC_SELECTION_APIS)
+            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in SELECTION_FLAGS.items() for flag in flags)
+            and set(native.get('selectionCallbacks', {})) == {'AcknowledgedMapPlay','AcknowledgedMapNode','SelectionError'}
+            and all(row.get('packagedMethodBytesMatchCompiledOutput') is True for row in native.get('selectionCallbacks', {}).values())
+            and all(native.get('methods', {}).get(owner, {}).get('callsAtomicRoundCommit') is True
+                    and native.get('methods', {}).get(owner, {}).get('callsPersist') is False for owner in ATOMIC_ROUND_APIS)
+            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in ROUND_FLAGS.items() for flag in flags)
+            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in SETTINGS_FLAGS.items() for flag in flags)
+            and native.get('methods', {}).get('GameState_TryTogglePreference', {}).get('callsPersist') is False
+            and set(native.get('settingsCallbacks', {})) == {'OwnedSettingsListener'}
+            and all(row.get('packagedMethodBytesMatchCompiledOutput') is True
+                    and row.get('rejectsRetiredBindingBeforeInputAndAction') is True
+                    and row.get('checksButtonAndInfoShieldBeforeAction') is True
+                    for row in native.get('settingsCallbacks', {}).values())
+            and packed.get('settingsRevision') == 5
+            and all(native.get('methods', {}).get(owner, {}).get(flag) is True for owner,flags in PERSISTENCE_FLAGS.items() for flag in flags)
+            and native.get('methods', {}).get('GameState_TryPersist', {}).get('callsAtomicBalanceCommit') is True
+            and native.get('methods', {}).get('GameState_TryPersist', {}).get('callsPersist') is False
+            and native.get('packagedLibrarySha256') == final.get('nativeRecoveryLibrarySha256')
+            and isinstance(final.get('nativeRecoveryLibrarySha256'), str)
+            and re.fullmatch('[a-f0-9]{64}', final.get('nativeRecoveryLibrarySha256')) is not None
             and verification.get('presetRuntimeTypes', {}).get('DevelopmentGameplayFixtures') is True
             and all(verification.get('presetSelectors', {}).get(key) is True for key in PRESETS)
             and [row.get('selector') for row in packed.get('fixedPresets', [])] == list(PRESETS)
@@ -82,6 +171,15 @@ def inspect_local(root=ROOT, pin=PIN):
         result.update(matchesVerifiedRecapApk=bool(matches), recapPackaged=bool(matches), checksumSidecarMatches=True,
                       matchesVerifiedPresetApk=bool(matches), fixedPresetsPackaged=bool(matches),
                       dailyRewardOverflowCatchPackaged=bool(matches),
+                      atomicSpendingAndBoosterRefundRecoveryPackaged=bool(matches),
+                      accumulatedRewardAndCreditRecoveryPackaged=bool(matches),
+                      acknowledgedOrdinaryPersistenceRecoveryPackaged=bool(matches),
+                      atomicSettingsPreferenceRecoveryPackaged=bool(matches),
+                      atomicRoundLifecycleRecoveryPackaged=bool(matches),
+                      atomicSelectionNormalizationRecoveryPackaged=bool(matches),
+                      atomicTutorialAcknowledgementRecoveryPackaged=bool(matches),
+                      atomicNarrativeAcknowledgementRecoveryPackaged=bool(matches),
+                      cappedAtomicEnergyAndClockRecoveryPackaged=bool(matches),
                       recordedSignatureAndCompiledInclusionVerified=bool(matches))
         result['status'] = 'offline_prepared_device_deferred' if matches else 'build_evidence_requires_review'
     except (OSError, ValueError, TypeError, KeyError, AttributeError):

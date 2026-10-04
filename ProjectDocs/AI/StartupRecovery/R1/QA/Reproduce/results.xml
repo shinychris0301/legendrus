@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Failed(Child)" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.4240246">
+  <test-suite type="TestSuite" id="2762" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1568" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.424025" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2756" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="779" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.359565" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2211882" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2757" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="779" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.340885" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2758" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="779" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.325432" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2759" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="779" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.310591" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2244" name="LevelSystemRuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="190" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.241605" total="5" passed="0" failed="5" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2473" name="StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate" methodname="StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1691821334" result="Failed" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.052201" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: same as <LegendsOfRus.PlayerSaveData>
+  But was:  <LegendsOfRus.PlayerSaveData>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupChangedMigrationReentryCannotReplaceAcknowledgedCandidate () [0x0008f] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:2019
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="2472" name="StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite" methodname="StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1811080051" result="Failed" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.028548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: same as <LegendsOfRus.PlayerSaveData>
+  But was:  <LegendsOfRus.PlayerSaveData>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupCurrentHealthyNoOpPreservesLoadedSaveWithoutAWrite () [0x0007d] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:2008
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="2471" name="StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair" methodname="StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="839000560" result="Failed" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.033129" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: same as <LegendsOfRus.PlayerSaveData>
+  But was:  <LegendsOfRus.PlayerSaveData>
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupLockedMigrationCannotAdoptOrEraseOriginalEvidenceAfterRepair () [0x000b4] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1996
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: InvalidInput:None:SAVE_CURRENT_PAYLOAD_REQUIRED
+
+IgnoreFailingMessages:false
+]]></output>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="2470" name="StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.084665" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2468" name="StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(5)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(5)" methodname="StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1214419501" result="Failed" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.033509" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Rejected normalization must not replace the loaded progress.
+  Expected: same as <LegendsOfRus.PlayerSaveData>
+  But was:  <LegendsOfRus.PlayerSaveData>
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite (System.Int32 version) [0x000b5] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1982
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: RevisionExhausted:None:SAVE_REVISION_EXHAUSTED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2469" name="StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(6)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite(6)" methodname="StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1557621362" result="Failed" start-time="2026-10-04 02:43:56Z" end-time="2026-10-04 02:43:56Z" duration="0.033191" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Rejected normalization must not replace the loaded progress.
+  Expected: same as <LegendsOfRus.PlayerSaveData>
+  But was:  <LegendsOfRus.PlayerSaveData>
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.StartupRejectedRewritePreservesLoadedProgressIdentityAndPendingRewrite (System.Int32 version) [0x000b5] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:1982
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: RevisionExhausted:None:SAVE_REVISION_EXHAUSTED
+
+IgnoreFailingMessages:false
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/StartupRecovery/R1/QA/Reproduce/results.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

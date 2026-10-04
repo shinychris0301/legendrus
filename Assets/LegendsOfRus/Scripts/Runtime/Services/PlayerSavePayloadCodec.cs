@@ -130,6 +130,14 @@ namespace LegendsOfRus
                 return false;
             }
 
+            // An absent extension keeps legacy v6 saves valid; malformed receipts cannot grant stock.
+            if (data.boosterCommand != null && !data.boosterCommand.IsValid)
+            {
+                data = null;
+                diagnosticCode = "SAVE_BOOSTER_COMMAND_INVALID";
+                return false;
+            }
+
             // JsonUtility may retain field initializers for an omitted field.
             // The inspected legacy version is authoritative.
             data.saveVersion = declaredVersion;

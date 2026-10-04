@@ -6,7 +6,8 @@ namespace LegendsOfRus
         MoreLines,
         PreLevel,
         ChapterMap,
-        ChapterComplete
+        ChapterComplete,
+        SaveRejected
     }
 
     public static class StoryService
@@ -172,12 +173,17 @@ namespace LegendsOfRus
         public static StoryAdvanceResult AdvanceDialogue()
         {
             if (activeSequence == null) return StoryAdvanceResult.None;
-            if (activeSequence.Advance()) return StoryAdvanceResult.MoreLines;
+            if (activeSequence.LineIndex + 1 < activeSequence.Scene.lines.Length && activeSequence.Advance())
+                return StoryAdvanceResult.MoreLines;
 
             StorySceneData completed = activeSequence.Scene;
-            activeSequence = null;
             GameState state = GameState.Instance;
             bool completedNow = state != null && state.CompleteStoryScene(completed?.id);
+            // Keep the current final line and unread eligibility on a rejected save.
+            if (!completedNow && (state == null || !state.HasCompletedStoryScene(completed?.id)))
+                return StoryAdvanceResult.SaveRejected;
+            activeSequence.Advance();
+            activeSequence = null;
             if (completedNow)
             {
                 PrivacyAwareAnalytics.TryStorySceneComplete(

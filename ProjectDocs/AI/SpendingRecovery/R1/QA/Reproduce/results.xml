@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="9" result="Failed(Child)" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.664129">
+  <test-suite type="TestSuite" id="2570" name="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" fullname="LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL" runstate="Runnable" testcasecount="1409" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.664129" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2564" name="LegendsOfRus.Runtime.PlayModeTests.dll" fullname="/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Library/ScriptAssemblies/LegendsOfRus.Runtime.PlayModeTests.dll" runstate="Runnable" testcasecount="620" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.638639" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="315424" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2565" name="LegendsOfRus" fullname="LegendsOfRus" runstate="Runnable" testcasecount="620" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.625399" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2566" name="Tests" fullname="LegendsOfRus.Tests" runstate="Runnable" testcasecount="620" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.609312" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2567" name="PlayMode" fullname="LegendsOfRus.Tests.PlayMode" runstate="Runnable" testcasecount="620" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.592595" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2238" name="LevelSystemRuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="53" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.301371" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="2294" name="SpendingBlockedWriteCannotDebitOrReportSuccess" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.252546" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="2287" name="SpendingBlockedWriteCannotDebitOrReportSuccess(0)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(0)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1733459897" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.035911" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 27.
+  Expected: "{"saveVersion":6,"gold":12540,"gems":350,"energy":4,"energyMa..."
+  But was:  "{"saveVersion":6,"gold":12539,"gems":350,"energy":4,"energyMa..."
+  --------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2288" name="SpendingBlockedWriteCannotDebitOrReportSuccess(1)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(1)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1602003178" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.030136" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 38.
+  Expected: "...rsion":6,"gold":12540,"gems":350,"energy":4,"energyMax":5,..."
+  But was:  "...rsion":6,"gold":12540,"gems":349,"energy":4,"energyMax":5,..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2289" name="SpendingBlockedWriteCannotDebitOrReportSuccess(2)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(2)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="480398052" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.033203" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 50.
+  Expected: "...ld":12540,"gems":350,"energy":4,"energyMax":5,"lastEnergyU..."
+  But was:  "...ld":12540,"gems":350,"energy":3,"energyMax":5,"lastEnergyU..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2290" name="SpendingBlockedWriteCannotDebitOrReportSuccess(3)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(3)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="909335011" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.033306" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 487.
+  Expected: "...Completions":[],"boosterMace":7,"boosterFirebird":5,"boost..."
+  But was:  "...Completions":[],"boosterMace":6,"boosterFirebird":5,"boost..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2291" name="SpendingBlockedWriteCannotDebitOrReportSuccess(4)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(4)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="2082499391" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.033302" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 507.
+  Expected: "...sterMace":7,"boosterFirebird":5,"boosterLivingLight":8,"bo..."
+  But was:  "...sterMace":7,"boosterFirebird":4,"boosterLivingLight":8,"bo..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2292" name="SpendingBlockedWriteCannotDebitOrReportSuccess(5)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(5)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="2144276026" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.033169" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  String lengths are both 1011. Strings differ at index 530.
+  Expected: "...ebird":5,"boosterLivingLight":8,"boosterSeaPearl":10,"last..."
+  But was:  "...ebird":5,"boosterLivingLight":7,"boosterSeaPearl":10,"last..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+                <test-case id="2293" name="SpendingBlockedWriteCannotDebitOrReportSuccess(6)" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess(6)" methodname="SpendingBlockedWriteCannotDebitOrReportSuccess" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="97913534" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.033312" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  No debit before durable commitment.
+  Expected string length 1011 but was 1010. Strings differ at index 550.
+  Expected: "...ingLight":8,"boosterSeaPearl":10,"lastDailyRewardUtc":"","..."
+  But was:  "...ingLight":8,"boosterSeaPearl":9,"lastDailyRewardUtc":"","d..."
+  --------------------------------------------^
+]]></message>
+                    <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingBlockedWriteCannotDebitOrReportSuccess (System.Int32 resource) [0x00103] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:668
+]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[
+IgnoreFailingMessages:true
+Player save write blocked: WriteBlocked:Scan:SAVE_FUTURE_VERSION_BLOCKED
+
+IgnoreFailingMessages:false
+]]></output>
+                </test-case>
+              </test-suite>
+              <test-case id="2295" name="SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation" fullname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation" methodname="SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation" classname="LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests" runstate="Runnable" seed="1092405718" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.031807" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.SpendingNegativeEnergyIsRejectedWithoutMintingOrClockMutation () [0x00018] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/LevelSystemRuntimePlayModeTests.cs:690
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2324" name="Match3RuntimePlayModeTests" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" testcasecount="13" result="Failed" site="Child" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.271698" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2336" name="SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits" fullname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests.SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits" methodname="SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits" classname="LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests" runstate="Runnable" seed="736990423" result="Failed" start-time="2026-10-03 14:44:27Z" end-time="2026-10-03 14:44:27Z" duration="0.254950" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: Paused
+  But was:  Idle
+]]></message>
+                  <stack-trace><![CDATA[at LegendsOfRus.Tests.PlayMode.Match3RuntimePlayModeTests+<SpendingRefundOverflowKeepsRestoredBoardPausedUntilCreditFits>d__25.MoveNext () [0x00117] in /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/Assets/LegendsOfRus/Tests/PlayMode/Match3RuntimePlayModeTests.cs:294
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@773a3a4953ad/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[SplashTitle typography is NOT reference-approved. Rendering with OS Liberation Serif — DEVELOPMENT ONLY. RegularFont and StartFont are not assigned. Open Legends of Rus > Production UI > Splash R3 > Select Typography Settings. Bind project font assets and verify their identity against the reference. An image-generated reference may not have an identifiable source typeface; do not mark a substitute as exact. This notice is emitted once per unchanged status per Play session.
+Legends of Rus level=qa.input-motion, attempt=1, board=8x9, seed=508541, hash=F55AF44F8CC1FC4B
+Gameplay phase: Idle -> ResolvingMatches
+Gameplay phase: ResolvingMatches -> Idle
+Gameplay command recovered: qa:stuck-command. Reason=Command timeout: qa:stuck-command; board=F55AF44F8CC1FC4B
+Saving results to: /home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/SpendingRecovery/R1/QA/Reproduce/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

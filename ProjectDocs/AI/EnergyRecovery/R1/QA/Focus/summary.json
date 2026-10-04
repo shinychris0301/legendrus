@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 25.421513319015503,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LevelSystemRuntimePlayModeTests.EnergyGrantLargestAmountRespectsExistingCap;LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents;LevelSystemRuntimePlayModeTests.EnergyClockLargestCapCannotWrapDuringRefreshOrSpending;FunctionalDemoNavigationPlayModeTests.EnergyClockCatchupIsCappedAndNotRepeated;LevelSystemRuntimePlayModeTests.SpendingInvalidInsufficientAndEnergyClockBoundaries",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/EnergyRecovery/R1/QA/Focus/results.xml",
+    "-logFile",
+    "/tmp/lor-energy-recovery-r1/Focus/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-energy-recovery-r1/Focus/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-energy-recovery-r1/Focus",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "11",
+    "result": "Failed(Child)",
+    "total": "11",
+    "passed": "10",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 15:56:47Z",
+    "end-time": "2026-10-03 15:56:48Z",
+    "duration": "0.7320091"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.EnergyMutationBlockedSavePreservesBalanceClockAndEvents(2)",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    }
+  ]
+}

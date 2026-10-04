@@ -61,6 +61,7 @@ namespace LegendsOfRus
         const float DefaultCommandTimeoutSeconds = 10f;
         float commandTimeoutSeconds = DefaultCommandTimeoutSeconds;
         bool recoveringCommand;
+        bool refundPending;
 
         bool lastWaveVerificationPassed = true;
         int lastVerifiedWaveCount;
@@ -86,6 +87,11 @@ namespace LegendsOfRus
         public event Action<BoardObstacleInteractionInstruction> ObstacleInteracted;
         public event Action<BoardObjectiveItemCollection> ObjectiveItemCollected;
         public event Action<string> CommandRejected;
+        public event Action<Match3Board> InventoryRecoveryRequired;
+        public bool HasInventoryRecoveryError => refundPending ||
+            (!campaignManaged && GameState.Instance != null && (!GameState.Instance.CanPersist ||
+            GameState.Instance.HasPendingBoosterCommand && (activeCommand == null ||
+            activeCommand.BoosterCommandId != GameState.Instance.Save.boosterCommand.commandId)));
         public event Action<GameplayMotionEvent> MotionEventPublished;
 
         public int Moves => moves;
@@ -102,7 +108,7 @@ namespace LegendsOfRus
         public int RedRemaining => GoalSlot1Remaining;
         public int BlueRemaining => GoalSlot2Remaining;
         public GameplayPhase Phase => interaction.Current;
-        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && interaction.CanAcceptPointerInput;
+        public bool CanAcceptPointerInput => !CampaignInventoryBlocked && !HasInventoryRecoveryError && interaction.CanAcceptPointerInput;
         public string BoardStateHash => model != null ? model.ComputeStateHash() : string.Empty;
         public int? BoardSeed => model != null ? model.Seed : null;
         public string BoardReplayToken =>
@@ -134,13 +140,20 @@ namespace LegendsOfRus
         public void Initialize(
             LevelData levelData,
             Action<int> onWin,
-            Action<int> onFail
+            Action<int> onFail,
+            int? registeredAttempt = null
         )
         {
             ruleVersion = CurrentGameplayRules;
             useCurrentBoardArt = true;
             campaignInventory = null;
-            InitializeCore(levelData, onWin, onFail, null);
+            if (registeredAttempt.HasValue && registeredAttempt.Value < 1)
+                throw new ArgumentException("A committed ordinary attempt must be positive.");
+            if (registeredAttempt.HasValue && (levelData == null || GameState.Instance == null ||
+                GameState.Instance.GetLevelProgress(levelData.chapterId, levelData.levelId)?.attempts != registeredAttempt.Value))
+                throw new ArgumentException("The ordinary attempt must match the committed progress ledger.");
+            InitializeCore(levelData, onWin, onFail, registeredAttempt,
+                preRegisteredOrdinaryAttempt: registeredAttempt.HasValue);
         }
 
         // Explicit development campaign entry: the coordinator already committed the attempt.
@@ -162,9 +175,9 @@ namespace LegendsOfRus
 
         }
 
-        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null)
+        void InitializeCore(LevelData levelData, Action<int> onWin, Action<int> onFail, int? committedAttempt, RetainedRoundData retained = null, bool preRegisteredOrdinaryAttempt = false)
         {
-            campaignManaged = committedAttempt.HasValue;
+            campaignManaged = committedAttempt.HasValue && !preRegisteredOrdinaryAttempt;
             this.onWin = onWin;
             this.onFail = onFail;
             currentLevel = levelData ?? ChapterLevelCatalog.ResolveSelected(null);
@@ -193,6 +206,7 @@ namespace LegendsOfRus
             int attempt = retained?.attempt ?? committedAttempt ?? (GameState.Instance != null
                 ? GameState.Instance.RegisterLevelAttempt(currentLevel)
                 : 1);
+            if (attempt < 1) throw new InvalidOperationException("Round attempt could not be committed.");
             retainedAttemptNumber = attempt;
             retainedAttemptId = retained?.attemptId ?? Guid.NewGuid().ToString("N");
             int seed = BoardSeedUtility.CreateRuntimeSeed(
@@ -923,8 +937,7 @@ namespace LegendsOfRus
                     return;
                 }
 
-                var state = GameState.Instance;
-                if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
+                if (!ConsumeCommandBooster(type))
                 {
                     CompleteRuntimeCommand();
                     LastRejectedCommandReason = "Booster inventory is empty.";
@@ -936,11 +949,11 @@ namespace LegendsOfRus
                         GameplayBoosterKind.SeaPearl
                     );
                     SafeCommandRejected(LastRejectedCommandReason);
-                    ShowLegacyToast("Жемчужина закончилась.");
+                    if (!HasInventoryRecoveryError) ShowLegacyToast("Жемчужина закончилась.");
+                    PauseForBlockedInventory();
                     return;
                 }
 
-                MarkActiveCommandBoosterConsumed(type);
                 EnsurePhase(GameplayPhase.ActivatingSpecials);
                 PublishBoosterMotion(
                     GameplayMotionKind.BoosterActivated,
@@ -1108,8 +1121,7 @@ namespace LegendsOfRus
                 yield break;
             }
 
-            var state = GameState.Instance;
-            if (campaignManaged ? !campaignInventory.Consume(type) : state == null || !state.TryUseBooster(type))
+            if (!ConsumeCommandBooster(type))
             {
                 CompleteRuntimeCommand();
                 armedBooster = null;
@@ -1123,11 +1135,11 @@ namespace LegendsOfRus
                     boosterKind
                 );
                 SafeCommandRejected(LastRejectedCommandReason);
-                ShowLegacyToast("Этот бустер закончился.");
+                if (!HasInventoryRecoveryError) ShowLegacyToast("Этот бустер закончился.");
+                PauseForBlockedInventory();
                 yield break;
             }
 
-            MarkActiveCommandBoosterConsumed(type);
             armedBooster = null;
             EnsurePhase(GameplayPhase.ActivatingSpecials);
             int boosterAffectedCount = FirstWaveAffectedCount(plan);
@@ -1687,7 +1699,9 @@ namespace LegendsOfRus
             BoardResolutionPlan plan
         )
         {
-            if (CampaignInventoryBlocked) return false;
+            if (CampaignInventoryBlocked || HasInventoryRecoveryError) { PauseForBlockedInventory(); return false; }
+            if (!campaignManaged && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand && activeCommand == null)
+            { interaction.Force(GameplayPhase.Paused); SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired"); return false; }
             if (activeCommand != null)
             {
                 Debug.LogError(
@@ -1715,9 +1729,27 @@ namespace LegendsOfRus
             return true;
         }
 
-        void MarkActiveCommandBoosterConsumed(BoosterType booster)
+        void PauseForBlockedInventory()
         {
-            activeCommand?.MarkBoosterConsumed(booster);
+            if (!HasInventoryRecoveryError) return;
+            interaction.Force(GameplayPhase.Paused);
+            SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
+        }
+
+        bool ConsumeCommandBooster(BoosterType type)
+        {
+            string commandId = null;
+            bool consumed = campaignManaged ? campaignInventory.Consume(type) :
+                GameState.Instance != null && GameState.Instance.TryBeginBoosterCommand(type, out commandId);
+            if (consumed) activeCommand?.MarkBoosterConsumed(type, commandId);
+            return consumed;
+        }
+
+        bool RefundCommand(RuntimeCommandTransaction command)
+        {
+            if (!command.ConsumedBooster.HasValue) return true;
+            return campaignManaged ? campaignInventory != null && campaignInventory.Refund() :
+                GameState.Instance != null && GameState.Instance.TrySettleBoosterCommand(command.BoosterCommandId, applied: false);
         }
 
         bool CompleteRuntimeCommand()
@@ -1727,6 +1759,12 @@ namespace LegendsOfRus
             {
                 commandWatchdog.Cancel(); activeCommand = null; interaction.Force(GameplayPhase.Paused); return false;
             }
+            if (!campaignManaged && activeCommand.ConsumedBooster.HasValue &&
+                (GameState.Instance == null || !GameState.Instance.TrySettleBoosterCommand(activeCommand.BoosterCommandId, applied: true)))
+            {
+                RecoverActiveCommand("Booster completion could not be committed.");
+                return false;
+            }
             commandWatchdog.Complete(activeCommand.Token);
             activeCommand = null;
             recoveringCommand = false;
@@ -1735,7 +1773,7 @@ namespace LegendsOfRus
 
         void RecoverActiveCommand(string reason)
         {
-            if (recoveringCommand || activeCommand == null)
+            if (recoveringCommand || refundPending || activeCommand == null)
                 return;
 
             recoveringCommand = true;
@@ -1756,20 +1794,20 @@ namespace LegendsOfRus
             if (goalRuntime != null && failed.GoalsBefore != null)
                 goalRuntime.RestoreSnapshot(failed.GoalsBefore);
 
-            if (campaignManaged && failed.ConsumedBooster.HasValue) campaignInventory?.Refund();
-            if (!campaignManaged && failed.ConsumedBooster.HasValue && GameState.Instance != null)
-                GameState.Instance.AddBooster(failed.ConsumedBooster.Value, 1);
+            bool refunded = RefundCommand(failed);
+            refundPending = !refunded;
 
             armedBooster = null;
             selected = new Vector2Int(-1, -1);
-            activeCommand = null;
+            if (refunded) activeCommand = null;
             ResetVisualTransforms();
             RefreshAll();
-            interaction.Force(GameplayPhase.Idle);
+            bool canResume = refunded && !HasInventoryRecoveryError && !CampaignInventoryBlocked;
+            interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused);
             PublishState();
 
             lastWaveVerificationPassed = false;
-            PublishMotion(
+            if (refunded) PublishMotion(
                 GameplayMotionKind.CommandRecovered,
                 new Vector2Int(0, 0),
                 new Vector2Int(0, 0),
@@ -1781,12 +1819,13 @@ namespace LegendsOfRus
                 recoveredBooster
             );
             Debug.LogError(
-                $"Gameplay command recovered: {failed.Label}. " +
+                $"Gameplay command {(refunded ? "recovered" : "recovery pending")}: {failed.Label}. " +
                 $"Reason={reason}; board={model.ComputeStateHash()}"
             );
-            ShowLegacyToast(
+            if (refunded) ShowLegacyToast(
                 "Ход восстановлен после ошибки анимации. Повторите действие."
             );
+            if (!canResume) SafeInvoke(InventoryRecoveryRequired, this, "InventoryRecoveryRequired");
             recoveringCommand = false;
         }
 
@@ -2123,10 +2162,10 @@ namespace LegendsOfRus
             if (
                 !campaignManaged && consumedBooster.HasValue &&
                 GameState.Instance != null &&
-                GameState.Instance.TryUseBooster(consumedBooster.Value)
+                ConsumeCommandBooster(consumedBooster.Value)
             )
             {
-                MarkActiveCommandBoosterConsumed(consumedBooster.Value);
+                // The normal durable reservation was made by ConsumeCommandBooster.
             }
 
             interaction.Force(GameplayPhase.ResolvingMatches);
@@ -2146,6 +2185,23 @@ namespace LegendsOfRus
 
         public bool TryResume()
         {
+            if (refundPending)
+            {
+                if (activeCommand == null || !RefundCommand(activeCommand)) return false;
+                var failed = activeCommand;
+                refundPending = false; activeCommand = null;
+                bool canResume = !HasInventoryRecoveryError && !CampaignInventoryBlocked;
+                interaction.Force(canResume ? GameplayPhase.Idle : GameplayPhase.Paused); PublishState();
+                PublishMotion(GameplayMotionKind.CommandRecovered, Vector2Int.zero, Vector2Int.zero,
+                    0, 0, SpecialGem.None, lastResolutionPlanHash, SpecialCombinationKind.None,
+                    ToGameplayBooster(failed.Label, failed.ConsumedBooster));
+                return canResume;
+            }
+            if (!campaignManaged && activeCommand == null && GameState.Instance != null && GameState.Instance.HasPendingBoosterCommand)
+            {
+                if (!GameState.Instance.TryRecoverPendingBoosterCommand()) return false;
+            }
+            if (CampaignInventoryBlocked || HasInventoryRecoveryError) return false;
             return interaction.TryResume();
         }
 

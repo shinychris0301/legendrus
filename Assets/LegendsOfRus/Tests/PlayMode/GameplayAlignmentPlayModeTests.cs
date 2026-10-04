@@ -315,6 +315,63 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(state.BoosterCount(BoosterType.SeaPearl),Is.EqualTo(inventory-1));Assert.That(view.BoosterCounts[3].text,Is.EqualTo((inventory-1).ToString()));
         }
 
+        IEnumerator WaitForInventoryError()
+        {
+            float deadline=Time.realtimeSinceStartup+5;
+            while(router.ActiveModal!=ScreenId.EmptyErrorState && Time.realtimeSinceStartup<deadline)yield return null;
+            Settle();yield return null;
+            Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+        }
+
+        [UnityTest]
+        public IEnumerator SpendingNativeRefundRetryExitAndStaleCallbacksInBothLanguages()
+        {
+            var state=GameState.Instance;Assert.That(state.SpendEnergy(1),Is.True);
+            foreach(string language in new[]{"ru","en"})
+            {
+                router.Show(ScreenId.Gameplay);Settle();yield return null;
+                DemoFeatureState.SetLanguage(language);
+                var view=Root().GetComponentInChildren<ProductionGameplayView>();var board=view.Board;
+                var target=new BoardPosition(3,3);
+                string hash=board.BoardStateHash;int moves=board.Moves,score=board.Score;
+                ClickCardEdge(view.Footer.Find("BoosterCard_1").GetComponent<ProductionGameplayBoosterCard>());
+                Assert.That(board.TapCell(target.X,target.Y),Is.True);
+                Assert.That(state.HasPendingBoosterCommand,Is.True);string id=state.Save.boosterCommand.commandId;
+                Assert.That(state.TryAddBooster(BoosterType.Firebird,int.MaxValue-state.BoosterCount(BoosterType.Firebird)),Is.True);
+                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: booster:FirebirdArea"));
+                board.ForceCommandTimeoutForTesting();yield return WaitForInventoryError();
+                Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Paused));Assert.That(board.BoardStateHash,Is.EqualTo(hash));
+                Assert.That(board.Moves,Is.EqualTo(moves));Assert.That(board.Score,Is.EqualTo(score));
+                var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();Assert.That(error.Retry.interactable,Is.True);
+                error.Retry.onClick.Invoke();Settle();yield return WaitForInventoryError();
+                Assert.That(state.Save.boosterCommand.commandId,Is.EqualTo(id));Assert.That(state.HasPendingBoosterCommand,Is.True);
+                Assert.That(state.TryUseBooster(BoosterType.Firebird),Is.True);
+                error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();var stale=error.Retry.onClick;
+                error.Retry.onClick.Invoke();error.Retry.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.ActiveModal,Is.Null);Assert.That(board.Phase,Is.EqualTo(GameplayPhase.Idle));
+                Assert.That(state.Save.boosterCommand.state,Is.EqualTo(CampaignBoosterState.Refunded));
+                Assert.That(state.BoosterCount(BoosterType.Firebird),Is.EqualTo(int.MaxValue));
+                Assert.That(SaveService.Load().boosterCommand.state,Is.EqualTo(CampaignBoosterState.Refunded));
+                Capture("Gameplay_RefundRecovered_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672));
+
+                ClickCardEdge(view.Footer.Find("BoosterCard_1").GetComponent<ProductionGameplayBoosterCard>());
+                Assert.That(board.TapCell(target.X,target.Y),Is.True);
+                Assert.That(state.TryAddBooster(BoosterType.Firebird,1),Is.True);
+                LogAssert.Expect(LogType.Error,new System.Text.RegularExpressions.Regex("Gameplay command recovery pending: booster:FirebirdArea"));
+                board.ForceCommandTimeoutForTesting();yield return WaitForInventoryError();
+                Capture("Gameplay_RefundPending_"+language,new Vector2Int(941,1672),new Rect(0,0,941,1672),allowBlockingModal:true);
+                router.NavigateBack();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.ChapterMap));Assert.That(state.HasPendingBoosterCommand,Is.True);
+                Assert.That(SaveService.Load().boosterCommand.state,Is.EqualTo(CampaignBoosterState.Reserved));
+                Assert.That(state.TryUseBooster(BoosterType.Firebird),Is.True);
+                router.Show(ScreenId.PreLevel);Settle();yield return null;
+                router.Viewport.GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));Assert.That(state.HasPendingBoosterCommand,Is.False);
+                string committed=JsonUtility.ToJson(state.Save);stale.Invoke();Settle();yield return null;
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(committed));
+            }
+        }
+
         [UnityTest]
         public IEnumerator NativePauseKeepsTheSameBoardAndBlocksBoosterInput()
         {
@@ -544,7 +601,7 @@ namespace LegendsOfRus.Tests.PlayMode
             public Rect safeArea;
         }
 
-        void Capture(string name, Vector2Int size, Rect safeArea, Action<Camera> inspect = null)
+        void Capture(string name, Vector2Int size, Rect safeArea, Action<Camera> inspect = null, bool allowBlockingModal = false)
         {
             string directory = Environment.GetEnvironmentVariable("LOR_GAMEPLAY_CAPTURE_DIR");
             Assert.That(directory, Is.Not.Null.And.Not.Empty);
@@ -578,7 +635,18 @@ namespace LegendsOfRus.Tests.PlayMode
                 foreach (Text text in Root().GetComponentsInChildren<Text>(true)) text.SetVerticesDirty();
                 Canvas.ForceUpdateCanvases();
 
-                VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionGameplayView>(),camera,size,safeArea);
+                if (allowBlockingModal)
+                {
+                    Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                    Assert.That(Root().GetComponentInChildren<ProductionGameplayView>().Board.CanAcceptPointerInput,Is.False);
+                    var error=router.Viewport.GetComponentInChildren<ProductionErrorDialogView>();
+                    var hits=new List<RaycastResult>();
+                    EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current)
+                    {position=Bounds((RectTransform)error.Close.transform,camera).center},hits);
+                    Assert.That(hits,Is.Not.Empty);
+                    Assert.That(hits[0].gameObject.GetComponentInParent<Button>(),Is.SameAs(error.Close));
+                }
+                else VerifyLayoutAndInput(Root().GetComponentInChildren<ProductionGameplayView>(),camera,size,safeArea);
                 inspect?.Invoke(camera);
                 camera.Render(); RenderTexture.active = target;
                 texture.ReadPixels(new Rect(0,0,size.x,size.y),0,0); texture.Apply();

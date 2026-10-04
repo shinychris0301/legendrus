@@ -1,0 +1,41 @@
+{
+  "extraOwners": [
+    "GameState_TryTogglePreference",
+    "ProductionSettingsView_TogglePreference",
+    "ProductionSettingsView_Unbind",
+    "ProductionSettingsView_InputReady",
+    "ProductionSettingsView_Listen",
+    "ProductionSettingsView_RefreshInfo",
+    "ProductionSettingsView_Bind"
+  ],
+  "flags": {
+    "GameState_TryTogglePreference": [
+      "validatesPreferenceBeforeClone",
+      "respectsPreferenceWriteLock",
+      "changesAllFourPreferenceCandidates",
+      "callsAtomicBalanceCommit"
+    ],
+    "ProductionSettingsView_TogglePreference": [
+      "guardsPreferenceReentry",
+      "refreshesAfterAcknowledgement",
+      "rejectionUsesExistingInfoPanel"
+    ],
+    "ProductionSettingsView_Unbind": [
+      "retiresBindingBeforeRemovingListeners"
+    ],
+    "ProductionSettingsView_InputReady": [
+      "blocksPreferenceCommitReentry",
+      "preservesModalTransitionGuard"
+    ],
+    "ProductionSettingsView_Listen": [
+      "capturesBindingOwner",
+      "ownedSettingsCallbackCompiledAndPackaged"
+    ],
+    "ProductionSettingsView_RefreshInfo": [
+      "existingLocalizedErrorBranchPackaged"
+    ],
+    "ProductionSettingsView_Bind": [
+      "retiresPreviousBindingsBeforeRebinding"
+    ]
+  }
+}

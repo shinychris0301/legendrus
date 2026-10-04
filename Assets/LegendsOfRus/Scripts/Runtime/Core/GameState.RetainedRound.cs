@@ -44,7 +44,9 @@ namespace LegendsOfRus
             var candidate=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(Save));
             if (!CancelUnusedContinuation(candidate,data)) return false;
             var progress=candidate.levelProgress.Single(p=>p.chapterId==data.chapter&&p.levelId==data.level);
-            progress.failures++;progress.bestScore=Math.Max(progress.bestScore,data.score);candidate.retainedRound=null;
+            try { progress.failures=checked(progress.failures+1); }
+            catch (OverflowException) { return false; }
+            progress.bestScore=Math.Max(progress.bestScore,data.score);candidate.retainedRound=null;
             if (!CommitRetained(candidate)) return false;
             unsavedRetainedRound=null;
             PrivacyAwareAnalytics.TryLevelFail(ChapterLevelCatalog.Find(data.chapter,data.level).id,data.attempt,data.score);

@@ -1,0 +1,13 @@
+{
+  "initialAudit": "CaptureNative.py After",
+  "initialExitCode": 1,
+  "failedAssertion": "Settings owned listener expected a direct Selectable_IsInteractable_ call",
+  "actualCompiledForm": "Button IsInteractable is emitted as VirtualFuncInvoker0< bool >::Invoke(24, button). All rejected owner/input/button/info conditions converge to the return label before Action_Invoke.",
+  "correction": "Require the boolean virtual call on the captured button and its position before InfoPanel/action, while retaining exact compiled-to-packaged byte checks.",
+  "productionEditsRequired": false,
+  "anotherUnityBuildRequired": false,
+  "secondAuditExitCode": 1,
+  "secondFailedAssertion": "The busy-reset assignment was required textually after the TryTogglePreference call.",
+  "actualFinallyForm": "IL2CPP declares a Finally lambda containing the busy reset before the try block, then executes that scoped cleanup on exit before RefreshState.",
+  "secondCorrection": "Verify the reset belongs to the generated scoped Finally declaration before try/commit and the subsequent RefreshState, rather than requiring C# lexical ordering."
+}

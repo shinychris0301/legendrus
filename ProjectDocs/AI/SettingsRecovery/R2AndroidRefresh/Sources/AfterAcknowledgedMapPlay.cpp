@@ -1,0 +1,13 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void U3CU3Ec__DisplayClass52_0_U3CBindNavigationU3Eb__2_m5DC08EF5587B191495867C0246DC6E66D14282AB (U3CU3Ec__DisplayClass52_0_t9CED2D43B105C8CFAF5F15DEEF9A7644E9AD64D2* __this, const RuntimeMethod* method) 
+{
+	{
+		ProductionChapterMapView_t73FA61D194FCDDD0F89F8021A5BBFC50FD5D1075* L_0 = __this->___U3CU3E4__this;
+		Func_1_t2BE7F58348C9CC544A8973B3A9E55541DE43C457* L_1 = __this->___openSelectedLevel;
+		NullCheck(L_1);
+		bool L_2;
+		L_2 = Func_1_Invoke_mBB7F37C468451AF57FAF31635C544D6B8C4373B2_inline(L_1, NULL);
+		NullCheck(L_0);
+		L_0->___committed = L_2;
+		return;
+	}
+}

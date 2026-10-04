@@ -1,0 +1,47 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 24.98740267753601,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LevelSystemRuntimePlayModeTests.Tutorial;TutorialAlignmentPlayModeTests.Tutorial",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/TutorialRecovery/R1/QA/Boundaries/results.xml",
+    "-logFile",
+    "/tmp/lor-tutorial-recovery-r1/Boundaries/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-tutorial-recovery-r1/Boundaries/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-tutorial-recovery-r1/Boundaries",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "14",
+    "result": "Failed(Child)",
+    "total": "14",
+    "passed": "13",
+    "failed": "1",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 19:20:59Z",
+    "end-time": "2026-10-03 19:21:00Z",
+    "duration": "1.7214091"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.TutorialAlignmentPlayModeTests.TutorialRejectedNativeContinuePreservesPausedGameplayInBothLanguages",
+      "result": "Failed",
+      "message": "UnityEngine.MissingReferenceException : The object of type 'LegendsOfRus.LevelTutorialPresenter' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+    }
+  ]
+}

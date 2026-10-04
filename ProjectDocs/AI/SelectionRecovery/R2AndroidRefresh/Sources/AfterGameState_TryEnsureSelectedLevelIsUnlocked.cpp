@@ -1,0 +1,36 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool GameState_TryEnsureSelectedLevelIsUnlocked_mB10422023D3F25FEEAFAC46AF1BC583D4F220D90 (GameState_t5E590D2FB317152A4011A3CA69E3F311E0A7393A* __this, const RuntimeMethod* method) 
+{
+	static bool s_Il2CppMethodInitialized;
+	if (!s_Il2CppMethodInitialized)
+	{
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&JsonUtility_FromJson_TisPlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30_m5FA532D489BA59FC0DD187FA87D56E71F1F63B04_RuntimeMethod_var);
+		s_Il2CppMethodInitialized = true;
+	}
+	PlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30* V_0 = NULL;
+	{
+		bool L_0 = __this->___canPersist;
+		if (L_0)
+		{
+			goto IL_000a;
+		}
+	}
+	{
+		return (bool)0;
+	}
+
+IL_000a:
+	{
+		PlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30* L_1 = __this->___Save;
+		String_t* L_2;
+		L_2 = JsonUtility_ToJson_m28CC6843B9D3723D88AD13EA3829B71FDE7826BA(L_1, NULL);
+		PlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30* L_3;
+		L_3 = JsonUtility_FromJson_TisPlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30_m5FA532D489BA59FC0DD187FA87D56E71F1F63B04(L_2, JsonUtility_FromJson_TisPlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30_m5FA532D489BA59FC0DD187FA87D56E71F1F63B04_RuntimeMethod_var);
+		V_0 = L_3;
+		PlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30* L_4 = V_0;
+		GameState_NormalizeLevelProgress_m2905E3A4F6C3B9801AE636257CCF1C938DABAF6C(L_4, NULL);
+		PlayerSaveData_t44D743359749F73BC6386FE5FCED6A67D1E51F30* L_5 = V_0;
+		bool L_6;
+		L_6 = GameState_TryCommitBalance_mD9DA4B9AE5D934AD30A0F070F9C9AE01F165CCD7(__this, L_5, NULL);
+		return L_6;
+	}
+}

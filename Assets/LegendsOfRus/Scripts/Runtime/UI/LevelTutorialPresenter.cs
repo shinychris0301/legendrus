@@ -23,6 +23,8 @@ namespace LegendsOfRus
         int previousGoalOne;
         int previousGoalTwo;
 
+        public event Action<LevelTutorialPresenter> AcknowledgementRejected;
+
         public LevelTutorialStepData CurrentStep { get; private set; }
         public bool IsPresenting => overlay != null;
         public int PendingStepCount => sequence?.PendingCount ?? 0;
@@ -222,7 +224,11 @@ namespace LegendsOfRus
             buttonOutline.effectDistance = new Vector2(2f, -2f);
             Button action = button.GetComponent<Button>();
             action.navigation = new Navigation { mode = Navigation.Mode.None };
-            action.onClick.AddListener(Advance);
+            GameObject presentedOverlay = overlay;
+            action.onClick.AddListener(() =>
+            {
+                if (overlay == presentedOverlay && CurrentStep == step) Advance();
+            });
 
             Text label = CreateText(
                 button.GetComponent<RectTransform>(),
@@ -238,11 +244,17 @@ namespace LegendsOfRus
 
         public void Advance()
         {
+            if (this == null || !isActiveAndEnabled || CurrentStep == null || board == null || !IsPresenting) return;
             if (CurrentStep != null && board != null)
             {
                 GameState state = GameState.Instance;
                 bool completedNow =
                     state != null && state.CompleteTutorial(CurrentStep.id);
+                if (!completedNow && (state == null || !state.HasCompletedTutorial(CurrentStep.id)))
+                {
+                    AcknowledgementRejected?.Invoke(this);
+                    return;
+                }
                 if (completedNow)
                 {
                     PrivacyAwareAnalytics.TryTutorialStepComplete(
@@ -255,7 +267,7 @@ namespace LegendsOfRus
             }
 
             CurrentStep = null;
-            if (overlay != null) Destroy(overlay);
+            if (overlay != null) { overlay.SetActive(false); Destroy(overlay); }
             overlay = null;
 
             if (sequence != null && sequence.HasPending)

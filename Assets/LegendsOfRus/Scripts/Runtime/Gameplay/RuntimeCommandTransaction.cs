@@ -11,6 +11,7 @@ namespace LegendsOfRus
         public int ScoreBefore { get; }
         public LevelGoalRuntimeSnapshot GoalsBefore { get; }
         public BoosterType? ConsumedBooster { get; private set; }
+        public string BoosterCommandId { get; private set; }
 
         public RuntimeCommandTransaction(
             long token,
@@ -29,9 +30,10 @@ namespace LegendsOfRus
             GoalsBefore = goalsBefore;
         }
 
-        public void MarkBoosterConsumed(BoosterType booster)
+        public void MarkBoosterConsumed(BoosterType booster, string commandId = null)
         {
             ConsumedBooster = booster;
+            BoosterCommandId = commandId;
         }
     }
 }

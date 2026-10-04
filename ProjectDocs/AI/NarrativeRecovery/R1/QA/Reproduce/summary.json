@@ -1,0 +1,67 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 26.132139205932617,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/NarrativeRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-narrative-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-narrative-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-narrative-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "5",
+    "result": "Failed(Child)",
+    "total": "5",
+    "passed": "0",
+    "failed": "5",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 17:50:55Z",
+    "end-time": "2026-10-03 17:50:55Z",
+    "duration": "0.2919262"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(0)",
+      "result": "Failed",
+      "message": "  Rejected story/chapter acknowledgement must remain unread/pending.\n  Expected string length 1082 but was 1099. Strings differ at index 435.\n  Expected: \"...s\":[],\"completedStoryScenes\":[],\"acknowledgedChapterComple...\"\n  But was:  \"...s\":[],\"completedStoryScenes\":[\"chapter01.intro\"],\"acknowle...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(1)",
+      "result": "Failed",
+      "message": "  Rejected story/chapter acknowledgement must remain unread/pending.\n  Expected string length 1256 but was 1257. Strings differ at index 645.\n  Expected: \"...nowledgedChapterCompletions\":[],\"boosterMace\":7,\"boosterFi...\"\n  But was:  \"...nowledgedChapterCompletions\":[1],\"boosterMace\":7,\"boosterF...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(2)",
+      "result": "Failed",
+      "message": "  Rejected story/chapter acknowledgement must remain unread/pending.\n  Expected string length 1215 but was 1241. Strings differ at index 568.\n  Expected: \"...s\":[],\"completedStoryScenes\":[],\"acknowledgedChapterComple...\"\n  But was:  \"...s\":[],\"completedStoryScenes\":[\"chapter01.firebird_found\"],...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(3)",
+      "result": "Failed",
+      "message": "  Rejected story/chapter acknowledgement must remain unread/pending.\n  Expected string length 1218 but was 1256. Strings differ at index 571.\n  Expected: \"...s\":[],\"completedStoryScenes\":[],\"acknowledgedChapterComple...\"\n  But was:  \"...s\":[],\"completedStoryScenes\":[\"campaign.chapter01.village_...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.NarrativeBlockedWriteKeepsAcknowledgementPendingAndDialogueVisible(4)",
+      "result": "Failed",
+      "message": "  Rejected story/chapter acknowledgement must remain unread/pending.\n  Expected string length 1082 but was 1099. Strings differ at index 435.\n  Expected: \"...s\":[],\"completedStoryScenes\":[],\"acknowledgedChapterComple...\"\n  But was:  \"...s\":[],\"completedStoryScenes\":[\"chapter01.intro\"],\"acknowle...\"\n  --------------------------------------------^\n"
+    }
+  ]
+}

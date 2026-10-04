@@ -1,0 +1,82 @@
+{
+  "exitCode": 2,
+  "durationSeconds": 28.61418104171753,
+  "command": [
+    "/home/k2/Unity/Hub/Editor/6000.5.9f1/Editor/Unity",
+    "-batchmode",
+    "-projectPath",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL",
+    "-runTests",
+    "-testPlatform",
+    "PlayMode",
+    "-testFilter",
+    "RoundRegistrationRejectedWriteKeepsCountersAndSelection;RoundFailureRejectedWriteKeepsProgressAndPresentation;RoundRegistrationCounterOverflowDoesNotPublish;RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy;RoundFailureFinalizeOverflowRetainsCheckpointAndJournal",
+    "-testResults",
+    "/home/k2/LegendsOfRus_SplashTitle_R3_FidelityFix02_FULL/ProjectDocs/AI/RoundLifecycleRecovery/R1/QA/Reproduce/results.xml",
+    "-logFile",
+    "/tmp/lor-round-lifecycle-recovery-r1/Reproduce/unity.log",
+    "-force-vulkan"
+  ],
+  "isolatedConfig": "/tmp/lor-round-lifecycle-recovery-r1/Reproduce/config",
+  "mode": "PlayMode",
+  "rawLogs": "/tmp/lor-round-lifecycle-recovery-r1/Reproduce",
+  "processOnlyVulkan": true,
+  "result": {
+    "id": "2",
+    "testcasecount": "8",
+    "result": "Failed(Child)",
+    "total": "8",
+    "passed": "0",
+    "failed": "8",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-03 20:42:29Z",
+    "end-time": "2026-10-03 20:42:30Z",
+    "duration": "1.2527854"
+  },
+  "nonPassing": [
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation(False)",
+      "result": "Failed",
+      "message": "  Expected string length 1214 but was 1215. Strings differ at index 434.\n  Expected: \"...\":1,\"bestStars\":0,\"bestScore\":10,\"attempts\":1,\"retries\":0,...\"\n  But was:  \"...\":1,\"bestStars\":0,\"bestScore\":200,\"attempts\":1,\"retries\":0...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundFailureRejectedWriteKeepsProgressAndPresentation(True)",
+      "result": "Failed",
+      "message": "  Expected string length 1214 but was 1215. Strings differ at index 434.\n  Expected: \"...\":1,\"bestStars\":0,\"bestScore\":10,\"attempts\":1,\"retries\":0,...\"\n  But was:  \"...\":1,\"bestStars\":0,\"bestScore\":200,\"attempts\":1,\"retries\":0...\"\n  --------------------------------------------^\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish(False)",
+      "result": "Failed",
+      "message": "  Expected: 0\n  But was:  -2147483648\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationCounterOverflowDoesNotPublish(True)",
+      "result": "Failed",
+      "message": "  Expected: 0\n  But was:  2\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection(False)",
+      "result": "Failed",
+      "message": "  Expected: 0\n  But was:  1\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.LevelSystemRuntimePlayModeTests.RoundRegistrationRejectedWriteKeepsCountersAndSelection(True)",
+      "result": "Failed",
+      "message": "  Expected: 0\n  But was:  1\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.PreLevelAlignmentPlayModeTests.RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy",
+      "result": "Failed",
+      "message": "  Expected: PreLevel\n  But was:  Gameplay\n"
+    },
+    {
+      "name": "LegendsOfRus.Tests.PlayMode.RetainedRoundPlayModeTests.RoundFailureFinalizeOverflowRetainsCheckpointAndJournal",
+      "result": "Failed",
+      "message": "  Expected: False\n  But was:  True\n"
+    }
+  ]
+}

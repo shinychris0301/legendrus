@@ -112,6 +112,30 @@ Assert.That(view.ActionsBound,Is.True);
         }
 
         [UnityTest]
+        public IEnumerator SpendingBlockedSaveShowsErrorWithoutStartingOrSpendingEnergy()
+        {
+            var state=GameState.Instance;Assert.That(state.SpendEnergy(1),Is.True);
+            string before=JsonUtility.ToJson(state.Save);var future=JsonUtility.FromJson<PlayerSaveData>(before);future.saveVersion=999;
+            var present=new bool[keys.Length];var journal=new string[keys.Length];
+            for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);PlayerPrefs.DeleteKey(keys[i]);}
+            string raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+            try
+            {
+                Root().GetComponentInChildren<ProductionPreLevelView>().PlayButton.onClick.Invoke();Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                Assert.That(router.Viewport.GetComponentInChildren<ProductionErrorDialogView>().Retry.interactable,Is.False);
+                Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.CanPersist,Is.False);
+                Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
+                router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+            }
+            finally
+            {
+                for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}
+                PlayerPrefs.Save();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator EnergyGateCanCloseAndPlayAgainWithoutDoubleSpendingOrConsumingBoosters()
         {
             var state=GameState.Instance;var view=Root().GetComponentInChildren<ProductionPreLevelView>();
@@ -443,5 +467,84 @@ Assert.That(view.ActionsBound,Is.True);
             Assert.That(Bounds(view.BoostersArea,camera).Overlaps(Bounds(view.RewardsArea,camera)),Is.False);
             Assert.That(Bounds(view.RewardsArea,camera).Overlaps(Bounds(view.PlayButton.transform as RectTransform,camera)),Is.False);
         }
+
+        [UnityTest]
+        public IEnumerator RoundStartOverflowStaysOnPreLevelWithoutDebitingEnergy()
+        {
+            var state=GameState.Instance;state.Save.energy=4;state.Save.lastEnergyUtcTicks=System.DateTime.UtcNow.Ticks;
+            state.GetLevelProgress(1,1,true).attempts=int.MaxValue;state.Persist();
+            string before=JsonUtility.ToJson(state.Save);var view=Root().GetComponentInChildren<ProductionPreLevelView>();
+            view.PlayButton.onClick.Invoke();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);
+            router.NavigateBack();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+        }
+
+
+        [UnityTest]
+        public IEnumerator RoundStartNativeReentrantCallbackCommitsOnceInBothLanguages()
+        {
+            foreach(string language in new[]{"ru","en"})
+            {
+                var state=GameState.Instance;state.ResetProgress();DemoFeatureState.SetLanguage(language);
+                state.Save.highestUnlockedLevel=31;state.SelectLevel(1,31);state.Save.energy=4;
+                state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();router.Show(ScreenId.PreLevel);Settle();yield return null;
+                var view=Root().GetComponentInChildren<ProductionPreLevelView>();var play=view.PlayButton;
+                int calls=0;System.Action changed=()=>{calls++;typeof(ScreenRouter).GetMethod("StartLevel",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(router,null);};
+                state.Changed+=changed;
+                try{play.onClick.Invoke();}
+                finally{state.Changed-=changed;}
+                Settle();yield return null;
+                Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.Gameplay));Assert.That(router.ActiveModal,Is.Null);
+                Assert.That(calls,Is.EqualTo(2),"Selection normalization and one combined debit/attempt; board initialization must not register again.");
+                Assert.That(state.Save.energy,Is.EqualTo(3));Assert.That(state.GetLevelProgress(1,31).attempts,Is.EqualTo(1));Assert.That(state.GetLevelProgress(1,31).retries,Is.Zero);
+                var active=router.Viewport.GetComponentInChildren<Match3Board>();Assert.That(active,Is.Not.Null);Assert.That(active.CurrentLevel.levelId,Is.EqualTo(31));
+                Assert.That(JsonUtility.ToJson(SaveService.Load()),Is.EqualTo(JsonUtility.ToJson(state.Save)));
+                router.Show(ScreenId.PreLevel);Settle();yield return null;
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator RoundStartNativeWriteRejectedAfterNormalizationKeepsPreLevelInBothLanguages()
+        {
+            foreach(string language in new[]{"ru","en"})
+            {
+                var state=GameState.Instance;state.ResetProgress();DemoFeatureState.SetLanguage(language);state.Save.energy=4;state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();
+                router.Show(ScreenId.PreLevel);Settle();yield return null;string before=JsonUtility.ToJson(state.Save);
+                var present=new bool[keys.Length];var journal=new string[keys.Length];for(int i=0;i<keys.Length;i++){present[i]=PlayerPrefs.HasKey(keys[i]);journal[i]=PlayerPrefs.GetString(keys[i]);}
+                string raw=null;int calls=0;System.Action changed=()=>
+                {
+                    if(++calls!=1)return;var future=JsonUtility.FromJson<PlayerSaveData>(JsonUtility.ToJson(state.Save));future.saveVersion=999;
+                    foreach(string key in keys)PlayerPrefs.DeleteKey(key);raw=JsonUtility.ToJson(future);PlayerPrefs.SetString(keys[0],raw);PlayerPrefs.Save();
+                };
+                state.Changed+=changed;
+                try
+                {
+                    var view=Root().GetComponentInChildren<ProductionPreLevelView>();view.PlayButton.onClick.Invoke();Settle();yield return null;
+                    Assert.That(calls,Is.EqualTo(1));Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                    Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(state.CanPersist,Is.False);
+                    Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);Assert.That(PlayerPrefs.GetString(keys[0]),Is.EqualTo(raw));
+                    router.NavigateBack();Settle();yield return null;var write=state.LastWriteResult;
+                    view.PlayButton.onClick.Invoke();Settle();yield return null;
+                    Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.EmptyErrorState));
+                    Assert.That(state.LastWriteResult,Is.SameAs(write));Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));
+                }
+                finally
+                {
+                    state.Changed-=changed;for(int i=0;i<keys.Length;i++){PlayerPrefs.DeleteKey(keys[i]);if(present[i])PlayerPrefs.SetString(keys[i],journal[i]);}PlayerPrefs.Save();
+                }
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator RoundStartNativeNoEnergyOpensExistingGateWithoutAnAttempt()
+        {
+            var state=GameState.Instance;state.Save.energy=0;state.Save.lastEnergyUtcTicks=DateTime.UtcNow.Ticks;state.Persist();
+            string before=JsonUtility.ToJson(state.Save);var view=Root().GetComponentInChildren<ProductionPreLevelView>();view.PlayButton.onClick.Invoke();Settle();yield return null;
+            Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));Assert.That(router.ActiveModal,Is.EqualTo(ScreenId.OutOfEnergy));
+            Assert.That(JsonUtility.ToJson(state.Save),Is.EqualTo(before));Assert.That(router.Viewport.GetComponentInChildren<Match3Board>(),Is.Null);
+            router.Viewport.GetComponentInChildren<ProductionOutOfEnergyView>().Close.onClick.Invoke();Settle();yield return null;Assert.That(router.CurrentScreen,Is.EqualTo(ScreenId.PreLevel));
+        }
+
     }
 }

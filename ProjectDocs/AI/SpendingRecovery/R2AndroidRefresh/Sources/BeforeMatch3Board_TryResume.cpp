@@ -1,0 +1,10 @@
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR bool Match3Board_TryResume_m1576AA7FCE103DF071BE8905F8F9348E214B8D30 (Match3Board_tE4CAA58AF06191DC578D60DE5FA7659B8C8ACD69* __this, const RuntimeMethod* method) 
+{
+	{
+		GameplayStateMachine_t01C75AC2E3E92D6A53E4B80363DB5C26D85DA0CA* L_0 = __this->___interaction;
+		NullCheck(L_0);
+		bool L_1;
+		L_1 = GameplayStateMachine_TryResume_mB1253C9B58BBB09AAC5F8AEA614FF3B16D47D325(L_0, NULL);
+		return L_1;
+	}
+}

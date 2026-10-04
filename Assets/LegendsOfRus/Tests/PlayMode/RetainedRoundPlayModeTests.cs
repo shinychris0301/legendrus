@@ -196,5 +196,18 @@ namespace LegendsOfRus.Tests.PlayMode
             Assert.That(State.GetLevelProgress(1,31).failures,Is.EqualTo(1));Assert.That(State.GetLevelProgress(1,31).attempts,Is.EqualTo(2));
             Assert.That(State.Save.energy,Is.EqualTo(energy));Assert.That(State.Save.retainedRound,Is.Null);
         }
+
+        [Test]
+        public void RoundFailureFinalizeOverflowRetainsCheckpointAndJournal()
+        {
+            var data=Fixture();Assert.That(State.TrySuspendRound(data),Is.True);
+            State.GetLevelProgress(1,data.level).failures=int.MaxValue;State.Persist();
+            string before=JsonUtility.ToJson(State.Save);var original=State.Save;var write=State.LastWriteResult;
+            Assert.That(State.TryFinalizeRetainedFailure(data.attemptId),Is.False);
+            Assert.That(State.Save,Is.SameAs(original));Assert.That(JsonUtility.ToJson(State.Save),Is.EqualTo(before));
+            Assert.That(State.LastWriteResult,Is.SameAs(write));Assert.That(State.TryGetRetainedRound(out var after),Is.True);
+            Assert.That(JsonUtility.ToJson(after),Is.EqualTo(JsonUtility.ToJson(data)));Assert.That(State.CanPersist,Is.True);
+        }
+
     }
 }
